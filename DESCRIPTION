@@ -1,0 +1,22 @@
+Package: ggalluvium
+Type: Package
+Title: Alluvial diagrams in ggplot2
+Version: 0.1
+Date: 2016-05-15
+Authors@R: person('Jason Cory', 'Brunson', email = 'jabrunso@vt.edu',
+    role = c('aut', 'cre'))
+Maintainer: Jason Cory Brunson <jabrunso@vt.edu>
+Description: In the context of frequency tables, an alluvial diagram represents
+    each categorical variable (axis) as a column of stacked values, and each
+    subset (or individual) as a spline through the corresponding value at each
+    column. This package contains stat-geom pairs to construct both
+    intra-variable boxes ("strata") and inter-variable flows ("alluvia").
+Depends:
+    R (>= 3.0.1),
+    ggplot2,
+    grid
+Imports:
+Suggests:
+License: GPL-2
+VignetteBuilder: knitr
+RoxygenNote: 5.0.1
