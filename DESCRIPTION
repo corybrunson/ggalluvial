@@ -13,9 +13,9 @@ Description: In the context of frequency tables, an alluvial diagram represents
     intra-variable boxes ("strata") and inter-variable flows ("alluvia").
 Depends:
     R (>= 3.0.1),
-    ggplot2,
-    grid
+    ggplot2
 Imports:
+    grid
 Suggests:
 License: GPL-2
 VignetteBuilder: knitr

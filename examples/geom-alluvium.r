@@ -17,6 +17,11 @@ ggplot(as.data.frame(Titanic),
     geom_alluvium(aes(fill = Age, alpha = Sex)) +
     facet_wrap(~ Survived, scales = "free_y")
 
+# use of groups (needs to be prohibited)
+ggplot(as.data.frame(Titanic),
+       aes(freq = Freq, axis1 = Class, axis2 = Sex, group = Survived)) +
+    geom_alluvium()
+
 # degeneracy (one axis)
 ggplot(as.data.frame(Titanic), aes(freq = Freq, axis = Class)) +
     geom_alluvium(aes(fill = Class, color = Survived)) +
@@ -36,27 +41,11 @@ ggplot(as.data.frame(Titanic),
     geom_alluvium(aes(fill = Age, alpha = Sex),
                   axis_width = 1/5, ribbon_bend = 1/3)
 
-# control of axis positions
-if (FALSE) {
-    # ridiculous syntax
-    ggplot(as.data.frame(Titanic),
-           aes(freq = Freq,
-               axis1 = Class, axis1.5 = Age, axis2.5 = Sex, axis3 = Survived)) +
-        geom_alluvium(aes(fill = Age, alpha = Sex))
-}
-
-# combining flows and boxes
+# control of axis positions (ridiculous syntax)
 ggplot(as.data.frame(Titanic),
-       aes(freq = Freq, axis1 = Class, axis2 = Sex)) +
-    geom_alluvium(aes(fill = Age)) +
-    geom_stratum()
-
-# combining flows and boxes and using facets
-ggplot(as.data.frame(Titanic),
-       aes(freq = Freq, axis1 = Class, axis2 = Sex)) +
-    geom_alluvium(aes(fill = Age)) +
-    geom_stratum() +
-    facet_wrap(~ Survived, scales = "free_y")
+       aes(freq = Freq,
+           axis1 = Class, axis1.5 = Age, axis2.5 = Sex, axis3 = Survived)) +
+    geom_alluvium(aes(fill = Age, alpha = Sex))
 
 # use of annotation and labels
 ggplot(as.data.frame(Titanic),
@@ -64,3 +53,16 @@ ggplot(as.data.frame(Titanic),
     geom_alluvium() +
     geom_text(stat = "stratum") +
     ggtitle("Alluvial diagram of Titanic passenger demographic data")
+
+# combining flows and boxes
+ggplot(as.data.frame(UCBAdmissions),
+       aes(freq = Freq, axis1 = Gender, axis2 = Dept)) +
+    geom_alluvium(aes(fill = Admit)) +
+    geom_stratum()
+
+# combining flows and boxes and using facets
+ggplot(as.data.frame(UCBAdmissions),
+       aes(freq = Freq, axis1 = Dept, axis2 = Admit)) +
+    geom_alluvium() +
+    geom_stratum() + geom_text(stat = "stratum") +
+    facet_wrap(~ Gender, scales = "free_y")

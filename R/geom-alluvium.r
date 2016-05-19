@@ -15,68 +15,40 @@
 
 StatAlluvium <- ggproto(
     "StatAlluvium", Stat,
-    # frequency
     required_aes = c("freq"),
-    # add axis-specific y0 and y1 params
-    setup_data = function(self, data, params) {
-        # aggregate freq over axes and panels
+    # REQUIRE THAT group, IF GIVEN, RESPECTS INTERACTION OF DISCRETE VARIABLES
+    # OR JUST PROHIBIT IT FROM BEING SPECIFIED
+    # add axis position and axis-specific y_0 params
+    setup_data = function(data, params) {
         data <- aggregate(
             formula = as.formula(paste("freq ~",
                                        paste(setdiff(names(data), "freq"),
                                              collapse = "+"))),
-            data = data, FUN = sum
+            data = data,
+            FUN = sum
         )
-        # identify axes (in numerical order)
-        axis_ind <- grep("^axis[0-9\\.]*$", names(data))
-        axis_ind <- axis_ind[order(as.numeric(gsub("^axis", "",
-                                                   names(data)[axis_ind])))]
-        # vertical floors at each axis, by panel
-        # (might want to parametrize the option to "hide" rather than "collapse"
-        # but not sure if anyone would ever use the former option)
-        if (FALSE) {
-            # hide version
-            alluvium_data <- as.data.frame(
-                do.call(rbind, lapply(1:length(axis_ind), function(i) {
-                    # order axis indices
-                    axis_seq <- axis_ind[zigzag(n = length(axis_ind), i = i)]
-                    # order ribbons according to axes, in above order
-                    ribbon_seq <- do.call(order, data[axis_seq])
-                    # ribbon increments along axis
-                    incrs <- c(0, cumsum(data$freq[ribbon_seq]))
-                    # ribbon breaks in original order (omits last)
-                    cbind(i, incrs[order(ribbon_seq)])
-                }))
-            )
-            # axis column name
-            names(alluvium_data) <- c("pos", "y0")
-            # combine with original data
-            res_data <- data.frame(data, alluvium_data)
-        } else {
-            # collapse version
-            res_data <- do.call(rbind, lapply(unique(data$PANEL), function(p) {
-                p_data <- subset(data, PANEL == p)
-                rownames(p_data) <- NULL
-                p_all <- do.call(rbind, lapply(1:length(axis_ind), function(i) {
-                    # order axis indices
-                    axis_seq <- axis_ind[zigzag(n = length(axis_ind), i = i)]
-                    # order ribbons according to axes, in above order
-                    ribbon_seq <- do.call(order, p_data[axis_seq])
-                    # ribbon increments along axis
-                    incrs <- c(0, cumsum(p_data$freq[ribbon_seq]))
-                    # ribbon breaks in original order (omits last)
-                    cbind(i, incrs[order(ribbon_seq)])
-                }))
-                # axis column name
-                colnames(p_all) <- c("pos", "y0")
-                # combine with original data
-                data.frame(p_data, p_all)
-            }))
-        }
-        res_data
+        axis_ind <- get_axes(data)
+        # vertical floors at each axis, by panel (collapse)
+        do.call(rbind, lapply(unique(data$PANEL), function(p) {
+            p_data <- subset(data, PANEL == p)
+            rownames(p_data) <- NULL
+            panel_alluvium <- function(i) {
+                # order axis indices
+                axis_seq <- axis_ind[zigzag(n = length(axis_ind), i = i)]
+                # order ribbons according to axes, in above order
+                ribbon_seq <- do.call(order, p_data[axis_seq])
+                # ribbon increments along axis
+                incrs <- c(0, cumsum(p_data$freq[ribbon_seq]))
+                # ribbon breaks in original order (omits last)
+                cbind(i, incrs[order(ribbon_seq)])
+            }
+            p_all <- do.call(rbind, lapply(1:length(axis_ind), panel_alluvium))
+            colnames(p_all) <- c("pos", "y0")
+            data.frame(p_data, p_all)
+        }))
     },
     # calculate coordinates governing ribbon segments
     compute_group = function(data, scales, params,
-                             # axes to be placed at positive integers
                              axis_width = 1/3, ribbon_bend = 1/6) {
         first_row <- data[1, setdiff(names(data), c("pos", "y0")),
                           drop = FALSE]
