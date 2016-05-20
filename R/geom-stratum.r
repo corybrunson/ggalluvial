@@ -3,15 +3,13 @@
 #' \code{stat_stratum} calculates the centers of the levels at each axis.
 #' \code{geom_stratum} stacks a box for each level of a variable at its axis.
 #' 
-#' @name geom_stratum
-#' @aliases StatStratum, stat_stratum, GeomStratum
+#' @name stratum
 #' @seealso \code{\link{geom_alluvium}} for inter-axis flows.
 #' @usage NULL
 #' @export
 #' @inheritParams layer
 #' @param axis_width The width of each variable axis, as a proportion of the
 #'   separation between axes.
-
 StatStratum <- ggproto(
     "StatStratum", Stat,
     required_aes = c("freq"),
@@ -47,6 +45,9 @@ StatStratum <- ggproto(
     }
 )
 
+#' @rdname alluvium
+#' @usage NULL
+#' @export
 stat_stratum <- function(mapping = NULL, data = NULL, geom = "stratum",
                           na.rm = FALSE, show.legend = NA,
                           inherit.aes = TRUE, ...) {
@@ -58,6 +59,9 @@ stat_stratum <- function(mapping = NULL, data = NULL, geom = "stratum",
     )
 }
 
+#' @rdname alluvium
+#' @usage NULL
+#' @export
 GeomStratum <- ggproto(
     "GeomStratum", GeomRect,
     required_aes = c("freq"),
@@ -71,6 +75,9 @@ GeomStratum <- ggproto(
     draw_key = draw_key_polygon
 )
 
+#' @rdname alluvium
+#' @usage NULL
+#' @export
 geom_stratum <- function(mapping = NULL, data = NULL, stat = "stratum",
                           na.rm = FALSE, show.legend = NA, inherit.aes = TRUE,
                           ...) {

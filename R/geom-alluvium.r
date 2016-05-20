@@ -4,8 +4,7 @@
 #' \code{geom_alluvium} plots an x-spline for each group through the axes at 
 #' these depths.
 #' 
-#' @name geom_alluvium
-#' @aliases StatAlluvium, stat_alluvium, GeomAlluvium
+#' @name alluvium
 #' @seealso \code{\link{geom_stratum}} for intra-axis boxes.
 #' @usage NULL
 #' @export
@@ -15,7 +14,6 @@
 #' @param ribbon_bend The horizontal distance between a variable axis
 #'   (\code{axis_width/2} from its center) and the control point of the
 #'   x-spline, also as a proportion of the separation between the axes.
-
 StatAlluvium <- ggproto(
     "StatAlluvium", Stat,
     required_aes = c("freq"),
@@ -76,6 +74,9 @@ StatAlluvium <- ggproto(
     }
 )
 
+#' @rdname alluvium
+#' @usage NULL
+#' @export
 stat_alluvium <- function(mapping = NULL, data = NULL, geom = "alluvium",
                          position = "identity", na.rm = FALSE, show.legend = NA,
                          inherit.aes = TRUE, ...) {
@@ -87,6 +88,9 @@ stat_alluvium <- function(mapping = NULL, data = NULL, geom = "alluvium",
     )
 }
 
+#' @rdname alluvium
+#' @usage NULL
+#' @export
 GeomAlluvium <- ggproto(
     "GeomAlluvium", Geom,
     required_aes = c("freq"),
@@ -106,6 +110,9 @@ GeomAlluvium <- ggproto(
     draw_key = draw_key_polygon
 )
 
+#' @rdname alluvium
+#' @usage NULL
+#' @export
 geom_alluvium <- function(mapping = NULL, data = NULL, stat = "alluvium",
                           na.rm = FALSE, show.legend = NA, inherit.aes = TRUE,
                           ...) {
