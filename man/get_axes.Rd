@@ -4,13 +4,14 @@
 \alias{get_axes}
 \title{Identify axis columns}
 \usage{
-get_axes(data)
+get_axes(x)
 }
 \arguments{
 \item{data}{data.frame}
 }
 \description{
-Identify variables in a dataset that fit the pattern of axis aesthetic names,
-and return their column indices in the numerical order of the axis numbers.
+Identify elements in a character vector that fit the pattern of axis
+aesthetic names, and return their indices in the numerical order of the axis
+numbers.
 }
 

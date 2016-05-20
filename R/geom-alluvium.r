@@ -4,7 +4,10 @@
 #' \code{geom_alluvium} plots an x-spline for each group through the axes at 
 #' these depths.
 #' 
+#' @name geom_alluvium
+#' @aliases StatAlluvium, stat_alluvium, GeomAlluvium
 #' @seealso \code{\link{geom_stratum}} for intra-axis boxes.
+#' @usage NULL
 #' @export
 #' @inheritParams layer
 #' @param axis_width The width of each variable axis, as a proportion of the
@@ -16,9 +19,6 @@
 StatAlluvium <- ggproto(
     "StatAlluvium", Stat,
     required_aes = c("freq"),
-    # REQUIRE THAT group, IF GIVEN, RESPECTS INTERACTION OF DISCRETE VARIABLES
-    # OR JUST PROHIBIT IT FROM BEING SPECIFIED
-    # add axis position and axis-specific y_0 params
     setup_data = function(data, params) {
         data <- aggregate(
             formula = as.formula(paste("freq ~",
@@ -27,7 +27,7 @@ StatAlluvium <- ggproto(
             data = data,
             FUN = sum
         )
-        axis_ind <- get_axes(data)
+        axis_ind <- get_axes(names(data))
         # vertical floors at each axis, by panel (collapse)
         do.call(rbind, lapply(unique(data$PANEL), function(p) {
             p_data <- subset(data, PANEL == p)
@@ -47,7 +47,6 @@ StatAlluvium <- ggproto(
             data.frame(p_data, p_all)
         }))
     },
-    # calculate coordinates governing ribbon segments
     compute_group = function(data, scales, params,
                              axis_width = 1/3, ribbon_bend = 1/6) {
         first_row <- data[1, setdiff(names(data), c("pos", "y0")),

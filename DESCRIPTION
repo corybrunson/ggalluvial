@@ -1,4 +1,4 @@
-Package: ggalluvium
+Package: ggalluvial
 Type: Package
 Title: Alluvial diagrams in ggplot2
 Version: 0.1
@@ -15,8 +15,10 @@ Depends:
     R (>= 3.0.1),
     ggplot2
 Imports:
-    grid
+    grid,
+    reshape2
 Suggests:
+    knitr
 License: GPL-2
 VignetteBuilder: knitr
 RoxygenNote: 5.0.1

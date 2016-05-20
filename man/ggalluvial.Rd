@@ -3,9 +3,6 @@
 \name{ggalluvial}
 \alias{ggalluvial}
 \title{Quick alluvial diagram}
-\usage{
-ggalluvial(...)
-}
 \arguments{
 \item{...}{arguments passed to \code{ggplot} and inherited by
 \code{geom_alluvium} and \code{geom_stratum}.}

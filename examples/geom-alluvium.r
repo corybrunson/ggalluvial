@@ -52,13 +52,14 @@ ggplot(as.data.frame(Titanic),
        aes(freq = Freq, axis1 = Class, axis2 = Sex, axis3 = Age)) +
     geom_alluvium() +
     geom_text(stat = "stratum") +
-    ggtitle("Alluvial diagram of Titanic passenger demographic data")
+    ggtitle("Alluvial diagram of Titanic passenger demographic data") +
+    scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 
 # combining flows and boxes
 ggplot(as.data.frame(UCBAdmissions),
        aes(freq = Freq, axis1 = Gender, axis2 = Dept)) +
     geom_alluvium(aes(fill = Admit)) +
-    geom_stratum()
+    geom_stratum() + geom_text(stat = "stratum")
 
 # combining flows and boxes and using facets
 ggplot(as.data.frame(UCBAdmissions),

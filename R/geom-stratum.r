@@ -3,7 +3,10 @@
 #' \code{stat_stratum} calculates the centers of the levels at each axis.
 #' \code{geom_stratum} stacks a box for each level of a variable at its axis.
 #' 
+#' @name geom_stratum
+#' @aliases StatStratum, stat_stratum, GeomStratum
 #' @seealso \code{\link{geom_alluvium}} for inter-axis flows.
+#' @usage NULL
 #' @export
 #' @inheritParams layer
 #' @param axis_width The width of each variable axis, as a proportion of the
@@ -12,8 +15,6 @@
 StatStratum <- ggproto(
     "StatStratum", Stat,
     required_aes = c("freq"),
-    # REQUIRE THAT group, IF GIVEN, RESPECTS INTERACTION OF DISCRETE VARIABLES
-    # OR JUST PROHIBIT IT FROM BEING SPECIFIED
     setup_data = function(data, params) {
         data <- aggregate(
             formula = as.formula(paste("freq ~",
@@ -22,7 +23,7 @@ StatStratum <- ggproto(
             data = data,
             FUN = sum
         )
-        axis_ind <- get_axes(data)
+        axis_ind <- get_axes(names(data))
         # stack axis-aggregated data with cumulative frequencies
         res_data <- do.call(rbind, lapply(unique(data$PANEL), function(p) {
             p_data <- subset(data, PANEL == p)
@@ -33,7 +34,7 @@ StatStratum <- ggproto(
                 cbind(pos = i, agg, cumfreq = cumsum(agg$freq), PANEL = p)
             }))
         }))
-        # add group (currently group specification is disabled)
+        # add group
         cbind(res_data, group = 1:nrow(res_data))
     },
     compute_group = function(data, scales,
