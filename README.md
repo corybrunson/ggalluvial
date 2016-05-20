@@ -10,7 +10,7 @@ There's much to be improved on here, including some items at the bottom of this 
 
 ## Install
 
-This package is serviceable, but it should not be viewed as stable. For one thing, hopefully the argument syntax can be made more elegant. So i don't anticipate sending this to CRAN any time soon. Here's how to install in the meantime:
+This package is serviceable (in the narrow sense of producing the kinds of images i had wanted), but it should not be viewed as stable. For one thing, hopefully the argument syntax can be made more elegant. So i don't anticipate sending this to CRAN any time soon. Here's how to install in the meantime:
 
 ```{r}
 if (require(devtools)) {
@@ -58,6 +58,8 @@ ggplot(as.data.frame(Titanic),
 
 ### Shortcut
 
+Even the shortcut requires that a multidimensional frequency table be reformatted as a data frame, consistent with the principles of `ggplot2` (see [here](https://rpubs.com/hadley/ggplot2-layers), section "Data").
+
 ```{r}
 ggalluvial(as.data.frame(Titanic),
            aes(freq = Freq, axis1 = Class, axis2 = Sex, axis3 = Age,
@@ -70,7 +72,7 @@ Many more examples can be found in the examples subdirectory (i.e. `help()`).
 
 Nested mosaic plots (see [here](https://cran.r-project.org/web/packages/vcdExtra/vignettes/vcd-tutorial.pdf), also [here](http://vita.had.co.nz/papers/prodplots.pdf)) are a more natural candidate for a grammar of graphics implementation since the coordinate dimensions of the plot window arise as compositions of the values of the categorical variables with their frequencies---these being the two dimensions of the basic bar chart (`geom_bar`). Alluvial diagrams, in contrast, take the categorical variables themselves (the "axes") as the values distributed along one dimension of the plot window. This avoids the hierarchicality of nested mosaics but imposes its own ordinality on the axes. More consequentially for this implementation, though, it violates the synchrony of data "tidiness" with graphic "grammar" built into `ggplot2`.
 
-The workaround used here is to allow to declare several numbered axis aesthetics (see the examples), which are then used in an ad hoc way (in particular, by extracting numerical information from their names) to determine the order of the axes in the diagram. This prevents `ggplot2` from recognizing the original variables as axis names, so that the user must contribute these using `scale_x_continuous()`, being careful to ensure that the `breaks` and `labels` match aesthetic assignments. The trick does allow non-integer values to be used as axis numbers, so the user can control the positions of the axes along the horizontal plot axis if they prefer (because why not). This workaround also relies on the automated `group` variable for handling the data, so `group` declarations in the `ggplot2` call can destroy the plot (see examples).
+The workaround used here is to allow to declare several numbered axis aesthetics (see the examples), which are then used in an ad hoc way (in particular, by extracting numerical information from their names) to determine the order of the axes in the diagram. This prevents `ggplot2` from recognizing the original variables as axis names, so that the user must contribute these using `scale_x_continuous()`, being careful to ensure that the `breaks` and `labels` match aesthetic assignments. The trick does allow non-integer values to be used as axis numbers, so the user can control the positions of the axes along the horizontal plot axis if they prefer (because why not). This workaround also relies on the automated `group` variable for handling the data, so `group` declarations in the `ggplot2` call can destroy the plot (see `help(geom_alluvium)`).
 
 An alternative would be to first "alluviate" the data, i.e. to melt the axis variables into two columns, perhaps "Axis" (indicating the variable name) and "Stratum" (the value), holding the frequency variable as an index variable. This raises a different problem, of how to stratify other aesthetics (e.g. `color`) by a single axis variable. I've toyed with this but haven't hit upon a satisfactory approach. I'd love to see a more "grammatical" implementation than the one used here.
 
@@ -93,7 +95,7 @@ The use of `axis[0-9\\.]*` aesthetics to identify axis variables and "smuggle in
 
 Several problems persist in the current attempt:
 
-- ggplot2 treats the horizontal axis as continuous; the default should be for it to be treated as categorical, with placement determined by axis aesthetics (in the multivariate setting) or by `as(x, "numeric")` (in the bivariate setting), and labeled accordingly. (All categorical variables should be stored as factors anyway.) The present implementation makes this challenging, but an easy patch is to add a `scale_x_continuous` layer (see examples).
+- ggplot2 treats the horizontal axis as continuous; the default should be for it to be treated as categorical, with placement determined by axis aesthetics (in the multivariate setting) or by `as(x, "numeric")` (in the bivariate setting), and labeled accordingly. (All categorical variables should be stored as factors anyway.) The present implementation makes this challenging, but an easy patch is to add a `scale_x_continuous` layer (see `help(geom_alluvium)`).
 - By default, should the factors of each axis proceed downward, not upward? This would require a transformation of `y` in both `geom_*`s, so it might be best implemented as a `coord_transform` layer rather than a `params` argument.
 - While it would require disabling the vertical metric (ticks, frequency labels, and grid), the option should be available to impose spacing between the strata within each axis. In a multivariate diagram, a fixed cumulative gap height should be evenly distributed between the strata in each axis, so that the axis stack up to the same height. In a bivariate diagram, a fixed gap height should separate the strata within each axis.
 - For each axis, the data are resorted, by the current axis first and then by the remaining axes in some order. The default order used here (`zigzag`) proceeds to the remaining axes in order of proximity to the current axis, in order to minimize overlaps of alluvia. Other orders are possible and in some settings desirable, and should be available as options.
