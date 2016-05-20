@@ -4,7 +4,13 @@ A ggplot2 extension for alluvial diagrams, which visualize frequency tables in s
 
 ## Background
 
-While alluvial plots are most popularly used to visualize frequency distributions over time (cite examples), i usually use them to visualize frequency tables involving several categorical variables. I've relied for several tasks on mbojan's timely [alluvial package](https://github.com/mbojan/alluvial), from which much of the alluvial infrastructure used here is derived.
+While alluvial plots are most popularly used to visualize frequency distributions over time (cite examples), i usually use them to visualize frequency tables involving several categorical variables.
+
+I've relied for several tasks on [mbojan](https://github.com/mbojan)'s timely [alluvial](https://github.com/mbojan/alluvial) package, from which much of the alluvial infrastructure used here is derived. Besides being tailored to ggplot2, there are several conspicuous differences between these packages:
+
+* alluvial understands a variety of inputs (vectors, lists, data frames), while ggalluvial requires a single data frame;
+* alluvial uses every variable of these inputs as axes, whereas ggalluvial requires the user to specify each axis individually;
+* alluvial produces both the alluvial flows and what are here called the stratal blocks in a single function (`alluvial()`); ggalluvial relies on separate functions (`*_alluvium()` and `*_stratum()`) to produce these elements.
 
 There's much to be improved on here, including some items at the bottom of this page. Comments or pull requests are more than welcome.
 
@@ -40,7 +46,7 @@ dev.off()
 
 ### Aesthetics
 
-This example has a lot going on, and isn't ideal for analysis or publication purposes, but it shows how many aesthetics--`fill`, `alpha`, and `color` shown here, though also `size` and `linetype` for the borders--can be incorporated into a single alluvial diagram. It also spotlights a major shortcoming of `ggalluvial`: The horizontal axis is continuous (and currently doesn't support labeling by axis names), so, without the value labels produced by `geom_text(stat = "stratum")`, the meanings of the axes is completely obscured. This can be remedied for now using `scale_x_continuous()` (see "Idiosyncrasies" below).
+This example has a lot going on, and isn't ideal for analysis or publication purposes, but it shows how many aesthetics—`fill`, `alpha`, and `color` shown here, though also `size` and `linetype` for the borders—can be incorporated into a single alluvial diagram. It also spotlights a major shortcoming of `ggalluvial`: The horizontal axis is continuous (and currently doesn't support labeling by axis names), so, without the value labels produced by `geom_text(stat = "stratum")`, the meanings of the axes is completely obscured. This can be remedied for now using `scale_x_continuous()` (see the following examples and section "Idiosyncrasies" below).
 
 ```{r}
 png(height = 360, width = 600, file = "inst/fig/example-aes.png")
@@ -58,7 +64,7 @@ dev.off()
 
 ### Facets
 
-The following example demonstrates `ggalluvial`'s compatibility with facets. It also illustrates the effect of using aesthetics beyond those assigned to axes: Since they are incorporated into the `data.frame` fed to `StatAlluvium` or `StatStratum`, whose `setup_data()` functions aggregate (hence sort) these data by all available columns besides the `freq` assignment, the resulting alluvia end up stratified by these variables as well.
+The following example demonstrates `ggalluvial`'s compatibility with facets. It also illustrates the effect of using aesthetics beyond those assigned to axes: Since they are incorporated into the data frame fed to `StatAlluvium` or `StatStratum`, whose `setup_data()` functions aggregate (hence sort) these data by all available columns besides the `freq` assignment, the resulting alluvia end up stratified by these variables as well.
 
 ```{r}
 png(height = 360, width = 600, file = "inst/fig/example-facet.png")
@@ -66,7 +72,8 @@ ggplot(as.data.frame(Titanic),
        aes(freq = Freq, axis1 = Class, axis2 = Sex)) +
     geom_alluvium(aes(fill = Age)) +
     geom_stratum() + geom_text(stat = "stratum") +
-    facet_wrap(~ Survived, scales = "free_y")
+    facet_wrap(~ Survived, scales = "free_y") +
+    scale_x_continuous(breaks = 1:2, labels = c("Class", "Sex"))
 dev.off()
 ```
 
@@ -74,7 +81,7 @@ dev.off()
 
 ### Shortcut
 
-Even the shortcut requires that a multidimensional frequency table be reformatted as a data frame, consistent with the principles of `ggplot2` (see [here](https://rpubs.com/hadley/ggplot2-layers), section "Data").
+Even the shortcut requires that a multidimensional frequency table be reformatted as a data frame, consistent with the principles of ggplot2 (see [here](https://rpubs.com/hadley/ggplot2-layers), section "Data"). It does include the axis labels fix used explicitly in the previous example.
 
 ```{r}
 png(height = 360, width = 600, file = "inst/fig/example-shortcut.png")
@@ -90,9 +97,9 @@ Many more examples can be found in the examples subdirectory (i.e. `help()`).
 
 ## Idiosyncrasies
 
-Nested mosaic plots (see [here](https://cran.r-project.org/web/packages/vcdExtra/vignettes/vcd-tutorial.pdf), also [here](http://vita.had.co.nz/papers/prodplots.pdf)) are a more natural candidate for a grammar of graphics implementation since the coordinate dimensions of the plot window arise as compositions of the values of the categorical variables with their frequencies--these being the two dimensions of the basic bar chart (`geom_bar()`). Alluvial diagrams, in contrast, take the categorical variables themselves (the "axes") as the values distributed along one dimension of the plot window. This avoids the hierarchicality of nested mosaics but imposes its own ordinality on the axes. More consequentially for this implementation, though, it violates the synchrony of data "tidiness" with graphic "grammar" built into `ggplot2`.
+Nested mosaic plots (see [here](https://cran.r-project.org/web/packages/vcdExtra/vignettes/vcd-tutorial.pdf), also [here](http://vita.had.co.nz/papers/prodplots.pdf)) are a more natural candidate for a grammar of graphics implementation since the coordinate dimensions of the plot window arise as compositions of the values of the categorical variables with their frequencies—these being the two dimensions of the basic bar chart (`geom_bar()`). Alluvial diagrams, in contrast, take the categorical variables themselves (the "axes") as the values distributed along one dimension of the plot window. This avoids the hierarchicality of nested mosaics but imposes its own ordinality on the axes. More consequentially for this implementation, though, it violates the synchrony of data "tidiness" with graphic "grammar" built into ggplot2.
 
-The workaround used here is to allow to declare several numbered axis aesthetics (see the examples), which are then used in an ad hoc way (in particular, by extracting numerical information from their names) to determine the order of the axes in the diagram. This prevents `ggplot2` from recognizing the original variables as axis names, so that the user must contribute these using `scale_x_continuous()`, being careful to ensure that the `breaks` and `labels` match aesthetic assignments. The trick does allow non-integer values to be used as axis numbers, so the user can control the positions of the axes along the horizontal plot axis if they prefer (because why not). This workaround also relies on the automated `group` variable for handling the data, so `group` declarations in the `ggplot2()` call can destroy the plot (see `help(geom_alluvium)`).
+The workaround used here is to allow to declare several numbered axis aesthetics (see section "Examples"), which are then used in an ad hoc way (in particular, by extracting numerical information from their names) to determine the order of the axes in the diagram. This prevents ggplot2 from recognizing the original variables as axis names, so that the user must contribute these using `scale_x_continuous()`, being careful to ensure that the `breaks` and `labels` match aesthetic assignments. The trick does allow non-integer values to be used as axis numbers, so the user can control the positions of the axes along the horizontal plot axis if they prefer (because why not). This workaround also relies on the automated `group` variable for handling the data, so `group` declarations in the `ggplot2()` call can destroy the plot (see `help(geom_alluvium)`).
 
 An alternative would be to first "alluviate" the data, i.e. to melt the axis variables into two columns, perhaps "Axis" (indicating the variable name) and "Stratum" (the value), holding the frequency variable as an index variable. This raises a different problem, of how to stratify other aesthetics (e.g. `color`) by a single axis variable. I've toyed with this but haven't hit upon a satisfactory approach. I'd love to see a more "grammatical" implementation than the one used here.
 
