@@ -7,7 +7,7 @@
 get_axes(x)
 }
 \arguments{
-\item{data}{data.frame}
+\item{x}{character vector}
 }
 \description{
 Identify elements in a character vector that fit the pattern of axis

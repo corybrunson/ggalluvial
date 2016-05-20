@@ -4,7 +4,7 @@
 #' aesthetic names, and return their indices in the numerical order of the axis
 #' numbers.
 #' 
-#' @param data data.frame
+#' @param x character vector
 
 get_axes <- function(x) {
     axis_ind <- grep("^axis[0-9\\.]*$", x)
