@@ -10,6 +10,7 @@
 #' @inheritParams layer
 #' @param axis_width The width of each variable axis, as a proportion of the
 #'   separation between axes.
+#' @example inst/examples/stratum.r
 StatStratum <- ggproto(
     "StatStratum", Stat,
     required_aes = c("freq"),

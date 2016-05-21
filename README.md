@@ -9,8 +9,8 @@ While alluvial plots are most popularly used to visualize frequency distribution
 I've relied for several tasks on [mbojan](https://github.com/mbojan)'s timely [alluvial](https://github.com/mbojan/alluvial) package, from which much of the alluvial infrastructure used here is derived. Besides being tailored to ggplot2, there are several conspicuous differences between these packages:
 
 * alluvial understands a variety of inputs (vectors, lists, data frames), while ggalluvial requires a single data frame;
-* alluvial uses every variable of these inputs as axes, whereas ggalluvial requires the user to specify each axis individually;
-* alluvial produces both the alluvial flows and what are here called the stratal blocks in a single function (`alluvial()`); ggalluvial relies on separate functions (`*_alluvium()` and `*_stratum()`) to produce these elements.
+* alluvial uses each variable of these inputs as an axis, whereas ggalluvial requires the user to specify each axis individually;
+* alluvial produces both the alluvial flows (alluvia) and what are here called the stratal blocks (or just strata) in a single function (`alluvial()`), whereas ggalluvial relies on the separate functions `*_alluvium()` and `*_stratum()` to produce these elements.
 
 There's much to be improved on here, including some items at the bottom of this page. Comments or pull requests are more than welcome.
 
@@ -19,7 +19,7 @@ There's much to be improved on here, including some items at the bottom of this 
 This package is serviceable (in the narrow sense of producing the kinds of images i had wanted), but it should not be viewed as stable. For one thing, hopefully the argument syntax can be made more elegant. So i don't anticipate sending this to CRAN any time soon. Here's how to install in the meantime:
 
 ```{r}
-if (require(devtools)) {
+if (!require(devtools)) {
     install.packages("devtools")
 }
 devtools::install_github("corybrunson/ggalluvial")

@@ -14,6 +14,7 @@
 #' @param ribbon_bend The horizontal distance between a variable axis
 #'   (\code{axis_width/2} from its center) and the control point of the
 #'   x-spline, also as a proportion of the separation between the axes.
+#' @example inst/examples/alluvium.r
 StatAlluvium <- ggproto(
     "StatAlluvium", Stat,
     required_aes = c("freq"),
