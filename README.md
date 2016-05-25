@@ -55,8 +55,7 @@ ggplot(as.data.frame(Titanic),
        axis1 = Class, axis2 = Sex, axis3 = Age)) +
     geom_alluvium(aes(fill = Age:Sex, alpha = Class, color = Survived)) +
     scale_color_manual(values = c("black", "white")) +
-    ggtitle("Titanic passenger demographic and survival data") +
-    theme_bw()
+    ggtitle("Titanic passenger demographic and survival data")
 dev.off()
 ```
 
@@ -73,7 +72,8 @@ ggplot(as.data.frame(Titanic),
     geom_alluvium(aes(fill = Age)) +
     geom_stratum() + geom_text(stat = "stratum") +
     facet_wrap(~ Survived, scales = "free_y") +
-    scale_x_continuous(breaks = 1:2, labels = c("Class", "Sex"))
+    scale_x_continuous(breaks = 1:2, labels = c("Class", "Sex")) +
+    ggtitle("Titanic passenger demographic and survival data, by survival")
 dev.off()
 ```
 
@@ -93,13 +93,23 @@ dev.off()
 
 ![Shortcut](inst/fig/example-shortcut.png)
 
-Many more examples can be found in the examples subdirectory (i.e. `help()`).
+Many more examples can be found in the examples subdirectory (or via `help()`).
+
+## Under the hood
+
+The core of the package consists in two `stat_*`-`geom_*` pairs of layer functions, `*_alluvium` and `*_stratum`.
+
+- `ggplot()` first processes the given data and aesthetics to produce a data frame having columns the aesthetic defaults and/or declarations, plus `PANEL` (for faceting) and `group` (for subset-wise transformation or plotting). At present it is best not to declare the `group` aesthetic, since the main functions make use of its default values (the interaction of the discrete variables).
+- `stat_alluvium()` takes the processed data, aggregates the `freq` variable along all of the other variables (which has the effect of sorting the data), and calculates the cumulative frequency within each axis in the order determined by an axis sequence function (currently `ggalluvial::zigzag()` and undeclarable by the user), each of which sums to the total frequency. Thus, the number of steps in the cumulative frequency is the same at each axis. It then returns the coordinates (`x`, `xmin`, `xmax`, `y`, `ymin`, `ymax`) of the group flows at each axis, from left to right.
+- `geom_alluvium()` derives coordinates for, and plots, closed splines centered at the coordinates provided by `stat_alluvium()`.
+- `stat_stratum()` similarly aggregates the processed data at each axis, but according to that axis's distinct values (in order of level, for factor variables), so that the number of steps at each axis depends on the number of values of the corresponding variable. It row-binds these aggregated data, with each row corresponding to a stratum of one axis. Finally, it appends the coordinates of the center of each stratum (block), along with its width. (The value column is named `label` so that `geom_text(stat = "stratum")` places appropriate labels at the locations of the strata.)
+- `geom_stratum()` uses the coordinates provided by `stat_stratum()` to plot the rectangles that form the strata.
 
 ## Idiosyncrasies
 
 Nested mosaic plots (see [here](https://cran.r-project.org/web/packages/vcdExtra/vignettes/vcd-tutorial.pdf), also [here](http://vita.had.co.nz/papers/prodplots.pdf)) are a more natural candidate for a grammar of graphics implementation since the coordinate dimensions of the plot window arise as compositions of the values of the categorical variables with their frequencies—these being the two dimensions of the basic bar chart (`geom_bar()`). Alluvial diagrams, in contrast, take the categorical variables themselves (the "axes") as the values distributed along one dimension of the plot window. This avoids the hierarchicality of nested mosaics but imposes its own ordinality on the axes. More consequentially for this implementation, though, it violates the synchrony of data "tidiness" with graphic "grammar" built into ggplot2.
 
-The workaround used here is to allow to declare several numbered axis aesthetics (see section "Examples"), which are then used in an ad hoc way (in particular, by extracting numerical information from their names) to determine the order of the axes in the diagram. This prevents ggplot2 from recognizing the original variables as axis names, so that the user must contribute these using `scale_x_continuous()`, being careful to ensure that the `breaks` and `labels` match aesthetic assignments. The trick does allow non-integer values to be used as axis numbers, so the user can control the positions of the axes along the horizontal plot axis if they prefer (because why not). This workaround also relies on the automated `group` variable for handling the data, so `group` declarations in the `ggplot2()` call can destroy the plot (see `help(geom_alluvium)`).
+The workaround used here is to allow to declare several numbered axis aesthetics (see section "Examples"), which are then used in an ad hoc way (in particular, by extracting numerical information from their names) to determine the order of the axes in the diagram. This prevents ggplot2 from recognizing the original variables as axis names, so that the user must contribute these using `scale_x_continuous()`, being careful to ensure that the `breaks` and `labels` match aesthetic assignments. The trick does allow non-integer values to be used as axis numbers, so the user can control the positions of the axes along the horizontal plot axis if they prefer (because why not). This workaround also relies on the automated `group` variable for handling the data, so `group` declarations in the `ggplot()` call can destroy the plot (see section "Examples").
 
 An alternative would be to first "alluviate" the data, i.e. to melt the axis variables into two columns, perhaps "Axis" (indicating the variable name) and "Stratum" (the value), holding the frequency variable as an index variable. This raises a different problem, of how to stratify other aesthetics (e.g. `color`) by a single axis variable. I've toyed with this but haven't hit upon a satisfactory approach. I'd love to see a more "grammatical" implementation than the one used here.
 
