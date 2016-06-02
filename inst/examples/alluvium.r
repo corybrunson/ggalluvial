@@ -67,3 +67,9 @@ ggplot(as.data.frame(UCBAdmissions),
     geom_alluvium() +
     geom_stratum() + geom_text(stat = "stratum") +
     facet_wrap(~ Gender, scales = "free_y")
+
+# omitting weight (defaults to 1)
+ggplot(as.data.frame(Titanic),
+       aes(axis1 = Class, axis2 = Sex)) +
+    geom_alluvium() +
+    geom_stratum() + geom_text(stat = "stratum")

@@ -14,8 +14,8 @@
 #' @example inst/examples/stratum.r
 StatStratum <- ggproto(
     "StatStratum", Stat,
-    default_aes = aes(weight = 1),
     setup_data = function(data, params) {
+        if (is.null(data$weight)) data$weight <- rep(1, nrow(data))
         data <- aggregate(
             formula = as.formula(paste("weight ~",
                                        paste(setdiff(names(data), "weight"),

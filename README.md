@@ -125,7 +125,7 @@ I'll refer to these as "bivariate" alluvial diagrams, in contrast to the "multiv
 
 ### Interface
 
-The use of `axis[0-9\\.]*` aesthetics to identify axis variables and "smuggle in" axis position information feels ridiculous, but i haven't yet found a better way to allow an arbitrary number of variables as axis aesthetics.
+- The use of `axis[0-9\\.]*` aesthetics to identify axis variables and "smuggle in" axis position information feels ridiculous, but i haven't yet found a better way to allow an arbitrary number of variables as axis aesthetics.
 - Should it be possible to specify different widths for different axes? If so, this will have to wait until the syntax for axis variables is changed.
 
 ### Formatting

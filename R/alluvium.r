@@ -18,8 +18,8 @@
 #' @example inst/examples/alluvium.r
 StatAlluvium <- ggproto(
     "StatAlluvium", Stat,
-    default_aes = aes(weight = 1),
     setup_data = function(data, params) {
+        if (is.null(data$weight)) data$weight <- rep(1, nrow(data))
         aggregate(
             formula = as.formula(paste("weight ~",
                                        paste(setdiff(names(data), "weight"),
@@ -62,8 +62,8 @@ StatAlluvium <- ggproto(
 #' @usage NULL
 #' @export
 stat_alluvium <- function(mapping = NULL, data = NULL, geom = "alluvium",
-                          position = "identity", na.rm = FALSE, show.legend = NA,
-                          inherit.aes = TRUE, ...) {
+                          position = "identity", na.rm = FALSE,
+                          show.legend = NA, inherit.aes = TRUE, ...) {
     layer(
         stat = StatAlluvium, data = data, mapping = mapping, geom = geom,
         position = position, show.legend = show.legend,

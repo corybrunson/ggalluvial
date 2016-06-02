@@ -11,7 +11,7 @@
 \alias{stat_alluvium}
 \alias{stat_stratum}
 \title{Alluvial flows}
-\format{An object of class \code{StatAlluvium} (inherits from \code{Stat}, \code{ggproto}) of length 4.}
+\format{An object of class \code{StatAlluvium} (inherits from \code{Stat}, \code{ggproto}) of length 3.}
 \arguments{
 \item{axis_width}{The width of each variable axis, as a proportion of the 
 separation between axes.}
@@ -95,6 +95,12 @@ ggplot(as.data.frame(UCBAdmissions),
     geom_alluvium() +
     geom_stratum() + geom_text(stat = "stratum") +
     facet_wrap(~ Gender, scales = "free_y")
+
+# omitting weight (defaults to 1)
+ggplot(as.data.frame(Titanic),
+       aes(axis1 = Class, axis2 = Sex)) +
+    geom_alluvium() +
+    geom_stratum() + geom_text(stat = "stratum")
 }
 \seealso{
 \code{\link{stratum}} for intra-axis boxes and
