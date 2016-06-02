@@ -1,23 +1,24 @@
 #' Variable axes and strata
 #' 
-#' \code{stat_stratum} calculates the centers of the levels at each axis.
+#' \code{stat_stratum} calculates the centers of the levels at each axis. 
 #' \code{geom_stratum} stacks a box for each level of a variable at its axis.
 #' 
 #' @name stratum
-#' @seealso \code{\link{geom_alluvium}} for inter-axis flows.
+#' @seealso \code{\link{alluvium}} for inter-axis flows and
+#'   \code{\link{ggalluvial}} for a shortcut method.
 #' @usage NULL
 #' @export
 #' @inheritParams layer
-#' @param axis_width The width of each variable axis, as a proportion of the
+#' @param axis_width The width of each variable axis, as a proportion of the 
 #'   separation between axes.
 #' @example inst/examples/stratum.r
 StatStratum <- ggproto(
     "StatStratum", Stat,
-    required_aes = c("freq"),
+    default_aes = aes(weight = 1),
     setup_data = function(data, params) {
         data <- aggregate(
-            formula = as.formula(paste("freq ~",
-                                       paste(setdiff(names(data), "freq"),
+            formula = as.formula(paste("weight ~",
+                                       paste(setdiff(names(data), "weight"),
                                              collapse = "+"))),
             data = data,
             FUN = sum
@@ -27,10 +28,10 @@ StatStratum <- ggproto(
         res_data <- do.call(rbind, lapply(unique(data$PANEL), function(p) {
             p_data <- subset(data, PANEL == p)
             do.call(rbind, lapply(1:length(axis_ind), function(i) {
-                agg <- aggregate(x = p_data$freq, by = p_data[axis_ind[i]],
+                agg <- aggregate(x = p_data$weight, by = p_data[axis_ind[i]],
                                  FUN = sum)
-                names(agg) <- c("label", "freq")
-                cbind(pos = i, agg, cumfreq = cumsum(agg$freq), PANEL = p)
+                names(agg) <- c("label", "weight")
+                cbind(pos = i, agg, cumweight = cumsum(agg$weight), PANEL = p)
             }))
         }))
         # add group
@@ -40,7 +41,7 @@ StatStratum <- ggproto(
                              axis_width = 1/3) {
         rownames(data) <- NULL
         rect_data <- data.frame(x = data$pos,
-                                y = (data$cumfreq - data$freq / 2),
+                                y = (data$cumweight - data$weight / 2),
                                 width = axis_width)
         data.frame(data, rect_data)
     }
@@ -65,13 +66,12 @@ stat_stratum <- function(mapping = NULL, data = NULL, geom = "stratum",
 #' @export
 GeomStratum <- ggproto(
     "GeomStratum", GeomRect,
-    required_aes = c("freq"),
     default_aes = aes(size = .5, linetype = 1,
                       colour = "black", fill = "white", alpha = 1),
     setup_data = function(data, params) {
         transform(data,
                   xmin = x - width / 2, xmax = x + width / 2,
-                  ymin = y - freq / 2, ymax = y + freq / 2)
+                  ymin = y - weight / 2, ymax = y + weight / 2)
     },
     draw_key = draw_key_polygon
 )

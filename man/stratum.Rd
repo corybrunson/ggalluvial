@@ -7,51 +7,52 @@
 \title{Variable axes and strata}
 \format{An object of class \code{StatStratum} (inherits from \code{Stat}, \code{ggproto}) of length 4.}
 \arguments{
-\item{axis_width}{The width of each variable axis, as a proportion of the
+\item{axis_width}{The width of each variable axis, as a proportion of the 
 separation between axes.}
 }
 \description{
-\code{stat_stratum} calculates the centers of the levels at each axis.
+\code{stat_stratum} calculates the centers of the levels at each axis. 
 \code{geom_stratum} stacks a box for each level of a variable at its axis.
 }
 \examples{
 # basic boxes (strata)
 ggplot(as.data.frame(Titanic),
-       aes(freq = Freq, axis1 = Class, axis2 = Sex)) +
+       aes(weight = Freq, axis1 = Class, axis2 = Sex)) +
     geom_stratum()
 
 # use of labels
 ggplot(as.data.frame(Titanic),
-       aes(freq = Freq, axis1 = Class, axis2 = Sex)) +
+       aes(weight = Freq, axis1 = Class, axis2 = Sex)) +
     geom_stratum() + geom_text(stat = "stratum")
 
 # full axis width
 ggplot(as.data.frame(Titanic),
-       aes(freq = Freq,
+       aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age, axis4 = Survived)) +
     geom_stratum(axis_width = 1) + geom_text(stat = "stratum")
 
 # adding boxes to flows
 ggplot(as.data.frame(Titanic),
-       aes(freq = Freq, axis1 = Class, axis2 = Sex)) +
+       aes(weight = Freq, axis1 = Class, axis2 = Sex)) +
     geom_alluvium(aes(fill = Age)) +
     geom_stratum() + geom_text(stat = "stratum")
 
 # adding flows to boxes
 ggplot(as.data.frame(Titanic),
-       aes(freq = Freq, axis1 = Class, axis2 = Sex)) +
+       aes(weight = Freq, axis1 = Class, axis2 = Sex)) +
     geom_stratum() + geom_text(stat = "stratum") +
     geom_alluvium(aes(fill = Age))
 
 # combining flows and boxes and using facets
 ggplot(as.data.frame(Titanic),
-       aes(freq = Freq, axis1 = Class, axis2 = Sex)) +
+       aes(weight = Freq, axis1 = Class, axis2 = Sex)) +
     geom_alluvium(aes(fill = Age)) +
     geom_stratum() + geom_text(stat = "stratum") +
     facet_wrap(~ Survived, scales = "free_y")
 }
 \seealso{
-\code{\link{geom_alluvium}} for inter-axis flows.
+\code{\link{alluvium}} for inter-axis flows and
+  \code{\link{ggalluvial}} for a shortcut method.
 }
 \keyword{datasets}
 

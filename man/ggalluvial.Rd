@@ -11,6 +11,6 @@
 Produces an alluvial diagram with axis strata and labels.
 }
 \seealso{
-\code{\link{geom_alluvium}} and \code{\link{geom_stratum}}
+\code{\link{alluvium}} and \code{\link{stratum}}
 }
 

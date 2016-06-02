@@ -32,7 +32,7 @@ devtools::install_github("corybrunson/ggalluvial")
 ```r
 png(height = 360, width = 600, file = "inst/fig/example-basic.png")
 ggplot(as.data.frame(Titanic),
-       aes(freq = Freq,
+       aes(weight = Freq,
        axis1 = Class, axis2 = Sex, axis3 = Age, axis4 = Survived)) +
     geom_alluvium() +
     geom_stratum() +
@@ -51,7 +51,7 @@ This example has a lot going on, and isn't ideal for analysis or publication pur
 ```{r}
 png(height = 360, width = 600, file = "inst/fig/example-aes.png")
 ggplot(as.data.frame(Titanic),
-       aes(freq = Freq,
+       aes(weight = Freq,
        axis1 = Class, axis2 = Sex, axis3 = Age)) +
     geom_alluvium(aes(fill = Age:Sex, alpha = Class, color = Survived)) +
     scale_color_manual(values = c("black", "white")) +
@@ -63,12 +63,12 @@ dev.off()
 
 ### Facets
 
-The following example demonstrates `ggalluvial`'s compatibility with facets. It also illustrates the effect of using aesthetics beyond those assigned to axes: Since they are incorporated into the data frame fed to `StatAlluvium` or `StatStratum`, whose `setup_data()` functions aggregate (hence sort) these data by all available columns besides the `freq` assignment, the resulting alluvia end up stratified by these variables as well.
+The following example demonstrates `ggalluvial`'s compatibility with facets. It also illustrates the effect of using aesthetics beyond those assigned to axes: Since they are incorporated into the data frame fed to `StatAlluvium` or `StatStratum`, whose `setup_data()` functions aggregate (hence sort) these data by all available columns besides the `weight` assignment (frequencies), the resulting alluvia end up stratified by these variables as well.
 
 ```{r}
 png(height = 360, width = 600, file = "inst/fig/example-facet.png")
 ggplot(as.data.frame(Titanic),
-       aes(freq = Freq, axis1 = Class, axis2 = Sex)) +
+       aes(weight = Freq, axis1 = Class, axis2 = Sex)) +
     geom_alluvium(aes(fill = Age)) +
     geom_stratum() + geom_text(stat = "stratum") +
     facet_wrap(~ Survived, scales = "free_y") +
@@ -86,7 +86,7 @@ Even the shortcut requires that a multidimensional frequency table be reformatte
 ```{r}
 png(height = 360, width = 600, file = "inst/fig/example-shortcut.png")
 ggalluvial(as.data.frame(Titanic),
-           aes(freq = Freq, axis1 = Class, axis2 = Sex, axis3 = Age,
+           aes(weight = Freq, axis1 = Class, axis2 = Sex, axis3 = Age,
                fill = Survived))
 dev.off()
 ```
@@ -100,7 +100,7 @@ Many more examples can be found in the examples subdirectory (or via `help()`).
 The core of the package consists in two `stat_*`-`geom_*` pairs of layer functions, `*_alluvium` and `*_stratum`.
 
 - `ggplot()` first processes the given data and aesthetics to produce a data frame having columns the aesthetic defaults and/or declarations, plus `PANEL` (for faceting) and `group` (for subset-wise transformation or plotting). At present it is best not to declare the `group` aesthetic, since the main functions make use of its default values (the interaction of the discrete variables).
-- `stat_alluvium()` takes the processed data, aggregates the `freq` variable along all of the other variables (which has the effect of sorting the data), and calculates the cumulative frequency within each axis in the order determined by an axis sequence function (currently `ggalluvial::zigzag()` and undeclarable by the user), each of which sums to the total frequency. Thus, the number of steps in the cumulative frequency is the same at each axis. It then returns the coordinates (`x`, `xmin`, `xmax`, `y`, `ymin`, `ymax`) of the group flows at each axis, from left to right.
+- `stat_alluvium()` takes the processed data, aggregates the `weight` variable (frequencies) along all of the other variables (which has the effect of sorting the data), and calculates the cumulative frequency within each axis in the order determined by an axis sequence function (currently `ggalluvial::zigzag()` and undeclarable by the user), each of which sums to the total frequency. Thus, the number of steps in the cumulative frequency is the same at each axis. It then returns the coordinates (`x`, `xmin`, `xmax`, `y`, `ymin`, `ymax`) of the group flows at each axis, from left to right. (Try `geom_line(stat = "alluvium")` in place of `geom_alluvium()` to more directly discern the output of `stat_alluvium()`.)
 - `geom_alluvium()` derives coordinates for, and plots, closed splines centered at the coordinates provided by `stat_alluvium()`.
 - `stat_stratum()` similarly aggregates the processed data at each axis, but according to that axis's distinct values (in order of level, for factor variables), so that the number of steps at each axis depends on the number of values of the corresponding variable. It row-binds these aggregated data, with each row corresponding to a stratum of one axis. Finally, it appends the coordinates of the center of each stratum (block), along with its width. (The value column is named `label` so that `geom_text(stat = "stratum")` places appropriate labels at the locations of the strata.)
 - `geom_stratum()` uses the coordinates provided by `stat_stratum()` to plot the rectangles that form the strata.
@@ -119,7 +119,7 @@ Here are some remaining tasks:
 
 ### Extension to time series
 
-See the [alluvial package](https://github.com/mbojan/alluvial) for examples. More generally, ggalluvial should be able to track the frequencies of the factors of one categorical variable along the factors of another. Using as an example dataset `as.data.frame(as.table(WorldPhones))`, It might make sense for this to be done using `aes(x = Var1, y = Var2, freq = Freq)`, and for `x` and `y` to override any passes to axis aesthetics. Another dataset for exemplary use would be `Seatbelts`.
+See the [alluvial package](https://github.com/mbojan/alluvial) for examples. More generally, ggalluvial should be able to track the frequencies of the factors of one categorical variable along the factors of another. Using as an example dataset `as.data.frame(as.table(WorldPhones))`, It might make sense for this to be done using `aes(x = Var1, y = Var2, weight = Freq)`, and for `x` and `y` to override any passes to axis aesthetics. Another dataset for exemplary use would be `Seatbelts`.
 
 I'll refer to these as "bivariate" alluvial diagrams, in contrast to the "multivariate" alluvial diagrams already implemented here.
 

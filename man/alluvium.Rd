@@ -13,11 +13,11 @@
 \title{Alluvial flows}
 \format{An object of class \code{StatAlluvium} (inherits from \code{Stat}, \code{ggproto}) of length 4.}
 \arguments{
-\item{axis_width}{The width of each variable axis, as a proportion of the
+\item{axis_width}{The width of each variable axis, as a proportion of the 
 separation between axes.}
 
-\item{ribbon_bend}{The horizontal distance between a variable axis
-(\code{axis_width/2} from its center) and the control point of the
+\item{ribbon_bend}{The horizontal distance between a variable axis 
+(\code{axis_width/2} from its center) and the control point of the 
 x-spline, also as a proportion of the separation between the axes.}
 }
 \description{
@@ -28,56 +28,56 @@ these depths.
 \examples{
 # basic flows (alluvia)
 ggplot(as.data.frame(Titanic),
-       aes(freq = Freq, axis1 = Class, axis2 = Sex)) +
+       aes(weight = Freq, axis1 = Class, axis2 = Sex)) +
     geom_alluvium()
 
 # use of aesthetics
 ggplot(as.data.frame(Titanic),
-       aes(freq = Freq,
+       aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age, axis4 = Survived)) +
     geom_alluvium(aes(fill = Age, alpha = Sex, color = Survived)) +
     scale_color_manual(values = c("black", "white"))
 
 # use of facets
 ggplot(as.data.frame(Titanic),
-       aes(freq = Freq,
+       aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
     geom_alluvium(aes(fill = Age, alpha = Sex)) +
     facet_wrap(~ Survived, scales = "free_y")
 
 # use of groups (needs to be prohibited)
 ggplot(as.data.frame(Titanic),
-       aes(freq = Freq, axis1 = Class, axis2 = Sex, group = Survived)) +
+       aes(weight = Freq, axis1 = Class, axis2 = Sex, group = Survived)) +
     geom_alluvium()
 
 # degeneracy (one axis)
-ggplot(as.data.frame(Titanic), aes(freq = Freq, axis = Class)) +
+ggplot(as.data.frame(Titanic), aes(weight = Freq, axis = Class)) +
     geom_alluvium(aes(fill = Class, color = Survived)) +
     scale_color_manual(values = c("black", "white"))
 
 # degeneracy (no axis)
 if (FALSE) {
-    ggplot(as.data.frame(Titanic), aes(freq = Freq)) +
+    ggplot(as.data.frame(Titanic), aes(weight = Freq)) +
         geom_alluvium(aes(fill = Class, color = Survived)) +
         scale_color_manual(values = c("black", "white"))
 }
 
 # control of horizontal spacing
 ggplot(as.data.frame(Titanic),
-       aes(freq = Freq,
+       aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age, axis4 = Survived)) +
     geom_alluvium(aes(fill = Age, alpha = Sex),
                   axis_width = 1/5, ribbon_bend = 1/3)
 
 # control of axis positions (ridiculous syntax)
 ggplot(as.data.frame(Titanic),
-       aes(freq = Freq,
+       aes(weight = Freq,
            axis1 = Class, axis1.5 = Age, axis2.5 = Sex, axis3 = Survived)) +
     geom_alluvium(aes(fill = Age, alpha = Sex))
 
 # use of annotation and labels
 ggplot(as.data.frame(Titanic),
-       aes(freq = Freq, axis1 = Class, axis2 = Sex, axis3 = Age)) +
+       aes(weight = Freq, axis1 = Class, axis2 = Sex, axis3 = Age)) +
     geom_alluvium() +
     geom_text(stat = "stratum") +
     ggtitle("Alluvial diagram of Titanic passenger demographic data") +
@@ -85,19 +85,20 @@ ggplot(as.data.frame(Titanic),
 
 # combining flows and boxes
 ggplot(as.data.frame(UCBAdmissions),
-       aes(freq = Freq, axis1 = Gender, axis2 = Dept)) +
+       aes(weight = Freq, axis1 = Gender, axis2 = Dept)) +
     geom_alluvium(aes(fill = Admit)) +
     geom_stratum() + geom_text(stat = "stratum")
 
 # combining flows and boxes and using facets
 ggplot(as.data.frame(UCBAdmissions),
-       aes(freq = Freq, axis1 = Dept, axis2 = Admit)) +
+       aes(weight = Freq, axis1 = Dept, axis2 = Admit)) +
     geom_alluvium() +
     geom_stratum() + geom_text(stat = "stratum") +
     facet_wrap(~ Gender, scales = "free_y")
 }
 \seealso{
-\code{\link{geom_stratum}} for intra-axis boxes.
+\code{\link{stratum}} for intra-axis boxes and
+  \code{\link{ggalluvial}} for a shortcut method.
 }
 \keyword{datasets}
 

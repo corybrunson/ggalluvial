@@ -5,23 +5,24 @@
 #' these depths.
 #' 
 #' @name alluvium
-#' @seealso \code{\link{geom_stratum}} for intra-axis boxes.
+#' @seealso \code{\link{stratum}} for intra-axis boxes and
+#'   \code{\link{ggalluvial}} for a shortcut method.
 #' @usage NULL
 #' @export
 #' @inheritParams layer
-#' @param axis_width The width of each variable axis, as a proportion of the
+#' @param axis_width The width of each variable axis, as a proportion of the 
 #'   separation between axes.
-#' @param ribbon_bend The horizontal distance between a variable axis
-#'   (\code{axis_width/2} from its center) and the control point of the
+#' @param ribbon_bend The horizontal distance between a variable axis 
+#'   (\code{axis_width/2} from its center) and the control point of the 
 #'   x-spline, also as a proportion of the separation between the axes.
 #' @example inst/examples/alluvium.r
 StatAlluvium <- ggproto(
     "StatAlluvium", Stat,
-    required_aes = c("freq"),
+    default_aes = aes(weight = 1),
     setup_data = function(data, params) {
         aggregate(
-            formula = as.formula(paste("freq ~",
-                                       paste(setdiff(names(data), "freq"),
+            formula = as.formula(paste("weight ~",
+                                       paste(setdiff(names(data), "weight"),
                                              collapse = "+"))),
             data = data,
             FUN = sum
@@ -37,8 +38,8 @@ StatAlluvium <- ggproto(
             # order ribbons according to axes, in above order
             ribbon_seq <- do.call(order, data[axis_seq])
             # ribbon floors and ceilings along axis
-            ymin_seq <- c(0, cumsum(data$freq[ribbon_seq]))
-            ymax_seq <- c(cumsum(data$freq[ribbon_seq]), sum(data$freq))
+            ymin_seq <- c(0, cumsum(data$weight[ribbon_seq]))
+            ymax_seq <- c(cumsum(data$weight[ribbon_seq]), sum(data$weight))
             # ribbon breaks
             cbind(i,
                   ymin_seq[order(ribbon_seq)],
@@ -76,7 +77,6 @@ stat_alluvium <- function(mapping = NULL, data = NULL, geom = "alluvium",
 #' @export
 GeomAlluvium <- ggproto(
     "GeomAlluvium", Geom,
-    required_aes = c("freq"),
     default_aes = aes(size = .5, linetype = 1,
                       colour = 0, fill = "gray", alpha = .5),
     setup_data = function(data, params) data,
@@ -91,7 +91,7 @@ GeomAlluvium <- ggproto(
             # spline coordinates (one axis)
             spline_data <- data.frame(
                 x = data$x + data$width / 2 * c(-1, 1, 1, -1),
-                y = data$ymin + first_row$freq * c(0, 0, 1, 1),
+                y = data$ymin + first_row$weight * c(0, 0, 1, 1),
                 shape = rep(0, 4)
             )
         } else {
@@ -104,7 +104,7 @@ GeomAlluvium <- ggproto(
             shape_oneway <- c(0, rep(c(0, 1, 1, 0), nrow(data) - 1), 0)
             spline_data <- data.frame(
                 x = c(x_oneway, rev(x_oneway)),
-                y = c(y_oneway, rev(y_oneway) + first_row$freq),
+                y = c(y_oneway, rev(y_oneway) + first_row$weight),
                 shape = rep(shape_oneway, 2)
             )
         }
