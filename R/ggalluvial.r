@@ -13,7 +13,10 @@
 #' @param weight a weight variable, from \code{data} or of compatible length 
 #'   with the elements of \code{formula}
 ggalluvial <- function(...) {
-    if (!is.null(list(...)[["formula"]])) {
+    input_list <- list(...)
+    if (!is.null(input_list[["formula"]]) |
+        ((is.null(names(input_list)) | input_list[[1]] == "") &
+         is.call(input_list[[1]]))) {
         ggalluvial.formula(...)
     } else {
         ggalluvial.default(...)

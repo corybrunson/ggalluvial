@@ -7,5 +7,5 @@ ggalluvial(data = as.data.frame(Titanic),
            formula = ~ Age + Sex + Class,
            weight = "Freq")
 
-# shortcut using formula interface with frequency array input and within-flow stratification
-ggalluvial(data = Titanic, formula = Survived ~ Age + Sex + Class)
+# formula interface with frequency array input and within-flow stratification
+ggalluvial(Survived ~ Age + Sex + Class, Titanic)
