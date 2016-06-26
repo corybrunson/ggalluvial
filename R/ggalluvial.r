@@ -40,7 +40,13 @@ ggalluvial.default <- function(...) {
 ggalluvial.formula <- function(formula, data = NULL, weight, ...) {
     formula <- as.formula(formula)
     if (!is.null(data)) {
-        if (!is.data.frame(data)) data <- as.data.frame(data)
+        if (!is.data.frame(data)) {
+            data <- as.data.frame(data)
+            if (!missing(weight)) {
+                warning("Using weights from table; 'weight' argument ignored")
+            }
+            weight <- "Freq"
+        }
     }
     
     dep_incl <- (length(formula) == 3)
