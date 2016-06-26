@@ -134,7 +134,6 @@ Several problems persist in the current attempt:
 - By default, should the factors of each axis proceed downward, not upward? This would require a transformation of `y` in both `geom_*`s, so it might be best implemented as a `coord_transform()` layer rather than a `params()` argument.
 - For each axis, the data are resorted, by the current axis first and then by the remaining axes in some order. The default order used here (`zigzag()`) proceeds to the remaining axes in order of proximity to the current axis, in order to minimize overlaps of alluvia. Other orders are possible and in some settings desirable, and should be available as options.
 - Another way to minimize alluvial overlaps is to reorder the strata within each axis (i.e. the levels within each factor variable). Should this be an option, or should it be up to the user to reorder the factor levels before plotting?
-- Currently, the alluvium for each group is plotted as a a contiguous closed spline. An alternative would be to plot the alluvial segment connecting each pair of adjacent axes. This would allow the user to control the order in which the alluvia are plotted at each step.
 - Should `geom_text(stat = "stratum")` be incorporated as a logical option in `geom_stratum()` that defaults to `TRUE`? Would this require writing a separate `geom_stratum_label()`?
 
 ### Miscellany
