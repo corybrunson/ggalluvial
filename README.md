@@ -81,13 +81,11 @@ dev.off()
 
 ### Shortcut
 
-Even the shortcut requires that a multidimensional frequency table be reformatted as a data frame, consistent with the principles of ggplot2 (see [here](https://rpubs.com/hadley/ggplot2-layers), section "Data"). It does include the axis labels fix used explicitly in the previous example.
+The default shortcut `ggalluvial.default` requires that a multidimensional frequency table be reformatted as a data frame, consistent with the principles of ggplot2 (see [here](https://rpubs.com/hadley/ggplot2-layers), section "Data"). The formula interface `ggalluvial.formula` is triggered when "formula" is an argument in the function call, or if the first (unnamed) argument is a call; as shown below, it accepts frequency tables as well, in which case the flows will automatically be weighted by the frequencies. Both include the axis labels fix used explicitly in the previous example.
 
 ```{r}
 png(height = 360, width = 600, file = "inst/fig/example-shortcut.png")
-ggalluvial(as.data.frame(Titanic),
-           aes(weight = Freq, axis1 = Class, axis2 = Sex, axis3 = Age,
-               fill = Survived))
+ggalluvial(Survived ~ Class + Sex + Age, Titanic)
 dev.off()
 ```
 
