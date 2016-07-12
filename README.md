@@ -79,6 +79,24 @@ dev.off()
 
 ![Facets](inst/fig/example-facet.png)
 
+### Alternate style
+
+The following adjustments to `axis_width` and the `geom_stratum` aesthetics mimic a popular style for alluvial diagrams, in which axes are thin and black and number but two, while labels are placed on the outer side of each. These diagrams are quite elegant, but to my mind the intrinsic rigidity of ggplot2 requires keeping the strata contiguous, so that the total height of each axis equals the cumulative weight (and hence the vertical axis makes sense).
+
+```{r}
+png(height = 360, width = 600, file = "inst/fig/example-style.png")
+ggplot(as.data.frame(Titanic),
+       aes(axis1 = Age, axis2 = Sex, axis3 = Class,
+           fill = Survived, weight = Freq)) +
+    geom_alluvium(axis_width = 1/12) +
+    geom_stratum(fill = "black", color = "lightgrey", axis_width = 1/12) +
+    scale_x_continuous(breaks = 1:3, labels = c("Age", "Sex", "Class")) +
+    geom_label(stat = "stratum")
+dev.off()
+```
+
+![Style](inst/fig/example-style.png)
+
 ### Shortcut
 
 The default shortcut `ggalluvial.default` requires that a multidimensional frequency table be reformatted as a data frame, consistent with the principles of ggplot2 (see [here](https://rpubs.com/hadley/ggplot2-layers), section "Data"). The formula interface `ggalluvial.formula` is triggered when "formula" is an argument in the function call, or if the first (unnamed) argument is a call; as shown below, it accepts frequency tables as well, in which case the flows will automatically be weighted by the frequencies. Both include the axis labels fix used explicitly in the previous example.
