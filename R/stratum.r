@@ -4,6 +4,7 @@
 #' \code{geom_stratum} stacks a box for each level of a variable at its axis.
 #' 
 #' @name stratum
+#' @import ggplot2
 #' @seealso \code{\link{alluvium}} for inter-axis flows and
 #'   \code{\link{ggalluvial}} for a shortcut method.
 #' @usage NULL

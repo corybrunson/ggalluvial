@@ -4,6 +4,7 @@
 #' on a formula in terms of the data elements
 #' 
 #' @name ggalluvial
+#' @import ggplot2
 #' @seealso \code{\link{alluvium}} and \code{\link{stratum}}
 #' @export
 #' @param ... arguments passed to \code{ggplot} and inherited by 
@@ -41,7 +42,7 @@ ggalluvial.default <- function(...) {
 #' @rdname ggalluvial
 #' @export
 ggalluvial.formula <- function(formula, data = NULL, weight, ...) {
-    formula <- as.formula(formula)
+    formula <- stats::as.formula(formula)
     if (!is.null(data)) {
         if (!is.data.frame(data)) {
             data <- as.data.frame(data)
@@ -57,7 +58,7 @@ ggalluvial.formula <- function(formula, data = NULL, weight, ...) {
         stop("Multilpe variables on LHS of '%s'")
     }
     
-    luv_data <- model.frame(formula = formula, data = data)
+    luv_data <- stats::model.frame(formula = formula, data = data)
     if (!missing(weight)) {
         if (is.character(weight)) {
             luv_data[[weight]] <- data[[weight]]

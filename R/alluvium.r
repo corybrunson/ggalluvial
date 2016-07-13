@@ -5,6 +5,7 @@
 #' these depths.
 #' 
 #' @name alluvium
+#' @import ggplot2
 #' @seealso \code{\link{stratum}} for intra-axis boxes and
 #'   \code{\link{ggalluvial}} for a shortcut method.
 #' @usage NULL
