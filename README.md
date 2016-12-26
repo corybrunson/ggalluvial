@@ -20,9 +20,10 @@ This package is serviceable (in the narrow sense of producing the kinds of image
 
 ```{r}
 if (!require(devtools)) {
-    install.packages("devtools")
+  install.packages("devtools")
 }
 devtools::install_github("corybrunson/ggalluvial")
+library(ggalluvial)
 ```
 
 ## Examples
@@ -33,12 +34,12 @@ devtools::install_github("corybrunson/ggalluvial")
 png(height = 360, width = 600, file = "inst/fig/example-basic.png")
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
-       axis1 = Class, axis2 = Sex, axis3 = Age, axis4 = Survived)) +
-    geom_alluvium() +
-    geom_stratum() +
-    geom_text(stat = "stratum") +
-    ggtitle("Titanic passenger demographic and survival data") +
-    theme_bw()
+           axis1 = Class, axis2 = Sex, axis3 = Age, axis4 = Survived)) +
+  geom_alluvium() +
+  geom_stratum() +
+  geom_text(stat = "stratum") +
+  ggtitle("Titanic passenger demographic and survival data") +
+  theme_bw()
 dev.off()
 ```
 
@@ -52,10 +53,10 @@ This example has a lot going on, and isn't ideal for analysis or publication pur
 png(height = 360, width = 600, file = "inst/fig/example-aes.png")
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
-       axis1 = Class, axis2 = Sex, axis3 = Age)) +
-    geom_alluvium(aes(fill = Age:Sex, alpha = Class, color = Survived)) +
-    scale_color_manual(values = c("black", "white")) +
-    ggtitle("Titanic passenger demographic and survival data")
+           axis1 = Class, axis2 = Sex, axis3 = Age)) +
+  geom_alluvium(aes(fill = Age:Sex, alpha = Class, color = Survived)) +
+  scale_color_manual(values = c("black", "white")) +
+  ggtitle("Titanic passenger demographic and survival data")
 dev.off()
 ```
 
@@ -69,11 +70,11 @@ The following example demonstrates `ggalluvial`'s compatibility with facets. It 
 png(height = 360, width = 600, file = "inst/fig/example-facet.png")
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq, axis1 = Class, axis2 = Sex)) +
-    geom_alluvium(aes(fill = Age)) +
-    geom_stratum() + geom_text(stat = "stratum") +
-    facet_wrap(~ Survived, scales = "free_y") +
-    scale_x_continuous(breaks = 1:2, labels = c("Class", "Sex")) +
-    ggtitle("Titanic passenger demographic and survival data, by survival")
+  geom_alluvium(aes(fill = Age)) +
+  geom_stratum() + geom_text(stat = "stratum") +
+  facet_wrap(~ Survived, scales = "free_y") +
+  scale_x_continuous(breaks = 1:2, labels = c("Class", "Sex")) +
+  ggtitle("Titanic passenger demographic and survival data, by survival")
 dev.off()
 ```
 
@@ -88,14 +89,29 @@ png(height = 360, width = 600, file = "inst/fig/example-style.png")
 ggplot(as.data.frame(Titanic),
        aes(axis1 = Age, axis2 = Sex, axis3 = Class,
            fill = Survived, weight = Freq)) +
-    geom_alluvium(axis_width = 1/12) +
-    geom_stratum(fill = "black", color = "lightgrey", axis_width = 1/12) +
-    scale_x_continuous(breaks = 1:3, labels = c("Age", "Sex", "Class")) +
-    geom_label(stat = "stratum")
+  geom_alluvium(axis_width = 1/12) +
+  geom_stratum(fill = "black", color = "lightgrey", axis_width = 1/12) +
+  scale_x_continuous(breaks = 1:3, labels = c("Age", "Sex", "Class")) +
+  geom_label(stat = "stratum")
 dev.off()
 ```
 
 ![Style](inst/fig/example-style.png)
+
+### Time series
+
+A more straightforward class of alluvial diagrams track discrete distributions over time. The following example reproduces the original time series example from [alluvial](https://github.com/mbojan/alluvial). Some distinguishability is lost due to the absence of gaps between the alluvial flows, but on the whole the effect is quite nice. As in the categorical case, these diagrams are compatible with facets.
+
+```{r}
+data(Refugees, package = "alluvial")
+png(height = 360, width = 600, file = "inst/fig/example-ts.png")
+ggplot(Refugees,
+       aes(x = year, group = country, weight = refugees)) +
+  geom_alluvium_ts(aes(fill = country, colour = country))
+dev.off()
+```
+
+![Time series](inst/fig/example-ts.png)
 
 ### Shortcut
 
@@ -135,11 +151,11 @@ Here are some remaining tasks:
 
 ### Extension to time series
 
-The package now supports time series alluvial diagrams via `*_alluvium_ts()`; the examples use the `Refugees` dataset from [alluvial](https://github.com/mbojan/alluvial).
+The package now supports time series alluvial diagrams via `*_alluvium_ts()`. A few tasks remain:
 
-* Additional examples should use the `WorldPhones` and `Seatbelts` datasets in base R.
+* The horizontal axis should avoid fractional values where possible, i.e. be prettified.
+* The geom should have an option to sort the groups as given or (default) by size.
 * This implementation should be incorporated into `ggalluvial()` based on its own formula type.
-* At least one plot should be added to the examples above.
 
 I'll refer to these as "bivariate" alluvial diagrams, in contrast to the "multivariate" alluvial diagrams already implemented here.
 

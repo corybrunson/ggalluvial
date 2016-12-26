@@ -1,3 +1,10 @@
+# time series of WorldPhones data
+wph <- as.data.frame(as.table(WorldPhones))
+names(wph) <- c("Year", "Region", "Telephones")
+ggplot(wph,
+       aes(x = Year, group = Region, weight = Telephones)) +
+  geom_alluvium_ts(aes(fill = Region, colour = Region))
+
 # load refugees data from alluvial
 data(Refugees, package = "alluvial")
 
