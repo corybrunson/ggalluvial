@@ -135,7 +135,11 @@ Here are some remaining tasks:
 
 ### Extension to time series
 
-See the [alluvial package](https://github.com/mbojan/alluvial) for examples. More generally, ggalluvial should be able to track the frequencies of the factors of one categorical variable along the factors of another. Using as an example dataset `as.data.frame(as.table(WorldPhones))`, It might make sense for this to be done using `aes(x = Var1, y = Var2, weight = Freq)`, and for `x` and `y` to override any passes to axis aesthetics. Another dataset for exemplary use would be `Seatbelts`.
+The package now supports time series alluvial diagrams via `*_alluvium_ts()`; the examples use the `Refugees` dataset from [alluvial](https://github.com/mbojan/alluvial).
+
+* Additional examples should use the `WorldPhones` and `Seatbelts` datasets in base R.
+* This implementation should be incorporated into `ggalluvial()` based on its own formula type.
+* At least one plot should be added to the examples above.
 
 I'll refer to these as "bivariate" alluvial diagrams, in contrast to the "multivariate" alluvial diagrams already implemented here.
 
