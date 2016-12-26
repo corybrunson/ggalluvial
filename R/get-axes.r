@@ -6,6 +6,6 @@
 #' 
 #' @param x character vector
 get_axes <- function(x) {
-    axis_ind <- grep("^axis[0-9\\.]*$", x)
-    axis_ind[order(as.numeric(gsub("^axis", "", x[axis_ind])))]
+  axis_ind <- grep("^axis[0-9\\.]*$", x)
+  axis_ind[order(as.numeric(gsub("^axis", "", x[axis_ind])))]
 }
