@@ -17,7 +17,8 @@ Depends:
 Imports:
     stats,
     grid,
-    reshape2
+    reshape2,
+    alluvial
 Suggests:
     knitr
 License: GPL-2

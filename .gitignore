@@ -1,10 +1,10 @@
 # R session data
-*.Rhistory
-*.Rapp.history
+**/.Rhistory
+.Rapp.history
 .RData
 
 # Mac OS X
-*.DS_Store
+**/.DS_Store
 
 # litter
 sandbox
