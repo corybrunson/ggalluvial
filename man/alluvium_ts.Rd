@@ -10,6 +10,10 @@
 \title{Alluvial flows for time series}
 \format{An object of class \code{StatAlluviumTs} (inherits from \code{Stat}, \code{ggproto}) of length 4.}
 \arguments{
+\item{decreasing}{Logical; whether to stack the depths at each x-value with
+the largest on top (FALSE, default), with the largest on bottom (TRUE), or
+in the order of the grouping variable values (NA)}
+
 \item{ribbon_bend}{The horizontal distance between a measurement time and the
 control point of the x-spline, as a proportion of the separation between
 times}
@@ -35,10 +39,11 @@ ggplot(data = Refugees,
        aes(x = year, weight = refugees, group = country)) +
   geom_alluvium_ts()
 
-# time series alluvia with some aesthetics
+# time series alluvia with some aesthetics and without sorting by volume
 ggplot(data = Refugees,
        aes(x = year, weight = refugees, group = country)) +
-  geom_alluvium_ts(aes(fill = country), colour = "black")
+  geom_alluvium_ts(aes(fill = country), colour = "black",
+                   decreasing = NA)
 
 # time series alluvia faceted by region
 country_regions <- c(

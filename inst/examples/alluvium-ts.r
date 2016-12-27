@@ -13,10 +13,11 @@ ggplot(data = Refugees,
        aes(x = year, weight = refugees, group = country)) +
   geom_alluvium_ts()
 
-# time series alluvia with some aesthetics
+# time series alluvia with some aesthetics and without sorting by volume
 ggplot(data = Refugees,
        aes(x = year, weight = refugees, group = country)) +
-  geom_alluvium_ts(aes(fill = country), colour = "black")
+  geom_alluvium_ts(aes(fill = country), colour = "black",
+                   decreasing = NA)
 
 # time series alluvia faceted by region
 country_regions <- c(

@@ -10,6 +10,9 @@
 #' @usage NULL
 #' @export
 #' @inheritParams layer
+#' @param decreasing Logical; whether to stack the depths at each x-value with
+#'   the largest on top (FALSE, default), with the largest on bottom (TRUE), or
+#'   in the order of the grouping variable values (NA)
 #' @param ribbon_bend The horizontal distance between a measurement time and the
 #'   control point of the x-spline, as a proportion of the separation between
 #'   times
@@ -18,7 +21,8 @@ StatAlluviumTs <- ggproto(
   "StatAlluviumTs", Stat,
   required_aes = c("x", "group", "weight"),
   setup_data = function(data, params) data,
-  compute_panel = function(data, scales, params) {
+  compute_panel = function(data, scales, params,
+                           decreasing = FALSE) {
     #message("StatAlluviumTs > compute_panel receives:")
     #print(head(data))
     #print(tail(data))
@@ -28,8 +32,17 @@ StatAlluviumTs <- ggproto(
       with(data, expand.grid(group = unique(group), x = unique(x))),
       all.y = TRUE
     )
-    # sort data by x and weight
-    data <- data[order(data$x, data$weight), ]
+    # sort data by x and weight or group
+    slice_sort <- if (is.na(decreasing)) {
+      data$group
+    } else if (!decreasing) {
+      data$weight
+    } else if (decreasing) {
+      -data$weight
+    } else {
+      1:nrow(data)
+    }
+    data <- data[order(data$x, slice_sort), ]
     # cumulative weights
     data <- as.data.frame(dplyr::mutate(
       dplyr::group_by(data, x),
