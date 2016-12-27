@@ -7,11 +7,11 @@
 #' @import ggplot2
 #' @seealso \code{\link{alluvium}} and \code{\link{stratum}}
 #' @export
-#' @param ... arguments passed to \code{ggplot} and inherited by 
+#' @param ... Arguments passed to \code{ggplot} and inherited by 
 #'   \code{geom_alluvium} and \code{geom_stratum}.
-#' @param formula a formula to specify the axes and alluvial divisions
-#' @param data a data frame or frequency table
-#' @param weight a weight variable, from \code{data} or of compatible length 
+#' @param formula A formula to specify the axes and alluvial divisions
+#' @param data A data frame or frequency table
+#' @param weight A weight variable, from \code{data} or of compatible length 
 #'   with the elements of \code{formula}
 ggalluvial <- function(...) {
   input_list <- list(...)
