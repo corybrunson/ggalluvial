@@ -74,7 +74,7 @@ ggplot(as.data.frame(Titanic),
   geom_stratum() + geom_text(stat = "stratum") +
   facet_wrap(~ Survived, scales = "free_y") +
   scale_x_continuous(breaks = 1:2, labels = c("Class", "Sex")) +
-  ggtitle("Titanic passenger demographic and survival data, by survival")
+  ggtitle("Titanic passenger data, faceted by survival")
 dev.off()
 ```
 
@@ -92,7 +92,8 @@ ggplot(as.data.frame(Titanic),
   geom_alluvium(axis_width = 1/12) +
   geom_stratum(fill = "black", color = "lightgrey", axis_width = 1/12) +
   scale_x_continuous(breaks = 1:3, labels = c("Age", "Sex", "Class")) +
-  geom_label(stat = "stratum")
+  geom_label(stat = "stratum") +
+  ggtitle("Titanic passenger data")
 dev.off()
 ```
 
@@ -107,7 +108,8 @@ data(Refugees, package = "alluvial")
 png(height = 360, width = 600, file = "inst/fig/example-ts.png")
 ggplot(Refugees,
        aes(x = year, group = country, weight = refugees)) +
-  geom_alluvium_ts(aes(fill = country, colour = country))
+  geom_alluvium_ts(aes(fill = country, colour = country)) +
+  ggtitle("Refugee volume over the years, by country of origin")
 dev.off()
 ```
 
