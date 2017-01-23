@@ -155,8 +155,6 @@ Here are some remaining tasks:
 
 The package now supports time series alluvial diagrams via `*_alluvium_ts()`. A few tasks remain:
 
-* The horizontal axis should avoid fractional values where possible, i.e. be prettified.
-* The geom should have an option to sort the groups as given or (default) by size.
 * This implementation should be incorporated into `ggalluvial()` based on its own formula type.
 
 I refer to these as time series alluvial diagrams, in contrast to the categorical alluvial diagrams originally implemented.
