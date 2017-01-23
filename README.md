@@ -101,7 +101,7 @@ dev.off()
 
 ### Time series
 
-A more straightforward class of alluvial diagrams track discrete distributions over time. The following example reproduces the original time series example from [alluvial](https://github.com/mbojan/alluvial). Some distinguishability is lost due to the absence of gaps between the alluvial flows, but on the whole the effect is quite nice. As in the categorical case, these diagrams are compatible with facets.
+A more straightforward class of alluvial diagrams track discrete distributions over time. The following example reproduces the original time series example from [alluvial](https://github.com/mbojan/alluvial). Some distinguishability is lost due to the absence of gaps between the alluvial flows, but on the whole the effect is quite nice. I refer to these as time series alluvial diagrams, in contrast to the categorical alluvial diagrams originally implemented. As in the categorical case, these diagrams are compatible with facets.
 
 ```{r}
 data(Refugees, package = "alluvial")
@@ -117,7 +117,7 @@ dev.off()
 
 ### Shortcut
 
-The default shortcut `ggalluvial.default` requires that a multidimensional frequency table be reformatted as a data frame, consistent with the principles of ggplot2 (see [here](https://rpubs.com/hadley/ggplot2-layers), section "Data"). The formula interface `ggalluvial.formula` is triggered when "formula" is an argument in the function call, or if the first (unnamed) argument is a call; as shown below, it accepts frequency tables as well, in which case the flows will automatically be weighted by the frequencies. Both include the axis labels fix used explicitly in the previous example.
+The default shortcut `ggalluvial.default` requires that a multidimensional frequency table be reformatted as a data frame, consistent with the principles of ggplot2 (see [here](https://rpubs.com/hadley/ggplot2-layers), section "Data"). The formula interface `ggalluvial.formula` is triggered when "formula" is an argument in the function call, or if the first (unnamed) argument is a call; as shown below, it accepts frequency tables as well, in which case the flows will automatically be weighted by the frequencies. It will produce a categorical alluvial diagram if the RHS of the formula has at least two variables, and a time series diagram if the RHS has only one variable. Both shortcut functions include the axis labels fix used explicitly in the previous example.
 
 ```{r}
 png(height = 360, width = 600, file = "inst/fig/example-shortcut.png")
@@ -152,14 +152,6 @@ An alternative would be to first "alluviate" the data, i.e. to melt the axis var
 ## Agenda
 
 Here are some remaining tasks:
-
-### Extension to time series
-
-The package now supports time series alluvial diagrams via `*_alluvium_ts()`. A few tasks remain:
-
-* This implementation should be incorporated into `ggalluvial()` based on its own formula type.
-
-I refer to these as time series alluvial diagrams, in contrast to the categorical alluvial diagrams originally implemented.
 
 ### Interface
 

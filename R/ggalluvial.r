@@ -70,11 +70,28 @@ ggalluvial.formula <- function(formula, data = NULL, weight, ...) {
   formula_aes <- aes()
   if (!missing(weight)) formula_aes[["weight"]] <-
     if (is.character(weight)) as.name(weight) else as.name("weight")
-  formula_axes <- all.vars(formula[[2 + dep_incl]])
-  for (i in 1:length(formula_axes)) {
-    formula_aes[[paste0("axis", i)]] <- as.name(formula_axes[i])
-  }
-  if (dep_incl) formula_aes[["fill"]] <- as.name(all.vars(formula[[2]]))
   
-  ggalluvial.default(luv_data, formula_aes, ...)
+  # choose categorical or time series format based on number of RHS variables
+  if (dep_incl & length(all.vars(formula[[3]])) > 1) {
+    
+    formula_axes <- all.vars(formula[[2 + dep_incl]])
+    for (i in 1:length(formula_axes)) {
+      formula_aes[[paste0("axis", i)]] <- as.name(formula_axes[i])
+    }
+    if (dep_incl) formula_aes[["fill"]] <- as.name(all.vars(formula[[2]]))
+    
+    ggalluvial.default(luv_data, formula_aes, ...)
+    
+  } else {
+    
+    formula_aes$x <- as.name(formula[[3]])
+    grp <- as.name(formula[[2]])
+    formula_aes$group <- grp
+    formula_aes$fill <- grp
+    formula_aes$colour <- grp
+    
+    ggplot(data = luv_data, mapping = formula_aes, ...) +
+      geom_alluvium_ts()
+    
+  }
 }

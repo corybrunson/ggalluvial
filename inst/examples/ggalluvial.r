@@ -9,3 +9,11 @@ ggalluvial(data = as.data.frame(Titanic),
 
 # formula interface with frequency array input and within-flow stratification
 ggalluvial(Survived ~ Age + Sex + Class, Titanic)
+
+# formula interface with only one dependent variable (for time series)
+ggalluvial(Survived ~ Class, Titanic)
+
+# formula interface for time series of Refugee data
+ggalluvial(formula = country ~ year,
+           data = Refugees,
+           weight = "refugees")

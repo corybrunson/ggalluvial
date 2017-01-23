@@ -7,9 +7,9 @@
 zigzag(n, i)
 }
 \arguments{
-\item{n}{numeric, a positive integer}
+\item{n}{Numeric, a positive integer}
 
-\item{i}{numeric, a positive integer at most \code{n}}
+\item{i}{Numeric, a positive integer at most \code{n}}
 }
 \description{
 Order the numbers 1 through \code{n}, starting at some index and zigzagging

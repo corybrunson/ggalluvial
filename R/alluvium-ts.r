@@ -20,7 +20,15 @@
 StatAlluviumTs <- ggproto(
   "StatAlluviumTs", Stat,
   required_aes = c("x", "group", "weight"),
-  setup_data = function(data, params) data,
+  setup_data = function(data, params) {
+    aggregate(
+      formula = as.formula(paste("weight ~",
+                                 paste(setdiff(names(data), "weight"),
+                                       collapse = "+"))),
+      data = data,
+      FUN = sum
+    )
+  },
   compute_panel = function(data, scales, params,
                            decreasing = FALSE) {
     #message("StatAlluviumTs > compute_panel receives:")

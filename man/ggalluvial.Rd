@@ -13,14 +13,14 @@ ggalluvial.default(...)
 ggalluvial.formula(formula, data = NULL, weight, ...)
 }
 \arguments{
-\item{...}{arguments passed to \code{ggplot} and inherited by 
+\item{...}{Arguments passed to \code{ggplot} and inherited by 
 \code{geom_alluvium} and \code{geom_stratum}.}
 
-\item{formula}{a formula to specify the axes and alluvial divisions}
+\item{formula}{A formula to specify the axes and alluvial divisions}
 
-\item{data}{a data frame or frequency table}
+\item{data}{A data frame or frequency table}
 
-\item{weight}{a weight variable, from \code{data} or of compatible length 
+\item{weight}{A weight variable, from \code{data} or of compatible length 
 with the elements of \code{formula}}
 }
 \description{
