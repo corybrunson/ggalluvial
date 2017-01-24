@@ -16,7 +16,9 @@
 StatStratum <- ggproto(
   "StatStratum", Stat,
   setup_data = function(data, params) {
+    
     if (is.null(data$weight)) data$weight <- rep(1, nrow(data))
+    
     data <- aggregate(
       formula = as.formula(paste("weight ~",
                                  paste(setdiff(names(data), "weight"),
@@ -24,6 +26,7 @@ StatStratum <- ggproto(
       data = data,
       FUN = sum
     )
+    
     axis_ind <- get_axes(names(data))
     # stack axis-aggregated data with cumulative frequencies
     res_data <- do.call(rbind, lapply(unique(data$PANEL), function(p) {
@@ -35,11 +38,13 @@ StatStratum <- ggproto(
         cbind(pos = i, agg, cumweight = cumsum(agg$weight), PANEL = p)
       }))
     }))
+    
     # add group
     cbind(res_data, group = 1:nrow(res_data))
   },
   compute_group = function(data, scales,
                            axis_width = 1/3) {
+    
     rownames(data) <- NULL
     rect_data <- data.frame(x = data$pos,
                             y = (data$cumweight - data$weight / 2),
@@ -70,6 +75,7 @@ GeomStratum <- ggproto(
   default_aes = aes(size = .5, linetype = 1,
                     colour = "black", fill = "white", alpha = 1),
   setup_data = function(data, params) {
+    
     transform(data,
               xmin = x - width / 2, xmax = x + width / 2,
               ymin = y - weight / 2, ymax = y + weight / 2)

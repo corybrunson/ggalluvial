@@ -20,7 +20,20 @@
 StatAlluvium <- ggproto(
   "StatAlluvium", Stat,
   setup_data = function(data, params) {
+    
     if (is.null(data$weight)) data$weight <- rep(1, nrow(data))
+    
+    # if group variable does not respect axes, print message and fix it
+    interact <- interaction(data[, grep("^axis[0-9\\.]*", names(data))])
+    interact_group <- interaction(data$group, interact)
+    if (!all(match(interact_group, unique(interact_group)) ==
+             match(data$group, unique(data$group)))) {
+      message(paste0("'group' assignments do not respect axis assignments,",
+                     " and will be ignored."))
+      data$group <- as.numeric(interact)
+    }
+    
+    # aggregate over axes and groups by weight
     aggregate(
       formula = as.formula(paste("weight ~",
                                  paste(setdiff(names(data), "weight"),
@@ -31,7 +44,9 @@ StatAlluvium <- ggproto(
   },
   compute_panel = function(data, scales, params,
                            axis_width = 1/3) {
+    
     axis_ind <- get_axes(names(data))
+    
     # x and y coordinates of center of flow at each axis
     compute_alluvium <- function(i) {
       # order axis indices
@@ -46,15 +61,19 @@ StatAlluvium <- ggproto(
             ymin_seq[order(ribbon_seq)],
             ymax_seq[order(ribbon_seq)])
     }
+    
     alluvia <- do.call(rbind, lapply(1:length(axis_ind), compute_alluvium))
     colnames(alluvia) <- c("x", "ymin", "ymax")
     data <- data.frame(data, alluvia)
+    
     # widths and x bounds
     data$xmin <- data$x - axis_width / 2
     data$xmax <- data$x + axis_width / 2
     data$width <- axis_width
+    
     # y centers
     data$y <- (data$ymin + data$ymax) / 2
+    
     data
   }
 )
@@ -83,6 +102,7 @@ GeomAlluvium <- ggproto(
   setup_data = function(data, params) data,
   draw_group = function(data, panel_scales, coord,
                         ribbon_bend = 1/6) {
+    
     first_row <- data[1, setdiff(names(data), c("x", "xmin", "xmax",
                                                 "y", "ymin", "ymax",
                                                 "width")),
@@ -110,8 +130,10 @@ GeomAlluvium <- ggproto(
       )
     }
     data <- data.frame(first_row, spline_data)
+    
     # transform (after calculating spline paths)
     coords <- coord$transform(data, panel_scales)
+    
     # graphics object
     grid::xsplineGrob(
       x = coords$x, y = coords$y, shape = coords$shape,

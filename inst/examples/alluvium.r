@@ -10,7 +10,7 @@ ggplot(as.data.frame(Titanic),
   geom_alluvium(aes(fill = Age, alpha = Sex)) +
   facet_wrap(~ Survived, scales = "free_y")
 
-# use of groups (needs to be prohibited)
+# declaration of groups (ignored)
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq, axis1 = Class, axis2 = Sex, group = Survived)) +
   geom_alluvium()

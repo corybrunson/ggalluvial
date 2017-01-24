@@ -21,3 +21,9 @@ ggplot(as.data.frame(Titanic),
   geom_alluvium(aes(fill = Age)) +
   geom_stratum() + geom_text(stat = "stratum") +
   facet_wrap(~ Survived, scales = "free_y")
+
+# declaration of groups (ignored)
+ggplot(as.data.frame(Titanic),
+       aes(weight = Freq, axis1 = Class, axis2 = Sex, group = Survived)) +
+  geom_alluvium() +
+  geom_stratum() + geom_text(stat = "stratum")
