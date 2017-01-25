@@ -15,9 +15,7 @@
 #'   with the elements of \code{formula}
 ggalluvial <- function(...) {
   input_list <- list(...)
-  if (!is.null(input_list[["formula"]]) |
-      ((is.null(names(input_list)) | identical(input_list[[1]], "")) &
-       is.call(input_list[[1]]))) {
+  if (!is.null(input_list[["formula"]]) | any(sapply(input_list, is.call))) {
     ggalluvial.formula(...)
   } else {
     ggalluvial.default(...)
@@ -81,7 +79,7 @@ ggalluvial.formula <- function(formula, data = NULL, weight, ...) {
     for (i in 1:length(formula_axes)) {
       formula_aes[[paste0("axis", i)]] <- as.name(formula_axes[i])
     }
-    if (dep_incl) formula_aes[["fill"]] <- as.name(rhs)
+    if (dep_incl) formula_aes[["fill"]] <- as.name(lhs)
     
     ggalluvial.default(luv_data, formula_aes, ...)
     

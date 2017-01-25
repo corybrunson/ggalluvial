@@ -14,6 +14,4 @@ ggalluvial(Survived ~ Age + Sex + Class, Titanic)
 ggalluvial(Survived ~ Class, Titanic)
 
 # formula interface for time series of Refugee data
-ggalluvial(formula = country ~ year,
-           data = alluvial::Refugees,
-           weight = "refugees")
+ggalluvial(country ~ year, alluvial::Refugees, weight = "refugees")
