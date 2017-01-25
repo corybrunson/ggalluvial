@@ -53,8 +53,7 @@ ggalluvial.formula <- function(formula, data = NULL, weight, ...) {
     }
   }
   
-  dep_incl <- (length(formula) == 3)
-  if (dep_incl & length(all.vars(formula[[2]])) > 1) {
+  if (length(all.vars(update(formula, . ~ 0))) > 1) {
     stop("Multilpe variables on LHS of '%s'")
   }
   
@@ -72,6 +71,7 @@ ggalluvial.formula <- function(formula, data = NULL, weight, ...) {
     if (is.character(weight)) as.name(weight) else as.name("weight")
   
   # choose categorical or time series format based on number of RHS variables
+  dep_incl <- (length(formula) == 3)
   if (dep_incl & length(all.vars(formula[[3]])) > 1) {
     
     formula_axes <- all.vars(formula[[2 + dep_incl]])
