@@ -123,9 +123,9 @@ ggalluvial(Survived ~ Class + Sex + Age, Titanic)
 dev.off()
 ```
 
-The following example reproduces the original time series example from [alluvial](https://github.com/mbojan/alluvial). Some distinguishability is lost due to the absence of gaps between the alluvial flows, but on the whole the effect is quite nice.
-
 ![Shortcut](inst/fig/example-shortcut-1.png)
+
+The following example reproduces the original time series example from [alluvial](https://github.com/mbojan/alluvial). Some distinguishability is lost due to the absence of gaps between the alluvial flows, but on the whole the effect is quite nice.
 
 ```{r}
 png(height = 360, width = 600, file = "inst/fig/example-shortcut-2.png")
