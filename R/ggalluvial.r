@@ -53,7 +53,10 @@ ggalluvial.formula <- function(formula, data = NULL, weight, ...) {
     }
   }
   
-  if (length(all.vars(update(formula, . ~ 0))) > 1) {
+  rhs <- labels(terms(formula))
+  lhs <- setdiff(all.vars(formula), rhs)
+  
+  if (length(lhs) > 1) {
     stop("Multilpe variables on LHS of '%s'")
   }
   
@@ -72,20 +75,20 @@ ggalluvial.formula <- function(formula, data = NULL, weight, ...) {
   
   # choose categorical or time series format based on number of RHS variables
   dep_incl <- (length(formula) == 3)
-  if (length(labels(terms(formula))) > 1) {
+  if (length(rhs) > 1) {
     
-    formula_axes <- labels(terms(formula))
+    formula_axes <- rhs
     for (i in 1:length(formula_axes)) {
       formula_aes[[paste0("axis", i)]] <- as.name(formula_axes[i])
     }
-    if (dep_incl) formula_aes[["fill"]] <- as.name(all.vars(formula[[2]]))
+    if (dep_incl) formula_aes[["fill"]] <- as.name(rhs)
     
     ggalluvial.default(luv_data, formula_aes, ...)
     
   } else {
     
-    formula_aes$x <- as.name(formula[[3]])
-    grp <- as.name(formula[[2]])
+    formula_aes$x <- as.name(rhs)
+    grp <- as.name(lhs)
     formula_aes$group <- grp
     formula_aes$fill <- grp
     formula_aes$colour <- grp
