@@ -53,7 +53,7 @@ ggalluvial.formula <- function(formula, data = NULL, weight, ...) {
     }
   }
   
-  rhs <- labels(terms(formula))
+  rhs <- labels(stats::terms(formula))
   lhs <- setdiff(all.vars(formula), rhs)
   
   if (length(lhs) > 1) {
