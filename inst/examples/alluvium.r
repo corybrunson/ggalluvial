@@ -38,7 +38,7 @@ ggplot(as.data.frame(Titanic),
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis1.5 = Age, axis2.5 = Sex, axis3 = Survived)) +
-  geom_alluvium(aes(fill = Age, alpha = Sex))
+  geom_alluvium(aes(fill = Age))
 
 # use of annotation and labels
 ggplot(as.data.frame(Titanic),
