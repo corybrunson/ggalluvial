@@ -16,7 +16,7 @@
 ggalluvial <- function(...) {
   input_list <- list(...)
   if (!is.null(input_list[["formula"]]) |
-      ((is.null(names(input_list)) | input_list[[1]] == "") &
+      ((is.null(names(input_list)) | identical(input_list[[1]], "")) &
        is.call(input_list[[1]]))) {
     ggalluvial.formula(...)
   } else {
