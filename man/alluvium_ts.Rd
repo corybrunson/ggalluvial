@@ -31,20 +31,19 @@ ggplot(wph,
        aes(x = Year, group = Region, weight = Telephones)) +
   geom_alluvium_ts(aes(fill = Region, colour = Region))
 
-# load refugees data from alluvial
-data(Refugees, package = "alluvial")
-
 # basic time series alluvia
-ggplot(data = Refugees,
+ggplot(data = alluvial::Refugees,
        aes(x = year, weight = refugees, group = country)) +
   geom_alluvium_ts()
 
 # time series alluvia with some aesthetics and without sorting by volume
-ggplot(data = Refugees,
+ggplot(data = alluvial::Refugees,
        aes(x = year, weight = refugees, group = country)) +
   geom_alluvium_ts(aes(fill = country), colour = "black",
                    decreasing = NA)
 
+# load refugees data from alluvial
+data(Refugees, package = "alluvial")
 # time series alluvia faceted by region
 country_regions <- c(
   Afghanistan = "Middle East",
