@@ -25,9 +25,7 @@ StatAlluvium <- ggproto(
     
     # if group variable does not respect axes, print message and fix it
     interact <- interaction(data[, grep("^axis[0-9\\.]*", names(data))])
-    interact_group <- interaction(data$group, interact)
-    if (!all(match(interact_group, unique(interact_group)) ==
-             match(data$group, unique(data$group)))) {
+    if (!splinters(data$group, interact)) {
       message(paste0("'group' assignments do not respect axis assignments,",
                      " and will be ignored."))
       data$group <- as.numeric(interact)
