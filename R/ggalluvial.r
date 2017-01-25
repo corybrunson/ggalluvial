@@ -74,7 +74,7 @@ ggalluvial.formula <- function(formula, data = NULL, weight, ...) {
   dep_incl <- (length(formula) == 3)
   if (dep_incl & length(labels(terms(formula))) > 1) {
     
-    formula_axes <- all.vars(formula[[2 + dep_incl]])
+    formula_axes <- labels(terms(formula))
     for (i in 1:length(formula_axes)) {
       formula_aes[[paste0("axis", i)]] <- as.name(formula_axes[i])
     }
