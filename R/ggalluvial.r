@@ -72,7 +72,7 @@ ggalluvial.formula <- function(formula, data = NULL, weight, ...) {
   
   # choose categorical or time series format based on number of RHS variables
   dep_incl <- (length(formula) == 3)
-  if (dep_incl & length(labels(terms(formula))) > 1) {
+  if (length(labels(terms(formula))) > 1) {
     
     formula_axes <- labels(terms(formula))
     for (i in 1:length(formula_axes)) {
