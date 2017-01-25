@@ -15,7 +15,7 @@ ggplot(as.data.frame(Titanic),
        aes(weight = Freq, axis1 = Class, axis2 = Sex, group = Survived)) +
   geom_alluvium()
 
-# degeneracy (one axis)
+# degeneracy (one axis; unavailable through shortcut function)
 ggplot(as.data.frame(Titanic), aes(weight = Freq, axis = Class)) +
   geom_alluvium(aes(fill = Class, color = Survived)) +
   scale_color_manual(values = c("black", "white"))
@@ -31,7 +31,7 @@ if (FALSE) {
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age, axis4 = Survived)) +
-  geom_alluvium(aes(fill = Age, alpha = Sex),
+  geom_alluvium(aes(fill = Age),
                 axis_width = 1/5, ribbon_bend = 1/3)
 
 # control of axis positions (ridiculous syntax)
