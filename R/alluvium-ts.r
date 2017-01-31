@@ -31,9 +31,6 @@ StatAlluviumTs <- ggproto(
   },
   compute_panel = function(data, scales, params,
                            decreasing = FALSE) {
-    #message("StatAlluviumTs > compute_panel receives:")
-    #print(head(data))
-    #print(tail(data))
     # fill in missing values (as zeros)
     data <- merge(
       data,
@@ -56,9 +53,6 @@ StatAlluviumTs <- ggproto(
       dplyr::group_by(data, x),
       ymax = cumsum(weight)
     ))
-    #message("StatAlluviumTs > compute_panel returns:")
-    #print(head(data))
-    #print(tail(data))
     data
   }
 )
@@ -87,9 +81,6 @@ GeomAlluviumTs <- ggproto(
   setup_data = function(data, params) data,
   draw_group = function(data, panel_scales, coord,
                         ribbon_bend = 1/3) {
-    #message("GeomAlluviumTs > draw_group receives:")
-    #print(head(data))
-    #print(tail(data))
     # save elements from first row
     first_row <- data[1,
                       setdiff(names(data), c("x", "ymax", "weight")),
