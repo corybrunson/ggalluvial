@@ -80,7 +80,7 @@ GeomAlluviumTs <- ggproto(
                     colour = 0, fill = "gray", alpha = .5),
   setup_data = function(data, params) data,
   draw_group = function(data, panel_scales, coord,
-                        ribbon_bend = 1/3) {
+                        ribbon_bend = 1/6) {
     # save elements from first row
     first_row <- data[1,
                       setdiff(names(data), c("x", "ymax", "weight")),
