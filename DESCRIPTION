@@ -1,16 +1,18 @@
 Package: ggalluvial
 Type: Package
 Title: Alluvial diagrams in ggplot2
-Version: 0.1
+Version: 0.2
 Date: 2016-05-15
 Authors@R: person('Jason Cory', 'Brunson', email = 'jabrunso@vt.edu',
     role = c('aut', 'cre'))
 Maintainer: Jason Cory Brunson <jabrunso@vt.edu>
 Description: In the context of frequency tables, an alluvial diagram represents
-    each categorical variable (axis) as a column of stacked values, and each
-    subset (or individual) as a spline through the corresponding value at each
-    column. This package contains stat-geom pairs to construct both
-    intra-variable boxes ("strata") and inter-variable flows ("alluvia").
+    each categorical variable (axis) as a stacked bar plot, and each
+    subset (or individual) as a spline passing through each axis at the value
+    it takes there. This package contains stat/geom pairs to construct both
+    intra-variable bars ("strata") and inter-variable splines ("alluvia").
+    A temporal alluvial diagram represents frequencies along a single axis
+    that change over time.
 Depends:
     R (>= 3.3.1),
     ggplot2
