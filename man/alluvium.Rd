@@ -25,6 +25,23 @@ x-spline, also as a proportion of the separation between the axes.}
 \code{geom_alluvium} plots an x-spline for each group through the axes at 
 these depths.
 }
+\section{Aesthetics}{
+
+\code{stat_alluvium} understands only the \code{group} aesthetic, but it is
+currently ignored.
+\code{geom_alluvium} understands the following aesthetics (required
+aesthetics are in bold):
+\itemize{
+  \item \strong{\code{axis[0-9\\.]}} (\code{axis1}, \code{axis2.5}, etc.)
+  \item \code{alpha}
+  \item \code{colour}
+  \item \code{fill}
+  \item \code{group}
+  \item \code{linetype}
+  \item \code{size}
+}
+Currently, \code{group} is ignored.
+}
 \examples{
 # basic flows (alluvia)
 ggplot(as.data.frame(Titanic),

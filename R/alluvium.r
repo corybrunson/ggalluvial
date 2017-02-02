@@ -4,12 +4,26 @@
 #' \code{geom_alluvium} plots an x-spline for each group through the axes at 
 #' these depths.
 #' 
+#' @section Aesthetics:
+#' \code{stat_alluvium} understands only the \code{group} aesthetic, but it is
+#' currently ignored.
+#' \code{geom_alluvium} understands the following aesthetics (required
+#' aesthetics are in bold):
+#' \itemize{
+#'   \item \strong{\code{axis[0-9\\.]}} (\code{axis1}, \code{axis2.5}, etc.)
+#'   \item \code{alpha}
+#'   \item \code{colour}
+#'   \item \code{fill}
+#'   \item \code{group}
+#'   \item \code{linetype}
+#'   \item \code{size}
+#' }
+#' Currently, \code{group} is ignored.
+#' 
 #' @name alluvium
 #' @import ggplot2
 #' @seealso \code{\link{stratum}} for intra-axis boxes and
 #'   \code{\link{ggalluvial}} for a shortcut method.
-#' @usage NULL
-#' @export
 #' @inheritParams layer
 #' @param axis_width The width of each variable axis, as a proportion of the 
 #'   separation between axes.
@@ -17,6 +31,8 @@
 #'   (\code{axis_width/2} from its center) and the control point of the 
 #'   x-spline, also as a proportion of the separation between the axes.
 #' @example inst/examples/alluvium.r
+#' @usage NULL
+#' @export
 StatAlluvium <- ggproto(
   "StatAlluvium", Stat,
   setup_data = function(data, params) {

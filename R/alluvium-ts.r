@@ -4,11 +4,28 @@
 #' \code{geom_alluvium_ts} plots an x-spline for each category across these 
 #' times.
 #' 
+#' @section Aesthetics:
+#' \code{stat_alluvium_ts} understands the following aesthetics (required
+#' aesthetics are in bold):
+#' \itemize{
+#'   \item \strong{\code{x}}
+#'   \item \strong{\code{group}}
+#'   \item \strong{\code{weight}}
+#' }
+#' \code{geom_alluvium_ts} understands the following aesthetics (required
+#' aesthetics are in bold):
+#' \itemize{
+#'   \item \code{alpha}
+#'   \item \code{colour}
+#'   \item \code{fill}
+#'   \item \code{group}
+#'   \item \code{linetype}
+#'   \item \code{size}
+#' }
+#' 
 #' @name alluvium_ts
 #' @import ggplot2
 #' @seealso \code{\link{ggalluvial}} for a shortcut method.
-#' @usage NULL
-#' @export
 #' @inheritParams layer
 #' @param decreasing Logical; whether to stack the depths at each x-value with
 #'   the largest on top (FALSE, default), with the largest on bottom (TRUE), or
@@ -17,6 +34,8 @@
 #'   control point of the x-spline, as a proportion of the separation between
 #'   times
 #' @example inst/examples/alluvium-ts.r
+#' @usage NULL
+#' @export
 StatAlluviumTs <- ggproto(
   "StatAlluviumTs", Stat,
   required_aes = c("x", "group", "weight"),

@@ -14,6 +14,26 @@ separation between axes.}
 \code{stat_stratum} calculates the centers of the levels at each axis. 
 \code{geom_stratum} stacks a box for each level of a variable at its axis.
 }
+\section{Aesthetics}{
+
+\code{stat_stratum} understands only the \code{group} aesthetic, but it is
+currently ignored.
+\code{geom_stratum} understands the following aesthetics (required
+aesthetics are in bold):
+\itemize{
+  \item \strong{\code{xmin}}
+  \item \strong{\code{xmax}}
+  \item \strong{\code{ymin}}
+  \item \strong{\code{ymax}}
+  \item \code{alpha}
+  \item \code{colour}
+  \item \code{fill}
+  \item \code{group}
+  \item \code{linetype}
+  \item \code{size}
+}
+Currently, \code{group} is ignored.
+}
 \examples{
 # basic boxes (strata) with labels
 ggplot(as.data.frame(Titanic),

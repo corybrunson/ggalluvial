@@ -23,6 +23,26 @@ times}
 \code{geom_alluvium_ts} plots an x-spline for each category across these 
 times.
 }
+\section{Aesthetics}{
+
+\code{stat_alluvium_ts} understands the following aesthetics (required
+aesthetics are in bold):
+\itemize{
+  \item \strong{\code{x}}
+  \item \strong{\code{group}}
+  \item \strong{\code{weight}}
+}
+\code{geom_alluvium_ts} understands the following aesthetics (required
+aesthetics are in bold):
+\itemize{
+  \item \code{alpha}
+  \item \code{colour}
+  \item \code{fill}
+  \item \code{group}
+  \item \code{linetype}
+  \item \code{size}
+}
+}
 \examples{
 # time series of WorldPhones data
 wph <- as.data.frame(as.table(WorldPhones))

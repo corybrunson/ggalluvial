@@ -3,16 +3,35 @@
 #' \code{stat_stratum} calculates the centers of the levels at each axis. 
 #' \code{geom_stratum} stacks a box for each level of a variable at its axis.
 #' 
+#' @section Aesthetics:
+#' \code{stat_stratum} understands only the \code{group} aesthetic, but it is
+#' currently ignored.
+#' \code{geom_stratum} understands the following aesthetics (required
+#' aesthetics are in bold):
+#' \itemize{
+#'   \item \strong{\code{xmin}}
+#'   \item \strong{\code{xmax}}
+#'   \item \strong{\code{ymin}}
+#'   \item \strong{\code{ymax}}
+#'   \item \code{alpha}
+#'   \item \code{colour}
+#'   \item \code{fill}
+#'   \item \code{group}
+#'   \item \code{linetype}
+#'   \item \code{size}
+#' }
+#' Currently, \code{group} is ignored.
+#' 
 #' @name stratum
 #' @import ggplot2
 #' @seealso \code{\link{alluvium}} for inter-axis flows and
 #'   \code{\link{ggalluvial}} for a shortcut method.
-#' @usage NULL
-#' @export
 #' @inheritParams layer
 #' @param axis_width The width of each variable axis, as a proportion of the 
 #'   separation between axes.
 #' @example inst/examples/stratum.r
+#' @usage NULL
+#' @export
 StatStratum <- ggproto(
   "StatStratum", Stat,
   setup_data = function(data, params) {
