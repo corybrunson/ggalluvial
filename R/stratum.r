@@ -72,7 +72,7 @@ StatStratum <- ggproto(
   }
 )
 
-#' @rdname alluvium
+#' @rdname stratum
 #' @usage NULL
 #' @export
 stat_stratum <- function(mapping = NULL, data = NULL, geom = "stratum",
@@ -86,7 +86,7 @@ stat_stratum <- function(mapping = NULL, data = NULL, geom = "stratum",
   )
 }
 
-#' @rdname alluvium
+#' @rdname stratum
 #' @usage NULL
 #' @export
 GeomStratum <- ggproto(
@@ -102,7 +102,7 @@ GeomStratum <- ggproto(
   draw_key = draw_key_polygon
 )
 
-#' @rdname alluvium
+#' @rdname stratum
 #' @usage NULL
 #' @export
 geom_stratum <- function(mapping = NULL, data = NULL, stat = "stratum",
