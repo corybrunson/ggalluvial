@@ -1,31 +1,15 @@
 #' Variable axes and strata
 #' 
-#' \code{stat_stratum} calculates the centers of the levels at each axis. 
-#' \code{geom_stratum} stacks a box for each level of a variable at its axis.
+#' \code{stat_stratum} calculates the centers of the levels at each axis.
 #' 
-#' @section Aesthetics:
-#' \code{stat_stratum} understands only the \code{group} aesthetic, but it is
-#' currently ignored.
-#' \code{geom_stratum} understands the following aesthetics (required
-#' aesthetics are in bold):
-#' \itemize{
-#'   \item \strong{\code{xmin}}
-#'   \item \strong{\code{xmax}}
-#'   \item \strong{\code{ymin}}
-#'   \item \strong{\code{ymax}}
-#'   \item \code{alpha}
-#'   \item \code{colour}
-#'   \item \code{fill}
-#'   \item \code{group}
-#'   \item \code{linetype}
-#'   \item \code{size}
-#' }
-#' Currently, \code{group} is ignored.
-#' 
-#' @name stratum
+#' @section Aesthetics: \code{stat_stratum} understands only the \code{group}
+#'   aesthetic, but it is currently ignored.
+#'   
+#' @name stat_stratum
 #' @import ggplot2
-#' @seealso \code{\link{alluvium}} for inter-axis flows and
-#'   \code{\link{ggalluvial}} for a shortcut method.
+#' @seealso \code{\link{geom_stratum}} for plotting strata from transformed
+#'   data, \code{\link{stat_alluvium}} and \code{\link{geom_alluvium}} for
+#'   inter-axis flows and \code{\link{ggalluvial}} for a shortcut method.
 #' @inheritParams layer
 #' @param axis_width The width of each variable axis, as a proportion of the 
 #'   separation between axes.
@@ -72,7 +56,7 @@ StatStratum <- ggproto(
   }
 )
 
-#' @rdname alluvium
+#' @rdname stat_stratum
 #' @usage NULL
 #' @export
 stat_stratum <- function(mapping = NULL, data = NULL, geom = "stratum",
@@ -83,34 +67,5 @@ stat_stratum <- function(mapping = NULL, data = NULL, geom = "stratum",
     position = "identity", show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(na.rm = na.rm, ...)
-  )
-}
-
-#' @rdname alluvium
-#' @usage NULL
-#' @export
-GeomStratum <- ggproto(
-  "GeomStratum", GeomRect,
-  default_aes = aes(size = .5, linetype = 1,
-                    colour = "black", fill = "white", alpha = 1),
-  setup_data = function(data, params) {
-    
-    transform(data,
-              xmin = x - width / 2, xmax = x + width / 2,
-              ymin = y - weight / 2, ymax = y + weight / 2)
-  },
-  draw_key = draw_key_polygon
-)
-
-#' @rdname alluvium
-#' @usage NULL
-#' @export
-geom_stratum <- function(mapping = NULL, data = NULL, stat = "stratum",
-                         na.rm = FALSE, show.legend = NA, inherit.aes = TRUE,
-                         ...) {
-  layer(
-    geom = GeomStratum, mapping = mapping, data = data, stat = stat,
-    position = "identity", show.legend = show.legend,
-    inherit.aes = inherit.aes, params = list(na.rm = na.rm, ...)
   )
 }

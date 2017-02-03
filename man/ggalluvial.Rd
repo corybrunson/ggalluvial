@@ -24,10 +24,12 @@ ggalluvial.formula(formula, data = NULL, weight, ...)
 with the elements of \code{formula}}
 }
 \description{
-Produces an alluvial diagram with flows, boxes, and labels, optionally based
+Produces an alluvial diagram with flows, boxes, and labels, optionally based 
 on a formula in terms of the data elements
 }
 \seealso{
-\code{\link{alluvium}} and \code{\link{stratum}}
+\code{\link{stat_alluvium}} and \code{\link{geom_alluvium}} for
+  inter-axis flows, and \code{\link{stat_stratum}} and
+  \code{\link{geom_stratum}} for intra-axis boxes.
 }
 
