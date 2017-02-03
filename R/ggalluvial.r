@@ -1,20 +1,18 @@
 #' Quick alluvial diagrams and formula interface
 #' 
-#' Produces an alluvial diagram with flows, boxes, and labels, optionally based 
+#' Produces an alluvial diagram with flows, boxes, and labels, optionally based
 #' on a formula in terms of the data elements
 #' 
 #' @name ggalluvial
 #' @import ggplot2
-#' @seealso \code{\link{stat_alluvium}} and \code{\link{geom_alluvium}} for
-#'   inter-axis flows, and \code{\link{stat_stratum}} and
-#'   \code{\link{geom_stratum}} for intra-axis boxes.
+#' @seealso \code{\link{alluvium}} and \code{\link{stratum}}
+#' @export
 #' @param ... Arguments passed to \code{ggplot} and inherited by 
 #'   \code{geom_alluvium} and \code{geom_stratum}.
 #' @param formula A formula to specify the axes and alluvial divisions
 #' @param data A data frame or frequency table
 #' @param weight A weight variable, from \code{data} or of compatible length 
 #'   with the elements of \code{formula}
-#' @export
 ggalluvial <- function(...) {
   input_list <- list(...)
   if (!is.null(input_list[["formula"]]) | any(sapply(input_list, is.call))) {
