@@ -16,7 +16,7 @@ There's much to be improved on here, including some items at the bottom of this 
 
 ## Install
 
-This package is serviceable (in the narrow sense of producing the kinds of images i had wanted), but it should not be viewed as stable. For one thing, hopefully the argument syntax can be made more elegant. So i don't anticipate sending this to CRAN any time soon. Here's how to install in the meantime:
+This package is serviceable (in the narrow sense of producing the kinds of images i had wanted), *but it should not be viewed as stable*. For one thing, hopefully the argument syntax can be made more elegant. So i don't anticipate sending this to CRAN any time soon. Here's how to install in the meantime:
 
 ```{r}
 if (!require(devtools)) {
