@@ -19,8 +19,13 @@
 #' @param lode_favor Whether to prioritize "axes", or "aesthetics" when ordering
 #'   the lodes within each stratum. Defaults to "axes".
 #' @param lode_order The function to prioritize the axis variables for ordering 
-#'   the lodes within each stratum. Defaults to "zigzag", other options include
+#'   the lodes within each stratum. Defaults to "zigzag", other options include 
 #'   "rightward" and "leftward".
+#' @param lode_ordering A list (of length the number of axes) of integer vectors
+#'   (each of length the number of rows of \code{data}) giving the preferred
+#'   ordering of alluvia at each axis. This will be used to order the lodes
+#'   within each stratum by sorting the lodes first by stratum and then by the
+#'   provided vectors.
 #' @param axis_width The width of each variable axis, as a proportion of the 
 #'   separation between axes.
 #' @param ribbon_bend The horizontal distance between a variable axis 
@@ -44,6 +49,7 @@ StatAlluvium <- ggproto(
   },
   compute_panel = function(data, scales, params,
                            lode_favor = "axes", lode_order = "zigzag",
+                           lode_ordering = NULL,
                            axis_width = 1/3) {
     
     axis_ind <- get_axes(names(data))
@@ -54,15 +60,25 @@ StatAlluvium <- ggproto(
     lode_favor <- match.arg(lode_favor, c("axes", "aesthetics"))
     lode_fn <- get(paste0("lode_", lode_order))
     
+    if (!is.null(lode_ordering)) {
+      stopifnot(length(lode_ordering) == length(axis_ind))
+      stopifnot(all(sapply(lode_ordering, length) == nrow(data)))
+    }
+    
     # x and y coordinates of center of flow at each axis
     compute_alluvium <- function(i) {
-      # order axis indices
-      axis_seq <- axis_ind[lode_fn(n = length(axis_ind), i = i)]
-      # combine axis and aesthetic indices
-      all_ind <- if (lode_favor == "axes") c(axis_seq, aes_ind) else
-        if (lode_favor == "aesthetics") c(axis_seq[1], aes_ind, axis_seq[-1])
-      # order ribbons according to axes, in above order
-      ribbon_seq <- do.call(order, data[all_ind])
+      # depends on whether the user has provided a lode_ordering
+      if (is.null(lode_ordering)) {
+        # order axis indices
+        axis_seq <- axis_ind[lode_fn(n = length(axis_ind), i = i)]
+        # combine axis and aesthetic indices
+        all_ind <- if (lode_favor == "axes") c(axis_seq, aes_ind) else
+          if (lode_favor == "aesthetics") c(axis_seq[1], aes_ind, axis_seq[-1])
+        # order ribbons according to axes, in above order
+        ribbon_seq <- do.call(order, data[all_ind])
+      } else {
+        ribbon_seq <- order(data[axis_ind[i]], lode_ordering[[i]])
+      }
       # ribbon floors and ceilings along axis
       ymin_seq <- c(0, cumsum(data$weight[ribbon_seq]))
       ymax_seq <- c(cumsum(data$weight[ribbon_seq]), sum(data$weight))
