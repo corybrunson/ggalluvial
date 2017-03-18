@@ -5,7 +5,7 @@
 #' 
 #' @param n Numeric, a positive integer
 #' @param i Numeric, a positive integer at most \code{n}
-zigzag <- function(n, i) {
+lode_zigzag <- function(n, i) {
   if(!(i %in% 1:n)) stop('the given index lies outside the range')
   
   # Radii

@@ -4,27 +4,23 @@
 #' \code{geom_alluvium} plots an x-spline for each group through the axes at 
 #' these depths.
 #' 
-#' @section Aesthetics:
-#' \code{stat_alluvium} understands only the \code{group} aesthetic, but it is
-#' currently ignored.
-#' \code{geom_alluvium} understands the following aesthetics (required
-#' aesthetics are in bold):
-#' \itemize{
-#'   \item \strong{\code{axis[0-9\\.]}} (\code{axis1}, \code{axis2.5}, etc.)
-#'   \item \code{alpha}
-#'   \item \code{colour}
-#'   \item \code{fill}
-#'   \item \code{group}
-#'   \item \code{linetype}
-#'   \item \code{size}
-#' }
-#' Currently, \code{group} is ignored.
-#' 
+#' @section Aesthetics: \code{stat_alluvium} understands only the \code{group} 
+#'   aesthetic, but it is currently ignored. \code{geom_alluvium} understands 
+#'   the following aesthetics (required aesthetics are in bold): \itemize{ \item
+#'   \strong{\code{axis[0-9\\.]}} (\code{axis1}, \code{axis2.5}, etc.) \item 
+#'   \code{alpha} \item \code{colour} \item \code{fill} \item \code{group} \item
+#'   \code{linetype} \item \code{size} } Currently, \code{group} is ignored.
+#'   
 #' @name alluvium
 #' @import ggplot2
-#' @seealso \code{\link{stratum}} for intra-axis boxes and
+#' @seealso \code{\link{stratum}} for intra-axis boxes and 
 #'   \code{\link{ggalluvial}} for a shortcut method.
 #' @inheritParams layer
+#' @param lode_favor Whether to prioritize "axes", or "aesthetics" when ordering
+#'   the lodes within each stratum. Defaults to "axes".
+#' @param lode_order The function to prioritize the axis variables for ordering 
+#'   the lodes within each stratum. Defaults to "zigzag", other options include
+#'   "rightward" and "leftward".
 #' @param axis_width The width of each variable axis, as a proportion of the 
 #'   separation between axes.
 #' @param ribbon_bend The horizontal distance between a variable axis 
@@ -57,16 +53,25 @@ StatAlluvium <- ggproto(
     )
   },
   compute_panel = function(data, scales, params,
+                           lode_favor = "axes", lode_order = "zigzag",
                            axis_width = 1/3) {
     
     axis_ind <- get_axes(names(data))
+    aes_ind <- match(intersect(ggplot2:::.all_aesthetics, names(data)),
+                     names(data))
+    
+    lode_favor <- match.arg(lode_favor, c("axes", "aesthetics"))
+    lode_fn <- get(paste0("lode_", lode_order))
     
     # x and y coordinates of center of flow at each axis
     compute_alluvium <- function(i) {
       # order axis indices
-      axis_seq <- axis_ind[zigzag(n = length(axis_ind), i = i)]
+      axis_seq <- axis_ind[lode_fn(n = length(axis_ind), i = i)]
+      # combine axis and aesthetic indices
+      all_ind <- if (lode_favor == "axes") c(axis_seq, aes_ind) else
+        if (lode_favor == "aesthetics") c(axis_seq[1], aes_ind, axis_seq[-1])
       # order ribbons according to axes, in above order
-      ribbon_seq <- do.call(order, data[axis_seq])
+      ribbon_seq <- do.call(order, data[all_ind])
       # ribbon floors and ceilings along axis
       ymin_seq <- c(0, cumsum(data$weight[ribbon_seq]))
       ymax_seq <- c(cumsum(data$weight[ribbon_seq]), sum(data$weight))

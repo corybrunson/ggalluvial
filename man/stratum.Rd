@@ -2,7 +2,10 @@
 % Please edit documentation in R/stratum.r
 \docType{data}
 \name{stratum}
+\alias{GeomStratum}
 \alias{StatStratum}
+\alias{geom_stratum}
+\alias{stat_stratum}
 \alias{stratum}
 \title{Variable axes and strata}
 \format{An object of class \code{StatStratum} (inherits from \code{Stat}, \code{ggproto}) of length 3.}
