@@ -57,8 +57,9 @@ StatAlluvium <- ggproto(
                            axis_width = 1/3) {
     
     axis_ind <- get_axes(names(data))
-    aes_ind <- match(intersect(ggplot2:::.all_aesthetics, names(data)),
-                     names(data))
+    data_aes <- setdiff(names(data)[-axis_ind],
+                        c("weight", "PANEL", "group"))
+    aes_ind <- match(data_aes, names(data))
     
     lode_favor <- match.arg(lode_favor, c("axes", "aesthetics"))
     lode_fn <- get(paste0("lode_", lode_order))
