@@ -35,22 +35,12 @@ StatAlluvium <- ggproto(
     
     if (is.null(data$weight)) data$weight <- rep(1, nrow(data))
     
-    # if group variable does not respect axes, print message and fix it
-    interact <- interaction(data[, grep("^axis[0-9\\.]*", names(data))])
-    if (!splinters(data$group, interact)) {
-      message(paste0("'group' assignments do not respect axis assignments,",
-                     " and will be ignored."))
-      data$group <- as.numeric(interact)
-    }
-    
-    # aggregate over axes and groups by weight
-    aggregate(
-      formula = as.formula(paste("weight ~",
-                                 paste(setdiff(names(data), "weight"),
-                                       collapse = "+"))),
-      data = data,
-      FUN = sum
-    )
+    # sort data by non-weight fields and assign each row to its own group
+    data <- data[do.call(order,
+                         data[, -match(c("weight", "group"), names(data))]), ]
+    rownames(data) <- 1:nrow(data)
+    data$group <- 1:nrow(data)
+    data
   },
   compute_panel = function(data, scales, params,
                            lode_favor = "axes", lode_order = "zigzag",
