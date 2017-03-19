@@ -57,10 +57,10 @@ StatAlluvium <- ggproto(
                         c("weight", "PANEL", "group"))
     aes_ind <- match(data_aes, names(data))
     
-    lode_favor <- match.arg(lode_favor, c("axes", "aesthetics"))
-    lode_fn <- get(paste0("lode_", lode_order))
-    
-    if (!is.null(lode_ordering)) {
+    if (is.null(lode_ordering)) {
+      lode_favor <- match.arg(lode_favor, c("axes", "aesthetics"))
+      lode_fn <- get(paste0("lode_", lode_order))
+    } else {
       stopifnot(length(lode_ordering) == length(axis_ind))
       stopifnot(all(sapply(lode_ordering, length) == nrow(data)))
     }
