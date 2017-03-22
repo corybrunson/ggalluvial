@@ -10,12 +10,13 @@
 \title{Alluvial flows}
 \format{An object of class \code{StatAlluvium} (inherits from \code{Stat}, \code{ggproto}) of length 3.}
 \arguments{
-\item{lode.guidance}{The function to prioritize the axis variables for ordering 
-the lodes within each stratum. Defaults to "zigzag", other options include 
-"rightward" and "leftward".}
+\item{lode.guidance}{The function to prioritize the axis variables for
+ordering the lodes within each stratum. Defaults to "zigzag", other options
+include "rightleft", "leftright", "rightward", and "leftward" (see
+\code{\link{lode-guidance-functions}}).}
 
-\item{bind.by.aes}{Whether to prioritize aesthetics before axes (other than
-the index axis) when ordering the lodes within each stratum. Defaults to
+\item{bind.by.aes}{Whether to prioritize aesthetics before axes (other than 
+the index axis) when ordering the lodes within each stratum. Defaults to 
 FALSE.}
 
 \item{lode.ordering}{A list (of length the number of axes) of integer vectors

@@ -16,11 +16,12 @@
 #' @seealso \code{\link{stratum}} for intra-axis boxes and 
 #'   \code{\link{ggalluvial}} for a shortcut method.
 #' @inheritParams layer
-#' @param lode.guidance The function to prioritize the axis variables for ordering 
-#'   the lodes within each stratum. Defaults to "zigzag", other options include 
-#'   "rightward" and "leftward".
-#' @param bind.by.aes Whether to prioritize aesthetics before axes (other than
-#'   the index axis) when ordering the lodes within each stratum. Defaults to
+#' @param lode.guidance The function to prioritize the axis variables for
+#'   ordering the lodes within each stratum. Defaults to "zigzag", other options
+#'   include "rightleft", "leftright", "rightward", and "leftward" (see
+#'   \code{\link{lode-guidance-functions}}).
+#' @param bind.by.aes Whether to prioritize aesthetics before axes (other than 
+#'   the index axis) when ordering the lodes within each stratum. Defaults to 
 #'   FALSE.
 #' @param lode.ordering A list (of length the number of axes) of integer vectors
 #'   (each of length the number of rows of \code{data}) giving the preferred 
