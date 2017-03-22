@@ -42,23 +42,6 @@ dev.off()
 
 ![Basic](inst/fig/example-basic.png)
 
-### Aesthetics
-
-This example has a lot going on, and isn't ideal for analysis or publication purposes, but it shows how many aesthetics—`fill`, `alpha`, and `color` shown here, though also `size` and `linetype` for the borders—can be incorporated into a single alluvial diagram. It also spotlights a major shortcoming of `ggalluvial`: The horizontal axis is continuous (and currently doesn't support labeling by axis names), so, without the value labels produced by `geom_text(stat = "stratum")`, the meanings of the axes is completely obscured. This can be remedied for now using `scale_x_continuous()` (see the following examples and section "Idiosyncrasies" below).
-
-```{r}
-png(height = 360, width = 600, file = "inst/fig/example-aes.png")
-ggplot(as.data.frame(Titanic),
-       aes(weight = Freq,
-           axis1 = Class, axis2 = Sex, axis3 = Age)) +
-  geom_alluvium(aes(fill = Age:Sex, alpha = Class, color = Survived)) +
-  scale_color_manual(values = c("black", "white")) +
-  ggtitle("Titanic passenger demographic and survival data")
-dev.off()
-```
-
-![Aesthetics](inst/fig/example-aes.png)
-
 ### Facets
 
 The following example demonstrates `ggalluvial`'s compatibility with facets. It also illustrates the effect of using aesthetics beyond those assigned to axes: Since they are incorporated into the data frame fed to `StatAlluvium` or `StatStratum`, whose `setup_data()` functions aggregate (hence sort) these data by all available columns besides the `weight` assignment (frequencies), the resulting alluvia end up stratified by these variables as well.
