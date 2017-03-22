@@ -44,10 +44,7 @@ StatAlluvium <- ggproto(
       message("No argument provided for 'weight'; assuming uniform row weights")
     }
     
-    # sort data by non-weight fields and assign each row to its own group
-    data <- data[do.call(order,
-                         data[, -match(c("weight", "group"), names(data))]), ]
-    rownames(data) <- 1:nrow(data)
+    # assign each row to its own group
     data$group <- 1:nrow(data)
     data
   },
