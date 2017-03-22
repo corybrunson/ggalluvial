@@ -10,17 +10,18 @@
 \title{Alluvial flows}
 \format{An object of class \code{StatAlluvium} (inherits from \code{Stat}, \code{ggproto}) of length 3.}
 \arguments{
-\item{lode_favor}{Whether to prioritize "axes", or "aesthetics" when ordering
-the lodes within each stratum. Defaults to "axes".}
-
-\item{lode_order}{The function to prioritize the axis variables for ordering 
+\item{lode.guidance}{The function to prioritize the axis variables for ordering 
 the lodes within each stratum. Defaults to "zigzag", other options include 
 "rightward" and "leftward".}
 
-\item{lode_ordering}{A list (of length the number of axes) of integer vectors
-(each of length the number of rows of \code{data}) giving the preferred
-ordering of alluvia at each axis. This will be used to order the lodes
-within each stratum by sorting the lodes first by stratum and then by the
+\item{bind.by.aes}{Whether to prioritize aesthetics before axes (other than
+the index axis) when ordering the lodes within each stratum. Defaults to
+FALSE.}
+
+\item{lode.ordering}{A list (of length the number of axes) of integer vectors
+(each of length the number of rows of \code{data}) giving the preferred 
+ordering of alluvia at each axis. This will be used to order the lodes 
+within each stratum by sorting the lodes first by stratum and then by the 
 provided vectors.}
 
 \item{axis_width}{The width of each variable axis, as a proportion of the 
@@ -94,7 +95,7 @@ ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
   geom_alluvium(aes(fill = Survived),
-                lode_favor = "aes", lode_order = "rightward") +
+                bind.by.aes = TRUE, lode.guidance = "rightward") +
   geom_stratum() + geom_text(stat = "stratum") +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 
@@ -104,7 +105,7 @@ ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
   geom_alluvium(aes(fill = Survived),
-                lode_ordering = lode_ord) +
+                lode.ordering = lode_ord) +
   geom_stratum() + geom_text(stat = "stratum") +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 }

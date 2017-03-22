@@ -48,7 +48,7 @@ ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
   geom_alluvium(aes(fill = Survived),
-                lode_favor = "aes", lode_order = "rightward") +
+                bind.by.aes = TRUE, lode.guidance = "rightward") +
   geom_stratum() + geom_text(stat = "stratum") +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 
@@ -58,6 +58,6 @@ ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
   geom_alluvium(aes(fill = Survived),
-                lode_ordering = lode_ord) +
+                lode.ordering = lode_ord) +
   geom_stratum() + geom_text(stat = "stratum") +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
