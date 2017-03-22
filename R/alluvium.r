@@ -78,7 +78,7 @@ StatAlluvium <- ggproto(
         # order ribbons according to axes, in above order
         ribbon_seq <- do.call(order, data[all_ind])
       } else {
-        ribbon_seq <- order(data[axis_ind[i]], lode_ordering[[i]])
+        ribbon_seq <- order(data[[axis_ind[i]]], lode_ordering[[i]])
       }
       # ribbon floors and ceilings along axis
       ymin_seq <- c(0, cumsum(data$weight[ribbon_seq]))
