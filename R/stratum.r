@@ -36,18 +36,19 @@ StatStratum <- ggproto(
   "StatStratum", Stat,
   setup_data = function(data, params) {
     
+    # assign uniform weight if not provided
     if (is.null(data$weight)) data$weight <- rep(1, nrow(data))
     
+    # aggregate over axes by weight
     data <- aggregate(
       formula = as.formula(paste("weight ~",
                                  paste(setdiff(names(data), "weight"),
                                        collapse = "+"))),
-      data = data,
-      FUN = sum
+      data = data, FUN = sum
     )
     
     axis_ind <- get_axes(names(data))
-    # stack axis-aggregated data with cumulative frequencies
+    # stack data with cumulative frequencies by panel
     res_data <- do.call(rbind, lapply(unique(data$PANEL), function(p) {
       p_data <- subset(data, PANEL == p)
       do.call(rbind, lapply(1:length(axis_ind), function(i) {
@@ -58,7 +59,10 @@ StatStratum <- ggproto(
       }))
     }))
     
-    # add group
+    # remove empty elements
+    res_data <- res_data[res_data$weight > 0, ]
+    
+    # assign each row its own group
     cbind(res_data, group = 1:nrow(res_data))
   },
   compute_group = function(data, scales,
