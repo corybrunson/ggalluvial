@@ -46,9 +46,8 @@ StatAlluvium <- ggproto(
       message("No argument provided for 'weight'; assuming uniform row weights")
     }
     
-    # assign each row to its own group
-    data$group <- 1:nrow(data)
-    data
+    # assign each row its own group
+    cbind(data, group = 1:nrow(data))
   },
   compute_panel = function(data, scales, params,
                            lode.guidance = "zigzag",
