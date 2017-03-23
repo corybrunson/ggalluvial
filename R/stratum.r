@@ -37,7 +37,10 @@ StatStratum <- ggproto(
   setup_data = function(data, params) {
     
     # assign uniform weight if not provided
-    if (is.null(data$weight)) data$weight <- rep(1, nrow(data))
+    if (is.null(data$weight)) {
+      data$weight <- rep(1, nrow(data))
+      message("No argument provided for 'weight'; assuming uniform row weights")
+    }
     
     # aggregate over axes by weight
     data <- aggregate(

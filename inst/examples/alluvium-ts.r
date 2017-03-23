@@ -1,16 +1,11 @@
-# time series of WorldPhones data
+# time series alluvia of WorldPhones data
 wph <- as.data.frame(as.table(WorldPhones))
 names(wph) <- c("Year", "Region", "Telephones")
 ggplot(wph,
        aes(x = Year, group = Region, weight = Telephones)) +
   geom_alluvium_ts(aes(fill = Region, colour = Region))
 
-# basic time series alluvia
-ggplot(data = alluvial::Refugees,
-       aes(x = year, weight = refugees, group = country)) +
-  geom_alluvium_ts()
-
-# time series alluvia with some aesthetics and without sorting by volume
+# time series alluvia of refugees data, sorted by country
 ggplot(data = alluvial::Refugees,
        aes(x = year, weight = refugees, group = country)) +
   geom_alluvium_ts(aes(fill = country), colour = "black",
