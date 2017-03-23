@@ -38,12 +38,6 @@ these depths.
   \code{linetype} \item \code{size} } Currently, \code{group} is ignored.
 }
 \examples{
-# basic flows (alluvia)
-ggplot(as.data.frame(Titanic),
-       aes(weight = Freq,
-           axis1 = Class, axis2 = Sex, axis3 = Age)) +
-  geom_alluvium()
-
 # degeneracy (one axis; unavailable through shortcut function)
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
@@ -78,10 +72,10 @@ ggplot(as.data.frame(Titanic),
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex)) +
-  geom_alluvium() +
+  geom_alluvium(aes(fill = Age)) +
   geom_stratum() + geom_text(stat = "stratum") +
   scale_x_continuous(breaks = 1:2, labels = c("Class", "Sex")) +
-  facet_wrap(~ Survived, scales = "free_y")
+  facet_wrap(~ Survived, scales = "fixed")
 
 # use of lode controls
 ggplot(as.data.frame(Titanic),
