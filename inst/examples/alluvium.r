@@ -12,12 +12,6 @@ ggplot(as.data.frame(Titanic),
            group = Survived)) +
   geom_alluvium()
 
-# weights omitted
-ggplot(as.data.frame(Titanic),
-       aes(axis1 = Class, axis2 = Sex, axis3 = Age)) +
-  geom_alluvium(aes(fill = Class, alpha = Survived)) +
-  scale_alpha_manual(values = c(.25, .75))
-
 # control of horizontal spacing: axis widths and ribbon bends
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,

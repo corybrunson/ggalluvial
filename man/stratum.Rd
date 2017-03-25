@@ -8,7 +8,7 @@
 \alias{GeomStratum}
 \alias{geom_stratum}
 \title{Variable axes and strata}
-\format{An object of class \code{StatStratum} (inherits from \code{Stat}, \code{ggproto}) of length 3.}
+\format{An object of class \code{StatStratum} (inherits from \code{Stat}, \code{ggproto}) of length 4.}
 \description{
 \code{stat_stratum} calculates the centers of the levels at each axis. 
 \code{geom_stratum} stacks a box for each level of a variable at its axis.

@@ -61,6 +61,11 @@ StatAlluvium <- ggproto(
   },
   setup_params = function(data, params) {
     
+    if (!is.null(data$x) || !is.null(params$x) ||
+        !is.null(data$y) || !is.null(params$y)) {
+      stop("stat_alluvium() does not accept x or y aesthetics")
+    }
+    
     if (!is.null(params$lode.ordering)) {
       if (is.list(params$lode.ordering)) {
         # replace any null entries with uniform NA vectors

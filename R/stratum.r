@@ -66,6 +66,15 @@ StatStratum <- ggproto(
     # assign each row its own group (no pre-existing group field)
     cbind(res_data, group = 1:nrow(res_data))
   },
+  setup_params = function(data, params) {
+    
+    if (!is.null(data$x) || !is.null(params$x) ||
+        !is.null(data$y) || !is.null(params$y)) {
+      stop("stat_stratum() does not accept x or y aesthetics")
+    }
+    
+    params
+  },
   compute_group = function(data, scales,
                            width = 1/3) {
     
