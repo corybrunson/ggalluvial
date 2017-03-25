@@ -22,7 +22,8 @@
 #'   
 #' @name alluvium
 #' @import ggplot2
-#' @seealso \code{\link{stratum}} for intra-axis boxes and 
+#' @seealso \code{\link{stratum}} for intra-axis boxes,
+#'   \code{\link{alluvium_ts}} for a time series implementation, and
 #'   \code{\link{ggalluvial}} for a shortcut method.
 #' @inheritParams layer
 #' @param lode.guidance The function to prioritize the axis variables for
