@@ -12,12 +12,18 @@ ggplot(as.data.frame(Titanic),
            group = Survived)) +
   geom_alluvium()
 
+# weights omitted
+ggplot(as.data.frame(Titanic),
+       aes(axis1 = Class, axis2 = Sex, axis3 = Age)) +
+  geom_alluvium(aes(fill = Class, alpha = Survived)) +
+  scale_alpha_manual(values = c(.25, .75))
+
 # control of horizontal spacing: axis widths and ribbon bends
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
   geom_alluvium(aes(fill = Age),
-                axis_width = 1/5, ribbon_bend = 1/3)
+                width = 1/5, ribbon_bend = 1/3)
 
 # use of strata, annotation, and labels
 ggplot(as.data.frame(Titanic),

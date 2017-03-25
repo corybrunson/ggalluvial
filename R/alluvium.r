@@ -34,16 +34,14 @@
 #'   the index axis) when ordering the lodes within each stratum. Defaults to 
 #'   FALSE.
 #' @param lode.ordering A list (of length the number of axes) of integer vectors
-#'   (each of length the number of rows of \code{data}) or NULL entries
+#'   (each of length the number of rows of \code{data}) or NULL entries 
 #'   (indicating no imposed ordering), or else a numeric matrix of corresponding
-#'   dimensions, giving the preferred ordering of alluvia at each axis. This
-#'   will be used to order the lodes within each stratum by sorting the lodes
+#'   dimensions, giving the preferred ordering of alluvia at each axis. This 
+#'   will be used to order the lodes within each stratum by sorting the lodes 
 #'   first by stratum and then by the provided vectors.
-#' @param axis_width The width of each variable axis, as a proportion of the 
-#'   separation between axes.
 #' @param ribbon_bend The horizontal distance between a variable axis 
-#'   (\code{axis_width/2} from its center) and the control point of the 
-#'   x-spline, also as a proportion of the separation between the axes.
+#'   (\code{width/2} from its center) and the control point of the x-spline,
+#'   also as a proportion of the separation between the axes.
 #' @example inst/examples/alluvium.r
 #' @usage NULL
 #' @export
@@ -82,7 +80,7 @@ StatAlluvium <- ggproto(
                            lode.guidance = "zigzag",
                            bind.by.aes = FALSE,
                            lode.ordering = NULL,
-                           axis_width = 1/3) {
+                           width = 1/3) {
     
     axis_ind <- get_axes(names(data))
     data_aes <- setdiff(names(data)[-axis_ind],
@@ -122,9 +120,9 @@ StatAlluvium <- ggproto(
     data <- data.frame(data, alluvia)
     
     # widths and x bounds
-    data$xmin <- data$x - axis_width / 2
-    data$xmax <- data$x + axis_width / 2
-    data$width <- axis_width
+    data$xmin <- data$x - width / 2
+    data$xmax <- data$x + width / 2
+    data$width <- width
     
     # y centers
     data$y <- (data$ymin + data$ymax) / 2
@@ -139,12 +137,12 @@ StatAlluvium <- ggproto(
 stat_alluvium <- function(mapping = NULL, data = NULL, geom = "alluvium",
                           position = "identity", na.rm = FALSE,
                           show.legend = NA, inherit.aes = TRUE,
-                          check.aes = FALSE, check.params = TRUE, ...) {
+                          width = 1/3, ...) {
   layer(
     stat = StatAlluvium, data = data, mapping = mapping, geom = geom,
     position = position, show.legend = show.legend,
     inherit.aes = inherit.aes,
-    params = list(na.rm = na.rm, ...)
+    params = list(na.rm = na.rm, width = width, ...)
   )
 }
 
@@ -153,8 +151,8 @@ stat_alluvium <- function(mapping = NULL, data = NULL, geom = "alluvium",
 #' @export
 GeomAlluvium <- ggproto(
   "GeomAlluvium", Geom,
-  default_aes = aes(size = .5, linetype = 1,
-                    colour = 0, fill = "gray", alpha = .5),
+  default_aes = aes(size = .5, linetype = 1, colour = 0,
+                    fill = "gray", alpha = .5),
   setup_data = function(data, params) data,
   draw_group = function(data, panel_scales, coord,
                         ribbon_bend = 1/6) {
@@ -208,7 +206,7 @@ GeomAlluvium <- ggproto(
 #' @export
 geom_alluvium <- function(mapping = NULL, data = NULL, stat = "alluvium",
                           na.rm = FALSE, show.legend = NA, inherit.aes = TRUE,
-                          check.aes = FALSE, check.params = TRUE, ...) {
+                          ...) {
   layer(
     geom = GeomAlluvium, mapping = mapping, data = data, stat = stat,
     position = "identity", show.legend = show.legend,

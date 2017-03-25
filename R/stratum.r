@@ -27,8 +27,6 @@
 #' @seealso \code{\link{alluvium}} for inter-axis flows and
 #'   \code{\link{ggalluvial}} for a shortcut method.
 #' @inheritParams layer
-#' @param axis_width The width of each variable axis, as a proportion of the 
-#'   separation between axes.
 #' @example inst/examples/stratum.r
 #' @usage NULL
 #' @export
@@ -69,12 +67,12 @@ StatStratum <- ggproto(
     cbind(res_data, group = 1:nrow(res_data))
   },
   compute_group = function(data, scales,
-                           axis_width = 1/3) {
+                           width = 1/3) {
     
     rownames(data) <- NULL
     rect_data <- data.frame(x = data$pos,
                             y = (data$cumweight - data$weight / 2),
-                            width = axis_width)
+                            width = width)
     data.frame(data, rect_data)
   }
 )
@@ -84,12 +82,12 @@ StatStratum <- ggproto(
 #' @export
 stat_stratum <- function(mapping = NULL, data = NULL, geom = "stratum",
                          na.rm = FALSE, show.legend = NA, inherit.aes = TRUE,
-                         check.aes = FALSE, check.params = TRUE, ...) {
+                         width = 1/3, ...) {
   layer(
     stat = StatStratum, data = data, mapping = mapping, geom = geom,
     position = "identity", show.legend = show.legend,
     inherit.aes = inherit.aes,
-    params = list(na.rm = na.rm, ...)
+    params = list(na.rm = na.rm, width = width, ...)
   )
 }
 
@@ -114,7 +112,7 @@ GeomStratum <- ggproto(
 #' @export
 geom_stratum <- function(mapping = NULL, data = NULL, stat = "stratum",
                          na.rm = FALSE, show.legend = NA, inherit.aes = TRUE,
-                         check.aes = FALSE, check.params = TRUE, ...) {
+                         ...) {
   layer(
     geom = GeomStratum, mapping = mapping, data = data, stat = stat,
     position = "identity", show.legend = show.legend,

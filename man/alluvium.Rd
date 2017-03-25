@@ -20,18 +20,15 @@ the index axis) when ordering the lodes within each stratum. Defaults to
 FALSE.}
 
 \item{lode.ordering}{A list (of length the number of axes) of integer vectors
-(each of length the number of rows of \code{data}) or NULL entries
+(each of length the number of rows of \code{data}) or NULL entries 
 (indicating no imposed ordering), or else a numeric matrix of corresponding
-dimensions, giving the preferred ordering of alluvia at each axis. This
-will be used to order the lodes within each stratum by sorting the lodes
+dimensions, giving the preferred ordering of alluvia at each axis. This 
+will be used to order the lodes within each stratum by sorting the lodes 
 first by stratum and then by the provided vectors.}
 
-\item{axis_width}{The width of each variable axis, as a proportion of the 
-separation between axes.}
-
 \item{ribbon_bend}{The horizontal distance between a variable axis 
-(\code{axis_width/2} from its center) and the control point of the 
-x-spline, also as a proportion of the separation between the axes.}
+(\code{width/2} from its center) and the control point of the x-spline,
+also as a proportion of the separation between the axes.}
 }
 \description{
 \code{stat_alluvium} calculates the depth of each group at each axis. 
@@ -71,12 +68,18 @@ ggplot(as.data.frame(Titanic),
            group = Survived)) +
   geom_alluvium()
 
+# weights omitted
+ggplot(as.data.frame(Titanic),
+       aes(axis1 = Class, axis2 = Sex, axis3 = Age)) +
+  geom_alluvium(aes(fill = Class, alpha = Survived)) +
+  scale_alpha_manual(values = c(.25, .75))
+
 # control of horizontal spacing: axis widths and ribbon bends
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
   geom_alluvium(aes(fill = Age),
-                axis_width = 1/5, ribbon_bend = 1/3)
+                width = 1/5, ribbon_bend = 1/3)
 
 # use of strata, annotation, and labels
 ggplot(as.data.frame(Titanic),

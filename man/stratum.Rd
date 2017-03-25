@@ -9,10 +9,6 @@
 \alias{geom_stratum}
 \title{Variable axes and strata}
 \format{An object of class \code{StatStratum} (inherits from \code{Stat}, \code{ggproto}) of length 3.}
-\arguments{
-\item{axis_width}{The width of each variable axis, as a proportion of the 
-separation between axes.}
-}
 \description{
 \code{stat_stratum} calculates the centers of the levels at each axis. 
 \code{geom_stratum} stacks a box for each level of a variable at its axis.
@@ -43,7 +39,7 @@ Currently, \code{group} is ignored.
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age, axis4 = Survived)) +
-  geom_stratum(axis_width = 1) + geom_text(stat = "stratum")
+  geom_stratum(width = 1) + geom_text(stat = "stratum")
 
 # use of facets
 ggplot(as.data.frame(Titanic),
