@@ -62,15 +62,15 @@ dev.off()
 
 ### Alternate style
 
-The following adjustments to `axis_width` and the `geom_stratum` aesthetics mimic a popular style for alluvial diagrams, in which axes are thin and black and number but two, while labels are placed on the outer side of each. These diagrams are quite elegant, but to my mind the intrinsic rigidity of ggplot2 requires keeping the strata contiguous, so that the total height of each axis equals the cumulative weight (and hence the vertical axis makes sense).
+The following adjustments to `width` and the `geom_stratum` aesthetics mimic a popular style for alluvial diagrams, in which axes are thin and black and number but two, while labels are placed on the outer side of each. These diagrams are quite elegant, but to my mind the intrinsic rigidity of ggplot2 requires keeping the strata contiguous, so that the total height of each axis equals the cumulative weight (and hence the vertical axis makes sense).
 
 ```{r}
 png(height = 360, width = 600, file = "inst/fig/example-style.png")
 ggplot(as.data.frame(Titanic),
        aes(axis1 = Age, axis2 = Sex, axis3 = Class,
            fill = Survived, weight = Freq)) +
-  geom_alluvium(axis_width = 1/12) +
-  geom_stratum(fill = "black", color = "lightgrey", axis_width = 1/12) +
+  geom_alluvium(width = 1/12) +
+  geom_stratum(fill = "black", color = "lightgrey", width = 1/12) +
   scale_x_continuous(breaks = 1:3, labels = c("Age", "Sex", "Class")) +
   geom_label(stat = "stratum") +
   ggtitle("Titanic passenger data")
