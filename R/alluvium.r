@@ -19,25 +19,26 @@
 #'   \item \code{size}
 #' }
 #' Currently, \code{group} is ignored.
-#'   
+#' 
 #' @name alluvium
 #' @import ggplot2
-#' @seealso \code{\link{stratum}} for intra-axis boxes,
-#'   \code{\link{alluvium_ts}} for a time series implementation, and
+#' @seealso \code{\link{stratum}} for intra-axis boxes, 
+#'   \code{\link{alluvium_ts}} for a time series implementation, and 
 #'   \code{\link{ggalluvial}} for a shortcut method.
 #' @inheritParams layer
-#' @param lode.guidance The function to prioritize the axis variables for
+#' @param lode.guidance The function to prioritize the axis variables for 
 #'   ordering the lodes within each stratum. Defaults to "zigzag", other options
-#'   include "rightleft", "leftright", "rightward", and "leftward" (see
+#'   include "rightleft", "leftright", "rightward", and "leftward" (see 
 #'   \code{\link{lode-guidance-functions}}).
 #' @param bind.by.aes Whether to prioritize aesthetics before axes (other than 
 #'   the index axis) when ordering the lodes within each stratum. Defaults to 
 #'   FALSE.
 #' @param lode.ordering A list (of length the number of axes) of integer vectors
-#'   (each of length the number of rows of \code{data}) giving the preferred 
-#'   ordering of alluvia at each axis. This will be used to order the lodes 
-#'   within each stratum by sorting the lodes first by stratum and then by the 
-#'   provided vectors.
+#'   (each of length the number of rows of \code{data}) or NULL entries
+#'   (indicating no imposed ordering), or else a numeric matrix of corresponding
+#'   dimensions, giving the preferred ordering of alluvia at each axis. This
+#'   will be used to order the lodes within each stratum by sorting the lodes
+#'   first by stratum and then by the provided vectors.
 #' @param axis_width The width of each variable axis, as a proportion of the 
 #'   separation between axes.
 #' @param ribbon_bend The horizontal distance between a variable axis 
@@ -60,6 +61,23 @@ StatAlluvium <- ggproto(
     data$group <- 1:nrow(data)
     data
   },
+  setup_params = function(data, params) {
+    
+    if (!is.null(params$lode.ordering)) {
+      if (is.list(params$lode.ordering)) {
+        # replace any null entries with uniform NA vectors
+        wh.null <- which(sapply(params$lode.ordering, is.null))
+        for (w in wh.null) params$lode.ordering[[w]] <- rep(NA, nrow(data))
+        # convert list to array (requires equal-length numeric entries)
+        params$lode.ordering <- do.call(cbind, params$lode.ordering)
+      }
+      # check that array has correct dimensions
+      stopifnot(dim(params$lode.ordering) ==
+                  c(nrow(data), length(get_axes(names(data)))))
+    }
+    
+    params
+  },
   compute_panel = function(data, scales, params,
                            lode.guidance = "zigzag",
                            bind.by.aes = FALSE,
@@ -71,13 +89,8 @@ StatAlluvium <- ggproto(
                         c("weight", "PANEL", "group"))
     aes_ind <- match(data_aes, names(data))
     
-    if (is.null(lode.ordering)) {
-      lode_fn <- get(paste0("lode_", lode.guidance))
-    } else {
-      stopifnot(length(lode.ordering) == length(axis_ind))
-      stopifnot(all(sapply(lode.ordering, length) == nrow(data)))
-    }
-    
+    if (is.null(lode.ordering)) lode_fn <- get(paste0("lode_", lode.guidance))
+
     # x and y coordinates of center of flow at each axis
     compute_alluvium <- function(i) {
       # depends on whether the user has provided a lode.ordering
@@ -93,7 +106,7 @@ StatAlluvium <- ggproto(
         # order ribbons according to axes, in above order
         ribbon_seq <- do.call(order, data[all_ind])
       } else {
-        ribbon_seq <- order(data[[axis_ind[i]]], lode.ordering[[i]])
+        ribbon_seq <- order(data[[axis_ind[i]]], lode.ordering[, i])
       }
       # ribbon floors and ceilings along axis
       ymin_seq <- c(0, cumsum(data$weight[ribbon_seq]))

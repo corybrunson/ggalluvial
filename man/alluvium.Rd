@@ -8,11 +8,11 @@
 \alias{GeomAlluvium}
 \alias{geom_alluvium}
 \title{Alluvial flows}
-\format{An object of class \code{StatAlluvium} (inherits from \code{Stat}, \code{ggproto}) of length 3.}
+\format{An object of class \code{StatAlluvium} (inherits from \code{Stat}, \code{ggproto}) of length 4.}
 \arguments{
-\item{lode.guidance}{The function to prioritize the axis variables for
+\item{lode.guidance}{The function to prioritize the axis variables for 
 ordering the lodes within each stratum. Defaults to "zigzag", other options
-include "rightleft", "leftright", "rightward", and "leftward" (see
+include "rightleft", "leftright", "rightward", and "leftward" (see 
 \code{\link{lode-guidance-functions}}).}
 
 \item{bind.by.aes}{Whether to prioritize aesthetics before axes (other than 
@@ -20,10 +20,11 @@ the index axis) when ordering the lodes within each stratum. Defaults to
 FALSE.}
 
 \item{lode.ordering}{A list (of length the number of axes) of integer vectors
-(each of length the number of rows of \code{data}) giving the preferred 
-ordering of alluvia at each axis. This will be used to order the lodes 
-within each stratum by sorting the lodes first by stratum and then by the 
-provided vectors.}
+(each of length the number of rows of \code{data}) or NULL entries
+(indicating no imposed ordering), or else a numeric matrix of corresponding
+dimensions, giving the preferred ordering of alluvia at each axis. This
+will be used to order the lodes within each stratum by sorting the lodes
+first by stratum and then by the provided vectors.}
 
 \item{axis_width}{The width of each variable axis, as a proportion of the 
 separation between axes.}
@@ -115,8 +116,8 @@ ggplot(as.data.frame(Titanic),
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 }
 \seealso{
-\code{\link{stratum}} for intra-axis boxes,
-  \code{\link{alluvium_ts}} for a time series implementation, and
+\code{\link{stratum}} for intra-axis boxes, 
+  \code{\link{alluvium_ts}} for a time series implementation, and 
   \code{\link{ggalluvial}} for a shortcut method.
 }
 \keyword{datasets}
