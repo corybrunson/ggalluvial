@@ -84,7 +84,7 @@ StatStratum <- ggproto(
 #' @export
 stat_stratum <- function(mapping = NULL, data = NULL, geom = "stratum",
                          na.rm = FALSE, show.legend = NA, inherit.aes = TRUE,
-                         check.aes = TRUE, check.params = TRUE, ...) {
+                         check.aes = FALSE, check.params = TRUE, ...) {
   layer(
     stat = StatStratum, data = data, mapping = mapping, geom = geom,
     position = "identity", show.legend = show.legend,
@@ -114,7 +114,7 @@ GeomStratum <- ggproto(
 #' @export
 geom_stratum <- function(mapping = NULL, data = NULL, stat = "stratum",
                          na.rm = FALSE, show.legend = NA, inherit.aes = TRUE,
-                         check.aes = TRUE, check.params = TRUE, ...) {
+                         check.aes = FALSE, check.params = TRUE, ...) {
   layer(
     geom = GeomStratum, mapping = mapping, data = data, stat = stat,
     position = "identity", show.legend = show.legend,

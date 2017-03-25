@@ -124,7 +124,7 @@ StatAlluvium <- ggproto(
 stat_alluvium <- function(mapping = NULL, data = NULL, geom = "alluvium",
                           position = "identity", na.rm = FALSE,
                           show.legend = NA, inherit.aes = TRUE,
-                          check.aes = TRUE, check.params = TRUE, ...) {
+                          check.aes = FALSE, check.params = TRUE, ...) {
   layer(
     stat = StatAlluvium, data = data, mapping = mapping, geom = geom,
     position = position, show.legend = show.legend,
@@ -193,7 +193,7 @@ GeomAlluvium <- ggproto(
 #' @export
 geom_alluvium <- function(mapping = NULL, data = NULL, stat = "alluvium",
                           na.rm = FALSE, show.legend = NA, inherit.aes = TRUE,
-                          check.aes = TRUE, check.params = TRUE, ...) {
+                          check.aes = FALSE, check.params = TRUE, ...) {
   layer(
     geom = GeomAlluvium, mapping = mapping, data = data, stat = stat,
     position = "identity", show.legend = show.legend,
