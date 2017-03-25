@@ -139,15 +139,28 @@ StatAlluvium <- ggproto(
 #' @rdname alluvium
 #' @usage NULL
 #' @export
-stat_alluvium <- function(mapping = NULL, data = NULL, geom = "alluvium",
-                          position = "identity", na.rm = FALSE,
-                          show.legend = NA, inherit.aes = TRUE,
-                          width = 1/3, ...) {
+stat_alluvium <- function(mapping = NULL,
+                          data = NULL,
+                          geom = "alluvium",
+                          position = "identity",
+                          width = 1/3,
+                          na.rm = FALSE,
+                          show.legend = NA,
+                          inherit.aes = TRUE,
+                          ...) {
   layer(
-    stat = StatAlluvium, data = data, mapping = mapping, geom = geom,
-    position = position, show.legend = show.legend,
+    stat = StatAlluvium,
+    data = data,
+    mapping = mapping,
+    geom = geom,
+    position = position,
+    show.legend = show.legend,
     inherit.aes = inherit.aes,
-    params = list(na.rm = na.rm, width = width, ...)
+    params = list(
+      na.rm = na.rm,
+      width = width,
+      ...
+    )
   )
 }
 
@@ -209,13 +222,24 @@ GeomAlluvium <- ggproto(
 #' @rdname alluvium
 #' @usage NULL
 #' @export
-geom_alluvium <- function(mapping = NULL, data = NULL, stat = "alluvium",
-                          na.rm = FALSE, show.legend = NA, inherit.aes = TRUE,
+geom_alluvium <- function(mapping = NULL,
+                          data = NULL,
+                          stat = "alluvium",
+                          na.rm = FALSE,
+                          show.legend = NA,
+                          inherit.aes = TRUE,
                           ...) {
   layer(
-    geom = GeomAlluvium, mapping = mapping, data = data, stat = stat,
-    position = "identity", show.legend = show.legend,
+    geom = GeomAlluvium,
+    mapping = mapping,
+    data = data,
+    stat = stat,
+    position = "identity",
+    show.legend = show.legend,
     inherit.aes = inherit.aes,
-    params = list(na.rm = na.rm, ...)
+    params = list(
+      na.rm = na.rm,
+      ...
+    )
   )
 }

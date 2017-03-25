@@ -89,14 +89,27 @@ StatStratum <- ggproto(
 #' @rdname stratum
 #' @usage NULL
 #' @export
-stat_stratum <- function(mapping = NULL, data = NULL, geom = "stratum",
-                         na.rm = FALSE, show.legend = NA, inherit.aes = TRUE,
-                         width = 1/3, ...) {
+stat_stratum <- function(mapping = NULL,
+                         data = NULL,
+                         geom = "stratum",
+                         width = 1/3,
+                         na.rm = FALSE,
+                         show.legend = NA,
+                         inherit.aes = TRUE,
+                         ...) {
   layer(
-    stat = StatStratum, data = data, mapping = mapping, geom = geom,
-    position = "identity", show.legend = show.legend,
+    stat = StatStratum,
+    data = data,
+    mapping = mapping,
+    geom = geom,
+    position = "identity",
+    show.legend = show.legend,
     inherit.aes = inherit.aes,
-    params = list(na.rm = na.rm, width = width, ...)
+    params = list(
+      na.rm = na.rm,
+      width = width,
+      ...
+    )
   )
 }
 
@@ -119,12 +132,24 @@ GeomStratum <- ggproto(
 #' @rdname stratum
 #' @usage NULL
 #' @export
-geom_stratum <- function(mapping = NULL, data = NULL, stat = "stratum",
-                         na.rm = FALSE, show.legend = NA, inherit.aes = TRUE,
+geom_stratum <- function(mapping = NULL,
+                         data = NULL,
+                         stat = "stratum",
+                         na.rm = FALSE,
+                         show.legend = NA,
+                         inherit.aes = TRUE,
                          ...) {
   layer(
-    geom = GeomStratum, mapping = mapping, data = data, stat = stat,
-    position = "identity", show.legend = show.legend,
-    inherit.aes = inherit.aes, params = list(na.rm = na.rm, ...)
+    geom = GeomStratum,
+    mapping = mapping,
+    data = data,
+    stat = stat,
+    position = "identity",
+    show.legend = show.legend,
+    inherit.aes = inherit.aes,
+    params = list(
+      na.rm = na.rm,
+      ...
+    )
   )
 }
