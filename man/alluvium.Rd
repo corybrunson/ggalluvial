@@ -115,7 +115,8 @@ ggplot(as.data.frame(Titanic),
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 }
 \seealso{
-\code{\link{stratum}} for intra-axis boxes and 
+\code{\link{stratum}} for intra-axis boxes,
+  \code{\link{alluvium_ts}} for a time series implementation, and
   \code{\link{ggalluvial}} for a shortcut method.
 }
 \keyword{datasets}

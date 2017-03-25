@@ -65,7 +65,7 @@ StatStratum <- ggproto(
     # remove empty elements
     res_data <- res_data[res_data$weight > 0, ]
     
-    # assign each row its own group
+    # assign each row its own group (no pre-existing group field)
     cbind(res_data, group = 1:nrow(res_data))
   },
   compute_group = function(data, scales,
