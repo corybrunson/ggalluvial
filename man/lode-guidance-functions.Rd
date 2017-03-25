@@ -2,11 +2,11 @@
 % Please edit documentation in R/lode-guidance-functions.r
 \name{lode-guidance-functions}
 \alias{lode-guidance-functions}
-\alias{lode_leftright}
+\alias{lode_zigzag}
+\alias{lode_rightward}
 \alias{lode_leftward}
 \alias{lode_rightleft}
-\alias{lode_rightward}
-\alias{lode_zigzag}
+\alias{lode_leftright}
 \title{Lode guidance functions}
 \usage{
 lode_zigzag(n, i)
@@ -37,4 +37,3 @@ lodes within each index axis. After starting at \code{i}, the functions order th
   \item \code{leftright}: Proceed leftward from \code{i} to 1, then rightward to \code{n}
 }
 }
-

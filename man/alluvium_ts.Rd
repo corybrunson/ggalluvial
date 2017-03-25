@@ -2,11 +2,11 @@
 % Please edit documentation in R/alluvium-ts.r
 \docType{data}
 \name{alluvium_ts}
-\alias{GeomAlluviumTs}
-\alias{StatAlluviumTs}
 \alias{alluvium_ts}
-\alias{geom_alluvium_ts}
+\alias{StatAlluviumTs}
 \alias{stat_alluvium_ts}
+\alias{GeomAlluviumTs}
+\alias{geom_alluvium_ts}
 \title{Alluvial flows for time series}
 \format{An object of class \code{StatAlluviumTs} (inherits from \code{Stat}, \code{ggproto}) of length 4.}
 \arguments{
@@ -43,6 +43,7 @@ aesthetics are in bold):
   \item \code{size}
 }
 }
+
 \examples{
 # time series alluvia of WorldPhones data
 wph <- as.data.frame(as.table(WorldPhones))
@@ -82,4 +83,3 @@ ggplot(data = Refugees,
 \code{\link{ggalluvial}} for a shortcut method.
 }
 \keyword{datasets}
-

@@ -25,4 +25,4 @@ Suggests:
     knitr
 License: GPL-2
 VignetteBuilder: knitr
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

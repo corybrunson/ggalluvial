@@ -2,11 +2,11 @@
 % Please edit documentation in R/alluvium.r
 \docType{data}
 \name{alluvium}
-\alias{GeomAlluvium}
-\alias{StatAlluvium}
 \alias{alluvium}
-\alias{geom_alluvium}
+\alias{StatAlluvium}
 \alias{stat_alluvium}
+\alias{GeomAlluvium}
+\alias{geom_alluvium}
 \title{Alluvial flows}
 \format{An object of class \code{StatAlluvium} (inherits from \code{Stat}, \code{ggproto}) of length 3.}
 \arguments{
@@ -38,13 +38,23 @@ x-spline, also as a proportion of the separation between the axes.}
 these depths.
 }
 \section{Aesthetics}{
- \code{stat_alluvium} understands only the \code{group} 
-  aesthetic, but it is currently ignored. \code{geom_alluvium} understands 
-  the following aesthetics (required aesthetics are in bold): \itemize{ \item
-  \strong{\code{axis[0-9\\.]}} (\code{axis1}, \code{axis2.5}, etc.) \item 
-  \code{alpha} \item \code{colour} \item \code{fill} \item \code{group} \item
-  \code{linetype} \item \code{size} } Currently, \code{group} is ignored.
+
+\code{stat_alluvium} understands only the \code{group} 
+  aesthetic, but it is currently ignored.
+\code{geom_alluvium} understands the following aesthetics
+  (required aesthetics are in bold):
+\itemize{
+  \item \strong{\code{axis[0-9\\.]}} (\code{axis1}, \code{axis2.5}, etc.)
+  \item \code{alpha}
+  \item \code{colour}
+  \item \code{fill}
+  \item \code{group}
+  \item \code{linetype}
+  \item \code{size}
 }
+Currently, \code{group} is ignored.
+}
+
 \examples{
 # degeneracy (one axis; unavailable through shortcut function)
 ggplot(as.data.frame(Titanic),
@@ -109,4 +119,3 @@ ggplot(as.data.frame(Titanic),
   \code{\link{ggalluvial}} for a shortcut method.
 }
 \keyword{datasets}
-

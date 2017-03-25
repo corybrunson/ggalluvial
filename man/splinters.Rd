@@ -17,4 +17,3 @@ vector, in the sense that the binning defined by the former is finer (or
 equal to) that of the latter, i.e. each bin in the former is a subset of one
 in the latter.
 }
-

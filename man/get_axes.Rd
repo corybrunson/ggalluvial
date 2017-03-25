@@ -14,4 +14,3 @@ Identify elements in a character vector that fit the pattern of axis
 aesthetic names, and return their indices in the numerical order of the axis
 numbers.
 }
-

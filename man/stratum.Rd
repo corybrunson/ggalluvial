@@ -2,11 +2,11 @@
 % Please edit documentation in R/stratum.r
 \docType{data}
 \name{stratum}
-\alias{GeomStratum}
-\alias{StatStratum}
-\alias{geom_stratum}
-\alias{stat_stratum}
 \alias{stratum}
+\alias{StatStratum}
+\alias{stat_stratum}
+\alias{GeomStratum}
+\alias{geom_stratum}
 \title{Variable axes and strata}
 \format{An object of class \code{StatStratum} (inherits from \code{Stat}, \code{ggproto}) of length 3.}
 \arguments{
@@ -37,6 +37,7 @@ aesthetics are in bold):
 }
 Currently, \code{group} is ignored.
 }
+
 \examples{
 # full axis width
 ggplot(as.data.frame(Titanic),
@@ -59,4 +60,3 @@ ggplot(as.data.frame(Titanic),
   \code{\link{ggalluvial}} for a shortcut method.
 }
 \keyword{datasets}
-

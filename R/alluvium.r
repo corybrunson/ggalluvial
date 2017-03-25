@@ -4,12 +4,21 @@
 #' \code{geom_alluvium} plots an x-spline for each group through the axes at 
 #' these depths.
 #' 
-#' @section Aesthetics: \code{stat_alluvium} understands only the \code{group} 
-#'   aesthetic, but it is currently ignored. \code{geom_alluvium} understands 
-#'   the following aesthetics (required aesthetics are in bold): \itemize{ \item
-#'   \strong{\code{axis[0-9\\.]}} (\code{axis1}, \code{axis2.5}, etc.) \item 
-#'   \code{alpha} \item \code{colour} \item \code{fill} \item \code{group} \item
-#'   \code{linetype} \item \code{size} } Currently, \code{group} is ignored.
+#' @section Aesthetics:
+#' \code{stat_alluvium} understands only the \code{group} 
+#'   aesthetic, but it is currently ignored.
+#' \code{geom_alluvium} understands the following aesthetics
+#'   (required aesthetics are in bold):
+#' \itemize{
+#'   \item \strong{\code{axis[0-9\\.]}} (\code{axis1}, \code{axis2.5}, etc.)
+#'   \item \code{alpha}
+#'   \item \code{colour}
+#'   \item \code{fill}
+#'   \item \code{group}
+#'   \item \code{linetype}
+#'   \item \code{size}
+#' }
+#' Currently, \code{group} is ignored.
 #'   
 #' @name alluvium
 #' @import ggplot2
@@ -114,7 +123,8 @@ StatAlluvium <- ggproto(
 #' @export
 stat_alluvium <- function(mapping = NULL, data = NULL, geom = "alluvium",
                           position = "identity", na.rm = FALSE,
-                          show.legend = NA, inherit.aes = TRUE, ...) {
+                          show.legend = NA, inherit.aes = TRUE,
+                          check.aes = TRUE, check.params = TRUE, ...) {
   layer(
     stat = StatAlluvium, data = data, mapping = mapping, geom = geom,
     position = position, show.legend = show.legend,
@@ -183,7 +193,7 @@ GeomAlluvium <- ggproto(
 #' @export
 geom_alluvium <- function(mapping = NULL, data = NULL, stat = "alluvium",
                           na.rm = FALSE, show.legend = NA, inherit.aes = TRUE,
-                          ...) {
+                          check.aes = TRUE, check.params = TRUE, ...) {
   layer(
     geom = GeomAlluvium, mapping = mapping, data = data, stat = stat,
     position = "identity", show.legend = show.legend,

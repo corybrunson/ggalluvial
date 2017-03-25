@@ -30,4 +30,3 @@ on a formula in terms of the data elements
 \seealso{
 \code{\link{alluvium}} and \code{\link{stratum}}
 }
-
