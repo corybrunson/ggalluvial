@@ -33,23 +33,46 @@
 #' @param knot.pos The horizontal distance between a measurement time and the
 #'   control point of the x-spline, as a proportion of the separation between
 #'   times. (Must be between 0 and 0.6.)
+#' @param ribbon_bend Deprecated; alias for \code{knot.pos}.
 #' @example inst/examples/alluvium-ts.r
 #' @usage NULL
 #' @export
 StatAlluviumTs <- ggproto(
   "StatAlluviumTs", Stat,
   required_aes = c("x", "group", "weight"),
+  setup_params = function(data, params) {
+    
+    if (!is.null(params$ribbon_bend)) {
+      warning("Parameter 'ribbon_bend' is deprecated; use 'knot.pos' instead.")
+      params$knot.pos <- params$ribbon_bend
+      params$ribbon_bend <- NULL
+    }
+    if (params$knot.pos < 0 | params$knot.pos > .6) {
+      warning("Parameter 'knot.pos' is not between 0 and .6, ",
+              "and will be ignored.")
+      params$knot.pos <- 1/6
+    }
+    
+    params
+  },
   setup_data = function(data, params) {
-    aggregate(
+    
+    data <- aggregate(
       formula = as.formula(paste("weight ~",
                                  paste(setdiff(names(data), "weight"),
                                        collapse = "+"))),
       data = data,
       FUN = sum
     )
+    
+    # positioning parameter
+    data$knot.pos <- params$knot.pos
+    
+    data
   },
   compute_panel = function(data, scales, params,
-                           decreasing = FALSE) {
+                           decreasing = FALSE,
+                           knot.pos = 1/6, ribbon_bend = NULL) {
     # fill in missing values (as zeros)
     data <- merge(
       data,
@@ -83,6 +106,7 @@ stat_alluvium_ts <- function(mapping = NULL,
                              data = NULL,
                              geom = "alluvium_ts",
                              position = "identity",
+                             knot.pos = 1/6, ribbon_bend = NULL,
                              na.rm = FALSE,
                              show.legend = NA,
                              inherit.aes = TRUE,
@@ -96,6 +120,7 @@ stat_alluvium_ts <- function(mapping = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
+      knot.pos = knot.pos, ribbon_bend = ribbon_bend,
       na.rm = na.rm,
       ...
     )
@@ -110,17 +135,18 @@ GeomAlluviumTs <- ggproto(
   default_aes = aes(size = .5, linetype = 1,
                     colour = 0, fill = "gray", alpha = .5),
   setup_data = function(data, params) data,
-  draw_group = function(data, panel_scales, coord,
-                        knot.pos = 1/6) {
+  draw_group = function(data, panel_scales, coord) {
     
     first_row <- data[1,
-                      setdiff(names(data), c("x", "ymax", "weight")),
+                      setdiff(names(data),
+                              c("x", "ymax", "weight", "knot.pos")),
                       drop = FALSE]
     rownames(first_row) <- NULL
     
     # spline coordinates
     x_forward <- rep(data$x, c(3, rep(4, nrow(data) - 2), 3)) +
-      knot.pos * c(0, rep(c(0, 1, -1, 0), nrow(data) - 1), 0)
+      rep(data$knot.pos, c(3, rep(4, nrow(data) - 2), 3)) *
+      c(0, rep(c(0, 1, -1, 0), nrow(data) - 1), 0)
     y_forward <- rep(data$ymax - data$weight, c(3, rep(4, nrow(data) - 2), 3))
     y_backward <- rev(rep(data$ymax, c(3, rep(4, nrow(data) - 2), 3)))
     shape_forward <- c(0, rep(c(0, 1, 1, 0), times = nrow(data) - 1), 0)
@@ -152,7 +178,7 @@ GeomAlluviumTs <- ggproto(
 geom_alluvium_ts <- function(mapping = NULL,
                              data = NULL,
                              stat = "alluvium_ts",
-                             knot.pos = 1/6,
+                             knot.pos = 1/6, ribbon_bend = NULL,
                              na.rm = FALSE,
                              show.legend = NA,
                              inherit.aes = TRUE,
@@ -166,7 +192,7 @@ geom_alluvium_ts <- function(mapping = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
-      knot.pos = knot.pos,
+      knot.pos = knot.pos, ribbon_bend = ribbon_bend,
       na.rm = na.rm,
       ...
     )

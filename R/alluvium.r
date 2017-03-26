@@ -41,8 +41,9 @@
 #'   first by stratum and then by the provided vectors.
 #' @param knot.pos The horizontal distance between a variable axis 
 #'   (\code{width/2} from its center) and the control point of the x-spline, as
-#'   a proportion of the separation between the strata (Must be between 0 and 
+#'   a proportion of the separation between the strata. (Must be between 0 and 
 #'   0.6.)
+#' @param ribbon_bend Deprecated; alias for \code{knot.pos}.
 #' @example inst/examples/alluvium.r
 #' @usage NULL
 #' @export
@@ -53,6 +54,17 @@ StatAlluvium <- ggproto(
     if (!is.null(data$x) || !is.null(params$x) ||
         !is.null(data$y) || !is.null(params$y)) {
       stop("stat_alluvium() does not accept x or y aesthetics")
+    }
+    
+    if (!is.null(params$ribbon_bend)) {
+      warning("Parameter 'ribbon_bend' is deprecated; use 'knot.pos' instead.")
+      params$knot.pos <- params$ribbon_bend
+      params$ribbon_bend <- NULL
+    }
+    if (params$knot.pos < 0 | params$knot.pos > .6) {
+      warning("Parameter 'knot.pos' is not between 0 and .6, ",
+              "and will be ignored.")
+      params$knot.pos <- 1/6
     }
     
     if (!is.null(params$lode.ordering)) {
@@ -91,13 +103,19 @@ StatAlluvium <- ggproto(
     
     # override existing group assignment; assign each row its own group
     data$group <- 1:nrow(data)
+    
+    # positioning parameters
+    data$width <- params$width
+    data$knot.pos <- params$knot.pos
+    
     data
   },
   compute_panel = function(data, scales, params,
                            lode.guidance = "zigzag",
                            bind.by.aes = FALSE,
                            lode.ordering = NULL,
-                           width = 1/3) {
+                           width = 1/3,
+                           knot.pos = 1/6, ribbon_bend = NULL) {
     
     axis_ind <- get_axes(names(data))
     data_aes <- setdiff(names(data)[-axis_ind],
@@ -137,10 +155,9 @@ StatAlluvium <- ggproto(
     data <- data.frame(data, alluvia)
     
     # widths and x bounds
-    data$xmin <- data$x - width / 2
-    data$xmax <- data$x + width / 2
-    data$width <- width
-    
+    data$xmin <- data$x - data$width / 2
+    data$xmax <- data$x + data$width / 2
+
     # y centers
     data$y <- (data$ymin + data$ymax) / 2
     
@@ -156,6 +173,7 @@ stat_alluvium <- function(mapping = NULL,
                           geom = "alluvium",
                           position = "identity",
                           width = 1/3,
+                          knot.pos = 1/6, ribbon_bend = NULL,
                           na.rm = FALSE,
                           show.legend = NA,
                           inherit.aes = TRUE,
@@ -170,6 +188,7 @@ stat_alluvium <- function(mapping = NULL,
     inherit.aes = inherit.aes,
     params = list(
       width = width,
+      knot.pos = knot.pos, ribbon_bend = ribbon_bend,
       na.rm = na.rm,
       ...
     )
@@ -184,12 +203,12 @@ GeomAlluvium <- ggproto(
   default_aes = aes(size = .5, linetype = 1, colour = 0,
                     fill = "gray", alpha = .5),
   setup_data = function(data, params) data,
-  draw_group = function(data, panel_scales, coord,
-                        knot.pos = 1/6) {
+  draw_group = function(data, panel_scales, coord) {
     
-    first_row <- data[1, setdiff(names(data), c("x", "xmin", "xmax",
-                                                "y", "ymin", "ymax",
-                                                "width")),
+    first_row <- data[1, setdiff(names(data),
+                                 c("x", "xmin", "xmax",
+                                   "y", "ymin", "ymax",
+                                   "width", "knot.pos")),
                       drop = FALSE]
     rownames(first_row) <- NULL
     
@@ -203,9 +222,10 @@ GeomAlluvium <- ggproto(
     } else {
       # spline coordinates (more than one axis)
       w_oneway <- rep(data$width, c(3, rep(4, nrow(data) - 2), 3))
+      k_oneway <- rep(data$knot.pos, c(3, rep(4, nrow(data) - 2), 3))
       x_oneway <- rep(data$x, c(3, rep(4, nrow(data) - 2), 3)) +
         w_oneway / 2 * c(-1, rep(c(1, 1, -1, -1), nrow(data) - 1), 1) +
-        knot.pos * (1 - w_oneway) * c(0, rep(c(0, 1, -1, 0), nrow(data) - 1), 0)
+        k_oneway * (1 - w_oneway) * c(0, rep(c(0, 1, -1, 0), nrow(data) - 1), 0)
       y_oneway <- rep(data$ymin, c(3, rep(4, nrow(data) - 2), 3))
       shape_oneway <- c(0, rep(c(0, 1, 1, 0), nrow(data) - 1), 0)
       spline_data <- data.frame(
@@ -238,7 +258,8 @@ GeomAlluvium <- ggproto(
 geom_alluvium <- function(mapping = NULL,
                           data = NULL,
                           stat = "alluvium",
-                          knot.pos = 1/6,
+                          width = 1/3,
+                          knot.pos = 1/6, ribbon_bend = NULL,
                           na.rm = FALSE,
                           show.legend = NA,
                           inherit.aes = TRUE,
@@ -252,7 +273,8 @@ geom_alluvium <- function(mapping = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
-      knot.pos = knot.pos,
+      width = width,
+      knot.pos = knot.pos, ribbon_bend = ribbon_bend,
       na.rm = na.rm,
       ...
     )

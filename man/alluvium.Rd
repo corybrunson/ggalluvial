@@ -12,8 +12,10 @@
 \arguments{
 \item{knot.pos}{The horizontal distance between a variable axis 
 (\code{width/2} from its center) and the control point of the x-spline, as
-a proportion of the separation between the strata (Must be between 0 and 
+a proportion of the separation between the strata. (Must be between 0 and 
 0.6.)}
+
+\item{ribbon_bend}{Deprecated; alias for \code{knot.pos}.}
 
 \item{lode.guidance}{The function to prioritize the axis variables for 
 ordering the lodes within each stratum. Defaults to "zigzag", other options

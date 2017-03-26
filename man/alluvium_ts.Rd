@@ -8,11 +8,13 @@
 \alias{GeomAlluviumTs}
 \alias{geom_alluvium_ts}
 \title{Alluvial flows for time series}
-\format{An object of class \code{StatAlluviumTs} (inherits from \code{Stat}, \code{ggproto}) of length 4.}
+\format{An object of class \code{StatAlluviumTs} (inherits from \code{Stat}, \code{ggproto}) of length 5.}
 \arguments{
 \item{knot.pos}{The horizontal distance between a measurement time and the
 control point of the x-spline, as a proportion of the separation between
 times. (Must be between 0 and 0.6.)}
+
+\item{ribbon_bend}{Deprecated; alias for \code{knot.pos}.}
 
 \item{decreasing}{Logical; whether to stack the depths at each x-value with
 the largest on top (FALSE, default), with the largest on bottom (TRUE), or
