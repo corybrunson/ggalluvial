@@ -47,18 +47,6 @@
 #' @export
 StatAlluvium <- ggproto(
   "StatAlluvium", Stat,
-  setup_data = function(data, params) {
-    
-    # assign uniform weight if not provided
-    if (is.null(data$weight)) {
-      data$weight <- rep(1, nrow(data))
-      message("No argument provided for 'weight'; assuming uniform row weights")
-    }
-    
-    # override existing group assignment; assign each row its own group
-    data$group <- 1:nrow(data)
-    data
-  },
   setup_params = function(data, params) {
     
     if (!is.null(data$x) || !is.null(params$x) ||
@@ -80,6 +68,18 @@ StatAlluvium <- ggproto(
     }
     
     params
+  },
+  setup_data = function(data, params) {
+    
+    # assign uniform weight if not provided
+    if (is.null(data$weight)) {
+      data$weight <- rep(1, nrow(data))
+      message("No argument provided for 'weight'; assuming uniform row weights")
+    }
+    
+    # override existing group assignment; assign each row its own group
+    data$group <- 1:nrow(data)
+    data
   },
   compute_panel = function(data, scales, params,
                            lode.guidance = "zigzag",
