@@ -5,11 +5,11 @@ ggplot(wph,
        aes(x = Year, group = Region, weight = Telephones)) +
   geom_alluvium_ts(aes(fill = Region, colour = Region))
 
-# time series alluvia of refugees data, sorted by country
+# time series line plot of refugees data, sorted by country
 ggplot(data = alluvial::Refugees,
        aes(x = year, weight = refugees, group = country)) +
   geom_alluvium_ts(aes(fill = country), colour = "black",
-                   decreasing = NA)
+                   decreasing = NA, knot.pos = 0)
 
 # load refugees data from alluvial
 data(Refugees, package = "alluvial")

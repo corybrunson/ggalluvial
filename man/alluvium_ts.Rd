@@ -10,13 +10,13 @@
 \title{Alluvial flows for time series}
 \format{An object of class \code{StatAlluviumTs} (inherits from \code{Stat}, \code{ggproto}) of length 4.}
 \arguments{
+\item{knot.pos}{The horizontal distance between a measurement time and the
+control point of the x-spline, as a proportion of the separation between
+times. (Must be between 0 and 0.6.)}
+
 \item{decreasing}{Logical; whether to stack the depths at each x-value with
 the largest on top (FALSE, default), with the largest on bottom (TRUE), or
-in the order of the grouping variable values (NA)}
-
-\item{ribbon_bend}{The horizontal distance between a measurement time and the
-control point of the x-spline, as a proportion of the separation between
-times}
+in the order of the grouping variable values (NA).}
 }
 \description{
 \code{stat_alluvium_ts} calculates the depth of each category at each time. 
@@ -52,11 +52,11 @@ ggplot(wph,
        aes(x = Year, group = Region, weight = Telephones)) +
   geom_alluvium_ts(aes(fill = Region, colour = Region))
 
-# time series alluvia of refugees data, sorted by country
+# time series line plot of refugees data, sorted by country
 ggplot(data = alluvial::Refugees,
        aes(x = year, weight = refugees, group = country)) +
   geom_alluvium_ts(aes(fill = country), colour = "black",
-                   decreasing = NA)
+                   decreasing = NA, knot.pos = 0)
 
 # load refugees data from alluvial
 data(Refugees, package = "alluvial")

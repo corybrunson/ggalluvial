@@ -29,10 +29,10 @@
 #' @inheritParams layer
 #' @param decreasing Logical; whether to stack the depths at each x-value with
 #'   the largest on top (FALSE, default), with the largest on bottom (TRUE), or
-#'   in the order of the grouping variable values (NA)
-#' @param ribbon_bend The horizontal distance between a measurement time and the
+#'   in the order of the grouping variable values (NA).
+#' @param knot.pos The horizontal distance between a measurement time and the
 #'   control point of the x-spline, as a proportion of the separation between
-#'   times
+#'   times. (Must be between 0 and 0.6.)
 #' @example inst/examples/alluvium-ts.r
 #' @usage NULL
 #' @export
@@ -79,14 +79,26 @@ StatAlluviumTs <- ggproto(
 #' @rdname alluvium_ts
 #' @usage NULL
 #' @export
-stat_alluvium_ts <- function(mapping = NULL, data = NULL, geom = "alluvium_ts",
-                          position = "identity", na.rm = FALSE,
-                          show.legend = NA, inherit.aes = TRUE, ...) {
+stat_alluvium_ts <- function(mapping = NULL,
+                             data = NULL,
+                             geom = "alluvium_ts",
+                             position = "identity",
+                             na.rm = FALSE,
+                             show.legend = NA,
+                             inherit.aes = TRUE,
+                             ...) {
   layer(
-    stat = StatAlluviumTs, data = data, mapping = mapping, geom = geom,
-    position = position, show.legend = show.legend,
+    stat = StatAlluviumTs,
+    data = data,
+    mapping = mapping,
+    geom = geom,
+    position = position,
+    show.legend = show.legend,
     inherit.aes = inherit.aes,
-    params = list(na.rm = na.rm, ...)
+    params = list(
+      na.rm = na.rm,
+      ...
+    )
   )
 }
 
@@ -99,15 +111,16 @@ GeomAlluviumTs <- ggproto(
                     colour = 0, fill = "gray", alpha = .5),
   setup_data = function(data, params) data,
   draw_group = function(data, panel_scales, coord,
-                        ribbon_bend = 1/6) {
-    # save elements from first row
+                        knot.pos = 1/6) {
+    
     first_row <- data[1,
                       setdiff(names(data), c("x", "ymax", "weight")),
                       drop = FALSE]
     rownames(first_row) <- NULL
+    
     # spline coordinates
     x_forward <- rep(data$x, c(3, rep(4, nrow(data) - 2), 3)) +
-      ribbon_bend * c(0, rep(c(0, 1, -1, 0), nrow(data) - 1), 0)
+      knot.pos * c(0, rep(c(0, 1, -1, 0), nrow(data) - 1), 0)
     y_forward <- rep(data$ymax - data$weight, c(3, rep(4, nrow(data) - 2), 3))
     y_backward <- rev(rep(data$ymax, c(3, rep(4, nrow(data) - 2), 3)))
     shape_forward <- c(0, rep(c(0, 1, 1, 0), times = nrow(data) - 1), 0)
@@ -136,13 +149,26 @@ GeomAlluviumTs <- ggproto(
 #' @rdname alluvium_ts
 #' @usage NULL
 #' @export
-geom_alluvium_ts <- function(mapping = NULL, data = NULL, stat = "alluvium_ts",
-                          na.rm = FALSE, show.legend = NA, inherit.aes = TRUE,
-                          ...) {
+geom_alluvium_ts <- function(mapping = NULL,
+                             data = NULL,
+                             stat = "alluvium_ts",
+                             knot.pos = 1/6,
+                             na.rm = FALSE,
+                             show.legend = NA,
+                             inherit.aes = TRUE,
+                             ...) {
   layer(
-    geom = GeomAlluviumTs, mapping = mapping, data = data, stat = stat,
-    position = "identity", show.legend = show.legend,
+    geom = GeomAlluviumTs,
+    mapping = mapping,
+    data = data,
+    stat = stat,
+    position = "identity",
+    show.legend = show.legend,
     inherit.aes = inherit.aes,
-    params = list(na.rm = na.rm, ...)
+    params = list(
+      knot.pos = knot.pos,
+      na.rm = na.rm,
+      ...
+    )
   )
 }

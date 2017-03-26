@@ -3,6 +3,7 @@ ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis = Class)) +
   geom_alluvium(aes(fill = Class, alpha = Survived)) +
+  scale_x_continuous(breaks = 1, labels = c("Class")) +
   scale_alpha_manual(values = c(.25, .75))
 
 # declaration of groups (ignored)
@@ -10,23 +11,25 @@ ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age,
            group = Survived)) +
-  geom_alluvium()
+  geom_alluvium() +
+  scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 
-# control of horizontal spacing: axis widths and ribbon bends
+# control of horizontal spacing: parallel sets
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
-  geom_alluvium(aes(fill = Age),
-                width = 1/5, ribbon_bend = 1/3)
+  geom_alluvium(aes(fill = Survived),
+                width = 0, knot.pos = 0) +
+  scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 
-# use of strata, annotation, and labels
+# use of strata and labels
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
   geom_alluvium() +
+  scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age")) +
   geom_stratum() + geom_text(stat = "stratum") +
-  ggtitle("Alluvial diagram of Titanic passenger demographic data") +
-  scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
+  ggtitle("Alluvial diagram of Titanic passenger demographic data")
 
 # use of facets
 ggplot(as.data.frame(Titanic),

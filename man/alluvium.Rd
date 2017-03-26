@@ -10,6 +10,11 @@
 \title{Alluvial flows}
 \format{An object of class \code{StatAlluvium} (inherits from \code{Stat}, \code{ggproto}) of length 4.}
 \arguments{
+\item{knot.pos}{The horizontal distance between a variable axis 
+(\code{width/2} from its center) and the control point of the x-spline, as
+a proportion of the separation between the strata (Must be between 0 and 
+0.6.)}
+
 \item{lode.guidance}{The function to prioritize the axis variables for 
 ordering the lodes within each stratum. Defaults to "zigzag", other options
 include "rightleft", "leftright", "rightward", and "leftward" (see 
@@ -25,10 +30,6 @@ FALSE.}
 dimensions, giving the preferred ordering of alluvia at each axis. This 
 will be used to order the lodes within each stratum by sorting the lodes 
 first by stratum and then by the provided vectors.}
-
-\item{ribbon_bend}{The horizontal distance between a variable axis 
-(\code{width/2} from its center) and the control point of the x-spline,
-also as a proportion of the separation between the axes.}
 }
 \description{
 \code{stat_alluvium} calculates the depth of each group at each axis. 
@@ -59,6 +60,7 @@ ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis = Class)) +
   geom_alluvium(aes(fill = Class, alpha = Survived)) +
+  scale_x_continuous(breaks = 1, labels = c("Class")) +
   scale_alpha_manual(values = c(.25, .75))
 
 # declaration of groups (ignored)
@@ -66,23 +68,25 @@ ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age,
            group = Survived)) +
-  geom_alluvium()
+  geom_alluvium() +
+  scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 
-# control of horizontal spacing: axis widths and ribbon bends
+# control of horizontal spacing: parallel sets
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
-  geom_alluvium(aes(fill = Age),
-                width = 1/5, ribbon_bend = 1/3)
+  geom_alluvium(aes(fill = Survived),
+                width = 0, knot.pos = 0) +
+  scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 
-# use of strata, annotation, and labels
+# use of strata and labels
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
   geom_alluvium() +
+  scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age")) +
   geom_stratum() + geom_text(stat = "stratum") +
-  ggtitle("Alluvial diagram of Titanic passenger demographic data") +
-  scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
+  ggtitle("Alluvial diagram of Titanic passenger demographic data")
 
 # use of facets
 ggplot(as.data.frame(Titanic),

@@ -39,9 +39,10 @@
 #'   dimensions, giving the preferred ordering of alluvia at each axis. This 
 #'   will be used to order the lodes within each stratum by sorting the lodes 
 #'   first by stratum and then by the provided vectors.
-#' @param ribbon_bend The horizontal distance between a variable axis 
-#'   (\code{width/2} from its center) and the control point of the x-spline,
-#'   also as a proportion of the separation between the axes.
+#' @param knot.pos The horizontal distance between a variable axis 
+#'   (\code{width/2} from its center) and the control point of the x-spline, as
+#'   a proportion of the separation between the strata (Must be between 0 and 
+#'   0.6.)
 #' @example inst/examples/alluvium.r
 #' @usage NULL
 #' @export
@@ -117,18 +118,18 @@ StatAlluvium <- ggproto(
         } else {
           c(axis_seq, aes_ind)
         }
-        # order ribbons according to axes, in above order
-        ribbon_seq <- do.call(order, data[all_ind])
+        # order lodes according to axes, in above order
+        lode_seq <- do.call(order, data[all_ind])
       } else {
-        ribbon_seq <- order(data[[axis_ind[i]]], lode.ordering[, i])
+        lode_seq <- order(data[[axis_ind[i]]], lode.ordering[, i])
       }
-      # ribbon floors and ceilings along axis
-      ymin_seq <- c(0, cumsum(data$weight[ribbon_seq]))
-      ymax_seq <- c(cumsum(data$weight[ribbon_seq]), sum(data$weight))
-      # ribbon breaks
+      # lode floors and ceilings along axis
+      ymin_seq <- c(0, cumsum(data$weight[lode_seq]))
+      ymax_seq <- c(cumsum(data$weight[lode_seq]), sum(data$weight))
+      # lode breaks
       cbind(i,
-            ymin_seq[order(ribbon_seq)],
-            ymax_seq[order(ribbon_seq)])
+            ymin_seq[order(lode_seq)],
+            ymax_seq[order(lode_seq)])
     }
     
     alluvia <- do.call(rbind, lapply(1:length(axis_ind), compute_alluvium))
@@ -184,13 +185,14 @@ GeomAlluvium <- ggproto(
                     fill = "gray", alpha = .5),
   setup_data = function(data, params) data,
   draw_group = function(data, panel_scales, coord,
-                        ribbon_bend = 1/6) {
+                        knot.pos = 1/6) {
     
     first_row <- data[1, setdiff(names(data), c("x", "xmin", "xmax",
                                                 "y", "ymin", "ymax",
                                                 "width")),
                       drop = FALSE]
     rownames(first_row) <- NULL
+    
     if (nrow(data) == 1) {
       # spline coordinates (one axis)
       spline_data <- data.frame(
@@ -200,10 +202,10 @@ GeomAlluvium <- ggproto(
       )
     } else {
       # spline coordinates (more than one axis)
+      w_oneway <- rep(data$width, c(3, rep(4, nrow(data) - 2), 3))
       x_oneway <- rep(data$x, c(3, rep(4, nrow(data) - 2), 3)) +
-        rep(data$width, c(3, rep(4, nrow(data) - 2), 3)) / 2 *
-        c(-1, rep(c(1, 1, -1, -1), nrow(data) - 1), 1) +
-        ribbon_bend * c(0, rep(c(0, 1, -1, 0), nrow(data) - 1), 0)
+        w_oneway / 2 * c(-1, rep(c(1, 1, -1, -1), nrow(data) - 1), 1) +
+        knot.pos * (1 - w_oneway) * c(0, rep(c(0, 1, -1, 0), nrow(data) - 1), 0)
       y_oneway <- rep(data$ymin, c(3, rep(4, nrow(data) - 2), 3))
       shape_oneway <- c(0, rep(c(0, 1, 1, 0), nrow(data) - 1), 0)
       spline_data <- data.frame(
@@ -236,6 +238,7 @@ GeomAlluvium <- ggproto(
 geom_alluvium <- function(mapping = NULL,
                           data = NULL,
                           stat = "alluvium",
+                          knot.pos = 1/6,
                           na.rm = FALSE,
                           show.legend = NA,
                           inherit.aes = TRUE,
@@ -249,6 +252,7 @@ geom_alluvium <- function(mapping = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
+      knot.pos = knot.pos,
       na.rm = na.rm,
       ...
     )
