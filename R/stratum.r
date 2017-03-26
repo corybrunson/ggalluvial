@@ -43,6 +43,17 @@ StatStratum <- ggproto(
   },
   setup_data = function(data, params) {
     
+    if (params$na.rm) {
+      data <- na.omit(data)
+    } else {
+      axis_ind <- get_axes(names(data))
+      for (i in axis_ind) {
+        if (any(is.na(data[[i]]))) {
+          data[[i]] <- addNA(data[[i]], ifany = TRUE)
+        }
+      }
+    }
+    
     # assign uniform weight if not provided
     if (is.null(data$weight)) {
       data$weight <- rep(1, nrow(data))
@@ -106,8 +117,8 @@ stat_stratum <- function(mapping = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
-      na.rm = na.rm,
       width = width,
+      na.rm = na.rm,
       ...
     )
   )
@@ -135,6 +146,7 @@ GeomStratum <- ggproto(
 geom_stratum <- function(mapping = NULL,
                          data = NULL,
                          stat = "stratum",
+                         width = 1/3,
                          na.rm = FALSE,
                          show.legend = NA,
                          inherit.aes = TRUE,
@@ -148,6 +160,7 @@ geom_stratum <- function(mapping = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
+      width = width,
       na.rm = na.rm,
       ...
     )

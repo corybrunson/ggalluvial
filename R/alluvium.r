@@ -71,6 +71,17 @@ StatAlluvium <- ggproto(
   },
   setup_data = function(data, params) {
     
+    if (params$na.rm) {
+      data <- na.omit(data)
+    } else {
+      axis_ind <- get_axes(names(data))
+      for (i in axis_ind) {
+        if (any(is.na(data[[i]]))) {
+          data[[i]] <- addNA(data[[i]], ifany = TRUE)
+        }
+      }
+    }
+    
     # assign uniform weight if not provided
     if (is.null(data$weight)) {
       data$weight <- rep(1, nrow(data))
@@ -157,8 +168,8 @@ stat_alluvium <- function(mapping = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
-      na.rm = na.rm,
       width = width,
+      na.rm = na.rm,
       ...
     )
   )
