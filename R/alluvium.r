@@ -39,10 +39,13 @@
 #'   dimensions, giving the preferred ordering of alluvia at each axis. This 
 #'   will be used to order the lodes within each stratum by sorting the lodes 
 #'   first by stratum and then by the provided vectors.
+#' @param width The width of each variable axis, as a proportion of the
+#'   separation between axes. Defaults to 1/3.
+#' @param axis_width Deprecated; alias for \code{width}.
 #' @param knot.pos The horizontal distance between a variable axis 
-#'   (\code{width/2} from its center) and the control point of the x-spline, as
+#'   (\code{width/2} from its center) and the control point of the x-spline, as 
 #'   a proportion of the separation between the strata. (Must be between 0 and 
-#'   0.6.)
+#'   0.5.). Defaults to 1/6.
 #' @param ribbon_bend Deprecated; alias for \code{knot.pos}.
 #' @example inst/examples/alluvium.r
 #' @usage NULL
@@ -56,13 +59,26 @@ StatAlluvium <- ggproto(
       stop("stat_alluvium() does not accept x or y aesthetics")
     }
     
+    if (!is.null(params$axis_width)) {
+      warning("Parameter 'axis_width' is deprecated; use 'width' instead.")
+      params$width <- params$axis_width
+      params$axis_width <- NULL
+    }
+    if (!is.null(params$width)) {
+      if (params$width < 0 | params$width > 1) {
+        warning("Argument to parameter 'width' is not between 0 and 1, ",
+                "and will be ignored.")
+        params$width <- 1/3
+      }
+    }
+    
     if (!is.null(params$ribbon_bend)) {
       warning("Parameter 'ribbon_bend' is deprecated; use 'knot.pos' instead.")
       params$knot.pos <- params$ribbon_bend
       params$ribbon_bend <- NULL
     }
-    if (params$knot.pos < 0 | params$knot.pos > .6) {
-      warning("Parameter 'knot.pos' is not between 0 and .6, ",
+    if (params$knot.pos < 0 | params$knot.pos > .5) {
+      warning("Argument to parameter 'knot.pos' is not between 0 and .5, ",
               "and will be ignored.")
       params$knot.pos <- 1/6
     }
@@ -114,7 +130,7 @@ StatAlluvium <- ggproto(
                            lode.guidance = "zigzag",
                            bind.by.aes = FALSE,
                            lode.ordering = NULL,
-                           width = 1/3,
+                           width = 1/3, axis_width = NULL,
                            knot.pos = 1/6, ribbon_bend = NULL) {
     
     axis_ind <- get_axes(names(data))
@@ -172,7 +188,7 @@ stat_alluvium <- function(mapping = NULL,
                           data = NULL,
                           geom = "alluvium",
                           position = "identity",
-                          width = 1/3,
+                          width = 1/3, axis_width = NULL,
                           knot.pos = 1/6, ribbon_bend = NULL,
                           na.rm = FALSE,
                           show.legend = NA,
@@ -187,7 +203,7 @@ stat_alluvium <- function(mapping = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
-      width = width,
+      width = width, axis_width = axis_width,
       knot.pos = knot.pos, ribbon_bend = ribbon_bend,
       na.rm = na.rm,
       ...
@@ -258,7 +274,7 @@ GeomAlluvium <- ggproto(
 geom_alluvium <- function(mapping = NULL,
                           data = NULL,
                           stat = "alluvium",
-                          width = 1/3,
+                          width = 1/3, axis_width = NULL,
                           knot.pos = 1/6, ribbon_bend = NULL,
                           na.rm = FALSE,
                           show.legend = NA,
@@ -273,7 +289,7 @@ geom_alluvium <- function(mapping = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
-      width = width,
+      width = width, axis_width = axis_width,
       knot.pos = knot.pos, ribbon_bend = ribbon_bend,
       na.rm = na.rm,
       ...

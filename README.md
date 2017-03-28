@@ -130,7 +130,7 @@ The core of the package consists in two `stat_*`-`geom_*` pairs of layer functio
 - `stat_stratum()` similarly aggregates the processed data at each axis, but according to that axis's distinct values (in order of level, for factor variables), so that the number of steps at each axis depends on the number of values of the corresponding variable. It row-binds these aggregated data, with each row corresponding to a stratum of one axis. Finally, it appends the coordinates of the center of each stratum (block), along with its width. (The value column is named `label` so that `geom_text(stat = "stratum")` places appropriate labels at the locations of the strata.)
 - `geom_stratum()` uses the coordinates provided by `stat_stratum()` to plot the rectangles that form the strata.
 
-Time series alluvial diagrams are produced by `stat_alluvium_ts()` and `geom_alluvium_ts()` in a more straightforward way. In contrast to the functions that produce categorial alluvial diagrams (see "Idiosyncrasies" below), to these functions the `group` parameter is essential: it defines the ribbons that widen and tighten with changes in each group's volume over time (see "Examples" above). There are no corresponding stratum functions for time series diagrams.
+Time series alluvial diagrams are produced by `stat_alluvium_ts()` and `geom_alluvium_ts()` in a more straightforward way. In contrast to the functions that produce categorial alluvial diagrams (see "Idiosyncrasies" below), to these functions the `group` parameter is essential: it defines the alluvia that widen and tighten with changes in each group's volume over time (see "Examples" above). There are no corresponding stratum functions for time series diagrams.
 
 ## Idiosyncrasies
 
@@ -157,5 +157,4 @@ Several problems persist in the current attempt:
 
 ### Miscellany
 
-- If neither `x` and `y` nor any axes are provided, then should the `geom_*`s throw an error or produce a single-axis plot?
 - It might make sense to allow the axis strata to overlap, rather than stack, under `position_identity`, but make `position_stack` the default that produces the traditional alluvial diagram, and make other `position_*`s throw errors. In the time series setting without strata, this would produce overlaid filled area plots.

@@ -27,6 +27,9 @@
 #' @seealso \code{\link{alluvium}} for inter-axis flows and
 #'   \code{\link{ggalluvial}} for a shortcut method.
 #' @inheritParams layer
+#' @param width The width of each stratum, as a proportion of the separation
+#'   between their centers. Defaults to 1/3.
+#' @param axis_width Deprecated; alias for \code{width}.
 #' @example inst/examples/stratum.r
 #' @usage NULL
 #' @export
@@ -37,6 +40,19 @@ StatStratum <- ggproto(
     if (!is.null(data$x) || !is.null(params$x) ||
         !is.null(data$y) || !is.null(params$y)) {
       stop("stat_stratum() does not accept x or y aesthetics")
+    }
+    
+    if (!is.null(params$axis_width)) {
+      warning("Parameter 'axis_width' is deprecated; use 'width' instead.")
+      params$width <- params$axis_width
+      params$axis_width <- NULL
+    }
+    if (!is.null(params$width)) {
+      if (params$width < 0 | params$width > 1) {
+        warning("Argument to parameter 'width' is not between 0 and 1, ",
+                "and will be ignored.")
+        params$width <- 1/3
+      }
     }
     
     params
@@ -87,7 +103,7 @@ StatStratum <- ggproto(
     cbind(res_data, group = 1:nrow(res_data))
   },
   compute_group = function(data, scales,
-                           width = 1/3) {
+                           width = 1/3, axis_width = NULL) {
     
     rownames(data) <- NULL
     rect_data <- data.frame(x = data$pos,
@@ -103,7 +119,7 @@ StatStratum <- ggproto(
 stat_stratum <- function(mapping = NULL,
                          data = NULL,
                          geom = "stratum",
-                         width = 1/3,
+                         width = 1/3, axis_width = NULL,
                          na.rm = FALSE,
                          show.legend = NA,
                          inherit.aes = TRUE,
@@ -117,7 +133,7 @@ stat_stratum <- function(mapping = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
-      width = width,
+      width = width, axis_width = axis_width,
       na.rm = na.rm,
       ...
     )
@@ -146,7 +162,7 @@ GeomStratum <- ggproto(
 geom_stratum <- function(mapping = NULL,
                          data = NULL,
                          stat = "stratum",
-                         width = 1/3,
+                         width = 1/3, axis_width = NULL,
                          na.rm = FALSE,
                          show.legend = NA,
                          inherit.aes = TRUE,
@@ -160,7 +176,7 @@ geom_stratum <- function(mapping = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
-      width = width,
+      width = width, axis_width = axis_width,
       na.rm = na.rm,
       ...
     )

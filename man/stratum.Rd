@@ -9,6 +9,12 @@
 \alias{geom_stratum}
 \title{Variable axes and strata}
 \format{An object of class \code{StatStratum} (inherits from \code{Stat}, \code{ggproto}) of length 4.}
+\arguments{
+\item{width}{The width of each stratum, as a proportion of the separation
+between their centers. Defaults to 1/3.}
+
+\item{axis_width}{Deprecated; alias for \code{width}.}
+}
 \description{
 \code{stat_stratum} calculates the centers of the levels at each axis. 
 \code{geom_stratum} stacks a box for each level of a variable at its axis.

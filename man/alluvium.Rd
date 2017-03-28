@@ -10,10 +10,15 @@
 \title{Alluvial flows}
 \format{An object of class \code{StatAlluvium} (inherits from \code{Stat}, \code{ggproto}) of length 4.}
 \arguments{
+\item{width}{The width of each variable axis, as a proportion of the
+separation between axes. Defaults to 1/3.}
+
+\item{axis_width}{Deprecated; alias for \code{width}.}
+
 \item{knot.pos}{The horizontal distance between a variable axis 
-(\code{width/2} from its center) and the control point of the x-spline, as
+(\code{width/2} from its center) and the control point of the x-spline, as 
 a proportion of the separation between the strata. (Must be between 0 and 
-0.6.)}
+0.5.). Defaults to 1/6.}
 
 \item{ribbon_bend}{Deprecated; alias for \code{knot.pos}.}
 
