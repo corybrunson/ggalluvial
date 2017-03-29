@@ -22,6 +22,7 @@ Imports:
     reshape2,
     alluvial
 Suggests:
+    testthat,
     knitr
 License: GPL-2
 VignetteBuilder: knitr
