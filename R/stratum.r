@@ -35,6 +35,7 @@
 #' @export
 StatStratum <- ggproto(
   "StatStratum", Stat,
+  
   setup_params = function(data, params) {
     
     if (!is.null(data$x) || !is.null(params$x) ||
@@ -57,6 +58,7 @@ StatStratum <- ggproto(
     
     params
   },
+  
   setup_data = function(data, params) {
     
     if (params$na.rm) {
@@ -102,6 +104,7 @@ StatStratum <- ggproto(
     # assign each row its own group (no pre-existing group field)
     cbind(res_data, group = 1:nrow(res_data))
   },
+  
   compute_group = function(data, scales,
                            width = 1/3, axis_width = NULL) {
     
@@ -145,14 +148,17 @@ stat_stratum <- function(mapping = NULL,
 #' @export
 GeomStratum <- ggproto(
   "GeomStratum", GeomRect,
+  
   default_aes = aes(size = .5, linetype = 1,
                     colour = "black", fill = "white", alpha = 1),
+  
   setup_data = function(data, params) {
     
     transform(data,
               xmin = x - width / 2, xmax = x + width / 2,
               ymin = y - weight / 2, ymax = y + weight / 2)
   },
+  
   draw_key = draw_key_polygon
 )
 

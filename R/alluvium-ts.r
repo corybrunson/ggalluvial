@@ -39,7 +39,9 @@
 #' @export
 StatAlluviumTs <- ggproto(
   "StatAlluviumTs", Stat,
+  
   required_aes = c("x", "group", "weight"),
+  
   setup_params = function(data, params) {
     
     if (!is.null(params$ribbon_bend)) {
@@ -55,6 +57,7 @@ StatAlluviumTs <- ggproto(
     
     params
   },
+  
   setup_data = function(data, params) {
     
     data <- aggregate(
@@ -70,6 +73,7 @@ StatAlluviumTs <- ggproto(
     
     data
   },
+  
   compute_panel = function(data, scales, params,
                            decreasing = FALSE,
                            knot.pos = 1/6, ribbon_bend = NULL) {
@@ -132,9 +136,12 @@ stat_alluvium_ts <- function(mapping = NULL,
 #' @export
 GeomAlluviumTs <- ggproto(
   "GeomAlluviumTs", Geom,
+  
   default_aes = aes(size = .5, linetype = 1,
                     colour = 0, fill = "gray", alpha = .5),
+  
   setup_data = function(data, params) data,
+  
   draw_group = function(data, panel_scales, coord) {
     
     first_row <- data[1,
@@ -169,6 +176,7 @@ GeomAlluviumTs <- ggproto(
       )
     )
   },
+  
   draw_key = draw_key_polygon
 )
 

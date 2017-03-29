@@ -52,6 +52,7 @@
 #' @export
 StatAlluvium <- ggproto(
   "StatAlluvium", Stat,
+  
   setup_params = function(data, params) {
     
     if (!is.null(data$x) || !is.null(params$x) ||
@@ -98,6 +99,7 @@ StatAlluvium <- ggproto(
     
     params
   },
+  
   setup_data = function(data, params) {
     
     if (params$na.rm) {
@@ -126,6 +128,7 @@ StatAlluvium <- ggproto(
     
     data
   },
+  
   compute_panel = function(data, scales, params,
                            lode.guidance = "zigzag",
                            bind.by.aes = FALSE,
@@ -216,9 +219,12 @@ stat_alluvium <- function(mapping = NULL,
 #' @export
 GeomAlluvium <- ggproto(
   "GeomAlluvium", Geom,
+  
   default_aes = aes(size = .5, linetype = 1, colour = 0,
                     fill = "gray", alpha = .5),
+  
   setup_data = function(data, params) data,
+  
   draw_group = function(data, panel_scales, coord) {
     
     first_row <- data[1, setdiff(names(data),
@@ -265,6 +271,7 @@ GeomAlluvium <- ggproto(
       )
     )
   },
+  
   draw_key = draw_key_polygon
 )
 
