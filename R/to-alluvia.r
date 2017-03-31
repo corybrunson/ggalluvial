@@ -3,7 +3,7 @@
 #' Take a data frame with axis and axis value variables to be used in an 
 #' alluvial diagram, and reshape the data frame so that the axes constitute 
 #' separate variables whose values are given by the value variable. This 
-#' function invokes \code{\liny{tidyr::spread_()}}.
+#' function invokes \code{\link[tidyr]{spread_}}.
 #' 
 #' 
 #' @param data Data frame.
@@ -14,6 +14,8 @@ to_alluvia <- function(data, key, value, id) {
   if (missing(key) | missing(value) | missing(id)) {
     stop("Each of 'key', 'value', and 'id' is required.")
   }
+  
+  stopifnot(is_alluvial(data, key = key, value = value, id = id))
   
   if (is.numeric(key)) key <- names(data)[key]
   if (is.numeric(value)) value <- names(data)[value]

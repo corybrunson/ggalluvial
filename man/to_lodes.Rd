@@ -20,5 +20,5 @@ Take a data frame with several designated variables to be used as axes in an
 alluvial diagram, and reshape the data frame so that the axis variable names 
 constitute a new factor variable and their values comprise another. Other 
 variables' values will be repeated, and a row-grouping variable can be 
-introduced. This function invokes \code{\link{tidyr::gather()}}.
+introduced. This function invokes \code{\link[tidyr]{gather}}.
 }

@@ -2,16 +2,36 @@
 % Please edit documentation in R/is-alluvial.r
 \name{is_alluvial}
 \alias{is_alluvial}
+\alias{is_alluvial.lodes}
+\alias{is_alluvial.alluvia}
 \title{Check a data frame for alluvial structure}
 \usage{
 is_alluvial(data, ..., logical = TRUE)
+
+is_alluvial.lodes(data, key, value, id, weight, logical = TRUE)
+
+is_alluvial.alluvia(data, axes, weight, logical = TRUE)
 }
 \arguments{
 \item{data}{A data frame}
 
-\item{logical}{Whether to return a logical value (TRUE, the default) or a
-character string indicating the type of alluvial structure ("none",
+\item{...}{Additional parameters used to determine method and passed
+thereto. All or none of \code{key}, \code{value}, and \code{id}, or else
+optionally \code{axes}, and (in either case) optionally \code{weight}.}
+
+\item{logical}{Whether to return a logical value (TRUE, the default) or a 
+character string indicating the type of alluvial structure ("none", 
 "lodes", or "alluvia")}
+
+\item{key, value, id}{Numeric or character; the fields of \code{data}
+corresponding to the axis (variable), stratum (value), and alluvium
+(identifying) variables.}
+
+\item{weight}{Optional numeric or character; the fields of \code{data}
+corresponding to alluvium or lode weights (heights when plotted).}
+
+\item{axes}{Numeric or character vector; the field(s) of \code{data}
+corresponding to the axi(e)s (variable(s)).}
 }
 \description{
 Alluvial diagrams consist of multiple horizontally-distributed columns (axes)
@@ -22,13 +42,32 @@ subsets or amounts of observations that take the corresponding values of the
 corresponding variables. This function checks a data frame for either of two
 types of alluvial structure:
 \itemize{
-  \item One row per **lode**, wherein each row encodes a subset or amount of
-        observations having a specific profile of axis values, a `key` field
-        encodes the axis, a `value` field encodes the value within each axis,
-        and a `id` column identifies multiple lodes corresponding to the
-        same subset or amount of observations.
-  \item One row per **alluvium**, wherein each row encodes a subset or amount
-        of observations having a specific profile of axis values and a set
-        `axes` of fields encodes its values at each axis variable.
+  \item One row per \strong{lode}, wherein each row encodes a subset or
+        amount of observations having a specific profile of axis values, a
+        \code{key} field encodes the axis, a \code{value} field encodes the
+        value within each axis, and a \code{id} column identifies multiple
+        lodes corresponding to the same subset or amount of observations.
+  \item One row per \strong{alluvium}, wherein each row encodes a subset or
+        amount of observations having a specific profile of axis values and a
+        set \code{axes} of fields encodes its values at each axis variable.
 }
+If no arguments are assigned to any of these parameters, then
+\code{is_alluvial} will default to \code{is_alluvial.alluvia} and assume that
+all fields in \code{data} (other than \code{weight}, if given) are to be
+treated as axes.
+}
+\examples{
+# Titanic data in alluvium form
+titanic_alluvia <- as.data.frame(Titanic)
+is_alluvial.alluvia(titanic_alluvia,
+                    weight = "Freq")
+
+# Titanic data in lode form
+titanic_lodes <- suppressWarnings(tidyr::gather(
+  dplyr::mutate(titanic_alluvia, Index = 1:nrow(titanic_alluvia)),
+  "Variable", "Value", axes = 1:4, factor_key = TRUE
+))
+is_alluvial.lodes(titanic_lodes,
+                  key = "Variable", value = "Value", id = "Index",
+                  weight = "Freq")
 }

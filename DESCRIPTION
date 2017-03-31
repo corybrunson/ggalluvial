@@ -19,7 +19,9 @@ Depends:
 Imports:
     stats,
     grid,
-    reshape2,
+    dplyr,
+    tidyr,
+    lazyeval,
     alluvial
 Suggests:
     testthat,

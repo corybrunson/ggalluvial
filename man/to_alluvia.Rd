@@ -16,5 +16,5 @@ axis (variable), stratum (value), and alluvium (identifying) variables.}
 Take a data frame with axis and axis value variables to be used in an 
 alluvial diagram, and reshape the data frame so that the axes constitute 
 separate variables whose values are given by the value variable. This 
-function invokes \code{\liny{tidyr::spread_()}}.
+function invokes \code{\link[tidyr]{spread_}}.
 }

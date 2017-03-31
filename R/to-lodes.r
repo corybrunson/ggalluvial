@@ -4,7 +4,7 @@
 #' alluvial diagram, and reshape the data frame so that the axis variable names 
 #' constitute a new factor variable and their values comprise another. Other 
 #' variables' values will be repeated, and a row-grouping variable can be 
-#' introduced. This function invokes \code{\link{tidyr::gather()}}.
+#' introduced. This function invokes \code{\link[tidyr]{gather}}.
 #' 
 #' @param data Data frame.
 #' @param key,value,id Character; names given to the axis (variable), stratum
@@ -21,12 +21,12 @@ to_lodes <- function(data,
   
   if (is.character(axes)) {
     axes <- match(axes, names(data))
-  } else if (is.numeric(axes)) {
+  } else {
     axes <- names(data)[axes]
   }
+  for (i in axes) data[[i]] <- as.character(data[[i]])
   
   data[[id]] <- 1:nrow(data)
   
-  suppressWarnings(tidyr::gather_(data, key = key, value = value,
-                                 axes, factor_key = TRUE))
+  tidyr::gather_(data, key = key, value = value, axes, factor_key = TRUE)
 }
