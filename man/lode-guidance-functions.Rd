@@ -25,15 +25,18 @@ lode_leftright(n, i)
 \item{i}{Numeric, a positive integer at most \code{n}}
 }
 \description{
-Each function orders the numbers 1 through \code{n}, starting at index
-\code{i}. The choice of function made in \code{\link{stat_alluvium}}
-determines the order in which the other axes contribute to the sorting of
-lodes within each index axis. After starting at \code{i}, the functions order the remaining axes as follows:
+Each function orders the numbers 1 through \code{n}, starting at index 
+\code{i}. The choice of function made in \code{\link{stat_alluvium}} 
+determines the order in which the other axes contribute to the sorting of 
+lodes within each index axis. After starting at \code{i}, the functions order
+the remaining axes as follows:
 \itemize{
   \item \code{zigzag}: Zigzag outward from \code{i}
   \item \code{rightward}: Increasing order
   \item \code{leftward}: Decreasing order
-  \item \code{rightleft}: Proceed rightward from \code{i} to \code{n}, then leftward to 1
-  \item \code{leftright}: Proceed leftward from \code{i} to 1, then rightward to \code{n}
+  \item \code{rightleft}: Proceed rightward from \code{i} to \code{n}, then
+        leftward to 1
+  \item \code{leftright}: Proceed leftward from \code{i} to 1, then rightward
+        to \code{n}
 }
 }

@@ -27,7 +27,7 @@ ggalluvial <- function(...) {
 ggalluvial.default <- function(...) {
   input_list <- list(...)
   aes_input <- input_list[[which(sapply(input_list, class) == "uneval")]]
-  axis_input <- aes_input[grep("^axis[0-9\\.]$", names(aes_input))]
+  axis_input <- aes_input[grep("^axis[0-9]*$", names(aes_input))]
   axis_breaks <- as.numeric(gsub("^axis", "", names(axis_input)))
   axis_labels <- unname(as.character(axis_input))
   ggplot(...) +

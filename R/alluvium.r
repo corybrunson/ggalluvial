@@ -10,7 +10,7 @@
 #' \code{geom_alluvium} understands the following aesthetics
 #'   (required aesthetics are in bold):
 #' \itemize{
-#'   \item \strong{\code{axis[0-9\\.]}} (\code{axis1}, \code{axis2.5}, etc.)
+#'   \item \strong{\code{axis[0-9]*}} (\code{axis1}, \code{axis2}, etc.)
 #'   \item \code{alpha}
 #'   \item \code{colour}
 #'   \item \code{fill}
