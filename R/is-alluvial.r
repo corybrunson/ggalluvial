@@ -18,7 +18,7 @@
 #'         set \code{axes} of fields encodes its values at each axis variable.
 #' }
 #' If no arguments are assigned to any of these parameters, then
-#' \code{is_alluvial} will default to \code{is_alluvial.alluvia} and assume that
+#' \code{is_alluvial} will default to \code{is_alluvial_alluvia} and assume that
 #' all fields in \code{data} (other than \code{weight}, if given) are to be
 #' treated as axes.
 #' @name is_alluvial
@@ -47,15 +47,15 @@ is_alluvial <- function(data, ..., logical = TRUE) {
       stop("Arguments to 'key', 'value', and 'id' are mutually exclusive ",
            "with an argument to 'axes'.")
     }
-    is_alluvial.lodes(data = data, ..., logical = logical)
+    is_alluvial_lodes(data = data, ..., logical = logical)
   } else {
-    is_alluvial.alluvia(data = data, ..., logical = logical)
+    is_alluvial_alluvia(data = data, ..., logical = logical)
   }
 }
 
 #' @rdname is_alluvial
 #' @export
-is_alluvial.lodes <- function(data, key, value, id, weight, logical = TRUE) {
+is_alluvial_lodes <- function(data, key, value, id, weight, logical = TRUE) {
   
   if (missing(key) | missing(value) | missing(id)) {
     stop("Each of 'key', 'value', and 'id' is required.")
@@ -87,7 +87,7 @@ is_alluvial.lodes <- function(data, key, value, id, weight, logical = TRUE) {
 
 #' @rdname is_alluvial
 #' @export
-is_alluvial.alluvia <- function(data, axes, weight, logical = TRUE) {
+is_alluvial_alluvia <- function(data, axes, weight, logical = TRUE) {
   
   if (missing(weight)) {
     warning("Alluvium weights not provided.")

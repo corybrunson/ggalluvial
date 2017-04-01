@@ -15,7 +15,7 @@ to_lodes <- function(data,
                      key = "key", value = "value", id = "id",
                      axes) {
   
-  stopifnot(is_alluvial(data, axes = axes))
+  stopifnot(suppressWarnings(is_alluvial(data, axes = axes)))
   
   if (!is.data.frame(data)) data <- as.data.frame(data)
   

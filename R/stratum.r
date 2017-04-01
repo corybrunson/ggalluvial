@@ -65,10 +65,9 @@ StatStratum <- ggproto(
       data <- na.omit(data)
     } else {
       axis_ind <- get_axes(names(data))
-      for (i in axis_ind) {
-        if (any(is.na(data[[i]]))) {
-          data[[i]] <- addNA(data[[i]], ifany = TRUE)
-        }
+      columns_with_na <- which(apply(is.na(data[, axis_ind]), 2, any))
+      for (i in columns_with_na) {
+        data[[i]] <- addNA(data[[i]], ifany = TRUE)
       }
     }
     
