@@ -58,8 +58,6 @@ stat_stratum <- function(mapping = NULL,
 StatStratum <- ggproto(
   "StatStratum", Stat,
   
-  default_aes = aes(weight = 1),
-  
   setup_params = function(data, params) {
     
     if (!is.null(params$axis_width)) {
@@ -73,14 +71,15 @@ StatStratum <- ggproto(
   
   setup_data = function(data, params) {
     
-    message("setup_data input")
-    print(sapply(data, is.factor))
-    print(head(data))
+    # assign uniform weight if not provided
+    if (is.null(data$weight)) {
+      data$weight <- rep(1, nrow(data))
+    }
     
     # ensure that data is in (more flexible) lode form
     axis_ind <- get_axes(names(data))
     if (length(axis_ind) > 0) {
-      stopifnot(is_alluvial_alluvia(data, axes = axis_ind, weight = "weight"))
+      stopifnot(is_alluvial_alluvia(data, axes = axis_ind))
       data <- to_lodes(data = data,
                        key = "x", value = "stratum", id = "alluvium",
                        axes = axis_ind)
@@ -91,14 +90,11 @@ StatStratum <- ggproto(
         stop("Parameters 'x', 'stratum', and 'alluvium' are required" ,
              "for data in lode form.")
       }
-      stopifnot(is_alluvial_lodes(data,
-                                  key = "x", value = "stratum", id = "alluvium",
-                                  weight = "weight"))
+      stopifnot(is_alluvial_lodes(
+        data,
+        key = "x", value = "stratum", id = "alluvium"
+      ))
     }
-    
-    message("setup_data lode form")
-    print(sapply(data, is.factor))
-    print(head(data))
     
     # incorporate any missing values into factor levels
     if (params$na.rm) {

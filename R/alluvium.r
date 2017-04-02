@@ -22,7 +22,8 @@
 #' 
 #' @name alluvium
 #' @import ggplot2
-#' @seealso \code{\link{stratum}} for intra-axis boxes, 
+#' @seealso \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for
+#'   intra-axis boxes, 
 #'   \code{\link{alluvium_ts}} for a time series implementation, and 
 #'   \code{\link{ggalluvial}} for a shortcut method.
 #' @inheritParams layer
@@ -116,7 +117,6 @@ StatAlluvium <- ggproto(
     # assign uniform weight if not provided
     if (is.null(data$weight)) {
       data$weight <- rep(1, nrow(data))
-      message("No argument provided for 'weight'; assuming uniform row weights")
     }
     
     # override existing group assignment; assign each row its own group

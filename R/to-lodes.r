@@ -24,7 +24,8 @@ to_lodes <- function(data,
   } else {
     axes <- names(data)[axes]
   }
-  strata <- do.call(c, lapply(data[axes], function(x) levels(as.factor(x))))
+  strata <- unique(unname(do.call(c, lapply(data[axes],
+                                            function(x) levels(as.factor(x))))))
   for (i in axes) data[[i]] <- as.character(data[[i]])
   
   data[[id]] <- 1:nrow(data)
@@ -32,7 +33,7 @@ to_lodes <- function(data,
   res <- tidyr::gather_(data,
                         key_col = key, value_col = value,
                         gather_col = axes, factor_key = TRUE)
-  res[[value]] <- factor(res[[value]], levels = unname(strata))
+  res[[value]] <- factor(res[[value]], levels = strata)
   
   res
 }

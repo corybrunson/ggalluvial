@@ -28,5 +28,6 @@ Produces an alluvial diagram with flows, boxes, and labels, optionally based
 on a formula in terms of the data elements
 }
 \seealso{
-\code{\link{alluvium}} and \code{\link{stratum}}
+\code{\link{stat_stratum}}, \code{\link{geom_stratum}},
+  \code{\link{alluvium}}, and \code{\link{alluvium_ts}}
 }

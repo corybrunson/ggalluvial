@@ -5,7 +5,8 @@
 #' 
 #' @name ggalluvial
 #' @import ggplot2
-#' @seealso \code{\link{alluvium}} and \code{\link{stratum}}
+#' @seealso \code{\link{stat_stratum}}, \code{\link{geom_stratum}},
+#'   \code{\link{alluvium}}, and \code{\link{alluvium_ts}}
 #' @export
 #' @param ... Arguments passed to \code{ggplot} and inherited by 
 #'   \code{geom_alluvium} and \code{geom_stratum}.

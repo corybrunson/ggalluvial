@@ -2,15 +2,15 @@
 % Please edit documentation in R/is-alluvial.r
 \name{is_alluvial}
 \alias{is_alluvial}
-\alias{is_alluvial.lodes}
-\alias{is_alluvial.alluvia}
+\alias{is_alluvial_lodes}
+\alias{is_alluvial_alluvia}
 \title{Check a data frame for alluvial structure}
 \usage{
 is_alluvial(data, ..., logical = TRUE)
 
-is_alluvial.lodes(data, key, value, id, weight, logical = TRUE)
+is_alluvial_lodes(data, key, value, id, weight, logical = TRUE)
 
-is_alluvial.alluvia(data, axes, weight, logical = TRUE)
+is_alluvial_alluvia(data, axes, weight, logical = TRUE)
 }
 \arguments{
 \item{data}{A data frame}
@@ -52,7 +52,7 @@ types of alluvial structure:
         set \code{axes} of fields encodes its values at each axis variable.
 }
 If no arguments are assigned to any of these parameters, then
-\code{is_alluvial} will default to \code{is_alluvial.alluvia} and assume that
+\code{is_alluvial} will default to \code{is_alluvial_alluvia} and assume that
 all fields in \code{data} (other than \code{weight}, if given) are to be
 treated as axes.
 }
@@ -67,6 +67,9 @@ titanic_lodes <- suppressWarnings(tidyr::gather(
   dplyr::mutate(titanic_alluvia, Index = 1:nrow(titanic_alluvia)),
   "Variable", "Value", axes = 1:4, factor_key = TRUE
 ))
+titanic_lodes$Value <- factor(titanic_lodes$Value,
+                              levels = do.call(c, lapply(titanic_alluvia[, 1:4],
+                                                         levels)))
 is_alluvial(titanic_lodes,
             key = "Variable", value = "Value", id = "Index",
             weight = "Freq",

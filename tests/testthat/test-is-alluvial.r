@@ -15,12 +15,14 @@ titanic_lodes <- suppressWarnings(tidyr::gather(
   dplyr::mutate(titanic_alluvia, Index = 1:nrow(titanic_alluvia)),
   "Variable", "Value", axes = 1:4, factor_key = TRUE
 ))
+titanic_lodes$Value <- factor(titanic_lodes$Value,
+                              levels = do.call(c, lapply(titanic_alluvia[, 1:4],
+                                                         levels)))
 
 test_that("is_alluvial recognizes lode-form Titanic data", {
   expect_true(is_alluvial(titanic_lodes))
-  expect_warning(is_alluvial(titanic_lodes,
-                             key = "Variable", value = "Value", id = "Index"),
-                 "weight")
+  expect_true(is_alluvial(titanic_lodes,
+                             key = "Variable", value = "Value", id = "Index"))
   expect_true(is_alluvial(titanic_lodes,
                           key = "Variable", value = "Value", id = "Index",
                           weight = "Freq"))

@@ -71,15 +71,13 @@ is_alluvial_lodes <- function(data, key, value, id, weight, logical = TRUE) {
     warning("Missing id-axis pairings.")
   }
   
-  if (missing(weight)) {
-    warning("Lode weights not provided.")
-  } else {
+  if (!missing(weight)) {
     if (!is.numeric(data[[weight]])) {
       message("Lode weights are non-numeric.")
       return(if (logical) FALSE else "none")
     }
     if (splinters(data[[weight]], data[[id]]))
-      warning("Non-constant lode weights within ids.")
+      message("Non-constant lode weights within ids.")
   }
   
   if (logical) TRUE else "lodes"
@@ -90,7 +88,6 @@ is_alluvial_lodes <- function(data, key, value, id, weight, logical = TRUE) {
 is_alluvial_alluvia <- function(data, axes, weight, logical = TRUE) {
   
   if (missing(weight)) {
-    warning("Alluvium weights not provided.")
     weight <- NULL
   } else {
     if (!is.numeric(data[[weight]])) {
