@@ -72,8 +72,10 @@ StatStratum <- ggproto(
   },
   
   setup_data = function(data, params) {
+    
     message("setup_data input")
-    print(data)
+    print(sapply(data, is.factor))
+    print(head(data))
     
     # ensure that data is in (more flexible) lode form
     axis_ind <- get_axes(names(data))
@@ -94,25 +96,26 @@ StatStratum <- ggproto(
                                   weight = "weight"))
     }
     
+    message("setup_data lode form")
+    print(sapply(data, is.factor))
+    print(head(data))
+    
     # incorporate any missing values into factor levels
     if (params$na.rm) {
       data <- na.omit(data)
     } else {
-      if (is.factor(data$y)) {
+      if (is.factor(data$stratum)) {
         data$stratum <- addNA(data$stratum, ifany = TRUE)
       } else {
         data$stratum[is.na(data$stratum)] <- "NA"
       }
     }
-    message("setup_data output")
-    print(data)
+    
     data
   },
   
   compute_panel = function(data, scales,
                            width = 1/3, axis_width = NULL) {
-    message("compute_panel input")
-    print(data)
     
     # remove empty elements (including labels)
     data <- subset(data, weight > 0)
@@ -132,8 +135,6 @@ StatStratum <- ggproto(
     # width
     data$width <- width
     
-    message("compute_panel output")
-    print(data)
     data
   }
 )

@@ -56,8 +56,7 @@ GeomStratum <- ggproto(
                     colour = "black", fill = "white", alpha = 1),
   
   setup_data = function(data, params) {
-    message("geom_stratum setup_data input")
-    print(data)
+    
     transform(data,
               xmin = x - width / 2, xmax = x + width / 2,
               ymin = y - weight / 2, ymax = y + weight / 2)
