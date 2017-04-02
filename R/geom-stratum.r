@@ -21,9 +21,6 @@
 #' @import ggplot2
 #' @seealso \code{\link{stat-stratum}} for the corresponding geom.
 #' @inheritParams layer
-#' @param width The width of each stratum, as a proportion of the separation
-#'   between their centers. Defaults to 1/3.
-#' @param axis_width Deprecated; alias for \code{width}.
 #' @example inst/examples/ex-geom-stratum.r
 #' @usage NULL
 #' @export
@@ -32,7 +29,6 @@ geom_stratum <- function(mapping = NULL,
                          stat = "stratum",
                          show.legend = NA,
                          inherit.aes = TRUE,
-                         width = 1/3, axis_width = NULL,
                          na.rm = FALSE,
                          ...) {
   layer(
@@ -44,7 +40,6 @@ geom_stratum <- function(mapping = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
-      width = width, axis_width = axis_width,
       na.rm = na.rm,
       ...
     )

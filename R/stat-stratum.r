@@ -131,8 +131,6 @@ StatStratum <- ggproto(
     }
     # width
     data$width <- width
-    #data$ymin <- data$ymax - data$weight
-    #data$y <- data$ymax - data$weight / 2
     
     message("compute_panel output")
     print(data)
