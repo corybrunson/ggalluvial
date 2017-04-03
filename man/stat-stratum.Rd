@@ -6,13 +6,7 @@
 \alias{stat_stratum}
 \alias{StatStratum}
 \title{Variable axes with strata of values}
-\format{An object of class \code{StatStratum} (inherits from \code{Stat}, \code{ggproto}) of length 4.}
-\arguments{
-\item{width}{The width of each stratum, as a proportion of the separation
-between their centers. Defaults to 1/3.}
-
-\item{axis_width}{Deprecated; alias for \code{width}.}
-}
+\format{An object of class \code{StatStratum} (inherits from \code{Stat}, \code{ggproto}) of length 3.}
 \description{
 Given a dataset with alluvial structure, \code{stat_stratum} calculates the
 centroids of the strata for each axis, together with their weights (heights)
@@ -36,6 +30,33 @@ Use \code{x}, \code{stratum}, and \code{alluvium} for data in lode form and
 arguments to parameters inconsistent with the data form will be ignored.
 }
 
+\examples{
+# illustrate positioning
+ggplot(as.data.frame(Titanic),
+       aes(weight = Freq,
+           axis1 = Class, axis2 = Sex, axis3 = Age, axis4 = Survived)) +
+  geom_text(stat = "stratum") +
+  scale_x_continuous(breaks = 1:4,
+                     labels = c("Class", "Sex", "Age", "Survived"))
+
+# full axis width
+ggplot(as.data.frame(Titanic),
+       aes(weight = Freq,
+           axis1 = Class, axis2 = Sex, axis3 = Age, axis4 = Survived)) +
+  geom_stratum(width = 1) + geom_text(stat = "stratum") +
+  scale_x_continuous(breaks = 1:4,
+                     labels = c("Class", "Sex", "Age", "Survived"))
+  
+# use of facets
+ggplot(as.data.frame(Titanic),
+       aes(weight = Freq,
+           axis1 = Class, axis2 = Sex,
+           fill = Survived)) +
+  geom_alluvium() +
+  geom_stratum() + geom_text(stat = "stratum") +
+  scale_x_continuous(breaks = 1:2, labels = c("Class", "Sex")) +
+  facet_wrap(~ Age, scales = "free_y")
+}
 \seealso{
 \code{\link{geom-stratum}} for the corresponding geom.
 }

@@ -23,10 +23,7 @@
 #' @import ggplot2
 #' @seealso \code{\link{geom-stratum}} for the corresponding geom.
 #' @inheritParams layer
-#' @param width The width of each stratum, as a proportion of the separation
-#'   between their centers. Defaults to 1/3.
-#' @param axis_width Deprecated; alias for \code{width}.
-#' @example inst/examples/ex-stat-stratum.r
+#' @example inst/examples/ex-stratum.r
 #' @usage NULL
 #' @export
 stat_stratum <- function(mapping = NULL,
@@ -34,7 +31,6 @@ stat_stratum <- function(mapping = NULL,
                          geom = "stratum",
                          show.legend = NA,
                          inherit.aes = TRUE,
-                         width = 1/3, axis_width = NULL,
                          na.rm = FALSE,
                          ...) {
   layer(
@@ -45,7 +41,6 @@ stat_stratum <- function(mapping = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
-      width = width, axis_width = axis_width,
       na.rm = na.rm,
       ...
     )
@@ -57,17 +52,6 @@ stat_stratum <- function(mapping = NULL,
 #' @export
 StatStratum <- ggproto(
   "StatStratum", Stat,
-  
-  setup_params = function(data, params) {
-    
-    if (!is.null(params$axis_width)) {
-      warning("Parameter 'axis_width' is deprecated; use 'width' instead.")
-      params$width <- params$axis_width
-      params$axis_width <- NULL
-    }
-    
-    params
-  },
   
   setup_data = function(data, params) {
     
@@ -110,8 +94,7 @@ StatStratum <- ggproto(
     data
   },
   
-  compute_panel = function(data, scales,
-                           width = 1/3, axis_width = NULL) {
+  compute_panel = function(data, scales) {
     
     # remove empty elements (including labels)
     data <- subset(data, weight > 0)
@@ -128,8 +111,13 @@ StatStratum <- ggproto(
       ww <- which(data$x == xx)
       data$y[ww] <- cumsum(data$weight[ww]) - data$weight[ww] / 2
     }
+    # y bounds
+    data <- transform(data,
+                      ymin = y - weight / 2,
+                      ymax = y + weight / 2)
+    
     # width
-    data$width <- width
+    #data$width <- width
     
     data
   }

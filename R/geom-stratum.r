@@ -21,7 +21,10 @@
 #' @import ggplot2
 #' @seealso \code{\link{stat-stratum}} for the corresponding geom.
 #' @inheritParams layer
-#' @example inst/examples/ex-geom-stratum.r
+#' @param width The width of each stratum, as a proportion of the separation
+#'   between their centers. Defaults to 1/3.
+#' @param axis_width Deprecated; alias for \code{width}.
+#' @example inst/examples/ex-stratum.r
 #' @usage NULL
 #' @export
 geom_stratum <- function(mapping = NULL,
@@ -29,6 +32,7 @@ geom_stratum <- function(mapping = NULL,
                          stat = "stratum",
                          show.legend = NA,
                          inherit.aes = TRUE,
+                         width = 1/3, axis_width = NULL,
                          na.rm = FALSE,
                          ...) {
   layer(
@@ -40,6 +44,7 @@ geom_stratum <- function(mapping = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
+      width = width, axis_width = axis_width,
       na.rm = na.rm,
       ...
     )
@@ -55,12 +60,54 @@ GeomStratum <- ggproto(
   default_aes = aes(size = .5, linetype = 1,
                     colour = "black", fill = "white", alpha = 1),
   
+  setup_params = function(data, params) {
+    
+    if (!is.null(params$axis_width)) {
+      warning("Parameter 'axis_width' is deprecated; use 'width' instead.")
+      params$width <- params$axis_width
+      params$axis_width <- NULL
+    }
+    
+    params
+  },
+  
   setup_data = function(data, params) {
     
     transform(data,
-              xmin = x - width / 2, xmax = x + width / 2,
-              ymin = y - weight / 2, ymax = y + weight / 2)
+              xmin = x - params$width / 2,
+              xmax = x + params$width / 2)
+  },
+  
+  draw_panel = function(data, panel_params, coord,
+                        width = 1/3, axis_width = NULL) {
+    
+    aesthetics <- setdiff(
+      names(data), c("x", "y", "xmin", "xmax", "ymin", "ymax")
+    )
+    
+    polys <- plyr::alply(data, 1, function(row) {
+      
+      poly <- rect_to_poly(row$xmin, row$xmax, row$ymin, row$ymax)
+      aes <- as.data.frame(row[aesthetics],
+                           stringsAsFactors = FALSE)[rep(1,5), ]
+      
+      GeomPolygon$draw_panel(cbind(poly, aes, group = 1), panel_params, coord)
+    })
+    
+    grob <- do.call(grid::grobTree, polys)
+    grob$name <- grid::grobName(grob, "bar")
+    grob
   },
   
   draw_key = draw_key_polygon
 )
+
+#' Convert rectangle to polygon
+#' (lifted from \code{\link[ggplot2]{geom_rect}})
+#' @keyword internal
+rect_to_poly <- function(xmin, xmax, ymin, ymax) {
+  data.frame(
+    y = c(ymax, ymax, ymin, ymin, ymax),
+    x = c(xmin, xmax, xmax, xmin, xmin)
+  )
+}
