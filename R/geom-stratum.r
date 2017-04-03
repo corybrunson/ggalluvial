@@ -80,6 +80,7 @@ GeomStratum <- ggproto(
   
   draw_panel = function(data, panel_params, coord,
                         width = 1/3, axis_width = NULL) {
+    # taken from GeomRect
     
     aesthetics <- setdiff(
       names(data), c("x", "y", "xmin", "xmax", "ymin", "ymax")
@@ -102,9 +103,9 @@ GeomStratum <- ggproto(
   draw_key = draw_key_polygon
 )
 
-#' Convert rectangle to polygon
-#' (lifted from \code{\link[ggplot2]{geom_rect}})
-#' @keyword internal
+# Convert rectangle to polygon
+# (lifted from \code{\link[ggplot2]{geom_rect}})
+# @keyword internal
 rect_to_poly <- function(xmin, xmax, ymin, ymax) {
   data.frame(
     y = c(ymax, ymax, ymin, ymin, ymax),
