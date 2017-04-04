@@ -26,7 +26,7 @@ are in bold):
 Currently, \code{group} is ignored.
 Use \code{x}, \code{stratum}, and \code{alluvium} for data in lode form and 
 \code{axis[0-9]*} for data in alluvium form (see \code{\link{is_alluvial}});
-arguments to parameters inconsistent with the data form will be ignored.
+arguments to parameters inconsistent with the data format will be ignored.
 }
 
 \examples{
@@ -58,6 +58,10 @@ ggplot(as.data.frame(Titanic),
   facet_wrap(~ Age, scales = "free_y")
 }
 \seealso{
-\code{\link{geom-stratum}} for the corresponding geom.
+\code{\link{geom_stratum}} for the corresponding geom,
+  \code{\link{stat_alluvium}} and \code{\link{geom_alluvium}} for
+  alluvial flows,
+  \code{\link{alluvium_ts}} for a time series implementation, and 
+  \code{\link{ggalluvial}} for a shortcut method.
 }
 \keyword{datasets}

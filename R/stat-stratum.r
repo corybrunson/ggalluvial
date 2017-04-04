@@ -17,10 +17,15 @@
 #' Currently, \code{group} is ignored.
 #' Use \code{x}, \code{stratum}, and \code{alluvium} for data in lode form and 
 #' \code{axis[0-9]*} for data in alluvium form (see \code{\link{is_alluvial}});
-#' arguments to parameters inconsistent with the data form will be ignored.
+#' arguments to parameters inconsistent with the data format will be ignored.
+#' 
 #' @name stat-stratum
 #' @import ggplot2
-#' @seealso \code{\link{geom-stratum}} for the corresponding geom.
+#' @seealso \code{\link{geom_stratum}} for the corresponding geom,
+#'   \code{\link{stat_alluvium}} and \code{\link{geom_alluvium}} for
+#'   alluvial flows,
+#'   \code{\link{alluvium_ts}} for a time series implementation, and 
+#'   \code{\link{ggalluvial}} for a shortcut method.
 #' @inheritParams layer
 #' @example inst/examples/ex-stratum.r
 #' @usage NULL

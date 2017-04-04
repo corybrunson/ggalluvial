@@ -2,17 +2,29 @@
 #' 
 #' Given a dataset with alluvial structure, \code{stat_alluvium} calculates the 
 #' centroids (\code{x} and \code{y}) of the \strong{lodes}, the intersections of
-#' the alluvia with the strata, together with their weights (heights;
-#' \code{ymin} and \code{ymax}). It leverages the \code{group} aesthetic for
+#' the alluvia with the strata, together with their weights (heights; 
+#' \code{ymin} and \code{ymax}). It leverages the \code{group} aesthetic for 
 #' plotting purposes (for now).
 #' 
-#' @section Aesthetics:
-#' \code{stat_alluvium} understands only the \code{group} 
-#'   aesthetic, but it is currently ignored.
+#' @section Aesthetics: \code{stat_alluvium} understands the following
+#'   aesthetics (required aesthetics are in bold):
+#' \itemize{
+#'   \item \code{x}
+#'   \item \code{stratum}
+#'   \item \code{alluvium}
+#'   \item \code{axis[0-9]*} (\code{axis1}, \code{axis2}, etc.)
+#'   \item \code{weight}
+#'   \item \code{group}
+#' }
+#' Currently, \code{group} is ignored.
+#' Use \code{x}, \code{stratum}, and \code{alluvium} for data in lode form and 
+#' \code{axis[0-9]*} for data in alluvium form (see \code{\link{is_alluvial}});
+#' arguments to parameters inconsistent with the data format will be ignored.
 #' 
 #' @name stat-alluvium
 #' @import ggplot2
-#' @seealso \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for
+#' @seealso \code{\link{geom_alluvium}} for the corresponding geom,
+#'   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for
 #'   intra-axis boxes, 
 #'   \code{\link{alluvium_ts}} for a time series implementation, and 
 #'   \code{\link{ggalluvial}} for a shortcut method.
