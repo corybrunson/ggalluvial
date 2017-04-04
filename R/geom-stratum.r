@@ -105,7 +105,6 @@ GeomStratum <- ggproto(
 
 # Convert rectangle to polygon
 # (lifted from \code{\link[ggplot2]{geom_rect}})
-# @keyword internal
 rect_to_poly <- function(xmin, xmax, ymin, ymax) {
   data.frame(
     y = c(ymax, ymax, ymin, ymin, ymax),
