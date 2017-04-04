@@ -9,8 +9,7 @@
 \format{An object of class \code{StatStratum} (inherits from \code{Stat}, \code{ggproto}) of length 3.}
 \description{
 Given a dataset with alluvial structure, \code{stat_stratum} calculates the
-centroids of the strata for each axis, together with their weights (heights)
-and widths.
+centroids of the strata at each axis, together with their weights (heights).
 }
 \section{Aesthetics}{
 

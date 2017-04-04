@@ -24,18 +24,16 @@
 #' 
 #' @name geom-alluvium
 #' @import ggplot2
-#' @seealso \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for
-#'   intra-axis boxes, 
-#'   \code{\link{alluvium_ts}} for a time series implementation, and 
-#'   \code{\link{ggalluvial}} for a shortcut method.
+#' @seealso \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 
+#'   intra-axis boxes, \code{\link{alluvium_ts}} for a time series
+#'   implementation, and \code{\link{ggalluvial}} for a shortcut method.
 #' @inheritParams layer
-#' @param width The width of each variable axis, as a proportion of the
-#'   separation between axes. Defaults to 1/3.
+#' @param width The width of each stratum, as a proportion of the distance
+#'   between axes. Defaults to 1/3.
 #' @param axis_width Deprecated; alias for \code{width}.
-#' @param knot.pos The horizontal distance between a variable axis 
-#'   (\code{width/2} from its center) and the control point of the x-spline, as 
-#'   a proportion of the separation between the strata. (Must be between 0 and 
-#'   0.5.). Defaults to 1/6.
+#' @param knot.pos The horizontal distance between a stratum (\code{width/2}
+#'   from its axis) and the knot of the x-spline, as a proportion of the
+#'   separation between strata. Defaults to 1/6.
 #' @param ribbon_bend Deprecated; alias for \code{knot.pos}.
 #' @example inst/examples/ex-alluvium.r
 #' @usage NULL

@@ -8,15 +8,16 @@
 \title{Variable axes with strata of values}
 \format{An object of class \code{GeomStratum} (inherits from \code{GeomRect}, \code{Geom}, \code{ggproto}) of length 6.}
 \arguments{
-\item{width}{The width of each stratum, as a proportion of the separation
-between their centers. Defaults to 1/3.}
+\item{width}{The width of each stratum, as a proportion of the distace
+between axes. Defaults to 1/3.}
 
 \item{axis_width}{Deprecated; alias for \code{width}.}
 }
 \description{
-Given a dataset with alluvial structure, \code{geom_stratum} calculates the
-centroids of the strata for each axis, together with their weights (heights)
-and widths.
+\code{geom_stratum} receives a dataset of the horizontal (\code{x}) and
+vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the strata of an
+alluvial diagram, and plots rectangles for these strata of a provided
+\code{width}.
 }
 \section{Aesthetics}{
 

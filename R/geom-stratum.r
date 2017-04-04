@@ -22,8 +22,8 @@
 #' @import ggplot2
 #' @seealso \code{\link{stat-stratum}} for the corresponding geom.
 #' @inheritParams layer
-#' @param width The width of each stratum, as a proportion of the separation
-#'   between their centers. Defaults to 1/3.
+#' @param width The width of each stratum, as a proportion of the distace
+#'   between axes. Defaults to 1/3.
 #' @param axis_width Deprecated; alias for \code{width}.
 #' @example inst/examples/ex-stratum.r
 #' @usage NULL
