@@ -28,16 +28,12 @@
 #'   dimensions, giving the preferred ordering of alluvia at each axis. This 
 #'   will be used to order the lodes within each stratum by sorting the lodes 
 #'   first by stratum and then by the provided vectors.
-#' @param width The width of each variable axis, as a proportion of the
-#'   separation between axes. Defaults to 1/3.
-#' @param axis_width Deprecated; alias for \code{width}.
 #' @example inst/examples/ex-alluvium.r
 #' @usage NULL
 #' @export
 stat_alluvium <- function(mapping = NULL,
                           data = NULL,
                           geom = "alluvium",
-                          position = "identity",
                           na.rm = FALSE,
                           show.legend = NA,
                           inherit.aes = TRUE,
@@ -47,7 +43,6 @@ stat_alluvium <- function(mapping = NULL,
     data = data,
     mapping = mapping,
     geom = geom,
-    position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(

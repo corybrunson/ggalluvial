@@ -25,6 +25,9 @@
 #'   \code{\link{alluvium_ts}} for a time series implementation, and 
 #'   \code{\link{ggalluvial}} for a shortcut method.
 #' @inheritParams layer
+#' @param width The width of each variable axis, as a proportion of the
+#'   separation between axes. Defaults to 1/3.
+#' @param axis_width Deprecated; alias for \code{width}.
 #' @param knot.pos The horizontal distance between a variable axis 
 #'   (\code{width/2} from its center) and the control point of the x-spline, as 
 #'   a proportion of the separation between the strata. (Must be between 0 and 

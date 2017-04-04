@@ -29,5 +29,6 @@ on a formula in terms of the data elements
 }
 \seealso{
 \code{\link{stat_stratum}}, \code{\link{geom_stratum}},
-  \code{\link{alluvium}}, and \code{\link{alluvium_ts}}
+  \code{\link{stat_alluvium}}, \code{\link{geom_alluvium}}, and
+  \code{\link{alluvium_ts}}
 }
