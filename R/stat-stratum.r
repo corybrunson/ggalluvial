@@ -111,6 +111,7 @@ StatStratum <- ggproto(
       ww <- which(data$x == xx)
       data$y[ww] <- cumsum(data$weight[ww]) - data$weight[ww] / 2
     }
+    
     # y bounds
     transform(data,
               ymin = y - weight / 2,
