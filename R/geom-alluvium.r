@@ -1,8 +1,12 @@
 #' Alluvial flows
 #' 
-#' \code{stat_alluvium} calculates the depth of each group at each axis. 
-#' \code{geom_alluvium} plots an x-spline for each group through the axes at 
-#' these depths.
+#' \code{geom_alluvium} receives a dataset of the horizontal (\code{x}) and 
+#' vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the \strong{lodes}
+#' of an alluvial diagram, the intersections of the alluvia with the strata. It
+#' reconfigures these into alluvial segments connecting pairs of corresponding
+#' lodes in adjacent strata and plots filled x-splines between each such pair,
+#' using a provided knot position parameter \code{knot.pos}, and filled
+#' rectangles at either end, using a provided \code{width}.
 #' 
 #' @section Aesthetics:
 #' \code{geom_alluvium} understands the following aesthetics

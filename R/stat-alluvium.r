@@ -1,8 +1,10 @@
 #' Alluvial flows
 #' 
-#' \code{stat_alluvium} calculates the depth of each group at each axis. 
-#' \code{geom_alluvium} plots an x-spline for each group through the axes at 
-#' these depths.
+#' Given a dataset with alluvial structure, \code{stat_alluvium} calculates the 
+#' centroids (\code{x} and \code{y}) of the \strong{lodes}, the intersections of
+#' the alluvia with the strata, together with their weights (heights;
+#' \code{ymin} and \code{ymax}). It leverages the \code{group} aesthetic for
+#' plotting purposes (for now).
 #' 
 #' @section Aesthetics:
 #' \code{stat_alluvium} understands only the \code{group} 
