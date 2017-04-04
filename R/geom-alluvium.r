@@ -36,6 +36,7 @@
 geom_alluvium <- function(mapping = NULL,
                           data = NULL,
                           stat = "alluvium",
+                          width = 1/3, axis_width = NULL,
                           knot.pos = 1/6, ribbon_bend = NULL,
                           na.rm = FALSE,
                           show.legend = NA,
@@ -46,11 +47,12 @@ geom_alluvium <- function(mapping = NULL,
     mapping = mapping,
     data = data,
     stat = stat,
-    #position = "identity",
+    position = "identity",
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
       knot.pos = knot.pos, ribbon_bend = ribbon_bend,
+      width = width, axis_width = axis_width,
       na.rm = na.rm,
       ...
     )
@@ -67,6 +69,19 @@ GeomAlluvium <- ggproto(
                     fill = "gray", alpha = .5),
   
   setup_params = function(data, params) {
+    
+    if (!is.null(params$axis_width)) {
+      warning("Parameter 'axis_width' is deprecated; use 'width' instead.")
+      params$width <- params$axis_width
+      params$axis_width <- NULL
+    }
+    if (!is.null(params$width)) {
+      if (params$width < 0 | params$width > 1) {
+        warning("Argument to parameter 'width' is not between 0 and 1, ",
+                "and will be ignored.")
+        params$width <- 1/3
+      }
+    }
     
     if (!is.null(params$ribbon_bend)) {
       warning("Parameter 'ribbon_bend' is deprecated; use 'knot.pos' instead.")
@@ -85,12 +100,15 @@ GeomAlluvium <- ggproto(
   setup_data = function(data, params) {
     
     # positioning parameters
-    data$knot.pos <- params$knot.pos
-    
-    data
+    transform(data,
+              width = params$width,
+              xmin = x - params$width / 2,
+              xmax = x + params$width / 2,
+              knot.pos = params$knot.pos)
   },
   
   draw_group = function(data, panel_scales, coord,
+                        width = 1/3, axis_width = NULL,
                         knot.pos = 1/6, ribbon_bend = NULL) {
     
     first_row <- data[1, setdiff(names(data),

@@ -38,7 +38,6 @@ stat_alluvium <- function(mapping = NULL,
                           data = NULL,
                           geom = "alluvium",
                           position = "identity",
-                          width = 1/3, axis_width = NULL,
                           na.rm = FALSE,
                           show.legend = NA,
                           inherit.aes = TRUE,
@@ -52,7 +51,6 @@ stat_alluvium <- function(mapping = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
-      width = width, axis_width = axis_width,
       na.rm = na.rm,
       ...
     )
@@ -70,19 +68,6 @@ StatAlluvium <- ggproto(
     if (!is.null(data$x) || !is.null(params$x) ||
         !is.null(data$y) || !is.null(params$y)) {
       stop("stat_alluvium() does not accept x or y aesthetics")
-    }
-    
-    if (!is.null(params$axis_width)) {
-      warning("Parameter 'axis_width' is deprecated; use 'width' instead.")
-      params$width <- params$axis_width
-      params$axis_width <- NULL
-    }
-    if (!is.null(params$width)) {
-      if (params$width < 0 | params$width > 1) {
-        warning("Argument to parameter 'width' is not between 0 and 1, ",
-                "and will be ignored.")
-        params$width <- 1/3
-      }
     }
     
     if (!is.null(params$lode.ordering)) {
@@ -122,17 +107,13 @@ StatAlluvium <- ggproto(
     # override existing group assignment; assign each row its own group
     data$group <- 1:nrow(data)
     
-    # positioning parameters
-    data$width <- params$width
-    
     data
   },
   
   compute_panel = function(data, scales, params,
                            lode.guidance = "zigzag",
                            bind.by.aes = FALSE,
-                           lode.ordering = NULL,
-                           width = 1/3, axis_width = NULL) {
+                           lode.ordering = NULL) {
     
     axis_ind <- get_axes(names(data))
     data_aes <- setdiff(names(data)[-axis_ind],
@@ -171,12 +152,9 @@ StatAlluvium <- ggproto(
     colnames(alluvia) <- c("x", "ymin", "ymax")
     data <- data.frame(data, alluvia)
     
-    # widths and x bounds
-    data$xmin <- data$x - data$width / 2
-    data$xmax <- data$x + data$width / 2
-    
     # y centers
-    data$y <- (data$ymin + data$ymax) / 2
+    data <- transform(data,
+                      y = (ymin + ymax) / 2)
     
     data
   }
