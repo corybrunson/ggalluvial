@@ -1,4 +1,4 @@
-#' Variable axes with strata of values
+#' Stratum rectangles
 #' 
 #' \code{geom_stratum} receives a dataset of the horizontal (\code{x}) and
 #' vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the strata of an
@@ -9,15 +9,19 @@
 #' \code{geom_stratum} understands the following aesthetics (required aesthetics
 #' are in bold):
 #' \itemize{
-#'   \item \code{x}
-#'   \item \code{y}
+#'   \item \code{\strong{x}}
+#'   \item \code{\strong{y}}
+#'   \item \code{\strong{ymin}}
+#'   \item \code{\strong{ymax}}
+#'   \item \code{alpha}
+#'   \item \code{colour}
+#'   \item \code{fill}
+#'   \item \code{linetype}
+#'   \item \code{size}
 #'   \item \code{group}
-#'   \item \code{axis[0-9]*} (\code{axis1}, \code{axis2}, etc.)
-#'   \item \code{weight}
 #' }
-#' Use \code{x}, \code{y}, and \code{group} for data in lode form and 
-#' \code{axis[0-9]*} for data in alluvium form (see \code{\link{is_alluvial}});
-#' arguments to parameters inconsistent with the data form will be ignored.
+#' Currently, \code{group} is ignored.
+#' 
 #' @name geom-stratum
 #' @import ggplot2
 #' @seealso \code{\link{stat-stratum}} for the corresponding geom.
@@ -87,15 +91,17 @@ GeomStratum <- ggproto(
       names(data), c("x", "y", "xmin", "xmax", "ymin", "ymax")
     )
     
+    # construct polygon grobs
     polys <- plyr::alply(data, 1, function(row) {
       
       poly <- rect_to_poly(row$xmin, row$xmax, row$ymin, row$ymax)
       aes <- as.data.frame(row[aesthetics],
-                           stringsAsFactors = FALSE)[rep(1,5), ]
+                           stringsAsFactors = FALSE)[rep(1, 5), ]
       
       GeomPolygon$draw_panel(cbind(poly, aes, group = 1), panel_params, coord)
     })
     
+    # combine polygon grobs
     grob <- do.call(grid::grobTree, polys)
     grob$name <- grid::grobName(grob, "bar")
     grob

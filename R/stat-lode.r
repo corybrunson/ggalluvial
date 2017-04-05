@@ -1,12 +1,12 @@
-#' Alluvial flows
+#' Lode positions
 #' 
-#' Given a dataset with alluvial structure, \code{stat_alluvium} calculates the 
+#' Given a dataset with alluvial structure, \code{stat_lode} calculates the 
 #' centroids (\code{x} and \code{y}) of the \strong{lodes}, the intersections of
 #' the alluvia with the strata, together with their weights (heights; 
 #' \code{ymin} and \code{ymax}). It leverages the \code{group} aesthetic for 
-#' plotting purposes (for now).
+#' alluvium plotting (for now).
 #' 
-#' @section Aesthetics: \code{stat_alluvium} understands the following
+#' @section Aesthetics: \code{stat_lode} understands the following
 #'   aesthetics (required aesthetics are in bold):
 #' \itemize{
 #'   \item \code{x}
@@ -21,11 +21,12 @@
 #' \code{axis[0-9]*} for data in alluvium form (see \code{\link{is_alluvial}});
 #' arguments to parameters inconsistent with the data format will be ignored.
 #' 
-#' @name stat-alluvium
+#' @name stat-lode
 #' @import ggplot2
-#' @seealso \code{\link{geom_alluvium}} for the corresponding geom,
+#' @seealso \code{\link{geom_alluvium}} and \code{\link{geom_lode}} for the
+#'   corresponding geoms,
 #'   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for
-#'   intra-axis boxes, 
+#'   strata at each axis, 
 #'   \code{\link{alluvium_ts}} for a time series implementation, and 
 #'   \code{\link{ggalluvial}} for a shortcut method.
 #' @inheritParams layer
@@ -33,9 +34,9 @@
 #'   ordering the lodes within each stratum. Defaults to "zigzag", other options
 #'   include "rightleft", "leftright", "rightward", and "leftward" (see 
 #'   \code{\link{lode-guidance-functions}}).
-#' @param bind.by.aes Whether to prioritize aesthetics before axes (other than 
-#'   the index axis) when ordering the lodes within each stratum. Defaults to 
-#'   FALSE.
+#' @param bind.by.aes Logical; whether to prioritize aesthetics before axes
+#'   (other than the index axis) when ordering the lodes within each stratum.
+#'   Defaults to FALSE.
 #' @param lode.ordering A list (of length the number of axes) of integer vectors
 #'   (each of length the number of rows of \code{data}) or NULL entries 
 #'   (indicating no imposed ordering), or else a numeric matrix of corresponding
@@ -45,15 +46,15 @@
 #' @example inst/examples/ex-alluvium.r
 #' @usage NULL
 #' @export
-stat_alluvium <- function(mapping = NULL,
-                          data = NULL,
-                          geom = "alluvium",
-                          na.rm = FALSE,
-                          show.legend = NA,
-                          inherit.aes = TRUE,
-                          ...) {
+stat_lode <- function(mapping = NULL,
+                      data = NULL,
+                      geom = "alluvium",
+                      na.rm = FALSE,
+                      show.legend = NA,
+                      inherit.aes = TRUE,
+                      ...) {
   layer(
-    stat = StatAlluvium,
+    stat = StatLode,
     data = data,
     mapping = mapping,
     geom = geom,
@@ -69,15 +70,10 @@ stat_alluvium <- function(mapping = NULL,
 #' @rdname stat-alluvium
 #' @usage NULL
 #' @export
-StatAlluvium <- ggproto(
-  "StatAlluvium", Stat,
+StatLode <- ggproto(
+  "StatLode", Stat,
   
   setup_params = function(data, params) {
-    
-    if (!is.null(data$x) || !is.null(params$x) ||
-        !is.null(data$y) || !is.null(params$y)) {
-      stop("stat_alluvium() does not accept x or y aesthetics")
-    }
     
     if (!is.null(params$lode.ordering)) {
       if (is.list(params$lode.ordering)) {
@@ -97,24 +93,31 @@ StatAlluvium <- ggproto(
   
   setup_data = function(data, params) {
     
-    if (params$na.rm) {
-      data <- na.omit(data)
-    } else {
-      axis_ind <- get_axes(names(data))
-      for (i in axis_ind) {
-        if (any(is.na(data[[i]]))) {
-          data[[i]] <- addNA(data[[i]], ifany = TRUE)
-        }
-      }
-    }
-    
     # assign uniform weight if not provided
     if (is.null(data$weight)) {
       data$weight <- rep(1, nrow(data))
     }
     
-    # override existing group assignment; assign each row its own group
-    data$group <- 1:nrow(data)
+    type <- get_alluvial_type(data)
+    if (type == "none") {
+      stop("Data is not in a recognized alluvial form ",
+           "(see `?is_alluvial` for details).")
+    }
+    
+    if (params$na.rm) {
+      data <- na.omit(data)
+    } else {
+      data <- na_keep(data)
+    }
+    
+    # ensure that data is in lode form
+    if (type == "alluvia") {
+      data <- to_lodes(data = data,
+                       key = "x", value = "stratum", id = "alluvium",
+                       axes = axis_ind)
+      # positioning requires numeric 'x'
+      data$x <- as.numeric(as.factor(data$x))
+    }
     
     data
   },
@@ -124,15 +127,30 @@ StatAlluvium <- ggproto(
                            bind.by.aes = FALSE,
                            lode.ordering = NULL) {
     
-    axis_ind <- get_axes(names(data))
-    data_aes <- setdiff(names(data)[-axis_ind],
-                        c("weight", "PANEL", "group"))
-    aes_ind <- match(data_aes, names(data))
+    # introduce any empty lodes in non-empty alluvia
+    data <- merge(data, expand.grid(list(
+      x = sort(unique(data$x)),
+      alluvium = sort(unique(data$alluvium))
+    )), all = TRUE)
+    # sort data by 'x' then 'alluvium' (to match 'alluv')
+    data <- data[do.call(order, data[, c("x", "alluvium")]), ]
     
     if (is.null(lode.ordering)) lode_fn <- get(paste0("lode_", lode.guidance))
     
-    # x and y coordinates of center of flow at each axis
-    compute_alluvium <- function(i) {
+    # put axis and aesthetic fields into alluvium form
+    alluv <- to_alluvia(data[, setdiff(names(data),
+                                       c("weight", "PANEL", "group"))],
+                        key = "x", value = "stratum", id = "alluvium")
+    stopifnot(nrow(alluv) == nrow(data) / dplyr::n_distinct(data$x))
+    # sort by 'alluvium' (to match 'data')
+    alluv <- alluv[order(alluv$alluvium), ]
+    # axis and aesthetic indices
+    axis_ind <- which(!(names(alluv) %in% names(data)))
+    aes_ind <- setdiff(1:ncol(alluv),
+                       c(which(names(alluv) == "alluvium"), axis_ind))
+    
+    # vertical positions of flows at each axis
+    position_lodes <- function(i) {
       # depends on whether the user has provided a lode.ordering
       if (is.null(lode.ordering)) {
         # order axis indices
@@ -144,26 +162,28 @@ StatAlluvium <- ggproto(
           c(axis_seq, aes_ind)
         }
         # order lodes according to axes, in above order
-        lode_seq <- do.call(order, data[all_ind])
+        lode_seq <- do.call(order, alluv[all_ind])
       } else {
-        lode_seq <- order(data[[axis_ind[i]]], lode.ordering[, i])
+        lode_seq <- order(alluv[[axis_ind[i]]], lode.ordering[, i])
       }
       # lode floors and ceilings along axis
-      ymin_seq <- c(0, cumsum(data$weight[lode_seq]))
-      ymax_seq <- c(cumsum(data$weight[lode_seq]), sum(data$weight))
+      subdata <- subset(data, x == names(alluv)[axis_ind[i]])
+      cumweight <- cumsum(subdata$weight[lode_seq])
+      ymin_seq <- c(0, cumweight)
+      ymax_seq <- c(cumweight, sum(subdata$weight))
       # lode breaks
-      cbind(i,
-            ymin_seq[order(lode_seq)],
-            ymax_seq[order(lode_seq)])
+      data.frame(x = names(alluv)[axis_ind[i]],
+                 ymin = ymin_seq[order(lode_seq)],
+                 ymax = ymax_seq[order(lode_seq)])
     }
+    lode_positions <- do.call(rbind, lapply(1:length(axis_ind), position_lodes))
+    stopifnot(all(data$x == lode_positions$x))
+    data <- cbind(data, lode_positions[, -1])
     
-    alluvia <- do.call(rbind, lapply(1:length(axis_ind), compute_alluvium))
-    colnames(alluvia) <- c("x", "ymin", "ymax")
-    data <- data.frame(data, alluvia)
-    
-    # y centers
+    # add vertical centroids and 'group' to encode alluvia
     data <- transform(data,
-                      y = (ymin + ymax) / 2)
+                      y = (ymin + ymax) / 2,
+                      group = alluvium)
     
     data
   }

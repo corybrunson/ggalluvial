@@ -1,11 +1,10 @@
-#' Variable axes with strata of values
+#' Stratum positions
 #' 
 #' Given a dataset with alluvial structure, \code{stat_stratum} calculates the
 #' centroids of the strata at each axis, together with their weights (heights).
 #' 
 #' @section Aesthetics:
-#' \code{stat_stratum} understands the following aesthetics (required aesthetics
-#' are in bold):
+#' \code{stat_stratum} understands the following aesthetics:
 #' \itemize{
 #'   \item \code{x}
 #'   \item \code{stratum}

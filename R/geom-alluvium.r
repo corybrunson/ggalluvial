@@ -12,13 +12,16 @@
 #' \code{geom_alluvium} understands the following aesthetics
 #'   (required aesthetics are in bold):
 #' \itemize{
-#'   \item \strong{\code{axis[0-9]*}} (\code{axis1}, \code{axis2}, etc.)
+#'   \item \code{\strong{x}}
+#'   \item \code{\strong{y}}
+#'   \item \code{\strong{ymin}}
+#'   \item \code{\strong{ymax}}
 #'   \item \code{alpha}
 #'   \item \code{colour}
 #'   \item \code{fill}
-#'   \item \code{group}
 #'   \item \code{linetype}
 #'   \item \code{size}
+#'   \item \code{group}
 #' }
 #' Currently, \code{group} is ignored.
 #' 
@@ -28,8 +31,10 @@
 #'   intra-axis boxes, \code{\link{alluvium_ts}} for a time series
 #'   implementation, and \code{\link{ggalluvial}} for a shortcut method.
 #' @inheritParams layer
-#' @param width The width of each stratum, as a proportion of the distance
-#'   between axes. Defaults to 1/3.
+#' @param backward Logical; whether lode aesthetics determine those of the flows
+#'   behind, rather than ahead of, them. Defaults to FALSE.
+#' @param width Numeric; the width of each stratum, as a proportion of the
+#'   distance between axes. Defaults to 1/3.
 #' @param axis_width Deprecated; alias for \code{width}.
 #' @param knot.pos The horizontal distance between a stratum (\code{width/2}
 #'   from its axis) and the knot of the x-spline, as a proportion of the
@@ -41,6 +46,7 @@
 geom_alluvium <- function(mapping = NULL,
                           data = NULL,
                           stat = "alluvium",
+                          backward = FALSE,
                           width = 1/3, axis_width = NULL,
                           knot.pos = 1/6, ribbon_bend = NULL,
                           na.rm = FALSE,
@@ -56,6 +62,7 @@ geom_alluvium <- function(mapping = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
+      backward = backward,
       knot.pos = knot.pos, ribbon_bend = ribbon_bend,
       width = width, axis_width = axis_width,
       na.rm = na.rm,
@@ -98,6 +105,34 @@ GeomAlluvium <- ggproto(
               xmin = x - params$width / 2,
               xmax = x + params$width / 2,
               knot.pos = params$knot.pos)
+  },
+  
+  draw_panel = function(data, panel_scales, coord,
+                        backward = FALSE,
+                        width = 1/3, axis_width = NULL,
+                        knot.pos = 1/6, ribbon_bend = NULL) {
+    
+    # pair lodes with neighbors (on the side determined by 'backward')
+    
+    
+    # remove lodes at end
+    
+    
+    # construct spline grobs
+    xsplines <- plyr::alply(data, 1, function(row) {
+      
+      xspline <- pair_to_spline(...)
+      aes <- as.data.frame(row[aesthetics],
+                           stringsAsFactors = FALSE)[rep(1, 5), ]
+      
+      # REPLACE THIS
+      #GeomPolygon$draw_panel(cbind(poly, aes, group = 1), panel_params, coord)
+    })
+    
+    # combine spline grobs
+    grob <- do.call(grid::grobTree, xsplines)
+    grob$name <- grid::grobName(grob, "xspline")
+    grob
   },
   
   draw_group = function(data, panel_scales, coord,
