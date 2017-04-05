@@ -119,15 +119,7 @@ GeomAlluvium <- ggproto(
     
     
     # construct spline grobs
-    xsplines <- plyr::alply(data, 1, function(row) {
-      
-      xspline <- pair_to_spline(...)
-      aes <- as.data.frame(row[aesthetics],
-                           stringsAsFactors = FALSE)[rep(1, 5), ]
-      
-      # REPLACE THIS
-      #GeomPolygon$draw_panel(cbind(poly, aes, group = 1), panel_params, coord)
-    })
+    
     
     # combine spline grobs
     grob <- do.call(grid::grobTree, xsplines)
