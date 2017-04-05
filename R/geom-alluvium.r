@@ -80,23 +80,11 @@ GeomAlluvium <- ggproto(
       params$width <- params$axis_width
       params$axis_width <- NULL
     }
-    if (!is.null(params$width)) {
-      if (params$width < 0 | params$width > 1) {
-        warning("Argument to parameter 'width' is not between 0 and 1, ",
-                "and will be ignored.")
-        params$width <- 1/3
-      }
-    }
     
     if (!is.null(params$ribbon_bend)) {
       warning("Parameter 'ribbon_bend' is deprecated; use 'knot.pos' instead.")
       params$knot.pos <- params$ribbon_bend
       params$ribbon_bend <- NULL
-    }
-    if (params$knot.pos < 0 | params$knot.pos > .5) {
-      warning("Argument to parameter 'knot.pos' is not between 0 and .5, ",
-              "and will be ignored.")
-      params$knot.pos <- 1/6
     }
     
     params
