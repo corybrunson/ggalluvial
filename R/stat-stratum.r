@@ -64,35 +64,25 @@ StatStratum <- ggproto(
       data$weight <- rep(1, nrow(data))
     }
     
-    # ensure that data is in (more flexible) lode form
-    axis_ind <- get_axes(names(data))
-    if (length(axis_ind) > 0) {
-      stopifnot(is_alluvial_alluvia(data, axes = axis_ind))
+    type <- get_alluvial_type(data)
+    if (type == "none") {
+      stop("Data is not in a recognized alluvial form ",
+           "(see `?is_alluvial` for details).")
+    }
+    
+    if (params$na.rm) {
+      data <- na.omit(data)
+    } else {
+      data <- na_keep(data)
+    }
+    
+    # ensure that data is in lode form
+    if (type == "alluvia") {
       data <- to_lodes(data = data,
                        key = "x", value = "stratum", id = "alluvium",
                        axes = axis_ind)
       # positioning requires numeric 'x'
       data$x <- as.numeric(as.factor(data$x))
-    } else {
-      if (is.null(data$x) | is.null(data$stratum) | is.null(data$alluvium)) {
-        stop("Parameters 'x', 'stratum', and 'alluvium' are required" ,
-             "for data in lode form.")
-      }
-      stopifnot(is_alluvial_lodes(
-        data,
-        key = "x", value = "stratum", id = "alluvium"
-      ))
-    }
-    
-    # incorporate any missing values into factor levels
-    if (params$na.rm) {
-      data <- na.omit(data)
-    } else {
-      if (is.factor(data$stratum)) {
-        data$stratum <- addNA(data$stratum, ifany = TRUE)
-      } else {
-        data$stratum[is.na(data$stratum)] <- "NA"
-      }
     }
     
     data
@@ -100,7 +90,7 @@ StatStratum <- ggproto(
   
   compute_panel = function(data, scales) {
     
-    # remove empty elements (including labels)
+    # remove empty lodes (including labels)
     data <- subset(data, weight > 0)
     
     # aggregate 'weight' by 'x' and 'y' (lose 'group')

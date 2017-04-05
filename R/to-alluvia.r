@@ -23,7 +23,8 @@ to_alluvia <- function(data, key, value, id) {
   
   # check that remaining columns are fixed by id
   n_id <- dplyr::n_distinct(data[[id]])
-  n_row <- nrow(unique(data[, setdiff(names(data), c(key, value))]))
+  n_row <- nrow(unique(data[, setdiff(names(data), c(key, value)),
+                            drop = FALSE]))
   if (!(n_id == n_row))
     stop("Non-'key'/'value' fields vary within 'id's.")
   

@@ -97,35 +97,25 @@ StatAlluvium <- ggproto(
       data$weight <- rep(1, nrow(data))
     }
     
-    # ensure that data is in (more flexible) lode form
-    axis_ind <- get_axes(names(data))
-    if (length(axis_ind) > 0) {
-      stopifnot(is_alluvial_alluvia(data, axes = axis_ind))
+    type <- get_alluvial_type(data)
+    if (type == "none") {
+      stop("Data is not in a recognized alluvial form ",
+           "(see `?is_alluvial` for details).")
+    }
+    
+    if (params$na.rm) {
+      data <- na.omit(data)
+    } else {
+      data <- na_keep(data)
+    }
+    
+    # ensure that data is in lode form
+    if (type == "alluvia") {
       data <- to_lodes(data = data,
                        key = "x", value = "stratum", id = "alluvium",
                        axes = axis_ind)
       # positioning requires numeric 'x'
       data$x <- as.numeric(as.factor(data$x))
-    } else {
-      if (is.null(data$x) | is.null(data$stratum) | is.null(data$alluvium)) {
-        stop("Parameters 'x', 'stratum', and 'alluvium' are required" ,
-             "for data in lode form.")
-      }
-      stopifnot(is_alluvial_lodes(
-        data,
-        key = "x", value = "stratum", id = "alluvium"
-      ))
-    }
-    
-    # incorporate any missing values into factor levels
-    if (params$na.rm) {
-      data <- na.omit(data)
-    } else {
-      if (is.factor(data$stratum)) {
-        data$stratum <- addNA(data$stratum, ifany = TRUE)
-      } else {
-        data$stratum[is.na(data$stratum)] <- "NA"
-      }
     }
     
     data
@@ -136,15 +126,30 @@ StatAlluvium <- ggproto(
                            bind.by.aes = FALSE,
                            lode.ordering = NULL) {
     
-    axis_ind <- get_axes(names(data))
-    data_aes <- setdiff(names(data)[-axis_ind],
-                        c("weight", "PANEL", "group"))
-    aes_ind <- match(data_aes, names(data))
+    # introduce any empty lodes in non-empty alluvia
+    data <- merge(data, expand.grid(list(
+      x = sort(unique(data$x)),
+      alluvium = sort(unique(data$alluvium))
+    )), all = TRUE)
+    # sort data by 'x' then 'alluvium' (to match 'alluv')
+    data <- data[do.call(order, data[, c("x", "alluvium")]), ]
     
     if (is.null(lode.ordering)) lode_fn <- get(paste0("lode_", lode.guidance))
     
-    # x and y coordinates of center of flow at each axis
-    compute_alluvium <- function(i) {
+    # put axis and aesthetic fields into alluvium form
+    alluv <- to_alluvia(data[, setdiff(names(data),
+                                       c("weight", "PANEL", "group"))],
+                        key = "x", value = "stratum", id = "alluvium")
+    stopifnot(nrow(alluv) == nrow(data) / dplyr::n_distinct(data$x))
+    # sort by 'alluvium' (to match 'data')
+    alluv <- alluv[order(alluv$alluvium), ]
+    # axis and aesthetic indices
+    axis_ind <- which(!(names(alluv) %in% names(data)))
+    aes_ind <- setdiff(1:ncol(alluv),
+                       c(which(names(alluv) == "alluvium"), axis_ind))
+    
+    # vertical positions of flows at each axis
+    position_lodes <- function(i) {
       # depends on whether the user has provided a lode.ordering
       if (is.null(lode.ordering)) {
         # order axis indices
@@ -156,22 +161,23 @@ StatAlluvium <- ggproto(
           c(axis_seq, aes_ind)
         }
         # order lodes according to axes, in above order
-        lode_seq <- do.call(order, data[all_ind])
+        lode_seq <- do.call(order, alluv[all_ind])
       } else {
-        lode_seq <- order(data[[axis_ind[i]]], lode.ordering[, i])
+        lode_seq <- order(alluv[[axis_ind[i]]], lode.ordering[, i])
       }
       # lode floors and ceilings along axis
-      ymin_seq <- c(0, cumsum(data$weight[lode_seq]))
-      ymax_seq <- c(cumsum(data$weight[lode_seq]), sum(data$weight))
+      subdata <- subset(data, x == names(alluv)[axis_ind[i]])
+      cumweight <- cumsum(subdata$weight[lode_seq])
+      ymin_seq <- c(0, cumweight)
+      ymax_seq <- c(cumweight, sum(subdata$weight))
       # lode breaks
-      cbind(i,
-            ymin_seq[order(lode_seq)],
-            ymax_seq[order(lode_seq)])
+      data.frame(x = names(alluv)[axis_ind[i]],
+                 ymin = ymin_seq[order(lode_seq)],
+                 ymax = ymax_seq[order(lode_seq)])
     }
-    
-    alluvia <- do.call(rbind, lapply(1:length(axis_ind), compute_alluvium))
-    colnames(alluvia) <- c("x", "ymin", "ymax")
-    data <- data.frame(data, alluvia)
+    lode_positions <- do.call(rbind, lapply(1:length(axis_ind), position_lodes))
+    stopifnot(all(data$x == lode_positions$x))
+    data <- cbind(data, lode_positions[, -1])
     
     # y centers
     data <- transform(data,
