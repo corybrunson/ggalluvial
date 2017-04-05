@@ -74,6 +74,11 @@ StatAlluvium <- ggproto(
   
   setup_params = function(data, params) {
     
+    if (!is.null(data$x) || !is.null(params$x) ||
+        !is.null(data$y) || !is.null(params$y)) {
+      stop("stat_alluvium() does not accept x or y aesthetics")
+    }
+    
     if (!is.null(params$lode.ordering)) {
       if (is.list(params$lode.ordering)) {
         # replace any null entries with uniform NA vectors
@@ -92,41 +97,24 @@ StatAlluvium <- ggproto(
   
   setup_data = function(data, params) {
     
+    if (params$na.rm) {
+      data <- na.omit(data)
+    } else {
+      axis_ind <- get_axes(names(data))
+      for (i in axis_ind) {
+        if (any(is.na(data[[i]]))) {
+          data[[i]] <- addNA(data[[i]], ifany = TRUE)
+        }
+      }
+    }
+    
     # assign uniform weight if not provided
     if (is.null(data$weight)) {
       data$weight <- rep(1, nrow(data))
     }
     
-    # ensure that data is in (more flexible) lode form
-    axis_ind <- get_axes(names(data))
-    if (length(axis_ind) > 0) {
-      stopifnot(is_alluvial_alluvia(data, axes = axis_ind))
-      data <- to_lodes(data = data,
-                       key = "x", value = "stratum", id = "alluvium",
-                       axes = axis_ind)
-      # positioning requires numeric 'x'
-      data$x <- as.numeric(as.factor(data$x))
-    } else {
-      if (is.null(data$x) | is.null(data$stratum) | is.null(data$alluvium)) {
-        stop("Parameters 'x', 'stratum', and 'alluvium' are required" ,
-             "for data in lode form.")
-      }
-      stopifnot(is_alluvial_lodes(
-        data,
-        key = "x", value = "stratum", id = "alluvium"
-      ))
-    }
-    
-    # incorporate any missing values into factor levels
-    if (params$na.rm) {
-      data <- na.omit(data)
-    } else {
-      if (is.factor(data$stratum)) {
-        data$stratum <- addNA(data$stratum, ifany = TRUE)
-      } else {
-        data$stratum[is.na(data$stratum)] <- "NA"
-      }
-    }
+    # override existing group assignment; assign each row its own group
+    data$group <- 1:nrow(data)
     
     data
   },
