@@ -7,13 +7,13 @@ get_alluvial_type <- function(data) {
     }
     return(is_alluvial_lodes(data,
                              key = "x", value = "stratum", id = "alluvium",
-                             weight = weight,
+                             weight = "weight",
                              logical = FALSE))
   } else {
     axis_ind <- get_axes(names(data))
     return(is_alluvial_alluvia(data,
                                axes = axis_ind,
-                               weight = weight,
+                               weight = "weight",
                                logical = FALSE))
   }
 }

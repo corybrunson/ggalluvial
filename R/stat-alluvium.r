@@ -104,13 +104,14 @@ StatAlluvium <- ggproto(
     }
     
     if (params$na.rm) {
-      data <- na.omit(data)
+      data <- na.omit(data = data)
     } else {
-      data <- na_keep(data)
+      data <- na_keep(data = data, type = type)
     }
     
     # ensure that data is in lode form
     if (type == "alluvia") {
+      axis_ind <- get_axes(names(data))
       data <- to_lodes(data = data,
                        key = "x", value = "stratum", id = "alluvium",
                        axes = axis_ind)

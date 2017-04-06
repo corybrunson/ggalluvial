@@ -31,8 +31,8 @@
 #'   intra-axis boxes, \code{\link{alluvium_ts}} for a time series
 #'   implementation, and \code{\link{ggalluvial}} for a shortcut method.
 #' @inheritParams layer
-#' @param backward Logical; whether lode aesthetics determine those of the flows
-#'   behind, rather than ahead of, them. Defaults to FALSE.
+#' @param aes.flow Character; how inter-lode flows assume aesthetics from lodes.
+#'   Options are "forward", "backward", and "interpolate".
 #' @param width Numeric; the width of each stratum, as a proportion of the
 #'   distance between axes. Defaults to 1/3.
 #' @param axis_width Deprecated; alias for \code{width}.
@@ -46,7 +46,7 @@
 geom_alluvium <- function(mapping = NULL,
                           data = NULL,
                           stat = "alluvium",
-                          backward = FALSE,
+                          aes.flow = "interpolate",
                           width = 1/3, axis_width = NULL,
                           knot.pos = 1/6, ribbon_bend = NULL,
                           na.rm = FALSE,
@@ -62,7 +62,7 @@ geom_alluvium <- function(mapping = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
-      backward = backward,
+      aes.flow = aes.flow,
       knot.pos = knot.pos, ribbon_bend = ribbon_bend,
       width = width, axis_width = axis_width,
       na.rm = na.rm,
@@ -108,11 +108,11 @@ GeomAlluvium <- ggproto(
   },
   
   draw_panel = function(data, panel_scales, coord,
-                        backward = FALSE,
+                        aes.flow = "interpolate",
                         width = 1/3, axis_width = NULL,
                         knot.pos = 1/6, ribbon_bend = NULL) {
-    
-    # pair lodes with neighbors (on the side determined by 'backward')
+    saveRDS(data, file = "temp.rda")
+    # pair lodes with neighbors (on the side determined by 'aes.flow')
     
     
     # remove lodes at end

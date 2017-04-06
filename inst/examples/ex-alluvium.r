@@ -1,11 +1,3 @@
-# degeneracy (one axis; unavailable through shortcut function)
-ggplot(as.data.frame(Titanic),
-       aes(weight = Freq,
-           axis = Class)) +
-  geom_alluvium(aes(fill = Class, alpha = Survived)) +
-  scale_x_continuous(breaks = 1, labels = c("Class")) +
-  scale_alpha_manual(values = c(.25, .75))
-
 # illustrate positioning
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
@@ -17,6 +9,14 @@ ggplot(as.data.frame(Titanic),
   geom_text(stat = "stratum") +
   scale_x_continuous(breaks = 1:3,
                      labels = c("Class", "Sex", "Age"))
+
+# degeneracy (one axis; unavailable through shortcut function)
+ggplot(as.data.frame(Titanic),
+       aes(weight = Freq,
+           axis = Class)) +
+  geom_alluvium(aes(fill = Class, alpha = Survived)) +
+  scale_x_continuous(breaks = 1, labels = c("Class")) +
+  scale_alpha_manual(values = c(.25, .75))
 
 # declaration of groups (ignored)
 ggplot(as.data.frame(Titanic),
