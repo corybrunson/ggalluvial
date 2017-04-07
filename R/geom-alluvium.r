@@ -32,7 +32,7 @@
 #'   implementation, and \code{\link{ggalluvial}} for a shortcut method.
 #' @inheritParams layer
 #' @param aes.flow Character; how inter-lode flows assume aesthetics from lodes.
-#'   Options are "forward", "backward", and "interpolate".
+#'   Options are "forward" and "backward".
 #' @param width Numeric; the width of each stratum, as a proportion of the
 #'   distance between axes. Defaults to 1/3.
 #' @param axis_width Deprecated; alias for \code{width}.
@@ -46,7 +46,7 @@
 geom_alluvium <- function(mapping = NULL,
                           data = NULL,
                           stat = "alluvium",
-                          aes.flow = "interpolate",
+                          aes.flow = "forward",
                           width = 1/3, axis_width = NULL,
                           knot.pos = 1/6, ribbon_bend = NULL,
                           na.rm = FALSE,
@@ -108,12 +108,43 @@ GeomAlluvium <- ggproto(
   },
   
   draw_panel = function(data, panel_scales, coord,
-                        aes.flow = "interpolate",
+                        aes.flow = "forward",
                         width = 1/3, axis_width = NULL,
                         knot.pos = 1/6, ribbon_bend = NULL) {
+    # maybe move this to setup_data
     saveRDS(data, file = "temp.rda")
-    # pair lodes with neighbors (on the side determined by 'aes.flow')
+    #data <- readRDS("temp.rda")
     
+    # pair lodes with neighbors
+    flow_pos <- c("x", "xmin", "xmax", "width",
+                  "y", "ymin", "ymax", "weight",
+                  "knot.pos",
+                  "flow", "alluvium")
+    flow_aes <- setdiff(names(data), c(flow_pos, "stratum", "PANEL", "group"))
+    flows <- dplyr::inner_join(transform(data, flow = x)[, flow_pos],
+                               transform(data, flow = x - 1)[, flow_pos],
+                               by = c("flow", "alluvium"),
+                               suffix = c("0", "1"))
+    data <- dplyr::left_join(flows,
+                             if (aes.flow == "forward") {
+                               transform(data, flow = x)[, c(flow_aes,
+                                                             "flow",
+                                                             "alluvium")]
+                             } else {
+                               transform(data, flow = x - 1)[, c(flow_aes,
+                                                                 "flow",
+                                                                 "alluvium")]
+                             },
+                             by = c("flow", "alluvium"))
+    
+    
+    aes_receiver_fields <- c("x", "xmin", "xmax", "width",
+                             "y", "ymin", "ymax", "weight",
+                             "axis", "alluvium")
+    data <- if ()
+    data <- dplyr::inner_join(transform(data, axis = x),
+                              transform(data, axis = x - 1),
+                              by = c("axis", "alluvium"))
     
     # remove lodes at end
     
