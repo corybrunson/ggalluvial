@@ -5,7 +5,7 @@
 \alias{stat-stratum}
 \alias{stat_stratum}
 \alias{StatStratum}
-\title{Variable axes with strata of values}
+\title{Stratum positions}
 \format{An object of class \code{StatStratum} (inherits from \code{Stat}, \code{ggproto}) of length 3.}
 \description{
 Given a dataset with alluvial structure, \code{stat_stratum} calculates the
@@ -13,8 +13,7 @@ centroids of the strata at each axis, together with their weights (heights).
 }
 \section{Aesthetics}{
 
-\code{stat_stratum} understands the following aesthetics (required aesthetics
-are in bold):
+\code{stat_stratum} understands the following aesthetics:
 \itemize{
   \item \code{x}
   \item \code{stratum}

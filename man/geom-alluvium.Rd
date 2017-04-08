@@ -8,8 +8,11 @@
 \title{Alluvial flows}
 \format{An object of class \code{GeomAlluvium} (inherits from \code{Geom}, \code{ggproto}) of length 6.}
 \arguments{
-\item{width}{The width of each stratum, as a proportion of the distance
-between axes. Defaults to 1/3.}
+\item{aes.flow}{Character; how inter-lode flows assume aesthetics from lodes.
+Options are "forward" and "backward".}
+
+\item{width}{Numeric; the width of each stratum, as a proportion of the
+distance between axes. Defaults to 1/3.}
 
 \item{axis_width}{Deprecated; alias for \code{width}.}
 
@@ -33,26 +36,21 @@ rectangles at either end, using a provided \code{width}.
 \code{geom_alluvium} understands the following aesthetics
   (required aesthetics are in bold):
 \itemize{
-  \item \strong{\code{axis[0-9]*}} (\code{axis1}, \code{axis2}, etc.)
+  \item \strong{\code{x}}
+  \item \strong{\code{y}}
+  \item \strong{\code{ymin}}
+  \item \strong{\code{ymax}}
   \item \code{alpha}
   \item \code{colour}
   \item \code{fill}
-  \item \code{group}
   \item \code{linetype}
   \item \code{size}
+  \item \code{group}
 }
 Currently, \code{group} is ignored.
 }
 
 \examples{
-# degeneracy (one axis; unavailable through shortcut function)
-ggplot(as.data.frame(Titanic),
-       aes(weight = Freq,
-           axis = Class)) +
-  geom_alluvium(aes(fill = Class, alpha = Survived)) +
-  scale_x_continuous(breaks = 1, labels = c("Class")) +
-  scale_alpha_manual(values = c(.25, .75))
-
 # illustrate positioning
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
@@ -64,6 +62,14 @@ ggplot(as.data.frame(Titanic),
   geom_text(stat = "stratum") +
   scale_x_continuous(breaks = 1:3,
                      labels = c("Class", "Sex", "Age"))
+
+# degeneracy (one axis; unavailable through shortcut function)
+ggplot(as.data.frame(Titanic),
+       aes(weight = Freq,
+           axis = Class)) +
+  geom_alluvium(aes(fill = Class, alpha = Survived)) +
+  scale_x_continuous(breaks = 1, labels = c("Class")) +
+  scale_alpha_manual(values = c(.25, .75))
 
 # declaration of groups (ignored)
 ggplot(as.data.frame(Titanic),
@@ -104,7 +110,7 @@ ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
   geom_alluvium(aes(fill = Survived),
-                bind.by.aes = TRUE, lode.guidance = "rightward") +
+                aes.bind = TRUE, lode.guidance = "rightward") +
   geom_stratum() + geom_text(stat = "stratum") +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 

@@ -5,7 +5,7 @@
 \alias{stat-alluvium}
 \alias{stat_alluvium}
 \alias{StatAlluvium}
-\title{Alluvial flows}
+\title{Alluvial positions}
 \format{An object of class \code{StatAlluvium} (inherits from \code{Stat}, \code{ggproto}) of length 4.}
 \arguments{
 \item{lode.guidance}{The function to prioritize the axis variables for 
@@ -13,9 +13,8 @@ ordering the lodes within each stratum. Defaults to "zigzag", other options
 include "rightleft", "leftright", "rightward", and "leftward" (see 
 \code{\link{lode-guidance-functions}}).}
 
-\item{bind.by.aes}{Whether to prioritize aesthetics before axes (other than 
-the index axis) when ordering the lodes within each stratum. Defaults to 
-FALSE.}
+\item{aes.bind}{Whether to prioritize aesthetics before axes (other than the
+index axis) when ordering the lodes within each stratum. Defaults to FALSE.}
 
 \item{lode.ordering}{A list (of length the number of axes) of integer vectors
 (each of length the number of rows of \code{data}) or NULL entries 
@@ -49,14 +48,6 @@ arguments to parameters inconsistent with the data format will be ignored.
 }
 
 \examples{
-# degeneracy (one axis; unavailable through shortcut function)
-ggplot(as.data.frame(Titanic),
-       aes(weight = Freq,
-           axis = Class)) +
-  geom_alluvium(aes(fill = Class, alpha = Survived)) +
-  scale_x_continuous(breaks = 1, labels = c("Class")) +
-  scale_alpha_manual(values = c(.25, .75))
-
 # illustrate positioning
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
@@ -68,6 +59,14 @@ ggplot(as.data.frame(Titanic),
   geom_text(stat = "stratum") +
   scale_x_continuous(breaks = 1:3,
                      labels = c("Class", "Sex", "Age"))
+
+# degeneracy (one axis; unavailable through shortcut function)
+ggplot(as.data.frame(Titanic),
+       aes(weight = Freq,
+           axis = Class)) +
+  geom_alluvium(aes(fill = Class, alpha = Survived)) +
+  scale_x_continuous(breaks = 1, labels = c("Class")) +
+  scale_alpha_manual(values = c(.25, .75))
 
 # declaration of groups (ignored)
 ggplot(as.data.frame(Titanic),
@@ -108,7 +107,7 @@ ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
   geom_alluvium(aes(fill = Survived),
-                bind.by.aes = TRUE, lode.guidance = "rightward") +
+                aes.bind = TRUE, lode.guidance = "rightward") +
   geom_stratum() + geom_text(stat = "stratum") +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 

@@ -12,10 +12,10 @@
 #' \code{geom_alluvium} understands the following aesthetics
 #'   (required aesthetics are in bold):
 #' \itemize{
-#'   \item \code{\strong{x}}
-#'   \item \code{\strong{y}}
-#'   \item \code{\strong{ymin}}
-#'   \item \code{\strong{ymax}}
+#'   \item \strong{\code{x}}
+#'   \item \strong{\code{y}}
+#'   \item \strong{\code{ymin}}
+#'   \item \strong{\code{ymax}}
 #'   \item \code{alpha}
 #'   \item \code{colour}
 #'   \item \code{fill}

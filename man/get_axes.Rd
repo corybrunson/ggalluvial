@@ -2,7 +2,7 @@
 % Please edit documentation in R/get-axes.r
 \name{get_axes}
 \alias{get_axes}
-\title{Identify axis columns}
+\title{Identify axis fields}
 \usage{
 get_axes(x)
 }
@@ -10,7 +10,8 @@ get_axes(x)
 \item{x}{Character vector}
 }
 \description{
-Identify elements in a character vector that fit the pattern of axis
-aesthetic names, and return their indices in the numerical order of the axis
-numbers. Only non-negative integers are allowed.
+Identify elements in a character vector that fit the pattern of axis 
+aesthetic names, and return their indices in the numerical order of the axis 
+numbers (with \code{axis} first, if present). Only non-negative integers are
+allowed.
 }

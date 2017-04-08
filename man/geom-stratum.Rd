@@ -5,7 +5,7 @@
 \alias{geom-stratum}
 \alias{geom_stratum}
 \alias{GeomStratum}
-\title{Variable axes with strata of values}
+\title{Stratum rectangles}
 \format{An object of class \code{GeomStratum} (inherits from \code{GeomRect}, \code{Geom}, \code{ggproto}) of length 6.}
 \arguments{
 \item{width}{The width of each stratum, as a proportion of the distace
@@ -24,15 +24,18 @@ alluvial diagram, and plots rectangles for these strata of a provided
 \code{geom_stratum} understands the following aesthetics (required aesthetics
 are in bold):
 \itemize{
-  \item \code{x}
-  \item \code{y}
+  \item \strong{\code{x}}
+  \item \strong{\code{y}}
+  \item \strong{\code{ymin}}
+  \item \strong{\code{ymax}}
+  \item \code{alpha}
+  \item \code{colour}
+  \item \code{fill}
+  \item \code{linetype}
+  \item \code{size}
   \item \code{group}
-  \item \code{axis[0-9]*} (\code{axis1}, \code{axis2}, etc.)
-  \item \code{weight}
 }
-Use \code{x}, \code{y}, and \code{group} for data in lode form and 
-\code{axis[0-9]*} for data in alluvium form (see \code{\link{is_alluvial}});
-arguments to parameters inconsistent with the data form will be ignored.
+Currently, \code{group} is ignored.
 }
 
 \examples{
