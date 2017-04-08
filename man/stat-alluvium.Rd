@@ -60,20 +60,12 @@ ggplot(as.data.frame(Titanic),
   scale_x_continuous(breaks = 1:3,
                      labels = c("Class", "Sex", "Age"))
 
-# degeneracy (one axis; unavailable through shortcut function)
-ggplot(as.data.frame(Titanic),
-       aes(weight = Freq,
-           axis = Class)) +
-  geom_alluvium(aes(fill = Class, alpha = Survived)) +
-  scale_x_continuous(breaks = 1, labels = c("Class")) +
-  scale_alpha_manual(values = c(.25, .75))
-
 # declaration of groups (ignored)
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age,
            group = Survived)) +
-  geom_alluvium() +
+  geom_alluvium() + geom_lode() +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 
 # control of horizontal spacing: parallel sets

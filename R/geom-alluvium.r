@@ -2,11 +2,11 @@
 #' 
 #' \code{geom_alluvium} receives a dataset of the horizontal (\code{x}) and 
 #' vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the \strong{lodes}
-#' of an alluvial diagram, the intersections of the alluvia with the strata. It
-#' reconfigures these into alluvial segments connecting pairs of corresponding
-#' lodes in adjacent strata and plots filled x-splines between each such pair,
-#' using a provided knot position parameter \code{knot.pos}, and filled
-#' rectangles at either end, using a provided \code{width}.
+#' of an alluvial diagram, the intersections of the alluvia with the strata.
+#' It reconfigures these into alluvial segments connecting pairs of
+#' corresponding lodes in adjacent strata and plots filled x-splines between
+#' each such pair, using a provided knot position parameter \code{knot.pos}, and
+#' filled rectangles at either end, using a provided \code{width}.
 #' 
 #' @section Aesthetics:
 #' \code{geom_alluvium} understands the following aesthetics
@@ -46,9 +46,9 @@
 geom_alluvium <- function(mapping = NULL,
                           data = NULL,
                           stat = "alluvium",
-                          aes.flow = "forward",
                           width = 1/3, axis_width = NULL,
                           knot.pos = 1/6, ribbon_bend = NULL,
+                          aes.flow = "forward",
                           na.rm = FALSE,
                           show.legend = NA,
                           inherit.aes = TRUE,
@@ -62,9 +62,9 @@ geom_alluvium <- function(mapping = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
-      aes.flow = aes.flow,
-      knot.pos = knot.pos, ribbon_bend = ribbon_bend,
       width = width, axis_width = axis_width,
+      knot.pos = knot.pos, ribbon_bend = ribbon_bend,
+      aes.flow = aes.flow,
       na.rm = na.rm,
       ...
     )
@@ -77,8 +77,8 @@ geom_alluvium <- function(mapping = NULL,
 GeomAlluvium <- ggproto(
   "GeomAlluvium", Geom,
   
-  default_aes = aes(size = .5, linetype = 1, colour = 0,
-                    fill = "gray", alpha = .5),
+  default_aes = aes(size = .5, linetype = 1,
+                    colour = 0, fill = "gray", alpha = .5),
   
   setup_params = function(data, params) {
     
@@ -155,40 +155,3 @@ GeomAlluvium <- ggproto(
   
   draw_key = draw_key_polygon
 )
-
-# self-adjoin a dataset, pairing some fields and holding others from one end
-self_adjoin <- function(data, key, also.by,
-                        pair = NULL, keep0 = NULL, keep1 = NULL) {
-  if (is.character(data[[key]])) data[[key]] <- as.factor(data[[key]])
-  adj <- dplyr::inner_join(
-    transform(data,
-              link = as.numeric(data[[key]]))[, c("link", also.by, pair)],
-    transform(data,
-              link = as.numeric(data[[key]]) - 1)[, c("link", also.by, pair)],
-    by = c("link", also.by),
-    suffix = c("0", "1")
-  )
-  if (!is.null(keep0)) adj <- dplyr::left_join(
-    adj,
-    transform(data,
-              link = as.numeric(data[[key]]))[, c("link", also.by, keep0)],
-    by = c("link", also.by)
-  )
-  if (!is.null(keep1)) adj <- dplyr::left_join(
-    adj,
-    transform(data,
-              link = as.numeric(data[[key]]) - 1)[, c("link", also.by, keep1)],
-    by = c("link", also.by)
-  )
-  adj
-}
-
-# x-spline coordinates from 2 x bounds, 4 y bounds, and knot position
-knots_to_xspl <- function(x0, x1, ymin0, ymax0, ymin1, ymax1, kp0, kp1) {
-  x_oneway <- c(x0, x0 + kp0, x1 - kp1, x1)
-  data.frame(
-    x = c(x_oneway, rev(x_oneway)),
-    y = c(ymin0, ymin0, ymin1, ymin1, ymax1, ymax1, ymax0, ymax0),
-    shape = rep(c(0, 1, 1, 0), times = 2)
-  )
-}

@@ -16,8 +16,8 @@ between axes. Defaults to 1/3.}
 \description{
 \code{geom_stratum} receives a dataset of the horizontal (\code{x}) and
 vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the strata of an
-alluvial diagram, and plots rectangles for these strata of a provided
-\code{width}.
+alluvial diagram.
+It plots rectangles for these strata of a provided \code{width}.
 }
 \section{Aesthetics}{
 

@@ -8,9 +8,6 @@
 \title{Alluvial flows}
 \format{An object of class \code{GeomAlluvium} (inherits from \code{Geom}, \code{ggproto}) of length 6.}
 \arguments{
-\item{aes.flow}{Character; how inter-lode flows assume aesthetics from lodes.
-Options are "forward" and "backward".}
-
 \item{width}{Numeric; the width of each stratum, as a proportion of the
 distance between axes. Defaults to 1/3.}
 
@@ -21,15 +18,18 @@ from its axis) and the knot of the x-spline, as a proportion of the
 separation between strata. Defaults to 1/6.}
 
 \item{ribbon_bend}{Deprecated; alias for \code{knot.pos}.}
+
+\item{aes.flow}{Character; how inter-lode flows assume aesthetics from lodes.
+Options are "forward" and "backward".}
 }
 \description{
 \code{geom_alluvium} receives a dataset of the horizontal (\code{x}) and 
 vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the \strong{lodes}
-of an alluvial diagram, the intersections of the alluvia with the strata. It
-reconfigures these into alluvial segments connecting pairs of corresponding
-lodes in adjacent strata and plots filled x-splines between each such pair,
-using a provided knot position parameter \code{knot.pos}, and filled
-rectangles at either end, using a provided \code{width}.
+of an alluvial diagram, the intersections of the alluvia with the strata.
+It reconfigures these into alluvial segments connecting pairs of
+corresponding lodes in adjacent strata and plots filled x-splines between
+each such pair, using a provided knot position parameter \code{knot.pos}, and
+filled rectangles at either end, using a provided \code{width}.
 }
 \section{Aesthetics}{
 
@@ -63,20 +63,12 @@ ggplot(as.data.frame(Titanic),
   scale_x_continuous(breaks = 1:3,
                      labels = c("Class", "Sex", "Age"))
 
-# degeneracy (one axis; unavailable through shortcut function)
-ggplot(as.data.frame(Titanic),
-       aes(weight = Freq,
-           axis = Class)) +
-  geom_alluvium(aes(fill = Class, alpha = Survived)) +
-  scale_x_continuous(breaks = 1, labels = c("Class")) +
-  scale_alpha_manual(values = c(.25, .75))
-
 # declaration of groups (ignored)
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age,
            group = Survived)) +
-  geom_alluvium() +
+  geom_alluvium() + geom_lode() +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 
 # control of horizontal spacing: parallel sets
