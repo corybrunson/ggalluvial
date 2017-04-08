@@ -112,27 +112,15 @@ GeomAlluvium <- ggproto(
                         width = 1/3, axis_width = NULL,
                         knot.pos = 1/6, ribbon_bend = NULL) {
     
-    # pair lodes with neighbors
-    flow_pos <- c("x", "xmin", "xmax", "width",
-                  "y", "ymin", "ymax", "weight",
-                  "knot.pos",
-                  "flow", "alluvium")
+    # adjoin data with itself by alluvia along adjacent axes
+    flow_pos <- intersect(names(data), c("x", "xmin", "xmax", "width",
+                                         "y", "ymin", "ymax", "weight",
+                                         "knot.pos"))
     flow_aes <- setdiff(names(data), c(flow_pos, "stratum", "PANEL", "group"))
-    flows <- dplyr::inner_join(transform(data, flow = x)[, flow_pos],
-                               transform(data, flow = x - 1)[, flow_pos],
-                               by = c("flow", "alluvium"),
-                               suffix = c("0", "1"))
-    
-    # bring in aesthetics from appropriate side
-    data <- dplyr::left_join(
-      flows,
-      if (aes.flow == "forward") {
-        transform(data, flow = x)[, c(flow_aes, "flow", "alluvium")]
-      } else {
-        transform(data, flow = x - 1)[, c(flow_aes, "flow", "alluvium")]
-      },
-      by = c("flow", "alluvium")
-    )
+    flow_aes_fore <- if (aes.flow == "forward") flow_aes else NULL
+    flow_aes_back <- if (aes.flow == "backward") flow_aes else NULL
+    data <- self_adjoin(data, "x", "alluvium", pair = flow_pos,
+                        keep0 = flow_aes_fore, keep1 = flow_aes_back)
     
     # construct spline grobs
     xspls <- plyr::alply(data, 1, function(row) {
@@ -167,6 +155,33 @@ GeomAlluvium <- ggproto(
   
   draw_key = draw_key_polygon
 )
+
+# self-adjoin a dataset, pairing some fields and holding others from one end
+self_adjoin <- function(data, key, also.by,
+                        pair = NULL, keep0 = NULL, keep1 = NULL) {
+  if (is.character(data[[key]])) data[[key]] <- as.factor(data[[key]])
+  adj <- dplyr::inner_join(
+    transform(data,
+              link = as.numeric(data[[key]]))[, c("link", also.by, pair)],
+    transform(data,
+              link = as.numeric(data[[key]]) - 1)[, c("link", also.by, pair)],
+    by = c("link", also.by),
+    suffix = c("0", "1")
+  )
+  if (!is.null(keep0)) adj <- dplyr::left_join(
+    adj,
+    transform(data,
+              link = as.numeric(data[[key]]))[, c("link", also.by, keep0)],
+    by = c("link", also.by)
+  )
+  if (!is.null(keep1)) adj <- dplyr::left_join(
+    adj,
+    transform(data,
+              link = as.numeric(data[[key]]) - 1)[, c("link", also.by, keep1)],
+    by = c("link", also.by)
+  )
+  adj
+}
 
 # x-spline coordinates from 2 x bounds, 4 y bounds, and knot position
 knots_to_xspl <- function(x0, x1, ymin0, ymax0, ymin1, ymax1, kp0, kp1) {

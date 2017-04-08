@@ -33,9 +33,8 @@
 #'   ordering the lodes within each stratum. Defaults to "zigzag", other options
 #'   include "rightleft", "leftright", "rightward", and "leftward" (see 
 #'   \code{\link{lode-guidance-functions}}).
-#' @param bind.by.aes Whether to prioritize aesthetics before axes (other than 
-#'   the index axis) when ordering the lodes within each stratum. Defaults to 
-#'   FALSE.
+#' @param aes.bind Whether to prioritize aesthetics before axes (other than the
+#'   index axis) when ordering the lodes within each stratum. Defaults to FALSE.
 #' @param lode.ordering A list (of length the number of axes) of integer vectors
 #'   (each of length the number of rows of \code{data}) or NULL entries 
 #'   (indicating no imposed ordering), or else a numeric matrix of corresponding
@@ -124,7 +123,7 @@ StatAlluvium <- ggproto(
   
   compute_panel = function(data, scales, params,
                            lode.guidance = "zigzag",
-                           bind.by.aes = FALSE,
+                           aes.bind = FALSE,
                            lode.ordering = NULL) {
     
     # introduce any empty lodes in non-empty alluvia
@@ -159,7 +158,7 @@ StatAlluvium <- ggproto(
         # order lodes according to axes and aesthetics
         lode_seq <- do.call(
           order,
-          if (bind.by.aes) {
+          if (aes.bind) {
             c(alluv[axis_seq[1]],
               subset(data, x == names(alluv)[axis_ind[i]])[aes_col],
               alluv[axis_seq[-1]])
