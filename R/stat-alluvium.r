@@ -137,17 +137,18 @@ StatAlluvium <- ggproto(
     
     if (is.null(lode.ordering)) lode_fn <- get(paste0("lode_", lode.guidance))
     
-    # put axis and aesthetic fields into alluvium form
-    alluv <- to_alluvia(data[, setdiff(names(data),
-                                       c("weight", "PANEL", "group"))],
+    # alluvial fields
+    alluv_col <- c("x", "stratum", "alluvium")
+    # aesthetic fields
+    aes_col <- setdiff(names(data), c(alluv_col, "weight", "PANEL", "group"))
+    # put axis fields into alluvial form
+    alluv <- to_alluvia(data[, alluv_col],
                         key = "x", value = "stratum", id = "alluvium")
     stopifnot(nrow(alluv) == nrow(data) / dplyr::n_distinct(data$x))
     # sort by 'alluvium' (to match 'data')
     alluv <- alluv[order(alluv$alluvium), ]
     # axis and aesthetic indices
     axis_ind <- which(!(names(alluv) %in% names(data)))
-    aes_ind <- setdiff(1:ncol(alluv),
-                       c(which(names(alluv) == "alluvium"), axis_ind))
     
     # vertical positions of flows at each axis
     position_lodes <- function(i) {
@@ -155,14 +156,17 @@ StatAlluvium <- ggproto(
       if (is.null(lode.ordering)) {
         # order axis indices
         axis_seq <- axis_ind[lode_fn(n = length(axis_ind), i = i)]
-        # combine axis and aesthetic indices
-        all_ind <- if (bind.by.aes) {
-          c(axis_seq[1], aes_ind, axis_seq[-1])
-        } else {
-          c(axis_seq, aes_ind)
-        }
-        # order lodes according to axes, in above order
-        lode_seq <- do.call(order, alluv[all_ind])
+        # order lodes according to axes and aesthetics
+        lode_seq <- do.call(
+          order,
+          if (bind.by.aes) {
+            c(alluv[axis_seq[1]],
+              subset(data, x == names(alluv)[axis_ind[i]])[aes_col],
+              alluv[axis_seq[-1]])
+          } else {
+            alluv[axis_seq]
+          }
+        )
       } else {
         lode_seq <- order(alluv[[axis_ind[i]]], lode.ordering[, i])
       }

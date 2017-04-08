@@ -111,9 +111,6 @@ GeomAlluvium <- ggproto(
                         aes.flow = "forward",
                         width = 1/3, axis_width = NULL,
                         knot.pos = 1/6, ribbon_bend = NULL) {
-    # maybe move this to setup_data
-    saveRDS(data, file = "temp.rda")
-    #data <- readRDS("temp.rda")
     
     # pair lodes with neighbors
     flow_pos <- c("x", "xmin", "xmax", "width",
@@ -125,87 +122,58 @@ GeomAlluvium <- ggproto(
                                transform(data, flow = x - 1)[, flow_pos],
                                by = c("flow", "alluvium"),
                                suffix = c("0", "1"))
-    data <- dplyr::left_join(flows,
-                             if (aes.flow == "forward") {
-                               transform(data, flow = x)[, c(flow_aes,
-                                                             "flow",
-                                                             "alluvium")]
-                             } else {
-                               transform(data, flow = x - 1)[, c(flow_aes,
-                                                                 "flow",
-                                                                 "alluvium")]
-                             },
-                             by = c("flow", "alluvium"))
     
-    
-    aes_receiver_fields <- c("x", "xmin", "xmax", "width",
-                             "y", "ymin", "ymax", "weight",
-                             "axis", "alluvium")
-    data <- if ()
-    data <- dplyr::inner_join(transform(data, axis = x),
-                              transform(data, axis = x - 1),
-                              by = c("axis", "alluvium"))
-    
-    # remove lodes at end
-    
+    # bring in aesthetics from appropriate side
+    data <- dplyr::left_join(
+      flows,
+      if (aes.flow == "forward") {
+        transform(data, flow = x)[, c(flow_aes, "flow", "alluvium")]
+      } else {
+        transform(data, flow = x - 1)[, c(flow_aes, "flow", "alluvium")]
+      },
+      by = c("flow", "alluvium")
+    )
     
     # construct spline grobs
-    
+    xspls <- plyr::alply(data, 1, function(row) {
+      
+      # spline paths and aesthetics
+      xspl <- knots_to_xspl(row$xmax0, row$xmin1,
+                            row$ymin0, row$ymax0, row$ymin1, row$ymax1,
+                            row$knot.pos0, row$knot.pos1)
+      aes <- as.data.frame(row[flow_aes],
+                           stringsAsFactors = FALSE)[rep(1, 8), ]
+      f_data <- cbind(xspl, aes)
+      
+      # transform (after calculating spline paths)
+      f_coords <- coord$transform(f_data, panel_scales)
+      
+      # single spline grob
+      grid::xsplineGrob(
+        x = f_coords$x, y = f_coords$y, shape = f_coords$shape,
+        open = FALSE,
+        gp = grid::gpar(
+          col = f_coords$colour, fill = f_coords$fill, alpha = f_coords$alpha,
+          lty = f_coords$linetype, lwd = f_coords$size * .pt
+        )
+      )
+    })
     
     # combine spline grobs
-    grob <- do.call(grid::grobTree, xsplines)
+    grob <- do.call(grid::grobTree, xspls)
     grob$name <- grid::grobName(grob, "xspline")
     grob
   },
   
-  draw_group = function(data, panel_scales, coord,
-                        width = 1/3, axis_width = NULL,
-                        knot.pos = 1/6, ribbon_bend = NULL) {
-    
-    first_row <- data[1, setdiff(names(data),
-                                 c("x", "xmin", "xmax",
-                                   "y", "ymin", "ymax",
-                                   "width", "knot.pos")),
-                      drop = FALSE]
-    rownames(first_row) <- NULL
-    
-    if (nrow(data) == 1) {
-      # spline coordinates (one axis)
-      spline_data <- data.frame(
-        x = data$x + data$width / 2 * c(-1, 1, 1, -1),
-        y = data$ymin + first_row$weight * c(0, 0, 1, 1),
-        shape = rep(0, 4)
-      )
-    } else {
-      # spline coordinates (more than one axis)
-      w_oneway <- rep(data$width, c(3, rep(4, nrow(data) - 2), 3))
-      k_oneway <- rep(data$knot.pos, c(3, rep(4, nrow(data) - 2), 3))
-      x_oneway <- rep(data$x, c(3, rep(4, nrow(data) - 2), 3)) +
-        w_oneway / 2 * c(-1, rep(c(1, 1, -1, -1), nrow(data) - 1), 1) +
-        k_oneway * (1 - w_oneway) * c(0, rep(c(0, 1, -1, 0), nrow(data) - 1), 0)
-      y_oneway <- rep(data$ymin, c(3, rep(4, nrow(data) - 2), 3))
-      shape_oneway <- c(0, rep(c(0, 1, 1, 0), nrow(data) - 1), 0)
-      spline_data <- data.frame(
-        x = c(x_oneway, rev(x_oneway)),
-        y = c(y_oneway, rev(y_oneway) + first_row$weight),
-        shape = rep(shape_oneway, 2)
-      )
-    }
-    data <- data.frame(first_row, spline_data)
-    
-    # transform (after calculating spline paths)
-    coords <- coord$transform(data, panel_scales)
-    
-    # graphics object
-    grid::xsplineGrob(
-      x = coords$x, y = coords$y, shape = coords$shape,
-      open = FALSE,
-      gp = grid::gpar(
-        col = coords$colour, fill = coords$fill, alpha = coords$alpha,
-        lty = coords$linetype, lwd = coords$size * .pt
-      )
-    )
-  },
-  
   draw_key = draw_key_polygon
 )
+
+# x-spline coordinates from 2 x bounds, 4 y bounds, and knot position
+knots_to_xspl <- function(x0, x1, ymin0, ymax0, ymin1, ymax1, kp0, kp1) {
+  x_oneway <- c(x0, x0 + kp0, x1 - kp1, x1)
+  data.frame(
+    x = c(x_oneway, rev(x_oneway)),
+    y = c(ymin0, ymin0, ymin1, ymin1, ymax1, ymax1, ymax0, ymax0),
+    shape = rep(c(0, 1, 1, 0), times = 2)
+  )
+}
