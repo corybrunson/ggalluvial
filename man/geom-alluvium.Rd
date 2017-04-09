@@ -71,13 +71,15 @@ ggplot(as.data.frame(Titanic),
   geom_alluvium() + geom_lode() +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 
-# control of horizontal spacing: parallel sets
+# parallel sets
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
   geom_alluvium(aes(fill = Survived),
-                width = 0, knot.pos = 0) +
-  scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
+                width = 1/8, knot.pos = 0) +
+  geom_stratum(width = 1/8) + geom_text(stat = "stratum") +
+  scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age")) +
+  coord_flip()
 
 # use of strata and labels
 ggplot(as.data.frame(Titanic),
