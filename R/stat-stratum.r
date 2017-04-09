@@ -88,7 +88,7 @@ StatStratum <- ggproto(
     data
   },
   
-  compute_panel = function(data, scales) {
+  compute_panel = function(self, data, scales) {
     
     # remove empty lodes (including labels)
     data <- subset(data, weight > 0)

@@ -107,7 +107,7 @@ GeomAlluvium <- ggproto(
               knot.pos = params$knot.pos)
   },
   
-  draw_panel = function(data, panel_scales, coord,
+  draw_panel = function(self, data, panel_scales, coord,
                         aes.flow = "forward",
                         width = 1/3, axis_width = NULL,
                         knot.pos = 1/6, ribbon_bend = NULL) {

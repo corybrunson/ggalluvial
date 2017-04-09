@@ -120,7 +120,7 @@ StatAlluvium <- ggproto(
     data
   },
   
-  compute_panel = function(data, scales,
+  compute_panel = function(self, data, scales,
                            lode.guidance = "zigzag",
                            aes.bind = FALSE,
                            lode.ordering = NULL) {
@@ -144,7 +144,6 @@ StatAlluvium <- ggproto(
     # put axis fields into alluvial form
     alluv <- to_alluvia(data[, alluv_col],
                         key = "x", value = "stratum", id = "alluvium")
-    #stopifnot(nrow(alluv) == nrow(data) / dplyr::n_distinct(data$x))
     # sort by 'alluvium' (to match 'data')
     alluv <- alluv[order(alluv$alluvium), ]
     # axis and aesthetic indices
@@ -184,7 +183,6 @@ StatAlluvium <- ggproto(
                  ymax = ymax_seq[order(lode_seq)])
     }
     lode_positions <- do.call(rbind, lapply(1:length(axis_ind), position_lodes))
-    #stopifnot(all(data$x == lode_positions$x))
     data <- cbind(data, lode_positions[, -1])
     
     # add vertical centroids and 'group' to encode alluvia

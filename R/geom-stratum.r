@@ -83,7 +83,7 @@ GeomStratum <- ggproto(
               xmax = x + params$width / 2)
   },
   
-  draw_panel = function(data, panel_params, coord,
+  draw_panel = function(self, data, panel_params, coord,
                         width = 1/3, axis_width = NULL) {
     # taken from GeomRect
     
