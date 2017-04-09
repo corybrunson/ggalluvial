@@ -103,7 +103,7 @@ StatAlluvium <- ggproto(
     }
     
     if (params$na.rm) {
-      data <- na.omit(data = data)
+      data <- na.omit(object = data)
     } else {
       data <- na_keep(data = data, type = type)
     }
@@ -121,16 +121,11 @@ StatAlluvium <- ggproto(
     data
   },
   
-  compute_panel = function(data, scales, params,
+  compute_panel = function(data, scales,
                            lode.guidance = "zigzag",
                            aes.bind = FALSE,
                            lode.ordering = NULL) {
     
-    # introduce any empty lodes in non-empty alluvia
-    data <- merge(data, expand.grid(list(
-      x = sort(unique(data$x)),
-      alluvium = sort(unique(data$alluvium))
-    )), all = TRUE)
     # sort data by 'x' then 'alluvium' (to match 'alluv')
     data <- data[do.call(order, data[, c("x", "alluvium")]), ]
     
@@ -143,7 +138,7 @@ StatAlluvium <- ggproto(
     # put axis fields into alluvial form
     alluv <- to_alluvia(data[, alluv_col],
                         key = "x", value = "stratum", id = "alluvium")
-    stopifnot(nrow(alluv) == nrow(data) / dplyr::n_distinct(data$x))
+    #stopifnot(nrow(alluv) == nrow(data) / dplyr::n_distinct(data$x))
     # sort by 'alluvium' (to match 'data')
     alluv <- alluv[order(alluv$alluvium), ]
     # axis and aesthetic indices
@@ -155,19 +150,22 @@ StatAlluvium <- ggproto(
       if (is.null(lode.ordering)) {
         # order axis indices
         axis_seq <- axis_ind[lode_fn(n = length(axis_ind), i = i)]
+        # defined rows
+        wh_def <- which(!is.na(alluv[[axis_seq[1]]]))
         # order lodes according to axes and aesthetics
         lode_seq <- do.call(
           order,
           if (aes.bind) {
-            c(alluv[axis_seq[1]],
-              subset(data, x == names(alluv)[axis_ind[i]])[aes_col],
-              alluv[axis_seq[-1]])
+            cbind(alluv[wh_def, axis_seq[1], drop = FALSE],
+                  subset(data, x == names(alluv)[axis_ind[i]])[aes_col],
+                  alluv[wh_def, axis_seq[-1], drop = FALSE])
           } else {
-            alluv[axis_seq]
+            alluv[wh_def, axis_seq, drop = FALSE]
           }
         )
       } else {
-        lode_seq <- order(alluv[[axis_ind[i]]], lode.ordering[, i])
+        lode_seq <- order(alluv[[axis_ind[i]]][wh_def],
+                          lode.ordering[wh_def, i])
       }
       # lode floors and ceilings along axis
       subdata <- subset(data, x == names(alluv)[axis_ind[i]])
@@ -175,7 +173,7 @@ StatAlluvium <- ggproto(
       ymin_seq <- c(0, cumweight)
       ymax_seq <- c(cumweight, sum(subdata$weight))
       # lode breaks
-      data.frame(x = names(alluv)[axis_ind[i]],
+      data.frame(x = I(names(alluv)[axis_ind[i]]),
                  ymin = ymin_seq[order(lode_seq)],
                  ymax = ymax_seq[order(lode_seq)])
     }

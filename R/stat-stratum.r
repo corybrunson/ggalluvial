@@ -70,7 +70,7 @@ StatStratum <- ggproto(
     }
     
     if (params$na.rm) {
-      data <- na.omit(data = data)
+      data <- na.omit(object = data)
     } else {
       data <- na_keep(data = data, type = type)
     }
