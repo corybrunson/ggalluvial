@@ -93,11 +93,23 @@ StatStratum <- ggproto(
     # remove empty lodes (including labels)
     data <- subset(data, weight > 0)
     
+    # nullify 'group' and 'alluvium' fields
+    data <- transform(data,
+                      group = NULL,
+                      alluvium = NULL)
+    
+    # introduce label (if absent)
+    if (is.null(data$label)) data <- transform(data,
+                                               label = stratum)
+    
+    # aggregate data by 'x' and 'stratum'
+    data <- auto_aggregate(data = data, by = c("x", "stratum"))
+    
     # aggregate 'weight' by 'x' and 'y' (lose 'group')
-    data <- aggregate(x = data$weight,
-                      by = data[, c("x", "stratum")],
-                      FUN = sum)
-    names(data) <- c("x", "label", "weight")
+    #data <- aggregate(x = data$weight,
+    #                  by = data[, c("x", "stratum")],
+    #                  FUN = sum)
+    #names(data) <- c("x", "label", "weight")
     
     # cumulative weights
     data$y <- NA

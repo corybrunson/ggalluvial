@@ -76,14 +76,13 @@ StatAlluvium <- ggproto(
     if (!is.null(params$lode.ordering)) {
       if (is.list(params$lode.ordering)) {
         # replace any null entries with uniform NA vectors
-        wh.null <- which(sapply(params$lode.ordering, is.null))
-        for (w in wh.null) params$lode.ordering[[w]] <- rep(NA, nrow(data))
+        wh_null <- which(sapply(params$lode.ordering, is.null))
+        len <- unique(sapply(params$lode.ordering[wh_null], length))
+        if (length(len) > 1) stop("Lode orderings have different lengths.")
+        for (w in wh_null) params$lode.ordering[[w]] <- rep(NA, len)
         # convert list to array (requires equal-length numeric entries)
         params$lode.ordering <- do.call(cbind, params$lode.ordering)
       }
-      # check that array has correct dimensions
-      stopifnot(dim(params$lode.ordering) ==
-                  c(nrow(data), length(get_axes(names(data)))))
     }
     
     params
@@ -129,7 +128,14 @@ StatAlluvium <- ggproto(
     # sort data by 'x' then 'alluvium' (to match 'alluv')
     data <- data[do.call(order, data[, c("x", "alluvium")]), ]
     
-    if (is.null(lode.ordering)) lode_fn <- get(paste0("lode_", lode.guidance))
+    if (is.null(lode.ordering)) {
+      lode_fn <- get(paste0("lode_", lode.guidance))
+    } else {
+      # check that array has correct dimensions
+      stopifnot(dim(lode.ordering) ==
+                  c(dplyr::n_distinct(data$alluvium),
+                    dplyr::n_distinct(data$x)))
+    }
     
     # alluvial fields
     alluv_col <- c("x", "stratum", "alluvium")
@@ -146,12 +152,12 @@ StatAlluvium <- ggproto(
     
     # vertical positions of flows at each axis
     position_lodes <- function(i) {
+      # defined rows
+      wh_def <- which(!is.na(alluv[[axis_ind[i]]]))
       # depends on whether the user has provided a lode.ordering
       if (is.null(lode.ordering)) {
         # order axis indices
         axis_seq <- axis_ind[lode_fn(n = length(axis_ind), i = i)]
-        # defined rows
-        wh_def <- which(!is.na(alluv[[axis_seq[1]]]))
         # order lodes according to axes and aesthetics
         lode_seq <- do.call(
           order,
@@ -178,7 +184,7 @@ StatAlluvium <- ggproto(
                  ymax = ymax_seq[order(lode_seq)])
     }
     lode_positions <- do.call(rbind, lapply(1:length(axis_ind), position_lodes))
-    stopifnot(all(data$x == lode_positions$x))
+    #stopifnot(all(data$x == lode_positions$x))
     data <- cbind(data, lode_positions[, -1])
     
     # add vertical centroids and 'group' to encode alluvia
