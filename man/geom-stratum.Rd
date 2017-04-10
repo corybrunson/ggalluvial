@@ -54,7 +54,7 @@ ggplot(as.data.frame(Titanic),
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex)) +
-  geom_alluvium(aes(fill = Survived)) +
+  geom_flow(aes(fill = Survived)) +
   geom_stratum() + geom_text(stat = "stratum") +
   scale_x_continuous(breaks = 1:2, labels = c("Class", "Sex")) +
   facet_wrap(~ Age, scales = "free_y")

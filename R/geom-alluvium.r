@@ -1,12 +1,10 @@
-#' Alluvial flows
+#' Alluvia
 #' 
 #' \code{geom_alluvium} receives a dataset of the horizontal (\code{x}) and 
 #' vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the \strong{lodes}
 #' of an alluvial diagram, the intersections of the alluvia with the strata.
-#' It reconfigures these into alluvial segments connecting pairs of
-#' corresponding lodes in adjacent strata and plots filled x-splines between
-#' each such pair, using a provided knot position parameter \code{knot.pos}, and
-#' filled rectangles at either end, using a provided \code{width}.
+#' It plots both the lodes themselves, using \code{\link{geom_lode}}, and the
+#' flows between them, using \code{\link{geom_flow}}.
 #' 
 #' @section Aesthetics:
 #' \code{geom_alluvium} understands the following aesthetics
@@ -32,25 +30,21 @@
 #'   implementation, and \code{\link{ggalluvial}} for a shortcut method.
 #' @inheritParams layer
 #' @inheritParams geom_lode
-#' @param aes.flow Character; how inter-lode flows assume aesthetics from lodes.
-#'   Options are "forward" and "backward".
-#' @param knot.pos The horizontal distance between a stratum (\code{width/2}
-#'   from its axis) and the knot of the x-spline, as a proportion of the
-#'   separation between strata. Defaults to 1/6.
+#' @inheritParams geom_flow
 #' @param ribbon_bend Deprecated; alias for \code{knot.pos}.
 #' @example inst/examples/ex-alluvium.r
 #' @usage NULL
 #' @export
 geom_alluvium <- function(mapping = NULL,
-                          data = NULL,
-                          stat = "alluvium",
-                          width = 1/3, axis_width = NULL,
-                          knot.pos = 1/6, ribbon_bend = NULL,
-                          aes.flow = "forward",
-                          na.rm = FALSE,
-                          show.legend = NA,
-                          inherit.aes = TRUE,
-                          ...) {
+                      data = NULL,
+                      stat = "alluvium",
+                      width = 1/3, axis_width = NULL,
+                      knot.pos = 1/6, ribbon_bend = NULL,
+                      aes.flow = "forward",
+                      na.rm = FALSE,
+                      show.legend = NA,
+                      inherit.aes = TRUE,
+                      ...) {
   layer(
     geom = GeomAlluvium,
     mapping = mapping,
@@ -68,6 +62,7 @@ geom_alluvium <- function(mapping = NULL,
     )
   )
 }
+
 
 #' @rdname geom-alluvium
 #' @usage NULL
@@ -99,54 +94,21 @@ GeomAlluvium <- ggproto(
     
     # positioning parameters
     transform(data,
-              width = params$width,
               xmin = x - params$width / 2,
               xmax = x + params$width / 2,
               knot.pos = params$knot.pos)
   },
   
-  draw_panel = function(self, data, panel_scales, coord,
-                        aes.flow = "forward",
+  draw_panel = function(self, data, panel_params, coord,
                         width = 1/3, axis_width = NULL,
+                        aes.flow = "forward",
                         knot.pos = 1/6, ribbon_bend = NULL) {
     
-    # adjoin data with itself by alluvia along adjacent axes
-    flow_pos <- intersect(names(data), c("x", "xmin", "xmax", "width",
-                                         "y", "ymin", "ymax", "weight",
-                                         "knot.pos"))
-    flow_aes <- setdiff(names(data), c(flow_pos, "stratum", "PANEL", "group"))
-    flow_aes_fore <- if (aes.flow == "forward") flow_aes else NULL
-    flow_aes_back <- if (aes.flow == "backward") flow_aes else NULL
-    data <- self_adjoin(data, "x", "alluvium", pair = flow_pos,
-                        keep0 = flow_aes_fore, keep1 = flow_aes_back)
-    
-    # construct spline grobs
-    xspls <- plyr::alply(data, 1, function(row) {
-      
-      # spline paths and aesthetics
-      xspl <- knots_to_xspl(row$xmax0, row$xmin1,
-                            row$ymin0, row$ymax0, row$ymin1, row$ymax1,
-                            row$knot.pos0, row$knot.pos1)
-      aes <- as.data.frame(row[flow_aes],
-                           stringsAsFactors = FALSE)[rep(1, 8), ]
-      f_data <- cbind(xspl, aes)
-      
-      # transform (after calculating spline paths)
-      f_coords <- coord$transform(f_data, panel_scales)
-      
-      # single spline grob
-      grid::xsplineGrob(
-        x = f_coords$x, y = f_coords$y, shape = f_coords$shape,
-        open = FALSE,
-        gp = grid::gpar(
-          col = f_coords$colour, fill = f_coords$fill, alpha = f_coords$alpha,
-          lty = f_coords$linetype, lwd = f_coords$size * .pt
-        )
-      )
-    })
-    
-    # combine spline grobs
-    grob <- do.call(grid::grobTree, xspls)
+    # construct lode and flow grobs
+    grob <- grid::grobTree(
+      GeomLode$draw_panel(data, panel_params, coord),
+      GeomFlow$draw_panel(data, panel_params, coord)
+    )
     grob$name <- grid::grobName(grob, "xspline")
     grob
   },

@@ -65,7 +65,7 @@ ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age,
            group = Survived)) +
-  geom_alluvium() + geom_lode() +
+  geom_alluvium() +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 
 # parallel sets
@@ -82,7 +82,7 @@ ggplot(as.data.frame(Titanic),
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
-  geom_alluvium() +
+  geom_flow() +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age")) +
   geom_stratum() + geom_text(stat = "stratum") +
   ggtitle("Alluvial diagram of Titanic passenger demographic data")
@@ -91,7 +91,7 @@ ggplot(as.data.frame(Titanic),
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex)) +
-  geom_alluvium(aes(fill = Age)) +
+  geom_flow(aes(fill = Age)) +
   geom_stratum() + geom_text(stat = "stratum") +
   scale_x_continuous(breaks = 1:2, labels = c("Class", "Sex")) +
   facet_wrap(~ Survived, scales = "fixed")
@@ -100,8 +100,8 @@ ggplot(as.data.frame(Titanic),
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
-  geom_alluvium(aes(fill = Survived),
-                aes.bind = TRUE, lode.guidance = "rightward") +
+  geom_flow(aes(fill = Survived),
+            aes.bind = TRUE, lode.guidance = "rightward") +
   geom_stratum() + geom_text(stat = "stratum") +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 
@@ -110,8 +110,8 @@ lode_ord <- replicate(n = 3, expr = sample(x = 32), simplify = FALSE)
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
-  geom_alluvium(aes(fill = Survived),
-                lode.ordering = lode_ord) +
+  geom_flow(aes(fill = Survived),
+            lode.ordering = lode_ord) +
   geom_stratum() + geom_text(stat = "stratum") +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 }
