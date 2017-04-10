@@ -8,6 +8,14 @@
 \title{Alluvial positions}
 \format{An object of class \code{StatAlluvium} (inherits from \code{Stat}, \code{ggproto}) of length 4.}
 \arguments{
+\item{geom}{The geometric object to use display the data;
+override the default.}
+
+\item{decreasing}{Logical; whether to arrange the strata at each axis
+in the order of the variable values (NA, the default),
+with the largest on top (FALSE), or
+with the largest on bottom (TRUE).}
+
 \item{lode.guidance}{The function to prioritize the axis variables for 
 ordering the lodes within each stratum. Defaults to "zigzag", other options
 include "rightleft", "leftright", "rightward", and "leftward" (see 
@@ -59,57 +67,10 @@ ggplot(as.data.frame(Titanic),
   geom_text(stat = "stratum") +
   scale_x_continuous(breaks = 1:3,
                      labels = c("Class", "Sex", "Age"))
-
-# declaration of groups (ignored)
-ggplot(as.data.frame(Titanic),
-       aes(weight = Freq,
-           axis1 = Class, axis2 = Sex, axis3 = Age,
-           group = Survived)) +
-  geom_alluvium() +
-  scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
-# time series alluvia of WorldPhones data
-wph <- as.data.frame(as.table(WorldPhones))
-names(wph) <- c("Year", "Region", "Telephones")
-ggplot(wph,
-       aes(x = Year, stratum = Region, weight = Telephones)) +
-  geom_flow(aes(fill = Region, colour = Region), width = 0)
-
-# time series line plot of refugees data, sorted by country
-ggplot(data = alluvial::Refugees,
-       aes(x = year, weight = refugees, stratum = country)) +
-  geom_flow(aes(fill = country),
-            colour = "black", decreasing = NA, width = 0, knot.pos = 0)
-
-# time series bump chart
-ggplot(alluvial::Refugees,
-       aes(weight = refugees,
-           x = year, stratum = country,
-           fill = country)) +
-  geom_alluvium(width = 1/4, alpha = 2/3, decreasing = FALSE)
-
-# load refugees data from alluvial
-data(Refugees, package = "alluvial")
-# time series alluvia faceted by region
-country_regions <- c(
-  Afghanistan = "Middle East",
-  Burundi = "Central Africa",
-  `Congo DRC` = "Central Africa",
-  Iraq = "Middle East",
-  Myanmar = "Southeast Asia",
-  Palestine = "Middle East",
-  Somalia = "Horn of Africa",
-  Sudan = "Central Africa",
-  Syria = "Middle East",
-  Vietnam = "Southeast Asia"
-)
-Refugees$region <- country_regions[Refugees$country]
-ggplot(data = Refugees,
-       aes(x = year, weight = refugees, stratum = country)) +
-  geom_alluvium(aes(fill = country), decreasing = FALSE) +
-  facet_wrap(~ region, scales = "fixed")
 }
 \seealso{
-\code{\link{geom_alluvium}} for the corresponding geom,
+\code{\link[ggplot2]{layer}} for additional arguments,
+  \code{\link{geom_alluvium}} for the corresponding geom,
   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for
   intra-axis boxes, and
   \code{\link{ggalluvial}} for a shortcut method.

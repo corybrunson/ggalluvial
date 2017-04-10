@@ -8,6 +8,9 @@
 \title{Stratum positions}
 \format{An object of class \code{StatStratum} (inherits from \code{Stat}, \code{ggproto}) of length 3.}
 \arguments{
+\item{geom}{The geometric object to use display the data;
+override the default.}
+
 \item{decreasing}{Logical; whether to arrange the strata at each axis
 in the order of the variable values (NA, the default),
 with the largest on top (FALSE), or
@@ -62,7 +65,8 @@ ggplot(as.data.frame(Titanic),
   facet_wrap(~ Age, scales = "free_y")
 }
 \seealso{
-\code{\link{geom_stratum}} for the corresponding geom,
+\code{\link[ggplot2]{layer}} for additional arguments,
+  \code{\link{geom_stratum}} for the corresponding geom,
   \code{\link{stat_alluvium}} and \code{\link{geom_alluvium}} for
   alluvial flows, and
   \code{\link{ggalluvial}} for a shortcut method.

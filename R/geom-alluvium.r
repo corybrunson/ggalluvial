@@ -25,15 +25,16 @@
 #' 
 #' @name geom-alluvium
 #' @import ggplot2
-#' @seealso \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 
+#' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
+#'   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 
 #'   intra-axis boxes, and
 #'   \code{\link{ggalluvial}} for a shortcut method.
-#' @inheritParams layer
-#' @inheritParams geom_lode
-#' @inheritParams geom_flow
+#' @inheritParams geom-lode
+#' @param knot.pos The horizontal distance between a stratum (\code{width/2}
+#'   from its axis) and the knot of the x-spline, as a proportion of the
+#'   separation between strata. Defaults to 1/6.
 #' @param ribbon_bend Deprecated; alias for \code{knot.pos}.
-#' @example inst/examples/ex-alluvium.r
-#' @example inst/examples/ex-alluvium-bump.r
+#' @example inst/examples/ex-geom-alluvium.r
 #' @usage NULL
 #' @export
 geom_alluvium <- function(mapping = NULL,
@@ -41,7 +42,6 @@ geom_alluvium <- function(mapping = NULL,
                       stat = "alluvium",
                       width = 1/3, axis_width = NULL,
                       knot.pos = 1/6, ribbon_bend = NULL,
-                      aes.flow = "forward",
                       na.rm = FALSE,
                       show.legend = NA,
                       inherit.aes = TRUE,
@@ -57,7 +57,6 @@ geom_alluvium <- function(mapping = NULL,
     params = list(
       width = width, axis_width = axis_width,
       knot.pos = knot.pos, ribbon_bend = ribbon_bend,
-      aes.flow = aes.flow,
       na.rm = na.rm,
       ...
     )
@@ -95,23 +94,59 @@ GeomAlluvium <- ggproto(
     
     # positioning parameters
     transform(data,
-              xmin = x - params$width / 2,
-              xmax = x + params$width / 2,
               knot.pos = params$knot.pos)
   },
   
-  draw_panel = function(self, data, panel_params, coord,
+  draw_group = function(self, data, panel_scales, coord,
                         width = 1/3, axis_width = NULL,
-                        aes.flow = "forward",
                         knot.pos = 1/6, ribbon_bend = NULL) {
     
-    # construct lode and flow grobs
-    grob <- grid::grobTree(
-      GeomLode$draw_panel(data, panel_params, coord),
-      GeomFlow$draw_panel(data, panel_params, coord)
+    # add width to data
+    data <- transform(data, width = width)
+    
+    first_row <- data[1, setdiff(names(data),
+                                 c("x",
+                                   "y", "ymin", "ymax",
+                                   "width", "knot.pos")),
+                      drop = FALSE]
+    rownames(first_row) <- NULL
+    
+    if (nrow(data) == 1) {
+      # spline coordinates (one axis)
+      spline_data <- data.frame(
+        x = data$x + width / 2 * c(-1, 1, 1, -1),
+        y = data$ymin + first_row$weight * c(0, 0, 1, 1),
+        shape = rep(0, 4)
+      )
+    } else {
+      # spline coordinates (more than one axis)
+      w_oneway <- rep(data$width, c(3, rep(4, nrow(data) - 2), 3))
+      k_oneway <- rep(data$knot.pos, c(3, rep(4, nrow(data) - 2), 3))
+      x_oneway <- rep(data$x, c(3, rep(4, nrow(data) - 2), 3)) +
+        w_oneway / 2 * c(-1, rep(c(1, 1, -1, -1), nrow(data) - 1), 1) +
+        k_oneway * (1 - w_oneway) * c(0, rep(c(0, 1, -1, 0), nrow(data) - 1), 0)
+      y_oneway <- rep(data$ymin, c(3, rep(4, nrow(data) - 2), 3))
+      shape_oneway <- c(0, rep(c(0, 1, 1, 0), nrow(data) - 1), 0)
+      spline_data <- data.frame(
+        x = c(x_oneway, rev(x_oneway)),
+        y = c(y_oneway, rev(y_oneway) + first_row$weight),
+        shape = rep(shape_oneway, 2)
+      )
+    }
+    data <- data.frame(first_row, spline_data)
+    
+    # transform (after calculating spline paths)
+    coords <- coord$transform(data, panel_scales)
+    
+    # graphics object
+    grid::xsplineGrob(
+      x = coords$x, y = coords$y, shape = coords$shape,
+      open = FALSE,
+      gp = grid::gpar(
+        col = coords$colour, fill = coords$fill, alpha = coords$alpha,
+        lty = coords$linetype, lwd = coords$size * .pt
+      )
     )
-    grob$name <- grid::grobName(grob, "xspline")
-    grob
   },
   
   draw_key = draw_key_polygon

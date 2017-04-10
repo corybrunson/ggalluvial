@@ -8,6 +8,9 @@
 \title{Lode rectangles}
 \format{An object of class \code{GeomLode} (inherits from \code{Geom}, \code{ggproto}) of length 6.}
 \arguments{
+\item{stat}{The statistical transformation to use on the data;
+override the default.}
+
 \item{width}{Numeric; the width of each stratum, as a proportion of the
 distance between axes. Defaults to 1/3.}
 
@@ -63,7 +66,8 @@ ggplot(as.data.frame(Titanic),
   geom_stratum(stat = "alluvium")
 }
 \seealso{
-\code{\link{geom_alluvium}} for alluvial flows,
+\code{\link[ggplot2]{layer}} for additional arguments,
+  \code{\link{geom_alluvium}} for alluvial flows,
   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 
   intra-axis stratum rectangles, and
   \code{\link{ggalluvial}} for a shortcut method.

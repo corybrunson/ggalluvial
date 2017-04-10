@@ -23,12 +23,12 @@
 #' 
 #' @name stat-alluvium
 #' @import ggplot2
-#' @seealso \code{\link{geom_alluvium}} for the corresponding geom,
+#' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
+#'   \code{\link{geom_alluvium}} for the corresponding geom,
 #'   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for
 #'   intra-axis boxes, and
 #'   \code{\link{ggalluvial}} for a shortcut method.
-#' @inheritParams layer
-#' @inheritParams stat_stratum
+#' @inheritParams stat-stratum
 #' @param lode.guidance The function to prioritize the axis variables for 
 #'   ordering the lodes within each stratum. Defaults to "zigzag", other options
 #'   include "rightleft", "leftright", "rightward", and "leftward" (see 
@@ -41,8 +41,7 @@
 #'   dimensions, giving the preferred ordering of alluvia at each axis. This 
 #'   will be used to order the lodes within each stratum by sorting the lodes 
 #'   first by stratum and then by the provided vectors.
-#' @example inst/examples/ex-alluvium.r
-#' @example inst/examples/ex-alluvium-bump.r
+#' @example inst/examples/ex-stat-alluvium.r
 #' @usage NULL
 #' @export
 stat_alluvium <- function(mapping = NULL,

@@ -44,3 +44,16 @@ ggplot(as.data.frame(Titanic),
             lode.ordering = lode_ord) +
   geom_stratum() + geom_text(stat = "stratum") +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
+
+# time series alluvia of WorldPhones data
+wph <- as.data.frame(as.table(WorldPhones))
+names(wph) <- c("Year", "Region", "Telephones")
+ggplot(wph,
+       aes(x = Year, stratum = Region, weight = Telephones)) +
+  geom_flow(aes(fill = Region, colour = Region), width = 0)
+
+# time series line plot of refugees data, sorted by country
+ggplot(data = alluvial::Refugees,
+       aes(x = year, weight = refugees, stratum = country)) +
+  geom_flow(aes(fill = country),
+            colour = "black", decreasing = NA, width = 0, knot.pos = 0)

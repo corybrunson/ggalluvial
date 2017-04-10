@@ -5,9 +5,17 @@
 \alias{geom-flow}
 \alias{geom_flow}
 \alias{GeomFlow}
-\title{Alluvial flows}
+\title{Alluvial flows between lodes}
 \format{An object of class \code{GeomFlow} (inherits from \code{Geom}, \code{ggproto}) of length 6.}
 \arguments{
+\item{stat}{The statistical transformation to use on the data;
+override the default.}
+
+\item{width}{Numeric; the width of each stratum, as a proportion of the
+distance between axes. Defaults to 1/3.}
+
+\item{axis_width}{Deprecated; alias for \code{width}.}
+
 \item{knot.pos}{The horizontal distance between a stratum (\code{width/2}
 from its axis) and the knot of the x-spline, as a proportion of the
 separation between strata. Defaults to 1/6.}
@@ -46,28 +54,69 @@ Currently, \code{group} is ignored.
 }
 
 \examples{
-# illustrate positioning
+# parallel sets
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
-           axis1 = Class, axis2 = Sex, axis3 = Age,
-           color = Survived)) +
-  geom_errorbar(stat = "stratum") +
-  geom_line(stat = "alluvium") +
-  geom_pointrange(stat = "alluvium") +
-  geom_text(stat = "stratum") +
-  scale_x_continuous(breaks = 1:3,
-                     labels = c("Class", "Sex", "Age"))
+           axis1 = Class, axis2 = Sex, axis3 = Age)) +
+  geom_flow(aes(fill = Survived),
+            width = 1/8, knot.pos = 0) +
+  geom_stratum(width = 1/8) + geom_text(stat = "stratum") +
+  scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age")) +
+  coord_flip()
 
-# declaration of groups (ignored)
+# use of strata and labels
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
-           axis1 = Class, axis2 = Sex, axis3 = Age,
-           group = Survived)) +
-  geom_alluvium() +
+           axis1 = Class, axis2 = Sex, axis3 = Age)) +
+  geom_flow() +
+  scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age")) +
+  geom_stratum() + geom_text(stat = "stratum") +
+  ggtitle("Alluvial diagram of Titanic passenger demographic data")
+
+# use of facets
+ggplot(as.data.frame(Titanic),
+       aes(weight = Freq,
+           axis1 = Class, axis2 = Sex)) +
+  geom_flow(aes(fill = Age)) +
+  geom_stratum() + geom_text(stat = "stratum") +
+  scale_x_continuous(breaks = 1:2, labels = c("Class", "Sex")) +
+  facet_wrap(~ Survived, scales = "fixed")
+
+# use of lode controls
+ggplot(as.data.frame(Titanic),
+       aes(weight = Freq,
+           axis1 = Class, axis2 = Sex, axis3 = Age)) +
+  geom_flow(aes(fill = Survived),
+            aes.bind = TRUE, lode.guidance = "rightward") +
+  geom_stratum() + geom_text(stat = "stratum") +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
+
+# use of lode ordering
+lode_ord <- replicate(n = 3, expr = sample(x = 32), simplify = FALSE)
+ggplot(as.data.frame(Titanic),
+       aes(weight = Freq,
+           axis1 = Class, axis2 = Sex, axis3 = Age)) +
+  geom_flow(aes(fill = Survived),
+            lode.ordering = lode_ord) +
+  geom_stratum() + geom_text(stat = "stratum") +
+  scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
+
+# time series alluvia of WorldPhones data
+wph <- as.data.frame(as.table(WorldPhones))
+names(wph) <- c("Year", "Region", "Telephones")
+ggplot(wph,
+       aes(x = Year, stratum = Region, weight = Telephones)) +
+  geom_flow(aes(fill = Region, colour = Region), width = 0)
+
+# time series line plot of refugees data, sorted by country
+ggplot(data = alluvial::Refugees,
+       aes(x = year, weight = refugees, stratum = country)) +
+  geom_flow(aes(fill = country),
+            colour = "black", decreasing = NA, width = 0, knot.pos = 0)
 }
 \seealso{
-\code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 
+\code{\link[ggplot2]{layer}} for additional arguments,
+  \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 
   intra-axis boxes, and
   \code{\link{ggalluvial}} for a shortcut method.
 }

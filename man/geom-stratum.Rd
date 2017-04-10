@@ -7,6 +7,15 @@
 \alias{GeomStratum}
 \title{Stratum rectangles}
 \format{An object of class \code{GeomStratum} (inherits from \code{GeomRect}, \code{Geom}, \code{ggproto}) of length 6.}
+\arguments{
+\item{stat}{The statistical transformation to use on the data;
+override the default.}
+
+\item{width}{Numeric; the width of each stratum, as a proportion of the
+distance between axes. Defaults to 1/3.}
+
+\item{axis_width}{Deprecated; alias for \code{width}.}
+}
 \description{
 \code{geom_stratum} receives a dataset of the horizontal (\code{x}) and
 vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the strata of an
@@ -60,6 +69,7 @@ ggplot(as.data.frame(Titanic),
   facet_wrap(~ Age, scales = "free_y")
 }
 \seealso{
-\code{\link{stat-stratum}} for the corresponding geom.
+\code{\link[ggplot2]{layer}} for additional arguments, and
+  \code{\link{stat_stratum}} for the corresponding geom.
 }
 \keyword{datasets}

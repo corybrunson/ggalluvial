@@ -8,6 +8,18 @@
 \title{Alluvia}
 \format{An object of class \code{GeomAlluvium} (inherits from \code{Geom}, \code{ggproto}) of length 6.}
 \arguments{
+\item{stat}{The statistical transformation to use on the data;
+override the default.}
+
+\item{width}{Numeric; the width of each stratum, as a proportion of the
+distance between axes. Defaults to 1/3.}
+
+\item{axis_width}{Deprecated; alias for \code{width}.}
+
+\item{knot.pos}{The horizontal distance between a stratum (\code{width/2}
+from its axis) and the knot of the x-spline, as a proportion of the
+separation between strata. Defaults to 1/6.}
+
 \item{ribbon_bend}{Deprecated; alias for \code{knot.pos}.}
 }
 \description{
@@ -37,17 +49,13 @@ Currently, \code{group} is ignored.
 }
 
 \examples{
-# illustrate positioning
+# basic
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age,
-           color = Survived)) +
-  geom_errorbar(stat = "stratum") +
-  geom_line(stat = "alluvium") +
-  geom_pointrange(stat = "alluvium") +
-  geom_text(stat = "stratum") +
-  scale_x_continuous(breaks = 1:3,
-                     labels = c("Class", "Sex", "Age"))
+           fill = Survived)) +
+  geom_alluvium() +
+  scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 
 # declaration of groups (ignored)
 ggplot(as.data.frame(Titanic),
@@ -56,18 +64,6 @@ ggplot(as.data.frame(Titanic),
            group = Survived)) +
   geom_alluvium() +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
-# time series alluvia of WorldPhones data
-wph <- as.data.frame(as.table(WorldPhones))
-names(wph) <- c("Year", "Region", "Telephones")
-ggplot(wph,
-       aes(x = Year, stratum = Region, weight = Telephones)) +
-  geom_flow(aes(fill = Region, colour = Region), width = 0)
-
-# time series line plot of refugees data, sorted by country
-ggplot(data = alluvial::Refugees,
-       aes(x = year, weight = refugees, stratum = country)) +
-  geom_flow(aes(fill = country),
-            colour = "black", decreasing = NA, width = 0, knot.pos = 0)
 
 # time series bump chart
 ggplot(alluvial::Refugees,
@@ -98,7 +94,8 @@ ggplot(data = Refugees,
   facet_wrap(~ region, scales = "fixed")
 }
 \seealso{
-\code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 
+\code{\link[ggplot2]{layer}} for additional arguments,
+  \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 
   intra-axis boxes, and
   \code{\link{ggalluvial}} for a shortcut method.
 }

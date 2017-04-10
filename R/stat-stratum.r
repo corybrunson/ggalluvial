@@ -20,11 +20,13 @@
 #' 
 #' @name stat-stratum
 #' @import ggplot2
-#' @seealso \code{\link{geom_stratum}} for the corresponding geom,
+#' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
+#'   \code{\link{geom_stratum}} for the corresponding geom,
 #'   \code{\link{stat_alluvium}} and \code{\link{geom_alluvium}} for
 #'   alluvial flows, and
 #'   \code{\link{ggalluvial}} for a shortcut method.
-#' @inheritParams layer
+#' @param geom The geometric object to use display the data;
+#'    override the default.
 #' @param decreasing Logical; whether to arrange the strata at each axis
 #'   in the order of the variable values (NA, the default),
 #'   with the largest on top (FALSE), or

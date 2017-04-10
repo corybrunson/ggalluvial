@@ -1,4 +1,4 @@
-#' Alluvial flows
+#' Alluvial flows between lodes
 #' 
 #' \code{geom_flow} receives a dataset of the horizontal (\code{x}) and 
 #' vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the \strong{lodes}
@@ -27,18 +27,18 @@
 #' 
 #' @name geom-flow
 #' @import ggplot2
-#' @seealso \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 
+#' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
+#'   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 
 #'   intra-axis boxes, and
 #'   \code{\link{ggalluvial}} for a shortcut method.
-#' @inheritParams layer
-#' @inheritParams geom_lode
+#' @inheritParams geom-lode
 #' @param aes.flow Character; how inter-lode flows assume aesthetics from lodes.
 #'   Options are "forward" and "backward".
 #' @param knot.pos The horizontal distance between a stratum (\code{width/2}
 #'   from its axis) and the knot of the x-spline, as a proportion of the
 #'   separation between strata. Defaults to 1/6.
 #' @param ribbon_bend Deprecated; alias for \code{knot.pos}.
-#' @example inst/examples/ex-alluvium.r
+#' @example inst/examples/ex-geom-flow.r
 #' @usage NULL
 #' @export
 geom_flow <- function(mapping = NULL,
