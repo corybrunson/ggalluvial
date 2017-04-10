@@ -8,11 +8,6 @@
 \title{Alluvial flows}
 \format{An object of class \code{GeomAlluvium} (inherits from \code{Geom}, \code{ggproto}) of length 6.}
 \arguments{
-\item{width}{Numeric; the width of each stratum, as a proportion of the
-distance between axes. Defaults to 1/3.}
-
-\item{axis_width}{Deprecated; alias for \code{width}.}
-
 \item{knot.pos}{The horizontal distance between a stratum (\code{width/2}
 from its axis) and the knot of the x-spline, as a proportion of the
 separation between strata. Defaults to 1/6.}

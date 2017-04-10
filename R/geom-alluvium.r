@@ -31,11 +31,9 @@
 #'   intra-axis boxes, \code{\link{alluvium_ts}} for a time series
 #'   implementation, and \code{\link{ggalluvial}} for a shortcut method.
 #' @inheritParams layer
+#' @inheritParams geom_lode
 #' @param aes.flow Character; how inter-lode flows assume aesthetics from lodes.
 #'   Options are "forward" and "backward".
-#' @param width Numeric; the width of each stratum, as a proportion of the
-#'   distance between axes. Defaults to 1/3.
-#' @param axis_width Deprecated; alias for \code{width}.
 #' @param knot.pos The horizontal distance between a stratum (\code{width/2}
 #'   from its axis) and the knot of the x-spline, as a proportion of the
 #'   separation between strata. Defaults to 1/6.

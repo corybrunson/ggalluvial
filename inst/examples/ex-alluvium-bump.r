@@ -12,4 +12,4 @@ ggplot(alluvial::Refugees,
        aes(weight = refugees,
            x = year, stratum = country, alluvium = country,
            fill = country)) +
-  geom_alluvium()
+  geom_alluvium() + geom_lode()
