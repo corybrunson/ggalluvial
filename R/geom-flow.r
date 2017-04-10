@@ -28,8 +28,8 @@
 #' @name geom-flow
 #' @import ggplot2
 #' @seealso \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 
-#'   intra-axis boxes, \code{\link{alluvium_ts}} for a time series
-#'   implementation, and \code{\link{ggalluvial}} for a shortcut method.
+#'   intra-axis boxes, and
+#'   \code{\link{ggalluvial}} for a shortcut method.
 #' @inheritParams layer
 #' @inheritParams geom_lode
 #' @param aes.flow Character; how inter-lode flows assume aesthetics from lodes.

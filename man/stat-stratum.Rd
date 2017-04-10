@@ -7,6 +7,12 @@
 \alias{StatStratum}
 \title{Stratum positions}
 \format{An object of class \code{StatStratum} (inherits from \code{Stat}, \code{ggproto}) of length 3.}
+\arguments{
+\item{decreasing}{Logical; whether to arrange the strata at each axis
+in the order of the variable values (NA, the default),
+with the largest on top (FALSE), or
+with the largest on bottom (TRUE).}
+}
 \description{
 Given a dataset with alluvial structure, \code{stat_stratum} calculates the
 centroids of the strata at each axis, together with their weights (heights).
@@ -58,8 +64,7 @@ ggplot(as.data.frame(Titanic),
 \seealso{
 \code{\link{geom_stratum}} for the corresponding geom,
   \code{\link{stat_alluvium}} and \code{\link{geom_alluvium}} for
-  alluvial flows,
-  \code{\link{alluvium_ts}} for a time series implementation, and 
+  alluvial flows, and
   \code{\link{ggalluvial}} for a shortcut method.
 }
 \keyword{datasets}

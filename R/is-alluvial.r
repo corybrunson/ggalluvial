@@ -76,8 +76,8 @@ is_alluvial_lodes <- function(data, key, value, id, weight, logical = TRUE) {
       message("Lode weights are non-numeric.")
       return(if (logical) FALSE else "none")
     }
-    if (splinters(data[[weight]], data[[id]]))
-      message("Non-constant lode weights within ids.")
+    #if (splinters(data[[weight]], data[[id]]))
+    #  message("Non-constant lode weights within ids.")
   }
   
   if (logical) TRUE else "lodes"

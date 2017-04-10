@@ -26,9 +26,7 @@
 #' @import ggplot2
 #' @seealso \code{\link{geom_alluvium}} for alluvial flows,
 #'   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 
-#'   intra-axis stratum rectangles,
-#'   \code{\link{alluvium_ts}} for a time series
-#'   implementation, and
+#'   intra-axis stratum rectangles, and
 #'   \code{\link{ggalluvial}} for a shortcut method.
 #' @inheritParams layer
 #' @param width Numeric; the width of each stratum, as a proportion of the

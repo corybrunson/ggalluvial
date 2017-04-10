@@ -25,10 +25,10 @@
 #' @import ggplot2
 #' @seealso \code{\link{geom_alluvium}} for the corresponding geom,
 #'   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for
-#'   intra-axis boxes, 
-#'   \code{\link{alluvium_ts}} for a time series implementation, and 
+#'   intra-axis boxes, and
 #'   \code{\link{ggalluvial}} for a shortcut method.
 #' @inheritParams layer
+#' @inheritParams stat_stratum
 #' @param lode.guidance The function to prioritize the axis variables for 
 #'   ordering the lodes within each stratum. Defaults to "zigzag", other options
 #'   include "rightleft", "leftright", "rightward", and "leftward" (see 
@@ -42,11 +42,14 @@
 #'   will be used to order the lodes within each stratum by sorting the lodes 
 #'   first by stratum and then by the provided vectors.
 #' @example inst/examples/ex-alluvium.r
+#' @example inst/examples/ex-alluvium-bump.r
+#' @example inst/examples/ex-alluvium-supp.r
 #' @usage NULL
 #' @export
 stat_alluvium <- function(mapping = NULL,
                           data = NULL,
                           geom = "alluvium",
+                          decreasing = NA,
                           na.rm = FALSE,
                           show.legend = NA,
                           inherit.aes = TRUE,
@@ -56,6 +59,7 @@ stat_alluvium <- function(mapping = NULL,
     data = data,
     mapping = mapping,
     geom = geom,
+    decreasing = decreasing,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
@@ -121,6 +125,7 @@ StatAlluvium <- ggproto(
   },
   
   compute_panel = function(self, data, scales,
+                           decreasing = NA,
                            lode.guidance = "zigzag",
                            aes.bind = FALSE,
                            lode.ordering = NULL) {
@@ -137,13 +142,19 @@ StatAlluvium <- ggproto(
                     dplyr::n_distinct(data$x)))
     }
     
-    # alluvial fields
-    alluv_col <- c("x", "stratum", "alluvium")
     # aesthetic fields
-    aes_col <- setdiff(names(data), c(alluv_col, "weight", "PANEL", "group"))
-    # put axis fields into alluvial form
-    alluv <- to_alluvia(data[, alluv_col],
-                        key = "x", value = "stratum", id = "alluvium")
+    aes_col <- setdiff(names(data),
+                       c("x", "stratum", "alluvium",
+                         "weight", "PANEL", "group"))
+    # put axis fields into alluvial form, according to 'decreasing' parameter
+    if (is.na(decreasing)) {
+      alluv <- alluviate(data, "x", "stratum", "alluvium")
+    } else if (decreasing) {
+      alluv <- alluviate(data, "x", "weight", "alluvium")
+      alluv <- transform(alluv, weight = -weight)
+    } else {
+      alluv <- alluviate(data, "x", "weight", "alluvium")
+    }
     # sort by 'alluvium' (to match 'data')
     alluv <- alluv[order(alluv$alluvium), ]
     # axis and aesthetic indices

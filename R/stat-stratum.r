@@ -22,16 +22,20 @@
 #' @import ggplot2
 #' @seealso \code{\link{geom_stratum}} for the corresponding geom,
 #'   \code{\link{stat_alluvium}} and \code{\link{geom_alluvium}} for
-#'   alluvial flows,
-#'   \code{\link{alluvium_ts}} for a time series implementation, and 
+#'   alluvial flows, and
 #'   \code{\link{ggalluvial}} for a shortcut method.
 #' @inheritParams layer
+#' @param decreasing Logical; whether to arrange the strata at each axis
+#'   in the order of the variable values (NA, the default),
+#'   with the largest on top (FALSE), or
+#'   with the largest on bottom (TRUE).
 #' @example inst/examples/ex-stratum.r
 #' @usage NULL
 #' @export
 stat_stratum <- function(mapping = NULL,
                          data = NULL,
                          geom = "stratum",
+                         decreasing = NA,
                          show.legend = NA,
                          inherit.aes = TRUE,
                          na.rm = FALSE,
@@ -41,6 +45,7 @@ stat_stratum <- function(mapping = NULL,
     mapping = mapping,
     data = data,
     geom = geom,
+    decreasing = decreasing,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
@@ -88,7 +93,8 @@ StatStratum <- ggproto(
     data
   },
   
-  compute_panel = function(self, data, scales) {
+  compute_panel = function(self, data, scales,
+                           decreasing = NA) {
     
     # remove empty lodes (including labels)
     data <- subset(data, weight > 0)
@@ -110,6 +116,15 @@ StatStratum <- ggproto(
     #                  by = data[, c("x", "stratum")],
     #                  FUN = sum)
     #names(data) <- c("x", "label", "weight")
+    
+    # sort according to 'decreasing' parameter
+    if (!is.na(decreasing)) {
+      data <- if (decreasing) {
+        dplyr::arrange(data, PANEL, x, weight)
+      } else {
+        dplyr::arrange(data, PANEL, x, weight)
+      }
+    }
     
     # cumulative weights
     data$y <- NA

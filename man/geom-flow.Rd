@@ -115,7 +115,7 @@ ggplot(as.data.frame(Titanic),
 }
 \seealso{
 \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 
-  intra-axis boxes, \code{\link{alluvium_ts}} for a time series
-  implementation, and \code{\link{ggalluvial}} for a shortcut method.
+  intra-axis boxes, and
+  \code{\link{ggalluvial}} for a shortcut method.
 }
 \keyword{datasets}

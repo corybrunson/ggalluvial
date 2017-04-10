@@ -6,8 +6,7 @@
 #' @name ggalluvial
 #' @import ggplot2
 #' @seealso \code{\link{stat_stratum}}, \code{\link{geom_stratum}},
-#'   \code{\link{stat_alluvium}}, \code{\link{geom_alluvium}}, and
-#'   \code{\link{alluvium_ts}}
+#'   \code{\link{stat_alluvium}}, and \code{\link{geom_alluvium}}
 #' @export
 #' @param ... Arguments passed to \code{ggplot} and inherited by 
 #'   \code{geom_alluvium} and \code{geom_stratum}.
@@ -94,7 +93,7 @@ ggalluvial.formula <- function(formula, data = NULL, weight, ...) {
     formula_aes$colour <- grp
     
     ggplot(data = luv_data, mapping = formula_aes, ...) +
-      geom_alluvium_ts()
+      geom_alluvium()
     
   }
 }

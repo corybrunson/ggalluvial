@@ -43,6 +43,14 @@ na_keep <- function(data, type) {
   data
 }
 
+# build alluvial dataset for reference during lode-ordering
+alluviate <- function(data, key, value, id) {
+  to_alluvia(
+    data[, c(key, value, id)],
+    key = key, value = value, id = id
+  )
+}
+
 # automatically summarize over numeric, character, and factor fields
 auto_aggregate <- function(data, by) {
   agg <- aggregate(x = rep(1, nrow(data)),
