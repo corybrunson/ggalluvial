@@ -45,10 +45,10 @@ stat_stratum <- function(mapping = NULL,
     mapping = mapping,
     data = data,
     geom = geom,
-    decreasing = decreasing,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
+      decreasing = decreasing,
       na.rm = na.rm,
       ...
     )
@@ -139,3 +139,50 @@ StatStratum <- ggproto(
               ymax = y + weight / 2)
   }
 )
+
+# automatically summarize over numeric, character, and factor fields
+auto_aggregate <- function(data, by) {
+  agg <- aggregate(x = rep(1, nrow(data)),
+                   by = data[, by],
+                   FUN = unique)
+  agg[[3]] <- NULL
+  agg_vars <- setdiff(names(data), by)
+  for (var in agg_vars) {
+    agg2 <- aggregate(x = data[[var]],
+                      by = data[, by],
+                      FUN = if (var %in% c("size", "linetype",
+                                           "fill", "color", "alpha",
+                                           "PANEL", "group")) {
+                        only
+                      } else {
+                        agg_fn(data[[var]])
+                      })
+    names(agg2) <- c(by, var)
+    agg <- merge(agg, agg2, by = by, all = TRUE)
+  }
+  agg[do.call(order, agg[, by]), ]
+}
+
+# single unique value, or else NA
+only <- function(x) {
+  uniq <- unique(x)
+  if (length(uniq) == 1) {
+    uniq
+  } else {
+    NA
+  }
+}
+
+# select aggregation function based on variable type
+agg_fn <- function(x) {
+  if (is.character(x) | is.factor(x)) {
+    function(y) {
+      uniq <- unique(y)
+      if (length(uniq) == 1) as.character(uniq) else NA
+    }
+  } else if (is.numeric(x)) {
+    sum
+  } else {
+    function(y) NA
+  }
+}

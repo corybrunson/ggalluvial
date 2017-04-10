@@ -34,7 +34,6 @@
 #' @param ribbon_bend Deprecated; alias for \code{knot.pos}.
 #' @example inst/examples/ex-alluvium.r
 #' @example inst/examples/ex-alluvium-bump.r
-#' @example inst/examples/ex-alluvium-supp.r
 #' @usage NULL
 #' @export
 geom_alluvium <- function(mapping = NULL,

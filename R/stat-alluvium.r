@@ -43,7 +43,6 @@
 #'   first by stratum and then by the provided vectors.
 #' @example inst/examples/ex-alluvium.r
 #' @example inst/examples/ex-alluvium-bump.r
-#' @example inst/examples/ex-alluvium-supp.r
 #' @usage NULL
 #' @export
 stat_alluvium <- function(mapping = NULL,
@@ -59,10 +58,10 @@ stat_alluvium <- function(mapping = NULL,
     data = data,
     mapping = mapping,
     geom = geom,
-    decreasing = decreasing,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
+      decreasing = decreasing,
       na.rm = na.rm,
       ...
     )
@@ -93,6 +92,13 @@ StatAlluvium <- ggproto(
   },
   
   setup_data = function(data, params) {
+    
+    # assign 'stratum' to 'alluvium' if 'alluvium' not provided, and vice-versa
+    if (is.null(data$alluvium) & !is.null(data$stratum)) {
+      data <- transform(data, alluvium = stratum)
+    } else if (is.null(data$stratum) & !is.null(data$alluvium)) {
+      data <- transform(data, stratum = alluvium)
+    }
     
     # assign uniform weight if not provided
     if (is.null(data$weight)) {
@@ -204,3 +210,11 @@ StatAlluvium <- ggproto(
     data
   }
 )
+
+# build alluvial dataset for reference during lode-ordering
+alluviate <- function(data, key, value, id) {
+  to_alluvia(
+    data[, c(key, value, id)],
+    key = key, value = value, id = id
+  )
+}
