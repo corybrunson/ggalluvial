@@ -18,7 +18,7 @@ ggplot(as.data.frame(Titanic),
 ggplot(alluvial::Refugees,
        aes(weight = refugees,
            x = year, stratum = country,
-           fill = country)) +
+           fill = country, colour = country)) +
   geom_alluvium(width = 1/4, alpha = 2/3, decreasing = FALSE)
 
 # load refugees data from alluvial
@@ -39,5 +39,5 @@ country_regions <- c(
 Refugees$region <- country_regions[Refugees$country]
 ggplot(data = Refugees,
        aes(x = year, weight = refugees, stratum = country)) +
-  geom_alluvium(aes(fill = country), decreasing = FALSE) +
+  geom_alluvium(aes(fill = country, colour = country), decreasing = FALSE) +
   facet_wrap(~ region, scales = "fixed")

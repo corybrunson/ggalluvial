@@ -105,16 +105,16 @@ GeomAlluvium <- ggproto(
     data <- transform(data, width = width)
     
     first_row <- data[1, setdiff(names(data),
-                                 c("x",
-                                   "y", "ymin", "ymax",
-                                   "width", "knot.pos")),
+                                 c("x", "xmin", "xmax", "width",
+                                   "y", "ymin", "ymax", "weight",
+                                   "knot.pos")),
                       drop = FALSE]
     rownames(first_row) <- NULL
     
     if (nrow(data) == 1) {
       # spline coordinates (one axis)
       spline_data <- data.frame(
-        x = data$x + width / 2 * c(-1, 1, 1, -1),
+        x = data$x + data$width / 2 * c(-1, 1, 1, -1),
         y = data$ymin + first_row$weight * c(0, 0, 1, 1),
         shape = rep(0, 4)
       )
@@ -125,11 +125,12 @@ GeomAlluvium <- ggproto(
       x_oneway <- rep(data$x, c(3, rep(4, nrow(data) - 2), 3)) +
         w_oneway / 2 * c(-1, rep(c(1, 1, -1, -1), nrow(data) - 1), 1) +
         k_oneway * (1 - w_oneway) * c(0, rep(c(0, 1, -1, 0), nrow(data) - 1), 0)
-      y_oneway <- rep(data$ymin, c(3, rep(4, nrow(data) - 2), 3))
+      ymin_oneway <- rep(data$ymin, c(3, rep(4, nrow(data) - 2), 3))
+      ymax_oneway <- rep(data$ymax, c(3, rep(4, nrow(data) - 2), 3))
       shape_oneway <- c(0, rep(c(0, 1, 1, 0), nrow(data) - 1), 0)
       spline_data <- data.frame(
         x = c(x_oneway, rev(x_oneway)),
-        y = c(y_oneway, rev(y_oneway) + first_row$weight),
+        y = c(ymin_oneway, rev(ymax_oneway)),
         shape = rep(shape_oneway, 2)
       )
     }

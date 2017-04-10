@@ -144,21 +144,21 @@ StatStratum <- ggproto(
 
 # automatically summarize over numeric, character, and factor fields
 auto_aggregate <- function(data, by) {
-  agg <- aggregate(x = rep(1, nrow(data)),
-                   by = data[, by],
-                   FUN = unique)
+  agg <- stats::aggregate(x = rep(1, nrow(data)),
+                          by = data[, by],
+                          FUN = unique)
   agg[[3]] <- NULL
   agg_vars <- setdiff(names(data), by)
   for (var in agg_vars) {
-    agg2 <- aggregate(x = data[[var]],
-                      by = data[, by],
-                      FUN = if (var %in% c("size", "linetype",
-                                           "fill", "color", "alpha",
-                                           "PANEL", "group")) {
-                        only
-                      } else {
-                        agg_fn(data[[var]])
-                      })
+    agg2 <- stats::aggregate(x = data[[var]],
+                             by = data[, by],
+                             FUN = if (var %in% c("size", "linetype",
+                                                  "fill", "color", "alpha",
+                                                  "PANEL", "group")) {
+                               only
+                             } else {
+                               agg_fn(data[[var]])
+                             })
     names(agg2) <- c(by, var)
     agg <- merge(agg, agg2, by = by, all = TRUE)
   }

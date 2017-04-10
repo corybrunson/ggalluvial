@@ -192,7 +192,7 @@ StatAlluvium <- ggproto(
       subdata <- subset(data, x == names(alluv)[axis_ind[i]])
       cumweight <- cumsum(subdata$weight[lode_seq])
       ymin_seq <- c(0, cumweight)
-      ymax_seq <- c(cumweight, sum(subdata$weight))
+      ymax_seq <- c(cumweight, sum(subdata$weight[lode_seq]))
       # lode breaks
       data.frame(x = I(names(alluv)[axis_ind[i]]),
                  ymin = ymin_seq[order(lode_seq)],
@@ -200,11 +200,12 @@ StatAlluvium <- ggproto(
     }
     lode_positions <- do.call(rbind, lapply(1:length(axis_ind), position_lodes))
     data <- cbind(data, lode_positions[, -1])
+    stopifnot(all(data$weight == data$ymax - data$ymin))
     
     # add vertical centroids and 'group' to encode alluvia
     data <- transform(data,
                       y = (ymin + ymax) / 2,
-                      group = alluvium)
+                      group = as.numeric(alluvium))
     
     data
   }
