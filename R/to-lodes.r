@@ -11,6 +11,7 @@
 #'   (value), and alluvium (identifying) variables. Default to "key", "value",
 #'   and "id".
 #' @param axes Numeric or character vector; which variables to use as axes.
+#' @export
 to_lodes <- function(data,
                      key = "key", value = "value", id = "id",
                      axes) {

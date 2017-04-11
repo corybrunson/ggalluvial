@@ -10,7 +10,7 @@ for (i in 1:3) {
 }
 # convert NSA table to lode form
 ggalluvial::is_alluvial(tableNSA, axes = 1:3, weight = "freq")
-nsa <- ggalluvial:::to_lodes(
+nsa <- ggalluvial::to_lodes(
   tableNSA,
   key = "survey", value = "response", id = "subject",
   axes = 1:3

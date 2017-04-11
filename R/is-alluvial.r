@@ -36,8 +36,8 @@
 #'   corresponding to the axi(e)s (variable(s)).
 #' @param weight Optional numeric or character; the fields of \code{data}
 #'   corresponding to alluvium or lode weights (heights when plotted).
-#' @export
 #' @example inst/examples/ex-is-alluvial.r
+#' @export
 is_alluvial <- function(data, ..., logical = TRUE) {
   
   # determine method based on arguments given

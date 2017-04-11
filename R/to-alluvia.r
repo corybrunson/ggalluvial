@@ -9,6 +9,7 @@
 #' @param data Data frame.
 #' @param key,value,id Numeric or character; the fields corresponding to the
 #'   axis (variable), stratum (value), and alluvium (identifying) variables.
+#' @export
 to_alluvia <- function(data, key, value, id) {
   
   if (missing(key) | missing(value) | missing(id)) {
