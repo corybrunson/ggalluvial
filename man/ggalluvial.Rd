@@ -2,30 +2,35 @@
 % Please edit documentation in R/ggalluvial.r
 \name{ggalluvial}
 \alias{ggalluvial}
-\alias{ggalluvial.default}
-\alias{ggalluvial.formula}
-\title{Quick alluvial diagrams and formula interface}
+\alias{ggalluvial_lodes}
+\alias{ggalluvial_alluvia}
+\alias{ggalluvial_formula}
+\title{Formula interface for alluvial diagrams}
 \usage{
 ggalluvial(...)
 
-ggalluvial.default(...)
+ggalluvial_lodes(..., incl.strata = TRUE)
 
-ggalluvial.formula(formula, data = NULL, weight, ...)
+ggalluvial_alluvia(..., incl.strata = TRUE)
+
+ggalluvial_formula(formula, data = NULL, weight, incl.strata = TRUE, ...)
 }
 \arguments{
 \item{...}{Arguments passed to \code{ggplot} and inherited by 
 \code{geom_alluvium} and \code{geom_stratum}.}
 
-\item{formula}{A formula to specify the axes and alluvial divisions}
+\item{incl.strata}{Logical; whether to plot strata over alluvia.}
 
-\item{data}{A data frame or frequency table}
+\item{formula}{A formula to specify the axes and alluvial divisions.}
+
+\item{data}{A data frame or frequency table.}
 
 \item{weight}{A weight variable, from \code{data} or of compatible length 
-with the elements of \code{formula}}
+with the elements of \code{formula}.}
 }
 \description{
-Produces an alluvial diagram with flows, boxes, and labels, optionally based
-on a formula in terms of the data elements
+\code{ggalluvial} produces an alluvial diagram with flows, boxes, and labels,
+optionally based on a formula in terms of the data elements.
 }
 \seealso{
 \code{\link{stat_stratum}}, \code{\link{geom_stratum}},

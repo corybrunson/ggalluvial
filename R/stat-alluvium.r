@@ -103,7 +103,6 @@ StatAlluvium <- ggproto(
     if (is.null(data$weight)) {
       data$weight <- rep(1, nrow(data))
     }
-    
     type <- get_alluvial_type(data)
     if (type == "none") {
       stop("Data is not in a recognized alluvial form ",

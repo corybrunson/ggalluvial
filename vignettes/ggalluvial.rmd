@@ -9,4 +9,8 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
 ---
 
-This vignette should illustrate the various stats and geoms in the **ggalluvial** package and how to produce the most popular variants on the theme (mosaic-like strata, parallel sets, categorical alluvial diagrams, and weighted bump plots).
+This vignette should
+
+- describe the alluvial data structures recognized by **ggalluvial**,
+- illustrate each of the **ggalluvial** stats and geoms, and
+- showcase some of the most popular variants on the theme (including a mosaic-like full-width stratum plot, a parallel sets plot, a categorical alluvial diagram, and a weighted bump plot).

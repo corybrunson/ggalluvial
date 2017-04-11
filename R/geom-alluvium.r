@@ -63,7 +63,6 @@ geom_alluvium <- function(mapping = NULL,
   )
 }
 
-
 #' @rdname geom-alluvium
 #' @usage NULL
 #' @export
