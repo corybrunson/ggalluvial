@@ -1,0 +1,12 @@
+---
+title: "alluvial diagrams in ggplot2"
+author: "Jason Cory Brunson"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{alluvial diagrams in ggplot2}
+  %\VignetteEngine{knitr::rmarkdown}
+---
+
+This vignette should illustrate the various stats and geoms in the **ggalluvial** package and how to produce the most popular variants on the theme (mosaic-like strata, parallel sets, categorical alluvial diagrams, and weighted bump plots).
