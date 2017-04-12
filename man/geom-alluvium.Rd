@@ -57,16 +57,6 @@ ggplot(as.data.frame(Titanic),
   geom_alluvium() +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 
-# parallel sets
-ggplot(as.data.frame(Titanic),
-       aes(weight = Freq,
-           axis1 = Class, axis2 = Sex, axis3 = Age)) +
-  geom_alluvium(aes(fill = Survived),
-                width = 1/8, knot.pos = 0) +
-  geom_stratum(width = 1/8) + geom_text(stat = "stratum") +
-  scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age")) +
-  coord_flip()
-
 # declaration of groups (ignored)
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
