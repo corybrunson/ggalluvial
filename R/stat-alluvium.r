@@ -137,12 +137,20 @@ StatAlluvium <- ggproto(
                            aes.bind = FALSE,
                            lode.ordering = NULL) {
     
-    # aggregate up to weight
+    # aggregate up to weight, respecting 'na.rm' parameter
     if (aggregate.wts) {
-      data <- aggregate(x = data$weight,
-                        by = data[, setdiff(names(data), "weight")],
-                        FUN = sum)
-      names(data)[ncol(data)] <- "weight"
+      # http://stackoverflow.com/a/28182288/4556798
+      group_cols <- setdiff(names(data), "weight")
+      dots <- lapply(group_cols, as.symbol)
+      data <- as.data.frame(dplyr::summarize(dplyr::group_by_(data,
+                                                              .dots = dots),
+                                             weight = sum(weight)))
+      #data <- aggregate(x = data$weight,
+      #                  by = lapply(data[, setdiff(names(data), "weight")],
+      #                              addNA),
+      #                  FUN = sum,
+      #                  simplify = TRUE)
+      #names(data)[ncol(data)] <- "weight"
     }
     
     # sort data by 'x' then 'alluvium' (to match 'alluv')
