@@ -13,7 +13,7 @@ ggalluvial(data = as.data.frame(Titanic),
 ggalluvial(Survived ~ Age + Sex + Class, Titanic)
 
 # formula interface with only one dependent variable (for time series)
-ggalluvial(Survived ~ Class, Titanic)
+ggalluvial(Survived ~ Class, Titanic, incl.strata = FALSE)
 
 # formula interface for time series of Refugee data
 ggalluvial(country ~ year, alluvial::Refugees, weight = "refugees",

@@ -97,12 +97,6 @@ names(wph) <- c("Year", "Region", "Telephones")
 ggplot(wph,
        aes(x = Year, stratum = Region, weight = Telephones)) +
   geom_flow(aes(fill = Region, colour = Region), width = 0)
-
-# time series line plot of refugees data, sorted by country
-ggplot(data = alluvial::Refugees,
-       aes(x = year, weight = refugees, stratum = country)) +
-  geom_flow(aes(fill = country),
-            colour = "black", decreasing = NA, width = 0, knot.pos = 0)
 }
 \seealso{
 \code{\link[ggplot2]{layer}} for additional arguments,

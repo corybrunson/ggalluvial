@@ -37,7 +37,8 @@ ggalluvial_lodes <- function(..., incl.strata = TRUE) {
     geom_alluvium()
   if (incl.strata) {
     gg <- gg +  
-      geom_stratum() + geom_text(stat = "stratum")
+      geom_stratum(color = "black", fill = "white") +
+      geom_text(stat = "stratum", color = "black")
   }
   gg
 }
@@ -55,7 +56,8 @@ ggalluvial_alluvia <- function(..., incl.strata = TRUE) {
     scale_x_continuous(breaks = axis_breaks, labels = axis_labels)
   if (incl.strata) {
     gg <- gg +
-      geom_stratum() + geom_text(stat = "stratum")
+      geom_stratum(color = "black", fill = "white") +
+      geom_text(stat = "stratum", color = "black")
   }
   gg
 }
@@ -127,7 +129,8 @@ ggalluvial_formula <- function(formula, data = NULL, weight,
       geom_alluvium()
     if (incl.strata) {
       gg <- gg +
-        geom_stratum() + geom_text(stat = "stratum")
+        geom_stratum(color = "black", fill = "white") +
+        geom_text(stat = "stratum", color = "black")
     }
     gg
   }

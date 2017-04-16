@@ -29,6 +29,8 @@
 #'   intra-axis boxes, and
 #'   \code{\link{ggalluvial}} for a shortcut method.
 #' @inheritParams stat-stratum
+#' @param aggregate.wts Logical; whether to aggregate weights across otherwise
+#'   equivalent rows before computing lode and flow positions. Defaults to TRUE.
 #' @param lode.guidance The function to prioritize the axis variables for 
 #'   ordering the lodes within each stratum. Defaults to "zigzag", other options
 #'   include "rightleft", "leftright", "rightward", and "leftward" (see 
@@ -130,9 +132,18 @@ StatAlluvium <- ggproto(
   
   compute_panel = function(self, data, scales,
                            decreasing = NA,
+                           aggregate.wts = TRUE,
                            lode.guidance = "zigzag",
                            aes.bind = FALSE,
                            lode.ordering = NULL) {
+    
+    # aggregate up to weight
+    if (aggregate.wts) {
+      data <- aggregate(x = data$weight,
+                        by = data[, setdiff(names(data), "weight")],
+                        FUN = sum)
+      names(data)[ncol(data)] <- "weight"
+    }
     
     # sort data by 'x' then 'alluvium' (to match 'alluv')
     data <- data[do.call(order, data[, c("x", "alluvium")]), ]

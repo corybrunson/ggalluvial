@@ -31,7 +31,7 @@
 #'   in the order of the variable values (NA, the default),
 #'   with the largest on top (FALSE), or
 #'   with the largest on bottom (TRUE).
-#' @example inst/examples/ex-stratum.r
+#' @example inst/examples/ex-stat-stratum.r
 #' @usage NULL
 #' @export
 stat_stratum <- function(mapping = NULL,
@@ -112,7 +112,6 @@ StatStratum <- ggproto(
     
     # aggregate data by 'x' and 'stratum'
     data <- auto_aggregate(data = data, by = c("x", "stratum"))
-    
     # aggregate 'weight' by 'x' and 'y' (lose 'group')
     #data <- aggregate(x = data$weight,
     #                  by = data[, c("x", "stratum")],

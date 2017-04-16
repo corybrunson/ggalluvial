@@ -21,11 +21,17 @@ ggplot(alluvial::Refugees,
            fill = country, colour = country)) +
   geom_alluvium(width = 1/4, alpha = 2/3, decreasing = FALSE)
 
+# time series line plot of refugees data, sorted by country
+ggplot(data = alluvial::Refugees,
+       aes(x = year, weight = refugees, stratum = country)) +
+  geom_alluvium(aes(fill = country),
+                colour = "black", decreasing = NA, width = 0, knot.pos = 0)
+
 # rightward flow aesthetics for vaccine survey data
 data(nsa)
 ggplot(nsa,
        aes(x = survey, stratum = response, alluvium = subject,
            weight = freq, fill = response, label = round(a, 3))) +
-  geom_lode() + geom_flow(lode.guidance = "rightward") +
+  geom_lode() + geom_flow() +
   geom_stratum(alpha = 0) +
   geom_text(stat = "stratum")
