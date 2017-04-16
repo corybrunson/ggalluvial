@@ -7,6 +7,9 @@
 # Mac OS X
 **/.DS_Store
 
+# background infrastructure
+*-raw
+
 # litter
 sandbox
 
