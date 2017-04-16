@@ -4,5 +4,5 @@
 #'
 #' @format An alluvial data frame.
 #' @source RAND American Life Panel \url{https://alpdata.rand.org/}
-#' @name nsa
+#' @name vaccinations
 NULL

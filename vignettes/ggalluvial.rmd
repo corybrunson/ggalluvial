@@ -115,8 +115,8 @@ We can illustrate this usage on data from the influenza vaccination surveys cond
 For oesthetic reasons, `geom_alluvium()` insists on applying aesthetics uniformly across each alluvium, so to achieve this effect we invoke the auxiliary functions `geom_lode()` and `geom_flow()`, which plot the segments of each alluvium within (lodes) and between (flows) strata separately:
 
 ```{r }
-data(nsa)
-ggplot(nsa,
+data(vaccinations)
+ggplot(vaccinations,
        aes(x = survey, stratum = response, alluvium = subject,
            weight = freq,
            fill = response)) +
