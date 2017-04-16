@@ -8,7 +8,7 @@
 **/.DS_Store
 
 # background infrastructure
-*-raw
+*-raw/
 
 # litter
 sandbox
