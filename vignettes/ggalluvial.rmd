@@ -49,7 +49,7 @@ ggplot(as.data.frame(UCBAdmissions),
 ```
 
 An important feature of these diagrams is the meaningfulness of the vertical axis: No gaps are inserted between the strata, so the total height of the diagram reflects the cumulative weight of the observations. The diagrams produced by **ggalluvial** conform (somewhat; see below) to the "grammar of graphics" principles of **ggplot2**, and this prevents users from producing "free-floating" diagrams like the Sankey diagrams showcased [here](https://developers.google.com/chart/interactive/docs/gallery/sankey).
-**ggalluvial** parameters and existing **ggplot2** functionality can also produce [parallel sets](https://eagereyes.org/parallel-sets), illustrated here using the `Titanic` dataset:[^ggparallel]
+**ggalluvial** parameters and existing **ggplot2** functionality can also produce [parallel sets](https://eagereyes.org/parallel-sets) plots, illustrated here using the `Titanic` dataset:[^ggparallel]
 
 [^ggparallel]: A greater variety of parallel sets plots are implemented in [the **ggparallel** package](https://github.com/heike/ggparallel).
 
@@ -65,17 +65,17 @@ ggplot(as.data.frame(Titanic),
   ggtitle("Titanic survival by class and sex")
 ```
 
-This format and functionality are useful and will be retained in future versions. They also involve some conspicuous deviations from **ggplot2** standards:
+This format and functionality are useful and will be retained in future versions. They also involve some conspicuous deviations from **ggplot2** norms:
 
 - The `axis[0-9]*` position aesthetics are non-standard.
 - `stat_alluvium()` ignores any argument to the `group` aesthetic; instead, `StatAlluvium$compute_panel()` uses `group` to link the rows of the internally-transformed dataset that correspond to the same alluvium.
 - The horizontal axis must be manually corrected (using `scale_x_continuous()`) to reflect the implicit categorical variable identifying the axis.
 
-Furthermore, format aesthetics like `fill` are necessarily fixed for each alluvium; they cannot, for example, change from axis to axis according to the value taken at each. This means that this format and functionality cannot produce alluvial diagrams with the color schemes featured [here](https://epijim.uk/code-snippets/eq5d/) ("Alluvial diagram") and [here](https://developers.google.com/chart/interactive/docs/gallery/sankey) ("Controlling colors").
+Furthermore, format aesthetics like `fill` are necessarily fixed for each alluvium; they cannot, for example, change from axis to axis according to the value taken at each. This means that, although it can reproduce the branching-tree structure of parallel sets, this format and functionality cannot produce alluvial diagrams with the color schemes featured [here](https://epijim.uk/code-snippets/eq5d/) ("Alluvial diagram") and [here](https://developers.google.com/chart/interactive/docs/gallery/sankey) ("Controlling colors"), which are "reset" at each axis.
 
 ### One row per lode
 
-The second "alluvial" format recognized by **ggalluvial** contains one row per lode, and can be understood as the result of "gathering" (in the **dplyr** sense) the axis columns of a dataset of the preceding kind (one row per alluvium) into a "key" column indicating the axis and a "value" column indicating the value taken at that axis. The crucial difference is that this format requires an additional indexing column that links the rows corresponding to a common alluvium, as illustrated below using the `to_lodes()` defaults on the Titanic dataset:
+The second format recognized by **ggalluvial** contains one row per lode, and can be understood as the result of "gathering" (in the **dplyr** sense) the axis columns of a dataset of the preceding kind into a "key" column indicating the axis and a "value" column indicating the value taken thereat. This format requires an additional indexing column that links the rows corresponding to a common alluvium, as illustrated below using the `to_lodes()` defaults on the Titanic dataset:
 
 ```{r Titanic data in lode form}
 dplyr::tbl_df(to_lodes(as.data.frame(Titanic), axes = 1:4))
@@ -87,17 +87,7 @@ The same stat and geom can receive this data format using a different set of pos
 - `stratum`, the "value" taken by the axis variable indicated by `x`; and
 - `alluvium`, the indexing scheme that links the rows of a single alluvium.
 
-We can illustrate this usage too on the `Titanic` dataset:
-
-```{r }
-ggplot(to_lodes(as.data.frame(Titanic), axes = 1:4),
-       aes(x = key, stratum = value, alluvium = id,
-           weight = Freq)) +
-  geom_alluvium() +
-  geom_stratum() + geom_text(stat = "stratum")
-```
-
-This format and functionality also allow weights to vary from axis to axis, which allows users to produce weighted bump charts like those showcased [here](http://imgur.com/gallery/gI5p7). In these cases, the strata and the alluvia are the same, so either `stratum` or `alluvium` can be specified while omitting the other. As an example, we can assign each country in the **alluvial** `Refugees` dataset a region, allowing us to compare refugee volumes between countries and between regions simultaneously:
+This format and functionality admit of weights that vary from axis to axis, allowing users to produce weighted bump charts like those showcased [here](http://imgur.com/gallery/gI5p7). In these cases, the strata and the alluvia are the same, so either `stratum` or `alluvium` can be specified while omitting the other. As an example, we can assign each country in the **alluvial** `Refugees` dataset a region, allowing us to compare refugee volumes between countries and between regions simultaneously:
 
 ```{r}
 data(Refugees, package = "alluvial")
@@ -120,7 +110,26 @@ ggplot(data = Refugees,
   facet_wrap(~ region, scales = "fixed")
 ```
 
+The format allows us to assign aesthetics based on the values taken at *each* axis, which is useful for repeated measures datasets, rather than only at some specific axis, as in the parallel sets example.
+We can illustrate this usage on data from the influenza vaccination surveys conducted by the [RAND American Life Panel](https://alpdata.rand.org/).
+For oesthetic reasons, `geom_alluvium()` insists on applying aesthetics uniformly across each alluvium, so to achieve this effect we invoke the auxiliary functions `geom_lode()` and `geom_flow()`, which plot the segments of each alluvium within (lodes) and between (flows) strata separately:
 
+```{r }
+data(nsa)
+ggplot(nsa,
+       aes(x = survey, stratum = response, alluvium = subject,
+           weight = freq,
+           fill = response)) +
+  geom_lode() +
+  geom_flow(lode.guidance = "rightward") +
+  geom_stratum(alpha = 0) +
+  geom_text(stat = "stratum") +
+  theme(legend.position = "none")
+```
+
+An important limitation remains: The lode and flow geoms still invoke `stat_alluvium()`, which synchronizes the alluvial segments so that each alluvium, representing a homogeneous subset of observations, can be tracked across the diagram, proceeding horizontally through each stratum. If the entire trajectories of individual observations are less important than the proportions that transition at each step from one axis to the next (as in a Markov model), then this results in unnecessary fragmentation of the flows, in this case from `ms432_NSA` to `ms460_NSA`.[^lode.guidance] To address this limitation, a future version of **ggalluvial** will incorporate a third data format that retains the `x` and `stratum` position aesthetics but omits `alluvium`. Under this format, a new stat will prepare the data for `geom_flow()` by synchronizing the flows with respect to the strata, rather than to each other.
+
+[^lode.guidance]: Experimenting with the `lode.guidance` options can shift the problem but not eliminate it.
 
 ## Appendix
 
