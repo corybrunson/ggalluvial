@@ -6,7 +6,7 @@ A ggplot2 extension for alluvial diagrams, which visualize frequency tables in s
 
 While alluvial plots are most popularly used to visualize frequency distributions over time, i usually use them to visualize frequency tables involving several categorical variables.
 
-I've relied for several tasks on [mbojan](https://github.com/mbojan)'s timely [alluvial](https://github.com/mbojan/alluvial) package, from which much of the alluvial infrastructure used here is derived. Besides being tailored to ggplot2, there are several conspicuous differences between these packages:
+I've relied for several tasks on [mbojan](https://github.com/mbojan)'s timely [**alluvial**](https://github.com/mbojan/alluvial) package, from which much of the alluvial infrastructure used here is derived. Besides being tailored to ggplot2, there are several conspicuous differences between these packages:
 
 - **alluvial** understands a variety of inputs (vectors, lists, data frames), while **ggalluvial** requires a single data frame;
 - **alluvial** uses each variable of these inputs as an axis, whereas **ggalluvial** requires the user to specify each axis individually, either by calling separate aesthetics or via a `tidyr::gather()`ed data format;
