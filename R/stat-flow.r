@@ -99,22 +99,27 @@ StatFlow <- ggproto(
                            aggregate.wts = TRUE,
                            aes.bind = FALSE) {
     print(tail(data))
-    # convert data to flow format
-    flow_pos <- c("x", "stratum", "weight")
-    flow_aes <- setdiff(names(data),
-                        c(flow_pos, "alluvium", "PANEL", "group"))
-    flow_aes_fore <- if (aes.flow == "forward") flow_aes else NULL
-    flow_aes_back <- if (aes.flow == "backward") flow_aes else NULL
-    data <- self_adjoin(data, "x", "alluvium", pair = flow_pos,
-                        keep0 = flow_aes_fore, keep1 = flow_aes_back)
+    
+    # repeat non-end axes & use 'alluvium' to pair adjacent axes
+    data$x <- as.factor(data$x)
+    x_ran <- levels(data$x)[c(1, length(levels(data$x)))]
+    alluvium_max <- max(data$alluvium)
+    data <- dplyr::bind_rows(
+      transform(dplyr::filter(data, x != x_ran[2]),
+                alluvium = alluvium + alluvium_max * (as.numeric(x) - 1)),
+      transform(dplyr::filter(data, x != x_ran[1]),
+                alluvium = alluvium + alluvium_max * (as.numeric(x) - 2))
+    )
+    stopifnot(all(table(data$alluvium) == 2))
+    
+    
     
     # aggregate over extraneous axis variables
-    group_cols <- setdiff(names(data), c("alluvium", "weight0", "weight1"))
+    group_cols <- setdiff(names(data), "weight")
     dots <- lapply(group_cols, as.symbol)
-    data <- as.data.frame(dplyr::summarize(dplyr::group_by_(data,
+    test <- as.data.frame(dplyr::summarize(dplyr::group_by_(data,
                                                             .dots = dots),
-                                           weight0 = sum(weight0),
-                                           weight1 = sum(weight1)))
+                                           weight = sum(weight)))
     
     # sort according to 'decreasing' parameter
     if (!is.na(decreasing)) {
@@ -125,15 +130,21 @@ StatFlow <- ggproto(
       }
     }
     
+    
+    
     # cumulative weights
-    data$y0 <- NA; data$y1 <- NA
-    for (ll in unique(data$link)) {
-      ww <- which(data$link == ll)
-      data$y0[ww] <- cumsum(data$weight0[ww]) - data$weight0[ww] / 2
-      data$y1[ww] <- cumsum(data$weight1[ww]) - data$weight1[ww] / 2
+    data$y <- NA
+    for (xx in unique(data$x)) {
+      ww <- which(data$x == xx)
+      data$y[ww] <- cumsum(data$weight[ww]) - data$weight[ww] / 2
     }
     
+    # add vertical centroids and 'group' to encode alluvia
+    data <- transform(data,
+                      y = (ymin + ymax) / 2,
+                      group = as.numeric(alluvium))
     
+    data
   }
 )
 
