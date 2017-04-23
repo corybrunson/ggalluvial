@@ -98,55 +98,68 @@ StatFlow <- ggproto(
                            decreasing = NA,
                            aggregate.wts = TRUE,
                            aes.bind = FALSE) {
-    print(tail(data))
-    
-    # repeat non-end axes & use 'alluvium' to pair adjacent axes
-    data$x <- as.factor(data$x)
-    x_ran <- levels(data$x)[c(1, length(levels(data$x)))]
-    alluvium_max <- max(data$alluvium)
-    data <- dplyr::bind_rows(
-      transform(dplyr::filter(data, x != x_ran[2]),
-                alluvium = alluvium + alluvium_max * (as.numeric(x) - 1)),
-      transform(dplyr::filter(data, x != x_ran[1]),
-                alluvium = alluvium + alluvium_max * (as.numeric(x) - 2))
-    )
-    stopifnot(all(table(data$alluvium) == 2))
-    
-    
-    
-    # aggregate over extraneous axis variables
-    group_cols <- setdiff(names(data), "weight")
-    dots <- lapply(group_cols, as.symbol)
-    test <- as.data.frame(dplyr::summarize(dplyr::group_by_(data,
-                                                            .dots = dots),
-                                           weight = sum(weight)))
     
     # sort according to 'decreasing' parameter
     if (!is.na(decreasing)) {
-      data <- if (decreasing) {
-        dplyr::arrange(data, PANEL, link, weight0)
-      } else {
-        dplyr::arrange(data, PANEL, link, weight0)
-      }
+      stratum_weight <- aggregate(x = data$weight,
+                                  by = data[, "stratum", drop = FALSE],
+                                  FUN = sum)
+      names(stratum_weight)[2] <- "stratum_weight"
     }
     
+    # repeat non-end axes & use 'alluvium' to pair adjacent axes
+    alluvium_max <- max(data$alluvium)
+    data <- dplyr::bind_rows(
+      transform(dplyr::filter(data, x != x_ran[2]),
+                alluvium = alluvium + alluvium_max * (as.numeric(x) - 1),
+                t_ = "start"),
+      transform(dplyr::filter(data, x != x_ran[1]),
+                alluvium = alluvium + alluvium_max * (as.numeric(x) - 2),
+                t_ = "end")
+    )
+    data$t_ <- factor(data$t_, levels = c("start", "end"))
+    stopifnot(all(table(data$alluvium) == 2))
     
+    # aggregate over flows between common strata
+    adj <- tidyr::spread(data[, c("alluvium", "stratum", "t_")],
+                         key = t_, value = stratum)
+    adj <- transform(adj,
+                     group = rank(interaction(start, end),
+                                  ties.method = "first"))
+    grp <- adj$group
+    names(grp) <- adj$alluvium
+    data$group <- grp[as.character(data$alluvium)]
+    group_cols <- setdiff(names(data), c("weight", "alluvium"))
+    dots <- lapply(group_cols, as.symbol)
+    data <- as.data.frame(dplyr::summarize(dplyr::group_by_(data, .dots = dots),
+                                           weight = sum(weight)))
+    stopifnot(all(table(data$group) == 2))
+    data <- transform(data,
+                      alluvium = group)
+    
+    if (!is.na(decreasing)) {
+      data <- dplyr::left_join(data, stratum_weight, by = "stratum")
+      data <- if (decreasing) {
+        dplyr::arrange(data, PANEL, x, stratum_weight)
+      } else {
+        dplyr::arrange(data, PANEL, x, -stratum_weight)
+      }
+      data <- dplyr::select(data, -stratum_weight)
+    }
     
     # cumulative weights
     data$y <- NA
-    for (xx in unique(data$x)) {
-      ww <- which(data$x == xx)
+    for (tt in unique(data$t_)) for (xx in unique(data$x)) {
+      ww <- which(data$t_ == tt & data$x == xx)
       data$y[ww] <- cumsum(data$weight[ww]) - data$weight[ww] / 2
     }
     
-    # add vertical centroids and 'group' to encode alluvia
-    data <- transform(data,
-                      y = (ymin + ymax) / 2,
-                      group = as.numeric(alluvium))
-    
-    data
+    # y bounds
+    transform(data,
+              ymin = y - weight / 2,
+              ymax = y + weight / 2)
   }
 )
 
-data <- to_lodes(as.data.frame(Titanic), axes = 1:3)
-names(data) <- c("fill", "weight", "alluvium", "x", "stratum")
+#data <- to_lodes(as.data.frame(Titanic), axes = 1:3)
+#names(data) <- c("fill", "weight", "alluvium", "x", "stratum")
