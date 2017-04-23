@@ -77,15 +77,6 @@ ggplot(data = alluvial::Refugees,
        aes(x = year, weight = refugees, stratum = country)) +
   geom_alluvium(aes(fill = country),
                 colour = "black", decreasing = NA, width = 0, knot.pos = 0)
-
-# rightward flow aesthetics for vaccine survey data
-data(vaccinations)
-ggplot(vaccinations,
-       aes(x = survey, stratum = response, alluvium = subject,
-           weight = freq, fill = response, label = round(a, 3))) +
-  geom_lode() + geom_flow() +
-  geom_stratum(alpha = 0) +
-  geom_text(stat = "stratum")
 }
 \seealso{
 \code{\link[ggplot2]{layer}} for additional arguments,
