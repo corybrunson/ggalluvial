@@ -97,6 +97,15 @@ names(wph) <- c("Year", "Region", "Telephones")
 ggplot(wph,
        aes(x = Year, stratum = Region, weight = Telephones)) +
   geom_flow(aes(fill = Region, colour = Region), width = 0)
+
+# rightward flow aesthetics for vaccine survey data
+data(vaccinations)
+ggplot(vaccinations,
+       aes(x = survey, stratum = response, alluvium = subject,
+           weight = freq, fill = response, label = round(a, 3))) +
+  geom_lode() + geom_flow() +
+  geom_stratum(alpha = 0) +
+  geom_text(stat = "stratum")
 }
 \seealso{
 \code{\link[ggplot2]{layer}} for additional arguments,
