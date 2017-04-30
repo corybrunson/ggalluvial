@@ -151,9 +151,8 @@ ggplot(vaccinations,
        aes(x = survey, stratum = response, alluvium = subject,
            weight = freq,
            fill = response)) +
-  geom_lode() +
-  geom_flow(lode.guidance = "rightward") +
-  geom_stratum(alpha = 0) +
+  geom_flow() +
+  geom_stratum(alpha = .5) +
   geom_text(stat = "stratum", size = 3) +
   theme(legend.position = "none") +
   ggtitle("vaccination survey responses at three points in time")
