@@ -99,6 +99,11 @@ StatFlow <- ggproto(
                            aggregate.wts = TRUE,
                            aes.bind = FALSE) {
     
+    # aesthetics
+    aesthetics <- setdiff(names(data),
+                          c("weight", "PANEL", "group",
+                            "alluvium", "x", "stratum"))
+    
     # sort according to 'decreasing' parameter
     if (!is.na(decreasing)) {
       stratum_weight <- aggregate(x = data$weight,
@@ -108,49 +113,54 @@ StatFlow <- ggproto(
     }
     
     # repeat non-end axes & use 'alluvium' to pair adjacent axes
+    x_ran <- range(data$x)
     alluvium_max <- max(data$alluvium)
     data <- dplyr::bind_rows(
       transform(dplyr::filter(data, x != x_ran[2]),
+                link = as.numeric(x),
                 alluvium = alluvium + alluvium_max * (as.numeric(x) - 1),
-                t_ = "start"),
+                t_ = I("start")),
       transform(dplyr::filter(data, x != x_ran[1]),
+                link = as.numeric(x) - 1,
                 alluvium = alluvium + alluvium_max * (as.numeric(x) - 2),
-                t_ = "end")
+                t_ = I("end"))
     )
     data$t_ <- factor(data$t_, levels = c("start", "end"))
     stopifnot(all(table(data$alluvium) == 2))
     
+    # aesthetics for flow partition
+    n_link_t_ <- dplyr::n_distinct(data[, c("link", "t_", "stratum")])
+    aes_partition <- aesthetics[which(sapply(aesthetics, function(x) {
+      dplyr::n_distinct(data[, c("link", "t_", "stratum", x)])
+    }) > n_link_t_)]
+    aes_interpolate <- setdiff(aesthetics, aes_partition)
+    
     # aggregate over flows between common strata
-    adj <- tidyr::spread(data[, c("alluvium", "stratum", "t_")],
+    adj <- tidyr::spread(data[, c("link", "alluvium", "stratum", "t_")],
                          key = t_, value = stratum)
     adj <- transform(adj,
-                     group = rank(interaction(start, end),
-                                  ties.method = "first"))
-    grp <- adj$group
-    names(grp) <- adj$alluvium
-    data$group <- grp[as.character(data$alluvium)]
-    group_cols <- setdiff(names(data), c("weight", "alluvium"))
+                     flow = interaction(link, start, end, drop = TRUE))
+    flow <- adj$flow
+    names(flow) <- adj$alluvium
+    data$flow <- flow[as.character(data$alluvium)]
+    data$alluvium <- as.numeric(interaction(data[, c(aes_partition, "flow")],
+                                            drop = TRUE))
+    group_cols <- setdiff(names(data), c("weight", "group"))
     dots <- lapply(group_cols, as.symbol)
     data <- as.data.frame(dplyr::summarize(dplyr::group_by_(data, .dots = dots),
                                            weight = sum(weight)))
-    stopifnot(all(table(data$group) == 2))
+    stopifnot(all(table(data$alluvium) == 2))
     data <- transform(data,
-                      alluvium = group)
+                      group = alluvium)
     
-    if (!is.na(decreasing)) {
-      data <- dplyr::left_join(data, stratum_weight, by = "stratum")
-      data <- if (decreasing) {
-        dplyr::arrange(data, PANEL, x, stratum_weight)
-      } else {
-        dplyr::arrange(data, PANEL, x, -stratum_weight)
-      }
-      data <- dplyr::select(data, -stratum_weight)
-    }
-    
+    # sort in preparation for cumulative weights
+    data <- data[do.call(order, data[, c("t_", "link", "stratum",
+                                         "flow",
+                                         aes_partition)]), ]
     # cumulative weights
     data$y <- NA
-    for (tt in unique(data$t_)) for (xx in unique(data$x)) {
-      ww <- which(data$t_ == tt & data$x == xx)
+    for (tt in unique(data$t_)) for (ll in unique(data$link)) {
+      ww <- which(data$t_ == tt & data$link == ll)
       data$y[ww] <- cumsum(data$weight[ww]) - data$weight[ww] / 2
     }
     
@@ -160,6 +170,3 @@ StatFlow <- ggproto(
               ymax = y + weight / 2)
   }
 )
-
-#data <- to_lodes(as.data.frame(Titanic), axes = 1:3)
-#names(data) <- c("fill", "weight", "alluvium", "x", "stratum")

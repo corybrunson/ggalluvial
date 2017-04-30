@@ -44,6 +44,19 @@ Use \code{x}, \code{stratum}, and \code{alluvium} for data in lode form and
 arguments to parameters inconsistent with the data format will be ignored.
 }
 
+\examples{
+# illustrate positioning
+ggplot(as.data.frame(Titanic),
+       aes(weight = Freq,
+           axis1 = Class, axis2 = Sex, axis3 = Age,
+           color = Survived)) +
+  geom_errorbar(stat = "stratum") +
+  geom_line(stat = "flow") +
+  geom_pointrange(stat = "flow") +
+  geom_text(stat = "stratum") +
+  scale_x_continuous(breaks = 1:3,
+                     labels = c("Class", "Sex", "Age"))
+}
 \seealso{
 \code{\link[ggplot2]{layer}} for additional arguments,
   \code{\link{geom_flow}} for the corresponding geom,
