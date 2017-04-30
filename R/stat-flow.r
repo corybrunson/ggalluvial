@@ -65,6 +65,13 @@ StatFlow <- ggproto(
   
   setup_data = function(data, params) {
     
+    # assign 'stratum' to 'alluvium' if 'alluvium' not provided, and vice-versa
+    if (is.null(data$alluvium) & !is.null(data$stratum)) {
+      data <- transform(data, alluvium = stratum)
+    } else if (is.null(data$stratum) & !is.null(data$alluvium)) {
+      data <- transform(data, stratum = alluvium)
+    }
+    
     # assign uniform weight if not provided
     if (is.null(data$weight)) {
       data$weight <- rep(1, nrow(data))
@@ -114,6 +121,7 @@ StatFlow <- ggproto(
     
     # repeat non-end axes & use 'alluvium' to pair adjacent axes
     x_ran <- range(data$x)
+    data$alluvium <- as.numeric(as.factor(data$alluvium))
     alluvium_max <- max(data$alluvium)
     data <- dplyr::bind_rows(
       transform(dplyr::filter(data, x != x_ran[2]),
@@ -154,9 +162,15 @@ StatFlow <- ggproto(
                       group = alluvium)
     
     # sort in preparation for cumulative weights
-    data <- data[do.call(order, data[, c("t_", "link", "stratum",
-                                         "flow",
-                                         aes_partition)]), ]
+    sort_fields <- c(
+      "t_", "link", "stratum",
+      if (aes.bind) {
+        c(aes_partition, "flow")
+      } else {
+        c("flow", aes_partition)
+      }
+    )
+    data <- data[do.call(order, data[, sort_fields]), ]
     # cumulative weights
     data$y <- NA
     for (tt in unique(data$t_)) for (ll in unique(data$link)) {

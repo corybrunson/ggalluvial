@@ -43,7 +43,7 @@
 #' @export
 geom_flow <- function(mapping = NULL,
                           data = NULL,
-                          stat = "alluvium",
+                          stat = "flow",
                           width = 1/3, axis_width = NULL,
                           knot.pos = 1/6, ribbon_bend = NULL,
                           aes.flow = "forward",

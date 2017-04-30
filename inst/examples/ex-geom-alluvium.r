@@ -6,14 +6,6 @@ ggplot(as.data.frame(Titanic),
   geom_alluvium() +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 
-# declaration of groups (ignored)
-ggplot(as.data.frame(Titanic),
-       aes(weight = Freq,
-           axis1 = Class, axis2 = Sex, axis3 = Age,
-           group = Survived)) +
-  geom_alluvium() +
-  scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
-
 # time series bump chart
 ggplot(alluvial::Refugees,
        aes(weight = refugees,

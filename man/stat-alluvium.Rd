@@ -16,16 +16,10 @@ in the order of the variable values (NA, the default),
 with the largest on top (FALSE), or
 with the largest on bottom (TRUE).}
 
-\item{aggregate.wts}{Logical; whether to aggregate weights across otherwise
-equivalent rows before computing lode and flow positions. Defaults to TRUE.}
-
 \item{lode.guidance}{The function to prioritize the axis variables for 
 ordering the lodes within each stratum. Defaults to "zigzag", other options
 include "rightleft", "leftright", "rightward", and "leftward" (see 
 \code{\link{lode-guidance-functions}}).}
-
-\item{aes.bind}{Whether to prioritize aesthetics before axes (other than the
-index axis) when ordering the lodes within each stratum. Defaults to FALSE.}
 
 \item{lode.ordering}{A list (of length the number of axes) of integer vectors
 (each of length the number of rows of \code{data}) or NULL entries 
@@ -70,6 +64,25 @@ ggplot(as.data.frame(Titanic),
   geom_text(stat = "stratum") +
   scale_x_continuous(breaks = 1:3,
                      labels = c("Class", "Sex", "Age"))
+
+# use of lode controls
+ggplot(as.data.frame(Titanic),
+       aes(weight = Freq,
+           axis1 = Class, axis2 = Sex, axis3 = Age)) +
+  geom_flow(aes(fill = Survived), stat = "alluvium",
+            aes.bind = TRUE, lode.guidance = "rightward") +
+  geom_stratum() + geom_text(stat = "stratum") +
+  scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
+
+# use of lode ordering
+lode_ord <- replicate(n = 3, expr = sample(x = 32), simplify = FALSE)
+ggplot(as.data.frame(Titanic),
+       aes(weight = Freq,
+           axis1 = Class, axis2 = Sex, axis3 = Age)) +
+  geom_flow(aes(fill = Survived), stat = "alluvium",
+            lode.ordering = lode_ord) +
+  geom_stratum() + geom_text(stat = "stratum") +
+  scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 }
 \seealso{
 \code{\link[ggplot2]{layer}} for additional arguments,

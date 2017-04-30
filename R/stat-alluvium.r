@@ -28,15 +28,11 @@
 #'   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for
 #'   intra-axis boxes, and
 #'   \code{\link{ggalluvial}} for a shortcut method.
-#' @inheritParams stat-stratum
-#' @param aggregate.wts Logical; whether to aggregate weights across otherwise
-#'   equivalent rows before computing lode and flow positions. Defaults to TRUE.
+#' @inheritParams stat-flow
 #' @param lode.guidance The function to prioritize the axis variables for 
 #'   ordering the lodes within each stratum. Defaults to "zigzag", other options
 #'   include "rightleft", "leftright", "rightward", and "leftward" (see 
 #'   \code{\link{lode-guidance-functions}}).
-#' @param aes.bind Whether to prioritize aesthetics before axes (other than the
-#'   index axis) when ordering the lodes within each stratum. Defaults to FALSE.
 #' @param lode.ordering A list (of length the number of axes) of integer vectors
 #'   (each of length the number of rows of \code{data}) or NULL entries 
 #'   (indicating no imposed ordering), or else a numeric matrix of corresponding
