@@ -143,7 +143,7 @@ ggplot(data = Refugees,
 
 The format allows us to assign aesthetics based on the values taken at *each* axis, which is useful for repeated measures datasets, rather than only at some specific axis, as in the parallel sets example.
 We can illustrate this usage on data from the influenza vaccination surveys conducted by the [RAND American Life Panel](https://alpdata.rand.org/).
-For aesthetic reasons, `geom_alluvium()` insists on applying aesthetics uniformly to each alluvium, so to achieve this effect we invoke the auxiliary functions `geom_lode()` and `geom_flow()`, which plot the segments of each alluvium within and between strata separately:
+`geom_alluvium()` insists on applying aesthetics uniformly to each alluvium, so to achieve this effect we use `geom_flow()`, which plots alluvial segments between adjacent axes:
 
 ```{r alluvial diagram of vaccinations dataset}
 data(vaccinations)
@@ -158,9 +158,9 @@ ggplot(vaccinations,
   ggtitle("vaccination survey responses at three points in time")
 ```
 
-An important limitation remains: The lode and flow geoms still invoke `stat_alluvium()`, which synchronizes the alluvial segments so that each alluvium, representing a homogeneous subset of observations, can be tracked across the diagram, proceeding horizontally through each stratum. If the transitions are memoryless, or just if the entire trajectories of individual observations are less important than the proportions that transition at each step, then this results in unnecessary fragmentation of the flows, in this case from `ms432_NSA` to `ms460_NSA`.[^lode.guidance] To address this limitation, a future version of **ggalluvial** will incorporate a third data format that retains the `x` and `stratum` position aesthetics but omits `alluvium`. Under this format, a new stat will prepare the data for `geom_flow()` by synchronizing the flows with respect to the strata, rather than to each other.
+Note that `geom_flow()` by default calls `stat_flow()`, which ignores any continuity between the alluvial segments linking different pairs of adjacent axes.[^alluvium-flow] This "memoryless" plot produces a less cluttered diagram, in which at most one flow proceeds from each stratum at one axis to each stratum at the next, but at the cost of being able to track the subset of observations having a fixed set of values at all axes across the entire diagram.
 
-[^lode.guidance]: Experimenting with the `lode.guidance` options can shift the problem but not eliminate it.
+[^alluvium-flow]: This can be overridden, for example as `geom_flow(stat = "alluvium")`.
 
 ## Appendix
 

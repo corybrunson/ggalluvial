@@ -42,7 +42,7 @@ vaccinations$subgroup <- LETTERS[1:2][rbinom(
 ggplot(vaccinations,
        aes(x = survey, stratum = response, alluvium = subject,
            weight = freq, fill = response)) +
-  geom_flow(stat = "flow", aes(alpha = subgroup)) +
+  geom_flow(aes(alpha = subgroup)) +
   scale_alpha_discrete(range = c(1/3, 2/3)) +
   geom_stratum(alpha = .5) +
   geom_text(stat = "stratum")

@@ -31,13 +31,9 @@
 #'   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 
 #'   intra-axis boxes, and
 #'   \code{\link{ggalluvial}} for a shortcut method.
-#' @inheritParams geom-lode
+#' @inheritParams geom-alluvium
 #' @param aes.flow Character; how inter-lode flows assume aesthetics from lodes.
 #'   Options are "forward" and "backward".
-#' @param knot.pos The horizontal distance between a stratum (\code{width/2}
-#'   from its axis) and the knot of the x-spline, as a proportion of the
-#'   separation between strata. Defaults to 1/6.
-#' @param ribbon_bend Deprecated; alias for \code{knot.pos}.
 #' @example inst/examples/ex-geom-flow.r
 #' @usage NULL
 #' @export
