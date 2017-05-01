@@ -10,6 +10,14 @@ ggplot(as.data.frame(Titanic),
   scale_x_continuous(breaks = 1:3,
                      labels = c("Class", "Sex", "Age"))
 
+# use of lode controls
+ggplot(as.data.frame(Titanic),
+       aes(weight = Freq,
+           axis1 = Class, axis2 = Sex, axis3 = Age)) +
+  geom_flow(aes(fill = Survived), aes.bind = TRUE) +
+  geom_stratum() + geom_text(stat = "stratum") +
+  scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
+
 data(vaccinations)
 # rightward alluvial aesthetics for vaccine survey data
 ggplot(vaccinations,
@@ -25,14 +33,6 @@ ggplot(vaccinations,
   geom_flow() +
   geom_stratum(alpha = .5) +
   geom_text(stat = "stratum")
-
-# use of lode controls
-ggplot(as.data.frame(Titanic),
-       aes(weight = Freq,
-           axis1 = Class, axis2 = Sex, axis3 = Age)) +
-  geom_flow(aes(fill = Survived), aes.bind = TRUE) +
-  geom_stratum() + geom_text(stat = "stratum") +
-  scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 
 # both partition aesthetics and interpolation aesthetics
 data(vaccinations)
