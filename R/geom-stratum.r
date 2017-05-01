@@ -60,6 +60,8 @@ geom_stratum <- function(mapping = NULL,
 GeomStratum <- ggproto(
   "GeomStratum", GeomRect,
   
+  required_aes = c("x", "y", "ymin", "ymax"),
+  
   default_aes = aes(size = .5, linetype = 1,
                     colour = "black", fill = "white", alpha = 1),
   

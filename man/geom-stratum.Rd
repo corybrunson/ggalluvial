@@ -6,7 +6,7 @@
 \alias{geom_stratum}
 \alias{GeomStratum}
 \title{Stratum rectangles}
-\format{An object of class \code{GeomStratum} (inherits from \code{GeomRect}, \code{Geom}, \code{ggproto}) of length 6.}
+\format{An object of class \code{GeomStratum} (inherits from \code{GeomRect}, \code{Geom}, \code{ggproto}) of length 7.}
 \arguments{
 \item{stat}{The statistical transformation to use on the data;
 override the default.}

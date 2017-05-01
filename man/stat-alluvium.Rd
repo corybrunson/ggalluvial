@@ -6,7 +6,7 @@
 \alias{stat_alluvium}
 \alias{StatAlluvium}
 \title{Alluvial positions}
-\format{An object of class \code{StatAlluvium} (inherits from \code{Stat}, \code{ggproto}) of length 4.}
+\format{An object of class \code{StatAlluvium} (inherits from \code{Stat}, \code{ggproto}) of length 5.}
 \arguments{
 \item{geom}{The geometric object to use display the data;
 override the default.}

@@ -69,6 +69,8 @@ geom_alluvium <- function(mapping = NULL,
 GeomAlluvium <- ggproto(
   "GeomAlluvium", Geom,
   
+  required_aes = c("x", "y", "ymin", "ymax"),
+  
   default_aes = aes(size = .5, linetype = 1,
                     colour = 0, fill = "gray", alpha = .5),
   

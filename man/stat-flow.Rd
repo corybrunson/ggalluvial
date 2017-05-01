@@ -6,7 +6,7 @@
 \alias{stat_flow}
 \alias{StatFlow}
 \title{Flow positions}
-\format{An object of class \code{StatFlow} (inherits from \code{Stat}, \code{ggproto}) of length 3.}
+\format{An object of class \code{StatFlow} (inherits from \code{Stat}, \code{ggproto}) of length 4.}
 \arguments{
 \item{geom}{The geometric object to use display the data;
 override the default.}

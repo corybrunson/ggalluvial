@@ -71,6 +71,8 @@ stat_alluvium <- function(mapping = NULL,
 StatAlluvium <- ggproto(
   "StatAlluvium", Stat,
   
+  required_aes = c("x", "stratum", "alluvium"),
+  
   setup_params = function(data, params) {
     
     if (!is.null(params$lode.ordering)) {

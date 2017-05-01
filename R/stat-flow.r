@@ -63,6 +63,8 @@ stat_flow <- function(mapping = NULL,
 StatFlow <- ggproto(
   "StatFlow", Stat,
   
+  required_aes = c("x", "stratum", "alluvium"),
+  
   setup_data = function(data, params) {
     
     # assign 'stratum' to 'alluvium' if 'alluvium' not provided, and vice-versa

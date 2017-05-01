@@ -6,7 +6,7 @@
 \alias{geom_lode}
 \alias{GeomLode}
 \title{Lode rectangles}
-\format{An object of class \code{GeomLode} (inherits from \code{Geom}, \code{ggproto}) of length 6.}
+\format{An object of class \code{GeomLode} (inherits from \code{Geom}, \code{ggproto}) of length 7.}
 \arguments{
 \item{stat}{The statistical transformation to use on the data;
 override the default.}

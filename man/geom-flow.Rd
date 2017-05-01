@@ -6,7 +6,7 @@
 \alias{geom_flow}
 \alias{GeomFlow}
 \title{Alluvial flows between lodes}
-\format{An object of class \code{GeomFlow} (inherits from \code{Geom}, \code{ggproto}) of length 6.}
+\format{An object of class \code{GeomFlow} (inherits from \code{Geom}, \code{ggproto}) of length 7.}
 \arguments{
 \item{stat}{The statistical transformation to use on the data;
 override the default.}

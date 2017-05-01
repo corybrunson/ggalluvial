@@ -63,6 +63,8 @@ stat_stratum <- function(mapping = NULL,
 StatStratum <- ggproto(
   "StatStratum", Stat,
   
+  required_aes = c("x", "stratum", "alluvium"),
+  
   setup_data = function(data, params) {
     
     # assign uniform weight if not provided
