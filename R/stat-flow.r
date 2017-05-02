@@ -107,18 +107,20 @@ StatFlow <- ggproto(
                            decreasing = NA,
                            aggregate.wts = TRUE,
                            aes.bind = FALSE) {
+    #saveRDS(data, file = "temp.rda")
+    #data <- readRDS("temp.rda")
     
     # aesthetics
     aesthetics <- setdiff(names(data),
                           c("weight", "PANEL", "group",
                             "alluvium", "x", "stratum"))
     
-    # sort according to 'decreasing' parameter
+    # sort within axes by weight according to 'decreasing' parameter
     if (!is.na(decreasing)) {
-      stratum_weight <- aggregate(x = data$weight,
-                                  by = data[, "stratum", drop = FALSE],
-                                  FUN = sum)
-      names(stratum_weight)[2] <- "stratum_weight"
+      deposits <- aggregate(x = data$weight * (1 - decreasing * 2),
+                            by = data[, c("x", "stratum"), drop = FALSE],
+                            FUN = sum)
+      names(deposits)[3] <- "deposit"
     }
     
     # repeat non-end axes & use 'alluvium' to pair adjacent axes
@@ -164,19 +166,24 @@ StatFlow <- ggproto(
                       group = alluvium)
     
     # sort in preparation for cumulative weights
+    if (!is.na(decreasing)) {
+      data <- merge(data, deposits, all.x = TRUE, all.y = FALSE)
+    }
     sort_fields <- c(
-      "t_", "link", "stratum",
+      "link", "x",
+      if (is.na(decreasing)) "stratum" else "deposit",
       if (aes.bind) {
         c(aes_partition, "flow")
       } else {
         c("flow", aes_partition)
-      }
+      },
+      "alluvium", "t_"
     )
     data <- data[do.call(order, data[, sort_fields]), ]
     # cumulative weights
     data$y <- NA
-    for (tt in unique(data$t_)) for (ll in unique(data$link)) {
-      ww <- which(data$t_ == tt & data$link == ll)
+    for (ll in unique(data$link)) for (tt in unique(data$t_)) {
+      ww <- which(data$link == ll & data$t_ == tt)
       data$y[ww] <- cumsum(data$weight[ww]) - data$weight[ww] / 2
     }
     

@@ -32,9 +32,10 @@ centroids of the strata at each axis, together with their weights (heights).
   \item \code{group}
 }
 Currently, \code{group} is ignored.
-Use \code{x}, \code{stratum}, and \code{alluvium} for data in lode form and 
-\code{axis[0-9]*} for data in alluvium form (see \code{\link{is_alluvial}});
-arguments to parameters inconsistent with the data format will be ignored.
+Use \code{x}, \code{stratum}, and (optionally) \code{alluvium} for data in
+lode form and \code{axis[0-9]*} for data in alluvium form (see
+\code{\link{is_alluvial}}); arguments to parameters inconsistent with the
+data format will be ignored.
 }
 
 \examples{

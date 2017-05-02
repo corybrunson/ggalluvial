@@ -14,9 +14,10 @@
 #'   \item \code{group}
 #' }
 #' Currently, \code{group} is ignored.
-#' Use \code{x}, \code{stratum}, and \code{alluvium} for data in lode form and 
-#' \code{axis[0-9]*} for data in alluvium form (see \code{\link{is_alluvial}});
-#' arguments to parameters inconsistent with the data format will be ignored.
+#' Use \code{x}, \code{stratum}, and (optionally) \code{alluvium} for data in
+#' lode form and \code{axis[0-9]*} for data in alluvium form (see
+#' \code{\link{is_alluvial}}); arguments to parameters inconsistent with the
+#' data format will be ignored.
 #' 
 #' @name stat-stratum
 #' @import ggplot2
@@ -63,7 +64,7 @@ stat_stratum <- function(mapping = NULL,
 StatStratum <- ggproto(
   "StatStratum", Stat,
   
-  required_aes = c("x", "stratum", "alluvium"),
+  required_aes = c("x", "stratum"),
   
   setup_data = function(data, params) {
     
@@ -94,6 +95,16 @@ StatStratum <- ggproto(
       data$x <- as.numeric(as.factor(data$x))
     }
     
+    # introduce label (if absent)
+    if (is.null(data$label)) {
+      data$label <- data$stratum
+    }
+    
+    # nullify 'group' and 'alluvium' fields
+    data <- transform(data,
+                      group = NULL,
+                      alluvium = NULL)
+    
     data
   },
   
@@ -103,16 +114,8 @@ StatStratum <- ggproto(
     # remove empty lodes (including labels)
     data <- subset(data, weight > 0)
     
-    # nullify 'group' and 'alluvium' fields
-    data <- transform(data,
-                      group = NULL,
-                      alluvium = NULL)
-    
-    # introduce label (if absent)
-    if (is.null(data$label)) data <- transform(data,
-                                               label = stratum)
-    
     # aggregate data by 'x' and 'stratum'
+    # DISCONTINUE THIS; LABELS SHOULD BE TREATED MORE CAREFULLY
     data <- auto_aggregate(data = data, by = c("x", "stratum"))
     # aggregate 'weight' by 'x' and 'y' (lose 'group')
     #data <- aggregate(x = data$weight,
@@ -121,9 +124,11 @@ StatStratum <- ggproto(
     #names(data) <- c("x", "label", "weight")
     
     # sort according to 'decreasing' parameter
-    if (!is.na(decreasing)) {
-      data <- if (decreasing) {
-        dplyr::arrange(data, PANEL, x, weight)
+    data <- if (is.na(decreasing)) {
+      dplyr::arrange(data, PANEL, x, stratum)
+    } else {
+      if (decreasing) {
+        dplyr::arrange(data, PANEL, x, -weight)
       } else {
         dplyr::arrange(data, PANEL, x, weight)
       }

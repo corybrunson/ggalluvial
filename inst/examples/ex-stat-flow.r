@@ -45,4 +45,5 @@ ggplot(vaccinations,
   geom_flow(aes(alpha = subgroup)) +
   scale_alpha_discrete(range = c(1/3, 2/3)) +
   geom_stratum(alpha = .5) +
-  geom_text(stat = "stratum")
+  #geom_text(stat = "stratum")
+  geom_label(stat = "stratum")
