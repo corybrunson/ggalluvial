@@ -127,27 +127,28 @@ StatFlow <- ggproto(
       transform(dplyr::filter(data, x != x_ran[2]),
                 link = as.numeric(x),
                 alluvium = alluvium + alluvium_max * (as.numeric(x) - 1),
-                t_ = I("start")),
+                side = I("s0")),
       transform(dplyr::filter(data, x != x_ran[1]),
                 link = as.numeric(x) - 1,
                 alluvium = alluvium + alluvium_max * (as.numeric(x) - 2),
-                t_ = I("end"))
+                side = I("s1"))
     )
-    data$t_ <- factor(data$t_, levels = c("start", "end"))
+    # 'side' will become a field of 'adj'
+    data$side <- factor(data$side, levels = c("s0", "s1"))
     stopifnot(all(table(data$alluvium) == 2))
     
-    # aesthetics for flow partition
-    n_link_t_ <- dplyr::n_distinct(data[, c("link", "t_", "stratum")])
+    # aesthetics for flow partition and for alluvial segment interpolation
+    n_link_side <- dplyr::n_distinct(data[, c("link", "side", "stratum")])
     aes_partition <- aesthetics[which(sapply(aesthetics, function(x) {
-      dplyr::n_distinct(data[, c("link", "t_", "stratum", x)])
-    }) > n_link_t_)]
+      dplyr::n_distinct(data[, c("link", "side", "stratum", x)])
+    }) > n_link_side)]
     aes_interpolate <- setdiff(aesthetics, aes_partition)
     
-    # aggregate over flows between common strata
-    adj <- tidyr::spread(data[, c("link", "alluvium", "stratum", "t_")],
-                         key = t_, value = stratum)
+    # aggregate over flows (aggregated alluvial segments) between common strata
+    adj <- tidyr::spread(data[, c("link", "alluvium", "stratum", "side")],
+                         key = side, value = stratum)
     adj <- transform(adj,
-                     flow = interaction(link, start, end, drop = TRUE))
+                     flow = interaction(link, s0, s1, drop = TRUE))
     flow <- adj$flow
     names(flow) <- adj$alluvium
     data$flow <- flow[as.character(data$alluvium)]
@@ -173,13 +174,13 @@ StatFlow <- ggproto(
       } else {
         c("flow", aes_partition)
       },
-      "alluvium", "t_"
+      "alluvium", "side"
     )
     data <- data[do.call(order, data[, sort_fields]), ]
     # cumulative weights
     data$y <- NA
-    for (ll in unique(data$link)) for (tt in unique(data$t_)) {
-      ww <- which(data$link == ll & data$t_ == tt)
+    for (ll in unique(data$link)) for (ss in unique(data$side)) {
+      ww <- which(data$link == ll & data$side == ss)
       data$y[ww] <- cumsum(data$weight[ww]) - data$weight[ww] / 2
     }
     
