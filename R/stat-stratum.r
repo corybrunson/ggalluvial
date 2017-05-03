@@ -76,7 +76,7 @@ StatStratum <- ggproto(
     type <- get_alluvial_type(data)
     if (type == "none") {
       stop("Data is not in a recognized alluvial form ",
-           "(see `?is_alluvial` for details).")
+           "(see `help(is_alluvial)` for details).")
     }
     
     if (params$na.rm) {

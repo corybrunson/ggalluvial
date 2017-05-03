@@ -16,6 +16,9 @@ in the order of the variable values (NA, the default),
 with the largest on top (FALSE), or
 with the largest on bottom (TRUE).}
 
+\item{aggregate.wts}{Logical; whether to aggregate weights across otherwise
+equivalent rows before computing lode and flow positions. Defaults to TRUE.}
+
 \item{lode.guidance}{The function to prioritize the axis variables for 
 ordering the lodes within each stratum. Defaults to "zigzag", other options
 include "rightleft", "leftright", "rightward", and "leftward" (see 

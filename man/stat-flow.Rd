@@ -16,9 +16,6 @@ in the order of the variable values (NA, the default),
 with the largest on top (FALSE), or
 with the largest on bottom (TRUE).}
 
-\item{aggregate.wts}{Logical; whether to aggregate weights across otherwise
-equivalent rows before computing lode and flow positions. Defaults to TRUE.}
-
 \item{aes.bind}{Whether to prioritize aesthetics before axes (other than the
 index axis) when ordering the lodes within each stratum. Defaults to FALSE.}
 }

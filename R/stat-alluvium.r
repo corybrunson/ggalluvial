@@ -29,6 +29,8 @@
 #'   intra-axis boxes, and
 #'   \code{\link{ggalluvial}} for a shortcut method.
 #' @inheritParams stat-flow
+#' @param aggregate.wts Logical; whether to aggregate weights across otherwise
+#'   equivalent rows before computing lode and flow positions. Defaults to TRUE.
 #' @param lode.guidance The function to prioritize the axis variables for 
 #'   ordering the lodes within each stratum. Defaults to "zigzag", other options
 #'   include "rightleft", "leftright", "rightward", and "leftward" (see 
@@ -106,7 +108,7 @@ StatAlluvium <- ggproto(
     type <- get_alluvial_type(data)
     if (type == "none") {
       stop("Data is not in a recognized alluvial form ",
-           "(see `?is_alluvial` for details).")
+           "(see `help(is_alluvial)` for details).")
     }
     
     if (params$na.rm) {

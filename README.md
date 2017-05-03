@@ -1,18 +1,16 @@
 # ggalluvial
 
-A ggplot2 extension for alluvial diagrams, which visualize frequency tables in several dimensions.
+A ggplot2 extension for alluvial diagrams.
 
 ## Background
 
-While alluvial plots are most popularly used to visualize frequency distributions over time, i usually use them to visualize frequency tables involving several categorical variables.
-
-I've relied for several tasks on [mbojan](https://github.com/mbojan)'s timely [**alluvial**](https://github.com/mbojan/alluvial) package, from which much of the alluvial infrastructure used here is derived. Besides being tailored to ggplot2, there are several conspicuous differences between these packages:
+The alluvial plots implemented here can be used to visualize frequency distributions over time or frequency tables involving several categorical variables. Much of the infrastructure comes from the [**alluvial**](https://github.com/mbojan/alluvial) package, but the **ggplot2** framework induced several conspicuous differences:
 
 - **alluvial** understands a variety of inputs (vectors, lists, data frames), while **ggalluvial** requires a single data frame;
 - **alluvial** uses each variable of these inputs as an axis, whereas **ggalluvial** requires the user to specify each axis individually, either by calling separate aesthetics or via a `tidyr::gather()`ed data format;
-- **alluvial** produces both the alluvial flows (alluvia) and what are here called the strata in a single function (`alluvial()`), whereas **ggalluvial** relies on the separate functions `*_alluvium()` and `*_stratum()` to produce these elements.
+- **alluvial** produces both the alluvial flows (alluvia) and what are here called the strata in a single function (`alluvial()`), whereas **ggalluvial** relies on separate functions to produce strata, alluvia, and alluvial segments called *lodes* and *flows*.
 
-There's much to be improved on here. Comments or pull requests are more than welcome.
+There's much to be improved on here still. Comments or pull requests are more than welcome.
 
 ## Install
 
@@ -32,4 +30,4 @@ For detailed discussion of the data formats recognized by **ggalluvial** and sev
 vignette(topic = "ggalluvial")
 ```
 
-The shortcut function `ggalluvial()`, which includes a formula interface, is not included in the vignette and may not be included in the eventual CRAN release. (Let me know if you think it should be kept or improved!)
+The shortcut function `ggalluvial()`, which includes a formula interface, is not included in the vignette and may be deprecated in the next version and excluded from the eventual CRAN release. (Let me know if you think it should be kept or improved!)
