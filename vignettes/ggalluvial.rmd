@@ -44,8 +44,8 @@ For now, we use the image as a point of reference to define the following elemen
 
 - An *axis* is a dimension (variable) along which the data are vertically grouped at a fixed horizontal position. The diagram above uses three categorical axes: `Class`, `Sex`, and `Age`.
 - The groups at each axis are depicted as opaque blocks called *strata*. For example, the `Class` axis contains four strata: `1st`, `2nd`, `3rd`, and `Crew`.
-- Horizontal (x-) splines called *alluvia* span the width of the diagram. In this diagram, each alluvium corresponds to a fixed value of each axis variable as well as of the `Survived` variable used to color-code them.
-- The segments of the alluvia between pairs of adjacent axes are *flows*. Above, the positions of the flows indicate their axis values while their fill colors indicate their values of `Survived`.
+- Horizontal (x-) splines called *alluvia* span the width of the diagram. In this diagram, each alluvium corresponds to a fixed value of each axis variable, indicated by its vertical position at the axis, as well as of the `Survived` variable, indicated by its fill color.
+- The segments of the alluvia between pairs of adjacent axes are *flows*.
 - The alluvia intersect the strata at *lodes*, The lodes are not visualized in the above diagram, but they can be inferred as filled rectangles extending the flows through the strata at each end of the diagram or connecting the flows on either side of the center stratum.
 
 As the examples in the next section will demonstrate, which of these elements are incorporated into an alluvial diagram depends on both how the underlying data is structured and what the creator wants the diagram to communicate.
@@ -114,7 +114,9 @@ The same stat and geom can receive this data format using a different set of pos
 - `stratum`, the "value" taken by the axis variable indicated by `x`; and
 - `alluvium`, the indexing scheme that links the rows of a single alluvium.
 
-This format and functionality admit of weights that vary from axis to axis, allowing users to produce weighted bump charts like those showcased [here](http://imgur.com/gallery/gI5p7). In these cases, the strata and the alluvia are the same, so either `stratum` or `alluvium` can be specified while omitting the other. As an example, we can assign each country in the **alluvial** `Refugees` dataset a region, allowing us to compare refugee volumes between countries and between regions simultaneously:
+Weights (and weight totals) can vary from axis to axis, allowing users to produce bump charts like those showcased [here](http://imgur.com/gallery/gI5p7).[^geom-area] In these cases, the strata and the alluvia are the same, so either `stratum` or `alluvium` can be specified while omitting the other. As an example, we can grop countries in the `Refugees` dataset by region, in order to compare refugee volumes hierarchically:
+
+[^geom-area]: If bumping is unnecessary, consider using [`geom_area()`](https://chrisalbon.com/r-stats/stacked-area-graph.html) instead.
 
 ```{r time series alluvia diagram of refugees dataset}
 data(Refugees, package = "alluvial")
@@ -158,7 +160,7 @@ ggplot(vaccinations,
   ggtitle("vaccination survey responses at three points in time")
 ```
 
-Note that `geom_flow()` by default calls `stat_flow()`, which ignores any continuity between the alluvial segments linking different pairs of adjacent axes.[^alluvium-flow] This "memoryless" plot produces a less cluttered diagram, in which at most one flow proceeds from each stratum at one axis to each stratum at the next, but at the cost of being able to track the subset of observations having a fixed set of values at all axes across the entire diagram.
+Note that `geom_flow()` by default calls `stat_flow()`, which ignores any continuity between the alluvial segments linking different pairs of adjacent axes.[^alluvium-flow] This "memoryless" plot produces a less cluttered diagram, in which at most one flow proceeds from each stratum at one axis to each stratum at the next, but at the cost of being able to track each cohort across the entire diagram.
 
 [^alluvium-flow]: This can be overridden, for example as `geom_flow(stat = "alluvium")`.
 
