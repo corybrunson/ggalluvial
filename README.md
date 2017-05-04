@@ -17,9 +17,6 @@ There's much to be improved on here still. Comments or pull requests are more th
 This package is not yet CRAN-ready. Here's how to install in the meantime:
 
 ```{r}
-if (!require(devtools)) {
-  install.packages("devtools")
-}
 devtools::install_github("corybrunson/ggalluvial", build_vignettes = TRUE)
 library(ggalluvial)
 ```
