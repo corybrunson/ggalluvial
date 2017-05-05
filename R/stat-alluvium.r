@@ -145,12 +145,6 @@ StatAlluvium <- ggproto(
       data <- as.data.frame(dplyr::summarize(dplyr::group_by_(data,
                                                               .dots = dots),
                                              weight = sum(weight)))
-      #data <- aggregate(x = data$weight,
-      #                  by = lapply(data[, setdiff(names(data), "weight")],
-      #                              addNA),
-      #                  FUN = sum,
-      #                  simplify = TRUE)
-      #names(data)[ncol(data)] <- "weight"
     }
     
     # sort data by 'x' then 'alluvium' (to match 'alluv')
