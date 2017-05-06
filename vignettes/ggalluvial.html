@@ -12,7 +12,7 @@
 
 <meta name="author" content="Jason Cory Brunson" />
 
-<meta name="date" content="2017-05-05" />
+<meta name="date" content="2017-05-06" />
 
 <title>alluvial diagrams in ggplot2</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">alluvial diagrams in ggplot2</h1>
 <h4 class="author"><em>Jason Cory Brunson</em></h4>
-<h4 class="date"><em>2017-05-05</em></h4>
+<h4 class="date"><em>2017-05-06</em></h4>
 
 
 
@@ -142,8 +142,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <ul>
 <li>The <code>axis[0-9]*</code> position aesthetics are non-standard.</li>
 <li><code>stat_alluvium()</code> ignores any argument to the <code>group</code> aesthetic; instead, <code>StatAlluvium$compute_panel()</code> uses <code>group</code> to link the rows of the internally-transformed dataset that correspond to the same alluvium.</li>
+<li>The <code>label.strata</code> parameter instructs <code>stat_stratum()</code> (called by <code>geom_text()</code>) to take the values of the axis variables as labels.</li>
 <li>The horizontal axis must be manually corrected (using <code>scale_x_continuous()</code>) to reflect the implicit categorical variable identifying the axis.</li>
-<li>The <code>label.strata</code> parameter must instruct <code>stat_stratum()</code> (called by <code>geom_text()</code>) to take the values of the axis variables as labels because the labels cannot be found in any single column of the input dataset, so cannot be assigned to as aesthetic.</li>
 </ul>
 <p>Furthermore, format aesthetics like <code>fill</code> are necessarily fixed for each alluvium; they cannot, for example, change from axis to axis according to the value taken at each. This means that, although they can reproduce the branching-tree structure of parallel sets, this format and functionality cannot produce alluvial diagrams with the color schemes featured <a href="https://epijim.uk/code-snippets/eq5d/">here</a> (“Alluvial diagram”) and <a href="https://developers.google.com/chart/interactive/docs/gallery/sankey">here</a> (“Controlling colors”), which are “reset” at each axis.</p>
 </div>

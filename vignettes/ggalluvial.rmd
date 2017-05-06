@@ -94,8 +94,8 @@ This format and functionality are useful and will be retained in future versions
 
 - The `axis[0-9]*` position aesthetics are non-standard.
 - `stat_alluvium()` ignores any argument to the `group` aesthetic; instead, `StatAlluvium$compute_panel()` uses `group` to link the rows of the internally-transformed dataset that correspond to the same alluvium.
+- The `label.strata` parameter instructs `stat_stratum()` (called by `geom_text()`) to take the values of the axis variables as labels.
 - The horizontal axis must be manually corrected (using `scale_x_continuous()`) to reflect the implicit categorical variable identifying the axis.
-- The `label.strata` parameter must instruct `stat_stratum()` (called by `geom_text()`) to take the values of the axis variables as labels because the labels cannot be found in any single column of the input dataset, so cannot be assigned to as aesthetic.
 
 Furthermore, format aesthetics like `fill` are necessarily fixed for each alluvium; they cannot, for example, change from axis to axis according to the value taken at each. This means that, although they can reproduce the branching-tree structure of parallel sets, this format and functionality cannot produce alluvial diagrams with the color schemes featured [here](https://epijim.uk/code-snippets/eq5d/) ("Alluvial diagram") and [here](https://developers.google.com/chart/interactive/docs/gallery/sankey) ("Controlling colors"), which are "reset" at each axis.
 

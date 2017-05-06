@@ -47,9 +47,9 @@ ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age,
            color = Survived)) +
-  geom_errorbar(stat = "stratum") +
+  stat_stratum(geom = "errorbar") +
   geom_line(stat = "flow") +
-  geom_pointrange(stat = "flow") +
+  stat_flow(geom = "pointrange") +
   geom_text(stat = "stratum", label.strata = TRUE) +
   scale_x_continuous(breaks = 1:3,
                      labels = c("Class", "Sex", "Age"))
