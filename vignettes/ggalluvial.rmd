@@ -144,8 +144,28 @@ ggplot(data = Refugees,
   ggtitle("refugee volume by country of origin and geographic region")
 ```
 
-The format allows us to assign aesthetics that change from axis to axis along the same alluvium, which is useful for repeated measures datasets. It also gives us the option to aggregate the flows between adjacent axes.
-We can demonstrate these options on data from the influenza vaccination surveys conducted by the [RAND American Life Panel](https://alpdata.rand.org/):
+The format allows us to assign aesthetics that change from axis to axis along the same alluvium, which is useful for repeated measures datasets. This requires generating a separate graphical object for each flow, as implemented in `geom_flow()`.
+The plot below uses a set of (changes to) students' academic curricula over the course of several semesters.
+Since `geom_flow()` calls `stat_flow()` by default (see the next example), we override it with `stat_alluvium()` in order to track each student across all semesters:
+
+```{r alluvial diagram of majors dataset}
+data(majors)
+majors$curriculum <- as.factor(majors$curriculum)
+ggplot(majors,
+       aes(x = semester, stratum = curriculum, alluvium = student,
+           fill = curriculum, label = curriculum)) +
+  geom_flow(stat = "alluvium", lode.guidance = "rightleft") +
+  geom_stratum() +
+  ggtitle("student curricula across several semesters")
+```
+
+No `weight` is specified, so each row is assigned a weight of `1`.
+This example demonstrates one way **ggalluvial** handles missing data. The alternative is to set the parameter `na.rm` to `TRUE`.[^na.rm] Missing data handling (specifically, the order of the strata) also depends on whether the `stratum` variable is character or factor/numeric.
+
+[^na.rm] Be sure to set `na.rm` consistently in each layer, in this case both the flows and the strata.
+
+Finally, lode format gives us the option to aggregate the flows between adjacent axes, which may be appropriate when the transitions between adjacent axes are of primary importance.
+We can demonstrate this option on data from the influenza vaccination surveys conducted by the [RAND American Life Panel](https://alpdata.rand.org/):
 
 ```{r alluvial diagram of vaccinations dataset}
 data(vaccinations)
@@ -160,9 +180,7 @@ ggplot(vaccinations,
   ggtitle("vaccination survey responses at three points in time")
 ```
 
-Note that `stat_flow()`, called by `geom_flow()`, ignores any continuity between the alluvial segments linking different pairs of adjacent axes.[^alluvium-flow] This "memoryless" plot produces a less cluttered diagram, in which at most one flow proceeds from each stratum at one axis to each stratum at the next, but at the cost of being able to track each cohort across the entire diagram.
-
-[^alluvium-flow]: This can be overridden, for example as `geom_flow(stat = "alluvium")`.
+This diagram ignores any continuity between the alluvial segments linking different pairs of adjacent axes. This "memoryless" plot produces a less cluttered diagram, in which at most one flow proceeds from each stratum at one axis to each stratum at the next, but at the cost of being able to track each cohort across the entire diagram.
 
 ## Appendix
 

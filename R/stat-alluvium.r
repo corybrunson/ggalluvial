@@ -75,7 +75,7 @@ stat_alluvium <- function(mapping = NULL,
 StatAlluvium <- ggproto(
   "StatAlluvium", Stat,
   
-  required_aes = c("x", "stratum", "alluvium"),
+  required_aes = c("x"),
   
   setup_params = function(data, params) {
     
@@ -132,7 +132,7 @@ StatAlluvium <- ggproto(
     data
   },
   
-  compute_panel = function(self, data, scales,
+  compute_panel = function(data, scales,
                            decreasing = NA,
                            aggregate.wts = TRUE,
                            lode.guidance = "zigzag",

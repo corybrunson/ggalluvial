@@ -3,7 +3,16 @@
 #' This is a sample from the RAND ALP surveys on influenza vaccination,
 #' kindly contributed by Raffaele Vardavas.
 #'
-#' @format An alluvial data frame.
+#' @format An alluvial data frame in lode form.
 #' @source RAND American Life Panel \url{https://alpdata.rand.org/}
 #' @name vaccinations
+NULL
+
+#' Student curricula across semesters
+#' 
+#' This dataset follows the curricula of 10 students across 8 academic
+#' semesters.
+#'
+#' @format An alluvial data frame in lode form.
+#' @name majors
 NULL

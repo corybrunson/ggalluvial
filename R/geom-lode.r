@@ -38,19 +38,20 @@
 #' @usage NULL
 #' @export
 geom_lode <- function(mapping = NULL,
-                          data = NULL,
-                          stat = "alluvium",
-                          width = 1/3, axis_width = NULL,
-                          na.rm = FALSE,
-                          show.legend = NA,
-                          inherit.aes = TRUE,
-                          ...) {
+                      data = NULL,
+                      stat = "alluvium",
+                      position = "identity",
+                      width = 1/3, axis_width = NULL,
+                      na.rm = FALSE,
+                      show.legend = NA,
+                      inherit.aes = TRUE,
+                      ...) {
   layer(
     geom = GeomLode,
     mapping = mapping,
     data = data,
     stat = stat,
-    position = "identity",
+    position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(

@@ -38,21 +38,22 @@
 #' @usage NULL
 #' @export
 geom_flow <- function(mapping = NULL,
-                          data = NULL,
-                          stat = "flow",
-                          width = 1/3, axis_width = NULL,
-                          knot.pos = 1/6, ribbon_bend = NULL,
-                          aes.flow = "forward",
-                          na.rm = FALSE,
-                          show.legend = NA,
-                          inherit.aes = TRUE,
-                          ...) {
+                      data = NULL,
+                      stat = "flow",
+                      position = "identity",
+                      width = 1/3, axis_width = NULL,
+                      knot.pos = 1/6, ribbon_bend = NULL,
+                      aes.flow = "forward",
+                      na.rm = FALSE,
+                      show.legend = NA,
+                      inherit.aes = TRUE,
+                      ...) {
   layer(
     geom = GeomFlow,
     mapping = mapping,
     data = data,
     stat = stat,
-    position = "identity",
+    position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(

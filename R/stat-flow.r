@@ -63,7 +63,7 @@ stat_flow <- function(mapping = NULL,
 StatFlow <- ggproto(
   "StatFlow", Stat,
   
-  required_aes = c("x", "stratum", "alluvium"),
+  required_aes = c("x"),
   
   setup_data = function(data, params) {
     

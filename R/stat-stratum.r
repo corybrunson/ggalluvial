@@ -71,7 +71,7 @@ stat_stratum <- function(mapping = NULL,
 StatStratum <- ggproto(
   "StatStratum", Stat,
   
-  required_aes = c("x", "stratum"),
+  required_aes = c("x"),
   
   setup_data = function(data, params) {
     
