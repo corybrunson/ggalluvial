@@ -144,9 +144,8 @@ ggplot(data = Refugees,
   ggtitle("refugee volume by country of origin and geographic region")
 ```
 
-The format allows us to assign aesthetics based on the values taken at *each* axis, which is useful for repeated measures datasets, rather than only at some specific axis, as in the parallel sets example.
-We can illustrate this usage on data from the influenza vaccination surveys conducted by the [RAND American Life Panel](https://alpdata.rand.org/).
-`geom_alluvium()` insists on applying aesthetics uniformly to each alluvium, so to achieve this effect we use `geom_flow()`, which plots alluvial segments between adjacent axes:
+The format allows us to assign aesthetics that change from axis to axis along the same alluvium, which is useful for repeated measures datasets. It also gives us the option to aggregate the flows between adjacent axes.
+We can demonstrate these options on data from the influenza vaccination surveys conducted by the [RAND American Life Panel](https://alpdata.rand.org/):
 
 ```{r alluvial diagram of vaccinations dataset}
 data(vaccinations)
@@ -161,7 +160,7 @@ ggplot(vaccinations,
   ggtitle("vaccination survey responses at three points in time")
 ```
 
-Note that `geom_flow()` by default calls `stat_flow()`, which ignores any continuity between the alluvial segments linking different pairs of adjacent axes.[^alluvium-flow] This "memoryless" plot produces a less cluttered diagram, in which at most one flow proceeds from each stratum at one axis to each stratum at the next, but at the cost of being able to track each cohort across the entire diagram.
+Note that `stat_flow()`, called by `geom_flow()`, ignores any continuity between the alluvial segments linking different pairs of adjacent axes.[^alluvium-flow] This "memoryless" plot produces a less cluttered diagram, in which at most one flow proceeds from each stratum at one axis to each stratum at the next, but at the cost of being able to track each cohort across the entire diagram.
 
 [^alluvium-flow]: This can be overridden, for example as `geom_flow(stat = "alluvium")`.
 
