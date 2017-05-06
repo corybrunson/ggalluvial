@@ -64,7 +64,7 @@ ggplot(as.data.frame(Titanic),
   geom_errorbar(stat = "stratum") +
   geom_line(stat = "alluvium") +
   geom_pointrange(stat = "alluvium") +
-  geom_text(stat = "stratum") +
+  geom_text(stat = "stratum", label.strata = TRUE) +
   scale_x_continuous(breaks = 1:3,
                      labels = c("Class", "Sex", "Age"))
 
@@ -74,7 +74,7 @@ ggplot(as.data.frame(Titanic),
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
   geom_flow(aes(fill = Survived), stat = "alluvium",
             aes.bind = TRUE, lode.guidance = "rightward") +
-  geom_stratum() + geom_text(stat = "stratum") +
+  geom_stratum() + geom_text(stat = "stratum", label.strata = TRUE) +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 
 # use of lode ordering
@@ -84,7 +84,7 @@ ggplot(as.data.frame(Titanic),
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
   geom_flow(aes(fill = Survived), stat = "alluvium",
             lode.ordering = lode_ord) +
-  geom_stratum() + geom_text(stat = "stratum") +
+  geom_stratum() + geom_text(stat = "stratum", label.strata = TRUE) +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 }
 \seealso{

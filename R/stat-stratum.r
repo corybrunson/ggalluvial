@@ -32,6 +32,9 @@
 #'   in the order of the variable values (NA, the default),
 #'   with the largest on top (FALSE), or
 #'   with the largest on bottom (TRUE).
+#' @param label.strata Logical; whether to assign the values of the axis
+#'   variables to the strata. Defaults to FALSE, and requires that no label
+#'   aesthetic is assigned.
 #' @example inst/examples/ex-stat-stratum.r
 #' @usage NULL
 #' @export
@@ -39,6 +42,7 @@ stat_stratum <- function(mapping = NULL,
                          data = NULL,
                          geom = "stratum",
                          decreasing = NA,
+                         label.strata = FALSE,
                          show.legend = NA,
                          inherit.aes = TRUE,
                          na.rm = FALSE,
@@ -52,6 +56,7 @@ stat_stratum <- function(mapping = NULL,
     inherit.aes = inherit.aes,
     params = list(
       decreasing = decreasing,
+      label.strata = label.strata,
       na.rm = na.rm,
       ...
     )
@@ -95,11 +100,6 @@ StatStratum <- ggproto(
       data$x <- as.numeric(as.factor(data$x))
     }
     
-    # introduce label (if absent)
-    if (is.null(data$label)) {
-      data$label <- data$stratum
-    }
-    
     # nullify 'group' and 'alluvium' fields
     data <- transform(data,
                       group = NULL,
@@ -109,7 +109,18 @@ StatStratum <- ggproto(
   },
   
   compute_panel = function(self, data, scales,
-                           decreasing = NA) {
+                           decreasing = NA,
+                           label.strata = FALSE) {
+    
+    # introduce label (if absent)
+    if (label.strata) {
+      if (is.null(data$label)) {
+        data$label <- data$stratum
+      } else {
+        warning("Aesthetic 'label' is specified, ",
+                "so parameter 'label.strata' will be ignored.")
+      }
+    }
     
     # remove empty lodes (including labels)
     data <- subset(data, weight > 0)

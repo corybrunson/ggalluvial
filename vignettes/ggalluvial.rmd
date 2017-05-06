@@ -32,7 +32,7 @@ ggplot(data = to_lodes(as.data.frame(Titanic),
                        key = "Demographic",
                        axes = 1:3),
        aes(x = Demographic, stratum = value, alluvium = id,
-           weight = Freq)) +
+           weight = Freq, label = value)) +
   geom_alluvium(aes(fill = Survived)) +
   geom_stratum() + geom_text(stat = "stratum") +
   ggtitle("passengers on the maiden voyage of the Titanic",
@@ -68,7 +68,7 @@ ggplot(as.data.frame(UCBAdmissions),
        aes(weight = Freq, axis1 = Gender, axis2 = Dept)) +
   geom_alluvium(aes(fill = Admit), width = 1/12) +
   geom_stratum(width = 1/12, fill = "black", color = "grey") +
-  geom_label(stat = "stratum") +
+  geom_label(stat = "stratum", label.strata = TRUE) +
   scale_x_continuous(breaks = 1:2, labels = c("Gender", "Dept")) +
   ggtitle("UC Berkeley admissions and rejections, by sex and department")
 ```
@@ -84,7 +84,7 @@ ggplot(as.data.frame(Titanic),
            axis1 = Survived, axis2 = Sex, axis3 = Class)) +
   geom_alluvium(aes(fill = Class),
                 width = 1/8, knot.pos = 0) +
-  geom_stratum(width = 1/8) + geom_text(stat = "stratum") +
+  geom_stratum(width = 1/8) + geom_text(stat = "stratum", label.strata = TRUE) +
   scale_x_continuous(breaks = 1:3, labels = c("Survived", "Sex", "Class")) +
   coord_flip() +
   ggtitle("Titanic survival by class and sex")
@@ -95,6 +95,7 @@ This format and functionality are useful and will be retained in future versions
 - The `axis[0-9]*` position aesthetics are non-standard.
 - `stat_alluvium()` ignores any argument to the `group` aesthetic; instead, `StatAlluvium$compute_panel()` uses `group` to link the rows of the internally-transformed dataset that correspond to the same alluvium.
 - The horizontal axis must be manually corrected (using `scale_x_continuous()`) to reflect the implicit categorical variable identifying the axis.
+- The `label.strata` parameter must instruct `stat_stratum()` (called by `geom_text()`) to take the values of the axis variables as labels because the labels cannot be found in any single column of the input dataset, so cannot be assigned to as aesthetic.
 
 Furthermore, format aesthetics like `fill` are necessarily fixed for each alluvium; they cannot, for example, change from axis to axis according to the value taken at each. This means that, although they can reproduce the branching-tree structure of parallel sets, this format and functionality cannot produce alluvial diagrams with the color schemes featured [here](https://epijim.uk/code-snippets/eq5d/) ("Alluvial diagram") and [here](https://developers.google.com/chart/interactive/docs/gallery/sankey) ("Controlling colors"), which are "reset" at each axis.
 
@@ -152,7 +153,7 @@ data(vaccinations)
 ggplot(vaccinations,
        aes(x = survey, stratum = response, alluvium = subject,
            weight = freq,
-           fill = response)) +
+           fill = response, label = response)) +
   geom_flow() +
   geom_stratum(alpha = .5) +
   geom_text(stat = "stratum", size = 3) +
