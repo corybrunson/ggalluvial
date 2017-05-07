@@ -76,7 +76,7 @@ ggplot(as.data.frame(Titanic),
 wph <- as.data.frame(as.table(WorldPhones))
 names(wph) <- c("Year", "Region", "Telephones")
 ggplot(wph,
-       aes(x = Year, stratum = Region, weight = Telephones)) +
+       aes(x = Year, alluvium = Region, weight = Telephones)) +
   geom_flow(aes(fill = Region, colour = Region), width = 0)
 
 # rightward flow aesthetics for vaccine survey data

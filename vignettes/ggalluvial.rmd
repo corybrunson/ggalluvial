@@ -135,7 +135,7 @@ country_regions <- c(
 )
 Refugees$region <- country_regions[Refugees$country]
 ggplot(data = Refugees,
-       aes(x = year, weight = refugees, stratum = country)) +
+       aes(x = year, weight = refugees, alluvium = country)) +
   geom_alluvium(aes(fill = country, colour = country),
                 alpha = .75, decreasing = FALSE) +
   scale_fill_brewer(type = "qual", palette = "Set3") +

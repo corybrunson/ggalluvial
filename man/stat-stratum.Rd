@@ -43,7 +43,14 @@ data format will be ignored.
 }
 
 \examples{
+# only 'stratum' assignment is necessary to generate strata
 data(vaccinations)
+ggplot(vaccinations,
+       aes(weight = freq,
+           x = survey, stratum = response,
+           fill = response)) +
+  stat_stratum(width = .5)
+
 # lode data: positioning with weight labels
 ggplot(vaccinations,
        aes(weight = freq,

@@ -96,10 +96,8 @@ StatAlluvium <- ggproto(
   
   setup_data = function(data, params) {
     
-    # assign 'stratum' to 'alluvium' if 'alluvium' not provided, and vice-versa
-    if (is.null(data$alluvium) & !is.null(data$stratum)) {
-      data <- transform(data, alluvium = stratum)
-    } else if (is.null(data$stratum) & !is.null(data$alluvium)) {
+    # assign 'alluvium' to 'stratum' if 'stratum' not provided
+    if (is.null(data$stratum) & !is.null(data$alluvium)) {
       data <- transform(data, stratum = alluvium)
     }
     
