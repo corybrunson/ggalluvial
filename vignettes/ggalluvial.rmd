@@ -115,9 +115,10 @@ The same stat and geom can receive this data format using a different set of pos
 - `stratum`, the "value" taken by the axis variable indicated by `x`; and
 - `alluvium`, the indexing scheme that links the rows of a single alluvium.
 
-Weights (and weight totals) can vary from axis to axis, allowing users to produce bump charts like those showcased [here](http://imgur.com/gallery/gI5p7).[^geom-area] In these cases, the strata and the alluvia are the same, so either `stratum` or `alluvium` can be specified while omitting the other. As an example, we can grop countries in the `Refugees` dataset by region, in order to compare refugee volumes hierarchically:
+Weights (and weight totals) can vary from axis to axis, allowing users to produce bump charts like those showcased [here](http://imgur.com/gallery/gI5p7).[^geom-area] In these cases, the strata are an artifact of the alluvia and usually not plotted. For convenience, both `stat_alluvium()` and `stat_flow()` accept arguments for `x` and `alluvium` even if none is given for `stratum`.[^arguments] As an example, we can grop countries in the `Refugees` dataset by region, in order to compare refugee volumes hierarchically:
 
 [^geom-area]: If bumping is unnecessary, consider using [`geom_area()`](https://chrisalbon.com/r-stats/stacked-area-graph.html) instead.
+[^arguments]: `stat_stratum()` will similarly accept arguments for `x` and `stratum` without `alluvium`. If both strata and either alluvia or flows are to be plotted, though, all three parameters need arguments.
 
 ```{r time series alluvia diagram of refugees dataset}
 data(Refugees, package = "alluvial")

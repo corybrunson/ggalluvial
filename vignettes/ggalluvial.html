@@ -12,7 +12,7 @@
 
 <meta name="author" content="Jason Cory Brunson" />
 
-<meta name="date" content="2017-05-06" />
+<meta name="date" content="2017-05-07" />
 
 <title>alluvial diagrams in ggplot2</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">alluvial diagrams in ggplot2</h1>
 <h4 class="author"><em>Jason Cory Brunson</em></h4>
-<h4 class="date"><em>2017-05-06</em></h4>
+<h4 class="date"><em>2017-05-07</em></h4>
 
 
 
@@ -175,7 +175,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><code>stratum</code>, the “value” taken by the axis variable indicated by <code>x</code>; and</li>
 <li><code>alluvium</code>, the indexing scheme that links the rows of a single alluvium.</li>
 </ul>
-<p>Weights (and weight totals) can vary from axis to axis, allowing users to produce bump charts like those showcased <a href="http://imgur.com/gallery/gI5p7">here</a>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> In these cases, the strata and the alluvia are the same, so either <code>stratum</code> or <code>alluvium</code> can be specified while omitting the other. As an example, we can grop countries in the <code>Refugees</code> dataset by region, in order to compare refugee volumes hierarchically:</p>
+<p>Weights (and weight totals) can vary from axis to axis, allowing users to produce bump charts like those showcased <a href="http://imgur.com/gallery/gI5p7">here</a>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> In these cases, the strata are an artifact of the alluvia and usually not plotted. For convenience, both <code>stat_alluvium()</code> and <code>stat_flow()</code> accept arguments for <code>x</code> and <code>alluvium</code> even if none is given for <code>stratum</code>.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> As an example, we can grop countries in the <code>Refugees</code> dataset by region, in order to compare refugee volumes hierarchically:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(Refugees, <span class="dt">package =</span> <span class="st">&quot;alluvial&quot;</span>)
 country_regions &lt;-<span class="st"> </span><span class="kw">c</span>(
   <span class="dt">Afghanistan =</span> <span class="st">&quot;Middle East&quot;</span>,
@@ -191,7 +191,7 @@ country_regions &lt;-<span class="st"> </span><span class="kw">c</span>(
 )
 Refugees$region &lt;-<span class="st"> </span>country_regions[Refugees$country]
 <span class="kw">ggplot</span>(<span class="dt">data =</span> Refugees,
-       <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">weight =</span> refugees, <span class="dt">stratum =</span> country)) +
+       <span class="kw">aes</span>(<span class="dt">x =</span> year, <span class="dt">weight =</span> refugees, <span class="dt">alluvium =</span> country)) +
 <span class="st">  </span><span class="kw">geom_alluvium</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> country, <span class="dt">colour =</span> country),
                 <span class="dt">alpha =</span> .<span class="dv">75</span>, <span class="dt">decreasing =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">scale_fill_brewer</span>(<span class="dt">type =</span> <span class="st">&quot;qual&quot;</span>, <span class="dt">palette =</span> <span class="st">&quot;Set3&quot;</span>) +
@@ -260,6 +260,7 @@ majors$curriculum &lt;-<span class="st"> </span><span class="kw">as.factor</span
 <ol>
 <li id="fn1"><p>A greater variety of parallel sets plots are implemented in <a href="https://github.com/heike/ggparallel">the <strong>ggparallel</strong> package</a>.<a href="#fnref1">↩</a></p></li>
 <li id="fn2"><p>If bumping is unnecessary, consider using <a href="https://chrisalbon.com/r-stats/stacked-area-graph.html"><code>geom_area()</code></a> instead.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p><code>stat_stratum()</code> will similarly accept arguments for <code>x</code> and <code>stratum</code> without <code>alluvium</code>. If both strata and either alluvia or flows are to be plotted, though, all three parameters need arguments.<a href="#fnref3">↩</a></p></li>
 </ol>
 </div>
 
