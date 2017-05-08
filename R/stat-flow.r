@@ -105,8 +105,6 @@ StatFlow <- ggproto(
                            decreasing = NA,
                            aggregate.wts = TRUE,
                            aes.bind = FALSE) {
-    saveRDS(data, file = "temp.rda")
-    data <- readRDS("temp.rda")
     
     # aesthetics
     aesthetics <- setdiff(names(data),
@@ -126,7 +124,11 @@ StatFlow <- ggproto(
     aes_port <- aesthetics[which(sapply(aesthetics, function(x) {
       dplyr::n_distinct(data[, c("x", "stratum", x)])
     }) > n_ports)]
-    data$aes <- interaction(data[, rev(aes_port)], drop = TRUE)
+    data$aes <- if (length(aes_port) == 0) {
+      1
+    } else {
+      interaction(data[, rev(aes_port)], drop = TRUE)
+    }
     
     # stack starts and ends of flows, using 'alluvium' to link them
     x_ran <- range(data$x)
