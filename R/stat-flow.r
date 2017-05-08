@@ -105,6 +105,8 @@ StatFlow <- ggproto(
                            decreasing = NA,
                            aggregate.wts = TRUE,
                            aes.bind = FALSE) {
+    saveRDS(data, file = "temp.rda")
+    data <- readRDS("temp.rda")
     
     # aesthetics
     aesthetics <- setdiff(names(data),
@@ -119,45 +121,36 @@ StatFlow <- ggproto(
       names(deposits)[3] <- "deposit"
     }
     
+    # identify aesthetics that vary within strata
+    n_ports <- dplyr::n_distinct(data[, c("x", "stratum")])
+    aes_port <- aesthetics[which(sapply(aesthetics, function(x) {
+      dplyr::n_distinct(data[, c("x", "stratum", x)])
+    }) > n_ports)]
+    data$aes <- interaction(data[, rev(aes_port)], drop = TRUE)
+    
     # stack starts and ends of flows, using 'alluvium' to link them
-    # 'side' will become a field of 'adj'
     x_ran <- range(data$x)
     data$alluvium <- as.numeric(as.factor(data$alluvium))
     alluvium_max <- max(data$alluvium)
     data <- dplyr::bind_rows(
       transform(dplyr::filter(data, x != x_ran[2]),
-                link = as.numeric(x),
                 alluvium = alluvium + alluvium_max * (as.numeric(x) - 1),
+                link = as.numeric(x),
                 side = I("start")),
       transform(dplyr::filter(data, x != x_ran[1]),
-                link = as.numeric(x) - 1,
                 alluvium = alluvium + alluvium_max * (as.numeric(x) - 2),
+                link = as.numeric(x) - 1,
                 side = I("end"))
     )
     data$side <- factor(data$side, levels = c("start", "end"))
     stopifnot(all(table(data$alluvium) == 2))
     
-    # distinguish aesthetics for flow partition versus for flow interpolation
-    n_ports <- dplyr::n_distinct(data[, c("link", "side", "stratum")])
-    aes_partition <- aesthetics[which(sapply(aesthetics, function(x) {
-      dplyr::n_distinct(data[, c("link", "side", "stratum", x)])
-    }) > n_ports)]
-    aes_interpolate <- setdiff(aesthetics, aes_partition)
-    
-    # group flows between common strata
-    adj <- tidyr::spread(data[, c("link", "alluvium", "stratum", "side")],
-                         key = side, value = stratum)
-    adj <- transform(adj,
-                     flow = interaction(link, start, end, drop = TRUE))
-    data <- merge(data,
-                  adj[, c("alluvium", "flow")],
-                  by = "alluvium", all.x = TRUE, all.y = FALSE)
-    # evidently quicker, but clunkier
-    #flow <- adj$flow
-    #names(flow) <- adj$alluvium
-    #data$flow <- flow[as.character(data$alluvium)]
-    data$alluvium <- as.numeric(interaction(data[, c(aes_partition, "flow")],
-                                            drop = TRUE))
+    # flag flows between common pairs of strata and of aesthetics
+    for (var in c("stratum", "aes")) {
+      data <- match_sides(data, var, paste0("flow_", var))
+    }
+    data$alluvium <- as.numeric(interaction(data[, c("flow_stratum",
+                                                     "flow_aes")], drop = TRUE))
     # aggregate alluvial segments within flows
     group_cols <- setdiff(names(data), c("weight", "group"))
     dots <- lapply(group_cols, as.symbol)
@@ -175,9 +168,9 @@ StatFlow <- ggproto(
       "link", "x",
       if (is.na(decreasing)) "stratum" else "deposit",
       if (aes.bind) {
-        c(aes_partition, "flow")
+        c("flow_aes", "flow_stratum")
       } else {
-        c("flow", aes_partition)
+        c("flow_stratum", "flow_aes")
       },
       "alluvium", "side"
     )
@@ -194,3 +187,12 @@ StatFlow <- ggproto(
               ymax = y + weight / 2)
   }
 )
+
+match_sides <- function(data, var, var_col) {
+  adj <- tidyr::spread_(data[, c("alluvium", "link", "side", var)],
+                        key = "side", value = var)
+  adj[[var_col]] <- interaction(adj$link, adj$start, adj$end, drop = TRUE)
+  merge(data,
+        adj[, c("alluvium", var_col)],
+        by = "alluvium", all.x = TRUE, all.y = FALSE)
+}
