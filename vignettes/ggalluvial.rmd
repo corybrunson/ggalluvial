@@ -163,7 +163,7 @@ ggplot(majors,
 No `weight` is specified, so each row is assigned a weight of `1`.
 This example demonstrates one way **ggalluvial** handles missing data. The alternative is to set the parameter `na.rm` to `TRUE`.[^na.rm] Missing data handling (specifically, the order of the strata) also depends on whether the `stratum` variable is character or factor/numeric.
 
-[^na.rm] Be sure to set `na.rm` consistently in each layer, in this case both the flows and the strata.
+[^na.rm]: Be sure to set `na.rm` consistently in each layer, in this case both the flows and the strata.
 
 Finally, lode format gives us the option to aggregate the flows between adjacent axes, which may be appropriate when the transitions between adjacent axes are of primary importance.
 We can demonstrate this option on data from the influenza vaccination surveys conducted by the [RAND American Life Panel](https://alpdata.rand.org/):
