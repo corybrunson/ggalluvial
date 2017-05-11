@@ -5,6 +5,6 @@
 \title{Student curricula across semesters}
 \format{An alluvial data frame in lode form.}
 \description{
-This dataset follows the curricula of 10 students across 8 academic
-semesters.
+This dataset, kindly contributed by Dario Bonaretti, follows the curricula of
+10 students across 8 academic semesters.
 }

@@ -10,8 +10,8 @@ NULL
 
 #' Student curricula across semesters
 #' 
-#' This dataset follows the curricula of 10 students across 8 academic
-#' semesters.
+#' This dataset, kindly contributed by Dario Bonaretti, follows the curricula of
+#' 10 students across 8 academic semesters.
 #'
 #' @format An alluvial data frame in lode form.
 #' @name majors
