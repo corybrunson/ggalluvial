@@ -217,7 +217,7 @@ StatAlluvium <- ggproto(
     # add vertical centroids and 'group' to encode alluvia
     data <- transform(data,
                       y = (ymin + ymax) / 2,
-                      group = as.numeric(alluvium))
+                      group = as.numeric(as.factor(alluvium)))
     
     data
   }
