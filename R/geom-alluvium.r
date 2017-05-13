@@ -122,11 +122,11 @@ GeomAlluvium <- ggproto(
     
     if (nrow(data) == 1) {
       # spline coordinates (one axis)
-      spline_data <- data.frame(
-        x = data$x + data$width / 2 * c(-1, 1, 1, -1),
-        y = data$ymin + first_row$weight * c(0, 0, 1, 1),
+      spline_data <- with(data, data.frame(
+        x = x + width / 2 * c(-1, 1, 1, -1),
+        y = ymin + weight * c(0, 0, 1, 1),
         shape = rep(0, 4)
-      )
+      ))
     } else {
       # spline coordinates (more than one axis)
       spline_data <- data_to_xspl(data)

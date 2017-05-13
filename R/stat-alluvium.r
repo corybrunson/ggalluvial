@@ -212,7 +212,7 @@ StatAlluvium <- ggproto(
     }
     lode_positions <- do.call(rbind, lapply(1:length(axis_ind), position_lodes))
     data <- cbind(data, lode_positions[, -1])
-    stopifnot(all(data$weight == data$ymax - data$ymin))
+    stopifnot(isTRUE(all.equal(data$weight, data$ymax - data$ymin)))
     
     # add vertical centroids and 'group' to encode alluvia
     data <- transform(data,
