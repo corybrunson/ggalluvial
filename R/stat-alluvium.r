@@ -147,6 +147,13 @@ StatAlluvium <- ggproto(
                                              weight = sum(weight)))
     }
     
+    # introduce any missing rows
+    #if (fill.zeros) {
+    #  grid_data <- expand.grid(x = unique(data$x),
+    #                           alluvium = unique(data$alluvium))
+    #  data <- merge(data, grid_data, all = TRUE)
+    #}
+    
     # sort data by 'x' then 'alluvium' (to match 'alluv')
     data <- data[do.call(order, data[, c("x", "alluvium")]), ]
     
@@ -213,11 +220,22 @@ StatAlluvium <- ggproto(
     lode_positions <- do.call(rbind, lapply(1:length(axis_ind), position_lodes))
     data <- cbind(data, lode_positions[, -1])
     stopifnot(isTRUE(all.equal(data$weight, data$ymax - data$ymin)))
-    
-    # add vertical centroids and 'group' to encode alluvia
+    # add vertical centroids
     data <- transform(data,
-                      y = (ymin + ymax) / 2,
-                      group = as.numeric(as.factor(alluvium)))
+                      y = (ymin + ymax) / 2)
+    
+    # within each alluvium, indices at which contiguous subsets start
+    data <- transform(data,
+                      starts = duplicated(data$alluvium) &
+                        !duplicated(data[, c("x", "alluvium")]),
+                      axis = as.numeric(as.factor(as.character(x))))
+    # within each alluvium, group contiguous subsets
+    # (data is sorted by 'x' and 'alluvium'; dplyr::group_by() does not reorder)
+    data <- dplyr::ungroup(dplyr::mutate(dplyr::group_by(data, alluvium),
+                                         flow = axis - cumsum(starts)))
+    # add 'group' to group contiguous alluvial subsets
+    data <- transform(data,
+                      group = as.numeric(interaction(alluvium, flow)))
     
     data
   }
