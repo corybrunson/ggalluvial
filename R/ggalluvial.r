@@ -15,6 +15,7 @@
 #' @param weight A weight variable, from \code{data} or of compatible length 
 #'   with the elements of \code{formula}.
 #' @param incl.strata Logical; whether to plot strata over alluvia.
+#' @param incl.labels Logical; whether to plot labels over strata.
 ggalluvial <- function(...) {
   input_list <- list(...)
   if (!is.null(input_list[["formula"]]) | any(sapply(input_list, is.call))) {
@@ -22,30 +23,32 @@ ggalluvial <- function(...) {
   } else {
     aesthetics <-
       names(input_list[[which(sapply(input_list, class) == "uneval")]])
+    incl.labels <- "label" %in% aesthetics
     if (length(get_axes(aesthetics)) == 0) {
-      ggalluvial_lodes(...)
+      ggalluvial_lodes(..., incl.labels = incl.labels)
     } else {
-      ggalluvial_alluvia(...)
+      ggalluvial_alluvia(..., incl.labels = incl.labels)
     }
   }
 }
 
 #' @rdname ggalluvial
 #' @export
-ggalluvial_lodes <- function(..., incl.strata = TRUE) {
+ggalluvial_lodes <- function(..., incl.strata = TRUE, incl.labels = FALSE) {
   gg <- ggplot(...) +
     geom_alluvium()
   if (incl.strata) {
-    gg <- gg +  
-      geom_stratum(color = "black", fill = "white") +
-      geom_text(stat = "stratum", color = "black")
+    gg <- gg + geom_stratum(color = "black", fill = "white")
+    if (incl.labels) {
+      gg <- gg + geom_text(stat = "stratum", color = "black")
+    }
   }
   gg
 }
 
 #' @rdname ggalluvial
 #' @export
-ggalluvial_alluvia <- function(..., incl.strata = TRUE) {
+ggalluvial_alluvia <- function(..., incl.strata = TRUE, incl.labels = FALSE) {
   input_list <- list(...)
   aes_input <- input_list[[which(sapply(input_list, class) == "uneval")]]
   axis_input <- aes_input[grep("^axis[0-9]*$", names(aes_input))]
@@ -55,9 +58,10 @@ ggalluvial_alluvia <- function(..., incl.strata = TRUE) {
     geom_alluvium() +
     scale_x_continuous(breaks = axis_breaks, labels = axis_labels)
   if (incl.strata) {
-    gg <- gg +
-      geom_stratum(color = "black", fill = "white") +
-      geom_text(stat = "stratum", color = "black")
+    gg <- gg + geom_stratum(color = "black", fill = "white")
+    if (incl.labels) {
+      gg <- gg + geom_text(stat = "stratum", color = "black")
+    }
   }
   gg
 }
@@ -65,7 +69,9 @@ ggalluvial_alluvia <- function(..., incl.strata = TRUE) {
 #' @rdname ggalluvial
 #' @export
 ggalluvial_formula <- function(formula, data = NULL, weight,
-                               incl.strata = TRUE, ...) {
+                               incl.strata = TRUE, incl.labels = TRUE,
+                               ...) {
+  
   formula <- stats::as.formula(formula)
   if (!is.null(data)) {
     if (!is.data.frame(data)) {
@@ -130,7 +136,9 @@ ggalluvial_formula <- function(formula, data = NULL, weight,
     if (incl.strata) {
       gg <- gg +
         geom_stratum(color = "black", fill = "white") +
-        geom_text(stat = "stratum", color = "black")
+        if (incl.labels) {
+          gg <- gg + geom_text(stat = "stratum", color = "black")
+        }
     }
     gg
   }

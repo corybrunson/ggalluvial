@@ -9,17 +9,20 @@
 \usage{
 ggalluvial(...)
 
-ggalluvial_lodes(..., incl.strata = TRUE)
+ggalluvial_lodes(..., incl.strata = TRUE, incl.labels = FALSE)
 
-ggalluvial_alluvia(..., incl.strata = TRUE)
+ggalluvial_alluvia(..., incl.strata = TRUE, incl.labels = FALSE)
 
-ggalluvial_formula(formula, data = NULL, weight, incl.strata = TRUE, ...)
+ggalluvial_formula(formula, data = NULL, weight, incl.strata = TRUE,
+  incl.labels = TRUE, ...)
 }
 \arguments{
 \item{...}{Arguments passed to \code{ggplot} and inherited by 
 \code{geom_alluvium} and \code{geom_stratum}.}
 
 \item{incl.strata}{Logical; whether to plot strata over alluvia.}
+
+\item{incl.labels}{Logical; whether to plot labels over strata.}
 
 \item{formula}{A formula to specify the axes and alluvial divisions.}
 
