@@ -230,7 +230,7 @@ StatAlluvium <- ggproto(
                         !duplicated(data[, c("x", "alluvium")]),
                       axis = as.numeric(as.factor(as.character(x))))
     # within each alluvium, group contiguous subsets
-    # (data is sorted by 'x' and 'alluvium'; dplyr::group_by() does not reorder)
+    # (data is sorted by 'x' and 'alluvium'; group_by() does not reorder it)
     data <- dplyr::ungroup(dplyr::mutate(dplyr::group_by(data, alluvium),
                                          flow = axis - cumsum(starts)))
     # add 'group' to group contiguous alluvial subsets
