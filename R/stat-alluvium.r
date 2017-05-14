@@ -178,7 +178,7 @@ StatAlluvium <- ggproto(
       alluv <- alluviate(data, "x", "stratum", "alluvium")
     } else if (decreasing) {
       alluv <- alluviate(data, "x", "weight", "alluvium")
-      alluv <- transform(alluv, weight = -weight)
+      alluv[, -1] <- -alluv[, -1]
     } else {
       alluv <- alluviate(data, "x", "weight", "alluvium")
     }
