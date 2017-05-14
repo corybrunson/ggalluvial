@@ -104,7 +104,10 @@ StatAlluvium <- ggproto(
     # assign uniform weight if not provided
     if (is.null(data$weight)) {
       data$weight <- rep(1, nrow(data))
+    } else if (any(is.na(data$weight))) {
+      stop("Data contains NA weights.")
     }
+    
     type <- get_alluvial_type(data)
     if (type == "none") {
       stop("Data is not in a recognized alluvial form ",

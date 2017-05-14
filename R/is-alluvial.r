@@ -62,7 +62,7 @@ is_alluvial_lodes <- function(data, key, value, id, weight, logical = TRUE) {
   }
   
   if (any(duplicated(cbind(data[[key]], data[[id]])))) {
-    return(if (logical) FALSE else "none")
+    warning("Duplicated id-axis pairings.")
   }
   
   n_pairs <-

@@ -4,11 +4,13 @@ context("is_alluvial")
 titanic_alluvia <- as.data.frame(Titanic)
 
 test_that("is_alluvial recognizes alluvium-form Titanic data", {
-  expect_true(is_alluvial(titanic_alluvia))
+  expect_warning(is_alluvial(titanic_alluvia),
+                 "[Mm]issing")
   expect_true(is_alluvial(titanic_alluvia, axes = 1:4))
   expect_true(is_alluvial(titanic_alluvia, axes = c("Class", "Sex")))
-  expect_false(is_alluvial(titanic_alluvia,
-                           key = "Class", value = "Freq", id = "Age"))
+  expect_warning(is_alluvial(titanic_alluvia,
+                             key = "Class", value = "Freq", id = "Age"),
+                 "[Dd]uplicate")
 })
 
 titanic_lodes <- suppressWarnings(tidyr::gather(
@@ -20,11 +22,13 @@ titanic_lodes$Value <- factor(titanic_lodes$Value,
                                                          levels)))
 
 test_that("is_alluvial recognizes lode-form Titanic data", {
-  expect_true(is_alluvial(titanic_lodes))
+  expect_warning(is_alluvial(titanic_lodes),
+                 "[Mm]issing")
   expect_true(is_alluvial(titanic_lodes,
-                             key = "Variable", value = "Value", id = "Index"))
+                          key = "Variable", value = "Value", id = "Index"))
   expect_true(is_alluvial(titanic_lodes,
                           key = "Variable", value = "Value", id = "Index",
                           weight = "Freq"))
-  expect_true(is_alluvial(titanic_lodes, axes = 3:4))
+  expect_warning(is_alluvial(titanic_lodes, axes = 3:4),
+                 "[Mm]issing")
 })
