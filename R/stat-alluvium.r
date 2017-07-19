@@ -49,6 +49,7 @@ stat_alluvium <- function(mapping = NULL,
                           geom = "alluvium",
                           position = "identity",
                           decreasing = NA,
+                          reverse = TRUE,
                           na.rm = FALSE,
                           show.legend = NA,
                           inherit.aes = TRUE,
@@ -63,6 +64,7 @@ stat_alluvium <- function(mapping = NULL,
     inherit.aes = inherit.aes,
     params = list(
       decreasing = decreasing,
+      reverse = reverse,
       na.rm = na.rm,
       ...
     )
@@ -134,7 +136,7 @@ StatAlluvium <- ggproto(
   },
   
   compute_panel = function(data, scales,
-                           decreasing = NA,
+                           decreasing = NA, reverse = TRUE,
                            aggregate.wts = TRUE,
                            lode.guidance = "zigzag",
                            aes.bind = FALSE,
@@ -174,14 +176,13 @@ StatAlluvium <- ggproto(
                        c("x", "stratum", "alluvium",
                          "weight", "PANEL", "group"))
     # put axis fields into alluvial form, according to 'decreasing' parameter
-    if (is.na(decreasing)) {
-      alluv <- alluviate(data, "x", "stratum", "alluvium")
-    } else if (decreasing) {
-      alluv <- alluviate(data, "x", "weight", "alluvium")
-      alluv[, -1] <- -alluv[, -1]
+    data$deposit <- if (is.na(decreasing)) {
+      if (reverse) dplyr::desc(data$stratum) else data$stratum
     } else {
-      alluv <- alluviate(data, "x", "weight", "alluvium")
+      if (decreasing) -data$weight else data$weight
     }
+    alluv <- alluviate(data, "x", "deposit", "alluvium")
+    data$deposit <- NULL
     # sort by 'alluvium' (to match 'data')
     alluv <- alluv[order(alluv$alluvium), ]
     # axis and aesthetic indices

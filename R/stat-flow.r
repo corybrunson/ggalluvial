@@ -37,6 +37,7 @@ stat_flow <- function(mapping = NULL,
                       geom = "flow",
                       position = "identity",
                       decreasing = NA,
+                      reverse = TRUE,
                       na.rm = FALSE,
                       show.legend = NA,
                       inherit.aes = TRUE,
@@ -51,6 +52,7 @@ stat_flow <- function(mapping = NULL,
     inherit.aes = inherit.aes,
     params = list(
       decreasing = decreasing,
+      reverse = reverse,
       na.rm = na.rm,
       ...
     )
@@ -105,7 +107,7 @@ StatFlow <- ggproto(
   },
   
   compute_panel = function(self, data, scales,
-                           decreasing = NA,
+                           decreasing = NA, reverse = TRUE,
                            aggregate.wts = TRUE,
                            aes.bind = FALSE) {
     
@@ -168,10 +170,13 @@ StatFlow <- ggproto(
     # sort in preparation for calculating cumulative weights
     if (!is.na(decreasing)) {
       data <- merge(data, deposits, all.x = TRUE, all.y = FALSE)
+    } else {
+      arr_fun <- if (reverse) dplyr::desc else identity
+      data$deposit <- arr_fun(data$stratum)
     }
     sort_fields <- c(
       "link", "x",
-      if (is.na(decreasing)) "stratum" else "deposit",
+      "deposit",
       if (aes.bind) {
         c("flow_aes", "flow_stratum")
       } else {
@@ -180,6 +185,7 @@ StatFlow <- ggproto(
       "alluvium", "side"
     )
     data <- data[do.call(order, data[, sort_fields]), ]
+    data$deposit <- NULL
     # calculate cumulative weights
     data$y <- NA
     for (ll in unique(data$link)) for (ss in unique(data$side)) {

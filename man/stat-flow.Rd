@@ -12,9 +12,16 @@
 override the default.}
 
 \item{decreasing}{Logical; whether to arrange the strata at each axis
-in the order of the variable values (NA, the default),
-with the largest on top (FALSE), or
-with the largest on bottom (TRUE).}
+in the order of the variable values (\code{NA}, the default),
+in ascending order of total weight (largest on top, \code{FALSE}), or
+in descending order of total weight (largest on bottom, \code{TRUE}).}
+
+\item{reverse}{Logical; if \code{decreasing} is \code{NA},
+whether to arrange the strata at each axis
+in the reverse order of the variable values,
+so that they match the order of the values in the legend.
+Ignored if \code{decreasing} is not \code{NA}.
+Defaults to \code{TRUE}.}
 
 \item{aes.bind}{Whether to prioritize aesthetics before axes (other than the
 index axis) when ordering the lodes within each stratum. Defaults to FALSE.}
