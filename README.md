@@ -1,16 +1,16 @@
 # ggalluvial
 
-A ggplot2 extension for alluvial diagrams.
+A **ggplot2** extension for alluvial diagrams.
 
 ## Background
 
 The alluvial plots implemented here can be used to visualize frequency distributions over time or frequency tables involving several categorical variables. Much of the infrastructure comes from the [**alluvial**](https://github.com/mbojan/alluvial) package, but the **ggplot2** framework induced several conspicuous differences:
 
 - **alluvial** understands a variety of inputs (vectors, lists, data frames), while **ggalluvial** requires a single data frame;
-- **alluvial** uses each variable of these inputs as an axis, whereas **ggalluvial** requires the user to specify each axis individually, either by calling separate aesthetics or via a `tidyr::gather()`ed data format;
+- **alluvial** uses each variable of these inputs as an axis, whereas **ggalluvial** requires the user to specify each axis individually, either by calling separate aesthetics or by [un-pivoting](http://tidyr.tidyverse.org/) the data;
 - **alluvial** produces both the alluvial flows (alluvia) and what are here called the strata in a single function (`alluvial()`), whereas **ggalluvial** relies on separate functions to produce strata, alluvia, and alluvial segments called *lodes* and *flows*.
 
-There's much to be improved on here still. Comments or pull requests are more than welcome.
+Comments or pull requests are more than welcome.
 
 ## Install
 
