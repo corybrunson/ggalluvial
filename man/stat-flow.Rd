@@ -65,8 +65,9 @@ ggplot(as.data.frame(Titanic),
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
-  geom_flow(aes(fill = Survived), aes.bind = TRUE) +
-  geom_stratum() + geom_text(stat = "stratum", label.strata = TRUE) +
+  geom_flow(aes(fill = Survived), aes.bind = TRUE, reverse = FALSE) +
+  geom_stratum(reverse = FALSE) +
+  geom_text(stat = "stratum", label.strata = TRUE, reverse = FALSE) +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 
 data(vaccinations)

@@ -123,6 +123,8 @@ StatFlow <- ggproto(
                             FUN = sum)
       names(deposits)[3] <- "deposit"
     }
+    # sort within axes by stratum according to 'reverse' parameter
+    arr_fun <- if (reverse) dplyr::desc else identity
     
     # identify aesthetics that vary within strata
     n_ports <- dplyr::n_distinct(data[, c("x", "stratum")])
@@ -154,7 +156,9 @@ StatFlow <- ggproto(
     
     # flag flows between common pairs of strata and of aesthetics
     for (var in c("stratum", "aes")) {
-      data <- match_sides(data, var, paste0("flow_", var))
+      flow_var <- paste0("flow_", var)
+      data <- match_sides(data, var, flow_var)
+      data[[flow_var]] <- arr_fun(data[[flow_var]])
     }
     data$alluvium <- as.numeric(interaction(data[, c("flow_stratum",
                                                      "flow_aes")], drop = TRUE))
@@ -171,7 +175,6 @@ StatFlow <- ggproto(
     if (!is.na(decreasing)) {
       data <- merge(data, deposits, all.x = TRUE, all.y = FALSE)
     } else {
-      arr_fun <- if (reverse) dplyr::desc else identity
       data$deposit <- arr_fun(data$stratum)
     }
     sort_fields <- c(

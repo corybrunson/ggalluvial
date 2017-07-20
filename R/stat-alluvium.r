@@ -187,6 +187,8 @@ StatAlluvium <- ggproto(
     alluv <- alluv[order(alluv$alluvium), ]
     # axis and aesthetic indices
     axis_ind <- which(!(names(alluv) %in% names(data)))
+    # sort within axes by stratum according to 'reverse' parameter
+    arr_fun <- if (reverse) dplyr::desc else identity
     
     # vertical positions of flows at each axis
     position_lodes <- function(i) {
@@ -197,14 +199,17 @@ StatAlluvium <- ggproto(
         # order axis indices
         axis_seq <- axis_ind[lode_fn(n = length(axis_ind), i = i)]
         # order lodes according to axes and aesthetics
+        aes_dat <- subset(data, x == names(alluv)[axis_ind[i]])[aes_col]
+        for (var in names(aes_dat)) aes_dat[[var]] <- arr_fun(aes_dat[[var]])
         lode_seq <- do.call(
           order,
           if (aes.bind) {
             cbind(alluv[wh_def, axis_seq[1], drop = FALSE],
-                  subset(data, x == names(alluv)[axis_ind[i]])[aes_col],
+                  aes_dat,
                   alluv[wh_def, axis_seq[-1], drop = FALSE])
           } else {
-            alluv[wh_def, axis_seq, drop = FALSE]
+            cbind(alluv[wh_def, axis_seq, drop = FALSE],
+                  aes_dat)
           }
         )
       } else {
