@@ -71,6 +71,10 @@ ggalluvial_alluvia <- function(..., incl.strata = TRUE, incl.labels = FALSE) {
 ggalluvial_formula <- function(formula, data = NULL, weight,
                                incl.strata = TRUE, incl.labels = TRUE,
                                ...) {
+  .Deprecated(msg = paste(
+    "'ggalluvial' is deprecated",
+    "and will provisionally be omitted from the next version."
+  ))
   
   formula <- stats::as.formula(formula)
   if (!is.null(data)) {
