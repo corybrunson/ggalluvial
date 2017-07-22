@@ -48,6 +48,9 @@ geom_flow <- function(mapping = NULL,
                       show.legend = NA,
                       inherit.aes = TRUE,
                       ...) {
+  
+  aes.flow <- match.arg(aes.flow, c("forward", "backward"))
+  
   layer(
     geom = GeomFlow,
     mapping = mapping,
@@ -112,11 +115,12 @@ GeomFlow <- ggproto(
     flow_pos <- intersect(names(data), c("x", "xmin", "xmax", "width",
                                          "y", "ymin", "ymax", "weight",
                                          "knot.pos"))
-    flow_aes <- setdiff(names(data), c(flow_pos, "stratum", "PANEL", "group"))
-    flow_aes_fore <- if (aes.flow == "forward") flow_aes else NULL
-    flow_aes_back <- if (aes.flow == "backward") flow_aes else NULL
+    flow_aes <- intersect(names(data), c("size", "linetype",
+                                         "colour", "fill", "alpha"))
+    flow_fore <- if (aes.flow != "backward") flow_aes else NULL
+    flow_back <- if (aes.flow != "forward") flow_aes else NULL
     data <- self_adjoin(data, "x", "alluvium", pair = flow_pos,
-                        keep0 = flow_aes_fore, keep1 = flow_aes_back)
+                        keep0 = flow_fore, keep1 = flow_back)
     
     # construct spline grobs
     xspls <- plyr::alply(data, 1, function(row) {

@@ -25,6 +25,7 @@ ggplot(wph,
 
 # rightward flow aesthetics for vaccine survey data
 data(vaccinations)
+levels(vaccinations$response) <- rev(levels(vaccinations$response))
 ggplot(vaccinations,
        aes(x = survey, stratum = response, alluvium = subject,
            weight = freq, fill = response, label = round(a, 3))) +

@@ -188,7 +188,6 @@ StatFlow <- ggproto(
       "alluvium", "side"
     )
     data <- data[do.call(order, data[, sort_fields]), ]
-    data$deposit <- NULL
     # calculate cumulative weights
     data$y <- NA
     for (ll in unique(data$link)) for (ss in unique(data$side)) {
@@ -197,6 +196,11 @@ StatFlow <- ggproto(
     }
     # y bounds
     transform(data,
+              deposit = NULL,
+              aes = NULL,
+              flow_aes = NULL,
+              flow_stratum = NULL,
+              link = NULL,
               ymin = y - weight / 2,
               ymax = y + weight / 2)
   }
