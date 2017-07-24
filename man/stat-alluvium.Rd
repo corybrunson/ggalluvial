@@ -94,6 +94,15 @@ ggplot(as.data.frame(Titanic),
   geom_stratum() + geom_text(stat = "stratum", label.strata = TRUE) +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 
+# omit missing lodes and incident flows
+data(majors)
+ggplot(majors,
+       aes(x = semester, stratum = curriculum, alluvium = student,
+           label = curriculum)) +
+  geom_alluvium(fill = "darkgrey", na.rm = TRUE) +
+  geom_stratum(aes(fill = curriculum), color = NA, na.rm = TRUE) +
+  theme_bw()
+
 data(babynames, package = "babynames")
 # a discontiguous alluvium
 bn <- dplyr::filter(babynames,
