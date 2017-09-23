@@ -38,15 +38,15 @@
 #' @usage NULL
 #' @export
 geom_alluvium <- function(mapping = NULL,
-                      data = NULL,
-                      stat = "alluvium",
-                      position = "identity",
-                      width = 1/3, axis_width = NULL,
-                      knot.pos = 1/6, ribbon_bend = NULL,
-                      na.rm = FALSE,
-                      show.legend = NA,
-                      inherit.aes = TRUE,
-                      ...) {
+                          data = NULL,
+                          stat = "alluvium",
+                          position = "identity",
+                          width = 1/3, axis_width = NULL,
+                          knot.pos = 1/6, ribbon_bend = NULL,
+                          na.rm = FALSE,
+                          show.legend = NA,
+                          inherit.aes = TRUE,
+                          ...) {
   layer(
     geom = GeomAlluvium,
     mapping = mapping,
