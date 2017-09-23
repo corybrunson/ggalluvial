@@ -22,20 +22,20 @@
 #' }
 #' Currently, \code{group} is ignored.
 #' 
-#' @name geom-lode
 #' @import ggplot2
 #' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
 #'   \code{\link{geom_alluvium}} for alluvial flows,
 #'   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 
 #'   intra-axis stratum rectangles, and
 #'   \code{\link{ggalluvial}} for a shortcut method.
+#' @inheritParams ggplot2::layer
+#' @template common-params
 #' @param stat The statistical transformation to use on the data;
 #'    override the default.
 #' @param width Numeric; the width of each stratum, as a proportion of the
 #'   distance between axes. Defaults to 1/3.
 #' @param axis_width Deprecated; alias for \code{width}.
 #' @example inst/examples/ex-geom-lode.r
-#' @usage NULL
 #' @export
 geom_lode <- function(mapping = NULL,
                       data = NULL,
@@ -62,7 +62,7 @@ geom_lode <- function(mapping = NULL,
   )
 }
 
-#' @rdname geom-lode
+#' @rdname ggalluvial-ggproto
 #' @usage NULL
 #' @export
 GeomLode <- ggproto(

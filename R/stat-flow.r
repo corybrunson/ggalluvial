@@ -19,18 +19,16 @@
 #' \code{axis[0-9]*} for data in alluvium form (see \code{\link{is_alluvial}});
 #' arguments to parameters inconsistent with the data format will be ignored.
 #' 
-#' @name stat-flow
 #' @import ggplot2
 #' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
 #'   \code{\link{geom_flow}} for the corresponding geom,
 #'   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for
 #'   intra-axis boxes, and
 #'   \code{\link{ggalluvial}} for a shortcut method.
-#' @inheritParams stat-stratum
+#' @inheritParams stat_stratum
 #' @param aes.bind Whether to prioritize aesthetics before axes (other than the
 #'   index axis) when ordering the lodes within each stratum. Defaults to FALSE.
 #' @example inst/examples/ex-stat-flow.r
-#' @usage NULL
 #' @export
 stat_flow <- function(mapping = NULL,
                       data = NULL,
@@ -38,6 +36,7 @@ stat_flow <- function(mapping = NULL,
                       position = "identity",
                       decreasing = NA,
                       reverse = TRUE,
+                      aes.bind = FALSE,
                       na.rm = FALSE,
                       show.legend = NA,
                       inherit.aes = TRUE,
@@ -53,13 +52,14 @@ stat_flow <- function(mapping = NULL,
     params = list(
       decreasing = decreasing,
       reverse = reverse,
+      aes.bind = aes.bind,
       na.rm = na.rm,
       ...
     )
   )
 }
 
-#' @rdname stat-flow
+#' @rdname ggalluvial-ggproto
 #' @usage NULL
 #' @export
 StatFlow <- ggproto(
@@ -108,7 +108,7 @@ StatFlow <- ggproto(
   
   compute_panel = function(self, data, scales,
                            decreasing = NA, reverse = TRUE,
-                           aggregate.wts = TRUE,
+                           #aggregate.wts = TRUE,
                            aes.bind = FALSE) {
     
     # aesthetics

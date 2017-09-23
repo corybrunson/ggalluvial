@@ -38,23 +38,25 @@ ggplot(majors,
   geom_stratum(aes(fill = curriculum), color = NA, na.rm = TRUE) +
   theme_bw()
 
-data(babynames, package = "babynames")
-# a discontiguous alluvium
-bn <- dplyr::filter(babynames,
-                    prop >= .01 & sex == "F" &
-                      year > 1962 & year < 1968)
-ggplot(data = bn,
-       aes(x = year, alluvium = name, weight = prop)) +
-  geom_alluvium(aes(fill = name, color = name == "Tammy"),
-                decreasing = TRUE, show.legend = FALSE) +
-  scale_color_manual(values = c("#00000000", "#000000"))
-# filling in missing zeros
-bn2 <- merge(bn,
-             expand.grid(year = unique(bn$year), name = unique(bn$name)),
-             all = TRUE)
-bn2$prop[is.na(bn2$prop)] <- 0
-ggplot(data = bn2,
-       aes(x = year, alluvium = name, weight = prop)) +
-  geom_alluvium(aes(fill = name, color = name == "Tammy"),
-                decreasing = TRUE, show.legend = FALSE) +
-  scale_color_manual(values = c("#00000000", "#000000"))
+\dontrun{
+  data(babynames, package = "babynames")
+  # a discontiguous alluvium
+  bn <- dplyr::filter(babynames,
+                      prop >= .01 & sex == "F" &
+                        year > 1962 & year < 1968)
+  ggplot(data = bn,
+         aes(x = year, alluvium = name, weight = prop)) +
+    geom_alluvium(aes(fill = name, color = name == "Tammy"),
+                  decreasing = TRUE, show.legend = FALSE) +
+    scale_color_manual(values = c("#00000000", "#000000"))
+  # filling in missing zeros
+  bn2 <- merge(bn,
+               expand.grid(year = unique(bn$year), name = unique(bn$name)),
+               all = TRUE)
+  bn2$prop[is.na(bn2$prop)] <- 0
+  ggplot(data = bn2,
+         aes(x = year, alluvium = name, weight = prop)) +
+    geom_alluvium(aes(fill = name, color = name == "Tammy"),
+                  decreasing = TRUE, show.legend = FALSE) +
+    scale_color_manual(values = c("#00000000", "#000000"))
+}

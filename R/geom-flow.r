@@ -25,17 +25,15 @@
 #' }
 #' Currently, \code{group} is ignored.
 #' 
-#' @name geom-flow
 #' @import ggplot2
 #' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
 #'   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 
 #'   intra-axis boxes, and
 #'   \code{\link{ggalluvial}} for a shortcut method.
-#' @inheritParams geom-alluvium
+#' @inheritParams geom_alluvium
 #' @param aes.flow Character; how inter-lode flows assume aesthetics from lodes.
 #'   Options are "forward" and "backward".
 #' @example inst/examples/ex-geom-flow.r
-#' @usage NULL
 #' @export
 geom_flow <- function(mapping = NULL,
                       data = NULL,
@@ -69,7 +67,7 @@ geom_flow <- function(mapping = NULL,
   )
 }
 
-#' @rdname geom-flow
+#' @rdname ggalluvial-ggproto
 #' @usage NULL
 #' @export
 GeomFlow <- ggproto(

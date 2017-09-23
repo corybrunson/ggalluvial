@@ -21,14 +21,13 @@
 #' \code{axis[0-9]*} for data in alluvium form (see \code{\link{is_alluvial}});
 #' arguments to parameters inconsistent with the data format will be ignored.
 #' 
-#' @name stat-alluvium
 #' @import ggplot2
 #' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
 #'   \code{\link{geom_alluvium}} for the corresponding geom,
 #'   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for
 #'   intra-axis boxes, and
 #'   \code{\link{ggalluvial}} for a shortcut method.
-#' @inheritParams stat-flow
+#' @inheritParams stat_flow
 #' @param aggregate.wts Logical; whether to aggregate weights across otherwise
 #'   equivalent rows before computing lode and flow positions. Defaults to TRUE.
 #' @param lode.guidance The function to prioritize the axis variables for 
@@ -42,7 +41,6 @@
 #'   will be used to order the lodes within each stratum by sorting the lodes 
 #'   first by stratum and then by the provided vectors.
 #' @example inst/examples/ex-stat-alluvium.r
-#' @usage NULL
 #' @export
 stat_alluvium <- function(mapping = NULL,
                           data = NULL,
@@ -50,6 +48,9 @@ stat_alluvium <- function(mapping = NULL,
                           position = "identity",
                           decreasing = NA,
                           reverse = TRUE,
+                          aggregate.wts = TRUE,
+                          lode.guidance = "zigzag",
+                          lode.ordering = NULL,
                           na.rm = FALSE,
                           show.legend = NA,
                           inherit.aes = TRUE,
@@ -65,13 +66,16 @@ stat_alluvium <- function(mapping = NULL,
     params = list(
       decreasing = decreasing,
       reverse = reverse,
+      aggregate.wts = TRUE,
+      lode.guidance = lode.guidance,
+      lode.ordering = lode.ordering,
       na.rm = na.rm,
       ...
     )
   )
 }
 
-#' @rdname stat-alluvium
+#' @rdname ggalluvial-ggproto
 #' @usage NULL
 #' @export
 StatAlluvium <- ggproto(

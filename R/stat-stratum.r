@@ -19,13 +19,14 @@
 #' \code{\link{is_alluvial}}); arguments to parameters inconsistent with the
 #' data format will be ignored.
 #' 
-#' @name stat-stratum
 #' @import ggplot2
 #' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
 #'   \code{\link{geom_stratum}} for the corresponding geom,
 #'   \code{\link{stat_alluvium}} and \code{\link{geom_alluvium}} for
 #'   alluvial flows, and
 #'   \code{\link{ggalluvial}} for a shortcut method.
+#' @inheritParams ggplot2::layer
+#' @template common-params
 #' @param geom The geometric object to use display the data;
 #'    override the default.
 #' @param decreasing Logical; whether to arrange the strata at each axis
@@ -42,7 +43,6 @@
 #'   variables to the strata. Defaults to FALSE, and requires that no label
 #'   aesthetic is assigned.
 #' @example inst/examples/ex-stat-stratum.r
-#' @usage NULL
 #' @export
 stat_stratum <- function(mapping = NULL,
                          data = NULL,
@@ -73,7 +73,7 @@ stat_stratum <- function(mapping = NULL,
   )
 }
 
-#' @rdname stat-stratum
+#' @rdname ggalluvial-ggproto
 #' @usage NULL
 #' @export
 StatStratum <- ggproto(

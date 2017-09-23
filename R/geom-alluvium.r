@@ -23,19 +23,17 @@
 #' }
 #' Currently, \code{group} is ignored.
 #' 
-#' @name geom-alluvium
 #' @import ggplot2
 #' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
 #'   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 
 #'   intra-axis boxes, and
 #'   \code{\link{ggalluvial}} for a shortcut method.
-#' @inheritParams geom-lode
+#' @inheritParams geom_lode
 #' @param knot.pos The horizontal distance between a stratum (\code{width/2}
 #'   from its axis) and the knot of the x-spline, as a proportion of the
 #'   separation between strata. Defaults to 1/6.
 #' @param ribbon_bend Deprecated; alias for \code{knot.pos}.
 #' @example inst/examples/ex-geom-alluvium.r
-#' @usage NULL
 #' @export
 geom_alluvium <- function(mapping = NULL,
                           data = NULL,
@@ -64,7 +62,7 @@ geom_alluvium <- function(mapping = NULL,
   )
 }
 
-#' @rdname geom-alluvium
+#' @rdname ggalluvial-ggproto
 #' @usage NULL
 #' @export
 GeomAlluvium <- ggproto(
