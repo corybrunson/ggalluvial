@@ -22,7 +22,7 @@
 #' all fields in \code{data} (other than \code{weight}, if given) are to be
 #' treated as axes.
 #' @name is_alluvial
-#' @param data A data frame
+#' @param data Data frame.
 #' @param ... Additional parameters used to determine method and passed
 #'   thereto. All or none of \code{key}, \code{value}, and \code{id}, or else
 #'   optionally \code{axes}, and (in either case) optionally \code{weight}.
