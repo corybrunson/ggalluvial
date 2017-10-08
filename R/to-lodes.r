@@ -21,7 +21,7 @@ to_lodes <- function(data,
   if (!is.data.frame(data)) data <- as.data.frame(data)
   
   if (is.character(axes)) {
-    axes <- match(axes, names(data))
+    axes <- match.arg(axes, names(data), several.ok = TRUE)
   } else {
     axes <- names(data)[axes]
   }
@@ -33,7 +33,7 @@ to_lodes <- function(data,
   
   res <- tidyr::gather_(data,
                         key_col = key, value_col = value,
-                        gather_col = axes, factor_key = TRUE)
+                        gather_cols = axes, factor_key = TRUE)
   res[[value]] <- factor(res[[value]], levels = strata)
   
   res

@@ -55,7 +55,9 @@ is_alluvial <- function(data, ..., logical = TRUE) {
 
 #' @rdname is_alluvial
 #' @export
-is_alluvial_lodes <- function(data, key, value, id, weight, logical = TRUE) {
+is_alluvial_lodes <- function(
+  data, key, value, id, weight = NULL, logical = TRUE
+) {
   
   if (missing(key) | missing(value) | missing(id)) {
     stop("Each of 'key', 'value', and 'id' is required.")
@@ -71,7 +73,7 @@ is_alluvial_lodes <- function(data, key, value, id, weight, logical = TRUE) {
     warning("Missing id-axis pairings.")
   }
   
-  if (!missing(weight)) {
+  if (!is.null(weight)) {
     if (!is.numeric(data[[weight]])) {
       message("Lode weights are non-numeric.")
       return(if (logical) FALSE else "none")
@@ -85,11 +87,9 @@ is_alluvial_lodes <- function(data, key, value, id, weight, logical = TRUE) {
 
 #' @rdname is_alluvial
 #' @export
-is_alluvial_alluvia <- function(data, axes, weight, logical = TRUE) {
+is_alluvial_alluvia <- function(data, axes, weight = NULL, logical = TRUE) {
   
-  if (missing(weight)) {
-    weight <- NULL
-  } else {
+  if (!is.null(weight)) {
     if (!is.numeric(data[[weight]])) {
       message("Alluvium weights are non-numeric.")
       return(if (logical) FALSE else "none")
