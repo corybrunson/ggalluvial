@@ -8,12 +8,12 @@
 \usage{
 is_alluvial(data, ..., logical = TRUE)
 
-is_alluvial_lodes(data, key, value, id, weight, logical = TRUE)
+is_alluvial_lodes(data, key, value, id, weight = NULL, logical = TRUE)
 
-is_alluvial_alluvia(data, axes, weight, logical = TRUE)
+is_alluvial_alluvia(data, axes, weight = NULL, logical = TRUE)
 }
 \arguments{
-\item{data}{A data frame}
+\item{data}{Data frame.}
 
 \item{...}{Additional parameters used to determine method and passed
 thereto. All or none of \code{key}, \code{value}, and \code{id}, or else
