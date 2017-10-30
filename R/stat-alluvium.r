@@ -249,6 +249,13 @@ StatAlluvium <- ggproto(
     # add 'group' to group contiguous alluvial subsets
     data <- transform(data,
                       group = as.numeric(interaction(alluvium, flow)))
+    # arrange data by aesthetics for consistent (reverse) z-ordering
+    data <- dplyr::arrange_(data, aes_col)
+    data <- transform(data,
+                      group = as.numeric(factor(
+                        as.character(data$group),
+                        levels = as.character(unique(rev(data$group)))
+                      )))
     
     data
   }

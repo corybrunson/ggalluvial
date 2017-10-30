@@ -91,7 +91,7 @@ ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Survived, axis2 = Sex, axis3 = Class)) +
   geom_alluvium(aes(fill = Class),
-                width = 1/8, knot.pos = 0, reverse = FALSE) +
+                width = 0, knot.pos = 0, reverse = FALSE) +
   guides(fill = FALSE) +
   geom_stratum(width = 1/8, reverse = FALSE) +
   geom_text(stat = "stratum", label.strata = TRUE, reverse = FALSE) +
