@@ -195,14 +195,24 @@ StatFlow <- ggproto(
       data$y[ww] <- cumsum(data$weight[ww]) - data$weight[ww] / 2
     }
     # y bounds
-    transform(data,
-              deposit = NULL,
-              aes = NULL,
-              flow_aes = NULL,
-              flow_stratum = NULL,
-              link = NULL,
-              ymin = y - weight / 2,
-              ymax = y + weight / 2)
+    data <- transform(data,
+                      deposit = NULL,
+                      aes = NULL,
+                      flow_aes = NULL,
+                      flow_stratum = NULL,
+                      link = NULL,
+                      ymin = y - weight / 2,
+                      ymax = y + weight / 2)
+    
+    # arrange data by aesthetics for consistent (reverse) z-ordering
+    data <- dplyr::arrange_(data, aesthetics)
+    data <- transform(data,
+                      group = as.numeric(factor(
+                        as.character(data$group),
+                        levels = as.character(unique(rev(data$group)))
+                      )))
+    
+    data
   }
 )
 
