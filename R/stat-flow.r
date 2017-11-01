@@ -205,8 +205,9 @@ StatFlow <- ggproto(
                       ymax = y + weight / 2)
     
     # arrange data by aesthetics for consistent (reverse) z-ordering
-    if (length(aesthetics) > 0) {
-      data <- dplyr::arrange_(data, aesthetics)
+    colour_fill_aes <- intersect(names(data), c("colour", "fill"))
+    if (length(colour_fill_aes) > 0) {
+      data <- dplyr::arrange_(data, colour_fill_aes)
       data <- transform(data,
                         group = as.numeric(factor(
                           as.character(data$group),
