@@ -21,7 +21,7 @@ devtools::install_github("corybrunson/ggalluvial", build_vignettes = TRUE)
 library(ggalluvial)
 ```
 
-For detailed discussion of the data formats recognized by **ggalluvial** and several examples that illustrate its flexibility and limitations, see the vignette:
+For detailed discussion of the data formats recognized by **ggalluvial** and several examples that illustrate its flexibility and limitations, see [the vignette](http://corybrunson.github.io/ggalluvial/articles/ggalluvial.html):
 
 ```{r}
 vignette(topic = "ggalluvial")
