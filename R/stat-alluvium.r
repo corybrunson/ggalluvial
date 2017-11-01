@@ -133,7 +133,8 @@ StatAlluvium <- ggproto(
                        key = "x", value = "stratum", id = "alluvium",
                        axes = axis_ind)
       # positioning requires numeric 'x'
-      data$x <- as.numeric(as.factor(data$x))
+      #data$x <- as.numeric(as.factor(data$x))
+      data$x <- cumsum(!duplicated(data$x))
     }
     
     data
@@ -238,10 +239,12 @@ StatAlluvium <- ggproto(
                       y = (ymin + ymax) / 2)
     
     # within each alluvium, indices at which contiguous subsets start
+    #data <- data[do.call(order, data[, c("x", "alluvium")]), ]
     data <- transform(data,
                       starts = duplicated(data$alluvium) &
                         !duplicated(data[, c("x", "alluvium")]),
-                      axis = as.numeric(as.factor(as.character(x))))
+                      #axis = as.numeric(as.factor(as.character(x))))
+                      axis = cumsum(!duplicated(x)))
     # within each alluvium, group contiguous subsets
     # (data is sorted by 'x' and 'alluvium'; group_by() does not reorder it)
     data <- dplyr::ungroup(dplyr::mutate(dplyr::group_by(data, alluvium),

@@ -118,7 +118,8 @@ StatStratum <- ggproto(
                        key = "x", value = "stratum", id = "alluvium",
                        axes = axis_ind)
       # positioning requires numeric 'x'
-      data$x <- as.numeric(as.factor(data$x))
+      #data$x <- as.numeric(as.factor(data$x))
+      data$x <- cumsum(!duplicated(data$x))
     }
     
     # nullify 'group' and 'alluvium' fields
