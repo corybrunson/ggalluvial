@@ -13,7 +13,7 @@ ggplot(data = to_lodes(as.data.frame(Titanic),
   ggtitle("passengers on the maiden voyage of the Titanic",
           "stratified by demographics and survival")
 
-## ----Berkeley admissions dataset-----------------------------------------
+## ----alluvia format of Berkeley admissions dataset-----------------------
 head(as.data.frame(UCBAdmissions), n = 12)
 is_alluvial(as.data.frame(UCBAdmissions), logical = FALSE)
 
@@ -39,7 +39,7 @@ ggplot(as.data.frame(Titanic),
   coord_flip() +
   ggtitle("Titanic survival by class and sex")
 
-## ----lode form of Berkeley admissions dataset----------------------------
+## ----lodes format of Berkeley admissions dataset-------------------------
 UCB_lodes <- to_lodes(as.data.frame(UCBAdmissions), axes = 1:3)
 head(UCB_lodes, n = 12)
 is_alluvial(UCB_lodes, logical = FALSE)
@@ -63,10 +63,12 @@ ggplot(data = Refugees,
        aes(x = year, weight = refugees, alluvium = country)) +
   geom_alluvium(aes(fill = country, colour = country),
                 alpha = .75, decreasing = FALSE) +
+  scale_x_continuous(breaks = seq(2003, 2013, 2)) +
+  theme(axis.text.x = element_text(angle = -30, hjust = 0)) +
   scale_fill_brewer(type = "qual", palette = "Set3") +
   scale_color_brewer(type = "qual", palette = "Set3") +
   facet_wrap(~ region, scales = "fixed") +
-  ggtitle("refugee volume by country of origin and geographic region")
+  ggtitle("refugee volume by country and region of origin")
 
 ## ----alluvial diagram of majors dataset----------------------------------
 data(majors)
@@ -74,7 +76,7 @@ majors$curriculum <- as.factor(majors$curriculum)
 ggplot(majors,
        aes(x = semester, stratum = curriculum, alluvium = student,
            fill = curriculum, label = curriculum)) +
-  geom_flow(stat = "alluvium", lode.guidance = "rightleft") +
+  geom_flow(stat = "alluvium", lode.guidance = "rightleft", color = "darkgrey") +
   geom_stratum() +
   theme(legend.position = "bottom") +
   ggtitle("student curricula across several semesters")
