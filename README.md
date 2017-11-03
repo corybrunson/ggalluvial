@@ -21,10 +21,15 @@ devtools::install_github("corybrunson/ggalluvial", build_vignettes = TRUE)
 library(ggalluvial)
 ```
 
-For detailed discussion of the data formats recognized by **ggalluvial** and several examples that illustrate its flexibility and limitations, see the vignette:
+For detailed discussion of the data formats recognized by **ggalluvial** and several examples that illustrate its flexibility and limitations, see [the vignette](http://corybrunson.github.io/ggalluvial/articles/ggalluvial.html):
 
 ```{r}
 vignette(topic = "ggalluvial")
 ```
 
 The shortcut function `ggalluvial()`, which includes a formula interface, is not included in the vignette and may be deprecated in the next version and excluded from the eventual CRAN release. (Please let me know if you think it should be kept or improved!)
+
+## Documentation
+
+The documentation was built into [this website](http://corybrunson.github.io/ggalluvial/) using [**pkgdown**](https://github.com/hadley/pkgdown).
+

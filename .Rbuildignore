@@ -1,5 +1,10 @@
-data-raw
-man-roxygen
-ggplot2-exts
-sandbox
 
+^data-raw$
+
+^man-roxygen$
+
+^ggplot2-exts$
+
+^sandbox$
+
+^docs$
