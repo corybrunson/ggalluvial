@@ -56,7 +56,7 @@
       <h1>alluvial diagrams in ggplot2</h1>
                         <h4 class="author">Jason Cory Brunson</h4>
             
-            <h4 class="date">2017-11-01</h4>
+            <h4 class="date">2017-11-04</h4>
           </div>
 
     
@@ -107,9 +107,7 @@
 ## 10 Rejected   Male    C  205
 ## 11 Admitted Female    C  202
 ## 12 Rejected Female    C  391</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/is_alluvial.html">is_alluvial</a></span>(<span class="kw">as.data.frame</span>(UCBAdmissions), <span class="dt">logical =</span> <span class="ot">FALSE</span>)</code></pre></div>
-<pre><code>## Warning in is_alluvial_alluvia(data = data, ..., logical = logical):
-## Missing alluvia for some stratum combinations.</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/is_alluvial.html">is_alluvial</a></span>(<span class="kw">as.data.frame</span>(UCBAdmissions), <span class="dt">logical =</span> <span class="ot">FALSE</span>, <span class="dt">silent =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## [1] "alluvia"</code></pre>
 <p>This form was inherited from the first version of <strong>ggalluvial</strong>, which modeled it after usage in <strong>alluvial</strong>. It required a stark departure from the usual position aesthetics: The user declares any number of axis variables, which <code><a href="../reference/stat_alluvium.html">stat_alluvium()</a></code> and <code><a href="../reference/stat_stratum.html">stat_stratum()</a></code> recognize and process in a consistent way:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">as.data.frame</span>(UCBAdmissions),
@@ -162,9 +160,7 @@
 ## 10  205 10 Admit Rejected
 ## 11  202 11 Admit Admitted
 ## 12  391 12 Admit Rejected</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/is_alluvial.html">is_alluvial</a></span>(UCB_lodes, <span class="dt">logical =</span> <span class="ot">FALSE</span>)</code></pre></div>
-<pre><code>## Warning in is_alluvial_alluvia(data = data, ..., logical = logical):
-## Missing alluvia for some stratum combinations.</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/is_alluvial.html">is_alluvial</a></span>(UCB_lodes, <span class="dt">logical =</span> <span class="ot">FALSE</span>, <span class="dt">silent =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## [1] "alluvia"</code></pre>
 <p>The same stat and geom can receive this data format using a different set of positional aesthetics, also specific to <strong>ggalluvial</strong>:</p>
 <ul>
@@ -243,7 +239,7 @@ majors<span class="op">$</span>curriculum &lt;-<span class="st"> </span><span cl
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] bindrcpp_0.2   ggalluvial_0.3 ggplot2_2.2.1 
+## [1] bindrcpp_0.2       ggalluvial_0.3     ggplot2_2.2.1.9000
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_0.12.13       bindr_0.1          knitr_1.17        
@@ -251,12 +247,12 @@ majors<span class="op">$</span>curriculum &lt;-<span class="st"> </span><span cl
 ##  [7] colorspace_1.3-2   R6_2.2.2           rlang_0.1.2.9000  
 ## [10] stringr_1.2.0      plyr_1.8.4         dplyr_0.7.4       
 ## [13] tools_3.3.2        grid_3.3.2         gtable_0.2.0      
-## [16] htmltools_0.3.6    yaml_2.1.14        lazyeval_0.2.0    
+## [16] htmltools_0.3.6    yaml_2.1.14        lazyeval_0.2.1    
 ## [19] rprojroot_1.2      digest_0.6.12      assertthat_0.2.0  
 ## [22] tibble_1.3.4       RColorBrewer_1.1-2 purrr_0.2.4       
 ## [25] tidyr_0.7.2        glue_1.1.1         evaluate_0.10.1   
 ## [28] rmarkdown_1.6      labeling_0.3       stringi_1.1.5     
-## [31] scales_0.5.0       backports_1.1.1    pkgconfig_2.0.1</code></pre>
+## [31] scales_0.5.0.9000  backports_1.1.1    pkgconfig_2.0.1</code></pre>
 </div>
 <div class="footnotes">
 <hr>

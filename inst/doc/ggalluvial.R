@@ -15,7 +15,7 @@ ggplot(data = to_lodes(as.data.frame(Titanic),
 
 ## ----Berkeley admissions dataset-----------------------------------------
 head(as.data.frame(UCBAdmissions), n = 12)
-is_alluvial(as.data.frame(UCBAdmissions), logical = FALSE)
+is_alluvial(as.data.frame(UCBAdmissions), logical = FALSE, silent = TRUE)
 
 ## ----alluvial diagram of UC Berkeley admissions dataset------------------
 ggplot(as.data.frame(UCBAdmissions),
@@ -42,7 +42,7 @@ ggplot(as.data.frame(Titanic),
 ## ----lode form of Berkeley admissions dataset----------------------------
 UCB_lodes <- to_lodes(as.data.frame(UCBAdmissions), axes = 1:3)
 head(UCB_lodes, n = 12)
-is_alluvial(UCB_lodes, logical = FALSE)
+is_alluvial(UCB_lodes, logical = FALSE, silent = TRUE)
 
 ## ----time series alluvia diagram of refugees dataset---------------------
 data(Refugees, package = "alluvial")

@@ -64,7 +64,7 @@ The first format reflects the visual arrangement of an alluvial diagram, but "un
 
 ```{r Berkeley admissions dataset}
 head(as.data.frame(UCBAdmissions), n = 12)
-is_alluvial(as.data.frame(UCBAdmissions), logical = FALSE)
+is_alluvial(as.data.frame(UCBAdmissions), logical = FALSE, silent = TRUE)
 ```
 
 This form was inherited from the first version of **ggalluvial**, which modeled it after usage in **alluvial**. It required a stark departure from the usual position aesthetics: The user declares any number of axis variables, which `stat_alluvium()` and `stat_stratum()` recognize and process in a consistent way:
@@ -114,7 +114,7 @@ The second format recognized by **ggalluvial** contains one row per lode, and ca
 ```{r lode form of Berkeley admissions dataset}
 UCB_lodes <- to_lodes(as.data.frame(UCBAdmissions), axes = 1:3)
 head(UCB_lodes, n = 12)
-is_alluvial(UCB_lodes, logical = FALSE)
+is_alluvial(UCB_lodes, logical = FALSE, silent = TRUE)
 ```
 
 The same stat and geom can receive this data format using a different set of positional aesthetics, also specific to **ggalluvial**:

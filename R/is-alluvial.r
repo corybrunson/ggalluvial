@@ -29,6 +29,7 @@
 #' @param logical Whether to return a logical value (TRUE, the default) or a 
 #'   character string indicating the type of alluvial structure ("none", 
 #'   "lodes", or "alluvia")
+#' @param silent Whether to print warning messages.
 #' @param key,value,id Numeric or character; the fields of \code{data}
 #'   corresponding to the axis (variable), stratum (value), and alluvium
 #'   (identifying) variables.
@@ -38,7 +39,7 @@
 #'   corresponding to alluvium or lode weights (heights when plotted).
 #' @example inst/examples/ex-is-alluvial.r
 #' @export
-is_alluvial <- function(data, ..., logical = TRUE) {
+is_alluvial <- function(data, ..., logical = TRUE, silent = FALSE) {
   
   # determine method based on arguments given
   dots <- lazyeval::lazy_dots(...)
@@ -47,28 +48,31 @@ is_alluvial <- function(data, ..., logical = TRUE) {
       stop("Arguments to 'key', 'value', and 'id' are mutually exclusive ",
            "with an argument to 'axes'.")
     }
-    is_alluvial_lodes(data = data, ..., logical = logical)
+    is_alluvial_lodes(data = data, ..., logical = logical, silent = silent)
   } else {
-    is_alluvial_alluvia(data = data, ..., logical = logical)
+    is_alluvial_alluvia(data = data, ..., logical = logical, silent = silent)
   }
 }
 
 #' @rdname is_alluvial
 #' @export
-is_alluvial_lodes <- function(data, key, value, id, weight, logical = TRUE) {
+is_alluvial_lodes <- function(
+  data, key, value, id, weight,
+  logical = TRUE, silent = FALSE
+) {
   
   if (missing(key) | missing(value) | missing(id)) {
     stop("Each of 'key', 'value', and 'id' is required.")
   }
   
   if (any(duplicated(cbind(data[[key]], data[[id]])))) {
-    warning("Duplicated id-axis pairings.")
+    if (!silent) warning("Duplicated id-axis pairings.")
   }
   
   n_pairs <-
     dplyr::n_distinct(data[[key]]) * dplyr::n_distinct(data[[id]])
   if (nrow(data) < n_pairs) {
-    warning("Missing id-axis pairings.")
+    if (!silent) warning("Missing id-axis pairings.")
   }
   
   if (!missing(weight)) {
@@ -85,7 +89,10 @@ is_alluvial_lodes <- function(data, key, value, id, weight, logical = TRUE) {
 
 #' @rdname is_alluvial
 #' @export
-is_alluvial_alluvia <- function(data, axes, weight, logical = TRUE) {
+is_alluvial_alluvia <- function(
+  data, axes, weight,
+  logical = TRUE, silent = FALSE
+) {
   
   if (missing(weight)) {
     weight <- NULL
@@ -108,7 +115,7 @@ is_alluvial_alluvia <- function(data, axes, weight, logical = TRUE) {
   n_alluvia <- nrow(dplyr::distinct(data[axes]))
   n_combns <- do.call(prod, lapply(data[axes], dplyr::n_distinct))
   if (n_alluvia < n_combns) {
-    warning("Missing alluvia for some stratum combinations.")
+    if (!silent) warning("Missing alluvia for some stratum combinations.")
   }
   
   if (logical) TRUE else "alluvia"

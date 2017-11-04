@@ -103,11 +103,12 @@ all fields in <code>data</code> (other than <code>weight</code>, if given) are t
 treated as axes.</p>
     
 
-    <pre class="usage"><span class='fu'>is_alluvial</span>(<span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+    <pre class="usage"><span class='fu'>is_alluvial</span>(<span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>is_alluvial_lodes</span>(<span class='no'>data</span>, <span class='no'>key</span>, <span class='no'>value</span>, <span class='no'>id</span>, <span class='no'>weight</span>, <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>is_alluvial_lodes</span>(<span class='no'>data</span>, <span class='no'>key</span>, <span class='no'>value</span>, <span class='no'>id</span>, <span class='no'>weight</span>, <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>is_alluvial_alluvia</span>(<span class='no'>data</span>, <span class='no'>axes</span>, <span class='no'>weight</span>, <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+<span class='fu'>is_alluvial_alluvia</span>(<span class='no'>data</span>, <span class='no'>axes</span>, <span class='no'>weight</span>, <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -127,6 +128,10 @@ optionally <code>axes</code>, and (in either case) optionally <code>weight</code
       <td><p>Whether to return a logical value (TRUE, the default) or a 
 character string indicating the type of alluvial structure ("none", 
 "lodes", or "alluvia")</p></td>
+    </tr>
+    <tr>
+      <th>silent</th>
+      <td><p>Whether to print warning messages.</p></td>
     </tr>
     <tr>
       <th>key, value, id</th>

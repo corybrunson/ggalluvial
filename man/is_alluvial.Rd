@@ -6,11 +6,12 @@
 \alias{is_alluvial_alluvia}
 \title{Check a data frame for alluvial structure}
 \usage{
-is_alluvial(data, ..., logical = TRUE)
+is_alluvial(data, ..., logical = TRUE, silent = FALSE)
 
-is_alluvial_lodes(data, key, value, id, weight, logical = TRUE)
+is_alluvial_lodes(data, key, value, id, weight, logical = TRUE,
+  silent = FALSE)
 
-is_alluvial_alluvia(data, axes, weight, logical = TRUE)
+is_alluvial_alluvia(data, axes, weight, logical = TRUE, silent = FALSE)
 }
 \arguments{
 \item{data}{A data frame}
@@ -22,6 +23,8 @@ optionally \code{axes}, and (in either case) optionally \code{weight}.}
 \item{logical}{Whether to return a logical value (TRUE, the default) or a 
 character string indicating the type of alluvial structure ("none", 
 "lodes", or "alluvia")}
+
+\item{silent}{Whether to print warning messages.}
 
 \item{key, value, id}{Numeric or character; the fields of \code{data}
 corresponding to the axis (variable), stratum (value), and alluvium
