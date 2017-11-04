@@ -1,4 +1,4 @@
-#' Stratum rectangles
+#' Strata at axes
 #' 
 #' \code{geom_stratum} receives a dataset of the horizontal (\code{x}) and
 #' vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the strata of an
@@ -6,8 +6,8 @@
 #' It plots rectangles for these strata of a provided \code{width}.
 #' 
 #' @section Aesthetics:
-#' \code{geom_stratum} understands the following aesthetics (required aesthetics
-#' are in bold):
+#' \code{geom_stratum} understands the following aesthetics
+#' (required aesthetics are in bold):
 #' \itemize{
 #'   \item \strong{\code{x}}
 #'   \item \strong{\code{y}}
@@ -20,7 +20,7 @@
 #'   \item \code{size}
 #'   \item \code{group}
 #' }
-#' Currently, \code{group} is ignored.
+#' \code{group} is used internally; arguments are ignored.
 #' 
 #' @import ggplot2
 #' @seealso \code{\link[ggplot2]{layer}} for additional arguments, and

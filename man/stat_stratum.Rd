@@ -75,20 +75,24 @@ centroids of the strata at each axis, together with their weights (heights).
 }
 \section{Aesthetics}{
 
-\code{stat_stratum} understands the following aesthetics:
+\code{stat_stratum} requires one of two sets of aesthetics:
 \itemize{
-  \item \code{x}
-  \item \code{stratum}
-  \item \code{alluvium}
-  \item \code{axis[0-9]*} (\code{axis1}, \code{axis2}, etc.)
+  \item \code{x}, \code{stratum}, and (optionally) \code{alluvium}
+  \item any number of \code{axis[0-9]*} (\code{axis1}, \code{axis2}, etc.)
+}
+Use \code{x} and \code{stratum} for data in lodes format
+(\code{alluvium} is ignored)
+and \code{axis[0-9]*} for data in alluvia format
+(see \code{\link{is_alluvial}}).
+Arguments to parameters inconsistent with the format will be ignored.
+Additionally, \code{stat_stratum} accepts the following optional aesthetics:
+\itemize{
   \item \code{weight}
   \item \code{group}
 }
-Currently, \code{group} is ignored.
-Use \code{x}, \code{stratum}, and (optionally) \code{alluvium} for data in
-lode form and \code{axis[0-9]*} for data in alluvium form (see
-\code{\link{is_alluvial}}); arguments to parameters inconsistent with the
-data format will be ignored.
+\code{weight} controls the vertical dimensions of the alluvia
+and are aggregated across equivalent observations.
+\code{group} is used internally; arguments are ignored.
 }
 
 \examples{

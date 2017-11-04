@@ -2,7 +2,7 @@
 % Please edit documentation in R/geom-alluvium.r
 \name{geom_alluvium}
 \alias{geom_alluvium}
-\title{Alluvia}
+\title{Alluvia across strata}
 \usage{
 geom_alluvium(mapping = NULL, data = NULL, stat = "alluvium",
   position = "identity", width = 1/3, axis_width = NULL, knot.pos = 1/6,
@@ -74,7 +74,7 @@ flows between them, using \code{\link{geom_flow}}.
 \section{Aesthetics}{
 
 \code{geom_alluvium} understands the following aesthetics
-  (required aesthetics are in bold):
+(required aesthetics are in bold):
 \itemize{
   \item \strong{\code{x}}
   \item \strong{\code{y}}
@@ -87,7 +87,7 @@ flows between them, using \code{\link{geom_flow}}.
   \item \code{size}
   \item \code{group}
 }
-Currently, \code{group} is ignored.
+\code{group} is used internally; arguments are ignored.
 }
 
 \examples{

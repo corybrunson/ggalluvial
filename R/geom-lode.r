@@ -1,4 +1,4 @@
-#' Lode rectangles
+#' Lodes at intersections of alluvia and strata
 #' 
 #' \code{geom_alluvium} receives a dataset of the horizontal (\code{x}) and 
 #' vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the \strong{lodes}
@@ -7,7 +7,7 @@
 #' 
 #' @section Aesthetics:
 #' \code{geom_lode} understands the following aesthetics
-#'   (required aesthetics are in bold):
+#' (required aesthetics are in bold):
 #' \itemize{
 #'   \item \strong{\code{x}}
 #'   \item \strong{\code{y}}
@@ -20,7 +20,7 @@
 #'   \item \code{size}
 #'   \item \code{group}
 #' }
-#' Currently, \code{group} is ignored.
+#' \code{group} is used internally; arguments are ignored.
 #' 
 #' @import ggplot2
 #' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
