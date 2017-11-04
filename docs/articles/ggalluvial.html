@@ -147,19 +147,19 @@
 <p>The second format recognized by <strong>ggalluvial</strong> contains one row per lode, and can be understood as the result of “gathering” (in the <strong>dplyr</strong> sense) the axis columns of a dataset of the preceding kind into a “key” column indicating the axis and a “value” column indicating the value taken thereat. This format requires an additional indexing column that links the rows corresponding to a common alluvium, as illustrated below using the <code><a href="../reference/to_lodes.html">to_lodes()</a></code> defaults on the Berkeley admissions dataset:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">UCB_lodes &lt;-<span class="st"> </span><span class="kw"><a href="../reference/to_lodes.html">to_lodes</a></span>(<span class="kw">as.data.frame</span>(UCBAdmissions), <span class="dt">axes =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)
 <span class="kw">head</span>(UCB_lodes, <span class="dt">n =</span> <span class="dv">12</span>)</code></pre></div>
-<pre><code>##    Freq id   key    value
-## 1   512  1 Admit Admitted
-## 2   313  2 Admit Rejected
-## 3    89  3 Admit Admitted
-## 4    19  4 Admit Rejected
-## 5   353  5 Admit Admitted
-## 6   207  6 Admit Rejected
-## 7    17  7 Admit Admitted
-## 8     8  8 Admit Rejected
-## 9   120  9 Admit Admitted
-## 10  205 10 Admit Rejected
-## 11  202 11 Admit Admitted
-## 12  391 12 Admit Rejected</code></pre>
+<pre><code>##    Freq alluvium     x  stratum
+## 1   512        1 Admit Admitted
+## 2   313        2 Admit Rejected
+## 3    89        3 Admit Admitted
+## 4    19        4 Admit Rejected
+## 5   353        5 Admit Admitted
+## 6   207        6 Admit Rejected
+## 7    17        7 Admit Admitted
+## 8     8        8 Admit Rejected
+## 9   120        9 Admit Admitted
+## 10  205       10 Admit Rejected
+## 11  202       11 Admit Admitted
+## 12  391       12 Admit Rejected</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/is_alluvial.html">is_alluvial</a></span>(UCB_lodes, <span class="dt">logical =</span> <span class="ot">FALSE</span>, <span class="dt">silent =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## [1] "alluvia"</code></pre>
 <p>The same stat and geom can receive this data format using a different set of positional aesthetics, also specific to <strong>ggalluvial</strong>:</p>
