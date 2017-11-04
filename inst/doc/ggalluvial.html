@@ -154,19 +154,19 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>The second format recognized by <strong>ggalluvial</strong> contains one row per lode, and can be understood as the result of “gathering” (in the <strong>dplyr</strong> sense) the axis columns of a dataset of the preceding kind into a “key” column indicating the axis and a “value” column indicating the value taken thereat. This format requires an additional indexing column that links the rows corresponding to a common alluvium, as illustrated below using the <code>to_lodes()</code> defaults on the Berkeley admissions dataset:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">UCB_lodes &lt;-<span class="st"> </span><span class="kw">to_lodes</span>(<span class="kw">as.data.frame</span>(UCBAdmissions), <span class="dt">axes =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)
 <span class="kw">head</span>(UCB_lodes, <span class="dt">n =</span> <span class="dv">12</span>)</code></pre></div>
-<pre><code>##    Freq id   key    value
-## 1   512  1 Admit Admitted
-## 2   313  2 Admit Rejected
-## 3    89  3 Admit Admitted
-## 4    19  4 Admit Rejected
-## 5   353  5 Admit Admitted
-## 6   207  6 Admit Rejected
-## 7    17  7 Admit Admitted
-## 8     8  8 Admit Rejected
-## 9   120  9 Admit Admitted
-## 10  205 10 Admit Rejected
-## 11  202 11 Admit Admitted
-## 12  391 12 Admit Rejected</code></pre>
+<pre><code>##    Freq alluvium     x  stratum
+## 1   512        1 Admit Admitted
+## 2   313        2 Admit Rejected
+## 3    89        3 Admit Admitted
+## 4    19        4 Admit Rejected
+## 5   353        5 Admit Admitted
+## 6   207        6 Admit Rejected
+## 7    17        7 Admit Admitted
+## 8     8        8 Admit Rejected
+## 9   120        9 Admit Admitted
+## 10  205       10 Admit Rejected
+## 11  202       11 Admit Admitted
+## 12  391       12 Admit Rejected</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">is_alluvial</span>(UCB_lodes, <span class="dt">logical =</span> <span class="ot">FALSE</span>, <span class="dt">silent =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## [1] &quot;alluvia&quot;</code></pre>
 <p>The same stat and geom can receive this data format using a different set of positional aesthetics, also specific to <strong>ggalluvial</strong>:</p>
@@ -242,8 +242,7 @@ majors<span class="op">$</span>curriculum &lt;-<span class="st"> </span><span cl
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] bindrcpp_0.2       ggalluvial_0.3     ggplot2_2.2.1.9000
-## [4] devtools_1.13.3   
+## [1] ggalluvial_0.3     bindrcpp_0.2       ggplot2_2.2.1.9000
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_0.12.13       RColorBrewer_1.1-2 plyr_1.8.4        
@@ -251,16 +250,16 @@ majors<span class="op">$</span>curriculum &lt;-<span class="st"> </span><span cl
 ##  [7] digest_0.6.12      evaluate_0.10.1    memoise_1.1.0     
 ## [10] tibble_1.3.4       gtable_0.2.0       pkgconfig_2.0.1   
 ## [13] rlang_0.1.2.9000   commonmark_1.4     yaml_2.1.14       
-## [16] alluvial_0.2-0     withr_2.1.0.9000   dplyr_0.7.4       
-## [19] stringr_1.2.0      roxygen2_6.0.1     xml2_1.1.1        
-## [22] knitr_1.17         desc_1.1.1         tidyselect_0.2.2  
-## [25] rprojroot_1.2      grid_3.3.2         glue_1.1.1        
-## [28] R6_2.2.2           rmarkdown_1.6      tidyr_0.7.2       
-## [31] purrr_0.2.4        magrittr_1.5       htmltools_0.3.6   
-## [34] scales_0.5.0.9000  backports_1.1.1    assertthat_0.2.0  
-## [37] colorspace_1.3-2   labeling_0.3       brew_1.0-6        
-## [40] stringi_1.1.5      lazyeval_0.2.1     munsell_0.4.3     
-## [43] crayon_1.3.4</code></pre>
+## [16] alluvial_0.2-0     knitr_1.17         withr_2.1.0.9000  
+## [19] dplyr_0.7.4        stringr_1.2.0      roxygen2_6.0.1    
+## [22] xml2_1.1.1         desc_1.1.1         devtools_1.13.3   
+## [25] tidyselect_0.2.2   rprojroot_1.2      grid_3.3.2        
+## [28] glue_1.1.1         R6_2.2.2           rmarkdown_1.6     
+## [31] tidyr_0.7.2        purrr_0.2.4        magrittr_1.5      
+## [34] htmltools_0.3.6    scales_0.5.0.9000  backports_1.1.1   
+## [37] assertthat_0.2.0   colorspace_1.3-2   labeling_0.3      
+## [40] brew_1.0-6         stringi_1.1.5      lazyeval_0.2.1    
+## [43] munsell_0.4.3      crayon_1.3.4</code></pre>
 </div>
 <div class="footnotes">
 <hr />

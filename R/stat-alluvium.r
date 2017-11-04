@@ -133,11 +133,9 @@ StatAlluvium <- ggproto(
     # ensure that data is in lode form
     if (type == "alluvia") {
       axis_ind <- get_axes(names(data))
-      data <- to_lodes(data = data,
-                       key = "x", value = "stratum", id = "alluvium",
-                       axes = axis_ind)
+      data <- to_lodes(data = data, axes = axis_ind)
       # positioning requires numeric 'x'
-      #data$x <- as.numeric(as.factor(data$x))
+      data <- dplyr::arrange(data, x, stratum, alluvium)
       data$x <- cumsum(!duplicated(data$x))
     }
     
