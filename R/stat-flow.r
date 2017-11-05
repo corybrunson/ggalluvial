@@ -130,15 +130,15 @@ StatFlow <- ggproto(
     # sort within axes by stratum according to 'reverse' parameter
     arr_fun <- if (reverse) dplyr::desc else identity
     
-    # identify aesthetics that vary within strata
-    n_ports <- dplyr::n_distinct(data[, c("x", "stratum")])
-    aes_port <- aesthetics[which(sapply(aesthetics, function(x) {
+    # identify aesthetics that vary within strata (at "fissures")
+    n_lodes <- dplyr::n_distinct(data[, c("x", "stratum")])
+    fissure_aes <- aesthetics[which(sapply(aesthetics, function(x) {
       dplyr::n_distinct(data[, c("x", "stratum", x)])
-    }) > n_ports)]
-    data$aes <- if (length(aes_port) == 0) {
+    }) > n_lodes)]
+    data$fissure <- if (length(fissure_aes) == 0) {
       1
     } else {
-      interaction(data[, rev(aes_port)], drop = TRUE)
+      interaction(data[, rev(fissure_aes)], drop = TRUE)
     }
     
     # stack starts and ends of flows, using 'alluvium' to link them
@@ -159,18 +159,20 @@ StatFlow <- ggproto(
     stopifnot(all(table(data$alluvium) == 2))
     
     # flag flows between common pairs of strata and of aesthetics
-    for (var in c("stratum", "aes")) {
+    for (var in c("stratum", "fissure")) {
       flow_var <- paste0("flow_", var)
       data <- match_sides(data, var, flow_var)
       data[[flow_var]] <- arr_fun(data[[flow_var]])
     }
     data$alluvium <- as.numeric(interaction(data[, c("flow_stratum",
-                                                     "flow_aes")], drop = TRUE))
+                                                     "flow_fissure")],
+                                            drop = TRUE))
     # aggregate alluvial segments within flows
     group_cols <- setdiff(names(data), c("weight", "group"))
     dots <- lapply(group_cols, as.symbol)
     data <- as.data.frame(dplyr::summarize(dplyr::group_by_(data, .dots = dots),
                                            weight = sum(weight)))
+    #data <- aggregate_along(data, "x", "alluvium", "weight")
     stopifnot(all(table(data$alluvium) == 2))
     data <- transform(data,
                       group = alluvium)
@@ -185,9 +187,9 @@ StatFlow <- ggproto(
       "link", "x",
       "deposit",
       if (aes.bind) {
-        c("flow_aes", "flow_stratum")
+        c("flow_fissure", "flow_stratum")
       } else {
-        c("flow_stratum", "flow_aes")
+        c("flow_stratum", "flow_fissure")
       },
       "alluvium", "side"
     )
@@ -201,8 +203,8 @@ StatFlow <- ggproto(
     # y bounds
     data <- transform(data,
                       deposit = NULL,
-                      aes = NULL,
-                      flow_aes = NULL,
+                      fissure = NULL,
+                      flow_fissure = NULL,
                       flow_stratum = NULL,
                       link = NULL,
                       ymin = y - weight / 2,
