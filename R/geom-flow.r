@@ -8,6 +8,7 @@
 #' each such pair, using a provided knot position parameter \code{knot.pos}, and
 #' filled rectangles at either end, using a provided \code{width}.
 #' 
+
 #' @section Aesthetics:
 #' \code{geom_flow} understands the following aesthetics
 #' (required aesthetics are in bold):
@@ -25,6 +26,7 @@
 #' }
 #' \code{group} is used internally; arguments are ignored.
 #' 
+
 #' @import ggplot2
 #' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
 #'   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 

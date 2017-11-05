@@ -4,6 +4,7 @@
 #' centroids (\code{x} and \code{y}) and weights (heights; \code{ymin} and
 #' \code{ymax}) of alluvial flows between each pair of adjacent axes.
 #' 
+
 #' @section Aesthetics:
 #' \code{stat_flow} requires one of two sets of aesthetics:
 #' \itemize{
@@ -23,6 +24,7 @@
 #' and are aggregated across equivalent observations.
 #' \code{group} is used internally; arguments are ignored.
 #' 
+
 #' @import ggplot2
 #' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
 #'   \code{\link{geom_flow}} for the corresponding geom,
@@ -111,7 +113,6 @@ StatFlow <- ggproto(
   
   compute_panel = function(self, data, scales,
                            decreasing = NA, reverse = TRUE,
-                           #aggregate.wts = TRUE,
                            aes.bind = FALSE) {
     
     # aesthetics
@@ -208,15 +209,7 @@ StatFlow <- ggproto(
                       ymax = y + weight / 2)
     
     # arrange data by aesthetics for consistent (reverse) z-ordering
-    colour_fill_aes <- intersect(names(data), c("colour", "fill"))
-    if (length(colour_fill_aes) > 0) {
-      data <- dplyr::arrange_(data, colour_fill_aes)
-      data <- transform(data,
-                        group = as.numeric(factor(
-                          as.character(data$group),
-                          levels = as.character(unique(rev(data$group)))
-                        )))
-    }
+    data <- z_order_colors(data)
     
     data
   }

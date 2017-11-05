@@ -163,7 +163,8 @@ majors$curriculum <- as.factor(majors$curriculum)
 ggplot(majors,
        aes(x = semester, stratum = curriculum, alluvium = student,
            fill = curriculum, label = curriculum)) +
-  geom_flow(stat = "alluvium", lode.guidance = "rightleft") +
+  geom_flow(stat = "alluvium", lode.guidance = "rightleft",
+            color = "black") +
   geom_stratum() +
   theme(legend.position = "bottom") +
   ggtitle("student curricula across several semesters")

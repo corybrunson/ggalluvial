@@ -3,6 +3,7 @@
 #' Given a dataset with alluvial structure, \code{stat_stratum} calculates the
 #' centroids of the strata at each axis, together with their weights (heights).
 #' 
+
 #' @section Aesthetics:
 #' \code{stat_stratum} requires one of two sets of aesthetics:
 #' \itemize{
@@ -32,6 +33,7 @@
 #' observations within each stratum (otherwise \code{NA} is assigned).
 #' \code{group} is used internally; arguments are ignored.
 #' 
+
 #' @import ggplot2
 #' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
 #'   \code{\link{geom_stratum}} for the corresponding geom,

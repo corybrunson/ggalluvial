@@ -6,6 +6,7 @@
 #' \code{ymin} and \code{ymax}). It leverages the \code{group} aesthetic for 
 #' plotting purposes (for now).
 #' 
+
 #' @section Aesthetics:
 #' \code{stat_alluvium} requires one of two sets of aesthetics:
 #' \itemize{
@@ -25,6 +26,7 @@
 #' and are aggregated across equivalent observations.
 #' \code{group} is used internally; arguments are ignored.
 #' 
+
 #' @import ggplot2
 #' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
 #'   \code{\link{geom_alluvium}} for the corresponding geom,
@@ -32,11 +34,13 @@
 #'   intra-axis boxes, and
 #'   \code{\link{ggalluvial}} for a shortcut method.
 #' @inheritParams stat_flow
-#' @param aggregate.wts Logical; whether to aggregate weights across otherwise
-#'   equivalent rows before computing lode and flow positions. Defaults to TRUE.
+#' @param aggregate.wts Whether to aggregate weights across otherwise equivalent
+#'   rows before computing lode and flow positions. Set to \code{TRUE} to group
+#'   observations into cohorts.
+#'   \strong{Warning}: This is currently an expensive operation.
 #' @param lode.guidance The function to prioritize the axis variables for 
-#'   ordering the lodes within each stratum. Defaults to "zigzag", other options
-#'   include "rightleft", "leftright", "rightward", and "leftward" (see 
+#'   ordering the lodes within each stratum. Options are "zigzag", "rightleft",
+#'   "leftright", "rightward", and "leftward" (see 
 #'   \code{\link{lode-guidance-functions}}).
 #' @param lode.ordering A list (of length the number of axes) of integer vectors
 #'   (each of length the number of rows of \code{data}) or NULL entries 
@@ -52,7 +56,7 @@ stat_alluvium <- function(mapping = NULL,
                           position = "identity",
                           decreasing = NA,
                           reverse = TRUE,
-                          aggregate.wts = TRUE,
+                          aggregate.wts = FALSE,
                           lode.guidance = "zigzag",
                           lode.ordering = NULL,
                           na.rm = FALSE,
@@ -70,7 +74,7 @@ stat_alluvium <- function(mapping = NULL,
     params = list(
       decreasing = decreasing,
       reverse = reverse,
-      aggregate.wts = TRUE,
+      aggregate.wts = FALSE,
       lode.guidance = lode.guidance,
       lode.ordering = lode.ordering,
       na.rm = na.rm,
@@ -144,29 +148,49 @@ StatAlluvium <- ggproto(
   
   compute_panel = function(data, scales,
                            decreasing = NA, reverse = TRUE,
-                           aggregate.wts = TRUE,
+                           aggregate.wts = FALSE,
                            lode.guidance = "zigzag",
                            aes.bind = FALSE,
                            lode.ordering = NULL) {
     
-    # aggregate up to weight, respecting 'na.rm' parameter
+    # ensure that 'alluvium' values are contiguous starting at 1
+    data$alluvium <- as.numeric(as.factor(data$alluvium))
+    # aggregate weights over otherwise equivalent alluvia
+    # while respecting missingness
+    #if (aggregate.wts) data <- aggregate_weights(data)
     if (aggregate.wts) {
-      # http://stackoverflow.com/a/28182288/4556798
-      group_cols <- setdiff(names(data), "weight")
-      dots <- lapply(group_cols, as.symbol)
-      data <- as.data.frame(dplyr::summarize(dplyr::group_by_(data,
-                                                              .dots = dots),
-                                             weight = sum(weight)))
+      # interaction of all variables to aggregate over
+      data$agg_vars <- as.numeric(interaction(lapply(
+        data[, -match(c("x", "alluvium", "weight"), names(data)), drop = FALSE],
+        addNA
+      ), drop = FALSE))
+      # convert to alluvia format
+      alluv_data <- alluviate(data, "x", "agg_vars", "alluvium")
+      # sort by everything except 'alluvium'
+      alluv_data <- alluv_data[do.call(
+        order,
+        alluv_data[, -match("alluvium", names(alluv_data)), drop = FALSE]
+      ), , drop = FALSE]
+      # define map from original to aggregated alluvium IDs
+      alluv_orig <- alluv_data$alluvium
+      alluv_agg <- cumsum(!duplicated(interaction(
+        alluv_data[, -match("alluvium", names(alluv_data)), drop = FALSE]
+      )))
+      # transform 'alluvium' variable in 'data' accordingly
+      data$alluvium <- alluv_agg[match(data$alluvium, alluv_orig)]
+      data$agg_vars <- NULL
+      # aggregate weight by all other variables
+      dots <- lapply(setdiff(names(data), "weight"), as.symbol)
+      data <- as.data.frame(dplyr::summarize(
+        dplyr::group_by_(data, .dots = dots),
+        weight = sum(weight)
+      ))
+      # require that no stratum-alluvium pairs are duplicated
+      stopifnot(all(!duplicated(data[, c("x", "alluvium")])))
+      rm(alluv_data)
     }
     
-    # introduce any missing rows
-    #if (fill.zeros) {
-    #  grid_data <- expand.grid(x = unique(data$x),
-    #                           alluvium = unique(data$alluvium))
-    #  data <- merge(data, grid_data, all = TRUE)
-    #}
-    
-    # sort data by 'x' then 'alluvium' (to match 'alluv')
+    # sort data by 'x' then 'alluvium' (to match 'alluv' downstream)
     data <- data[do.call(order, data[, c("x", "alluvium")]), ]
     
     if (is.null(lode.ordering)) {
@@ -255,15 +279,7 @@ StatAlluvium <- ggproto(
     data <- transform(data,
                       group = as.numeric(interaction(alluvium, flow)))
     # arrange data by aesthetics for consistent (reverse) z-ordering
-    colour_fill_aes <- intersect(names(data), c("colour", "fill"))
-    if (length(colour_fill_aes) > 0) {
-      data <- dplyr::arrange_(data, colour_fill_aes)
-      data <- transform(data,
-                        group = as.numeric(factor(
-                          as.character(data$group),
-                          levels = as.character(unique(rev(data$group)))
-                        )))
-    }
+    data <- z_order_colors(data)
     
     data
   }

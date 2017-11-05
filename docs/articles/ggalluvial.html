@@ -56,7 +56,7 @@
       <h1>alluvial diagrams in ggplot2</h1>
                         <h4 class="author">Jason Cory Brunson</h4>
             
-            <h4 class="date">2017-11-04</h4>
+            <h4 class="date">2017-11-05</h4>
           </div>
 
     
@@ -201,7 +201,8 @@ majors<span class="op">$</span>curriculum &lt;-<span class="st"> </span><span cl
 <span class="kw">ggplot</span>(majors,
        <span class="kw">aes</span>(<span class="dt">x =</span> semester, <span class="dt">stratum =</span> curriculum, <span class="dt">alluvium =</span> student,
            <span class="dt">fill =</span> curriculum, <span class="dt">label =</span> curriculum)) <span class="op">+</span>
-<span class="st">  </span><span class="kw"><a href="../reference/geom_flow.html">geom_flow</a></span>(<span class="dt">stat =</span> <span class="st">"alluvium"</span>, <span class="dt">lode.guidance =</span> <span class="st">"rightleft"</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="../reference/geom_flow.html">geom_flow</a></span>(<span class="dt">stat =</span> <span class="st">"alluvium"</span>, <span class="dt">lode.guidance =</span> <span class="st">"rightleft"</span>,
+            <span class="dt">color =</span> <span class="st">"black"</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw"><a href="../reference/geom_stratum.html">geom_stratum</a></span>() <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">"student curricula across several semesters"</span>)</code></pre></div>

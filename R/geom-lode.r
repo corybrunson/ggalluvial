@@ -5,6 +5,7 @@
 #' of an alluvial diagram, the intersections of the alluvia with the strata.
 #' It plots rectangles for these lodes of a provided \code{width}.
 #' 
+
 #' @section Aesthetics:
 #' \code{geom_lode} understands the following aesthetics
 #' (required aesthetics are in bold):
@@ -22,6 +23,7 @@
 #' }
 #' \code{group} is used internally; arguments are ignored.
 #' 
+
 #' @import ggplot2
 #' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
 #'   \code{\link{geom_alluvium}} for alluvial flows,

@@ -6,7 +6,7 @@
 \usage{
 stat_alluvium(mapping = NULL, data = NULL, geom = "alluvium",
   position = "identity", decreasing = NA, reverse = TRUE,
-  aggregate.wts = TRUE, lode.guidance = "zigzag", lode.ordering = NULL,
+  aggregate.wts = FALSE, lode.guidance = "zigzag", lode.ordering = NULL,
   na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ...)
 }
 \arguments{
@@ -47,12 +47,13 @@ so that they match the order of the values in the legend.
 Ignored if \code{decreasing} is not \code{NA}.
 Defaults to \code{TRUE}.}
 
-\item{aggregate.wts}{Logical; whether to aggregate weights across otherwise
-equivalent rows before computing lode and flow positions. Defaults to TRUE.}
+\item{aggregate.wts}{Whether to aggregate weights across otherwise equivalent
+rows before computing lode and flow positions. Set to \code{TRUE} to group
+observations into cohorts.}
 
 \item{lode.guidance}{The function to prioritize the axis variables for 
-ordering the lodes within each stratum. Defaults to "zigzag", other options
-include "rightleft", "leftright", "rightward", and "leftward" (see 
+ordering the lodes within each stratum. Options are "zigzag", "rightleft",
+"leftright", "rightward", and "leftward" (see 
 \code{\link{lode-guidance-functions}}).}
 
 \item{lode.ordering}{A list (of length the number of axes) of integer vectors
@@ -140,14 +141,31 @@ ggplot(as.data.frame(Titanic),
   geom_stratum() + geom_text(stat = "stratum", label.strata = TRUE) +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 
-# omit missing lodes and incident flows
 data(majors)
+
+# omit missing lodes and incident flows
 ggplot(majors,
        aes(x = semester, stratum = curriculum, alluvium = student,
            label = curriculum)) +
   geom_alluvium(fill = "darkgrey", na.rm = TRUE) +
   geom_stratum(aes(fill = curriculum), color = NA, na.rm = TRUE) +
   theme_bw()
+
+# diagram with outlined alluvia and forward-colored flows
+ggplot(majors,
+       aes(x = semester, stratum = curriculum, alluvium = student,
+           fill = curriculum, label = curriculum)) +
+  geom_flow(stat = "alluvium", lode.guidance = "rightleft",
+            color = "black") +
+  geom_stratum()
+# same diagram without alluvium aggregation suppressed,
+# so that students are aggregated into cohorts
+ggplot(majors,
+       aes(x = semester, stratum = curriculum, alluvium = student,
+           fill = curriculum, label = curriculum)) +
+  geom_flow(stat = "alluvium", lode.guidance = "rightleft",
+            color = "black", aggregate.wts = TRUE) +
+  geom_stratum()
 
 \dontrun{
   data(babynames, package = "babynames")

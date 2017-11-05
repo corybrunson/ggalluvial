@@ -52,3 +52,15 @@ na_keep <- function(data, type) {
   }
   data
 }
+
+# arrange data by aesthetics for consistent (reverse) z-ordering
+z_order_colors <- function(data) {
+  stopifnot("group" %in% names(data))
+  # arrange by fill, then color
+  z_aes <- intersect(c("fill", "colour", "group"), names(data))
+  if (length(z_aes) > 0) {
+    data <- data[do.call(order, data[, z_aes, drop = FALSE]), , drop = FALSE]
+    data$group <- cumsum(!duplicated(data$group))
+  }
+  data
+}

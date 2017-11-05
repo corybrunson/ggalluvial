@@ -91,7 +91,7 @@ plotting purposes (for now).</p>
 
     <pre class="usage"><span class='fu'>stat_alluvium</span>(<span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
   <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"identity"</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>aggregate.wts</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>lode.guidance</span> <span class='kw'>=</span> <span class='st'>"zigzag"</span>, <span class='kw'>lode.ordering</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>aggregate.wts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>lode.guidance</span> <span class='kw'>=</span> <span class='st'>"zigzag"</span>, <span class='kw'>lode.ordering</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
@@ -145,14 +145,15 @@ Defaults to <code>TRUE</code>.</p></td>
     </tr>
     <tr>
       <th>aggregate.wts</th>
-      <td><p>Logical; whether to aggregate weights across otherwise
-equivalent rows before computing lode and flow positions. Defaults to TRUE.</p></td>
+      <td><p>Whether to aggregate weights across otherwise equivalent
+rows before computing lode and flow positions. Set to <code>TRUE</code> to group
+observations into cohorts.</p></td>
     </tr>
     <tr>
       <th>lode.guidance</th>
       <td><p>The function to prioritize the axis variables for 
-ordering the lodes within each stratum. Defaults to "zigzag", other options
-include "rightleft", "leftright", "rightward", and "leftward" (see 
+ordering the lodes within each stratum. Options are "zigzag", "rightleft",
+"leftright", "rightward", and "leftward" (see 
 <code><a href='lode-guidance-functions.html'>lode-guidance-functions</a></code>).</p></td>
     </tr>
     <tr>
@@ -246,14 +247,29 @@ and are aggregated across equivalent observations.
             <span class='kw'>lode.ordering</span> <span class='kw'>=</span> <span class='no'>lode_ord</span>) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>() + <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
   <span class='fu'>scale_x_continuous</span>(<span class='kw'>breaks</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>))</div><div class='img'><img src='stat_alluvium-3.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
-<span class='co'># omit missing lodes and incident flows</span>
 <span class='fu'>data</span>(<span class='no'>majors</span>)
+
+<span class='co'># omit missing lodes and incident flows</span>
 <span class='fu'>ggplot</span>(<span class='no'>majors</span>,
        <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>semester</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>curriculum</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>student</span>,
            <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>curriculum</span>)) +
   <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>"darkgrey"</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>curriculum</span>), <span class='kw'>color</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
   <span class='fu'>theme_bw</span>()</div><div class='img'><img src='stat_alluvium-4.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='co'># diagram with outlined alluvia and forward-colored flows</span>
+<span class='fu'>ggplot</span>(<span class='no'>majors</span>,
+       <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>semester</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>curriculum</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>student</span>,
+           <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>curriculum</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>curriculum</span>)) +
+  <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>, <span class='kw'>lode.guidance</span> <span class='kw'>=</span> <span class='st'>"rightleft"</span>,
+            <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"black"</span>) +
+  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>()</div><div class='img'><img src='stat_alluvium-5.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># same diagram without alluvium aggregation suppressed,</span>
+<span class='co'># so that students are aggregated into cohorts</span>
+<span class='fu'>ggplot</span>(<span class='no'>majors</span>,
+       <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>semester</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>curriculum</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>student</span>,
+           <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>curriculum</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>curriculum</span>)) +
+  <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>, <span class='kw'>lode.guidance</span> <span class='kw'>=</span> <span class='st'>"rightleft"</span>,
+            <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"black"</span>, <span class='kw'>aggregate.wts</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
+  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>()</div><div class='img'><img src='stat_alluvium-6.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 </div><span class='co'># NOT RUN {</span>
   <span class='fu'>data</span>(<span class='no'>babynames</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"babynames"</span>)
   <span class='co'># a discontiguous alluvium</span>

@@ -6,6 +6,7 @@
 #' It plots both the lodes themselves, using \code{\link{geom_lode}}, and the
 #' flows between them, using \code{\link{geom_flow}}.
 #' 
+
 #' @section Aesthetics:
 #' \code{geom_alluvium} understands the following aesthetics
 #' (required aesthetics are in bold):
@@ -23,6 +24,7 @@
 #' }
 #' \code{group} is used internally; arguments are ignored.
 #' 
+
 #' @import ggplot2
 #' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
 #'   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 

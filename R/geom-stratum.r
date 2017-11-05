@@ -5,6 +5,7 @@
 #' alluvial diagram.
 #' It plots rectangles for these strata of a provided \code{width}.
 #' 
+
 #' @section Aesthetics:
 #' \code{geom_stratum} understands the following aesthetics
 #' (required aesthetics are in bold):
@@ -22,6 +23,7 @@
 #' }
 #' \code{group} is used internally; arguments are ignored.
 #' 
+
 #' @import ggplot2
 #' @seealso \code{\link[ggplot2]{layer}} for additional arguments, and
 #'   \code{\link{stat_stratum}} for the corresponding geom.
