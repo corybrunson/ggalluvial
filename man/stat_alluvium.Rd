@@ -49,7 +49,8 @@ Defaults to \code{TRUE}.}
 
 \item{aggregate.wts}{Whether to aggregate weights across otherwise equivalent
 rows before computing lode and flow positions. Set to \code{TRUE} to group
-observations into cohorts.}
+observations into cohorts.
+\strong{Warning}: This is currently an expensive operation.}
 
 \item{lode.guidance}{The function to prioritize the axis variables for 
 ordering the lodes within each stratum. Options are "zigzag", "rightleft",
@@ -158,7 +159,7 @@ ggplot(majors,
   geom_flow(stat = "alluvium", lode.guidance = "rightleft",
             color = "black") +
   geom_stratum()
-# same diagram without alluvium aggregation suppressed,
+# same diagram with alluvium aggregation enabled,
 # so that students are aggregated into cohorts
 ggplot(majors,
        aes(x = semester, stratum = curriculum, alluvium = student,

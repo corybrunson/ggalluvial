@@ -147,7 +147,8 @@ Defaults to <code>TRUE</code>.</p></td>
       <th>aggregate.wts</th>
       <td><p>Whether to aggregate weights across otherwise equivalent
 rows before computing lode and flow positions. Set to <code>TRUE</code> to group
-observations into cohorts.</p></td>
+observations into cohorts.
+<strong>Warning</strong>: This is currently an expensive operation.</p></td>
     </tr>
     <tr>
       <th>lode.guidance</th>
@@ -262,7 +263,7 @@ and are aggregated across equivalent observations.
            <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>curriculum</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>curriculum</span>)) +
   <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>, <span class='kw'>lode.guidance</span> <span class='kw'>=</span> <span class='st'>"rightleft"</span>,
             <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"black"</span>) +
-  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>()</div><div class='img'><img src='stat_alluvium-5.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># same diagram without alluvium aggregation suppressed,</span>
+  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>()</div><div class='img'><img src='stat_alluvium-5.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># same diagram with alluvium aggregation enabled,</span>
 <span class='co'># so that students are aggregated into cohorts</span>
 <span class='fu'>ggplot</span>(<span class='no'>majors</span>,
        <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>semester</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>curriculum</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>student</span>,

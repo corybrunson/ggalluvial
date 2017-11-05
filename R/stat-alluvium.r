@@ -156,39 +156,7 @@ StatAlluvium <- ggproto(
     # ensure that 'alluvium' values are contiguous starting at 1
     data$alluvium <- as.numeric(as.factor(data$alluvium))
     # aggregate weights over otherwise equivalent alluvia
-    # while respecting missingness
-    #if (aggregate.wts) data <- aggregate_weights(data)
-    if (aggregate.wts) {
-      # interaction of all variables to aggregate over
-      data$agg_vars <- as.numeric(interaction(lapply(
-        data[, -match(c("x", "alluvium", "weight"), names(data)), drop = FALSE],
-        addNA
-      ), drop = FALSE))
-      # convert to alluvia format
-      alluv_data <- alluviate(data, "x", "agg_vars", "alluvium")
-      # sort by everything except 'alluvium'
-      alluv_data <- alluv_data[do.call(
-        order,
-        alluv_data[, -match("alluvium", names(alluv_data)), drop = FALSE]
-      ), , drop = FALSE]
-      # define map from original to aggregated alluvium IDs
-      alluv_orig <- alluv_data$alluvium
-      alluv_agg <- cumsum(!duplicated(interaction(
-        alluv_data[, -match("alluvium", names(alluv_data)), drop = FALSE]
-      )))
-      # transform 'alluvium' variable in 'data' accordingly
-      data$alluvium <- alluv_agg[match(data$alluvium, alluv_orig)]
-      data$agg_vars <- NULL
-      # aggregate weight by all other variables
-      dots <- lapply(setdiff(names(data), "weight"), as.symbol)
-      data <- as.data.frame(dplyr::summarize(
-        dplyr::group_by_(data, .dots = dots),
-        weight = sum(weight)
-      ))
-      # require that no stratum-alluvium pairs are duplicated
-      stopifnot(all(!duplicated(data[, c("x", "alluvium")])))
-      rm(alluv_data)
-    }
+    if (aggregate.wts) data <- aggregate_along(data, "x", "alluvium", "weight")
     
     # sort data by 'x' then 'alluvium' (to match 'alluv' downstream)
     data <- data[do.call(order, data[, c("x", "alluvium")]), ]
@@ -284,6 +252,42 @@ StatAlluvium <- ggproto(
     data
   }
 )
+
+# aggregate weights over otherwise equivalent alluvia (omitting missing values)
+aggregate_along <- function(data, key, id, var) {
+  # interaction of all variables to aggregate over
+  data$agg_vars <- as.numeric(interaction(lapply(
+    data[, -match(c(key, id, var), names(data)), drop = FALSE],
+    addNA, ifany = FALSE
+  ), drop = TRUE))
+  # convert to alluvia format
+  alluv_data <- alluviate(data, key, "agg_vars", id)
+  # sort by everything except 'id'
+  alluv_data <- alluv_data[do.call(
+    order,
+    alluv_data[, -match(id, names(alluv_data)), drop = FALSE]
+  ), , drop = FALSE]
+  # define map from original to aggregated 'id's
+  alluv_orig <- alluv_data[[id]]
+  alluv_agg <- cumsum(!duplicated(interaction(
+    alluv_data[, -match(id, names(alluv_data)), drop = FALSE]
+  )))
+  # transform 'id' in 'data' accordingly
+  data[[id]] <- alluv_agg[match(data[[id]], alluv_orig)]
+  # aggregate 'var' by all other variables
+  # and ensure that no 'key'-'id' pairs are duplicated
+  data <- unique(merge(
+    stats::aggregate(formula = stats::as.formula(paste(var, "~ .")),
+                     data = data[, c(key, id, "agg_vars", var)],
+                     FUN = sum),
+    data[, -match(var, names(data))],
+    all.x = TRUE, all.y = FALSE
+  ))
+  data$agg_vars <- NULL
+  # require that no 'key'-'id' pairs are duplicated
+  #stopifnot(all(!duplicated(data[, c(key, id)])))
+  data
+}
 
 # build alluvial dataset for reference during lode-ordering
 alluviate <- function(data, key, value, id) {
