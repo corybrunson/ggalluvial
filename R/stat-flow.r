@@ -172,7 +172,6 @@ StatFlow <- ggproto(
     dots <- lapply(group_cols, as.symbol)
     data <- as.data.frame(dplyr::summarize(dplyr::group_by_(data, .dots = dots),
                                            weight = sum(weight)))
-    #data <- aggregate_along(data, "x", "alluvium", "weight")
     stopifnot(all(table(data$alluvium) == 2))
     data <- transform(data,
                       group = alluvium)
@@ -200,7 +199,7 @@ StatFlow <- ggproto(
       ww <- which(data$link == ll & data$side == ss)
       data$y[ww] <- cumsum(data$weight[ww]) - data$weight[ww] / 2
     }
-    # y bounds
+    # calculate y bounds
     data <- transform(data,
                       deposit = NULL,
                       fissure = NULL,
