@@ -4,14 +4,13 @@
 \alias{to_lodes}
 \title{Combine multiple axis variables into an axis indicator and an axis value}
 \usage{
-to_lodes(data, key = "key", value = "value", id = "id", axes)
+to_lodes(data, key = "x", value = "stratum", id = "alluvium", axes)
 }
 \arguments{
 \item{data}{Data frame.}
 
 \item{key, value, id}{Character; names given to the axis (variable), stratum
-(value), and alluvium (identifying) variables. Default to "key", "value",
-and "id".}
+(value), and alluvium (identifying) variables.}
 
 \item{axes}{Numeric or character vector; which variables to use as axes.}
 }

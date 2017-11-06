@@ -6,28 +6,28 @@
 \usage{
 stat_alluvium(mapping = NULL, data = NULL, geom = "alluvium",
   position = "identity", decreasing = NA, reverse = TRUE,
-  aggregate.wts = TRUE, lode.guidance = "zigzag", lode.ordering = NULL,
+  aggregate.wts = FALSE, lode.guidance = "zigzag", lode.ordering = NULL,
   na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ...)
 }
 \arguments{
-\item{mapping}{Set of aesthetic mappings created by \code{\link{aes}} or
-\code{\link{aes_}}. If specified and \code{inherit.aes = TRUE} (the
+\item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
+\code{\link[=aes_]{aes_()}}. If specified and \code{inherit.aes = TRUE} (the
 default), it is combined with the default mapping at the top level of the
 plot. You must supply \code{mapping} if there is no plot mapping.}
 
 \item{data}{The data to be displayed in this layer. There are three
-   options:
+options:
 
-   If \code{NULL}, the default, the data is inherited from the plot
-   data as specified in the call to \code{\link{ggplot}}.
+If \code{NULL}, the default, the data is inherited from the plot
+data as specified in the call to \code{\link[=ggplot]{ggplot()}}.
 
-   A \code{data.frame}, or other object, will override the plot
-   data. All objects will be fortified to produce a data frame. See
-   \code{\link{fortify}} for which variables will be created.
+A \code{data.frame}, or other object, will override the plot
+data. All objects will be fortified to produce a data frame. See
+\code{\link[=fortify]{fortify()}} for which variables will be created.
 
-   A \code{function} will be called with a single argument,
-   the plot data. The return value must be a \code{data.frame.}, and
-   will be used as the layer data.}
+A \code{function} will be called with a single argument,
+the plot data. The return value must be a \code{data.frame.}, and
+will be used as the layer data.}
 
 \item{geom}{The geometric object to use display the data;
 override the default.}
@@ -47,12 +47,14 @@ so that they match the order of the values in the legend.
 Ignored if \code{decreasing} is not \code{NA}.
 Defaults to \code{TRUE}.}
 
-\item{aggregate.wts}{Logical; whether to aggregate weights across otherwise
-equivalent rows before computing lode and flow positions. Defaults to TRUE.}
+\item{aggregate.wts}{Whether to aggregate weights across otherwise equivalent
+rows before computing lode and flow positions. Set to \code{TRUE} to group
+observations into cohorts.
+\strong{Warning}: This is currently an expensive operation.}
 
 \item{lode.guidance}{The function to prioritize the axis variables for 
-ordering the lodes within each stratum. Defaults to "zigzag", other options
-include "rightleft", "leftright", "rightward", and "leftward" (see 
+ordering the lodes within each stratum. Options are "zigzag", "rightleft",
+"leftright", "rightward", and "leftward" (see 
 \code{\link{lode-guidance-functions}}).}
 
 \item{lode.ordering}{A list (of length the number of axes) of integer vectors
@@ -69,12 +71,14 @@ plotted in grey (regardless of the color scheme).}
 
 \item{show.legend}{logical. Should this layer be included in the legends?
 \code{NA}, the default, includes if any aesthetics are mapped.
-\code{FALSE} never includes, and \code{TRUE} always includes.}
+\code{FALSE} never includes, and \code{TRUE} always includes.
+It can also be a named logical vector to finely select the aesthetics to
+display.}
 
 \item{inherit.aes}{If \code{FALSE}, overrides the default aesthetics,
 rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
-the default plot specification, e.g. \code{\link{borders}}.}
+the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
 
 \item{...}{Additional arguments passed to \code{\link[ggplot2]{layer}}.}
 }
@@ -86,20 +90,24 @@ the alluvia with the strata, together with their weights (heights;
 plotting purposes (for now).
 }
 \section{Aesthetics}{
- \code{stat_alluvium} understands the following
-  aesthetics (required aesthetics are in bold):
+
+\code{stat_alluvium} requires one of two sets of aesthetics:
 \itemize{
-  \item \code{x}
-  \item \code{stratum}
-  \item \code{alluvium}
-  \item \code{axis[0-9]*} (\code{axis1}, \code{axis2}, etc.)
+  \item \code{x}, \code{alluvium}, and (optionally) \code{stratum}
+  \item any number of \code{axis[0-9]*} (\code{axis1}, \code{axis2}, etc.)
+}
+Use \code{x}, \code{alluvium}, and \code{stratum} for data in lodes format
+and \code{axis[0-9]*} for data in alluvia format
+(see \code{\link{is_alluvial}}).
+Arguments to parameters inconsistent with the format will be ignored.
+Additionally, \code{stat_alluvium} accepts the following optional aesthetics:
+\itemize{
   \item \code{weight}
   \item \code{group}
 }
-Currently, \code{group} is ignored.
-Use \code{x}, \code{stratum}, and \code{alluvium} for data in lode form and 
-\code{axis[0-9]*} for data in alluvium form (see \code{\link{is_alluvial}});
-arguments to parameters inconsistent with the data format will be ignored.
+\code{weight} controls the vertical dimensions of the alluvia
+and are aggregated across equivalent observations.
+\code{group} is used internally; arguments are ignored.
 }
 
 \examples{
@@ -134,14 +142,31 @@ ggplot(as.data.frame(Titanic),
   geom_stratum() + geom_text(stat = "stratum", label.strata = TRUE) +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 
-# omit missing lodes and incident flows
 data(majors)
+
+# omit missing lodes and incident flows
 ggplot(majors,
        aes(x = semester, stratum = curriculum, alluvium = student,
            label = curriculum)) +
   geom_alluvium(fill = "darkgrey", na.rm = TRUE) +
   geom_stratum(aes(fill = curriculum), color = NA, na.rm = TRUE) +
   theme_bw()
+
+# diagram with outlined alluvia and forward-colored flows
+ggplot(majors,
+       aes(x = semester, stratum = curriculum, alluvium = student,
+           fill = curriculum, label = curriculum)) +
+  geom_flow(stat = "alluvium", lode.guidance = "rightleft",
+            color = "black") +
+  geom_stratum()
+# same diagram with alluvium aggregation enabled,
+# so that students are aggregated into cohorts
+ggplot(majors,
+       aes(x = semester, stratum = curriculum, alluvium = student,
+           fill = curriculum, label = curriculum)) +
+  geom_flow(stat = "alluvium", lode.guidance = "rightleft",
+            color = "black", aggregate.wts = TRUE) +
+  geom_stratum()
 
 \dontrun{
   data(babynames, package = "babynames")
