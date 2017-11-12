@@ -153,13 +153,12 @@ StatAlluvium <- ggproto(
                            aes.bind = FALSE,
                            lode.ordering = NULL) {
     
-    # ensure that 'alluvium' values are contiguous starting at 1
-    data$alluvium <- as.numeric(as.factor(data$alluvium))
     # aggregate weights over otherwise equivalent alluvia
     if (aggregate.wts) data <- aggregate_along(data, "x", "alluvium", "weight")
-    
     # sort data by 'x' then 'alluvium' (to match 'alluv' downstream)
     data <- data[do.call(order, data[, c("x", "alluvium")]), ]
+    # ensure that 'alluvium' values are contiguous starting at 1
+    data$alluvium <- as.numeric(as.factor(data$alluvium))
     
     if (is.null(lode.ordering)) {
       lode_fn <- get(paste0("lode_", lode.guidance))
