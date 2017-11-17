@@ -188,7 +188,7 @@ StatAlluvium <- ggproto(
       lode.ordering <- sapply(seq_along(alluv_ind), function(i) {
         
         # order surrounding axes according to 'lode.guidance'
-        axis_seq <- axis_ind[lode_fun(n = length(alluv_ind), i = i)]
+        axis_seq <- alluv_ind[lode_fun(n = length(alluv_ind), i = i)]
         # order axis aesthetics ...
         aes_dat <- data[data$x == names(alluv)[alluv_ind[i]],
                         c("alluvium", aesthetics),
