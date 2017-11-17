@@ -1,4 +1,4 @@
-#' Alluvia
+#' Alluvia across strata
 #' 
 #' \code{geom_alluvium} receives a dataset of the horizontal (\code{x}) and 
 #' vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the \strong{lodes}
@@ -6,9 +6,10 @@
 #' It plots both the lodes themselves, using \code{\link{geom_lode}}, and the
 #' flows between them, using \code{\link{geom_flow}}.
 #' 
+
 #' @section Aesthetics:
 #' \code{geom_alluvium} understands the following aesthetics
-#'   (required aesthetics are in bold):
+#' (required aesthetics are in bold):
 #' \itemize{
 #'   \item \strong{\code{x}}
 #'   \item \strong{\code{y}}
@@ -21,8 +22,9 @@
 #'   \item \code{size}
 #'   \item \code{group}
 #' }
-#' Currently, \code{group} is ignored.
+#' \code{group} is used internally; arguments are ignored.
 #' 
+
 #' @import ggplot2
 #' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
 #'   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 

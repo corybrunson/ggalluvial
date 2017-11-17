@@ -89,7 +89,7 @@ variables' values will be repeated, and a row-grouping variable can be
 introduced. This function invokes <code><a href='http://www.rdocumentation.org/packages/tidyr/topics/gather'>gather</a></code>.</p>
     
 
-    <pre class="usage"><span class='fu'>to_lodes</span>(<span class='no'>data</span>, <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"key"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"value"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"id"</span>, <span class='no'>axes</span>)</pre>
+    <pre class="usage"><span class='fu'>to_lodes</span>(<span class='no'>data</span>, <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"x"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>, <span class='no'>axes</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -101,8 +101,7 @@ introduced. This function invokes <code><a href='http://www.rdocumentation.org/p
     <tr>
       <th>key, value, id</th>
       <td><p>Character; names given to the axis (variable), stratum
-(value), and alluvium (identifying) variables. Default to "key", "value",
-and "id".</p></td>
+(value), and alluvium (identifying) variables.</p></td>
     </tr>
     <tr>
       <th>axes</th>

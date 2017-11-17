@@ -96,23 +96,23 @@ centroids of the strata at each axis, together with their weights (heights).</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>mapping</th>
-      <td><p>Set of aesthetic mappings created by <code>aes()</code> or
-<code>aes_()</code>. If specified and <code>inherit.aes = TRUE</code> (the
+      <td><p>Set of aesthetic mappings created by <code>aes</code> or
+<code>aes_</code>. If specified and <code>inherit.aes = TRUE</code> (the
 default), it is combined with the default mapping at the top level of the
 plot. You must supply <code>mapping</code> if there is no plot mapping.</p></td>
     </tr>
     <tr>
       <th>data</th>
       <td><p>The data to be displayed in this layer. There are three
-options:</p>
+   options:</p>
 <p>If <code>NULL</code>, the default, the data is inherited from the plot
-data as specified in the call to <code>ggplot()</code>.</p>
+   data as specified in the call to <code>ggplot</code>.</p>
 <p>A <code>data.frame</code>, or other object, will override the plot
-data. All objects will be fortified to produce a data frame. See
-<code>fortify()</code> for which variables will be created.</p>
+   data. All objects will be fortified to produce a data frame. See
+   <code>fortify</code> for which variables will be created.</p>
 <p>A <code>function</code> will be called with a single argument,
-the plot data. The return value must be a <code>data.frame.</code>, and
-will be used as the layer data.</p></td>
+   the plot data. The return value must be a <code>data.frame.</code>, and
+   will be used as the layer data.</p></td>
     </tr>
     <tr>
       <th>geom</th>
@@ -142,24 +142,22 @@ Defaults to <code>TRUE</code>.</p></td>
     </tr>
     <tr>
       <th>label.strata</th>
-      <td><p>Logical; whether to assign the values of the axis
-variables to the strata. Defaults to FALSE, and requires that no label
-aesthetic is assigned.</p></td>
+      <td><p>Logical; whether to assign the values of the axis 
+variables to the strata. Defaults to FALSE, and requires that no
+<code>label</code> aesthetic is assigned.</p></td>
     </tr>
     <tr>
       <th>show.legend</th>
       <td><p>logical. Should this layer be included in the legends?
 <code>NA</code>, the default, includes if any aesthetics are mapped.
-<code>FALSE</code> never includes, and <code>TRUE</code> always includes.
-It can also be a named logical vector to finely select the aesthetics to
-display.</p></td>
+<code>FALSE</code> never includes, and <code>TRUE</code> always includes.</p></td>
     </tr>
     <tr>
       <th>inherit.aes</th>
       <td><p>If <code>FALSE</code>, overrides the default aesthetics,
 rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
-the default plot specification, e.g. <code>borders()</code>.</p></td>
+the default plot specification, e.g. <code>borders</code>.</p></td>
     </tr>
     <tr>
       <th>na.rm</th>
@@ -176,18 +174,28 @@ plotted in grey (regardless of the color scheme).</p></td>
     
     <h2 class="hasAnchor" id="aesthetics"><a class="anchor" href="#aesthetics"></a>Aesthetics</h2>
 
-    <p><code>stat_stratum</code> understands the following aesthetics:</p><ul>
-<li><p><code>x</code></p></li>
-<li><p><code>stratum</code></p></li>
-<li><p><code>alluvium</code></p></li>
-<li><p><code>axis[0-9]*</code> (<code>axis1</code>, <code>axis2</code>, etc.)</p></li>
+    <p><code>stat_stratum</code> requires one of two sets of aesthetics:</p><ul>
+<li><p><code>x</code>, <code>stratum</code>, and (optionally) <code>alluvium</code></p></li>
+<li><p>any number of <code>axis[0-9]*</code> (<code>axis1</code>, <code>axis2</code>, etc.)</p></li>
+</ul><p>Use <code>x</code> and <code>stratum</code> for data in lodes format
+(<code>alluvium</code> is ignored)
+and <code>axis[0-9]*</code> for data in alluvia format
+(see <code><a href='is_alluvial.html'>is_alluvial</a></code>).
+Arguments to parameters inconsistent with the format will be ignored.</p>
+<p>Additionally, <code>stat_stratum</code> accepts the following optional aesthetics:</p><ul>
 <li><p><code>weight</code></p></li>
+<li><p><code>label</code></p></li>
 <li><p><code>group</code></p></li>
-</ul><p>Currently, <code>group</code> is ignored.
-Use <code>x</code>, <code>stratum</code>, and (optionally) <code>alluvium</code> for data in
-lode form and <code>axis[0-9]*</code> for data in alluvium form (see
-<code><a href='is_alluvial.html'>is_alluvial</a></code>); arguments to parameters inconsistent with the
-data format will be ignored.</p>
+</ul><p><code>weight</code> controls the vertical dimensions of the alluvia
+and are aggregated across equivalent observations.
+<code>label</code> is used to label the strata and must take a unique value across
+the observations within each stratum.
+These and any other aesthetics are aggregated as follows:
+Numeric aesthetics, including <code>weight</code>, are summed.
+Character and factor aesthetics, including <code>label</code>,
+are assigned to strata provided they take unique values across the
+observations within each stratum (otherwise <code>NA</code> is assigned).
+<code>group</code> is used internally; arguments are ignored.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 

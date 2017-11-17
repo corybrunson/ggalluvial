@@ -6,8 +6,8 @@ knitr::opts_chunk$set(fig.width = 6, fig.height = 4, fig.align = "center")
 ggplot(data = to_lodes(as.data.frame(Titanic),
                        key = "Demographic",
                        axes = 1:3),
-       aes(x = Demographic, stratum = value, alluvium = id,
-           weight = Freq, label = value)) +
+       aes(x = Demographic, stratum = stratum, alluvium = alluvium,
+           weight = Freq, label = stratum)) +
   geom_alluvium(aes(fill = Survived)) +
   geom_stratum() + geom_text(stat = "stratum") +
   ggtitle("passengers on the maiden voyage of the Titanic",
@@ -76,7 +76,8 @@ majors$curriculum <- as.factor(majors$curriculum)
 ggplot(majors,
        aes(x = semester, stratum = curriculum, alluvium = student,
            fill = curriculum, label = curriculum)) +
-  geom_flow(stat = "alluvium", lode.guidance = "rightleft", color = "darkgrey") +
+  geom_flow(stat = "alluvium", lode.guidance = "rightleft",
+            color = "darkgray") +
   geom_stratum() +
   theme(legend.position = "bottom") +
   ggtitle("student curricula across several semesters")
