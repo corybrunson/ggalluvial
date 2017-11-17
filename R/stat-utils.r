@@ -53,6 +53,13 @@ na_keep <- function(data, type) {
   data
 }
 
+# replace a vector 'x' of any type with
+# a numeric vector of *contiguous* integers that sort in the same order as 'x'
+contiguate <- function(x) {
+  x <- xtfrm(x)
+  match(x, sort(unique(x)))
+}
+
 # aggregate weights over otherwise equivalent alluvia (omitting missing values)
 aggregate_along <- function(data, key, id, var) {
   # interaction of all variables to aggregate over

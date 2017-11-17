@@ -140,7 +140,7 @@ StatAlluvium <- ggproto(
       data <- to_lodes(data = data, axes = axis_ind)
       # positioning requires numeric 'x'
       data <- dplyr::arrange(data, x, stratum, alluvium)
-      data$x <- cumsum(!duplicated(data$x))
+      data$x <- contiguate(data$x)
     }
     
     data
@@ -243,7 +243,7 @@ StatAlluvium <- ggproto(
     data <- dplyr::arrange(data, x, alluvium)
     data$starts <- duplicated(data$alluvium) &
       !duplicated(data[, c("x", "alluvium")])
-    data$axis <- cumsum(!duplicated(data$x))
+    data$axis <- contiguate(data$x)
     # within each alluvium, group contiguous subsets
     # (data is sorted by 'x' and 'alluvium'; group_by() does not reorder it)
     data <- dplyr::ungroup(dplyr::mutate(dplyr::group_by(data, alluvium),

@@ -132,7 +132,7 @@ StatStratum <- ggproto(
       data <- to_lodes(data = data, axes = axis_ind)
       # positioning requires numeric 'x'
       data <- dplyr::arrange(data, x, stratum, alluvium)
-      data$x <- cumsum(!duplicated(data$x))
+      data$x <- contiguate(data$x)
     }
     
     # nullify 'group' and 'alluvium' fields (to avoid confusion with geoms)
