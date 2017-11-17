@@ -160,90 +160,96 @@ StatAlluvium <- ggproto(
     # ensure that 'alluvium' values are contiguous starting at 1
     data$alluvium <- as.numeric(as.factor(data$alluvium))
     
-    if (is.null(lode.ordering)) {
-      lode_fn <- get(paste0("lode_", lode.guidance))
-    } else {
-      # check that array has correct dimensions
-      stopifnot(dim(lode.ordering) ==
-                  c(dplyr::n_distinct(data$alluvium),
-                    dplyr::n_distinct(data$x)))
-    }
-    
     # aesthetic fields
-    aes_col <- setdiff(names(data),
-                       c("x", "stratum", "alluvium",
-                         "weight", "PANEL", "group"))
-    # put axis fields into alluvial form, according to 'decreasing' parameter
+    aesthetics <- setdiff(names(data),
+                          c("x", "stratum", "alluvium",
+                            "weight", "PANEL", "group"))
+    
+    # create alluvia-format dataset of alluvium stratum assignments,
+    # with strata arranged according to 'decreasing' and 'reverse' parameters
     data$deposit <- if (is.na(decreasing)) {
-      if (reverse) dplyr::desc(data$stratum) else data$stratum
+      if (reverse) -xtfrm(data$stratum) else data$stratum
     } else {
       if (decreasing) -data$weight else data$weight
     }
+    data$deposit <- match(data$deposit, sort(unique(data$deposit)))
     alluv <- alluviate(data, "x", "deposit", "alluvium")
     data$deposit <- NULL
     # sort by 'alluvium' (to match 'data')
     alluv <- alluv[order(alluv$alluvium), ]
-    # axis and aesthetic indices
-    axis_ind <- which(!(names(alluv) %in% names(data)))
-    # sort within axes by stratum according to 'reverse' parameter
-    arr_fun <- if (reverse) dplyr::desc else identity
+    # axis indices
+    alluv_ind <- seq_along(alluv)[-1]
     
-    # vertical positions of flows at each axis
-    position_lodes <- function(i) {
-      # defined rows
-      wh_def <- which(!is.na(alluv[[axis_ind[i]]]))
-      # depends on whether the user has provided a lode.ordering
-      if (is.null(lode.ordering)) {
-        # order axis indices
-        axis_seq <- axis_ind[lode_fn(n = length(axis_ind), i = i)]
-        # order lodes according to axes and aesthetics
-        aes_dat <- subset(data, x == names(alluv)[axis_ind[i]])[aes_col]
-        for (var in names(aes_dat)) aes_dat[[var]] <- arr_fun(aes_dat[[var]])
-        lode_seq <- do.call(
-          order,
-          if (aes.bind) {
-            cbind(alluv[wh_def, axis_seq[1], drop = FALSE],
-                  aes_dat,
-                  alluv[wh_def, axis_seq[-1], drop = FALSE])
-          } else {
-            cbind(alluv[wh_def, axis_seq, drop = FALSE],
-                  aes_dat)
-          }
-        )
-      } else {
-        lode_seq <- order(alluv[[axis_ind[i]]][wh_def],
-                          lode.ordering[wh_def, i])
-      }
-      # lode floors and ceilings along axis
-      subdata <- subset(data, x == names(alluv)[axis_ind[i]])
-      cumweight <- cumsum(subdata$weight[lode_seq])
-      ymin_seq <- c(0, cumweight)
-      ymax_seq <- c(cumweight, sum(subdata$weight[lode_seq]))
-      # lode breaks
-      data.frame(x = I(names(alluv)[axis_ind[i]]),
-                 ymin = ymin_seq[order(lode_seq)],
-                 ymax = ymax_seq[order(lode_seq)])
+    # if 'lode.ordering' not provided, generate it
+    if (is.null(lode.ordering)) {
+      # invoke surrounding axes in the order prescribed by 'lode.guidance'
+      lode_fun <- get(paste0("lode_", lode.guidance))
+      # construct a matrix of orderings
+      lode.ordering <- sapply(seq_along(alluv_ind), function(i) {
+        
+        # order surrounding axes according to 'lode.guidance'
+        axis_seq <- axis_ind[lode_fun(n = length(alluv_ind), i = i)]
+        # order axis aesthetics ...
+        aes_dat <- data[data$x == names(alluv)[alluv_ind[i]],
+                        c("alluvium", aesthetics),
+                        drop = FALSE]
+        # ... in the order prescribed by 'reverse'
+        if (reverse) {
+          aes_dat[, -1] <-
+            as.data.frame(apply(aes_dat[, -1, drop = FALSE], 2, dplyr::desc))
+        }
+        # order on aesthetics and surrounding axes according to 'aes.bind'
+        ord_dat <- dplyr::left_join(alluv, aes_dat, by = "alluvium")
+        ord_col <- if (aes.bind) {
+          c(names(alluv)[axis_seq[1]],
+            names(aes_dat)[-1],
+            names(alluv)[axis_seq[-1]])
+        } else {
+          c(names(alluv)[axis_seq],
+            names(aes_dat)[-1])
+        }
+        ord_dat <- ord_dat[, ord_col, drop = FALSE]
+        # return the ordering
+        do.call(order, ord_dat)
+      })
     }
-    lode_positions <- do.call(rbind, lapply(1:length(axis_ind), position_lodes))
-    data <- cbind(data, lode_positions[, -1])
+    # check that array has correct dimensions
+    stopifnot(dim(lode.ordering) ==
+                c(dplyr::n_distinct(data$alluvium),
+                  dplyr::n_distinct(data$x)))
+    
+    # gather lode positions into alluvium-axis-order table
+    alluv[, -1] <- apply(lode.ordering, 2, order)
+    alluv_pos <- tidyr::gather(
+      alluv,
+      key = "x", value = "position",
+      alluv_ind
+    )
+    rm(alluv) # avoid confusion
+    alluv_pos$x <- as.integer(alluv_pos$x)
+    # join position variable into 'data'
+    data <- dplyr::left_join(data, alluv_pos, by = c("x", "alluvium"))
+    
+    # calculate lode floors and ceilings from positions by axis
+    data <- dplyr::arrange(data, position)
+    data <- dplyr::ungroup(dplyr::mutate(dplyr::group_by(data, x),
+                                         ymax = cumsum(weight),
+                                         ymin = dplyr::lag(ymax, default = 0)))
     stopifnot(isTRUE(all.equal(data$weight, data$ymax - data$ymin)))
     # add vertical centroids
-    data <- transform(data,
-                      y = (ymin + ymax) / 2)
+    data <- dplyr::mutate(data, y = (ymin + ymax) / 2)
     
     # within each alluvium, indices at which contiguous subsets start
-    #data <- data[do.call(order, data[, c("x", "alluvium")]), ]
-    data <- transform(data,
-                      starts = duplicated(data$alluvium) &
-                        !duplicated(data[, c("x", "alluvium")]),
-                      axis = cumsum(!duplicated(x)))
+    data <- dplyr::arrange(data, x, alluvium)
+    data$starts <- duplicated(data$alluvium) &
+      !duplicated(data[, c("x", "alluvium")])
+    data$axis <- cumsum(!duplicated(data$x))
     # within each alluvium, group contiguous subsets
     # (data is sorted by 'x' and 'alluvium'; group_by() does not reorder it)
     data <- dplyr::ungroup(dplyr::mutate(dplyr::group_by(data, alluvium),
                                          flow = axis - cumsum(starts)))
     # add 'group' to group contiguous alluvial subsets
-    data <- transform(data,
-                      group = as.numeric(interaction(alluvium, flow)))
+    data <- dplyr::mutate(data, group = as.numeric(interaction(alluvium, flow)))
     # arrange data by aesthetics for consistent (reverse) z-ordering
     data <- z_order_colors(data)
     
