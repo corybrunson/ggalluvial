@@ -8,10 +8,11 @@
 \usage{
 is_alluvial(data, ..., logical = TRUE, silent = FALSE)
 
-is_alluvial_lodes(data, key, value, id, weight, logical = TRUE,
+is_alluvial_lodes(data, key, value, id, weight = NULL, logical = TRUE,
   silent = FALSE)
 
-is_alluvial_alluvia(data, axes, weight, logical = TRUE, silent = FALSE)
+is_alluvial_alluvia(data, axes, weight = NULL, logical = TRUE,
+  silent = FALSE)
 }
 \arguments{
 \item{data}{Data frame.}

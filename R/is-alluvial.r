@@ -57,7 +57,9 @@ is_alluvial <- function(data, ..., logical = TRUE, silent = FALSE) {
 #' @rdname is_alluvial
 #' @export
 is_alluvial_lodes <- function(
-  data, key, value, id, weight,
+  data,
+  key, value, id,
+  weight = NULL,
   logical = TRUE, silent = FALSE
 ) {
   
@@ -88,7 +90,9 @@ is_alluvial_lodes <- function(
 #' @rdname is_alluvial
 #' @export
 is_alluvial_alluvia <- function(
-  data, axes, weight,
+  data,
+  axes,
+  weight = NULL,
   logical = TRUE, silent = FALSE
 ) {
   
