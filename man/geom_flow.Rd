@@ -2,7 +2,7 @@
 % Please edit documentation in R/geom-flow.r
 \name{geom_flow}
 \alias{geom_flow}
-\title{Alluvial flows between lodes}
+\title{Flows between lodes or strata}
 \usage{
 geom_flow(mapping = NULL, data = NULL, stat = "flow",
   position = "identity", width = 1/3, axis_width = NULL, knot.pos = 1/6,
@@ -77,7 +77,7 @@ filled rectangles at either end, using a provided \code{width}.
 \section{Aesthetics}{
 
 \code{geom_flow} understands the following aesthetics
-  (required aesthetics are in bold):
+(required aesthetics are in bold):
 \itemize{
   \item \strong{\code{x}}
   \item \strong{\code{y}}
@@ -90,7 +90,7 @@ filled rectangles at either end, using a provided \code{width}.
   \item \code{size}
   \item \code{group}
 }
-Currently, \code{group} is ignored.
+\code{group} is used internally; arguments are ignored.
 }
 
 \examples{

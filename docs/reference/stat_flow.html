@@ -174,18 +174,19 @@ the default plot specification, e.g. <code>borders</code>.</p></td>
     
     <h2 class="hasAnchor" id="aesthetics"><a class="anchor" href="#aesthetics"></a>Aesthetics</h2>
 
-    <p><code>stat_flow</code> understands the following aesthetics
-  (required aesthetics are in bold):</p><ul>
-<li><p><code>x</code></p></li>
-<li><p><code>stratum</code></p></li>
-<li><p><code>alluvium</code></p></li>
-<li><p><code>axis[0-9]*</code> (<code>axis1</code>, <code>axis2</code>, etc.)</p></li>
+    <p><code>stat_flow</code> requires one of two sets of aesthetics:</p><ul>
+<li><p><code>x</code>, <code>alluvium</code>, and (optionally) <code>stratum</code></p></li>
+<li><p>any number of <code>axis[0-9]*</code> (<code>axis1</code>, <code>axis2</code>, etc.)</p></li>
+</ul><p>Use <code>x</code>, <code>alluvium</code>, and <code>stratum</code> for data in lodes format
+and <code>axis[0-9]*</code> for data in alluvia format
+(see <code><a href='is_alluvial.html'>is_alluvial</a></code>).
+Arguments to parameters inconsistent with the format will be ignored.
+Additionally, <code>stat_flow</code> accepts the following optional aesthetics:</p><ul>
 <li><p><code>weight</code></p></li>
 <li><p><code>group</code></p></li>
-</ul><p>Currently, <code>group</code> is ignored.
-Use <code>x</code>, <code>stratum</code>, and <code>alluvium</code> for data in lode form and 
-<code>axis[0-9]*</code> for data in alluvium form (see <code><a href='is_alluvial.html'>is_alluvial</a></code>);
-arguments to parameters inconsistent with the data format will be ignored.</p>
+</ul><p><code>weight</code> controls the vertical dimensions of the alluvia
+and are aggregated across equivalent observations.
+<code>group</code> is used internally; arguments are ignored.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 

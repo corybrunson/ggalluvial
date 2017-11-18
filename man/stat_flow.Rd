@@ -72,20 +72,24 @@ centroids (\code{x} and \code{y}) and weights (heights; \code{ymin} and
 \code{ymax}) of alluvial flows between each pair of adjacent axes.
 }
 \section{Aesthetics}{
- \code{stat_flow} understands the following aesthetics
-  (required aesthetics are in bold):
+
+\code{stat_flow} requires one of two sets of aesthetics:
 \itemize{
-  \item \code{x}
-  \item \code{stratum}
-  \item \code{alluvium}
-  \item \code{axis[0-9]*} (\code{axis1}, \code{axis2}, etc.)
+  \item \code{x}, \code{alluvium}, and (optionally) \code{stratum}
+  \item any number of \code{axis[0-9]*} (\code{axis1}, \code{axis2}, etc.)
+}
+Use \code{x}, \code{alluvium}, and \code{stratum} for data in lodes format
+and \code{axis[0-9]*} for data in alluvia format
+(see \code{\link{is_alluvial}}).
+Arguments to parameters inconsistent with the format will be ignored.
+Additionally, \code{stat_flow} accepts the following optional aesthetics:
+\itemize{
   \item \code{weight}
   \item \code{group}
 }
-Currently, \code{group} is ignored.
-Use \code{x}, \code{stratum}, and \code{alluvium} for data in lode form and 
-\code{axis[0-9]*} for data in alluvium form (see \code{\link{is_alluvial}});
-arguments to parameters inconsistent with the data format will be ignored.
+\code{weight} controls the vertical dimensions of the alluvia
+and are aggregated across equivalent observations.
+\code{group} is used internally; arguments are ignored.
 }
 
 \examples{

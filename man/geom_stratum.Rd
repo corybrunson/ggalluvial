@@ -2,7 +2,7 @@
 % Please edit documentation in R/geom-stratum.r
 \name{geom_stratum}
 \alias{geom_stratum}
-\title{Stratum rectangles}
+\title{Strata at axes}
 \usage{
 geom_stratum(mapping = NULL, data = NULL, stat = "stratum",
   position = "identity", show.legend = NA, inherit.aes = TRUE,
@@ -63,8 +63,8 @@ It plots rectangles for these strata of a provided \code{width}.
 }
 \section{Aesthetics}{
 
-\code{geom_stratum} understands the following aesthetics (required aesthetics
-are in bold):
+\code{geom_stratum} understands the following aesthetics
+(required aesthetics are in bold):
 \itemize{
   \item \strong{\code{x}}
   \item \strong{\code{y}}
@@ -77,7 +77,7 @@ are in bold):
   \item \code{size}
   \item \code{group}
 }
-Currently, \code{group} is ignored.
+\code{group} is used internally; arguments are ignored.
 }
 
 \examples{

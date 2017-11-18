@@ -29,14 +29,31 @@ ggplot(as.data.frame(Titanic),
   geom_stratum() + geom_text(stat = "stratum", label.strata = TRUE) +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 
-# omit missing lodes and incident flows
 data(majors)
+
+# omit missing lodes and incident flows
 ggplot(majors,
        aes(x = semester, stratum = curriculum, alluvium = student,
            label = curriculum)) +
   geom_alluvium(fill = "darkgrey", na.rm = TRUE) +
   geom_stratum(aes(fill = curriculum), color = NA, na.rm = TRUE) +
   theme_bw()
+
+# diagram with outlined alluvia and forward-colored flows
+ggplot(majors,
+       aes(x = semester, stratum = curriculum, alluvium = student,
+           fill = curriculum, label = curriculum)) +
+  geom_flow(stat = "alluvium", lode.guidance = "rightleft",
+            color = "black") +
+  geom_stratum()
+# same diagram with alluvium aggregation enabled,
+# so that students are aggregated into cohorts
+ggplot(majors,
+       aes(x = semester, stratum = curriculum, alluvium = student,
+           fill = curriculum, label = curriculum)) +
+  geom_flow(stat = "alluvium", lode.guidance = "rightleft",
+            color = "black", aggregate.wts = TRUE) +
+  geom_stratum()
 
 \dontrun{
   data(babynames, package = "babynames")

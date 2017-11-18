@@ -8,15 +8,14 @@
 #' 
 #' @param data Data frame.
 #' @param key,value,id Character; names given to the axis (variable), stratum
-#'   (value), and alluvium (identifying) variables. Default to "key", "value",
-#'   and "id".
+#'   (value), and alluvium (identifying) variables.
 #' @param axes Numeric or character vector; which variables to use as axes.
 #' @export
 to_lodes <- function(data,
-                     key = "key", value = "value", id = "id",
+                     key = "x", value = "stratum", id = "alluvium",
                      axes) {
   
-  stopifnot(suppressWarnings(is_alluvial(data, axes = axes)))
+  stopifnot(is_alluvial(data, axes = axes, silent = TRUE))
   
   if (!is.data.frame(data)) data <- as.data.frame(data)
   

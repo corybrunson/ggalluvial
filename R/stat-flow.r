@@ -4,21 +4,27 @@
 #' centroids (\code{x} and \code{y}) and weights (heights; \code{ymin} and
 #' \code{ymax}) of alluvial flows between each pair of adjacent axes.
 #' 
-#' @section Aesthetics: \code{stat_flow} understands the following aesthetics
-#'   (required aesthetics are in bold):
+
+#' @section Aesthetics:
+#' \code{stat_flow} requires one of two sets of aesthetics:
 #' \itemize{
-#'   \item \code{x}
-#'   \item \code{stratum}
-#'   \item \code{alluvium}
-#'   \item \code{axis[0-9]*} (\code{axis1}, \code{axis2}, etc.)
+#'   \item \code{x}, \code{alluvium}, and (optionally) \code{stratum}
+#'   \item any number of \code{axis[0-9]*} (\code{axis1}, \code{axis2}, etc.)
+#' }
+#' Use \code{x}, \code{alluvium}, and \code{stratum} for data in lodes format
+#' and \code{axis[0-9]*} for data in alluvia format
+#' (see \code{\link{is_alluvial}}).
+#' Arguments to parameters inconsistent with the format will be ignored.
+#' Additionally, \code{stat_flow} accepts the following optional aesthetics:
+#' \itemize{
 #'   \item \code{weight}
 #'   \item \code{group}
 #' }
-#' Currently, \code{group} is ignored.
-#' Use \code{x}, \code{stratum}, and \code{alluvium} for data in lode form and 
-#' \code{axis[0-9]*} for data in alluvium form (see \code{\link{is_alluvial}});
-#' arguments to parameters inconsistent with the data format will be ignored.
+#' \code{weight} controls the vertical dimensions of the alluvia
+#' and are aggregated across equivalent observations.
+#' \code{group} is used internally; arguments are ignored.
 #' 
+
 #' @import ggplot2
 #' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
 #'   \code{\link{geom_flow}} for the corresponding geom,
@@ -96,11 +102,10 @@ StatFlow <- ggproto(
     # ensure that data is in lode form
     if (type == "alluvia") {
       axis_ind <- get_axes(names(data))
-      data <- to_lodes(data = data,
-                       key = "x", value = "stratum", id = "alluvium",
-                       axes = axis_ind)
+      data <- to_lodes(data = data, axes = axis_ind)
       # positioning requires numeric 'x'
-      data$x <- as.numeric(as.factor(data$x))
+      data <- dplyr::arrange(data, x, stratum, alluvium)
+      data$x <- contiguate(data$x)
     }
     
     data
@@ -108,7 +113,6 @@ StatFlow <- ggproto(
   
   compute_panel = function(self, data, scales,
                            decreasing = NA, reverse = TRUE,
-                           #aggregate.wts = TRUE,
                            aes.bind = FALSE) {
     
     # aesthetics
@@ -126,15 +130,15 @@ StatFlow <- ggproto(
     # sort within axes by stratum according to 'reverse' parameter
     arr_fun <- if (reverse) dplyr::desc else identity
     
-    # identify aesthetics that vary within strata
-    n_ports <- dplyr::n_distinct(data[, c("x", "stratum")])
-    aes_port <- aesthetics[which(sapply(aesthetics, function(x) {
+    # identify aesthetics that vary within strata (at "fissures")
+    n_lodes <- dplyr::n_distinct(data[, c("x", "stratum")])
+    fissure_aes <- aesthetics[which(sapply(aesthetics, function(x) {
       dplyr::n_distinct(data[, c("x", "stratum", x)])
-    }) > n_ports)]
-    data$aes <- if (length(aes_port) == 0) {
+    }) > n_lodes)]
+    data$fissure <- if (length(fissure_aes) == 0) {
       1
     } else {
-      interaction(data[, rev(aes_port)], drop = TRUE)
+      interaction(data[, rev(fissure_aes)], drop = TRUE)
     }
     
     # stack starts and ends of flows, using 'alluvium' to link them
@@ -155,13 +159,14 @@ StatFlow <- ggproto(
     stopifnot(all(table(data$alluvium) == 2))
     
     # flag flows between common pairs of strata and of aesthetics
-    for (var in c("stratum", "aes")) {
+    for (var in c("stratum", "fissure")) {
       flow_var <- paste0("flow_", var)
       data <- match_sides(data, var, flow_var)
       data[[flow_var]] <- arr_fun(data[[flow_var]])
     }
     data$alluvium <- as.numeric(interaction(data[, c("flow_stratum",
-                                                     "flow_aes")], drop = TRUE))
+                                                     "flow_fissure")],
+                                            drop = TRUE))
     # aggregate alluvial segments within flows
     group_cols <- setdiff(names(data), c("weight", "group"))
     dots <- lapply(group_cols, as.symbol)
@@ -181,9 +186,9 @@ StatFlow <- ggproto(
       "link", "x",
       "deposit",
       if (aes.bind) {
-        c("flow_aes", "flow_stratum")
+        c("flow_fissure", "flow_stratum")
       } else {
-        c("flow_stratum", "flow_aes")
+        c("flow_stratum", "flow_fissure")
       },
       "alluvium", "side"
     )
@@ -194,26 +199,18 @@ StatFlow <- ggproto(
       ww <- which(data$link == ll & data$side == ss)
       data$y[ww] <- cumsum(data$weight[ww]) - data$weight[ww] / 2
     }
-    # y bounds
+    # calculate y bounds
     data <- transform(data,
                       deposit = NULL,
-                      aes = NULL,
-                      flow_aes = NULL,
+                      fissure = NULL,
+                      flow_fissure = NULL,
                       flow_stratum = NULL,
                       link = NULL,
                       ymin = y - weight / 2,
                       ymax = y + weight / 2)
     
     # arrange data by aesthetics for consistent (reverse) z-ordering
-    colour_fill_aes <- intersect(names(data), c("colour", "fill"))
-    if (length(colour_fill_aes) > 0) {
-      data <- dplyr::arrange_(data, colour_fill_aes)
-      data <- transform(data,
-                        group = as.numeric(factor(
-                          as.character(data$group),
-                          levels = as.character(unique(rev(data$group)))
-                        )))
-    }
+    data <- z_order_colors(data)
     
     data
   }

@@ -47,9 +47,9 @@ so that they match the order of the values in the legend.
 Ignored if \code{decreasing} is not \code{NA}.
 Defaults to \code{TRUE}.}
 
-\item{label.strata}{Logical; whether to assign the values of the axis
-variables to the strata. Defaults to FALSE, and requires that no label
-aesthetic is assigned.}
+\item{label.strata}{Logical; whether to assign the values of the axis 
+variables to the strata. Defaults to FALSE, and requires that no
+\code{label} aesthetic is assigned.}
 
 \item{show.legend}{logical. Should this layer be included in the legends?
 \code{NA}, the default, includes if any aesthetics are mapped.
@@ -73,20 +73,33 @@ centroids of the strata at each axis, together with their weights (heights).
 }
 \section{Aesthetics}{
 
-\code{stat_stratum} understands the following aesthetics:
+\code{stat_stratum} requires one of two sets of aesthetics:
 \itemize{
-  \item \code{x}
-  \item \code{stratum}
-  \item \code{alluvium}
-  \item \code{axis[0-9]*} (\code{axis1}, \code{axis2}, etc.)
+  \item \code{x}, \code{stratum}, and (optionally) \code{alluvium}
+  \item any number of \code{axis[0-9]*} (\code{axis1}, \code{axis2}, etc.)
+}
+Use \code{x} and \code{stratum} for data in lodes format
+(\code{alluvium} is ignored)
+and \code{axis[0-9]*} for data in alluvia format
+(see \code{\link{is_alluvial}}).
+Arguments to parameters inconsistent with the format will be ignored.
+
+Additionally, \code{stat_stratum} accepts the following optional aesthetics:
+\itemize{
   \item \code{weight}
+  \item \code{label}
   \item \code{group}
 }
-Currently, \code{group} is ignored.
-Use \code{x}, \code{stratum}, and (optionally) \code{alluvium} for data in
-lode form and \code{axis[0-9]*} for data in alluvium form (see
-\code{\link{is_alluvial}}); arguments to parameters inconsistent with the
-data format will be ignored.
+\code{weight} controls the vertical dimensions of the alluvia
+and are aggregated across equivalent observations.
+\code{label} is used to label the strata and must take a unique value across
+the observations within each stratum.
+These and any other aesthetics are aggregated as follows:
+Numeric aesthetics, including \code{weight}, are summed.
+Character and factor aesthetics, including \code{label},
+are assigned to strata provided they take unique values across the
+observations within each stratum (otherwise \code{NA} is assigned).
+\code{group} is used internally; arguments are ignored.
 }
 
 \examples{

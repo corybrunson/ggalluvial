@@ -6,7 +6,7 @@
 \usage{
 stat_alluvium(mapping = NULL, data = NULL, geom = "alluvium",
   position = "identity", decreasing = NA, reverse = TRUE,
-  aggregate.wts = TRUE, lode.guidance = "zigzag", lode.ordering = NULL,
+  aggregate.wts = FALSE, lode.guidance = "zigzag", lode.ordering = NULL,
   na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ...)
 }
 \arguments{
@@ -47,12 +47,14 @@ so that they match the order of the values in the legend.
 Ignored if \code{decreasing} is not \code{NA}.
 Defaults to \code{TRUE}.}
 
-\item{aggregate.wts}{Logical; whether to aggregate weights across otherwise
-equivalent rows before computing lode and flow positions. Defaults to TRUE.}
+\item{aggregate.wts}{Whether to aggregate weights across otherwise equivalent
+rows before computing lode and flow positions. Set to \code{TRUE} to group
+observations into cohorts.
+\strong{Warning}: This is currently an expensive operation.}
 
 \item{lode.guidance}{The function to prioritize the axis variables for 
-ordering the lodes within each stratum. Defaults to "zigzag", other options
-include "rightleft", "leftright", "rightward", and "leftward" (see 
+ordering the lodes within each stratum. Options are "zigzag", "rightleft",
+"leftright", "rightward", and "leftward" (see 
 \code{\link{lode-guidance-functions}}).}
 
 \item{lode.ordering}{A list (of length the number of axes) of integer vectors
@@ -86,20 +88,24 @@ the alluvia with the strata, together with their weights (heights;
 plotting purposes (for now).
 }
 \section{Aesthetics}{
- \code{stat_alluvium} understands the following
-  aesthetics (required aesthetics are in bold):
+
+\code{stat_alluvium} requires one of two sets of aesthetics:
 \itemize{
-  \item \code{x}
-  \item \code{stratum}
-  \item \code{alluvium}
-  \item \code{axis[0-9]*} (\code{axis1}, \code{axis2}, etc.)
+  \item \code{x}, \code{alluvium}, and (optionally) \code{stratum}
+  \item any number of \code{axis[0-9]*} (\code{axis1}, \code{axis2}, etc.)
+}
+Use \code{x}, \code{alluvium}, and \code{stratum} for data in lodes format
+and \code{axis[0-9]*} for data in alluvia format
+(see \code{\link{is_alluvial}}).
+Arguments to parameters inconsistent with the format will be ignored.
+Additionally, \code{stat_alluvium} accepts the following optional aesthetics:
+\itemize{
   \item \code{weight}
   \item \code{group}
 }
-Currently, \code{group} is ignored.
-Use \code{x}, \code{stratum}, and \code{alluvium} for data in lode form and 
-\code{axis[0-9]*} for data in alluvium form (see \code{\link{is_alluvial}});
-arguments to parameters inconsistent with the data format will be ignored.
+\code{weight} controls the vertical dimensions of the alluvia
+and are aggregated across equivalent observations.
+\code{group} is used internally; arguments are ignored.
 }
 
 \examples{
@@ -134,14 +140,31 @@ ggplot(as.data.frame(Titanic),
   geom_stratum() + geom_text(stat = "stratum", label.strata = TRUE) +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 
-# omit missing lodes and incident flows
 data(majors)
+
+# omit missing lodes and incident flows
 ggplot(majors,
        aes(x = semester, stratum = curriculum, alluvium = student,
            label = curriculum)) +
   geom_alluvium(fill = "darkgrey", na.rm = TRUE) +
   geom_stratum(aes(fill = curriculum), color = NA, na.rm = TRUE) +
   theme_bw()
+
+# diagram with outlined alluvia and forward-colored flows
+ggplot(majors,
+       aes(x = semester, stratum = curriculum, alluvium = student,
+           fill = curriculum, label = curriculum)) +
+  geom_flow(stat = "alluvium", lode.guidance = "rightleft",
+            color = "black") +
+  geom_stratum()
+# same diagram with alluvium aggregation enabled,
+# so that students are aggregated into cohorts
+ggplot(majors,
+       aes(x = semester, stratum = curriculum, alluvium = student,
+           fill = curriculum, label = curriculum)) +
+  geom_flow(stat = "alluvium", lode.guidance = "rightleft",
+            color = "black", aggregate.wts = TRUE) +
+  geom_stratum()
 
 \dontrun{
   data(babynames, package = "babynames")

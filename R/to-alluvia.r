@@ -16,8 +16,7 @@ to_alluvia <- function(data, key, value, id) {
     stop("Each of 'key', 'value', and 'id' is required.")
   }
   
-  stopifnot(suppressWarnings(is_alluvial(data,
-                                         key = key, value = value, id = id)))
+  stopifnot(is_alluvial(data, key = key, value = value, id = id, silent = TRUE))
   
   if (is.numeric(key)) key <- names(data)[key]
   if (is.numeric(value)) value <- names(data)[value]

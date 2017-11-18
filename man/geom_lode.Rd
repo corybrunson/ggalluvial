@@ -2,7 +2,7 @@
 % Please edit documentation in R/geom-lode.r
 \name{geom_lode}
 \alias{geom_lode}
-\title{Lode rectangles}
+\title{Lodes at intersections of alluvia and strata}
 \usage{
 geom_lode(mapping = NULL, data = NULL, stat = "alluvium",
   position = "identity", width = 1/3, axis_width = NULL, na.rm = FALSE,
@@ -64,7 +64,7 @@ It plots rectangles for these lodes of a provided \code{width}.
 \section{Aesthetics}{
 
 \code{geom_lode} understands the following aesthetics
-  (required aesthetics are in bold):
+(required aesthetics are in bold):
 \itemize{
   \item \strong{\code{x}}
   \item \strong{\code{y}}
@@ -77,7 +77,7 @@ It plots rectangles for these lodes of a provided \code{width}.
   \item \code{size}
   \item \code{group}
 }
-Currently, \code{group} is ignored.
+\code{group} is used internally; arguments are ignored.
 }
 
 \examples{
