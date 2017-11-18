@@ -1,12 +1,14 @@
-#' Formula interface for alluvial diagrams
+#' @section Formula interface for alluvial diagrams
 #' 
 #' \code{ggalluvial} produces an alluvial diagram with flows, boxes, and labels,
 #' optionally based on a formula in terms of the data elements.
 #' 
-#' @name ggalluvial
+#' @rdname ggalluvial-deprecated
 #' @import ggplot2
-#' @seealso \code{\link{stat_stratum}}, \code{\link{geom_stratum}},
-#'   \code{\link{stat_alluvium}}, and \code{\link{geom_alluvium}}
+#' @seealso \code{\link{stat_stratum}}, \code{\link{stat_flow}},
+#'   \code{\link{stat_alluvium}}, \code{\link{geom_stratum}},
+#'   \code{\link{geom_lode}}, \code{\link{geom_flow}}, and
+#'   \code{\link{geom_alluvium}}.
 #' @export
 #' @param ... Arguments passed to \code{ggplot} and inherited by 
 #'   \code{geom_alluvium} and \code{geom_stratum}.
@@ -32,9 +34,11 @@ ggalluvial <- function(...) {
   }
 }
 
-#' @rdname ggalluvial
+#' @rdname ggalluvial-deprecated
 #' @export
 ggalluvial_lodes <- function(..., incl.strata = TRUE, incl.labels = FALSE) {
+  ggalluvial_deprecated()
+  
   gg <- ggplot(...) +
     geom_alluvium()
   if (incl.strata) {
@@ -46,9 +50,11 @@ ggalluvial_lodes <- function(..., incl.strata = TRUE, incl.labels = FALSE) {
   gg
 }
 
-#' @rdname ggalluvial
+#' @rdname ggalluvial-deprecated
 #' @export
 ggalluvial_alluvia <- function(..., incl.strata = TRUE, incl.labels = FALSE) {
+  ggalluvial_deprecated()
+  
   input_list <- list(...)
   aes_input <- input_list[[which(sapply(input_list, class) == "uneval")]]
   axis_input <- aes_input[grep("^axis[0-9]*$", names(aes_input))]
@@ -66,15 +72,12 @@ ggalluvial_alluvia <- function(..., incl.strata = TRUE, incl.labels = FALSE) {
   gg
 }
 
-#' @rdname ggalluvial
+#' @rdname ggalluvial-deprecated
 #' @export
 ggalluvial_formula <- function(formula, data = NULL, weight,
                                incl.strata = TRUE, incl.labels = TRUE,
                                ...) {
-  .Deprecated(msg = paste(
-    "'ggalluvial' is deprecated",
-    "and will provisionally be omitted from the next version."
-  ))
+  ggalluvial_deprecated()
   
   formula <- stats::as.formula(formula)
   if (!is.null(data)) {
@@ -147,3 +150,11 @@ ggalluvial_formula <- function(formula, data = NULL, weight,
     gg
   }
 }
+
+ggalluvial_deprecated <- function() .Deprecated(
+  msg = paste0(
+    "The shortcut function 'ggalluvial()' is deprecated.\n",
+    "Use the 'stat_*' and 'geom_*' layers instead.\n",
+    "See the vignette for examples: 'vignette(topic = \"ggalluvial\")'"
+  )
+)

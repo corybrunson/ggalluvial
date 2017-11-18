@@ -111,8 +111,7 @@ ggplot(data = alluvial::Refugees,
                 colour = "black", decreasing = NA, width = 0, knot.pos = 0)
 }
 \seealso{
-\code{\link[ggplot2]{layer}} for additional arguments,
+\code{\link[ggplot2]{layer}} for additional arguments, and
   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 
-  intra-axis boxes, and
-  \code{\link{ggalluvial}} for a shortcut method.
+  intra-axis boxes.
 }

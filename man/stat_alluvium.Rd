@@ -191,8 +191,7 @@ ggplot(majors,
 }
 \seealso{
 \code{\link[ggplot2]{layer}} for additional arguments,
-  \code{\link{geom_alluvium}} for the corresponding geom,
+  \code{\link{geom_alluvium}} for the corresponding geom, and
   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for
-  intra-axis boxes, and
-  \code{\link{ggalluvial}} for a shortcut method.
+  intra-axis boxes.
 }

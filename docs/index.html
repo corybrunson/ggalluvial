@@ -55,30 +55,30 @@
     <div id="ggalluvial" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#ggalluvial" class="anchor"></a>ggalluvial</h1></div>
-<p>A <strong>ggplot2</strong> extension for alluvial diagrams.</p>
+
 <div id="background" class="section level2">
 <h2 class="hasAnchor">
 <a href="#background" class="anchor"></a>Background</h2>
-<p>The alluvial plots implemented here can be used to visualize frequency distributions over time or frequency tables involving several categorical variables. Much of the infrastructure comes from the <a href="https://github.com/mbojan/alluvial"><strong>alluvial</strong></a> package, but the <strong>ggplot2</strong> framework induced several conspicuous differences:</p>
+<p>The alluvial plots implemented here can be used to visualize frequency distributions over time or frequency tables involving several categorical variables. The design is derived mostly from the <a href="https://github.com/mbojan/alluvial"><strong>alluvial</strong></a> package, but the <strong>ggplot2</strong> framework induced several conspicuous differences:</p>
 <ul>
 <li>
 <strong>alluvial</strong> understands a variety of inputs (vectors, lists, data frames), while <strong>ggalluvial</strong> requires a single data frame;</li>
 <li>
-<strong>alluvial</strong> uses each variable of these inputs as an axis, whereas <strong>ggalluvial</strong> requires the user to specify the axes, either as separate aesthetics or as <a href="http://tidyr.tidyverse.org/">key-value pairs</a>;</li>
+<strong>alluvial</strong> uses each variable of these inputs as a dimension of the data, whereas <strong>ggalluvial</strong> requires the user to specify the dimensions, either as separate aesthetics or as <a href="http://tidyr.tidyverse.org/">key-value pairs</a>;</li>
 <li>
-<strong>alluvial</strong> produces both the alluvial flows (<em>alluvia</em>) and what are here called the <em>strata</em> in a single function, whereas <strong>ggalluvial</strong> relies on separate functions to produce strata, alluvia, and alluvial segments called <em>lodes</em> and <em>flows</em>.</li>
+<strong>alluvial</strong> produces both the <em>alluvia</em>, which link cohorts across multiple dimensions, and (what are here called) the <em>strata</em>, which partition the data along each dimension, in a single function; whereas <strong>ggalluvial</strong> relies on separate layers (stats and geoms) to produce strata, alluvia, and alluvial segments called <em>lodes</em> and <em>flows</em>.</li>
 </ul>
 <p>Issues and pull requests are more than welcome.</p>
 </div>
 <div id="install" class="section level2">
 <h2 class="hasAnchor">
 <a href="#install" class="anchor"></a>Install</h2>
-<p>This package is not yet CRAN-ready. Here’s how to install in the meantime:</p>
+<p>I anticipate submitting the package to CRAN soon. Here’s how to install in the meantime:</p>
 <pre class="{r}"><code><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">devtools::install_github("corybrunson/ggalluvial", build_vignettes = TRUE)
 library(ggalluvial)</a></code></pre>
 <p>For detailed discussion of the data formats recognized by <strong>ggalluvial</strong> and several examples that illustrate its flexibility and limitations, see <a href="http://corybrunson.github.io/ggalluvial/articles/ggalluvial.html">the vignette</a>:</p>
 <pre class="{r}"><code><a href="articles/ggalluvial.html">vignette(topic = "ggalluvial")</a></code></pre>
-<p>The shortcut function <code><a href="reference/ggalluvial.html">ggalluvial()</a></code>, which includes a formula interface, is not included in the vignette and may be deprecated in the next version and excluded from the eventual CRAN release. (Please let me know if you think it should be kept or improved!)</p>
+<p>The shortcut function <code><a href="reference/ggalluvial-deprecated.html">ggalluvial()</a></code>, which includes a formula interface, is deprecated in this version and will excluded from the CRAN release.</p>
 </div>
 </div>
   </div>
@@ -89,6 +89,10 @@ library(ggalluvial)</a></code></pre>
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>Jason Cory Brunson <br><small class="roles"> Author, maintainer </small> </li>
+</ul>
+<h2>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="http://www.ggplot2-exts.org/"><strong>ggplot2</strong> extension</a></li>
 </ul>
 </div>
 </div>

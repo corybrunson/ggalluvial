@@ -28,10 +28,9 @@
 #' 
 
 #' @import ggplot2
-#' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
+#' @seealso \code{\link[ggplot2]{layer}} for additional arguments, and
 #'   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 
-#'   intra-axis boxes, and
-#'   \code{\link{ggalluvial}} for a shortcut method.
+#'   intra-axis boxes.
 #' @inheritParams geom_alluvium
 #' @param aes.flow Character; how inter-lode flows assume aesthetics from lodes.
 #'   Options are "forward" and "backward".

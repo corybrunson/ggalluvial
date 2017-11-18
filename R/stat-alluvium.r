@@ -29,10 +29,9 @@
 
 #' @import ggplot2
 #' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
-#'   \code{\link{geom_alluvium}} for the corresponding geom,
+#'   \code{\link{geom_alluvium}} for the corresponding geom, and
 #'   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for
-#'   intra-axis boxes, and
-#'   \code{\link{ggalluvial}} for a shortcut method.
+#'   intra-axis boxes.
 #' @inheritParams stat_flow
 #' @param aggregate.wts Whether to aggregate weights across otherwise equivalent
 #'   rows before computing lode and flow positions. Set to \code{TRUE} to group

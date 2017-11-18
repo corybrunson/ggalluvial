@@ -159,7 +159,7 @@ corresponding to the axi(e)s (variable(s)).</p></td>
             <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"Freq"</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 <span class='co'># Titanic data in lode form</span>
 <span class='no'>titanic_lodes</span> <span class='kw'>&lt;-</span> <span class='fu'>suppressWarnings</span>(<span class='kw pkg'>tidyr</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/tidyr/topics/gather'>gather</a></span>(
-  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/dplyr/topics/mutate'>mutate</a></span>(<span class='no'>titanic_alluvia</span>, <span class='kw'>Index</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fu'>nrow</span>(<span class='no'>titanic_alluvia</span>)),
+  <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='http://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span>(<span class='no'>titanic_alluvia</span>, <span class='kw'>Index</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fu'>nrow</span>(<span class='no'>titanic_alluvia</span>)),
   <span class='st'>"Variable"</span>, <span class='st'>"Value"</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>4</span>, <span class='kw'>factor_key</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
 ))
 <span class='no'>titanic_lodes</span>$<span class='no'>Value</span> <span class='kw'>&lt;-</span> <span class='fu'>factor</span>(<span class='no'>titanic_lodes</span>$<span class='no'>Value</span>,
