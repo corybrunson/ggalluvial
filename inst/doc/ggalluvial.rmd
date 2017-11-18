@@ -79,9 +79,10 @@ ggplot(as.data.frame(UCBAdmissions),
   ggtitle("UC Berkeley admissions and rejections, by sex and department")
 ```
 
-An important feature of these diagrams is the meaningfulness of the vertical axis: No gaps are inserted between the strata, so the total height of the diagram reflects the cumulative weight of the observations. The diagrams produced by **ggalluvial** conform (somewhat; see below) to the "grammar of graphics" principles of **ggplot2**, and this prevents users from producing "free-floating" diagrams like the Sankey diagrams showcased [here](https://developers.google.com/chart/interactive/docs/gallery/sankey).
+An important feature of these diagrams is the meaningfulness of the vertical axis: No gaps are inserted between the strata, so the total height of the diagram reflects the cumulative weight of the observations. The diagrams produced by **ggalluvial** conform (somewhat; see below) to the "grammar of graphics" principles of **ggplot2**, and this prevents users from producing "free-floating" diagrams like the Sankey diagrams showcased [here](https://developers.google.com/chart/interactive/docs/gallery/sankey).[^ggforce]
 **ggalluvial** parameters and existing **ggplot2** functionality can also produce [parallel sets](https://eagereyes.org/parallel-sets) plots, illustrated here using the `Titanic` dataset:[^ggparallel]
 
+[^ggforce]: [The **ggforce** package](https://github.com/thomasp85/ggforce) includes parallel set geom and stat layers to produce similar diagrams that can be allowed to free-float.
 [^ggparallel]: A greater variety of parallel sets plots are implemented in [the **ggparallel** package](https://github.com/heike/ggparallel).
 
 ```{r parallel sets plot of Titanic dataset}
