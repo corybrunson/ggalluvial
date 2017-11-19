@@ -22,7 +22,7 @@
 #' all fields in \code{data} (other than \code{weight}, if given) are to be
 #' treated as axes.
 #' @name is_alluvial
-#' @param data A data frame
+#' @param data A data frame.
 #' @param ... Additional parameters used to determine method and passed
 #'   thereto. All or none of \code{key}, \code{value}, and \code{id}, or else
 #'   optionally \code{axes}, and (in either case) optionally \code{weight}.
@@ -57,7 +57,9 @@ is_alluvial <- function(data, ..., logical = TRUE, silent = FALSE) {
 #' @rdname is_alluvial
 #' @export
 is_alluvial_lodes <- function(
-  data, key, value, id, weight,
+  data,
+  key, value, id,
+  weight = NULL,
   logical = TRUE, silent = FALSE
 ) {
   
@@ -75,7 +77,7 @@ is_alluvial_lodes <- function(
     if (!silent) warning("Missing id-axis pairings.")
   }
   
-  if (!missing(weight)) {
+  if (!is.null(weight)) {
     if (!is.numeric(data[[weight]])) {
       message("Lode weights are non-numeric.")
       return(if (logical) FALSE else "none")
@@ -88,11 +90,13 @@ is_alluvial_lodes <- function(
 #' @rdname is_alluvial
 #' @export
 is_alluvial_alluvia <- function(
-  data, axes, weight,
+  data,
+  axes,
+  weight = NULL,
   logical = TRUE, silent = FALSE
 ) {
   
-  if (missing(weight)) {
+  if (is.null(weight)) {
     weight <- NULL
   } else {
     if (!is.numeric(data[[weight]])) {

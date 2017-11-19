@@ -209,7 +209,7 @@ majors<span class="op">$</span>curriculum &lt;-<span class="st"> </span><span cl
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">"student curricula across several semesters"</span>)</code></pre></div>
 <p><img src="ggalluvial_files/figure-html/alluvial%20diagram%20of%20majors%20dataset-1.png" width="576" style="display: block; margin: auto;"></p>
-<p>No <code>weight</code> is specified, so each row is assigned a weight of <code>1</code>. This example demonstrates one way <strong>ggalluvial</strong> handles missing data. The alternative is to set the parameter <code>na.rm</code> to <code>TRUE</code>.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> Missing data handling (specifically, the order of the strata) also depends on whether the <code>stratum</code> variable is character or factor/numeric.</p>
+<p>No <code>weight</code> is specified, so each row is assigned unit weight. This example demonstrates one way <strong>ggalluvial</strong> handles missing data. The alternative is to set the parameter <code>na.rm</code> to <code>TRUE</code>.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> Missing data handling (specifically, the order of the strata) also depends on whether the <code>stratum</code> variable is character or factor/numeric.</p>
 <p>Finally, lode format gives us the option to aggregate the flows between adjacent axes, which may be appropriate when the transitions between adjacent axes are of primary importance. We can demonstrate this option on data from the influenza vaccination surveys conducted by the <a href="https://alpdata.rand.org/">RAND American Life Panel</a>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(vaccinations)
 <span class="kw">levels</span>(vaccinations<span class="op">$</span>response) &lt;-<span class="st"> </span><span class="kw">rev</span>(<span class="kw">levels</span>(vaccinations<span class="op">$</span>response))
@@ -242,7 +242,7 @@ majors<span class="op">$</span>curriculum &lt;-<span class="st"> </span><span cl
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] bindrcpp_0.2   ggalluvial_0.3 ggplot2_2.2.1 
+## [1] bindrcpp_0.2   ggalluvial_0.4 ggplot2_2.2.1 
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_0.12.13       bindr_0.1          knitr_1.17        
