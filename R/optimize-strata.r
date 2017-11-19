@@ -73,7 +73,7 @@ optimize_strata <- function(
   } else {
     for (i in seq_along(niter)) {
       init <- lapply(n_cats, sample)
-      res <- optimize_strata_alluvia(data, objective_fun, init)
+      res <- optimize_strata_alluvia(data, key, value, id, objective_fun, init)
       if (res$obj < obj) {
         perms <- res$perms
         obj <- res$obj
@@ -88,7 +88,7 @@ increment_permutations <- function(perms) {
   
 }
 
-optimize_strata_alluvia <- function(data, objective_fun, init) {
+optimize_strata_alluvia <- function(data, key, value, id, objective_fun, init) {
   
   # test every adjacent transposition for a lower objective function value
   repeat {
