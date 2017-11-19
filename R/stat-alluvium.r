@@ -29,10 +29,9 @@
 
 #' @import ggplot2
 #' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
-#'   \code{\link{geom_alluvium}} for the corresponding geom,
+#'   \code{\link{geom_alluvium}} for the corresponding geom, and
 #'   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for
-#'   intra-axis boxes, and
-#'   \code{\link{ggalluvial}} for a shortcut method.
+#'   intra-axis boxes.
 #' @inheritParams stat_flow
 #' @param aggregate.wts Whether to aggregate weights across otherwise equivalent
 #'   rows before computing lode and flow positions. Set to \code{TRUE} to group
@@ -185,7 +184,7 @@ StatAlluvium <- ggproto(
       # invoke surrounding axes in the order prescribed by 'lode.guidance'
       lode_fun <- get(paste0("lode_", lode.guidance))
       # construct a matrix of orderings
-      lode.ordering <- sapply(seq_along(alluv_ind), function(i) {
+      lode.ordering <- do.call(cbind, lapply(seq_along(alluv_ind), function(i) {
         
         # order surrounding axes according to 'lode.guidance'
         axis_seq <- alluv_ind[lode_fun(n = length(alluv_ind), i = i)]
@@ -195,8 +194,7 @@ StatAlluvium <- ggproto(
                         drop = FALSE]
         # ... in the order prescribed by 'reverse'
         if (reverse) {
-          aes_dat[, -1] <-
-            as.data.frame(apply(aes_dat[, -1, drop = FALSE], 2, dplyr::desc))
+          aes_dat <- dplyr::mutate_at(aes_dat, -1, dplyr::funs(dplyr::desc))
         }
         # order on aesthetics and surrounding axes according to 'aes.bind'
         ord_dat <- dplyr::left_join(alluv, aes_dat, by = "alluvium")
@@ -211,7 +209,7 @@ StatAlluvium <- ggproto(
         ord_dat <- ord_dat[, ord_col, drop = FALSE]
         # return the ordering
         do.call(order, ord_dat)
-      })
+      }))
     }
     # check that array has correct dimensions
     stopifnot(dim(lode.ordering) ==

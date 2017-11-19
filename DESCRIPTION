@@ -1,7 +1,7 @@
 Package: ggalluvial
 Type: Package
 Title: Alluvial diagrams in ggplot2
-Version: 0.3
+Version: 0.4
 Date: 2017-04-16
 Authors@R: person('Jason Cory', 'Brunson', email = 'cornelioid@gmail.com',
     role = c('aut', 'cre'))

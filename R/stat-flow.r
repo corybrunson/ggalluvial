@@ -27,10 +27,9 @@
 
 #' @import ggplot2
 #' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
-#'   \code{\link{geom_flow}} for the corresponding geom,
+#'   \code{\link{geom_flow}} for the corresponding geom, and
 #'   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for
-#'   intra-axis boxes, and
-#'   \code{\link{ggalluvial}} for a shortcut method.
+#'   intra-axis boxes.
 #' @inheritParams stat_stratum
 #' @param aes.bind Whether to prioritize aesthetics before axes (other than the
 #'   index axis) when ordering the lodes within each stratum. Defaults to FALSE.

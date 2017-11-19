@@ -36,10 +36,9 @@
 
 #' @import ggplot2
 #' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
-#'   \code{\link{geom_stratum}} for the corresponding geom,
+#'   \code{\link{geom_stratum}} for the corresponding geom, and
 #'   \code{\link{stat_alluvium}} and \code{\link{geom_alluvium}} for
-#'   alluvial flows, and
-#'   \code{\link{ggalluvial}} for a shortcut method.
+#'   alluvial flows.
 #' @inheritParams ggplot2::layer
 #' @template common-params
 #' @param geom The geometric object to use display the data;

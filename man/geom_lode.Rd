@@ -106,8 +106,7 @@ ggplot(as.data.frame(Titanic),
 }
 \seealso{
 \code{\link[ggplot2]{layer}} for additional arguments,
-  \code{\link{geom_alluvium}} for alluvial flows,
+  \code{\link{geom_alluvium}} for alluvial flows, and
   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 
-  intra-axis stratum rectangles, and
-  \code{\link{ggalluvial}} for a shortcut method.
+  intra-axis stratum rectangles.
 }
