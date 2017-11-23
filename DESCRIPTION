@@ -1,6 +1,6 @@
 Package: ggalluvial
 Type: Package
-Title: Alluvial Diagrams with ggplot2
+Title: Alluvial Diagrams in ggplot2
 Version: 0.5.0
 Date: 2017-04-16
 Authors@R: person('Jason Cory', 'Brunson', email = 'cornelioid@gmail.com',
