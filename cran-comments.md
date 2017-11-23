@@ -5,9 +5,9 @@
 
 ## R CMD check results
 
-There were no ERRORs, WARNINGs, or NOTEs.
+There were no ERRORs or WARNINGs.
 
-Note that this is the first submission of this package to CRAN.
+There was one NOTE, that this is a new submission.
 
 ## Reverse dependencies
 
