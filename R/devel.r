@@ -6,3 +6,9 @@
 #' @name ggalluvial-deprecated
 #' @keywords internal
 NULL
+
+release_questions <- function() {
+  c(
+    "Is 'NEWS.md' up to date?"
+  )
+}
