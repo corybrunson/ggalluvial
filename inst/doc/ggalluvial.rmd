@@ -1,5 +1,5 @@
 ---
-title: "alluvial diagrams in ggplot2"
+title: "Alluvial diagrams in ggplot2"
 author: "Jason Cory Brunson"
 date: "`r Sys.Date()`"
 output:
@@ -18,7 +18,7 @@ This vignette
 - illustrates the new stats and geoms, and
 - showcases some popular variants on the theme and how to produce them.
 
-Many other resources exist for visualizing categorical data in R, including several more basic plot types that are likely to more accurately convey proportions to viewers when the data are not so structured as to warrant an alluvial diagram. In particular, check out Michael Friendly's [**vcd** and **vcdExtra** packages (PDF)](https://cran.r-project.org/web/packages/vcdExtra/vignettes/vcd-tutorial.pdf) for a variety of statistically-motivated categorical data visualization techniques, Hadley Wickham's [**productplots** package](https://github.com/hadley/productplots) and Haley Jeppson and Heike Hofmann's descendant [**ggmosaic** package](https://cran.r-project.org/web/packages/ggmosaic/vignettes/ggmosaic.html) for product or mosaic plots, and Nicholas Hamilton's [**ggtern** package](http://www.ggtern.com/) for ternary coordinates. Other related packages are mentioned below.
+Many other resources exist for visualizing categorical data in R, including several more basic plot types that are likely to more accurately convey proportions to viewers when the data are not so structured as to warrant an alluvial diagram. In particular, check out Michael Friendly's [**vcd** and **vcdExtra** packages (PDF)](https://CRAN.R-project.org/package=vcdExtra/vignettes/vcd-tutorial.pdf) for a variety of statistically-motivated categorical data visualization techniques, Hadley Wickham's [**productplots** package](https://github.com/hadley/productplots) and Haley Jeppson and Heike Hofmann's descendant [**ggmosaic** package](https://CRAN.R-project.org/package=ggmosaic/vignettes/ggmosaic.html) for product or mosaic plots, and Nicholas Hamilton's [**ggtern** package](http://www.ggtern.com/) for ternary coordinates. Other related packages are mentioned below.
 
 ```{r setup, echo=FALSE, message=FALSE, results='hide'}
 library(ggalluvial)
@@ -126,7 +126,7 @@ The same stat and geom can receive this data format using a different set of pos
 
 Weights (and weight totals) can vary from axis to axis, allowing users to produce bump charts like those showcased [here](http://imgur.com/gallery/gI5p7).[^geom-area] In these cases, the strata are an artifact of the alluvia and usually not plotted. For convenience, both `stat_alluvium()` and `stat_flow()` accept arguments for `x` and `alluvium` even if none is given for `stratum`.[^arguments] As an example, we can grop countries in the `Refugees` dataset by region, in order to compare refugee volumes at different scales:
 
-[^geom-area]: If bumping is unnecessary, consider using [`geom_area()`](https://chrisalbon.com/r-stats/stacked-area-graph.html) instead.
+[^geom-area]: If bumping is unnecessary, consider using [`geom_area()`](http://www.r-graph-gallery.com/136-stacked-area-chart/) instead.
 [^arguments]: `stat_stratum()` will similarly accept arguments for `x` and `stratum` without `alluvium`. If both strata and either alluvia or flows are to be plotted, though, all three parameters need arguments.
 
 ```{r time series alluvia diagram of refugees dataset}
@@ -173,7 +173,7 @@ ggplot(majors,
   ggtitle("student curricula across several semesters")
 ```
 
-No `weight` is specified, so each row is assigned a weight of `1`.
+No `weight` is specified, so each row is assigned unit weight.
 This example demonstrates one way **ggalluvial** handles missing data. The alternative is to set the parameter `na.rm` to `TRUE`.[^na.rm] Missing data handling (specifically, the order of the strata) also depends on whether the `stratum` variable is character or factor/numeric.
 
 [^na.rm]: Be sure to set `na.rm` consistently in each layer, in this case both the flows and the strata.
