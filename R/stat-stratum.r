@@ -164,10 +164,10 @@ StatStratum <- ggproto(
     
     # sort in preparation for calculating cumulative weights
     data <- if (is.na(decreasing)) {
-      arr_fun <- if (reverse) dplyr::desc else identity
+      arr_fun <- if (reverse) dplyr::desc else xtfrm
       dplyr::arrange(data, PANEL, x, arr_fun(stratum))
     } else {
-      arr_fun <- if (decreasing) dplyr::desc else identity
+      arr_fun <- if (decreasing) dplyr::desc else xtfrm
       dplyr::arrange(data, PANEL, x, arr_fun(weight))
     }
     

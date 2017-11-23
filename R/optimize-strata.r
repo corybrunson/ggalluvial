@@ -18,6 +18,8 @@
 #' @param weight Optional numeric or character; the fields of \code{data}
 #'   corresponding to alluvium or lode weights (heights when plotted). The
 #'   default value \code{NULL} assigns every alluvium equal weight.
+#' @param free.strata Logical; whether to allow the same strata to be ordered
+#'   differently at different axes.
 #' @param objective Character, the objective function to minimize; matched to
 #'   \code{"count"}, \code{"weight"}, or \code{"area"}.
 #' @param method Character; whether to exhaust all permutations of all axes
@@ -25,15 +27,25 @@
 #'   initial permutations (\code{"heuristic"}).
 #' @param niter Positive integer; if \code{method == "heuristic"}, the number of
 #'   iterations to perform from randomly sampled seed permutation sets.
+#' @param reverse Logical; if \code{decreasing} is \code{NA},
+#'   whether to arrange the strata at each axis
+#'   in the reverse order of the variable values,
+#'   so that they match the order of the values in the legend.
+#'   Ignored if \code{decreasing} is not \code{NA}.
+#'   Defaults to \code{TRUE}.
 #' @export
 optimize_strata <- function(
-  data, key, value, id, weight = NULL,
-  objective = "count", method = "exhaustive", niter = 10
+  data,
+  key, value, id,
+  weight = NULL,
+  free.strata = FALSE,
+  objective = "count", method = "exhaustive", niter = 6,
+  reverse = TRUE
 ) {
   
   if (!is_alluvial_lodes(data = data, key = key, value = value, id = id,
                          weight = weight, logical = TRUE)) {
-    stop("Data must be alluvial and in 'lodes' form.")
+    stop("Data must be in 'lodes' format.")
   }
   
   # governing parameters
@@ -43,7 +55,7 @@ optimize_strata <- function(
   })
   
   # convert stratum values to numeric by axis
-  #data[[value]] <- as.numeric(as.factor(data[[value]]))
+  #data[[value]] <- contiguate(data[[value]])
   #for (i in seq_along(xs)) {
   #  data[[value]][data[[key]] == xs[i]] <- match(
   #    data[[value]][data[[key]] == xs[i]],
@@ -79,6 +91,16 @@ optimize_strata <- function(
         obj <- res$obj
       }
     }
+  }
+  
+  # replace with reversal if closer to original
+  perm_lens <- sapply(perms, permutation_length)
+  rev_perms <- lapply(perms, rev)
+  rev_perm_lens <- sapply(rev_perms, permutation_length)
+  # CHECK THIS DURING TESTING
+  if ((reverse & rev_perm_lens > perm_lens) |
+      (!reverse & perm_lens > rev_perm_lens)) {
+    perms <- rev_perms
   }
   
   perms
@@ -143,4 +165,9 @@ objective_weight <- function(data, key, value, id, perms) {
 
 objective_area <- function(data, key, value, id, perms) {
   
+}
+
+permutation_length <- function(perm) {
+  pairs <- combn(perm, 2)
+  sum(pairs[1, ] > pairs[2, ])
 }

@@ -127,7 +127,7 @@ StatFlow <- ggproto(
       names(deposits)[3] <- "deposit"
     }
     # sort within axes by stratum according to 'reverse' parameter
-    arr_fun <- if (reverse) dplyr::desc else identity
+    arr_fun <- if (reverse) dplyr::desc else xtfrm
     
     # identify aesthetics that vary within strata (at "fissures")
     n_lodes <- dplyr::n_distinct(data[, c("x", "stratum")])
