@@ -1,5 +1,5 @@
 ---
-title: "Alluvial diagrams in ggplot2"
+title: "Alluvial Diagrams in ggplot2"
 author: "Jason Cory Brunson"
 date: "`r Sys.Date()`"
 output:
