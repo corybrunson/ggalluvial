@@ -1,3 +1,9 @@
+## Resubmission
+
+In this resubmission,
+
+* single-quotes were added to the package name in the DESCRIPTION Title
+
 ## Test environments
 
 * local OS X install, R 3.3.2
