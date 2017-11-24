@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>alluvial diagrams in ggplot2 • ggalluvial</title>
+<title>Alluvial Diagrams in ggplot2 • ggalluvial</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
@@ -40,6 +40,9 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li>
+  <a href="../news/index.html">News</a>
+</li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
 </div>
@@ -53,10 +56,10 @@
       </header><div class="row">
   <div class="col-md-9">
     <div class="page-header toc-ignore">
-      <h1>alluvial diagrams in ggplot2</h1>
+      <h1>Alluvial Diagrams in ggplot2</h1>
                         <h4 class="author">Jason Cory Brunson</h4>
             
-            <h4 class="date">2017-11-18</h4>
+            <h4 class="date">2017-11-24</h4>
           </div>
 
     
@@ -69,7 +72,7 @@
 <li>illustrates the new stats and geoms, and</li>
 <li>showcases some popular variants on the theme and how to produce them.</li>
 </ul>
-<p>Many other resources exist for visualizing categorical data in R, including several more basic plot types that are likely to more accurately convey proportions to viewers when the data are not so structured as to warrant an alluvial diagram. In particular, check out Michael Friendly’s <a href="https://cran.r-project.org/web/packages/vcdExtra/vignettes/vcd-tutorial.pdf"><strong>vcd</strong> and <strong>vcdExtra</strong> packages (PDF)</a> for a variety of statistically-motivated categorical data visualization techniques, Hadley Wickham’s <a href="https://github.com/hadley/productplots"><strong>productplots</strong> package</a> and Haley Jeppson and Heike Hofmann’s descendant <a href="https://cran.r-project.org/web/packages/ggmosaic/vignettes/ggmosaic.html"><strong>ggmosaic</strong> package</a> for product or mosaic plots, and Nicholas Hamilton’s <a href="http://www.ggtern.com/"><strong>ggtern</strong> package</a> for ternary coordinates. Other related packages are mentioned below.</p>
+<p>Many other resources exist for visualizing categorical data in R, including several more basic plot types that are likely to more accurately convey proportions to viewers when the data are not so structured as to warrant an alluvial diagram. In particular, check out Michael Friendly’s <a href="https://CRAN.R-project.org/package=vcdExtra/vignettes/vcd-tutorial.pdf"><strong>vcd</strong> and <strong>vcdExtra</strong> packages (PDF)</a> for a variety of statistically-motivated categorical data visualization techniques, Hadley Wickham’s <a href="https://github.com/hadley/productplots"><strong>productplots</strong> package</a> and Haley Jeppson and Heike Hofmann’s descendant <a href="https://CRAN.R-project.org/package=ggmosaic/vignettes/ggmosaic.html"><strong>ggmosaic</strong> package</a> for product or mosaic plots, and Nicholas Hamilton’s <a href="http://www.ggtern.com/"><strong>ggtern</strong> package</a> for ternary coordinates. Other related packages are mentioned below.</p>
 <div id="alluvial-diagrams" class="section level2">
 <h2 class="hasAnchor">
 <a href="#alluvial-diagrams" class="anchor"></a>Alluvial diagrams</h2>
@@ -242,19 +245,19 @@ majors<span class="op">$</span>curriculum &lt;-<span class="st"> </span><span cl
 ## [1] stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-## [1] bindrcpp_0.2   ggalluvial_0.4 ggplot2_2.2.1 
+## [1] bindrcpp_0.2     ggalluvial_0.5.0 ggplot2_2.2.1   
 ## 
 ## loaded via a namespace (and not attached):
 ##  [1] Rcpp_0.12.13       bindr_0.1          knitr_1.17        
-##  [4] magrittr_1.5       tidyselect_0.2.2   munsell_0.4.3     
-##  [7] colorspace_1.3-2   R6_2.2.2           rlang_0.1.2.9000  
+##  [4] magrittr_1.5       tidyselect_0.2.3   munsell_0.4.3     
+##  [7] colorspace_1.3-2   R6_2.2.2           rlang_0.1.4       
 ## [10] stringr_1.2.0      plyr_1.8.4         dplyr_0.7.4       
 ## [13] tools_3.3.2        grid_3.3.2         gtable_0.2.0      
 ## [16] htmltools_0.3.6    yaml_2.1.14        lazyeval_0.2.1    
 ## [19] rprojroot_1.2      digest_0.6.12      assertthat_0.2.0  
 ## [22] tibble_1.3.4       RColorBrewer_1.1-2 purrr_0.2.4       
-## [25] tidyr_0.7.2        glue_1.1.1         evaluate_0.10.1   
-## [28] rmarkdown_1.6      labeling_0.3       stringi_1.1.5     
+## [25] tidyr_0.7.2        glue_1.2.0         evaluate_0.10.1   
+## [28] rmarkdown_1.8      labeling_0.3       stringi_1.1.6     
 ## [31] scales_0.5.0.9000  backports_1.1.1    pkgconfig_2.0.1</code></pre>
 </div>
 <div class="footnotes">
@@ -263,7 +266,7 @@ majors<span class="op">$</span>curriculum &lt;-<span class="st"> </span><span cl
 <li id="fn1"><p>See Friendly’s tutorial, linked above, for a discussion.<a href="#fnref1">↩</a></p></li>
 <li id="fn2"><p><a href="https://github.com/thomasp85/ggforce">The <strong>ggforce</strong> package</a> includes parallel set geom and stat layers to produce similar diagrams that can be allowed to free-float.<a href="#fnref2">↩</a></p></li>
 <li id="fn3"><p>A greater variety of parallel sets plots are implemented in <a href="https://github.com/heike/ggparallel">the <strong>ggparallel</strong> package</a>.<a href="#fnref3">↩</a></p></li>
-<li id="fn4"><p>If bumping is unnecessary, consider using <a href="https://chrisalbon.com/r-stats/stacked-area-graph.html"><code>geom_area()</code></a> instead.<a href="#fnref4">↩</a></p></li>
+<li id="fn4"><p>If bumping is unnecessary, consider using <a href="http://www.r-graph-gallery.com/136-stacked-area-chart/"><code>geom_area()</code></a> instead.<a href="#fnref4">↩</a></p></li>
 <li id="fn5"><p><code><a href="../reference/stat_stratum.html">stat_stratum()</a></code> will similarly accept arguments for <code>x</code> and <code>stratum</code> without <code>alluvium</code>. If both strata and either alluvia or flows are to be plotted, though, all three parameters need arguments.<a href="#fnref5">↩</a></p></li>
 <li id="fn6"><p>Be sure to set <code>na.rm</code> consistently in each layer, in this case both the flows and the strata.<a href="#fnref6">↩</a></p></li>
 </ol>
