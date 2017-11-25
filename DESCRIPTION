@@ -22,7 +22,8 @@ Imports:
     dplyr,
     tidyr,
     lazyeval,
-    alluvial
+    alluvial,
+    iterpc
 Suggests:
     testthat,
     knitr,
