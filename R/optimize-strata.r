@@ -9,6 +9,7 @@
 #'   \item \code{"weight"}: the total weight of the crossings
 #'   (the weight of each crossing is the product of the weights of the flows)
 #' }
+#' @name overlap-optimization
 #' @param data Data frame in lode form (see \code{\link{to_lodes}}).
 #' @param key,value,id Numeric or character; the fields of \code{data}
 #'   corresponding to the axis (variable), stratum (value), and alluvium
@@ -25,6 +26,7 @@
 #'   initial permutations (\code{"heuristic"}).
 #' @param niter Positive integer; if \code{method == "heuristic"}, the number of
 #'   iterations to perform from randomly sampled seed permutation sets.
+#' @example inst/examples/ex-optimize-strata.r
 #' @export
 optimize_strata <- function(
   data,
@@ -199,7 +201,7 @@ objective_fun <- function(data, key, value, id, weight, perms) {
     w <- (w_left + w_right) / 2
     # identify the alluvia that intersect
     p_match <- match(p_right, p_left)
-    p_combn <- combn(p_match, 2)
+    p_combn <- utils::combn(p_match, 2)
     p_combn <- p_combn[, p_combn[1, ] > p_combn[2, ]]
     # increment objective function
     obj <- obj + sum(apply(rbind(w[p_combn[1, ]], w[p_combn[2, ]]), 2, prod))
@@ -208,6 +210,42 @@ objective_fun <- function(data, key, value, id, weight, perms) {
 }
 
 permutation_length <- function(perm) {
-  pairs <- combn(perm, 2)
+pairs <- utils::combn(perm, 2)
   sum(pairs[1, ] > pairs[2, ])
+}
+
+#' @rdname overlap-optimization
+#' @param permutations A list of integer vectors, one for each axis, each a
+#'   permutation of the number of strata at the corresponding axis (as output by
+#'   \code{optimize_strata()}).
+#' @export
+permute_strata <- function(data, key, value, id, permutations) {
+  stopifnot(is_alluvial_lodes(data, key, value, id))
+  
+  # if any strata span multiple axes, replace them with multiple levels
+  # SHOULD ONLY NEED TO DO THIS IF 'free.strata' IS 'TRUE'
+  if (length(unique(data[[value]])) < nrow(unique(data[, c(key, value)]))) {
+    warning("Some strata appear at multiple axes ",
+            "and will be replaced by new levels with adjusted names.")
+  }
+  
+  # introduce a key-value interaction variable in axis-stratum order
+  data <- data[do.call(order, data[, c(key, value)]), ]
+  keyvalue <- as.numeric(interaction(data[, c(key, value)],
+                                     lex.order = TRUE, drop = TRUE))
+  # replace any duplicates with adjusted names
+  value_levs <- as.character(data[[value]][!duplicated(keyvalue)])
+  while (anyDuplicated(value_levs)) {
+    which_dupe <- duplicated(value_levs)
+    value_levs[which_dupe] <- paste0(value_levs[which_dupe], " ")
+  }
+  # reorder value variable according to permutations
+  # permute the order of 'keyvalue' at each axis
+  perm_cums <- c(0, cumsum(sapply(permutations, length)))
+  perm_levs <- unlist(lapply(seq_along(permutations),
+                             function(i) permutations[[i]] + perm_cums[i]))
+  #perm_keyvalue <- perm_levs[keyvalue]
+  #perm_keyvalue <- match(keyvalue, perm_levs)
+  data[[value]] <- factor(data[[value]], levels = value_levs[perm_levs])
+  data[do.call(order, data[, c(key, id)]), ]
 }
