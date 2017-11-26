@@ -25,20 +25,13 @@
 #'   initial permutations (\code{"heuristic"}).
 #' @param niter Positive integer; if \code{method == "heuristic"}, the number of
 #'   iterations to perform from randomly sampled seed permutation sets.
-#' @param reverse Logical; if \code{decreasing} is \code{NA},
-#'   whether to arrange the strata at each axis
-#'   in the reverse order of the variable values,
-#'   so that they match the order of the values in the legend.
-#'   Ignored if \code{decreasing} is not \code{NA}.
-#'   Defaults to \code{TRUE}.
 #' @export
 optimize_strata <- function(
   data,
   key, value, id,
   weight = NULL,
   free.strata = TRUE,
-  objective = "count", method = "exhaustive", niter = 6,
-  reverse = TRUE
+  objective = "count", method = "exhaustive", niter = 6
 ) {
   
   if (!is_alluvial_lodes(data = data, key = key, value = value, id = id,
@@ -91,17 +84,17 @@ optimize_strata <- function(
     perms <- lapply(Is, iterpc::getnext)
     sol_perms <- perms
     max_perms <- lapply(lapply(n_cats, seq_len), rev)
-    peb <- dplyr::progress_estimated(prod(sapply(Is, iterpc::getlength)))
+    peb <- dplyr::progress_estimated(prod(sapply(Is, iterpc::getlength)), 2)
     repeat {
       peb$tick()$print()
       if (identical(perms, max_perms)) break
       perms <- gnapply(Is)
       # if orderings of the same strata disagree across axes, skip
       if (!free.strata) {
-        if (TEST) next
+        if (FALSE) next
       }
       # calculate the new objective function and reploce the old one if smaller
-      obj <- objective_fun(data, key, value, id, weight, new_perms)
+      obj <- objective_fun(data, key, value, id, weight, perms)
       if (obj < min_obj) {
         sol_perms <- perms
         min_obj <- obj
@@ -113,7 +106,7 @@ optimize_strata <- function(
     sol_perms <- lapply(n_cats, seq_len)
     min_obj <- objective_fun(data, key, value, id, weight, sol_perms)
     # 'niter' times, start from a random permutation and heuristically minimize
-    peb <- dplyr::progress_estimated(niter)
+    peb <- dplyr::progress_estimated(niter, 2)
     for (i in 1:niter) {
       res <- optimize_strata_alluvia(data, key, value, id, weight,
                                      lapply(n_cats, sample))
@@ -130,8 +123,7 @@ optimize_strata <- function(
   rev_perms <- lapply(sol_perms, rev)
   rev_perm_lens <- sum(sapply(rev_perms, permutation_length))
   # CHECK THIS DURING TESTING
-  if ((reverse & rev_perm_lens < perm_lens) |
-      (!reverse & perm_lens < rev_perm_lens)) {
+  if (rev_perm_lens < perm_lens) {
     sol_perms <- rev_perms
   }
   
