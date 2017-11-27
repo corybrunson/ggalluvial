@@ -49,6 +49,8 @@ optimize_strata <- function(
     stop("Data must be in 'lodes' format.")
   }
   
+  # restrict to variables of interest
+  #data <- dplyr::select_(data, key, value, id, weight)
   # contiguate alluvia
   data[[id]] <- contiguate(data[[id]])
   # governing parameters
@@ -191,8 +193,12 @@ objective_fun <- function(data, key, value, id, weight, perms) {
   for (i in seq_along(xs)) {
     this_axis <- which(data[[key]] == xs[i])
     these_values <- sort(unique(data[[value]][this_axis]))
-    data[[value]][this_axis] <-
-      these_values[perms[[i]][as.numeric(droplevels(data[[value]][this_axis]))]]
+    these_keyvalues <- if (is.factor(data[[value]])) {
+      as.numeric(droplevels(data[[value]][this_axis]))
+    } else {
+      as.numeric(factor(data[[value]][this_axis], levels = these_values))
+    }
+    data[[value]][this_axis] <- these_values[perms[[i]][these_keyvalues]]
   }
   obj <- 0
   for (i in seq_along(xs)[-1]) {
@@ -210,7 +216,7 @@ objective_fun <- function(data, key, value, id, weight, perms) {
     # identify the alluvia that intersect
     p_match <- match(p_right, p_left)
     p_combn <- utils::combn(p_match, 2)
-    p_combn <- p_combn[, p_combn[1, ] > p_combn[2, ]]
+    p_combn <- p_combn[, p_combn[1, ] > p_combn[2, ], drop = FALSE]
     # increment objective function
     obj <- obj + sum(apply(rbind(w[p_combn[1, ]], w[p_combn[2, ]]), 2, prod))
   }
@@ -218,7 +224,8 @@ objective_fun <- function(data, key, value, id, weight, perms) {
 }
 
 permutation_length <- function(perm) {
-pairs <- utils::combn(perm, 2)
+  if (length(perm) == 1) return(0)
+  pairs <- utils::combn(perm, 2)
   sum(pairs[1, ] > pairs[2, ])
 }
 
