@@ -31,9 +31,11 @@
 #'   \code{"count"} or \code{"weight"}.
 #' @param method Character; whether to exhaust all permutations of all axes
 #'   (\code{"exhaustive"}) versus to perform heuristic optimization from random
-#'   initial permutations (\code{"heuristic"}).
-#' @param niter Positive integer; if \code{method == "heuristic"}, the number of
-#'   iterations to perform from randomly sampled seed permutation sets.
+#'   initial permutations (\code{"heuristic"}). Default, \code{NULL}, is to use
+#'   the heuristic algorithm unless no axis has six or more strata.
+#' @param niter Positive integer; if \code{method} is \code{"heuristic"}, the
+#'   number of iterations to perform from randomly sampled seed permutation
+#'   sets.
 #' @example inst/examples/ex-optimize-strata.r
 #' @export
 optimize_strata <- function(
@@ -41,7 +43,7 @@ optimize_strata <- function(
   key, value, id,
   weight = NULL,
   free.strata = TRUE,
-  objective = "count", method = "exhaustive", niter = 6
+  objective = "count", method = NULL, niter = 6
 ) {
   
   if (!is_alluvial_lodes(data = data, key = key, value = value, id = id,
@@ -55,7 +57,7 @@ optimize_strata <- function(
   data[[id]] <- contiguate(data[[id]])
   # governing parameters
   xs <- sort(unique(data[[key]]))
-  n_cats <- sapply(xs, function(x) {
+  n_strata <- sapply(xs, function(x) {
     length(unique(data[data[[key]] == x, ][[value]]))
   })
   
@@ -87,15 +89,18 @@ optimize_strata <- function(
   }
   
   # minimize objective function
+  if (is.null(method)) {
+    method <- if (max(n_strata) < 6) "exhaustive" else "heuristic"
+  }
   method <- match.arg(method, c("exhaustive", "heuristic"))
   if (method == "exhaustive") {
     
     min_obj <- Inf
     # iterators for stratum permutations at each axis
-    Is <- lapply(n_cats, iterpc::iterpc, ordered = TRUE)
+    Is <- lapply(n_strata, iterpc::iterpc, ordered = TRUE)
     perms <- lapply(Is, iterpc::getnext)
     sol_perms <- perms
-    max_perms <- lapply(lapply(n_cats, seq_len), rev)
+    max_perms <- lapply(lapply(n_strata, seq_len), rev)
     peb <- dplyr::progress_estimated(prod(sapply(Is, iterpc::getlength)), 2)
     repeat {
       peb$tick()$print()
@@ -115,13 +120,13 @@ optimize_strata <- function(
   } else {
     
     # take length-zero permutations as the baseline
-    sol_perms <- lapply(n_cats, seq_len)
+    sol_perms <- lapply(n_strata, seq_len)
     min_obj <- objective_fun(data, key, value, id, weight, sol_perms)
     # 'niter' times, start from a random permutation and heuristically minimize
     peb <- dplyr::progress_estimated(niter, 2)
     for (i in 1:niter) {
       res <- optimize_strata_greedy(data, key, value, id, weight,
-                                    lapply(n_cats, sample))
+                                    lapply(n_strata, sample))
       if (res$obj < min_obj) {
         sol_perms <- res$perms
         min_obj <- res$obj

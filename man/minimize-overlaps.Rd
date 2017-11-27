@@ -7,7 +7,7 @@
 \title{Optimize strata}
 \usage{
 optimize_strata(data, key, value, id, weight = NULL, free.strata = TRUE,
-  objective = "count", method = "exhaustive", niter = 6)
+  objective = "count", method = NULL, niter = 6)
 
 permute_strata(data, key, value, id, permutations)
 }
@@ -30,10 +30,12 @@ differently at different axes.}
 
 \item{method}{Character; whether to exhaust all permutations of all axes
 (\code{"exhaustive"}) versus to perform heuristic optimization from random
-initial permutations (\code{"heuristic"}).}
+initial permutations (\code{"heuristic"}). Default, \code{NULL}, is to use
+the heuristic algorithm unless no axis has six or more strata.}
 
-\item{niter}{Positive integer; if \code{method == "heuristic"}, the number of
-iterations to perform from randomly sampled seed permutation sets.}
+\item{niter}{Positive integer; if \code{method} is \code{"heuristic"}, the
+number of iterations to perform from randomly sampled seed permutation
+sets.}
 
 \item{permutations}{A list of integer vectors, one for each axis, each a
 permutation of the number of strata at the corresponding axis (as output by
