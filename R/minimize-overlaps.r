@@ -88,35 +88,91 @@ optimize_strata <- function(
     }
   }
   
-  # minimize objective function
+  # function to test whether stratum orderings are consistent across axes
+  # FIND A MORE EFFICIENT CHECK
+  axes <- rep(xs, n_strata)
+  strata <- unlist(lapply(xs, function(x) {
+    sort(unique(as.numeric(data[[value]][data[[key]] == x])))
+  }))
+  # ERRONEOUS; INVOKE 'axes' AND 'strata'
+  consistent_strata <- function(perms) {
+    !any(unlist(lapply(seq_along(perms)[-length(perms)], function(i) {
+      lapply((i+1):length(perms), function(j) {
+        is.unsorted(setdiff(match(perms[[i]], perms[[j]]), NA))
+      })
+    })))
+  }
+  
+  # decide whether to iterate over permutations of all values
+  # versus over ordered tuples of permutations of axis values
+  n_values <- dplyr::n_distinct(data[[value]])
+  n_evals <- prod(sapply(n_strata[n_strata > 1], factorial))
+  aggregate_values <- FALSE
+  if (!free.strata) {
+    n_evals_aggregated <- factorial(n_values)
+    if (n_evals_aggregated < n_evals) {
+      aggregate_values <- TRUE
+      n_evals <- n_evals_aggregated
+    }
+  }
   if (is.null(method)) {
-    method <- if (max(n_strata) < 6) "exhaustive" else "heuristic"
+    method <- if (n_evals < 1260) "exhaustive" else "heuristic"
   }
   method <- match.arg(method, c("exhaustive", "heuristic"))
+  # minimize objective function
+  # REWRITE SO THAT OUTPUT IS ONLY ONE PERMUTATION, OF ALL VALUES OF value
   if (method == "exhaustive") {
     
     min_obj <- Inf
-    # iterators for stratum permutations at each axis
-    Is <- lapply(n_strata, iterpc::iterpc, ordered = TRUE)
-    perms <- lapply(Is, iterpc::getnext)
-    sol_perms <- perms
-    max_perms <- lapply(lapply(n_strata, seq_len), rev)
-    peb <- dplyr::progress_estimated(prod(sapply(Is, iterpc::getlength)), 2)
-    repeat {
-      peb$tick()$print()
-      if (identical(perms, max_perms)) break
-      perms <- gnapply(Is)
-      # if orderings of the same strata disagree across axes, skip
-      if (!free.strata) {
-        if (FALSE) next
+    
+    if (aggregate_values) {
+      # iterator for level permutations across axes
+      I <- iterpc::iterpc(n_values, ordered = TRUE)
+      perm <- iterpc::getnext(I)
+      max_perm <- n_values:1
+      perms <- lapply(xs, function(x) {
+        order(match(strata[axes == x], perm))
+      })
+      sol_perms <- perms
+      peb <- dplyr::progress_estimated(n_evals, 2)
+      repeat {
+        peb$tick()$print()
+        if (identical(perm, max_perm)) break
+        perm <- iterpc::getnext(I)
+        perms <- lapply(xs, function(x) {
+          order(match(strata[axes == x], perm))
+        })
+        # calculate new objective function and reploce the old one if smaller
+        obj <- objective_fun(data, key, value, id, weight, perms)
+        if (obj < min_obj) {
+          sol_perms <- perms
+          min_obj <- obj
+        }
       }
-      # calculate the new objective function and reploce the old one if smaller
-      obj <- objective_fun(data, key, value, id, weight, perms)
-      if (obj < min_obj) {
-        sol_perms <- perms
-        min_obj <- obj
+    } else {
+      # iterators for stratum permutations at each axis
+      Is <- lapply(n_strata, iterpc::iterpc, ordered = TRUE)
+      perms <- lapply(Is, iterpc::getnext)
+      sol_perms <- perms
+      max_perms <- lapply(lapply(n_strata, seq_len), rev)
+      peb <- dplyr::progress_estimated(n_evals, 2)
+      repeat {
+        peb$tick()$print()
+        if (identical(perms, max_perms)) break
+        perms <- gnapply(Is)
+        # if orderings of the same strata disagree across axes, skip
+        if (!free.strata) {
+          if (!consistent_strata(perms)) next
+        }
+        # calculate new objective function and reploce the old one if smaller
+        obj <- objective_fun(data, key, value, id, weight, perms)
+        if (obj < min_obj) {
+          sol_perms <- perms
+          min_obj <- obj
+        }
       }
     }
+    
   } else {
     
     # take length-zero permutations as the baseline
@@ -126,7 +182,7 @@ optimize_strata <- function(
     peb <- dplyr::progress_estimated(niter, 2)
     for (i in 1:niter) {
       res <- optimize_strata_greedy(data, key, value, id, weight,
-                                    lapply(n_strata, sample))
+                                    lapply(n_strata, sample), free.strata)
       if (res$obj < min_obj) {
         sol_perms <- res$perms
         min_obj <- res$obj
@@ -165,7 +221,10 @@ gnapply <- function(Is) {
 }
 
 # greedy optimization over the direct sum of the permutohedra at the axes
-optimize_strata_greedy <- function(data, key, value, id, weight, init) {
+optimize_strata_greedy <- function(
+  data, key, value, id, weight, init,
+  free.strata
+) {
   
   # iteratively test adjacent transpositions for lower objective function values
   perms <- init
@@ -176,6 +235,9 @@ optimize_strata_greedy <- function(data, key, value, id, weight, init) {
       for (j in seq_along(perms[[i]])[-1]) {
         new_perms <- perms
         new_perms[[i]][c(j - 1, j)] <- new_perms[[i]][c(j, j - 1)]
+        if (!free.strata) {
+          if (!consistent_strata(perms)) next
+        }
         new_obj <- objective_fun(data, key, value, id, weight, new_perms)
         if (new_obj < obj) {
           perms <- new_perms
@@ -264,8 +326,7 @@ permute_strata <- function(data, key, value, id, permutations) {
   perm_cums <- c(0, cumsum(sapply(permutations, length)))
   perm_levs <- unlist(lapply(seq_along(permutations),
                              function(i) permutations[[i]] + perm_cums[i]))
-  #perm_keyvalue <- perm_levs[keyvalue]
-  #perm_keyvalue <- match(keyvalue, perm_levs)
-  data[[value]] <- factor(data[[value]], levels = value_levs[perm_levs])
+  data$.stratum <- data[[value]]
+  data[[value]] <- factor(value_levs[keyvalue], levels = value_levs[perm_levs])
   data[do.call(order, data[, c(key, id)]), ]
 }
