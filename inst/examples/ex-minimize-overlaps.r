@@ -10,14 +10,12 @@ count_perms <- optimize_strata(
   objective = "count", method = "exhaustive"
 )
 
-\dontrun{
 count_perms <- optimize_strata(
   data,
   key = "x", value = "stratum", id = "alluvium",
   free.strata = TRUE,
   objective = "count", method = "heuristic"
 )
-}
 
 weight_perms <- optimize_strata(
   data,
@@ -27,7 +25,6 @@ weight_perms <- optimize_strata(
   objective = "weight", method = "exhaustive"
 )
 
-\dontrun{
 weight_perms <- optimize_strata(
   data,
   key = "x", value = "stratum", id = "alluvium",
@@ -35,7 +32,6 @@ weight_perms <- optimize_strata(
   free.strata = TRUE,
   objective = "weight", method = "heuristic"
 )
-}
 
 data <- to_lodes(as.data.frame(Titanic), axes = 1:4)
 ggplot(data,

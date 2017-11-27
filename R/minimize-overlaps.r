@@ -1,15 +1,23 @@
 #' Optimize strata
 #' 
-#' This function attempts to order the strata at each axis so as to maximize the
-#' readability of the diagram, by minimizing an objective function related to
-#' the number and sizes of the overlaps between flows when they cross. The
-#' planned objective functions include the following:
+#' The function \code{optimize_strata()} attempts to order the strata at each 
+#' axis so as to maximize the readability of the diagram, by minimizing an 
+#' objective function related to the overlaps of crossing flows. The objective
+#' functions include the following:
+#' 
+
 #' \itemize{
 #'   \item \code{"count"}: the number of crossings
 #'   \item \code{"weight"}: the total weight of the crossings
 #'   (the weight of each crossing is the product of the weights of the flows)
 #' }
-#' @name overlap-optimization
+#' 
+
+#' The function \code{permute_strata()} then applies the stratum permutations to
+#' a data frame (which must have the correct number of strata at each axis).
+#' 
+
+#' @name minimize-overlaps
 #' @param data Data frame in lode form (see \code{\link{to_lodes}}).
 #' @param key,value,id Numeric or character; the fields of \code{data}
 #'   corresponding to the axis (variable), stratum (value), and alluvium
@@ -104,14 +112,14 @@ optimize_strata <- function(
     }
   } else {
     
-    # ensure that length-zero permutations are in the running
+    # take length-zero permutations as the baseline
     sol_perms <- lapply(n_cats, seq_len)
     min_obj <- objective_fun(data, key, value, id, weight, sol_perms)
     # 'niter' times, start from a random permutation and heuristically minimize
     peb <- dplyr::progress_estimated(niter, 2)
     for (i in 1:niter) {
-      res <- optimize_strata_alluvia(data, key, value, id, weight,
-                                     lapply(n_cats, sample))
+      res <- optimize_strata_greedy(data, key, value, id, weight,
+                                    lapply(n_cats, sample))
       if (res$obj < min_obj) {
         sol_perms <- res$perms
         min_obj <- res$obj
@@ -124,7 +132,6 @@ optimize_strata <- function(
   perm_lens <- sum(sapply(sol_perms, permutation_length))
   rev_perms <- lapply(sol_perms, rev)
   rev_perm_lens <- sum(sapply(rev_perms, permutation_length))
-  # CHECK THIS DURING TESTING
   if (rev_perm_lens < perm_lens) {
     sol_perms <- rev_perms
   }
@@ -150,16 +157,17 @@ gnapply <- function(Is) {
   lapply(Is, iterpc::getcurrent)
 }
 
-optimize_strata_alluvia <- function(data, key, value, id, weight, init) {
+# greedy optimization over the direct sum of the permutohedra at the axes
+optimize_strata_greedy <- function(data, key, value, id, weight, init) {
   
-  # test every adjacent transposition for a lower objective function value
+  # iteratively test adjacent transpositions for lower objective function values
+  perms <- init
+  obj <- objective_fun(data, key, value, id, weight, perms)
   repeat {
     step <- FALSE
-    perms <- init
-    obj <- objective_fun(data, key, value, id, weight, perms)
-    for (i in seq_along(init)) {
-      for (j in seq_along(init[[i]])[-1]) {
-        new_perms <- init
+    for (i in seq_along(perms)) {
+      for (j in seq_along(perms[[i]])[-1]) {
+        new_perms <- perms
         new_perms[[i]][c(j - 1, j)] <- new_perms[[i]][c(j, j - 1)]
         new_obj <- objective_fun(data, key, value, id, weight, new_perms)
         if (new_obj < obj) {
@@ -214,7 +222,7 @@ pairs <- utils::combn(perm, 2)
   sum(pairs[1, ] > pairs[2, ])
 }
 
-#' @rdname overlap-optimization
+#' @rdname minimize-overlaps
 #' @param permutations A list of integer vectors, one for each axis, each a
 #'   permutation of the number of strata at the corresponding axis (as output by
 #'   \code{optimize_strata()}).

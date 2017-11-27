@@ -14,12 +14,12 @@
 #'   \item \code{leftright}: Proceed leftward from \code{i} to 1, then rightward
 #'         to \code{n}
 #' }
-#' @name lode-guidance-functions
+#' @name lode-guidance
 #' @param n Numeric, a positive integer
 #' @param i Numeric, a positive integer at most \code{n}
 NULL
 
-#' @rdname lode-guidance-functions
+#' @rdname lode-guidance
 #' @export
 lode_zigzag <- function(n, i) {
   
@@ -42,25 +42,25 @@ lode_zigzag <- function(n, i) {
     if(sgn == 0) c() else rem)
 }
 
-#' @rdname lode-guidance-functions
+#' @rdname lode-guidance
 #' @export
 lode_rightward <- function(n, i) {
   if (i == 1) 1:n else if (i == n) c(n, 1:(n-1)) else c(i, 1:(i-1), (i+1):n)
 }
 
-#' @rdname lode-guidance-functions
+#' @rdname lode-guidance
 #' @export
 lode_leftward <- function(n, i) {
   if (i == 1) c(i, n:2) else if (i == n) n:1 else c(i, n:(i+1), (i-1):1)
 }
 
-#' @rdname lode-guidance-functions
+#' @rdname lode-guidance
 #' @export
 lode_rightleft <- function(n, i) {
   if (i == 1) 1:n else if (i == n) n:1 else c(i, (i+1):n, (i-1):1)
 }
 
-#' @rdname lode-guidance-functions
+#' @rdname lode-guidance
 #' @export
 lode_leftright <- function(n, i) {
   if (i == 1) 1:n else if (i == n) n:1 else c(i, (i-1):1, (i+1):n)
