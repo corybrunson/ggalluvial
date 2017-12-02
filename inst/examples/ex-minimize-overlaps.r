@@ -90,8 +90,8 @@ ggplot(vaccinations,
        aes(x = survey, stratum = response, alluvium = subject,
            weight = freq, fill = response,
            label = response)) +
-  geom_lode() + geom_flow() +
-  geom_stratum(alpha = 0.25, fill = "white") +
+  geom_flow() +
+  geom_stratum() +
   geom_text(stat = "stratum")
 ggalluvial:::objective_fun(
   vaccinations,
@@ -117,8 +117,8 @@ ggplot(vaccinations1,
        aes(x = survey, stratum = response, alluvium = subject,
            weight = freq, fill = .stratum,
            label = .stratum)) +
-  geom_lode() + geom_flow() +
-  geom_stratum(alpha = 0.25, fill = "white") +
+  geom_flow() +
+  geom_stratum() +
   geom_text(stat = "stratum")
 ggalluvial:::objective_fun(
   vaccinations1,
@@ -144,8 +144,8 @@ ggplot(vaccinations2,
        aes(x = survey, stratum = response, alluvium = subject,
            weight = freq, fill = .stratum,
            label = .stratum)) +
-  geom_lode() + geom_flow() +
-  geom_stratum(alpha = 0.25, fill = "white") +
+  geom_flow() +
+  geom_stratum() +
   geom_text(stat = "stratum")
 ggalluvial:::objective_fun(
   vaccinations2,

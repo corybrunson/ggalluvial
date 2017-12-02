@@ -95,8 +95,8 @@ optimize_strata <- function(
     sort(unique(as.numeric(data[[value]][data[[key]] == x])))
   }))
   # ERRONEOUS; INVOKE 'axes' AND 'strata'
-  consistent_strata <- function(perms) {
-    !any(unlist(lapply(seq_along(perms)[-length(perms)], function(i) {
+  recumbent_strata <- function(perms) {
+    any(unlist(lapply(seq_along(perms)[-length(perms)], function(i) {
       lapply((i+1):length(perms), function(j) {
         is.unsorted(setdiff(match(perms[[i]], perms[[j]]), NA))
       })
@@ -162,7 +162,7 @@ optimize_strata <- function(
         perms <- gnapply(Is)
         # if orderings of the same strata disagree across axes, skip
         if (!free.strata) {
-          if (!consistent_strata(perms)) next
+          if (recumbent_strata(perms)) next
         }
         # calculate new objective function and reploce the old one if smaller
         obj <- objective_fun(data, key, value, id, weight, perms)
@@ -182,7 +182,8 @@ optimize_strata <- function(
     peb <- dplyr::progress_estimated(niter, 2)
     for (i in 1:niter) {
       res <- optimize_strata_greedy(data, key, value, id, weight,
-                                    lapply(n_strata, sample), free.strata)
+                                    lapply(n_strata, sample), free.strata,
+                                    recumbent_strata)
       if (res$obj < min_obj) {
         sol_perms <- res$perms
         min_obj <- res$obj
@@ -223,7 +224,7 @@ gnapply <- function(Is) {
 # greedy optimization over the direct sum of the permutohedra at the axes
 optimize_strata_greedy <- function(
   data, key, value, id, weight, init,
-  free.strata
+  free.strata, recumbency_test
 ) {
   
   # iteratively test adjacent transpositions for lower objective function values
@@ -236,7 +237,7 @@ optimize_strata_greedy <- function(
         new_perms <- perms
         new_perms[[i]][c(j - 1, j)] <- new_perms[[i]][c(j, j - 1)]
         if (!free.strata) {
-          if (!consistent_strata(perms)) next
+          if (recumbency_test(perms)) next
         }
         new_obj <- objective_fun(data, key, value, id, weight, new_perms)
         if (new_obj < obj) {
