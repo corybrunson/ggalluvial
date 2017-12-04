@@ -50,7 +50,7 @@ ggplot(majors,
   geom_flow(stat = "alluvium", lode.guidance = "rightleft",
             color = "darkgray") +
   geom_stratum()
-ggalluvial:::objective_fun(
+objective_fun(
   transform(majors, weight = 1),
   id = "student", key = "semester", value = "curriculum",
   weight = "weight",
@@ -61,21 +61,15 @@ ggalluvial:::objective_fun(
 count_perms <- optimize_strata(
   majors,
   id = "student", key = "semester", value = "curriculum",
-  free.strata = TRUE,
   objective = "count", method = "heuristic"
 )
-majors2 <- permute_strata(
-  majors,
+objective_fun(
+  transform(majors, weight = 1),
   id = "student", key = "semester", value = "curriculum",
-  permutations = count_perms
+  weight = "weight",
+  perms = count_perms$perms
 )
-ggplot(majors2,
-       aes(x = semester, stratum = curriculum, alluvium = student,
-           fill = curriculum, label = curriculum)) +
-  geom_flow(stat = "alluvium", lode.guidance = "rightleft",
-            color = "darkgray") +
-  geom_stratum()
-ggalluvial:::objective_fun(
+objective_fun(
   transform(majors2, weight = 1),
   id = "student", key = "semester", value = "curriculum",
   weight = "weight",
@@ -83,6 +77,17 @@ ggalluvial:::objective_fun(
     length(unique(majors[majors$semester == x, ]$curriculum))
   }), seq_len)
 )
+majors2 <- permute_strata(
+  majors,
+  id = "student", key = "semester", value = "curriculum",
+  perm = count_perms$perm
+)
+ggplot(majors2,
+       aes(x = semester, stratum = curriculum, alluvium = student,
+           fill = curriculum, label = curriculum)) +
+  geom_flow(stat = "alluvium", lode.guidance = "rightleft",
+            color = "darkgray") +
+  geom_stratum()
 
 # allow inconsistent orderings of strata across axes
 data(vaccinations)
@@ -93,7 +98,7 @@ ggplot(vaccinations,
   geom_flow() +
   geom_stratum() +
   geom_text(stat = "stratum")
-ggalluvial:::objective_fun(
+objective_fun(
   vaccinations,
   id = "subject", key = "survey", value = "response",
   weight = "freq",
@@ -104,23 +109,22 @@ ggalluvial:::objective_fun(
 weight_perms1 <- optimize_strata(
   vaccinations,
   id = "subject", key = "survey", value = "response",
-  free.strata = TRUE,
   weight = "freq",
   objective = "weight"
 )
+weight_perms1
 vaccinations1 <- permute_strata(
   vaccinations,
   id = "subject", key = "survey", value = "response",
-  permutations = weight_perms1
+  perm = weight_perms1$perm
 )
-ggplot(vaccinations1,
-       aes(x = survey, stratum = response, alluvium = subject,
-           weight = freq, fill = .stratum,
-           label = .stratum)) +
-  geom_flow() +
-  geom_stratum() +
-  geom_text(stat = "stratum")
-ggalluvial:::objective_fun(
+objective_fun(
+  vaccinations,
+  id = "subject", key = "survey", value = "response",
+  weight = "freq",
+  perms = weight_perms1$perms
+)
+objective_fun(
   vaccinations1,
   id = "subject", key = "survey", value = "response",
   weight = "freq",
@@ -128,30 +132,29 @@ ggalluvial:::objective_fun(
     length(unique(vaccinations1[vaccinations1$survey == x, ]$response))
   }), seq_len)
 )
-weight_perms2 <- optimize_strata(
-  vaccinations,
-  id = "subject", key = "survey", value = "response",
-  free.strata = FALSE,
-  weight = "freq",
-  objective = "weight"
-)
-vaccinations2 <- permute_strata(
-  vaccinations,
-  id = "subject", key = "survey", value = "response",
-  permutations = weight_perms2
-)
-ggplot(vaccinations2,
+ggplot(vaccinations1,
        aes(x = survey, stratum = response, alluvium = subject,
-           weight = freq, fill = .stratum,
-           label = .stratum)) +
+           weight = freq, fill = response,
+           label = response)) +
   geom_flow() +
   geom_stratum() +
   geom_text(stat = "stratum")
-ggalluvial:::objective_fun(
-  vaccinations2,
+weight_perms2 <- optimize_strata(
+  vaccinations,
   id = "subject", key = "survey", value = "response",
   weight = "freq",
-  perms = lapply(sapply(sort(unique(vaccinations2$survey)), function(x) {
-    length(unique(vaccinations2[vaccinations2$survey == x, ]$response))
-  }), seq_len)
+  objective = "weight"
 )
+weight_perms2
+vaccinations2 <- permute_strata(
+  vaccinations,
+  id = "subject", key = "survey", value = "response",
+  perm = weight_perms2$perm
+)
+ggplot(vaccinations2,
+       aes(x = survey, stratum = response, alluvium = subject,
+           weight = freq, fill = response,
+           label = response)) +
+  geom_flow() +
+  geom_stratum() +
+  geom_text(stat = "stratum")

@@ -3,13 +3,19 @@
 \name{minimize-overlaps}
 \alias{minimize-overlaps}
 \alias{optimize_strata}
+\alias{objective_fun}
 \alias{permute_strata}
+\alias{permute_axis_strata}
 \title{Optimize strata}
 \usage{
-optimize_strata(data, key, value, id, weight = NULL, free.strata = TRUE,
-  objective = "count", method = NULL, niter = 6)
+optimize_strata(data, key, value, id, weight = NULL, objective = "count",
+  method = NULL, niter = 6)
 
-permute_strata(data, key, value, id, permutations)
+objective_fun(data, key, value, id, weight, perms)
+
+permute_strata(data, key, value, id, perm)
+
+permute_axis_strata(data, key, value, id, perms)
 }
 \arguments{
 \item{data}{Data frame in lode form (see \code{\link{to_lodes}}).}
@@ -21,9 +27,6 @@ corresponding to the axis (variable), stratum (value), and alluvium
 \item{weight}{Optional numeric or character; the fields of \code{data}
 corresponding to alluvium or lode weights (heights when plotted). The
 default value \code{NULL} assigns every alluvium equal weight.}
-
-\item{free.strata}{Logical; whether to allow the same strata to be ordered
-differently at different axes.}
 
 \item{objective}{Character, the objective function to minimize; matched to
 \code{"count"} or \code{"weight"}.}
@@ -37,9 +40,10 @@ the heuristic algorithm unless no axis has six or more strata.}
 number of iterations to perform from randomly sampled seed permutation
 sets.}
 
-\item{permutations}{A list of integer vectors, one for each axis, each a
-permutation of the number of strata at the corresponding axis (as output by
-\code{optimize_strata()}).}
+\item{perm, perms}{An integer vector or list of integer vectors encoding 
+permutations of the strata, either all together (as output by 
+\code{optimize_strata()}) or for each axis (as output by
+\code{optimize_axis_strata()}).}
 }
 \description{
 The function \code{optimize_strata()} attempts to order the strata at each 
