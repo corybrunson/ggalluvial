@@ -70,23 +70,40 @@
 <li>
 <strong>alluvial</strong> produces both the <em>alluvia</em>, which link cohorts across multiple dimensions, and (what are here called) the <em>strata</em>, which partition the data along each dimension, in a single function; whereas <strong>ggalluvial</strong> relies on separate layers (stats and geoms) to produce strata, alluvia, and alluvial segments called <em>lodes</em> and <em>flows</em>.</li>
 </ul>
-<p>Issues and pull requests are more than welcome.</p>
+</div>
+<div id="installation" class="section level2">
+<h2 class="hasAnchor">
+<a href="#installation" class="anchor"></a>Installation</h2>
+<p>The latest stable release can be installed from CRAN:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"ggalluvial"</span>)</code></pre></div>
+<p>The <a href="https://github.com/corybrunson/ggalluvial/tree/cran">cran branch</a> will contain the version most recently submitted to <a href="https://cran.r-project.org/package=ggalluvial">CRAN</a>.</p>
+<p>Development versions can be installed from GitHub:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"corybrunson/ggalluvial"</span>, <span class="dt">build_vignettes =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p>The <a href="https://github.com/corybrunson/ggalluvial/tree/optimization">optimization branch</a> contains a development version with experimental functions to reduce the number or area of alluvial overlaps (see issue <a href="/../../issues/6">#6</a>). Install it as follows:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"corybrunson/ggalluvial"</span>, <span class="dt">ref =</span> <span class="st">"optimization"</span>)</code></pre></div>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
-<p>The latest stable release can be installed from CRAN:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"ggalluvial"</span>)</code></pre></div>
-<p>Development versions can be installed from GitHub:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"corybrunson/ggalluvial"</span>, <span class="dt">build_vignettes =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p>For detailed discussion of the data formats recognized by <strong>ggalluvial</strong> and several examples that illustrate its flexibility and limitations, read the vignette:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">vignette</span>(<span class="dt">topic =</span> <span class="st">"ggalluvial"</span>, <span class="dt">package =</span> <span class="st">"ggalluvial"</span>)</code></pre></div>
+<p>The documentation contains several examples; use <code>help()</code> to call forth examples of any layer (<code>stat_*</code> or <code>geom_*</code>).</p>
+</div>
+<div id="contribute" class="section level2">
+<h2 class="hasAnchor">
+<a href="#contribute" class="anchor"></a>Contribute</h2>
+<p>Issues and pull requests are more than welcome!</p>
 </div>
 </div>
   </div>
 
   <div class="col-md-3" id="sidebar">
-    <h2>License</h2>
+    <h2>Links</h2>
+<ul class="list-unstyled">
+<li>Download from CRAN at <br><a href="https://cran.r-project.org/package=ggalluvial">https://​cran.r-project.org/​package=ggalluvial</a>
+</li>
+</ul>
+<h2>License</h2>
 <p><a href="https://www.r-project.org/Licenses/GPL-2">GPL-2</a></p>
 <h2>Developers</h2>
 <ul class="list-unstyled">
