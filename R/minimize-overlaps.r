@@ -67,9 +67,6 @@ optimize_strata <- function(
     }
   }
   
-  # contiguate alluvia
-  # WHY IS THIS NECESSARY?
-  #data[[id]] <- contiguate(data[[id]])
   # governing parameters
   axes <- sort(unique(data[[key]]))
   n_axes <- length(axes)
@@ -159,6 +156,9 @@ optimize_strata <- function(
     
     # take length-zero permutations as the baseline
     sol_perms <- lapply(ns_strata, seq_len)
+    sol_perm <- unique(unlist(lapply(sol_perms, function(x) {
+      axis_strata[x]
+    })))
     min_obj <- objective_fun(data, key, value, id, weight, sol_perms)
     # 'niter' times, start from a random permutation and heuristically minimize
     peb <- dplyr::progress_estimated(niter, 2)
@@ -167,8 +167,8 @@ optimize_strata <- function(
       res <- optimize_strata_greedy(data, key, value, id, weight, axis_strata,
                                     init)
       if (res$obj < min_obj) {
-        sol_perm <- res$perm
         sol_perms <- res$perms
+        sol_perm <- res$perm
         min_obj <- res$obj
       }
       peb$tick()$print()
@@ -275,17 +275,58 @@ optimize_axis_strata_greedy <- function(
   list(perm = perm, perms = perms, obj = obj)
 }
 
-# THE OBJECTIVE FUNCTION MAY BE WAY MESSED UP (SEE THE EXAMPLES).
-# PLOW THROUGH WITH A VERY SIMPLE EXAMPLE.
 #' @rdname minimize-overlaps
 #' @export
-objective_fun <- function(data, key, value, id, weight, perms) {
+objective_fun <- function(
+  data, key, value, id, weight, perm
+) {
+  if (is.list(perm)) {
+    objective_fun_perms(data, key, value, id, weight, perm)
+  } else {
+    objective_fun_perm(data, key, value, id, weight, perm)
+  }
+}
+
+objective_fun_perm <- function(
+  data, key, value, id, weight, perm
+) {
+  data <- permute_strata(data, key, value, id, perm)
+  data <- data[do.call(order, data[, c(key, value, id)]), ]
+  axes <- sort(unique(data[[key]]))
+  
+  obj <- 0
+  for (i in seq_along(axes)[-1]) {
+    # alluvia and strata on each side of the flow segment
+    d_left <- data[data[[key]] == axes[i - 1], c(id, value, weight)]
+    d_right <- data[data[[key]] == axes[i], c(id, value, weight)]
+    # match the alluvia on either side
+    lr_match <- match(d_left[[id]], d_right[[id]])
+    rl_match <- match(d_right[[id]], d_left[[id]])
+    # mean 'weight' in order of 'd_left' (zero if no match)
+    w <- (d_left[[weight]] + d_right[[weight]][lr_match]) / 2
+    w[is.na(w)] <- 0
+    # identify pairings from the left->right perspective
+    rl_combn <- utils::combn(rl_match, 2)
+    # exclude pairings that don't intersect
+    # NOTE: SOME INTERSECTIONS WILL BE PREVENTED BY 'lode.ordering'
+    # SO THIS PRODUCES AN OVERESTIMATE OF THE ACTUAL NUMBER OF INTERSECTIONS
+    rl_combn <- rl_combn[, rl_combn[1, ] > rl_combn[2, ], drop = FALSE]
+    # increment by the products of the weights of the intersecting alluvia
+    obj <- obj + sum(apply(rbind(w[rl_combn[1, ]], w[rl_combn[2, ]]), 2, prod))
+  }
+  obj
+}
+
+objective_fun_perms <- function(
+  data, key, value, id, weight, perms
+) {
   # ensure that 'data' is arranged by alluvium
   data <- data[do.call(order, data[, c(id, key, value)]), ]
   axes <- sort(unique(data[[key]]))
-  # permute the strata at each axis in a consistent manner according to 'perms'
+  # arrange 'data' as in the alluvial diagram, according to 'perms'
   for (i in seq_along(axes)) {
     this_axis <- which(data[[key]] == axes[i])
+    # ORDER BY ALLUVIUM OR BY STRATUM LEVEL?
     these_values <- sort(unique(data[[value]][this_axis]))
     these_keyvalues <- if (is.factor(data[[value]])) {
       as.numeric(droplevels(data[[value]][this_axis]))
@@ -308,6 +349,8 @@ objective_fun <- function(data, key, value, id, weight, perms) {
     w_right <- d_right[[weight]][order(d_right[[id]])]
     w <- (w_left + w_right) / 2
     # identify the alluvia that intersect
+    # NOTE: SOME INTERSECTIONS WILL BE PREVENTED BY 'lode.ordering'
+    # SO THIS PRODUCES AN OVERESTIMATE OF THE ACTUAL NUMBER OF INTERSECTIONS
     p_match <- match(p_right, p_left)
     p_combn <- utils::combn(p_match, 2)
     p_combn <- p_combn[, p_combn[1, ] > p_combn[2, ], drop = FALSE]
@@ -333,9 +376,9 @@ permute_strata <- function(data, key, value, id, perm) {
   stopifnot(is_alluvial_lodes(data, key, value, id))
   
   # obtain levels of the stratum variable, coercing to factor if necessary
-  valuelevs <- levels(as.factor(data[[value]]))
+  value_levs <- levels(as.factor(data[[value]]))
   # reorder the factor levels according to 'perm'
-  data[[value]] <- factor(data[[value]], levels = valuelevs[perm])
+  data[[value]] <- factor(data[[value]], levels = value_levs[perm])
   
   data
 }

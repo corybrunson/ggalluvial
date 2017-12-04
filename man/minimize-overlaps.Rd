@@ -11,7 +11,7 @@
 optimize_strata(data, key, value, id, weight = NULL, objective = "count",
   method = NULL, niter = 6)
 
-objective_fun(data, key, value, id, weight, perms)
+objective_fun(data, key, value, id, weight, perm)
 
 permute_strata(data, key, value, id, perm)
 
