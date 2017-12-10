@@ -1,70 +1,42 @@
 #' Optimize strata
 #' 
 #' The function \code{optimize_strata()} attempts to order the strata at each 
-#' axis so as to maximize the readability of the diagram, by minimizing an 
-#' objective function related to the overlaps of crossing flows. The objective
-#' functions include the following:
+#' axis so as to maximize the readability of the diagram, by minimizing a 
+#' weighted total of the overlaps of crossing flows. The weight assigned to each
+#' overlap is the product of the mean \code{weight}s of the overlapping flows at
+#' each incident axis. The function \code{permute_strata()} applies the stratum 
+#' permutations to the stratum variable of the data frame; the experimental 
+#' function \code{permute_axis_strata()} applies a list of permutations 
+#' axis-wise, potentially resulting in different orderings of the same strata at
+#' different axes.
 #' 
-
-#' \itemize{
-#'   \item \code{"count"}: the number of crossings
-#'   \item \code{"weight"}: the total weight of the crossings
-#'   (the weight of each crossing is the product of the weights of the flows)
-#' }
-#' 
-
-#' The function \code{permute_strata()} then applies the stratum permutations to
-#' a data frame (which must have the correct number of strata at each axis).
-#' 
-
 #' @name minimize-overlaps
 #' @param data Data frame in lode form (see \code{\link{to_lodes}}).
-#' @param key,value,id Numeric or character; the fields of \code{data}
-#'   corresponding to the axis (variable), stratum (value), and alluvium
+#' @param key,value,id Numeric or character; the fields of \code{data} 
+#'   corresponding to the axis (variable), stratum (value), and alluvium 
 #'   (identifying) variables.
-#' @param weight Optional numeric or character; the fields of \code{data}
-#'   corresponding to alluvium or lode weights (heights when plotted). The
-#'   default value \code{NULL} assigns every alluvium equal weight.
-#' @param objective Character, the objective function to minimize; matched to
-#'   \code{"count"} or \code{"weight"}.
-#' @param method Character; whether to exhaust all permutations of all axes
-#'   (\code{"exhaustive"}) versus to perform heuristic optimization from random
-#'   initial permutations (\code{"heuristic"}). Default, \code{NULL}, is to use
+#' @param weight Numeric or character; the field of \code{data} corresponding to
+#'   flow weights (heights in the diagram). The default value \code{NULL}
+#'   assigns every alluvium, hence every overlap, unit weight.
+#' @param method Character; whether to exhaust all permutations of all axes 
+#'   (\code{"exhaustive"}) versus to perform heuristic optimization from random 
+#'   initial permutations (\code{"heuristic"}). Default, \code{NULL}, is to use 
 #'   the heuristic algorithm unless no axis has six or more strata.
-#' @param niter Positive integer; if \code{method} is \code{"heuristic"}, the
-#'   number of iterations to perform from randomly sampled seed permutation
+#' @param niter Positive integer; if \code{method} is \code{"heuristic"}, the 
+#'   number of iterations to perform from randomly sampled seed permutation 
 #'   sets.
-#' @example inst/examples/ex-optimize-strata.r
+#' @example inst/examples/ex-minimize-overlaps.r
 #' @export
 optimize_strata <- function(
   data,
   key, value, id,
   weight = NULL,
-  objective = "count", method = NULL, niter = 6
+  method = NULL, niter = 6
 ) {
   
   if (!is_alluvial_lodes(data = data, key = key, value = value, id = id,
                          weight = weight, logical = TRUE)) {
     stop("Data passed to 'optimize_strata()' must be in 'lodes' format.")
-  }
-  
-  # augment 'data' with suitable weight variable
-  # THIS IS A BIT CUMBERSOME
-  objective <- match.arg(objective, c("count", "weight"))
-  if (objective == "count") {
-    if (!is.null(weight)) {
-      message("Objective 'count' will ignore 'weight' variable.")
-    } else {
-      weight <- "weight"
-    }
-    data[[weight]] <- 1
-  } else {
-    if (is.null(weight)) {
-      warning("Objective '", objective, "' requires 'weight' variable. ",
-              "Unit weights will be used.")
-      weight <- "weight"
-      data[[weight]] <- 1
-    }
   }
   
   # governing parameters
@@ -90,13 +62,17 @@ optimize_strata <- function(
     method <- if (n_evals < 1260) "exhaustive" else "heuristic"
   }
   method <- match.arg(method, c("exhaustive", "heuristic"))
+  perm_orig <- 1:n_strata
+  perms_orig <- lapply(ns_strata, seq_len)
   
   # minimize objective function
   if (method == "exhaustive") {
     
-    min_obj <- Inf
+    obj_orig <- objective_strata(data, key, value, id, weight, perm_orig)
+    obj_min <- Inf
     
     if (n_evals_agg < n_evals_sep) {
+      message("Exhausting aggregate permutations of all strata.")
       
       # iterator for level permutations across axes
       I <- iterpc::iterpc(n_strata, ordered = TRUE)
@@ -109,15 +85,16 @@ optimize_strata <- function(
           order(match(x, perm))
         })
         # calculate new objective function and reploce the old one if smaller
-        obj <- objective_fun(data, key, value, id, weight, perms)
-        if (obj < min_obj) {
+        obj <- objective_strata(data, key, value, id, weight, perm)
+        if (obj < obj_min) {
           sol_perm <- perm
           sol_perms <- perms
-          min_obj <- obj
+          obj_min <- obj
         }
       }
       
     } else {
+      message("Exhausting separate permutations of axis strata.")
       
       # iterators for stratum permutations at each axis
       Is <- lapply(ns_strata, iterpc::iterpc, ordered = TRUE)
@@ -138,13 +115,13 @@ optimize_strata <- function(
         }
         if (recumbency) next
         # calculate new objective function and reploce the old one if smaller
-        obj <- objective_fun(data, key, value, id, weight, perms)
-        if (obj < min_obj) {
+        obj <- objective_axis_strata(data, key, value, id, weight, perms)
+        if (obj < obj_min) {
           sol_perms <- perms
           sol_perm <- unique(unlist(lapply(sol_perms, function(x) {
             axis_strata[x]
           })))
-          min_obj <- obj
+          obj_min <- obj
         }
         peb$tick()$print()
         if (nrep == n_evals_sep) break
@@ -155,21 +132,19 @@ optimize_strata <- function(
   } else {
     
     # take length-zero permutations as the baseline
-    sol_perms <- lapply(ns_strata, seq_len)
-    sol_perm <- unique(unlist(lapply(sol_perms, function(x) {
-      axis_strata[x]
-    })))
-    min_obj <- objective_fun(data, key, value, id, weight, sol_perms)
+    sol_perm <- perm_orig
+    obj_min <- objective_strata(data, key, value, id, weight, sol_perm)
+    obj_orig <- obj_min
     # 'niter' times, start from a random permutation and heuristically minimize
     peb <- dplyr::progress_estimated(niter, 2)
     for (i in 1:niter) {
       init <- sample(n_strata)
       res <- optimize_strata_greedy(data, key, value, id, weight, axis_strata,
                                     init)
-      if (res$obj < min_obj) {
+      if (res$obj < obj_min) {
         sol_perms <- res$perms
         sol_perm <- res$perm
-        min_obj <- res$obj
+        obj_min <- res$obj
       }
       peb$tick()$print()
     }
@@ -177,15 +152,13 @@ optimize_strata <- function(
   }
   
   # replace with reversal if closer to original
-  #perm_lens <- sum(sapply(sol_perms, permutation_length))
   rev_perms <- lapply(sol_perms, rev)
-  #rev_perm_lens <- sum(sapply(rev_perms, permutation_length))
   if (sum(sapply(rev_perms, permutation_length)) <
       sum(sapply(sol_perms, permutation_length))) {
     sol_perms <- rev_perms
   }
   
-  list(perm = sol_perm, perms = sol_perms, obj = min_obj)
+  list(perm = sol_perm, perms = sol_perms, obj = obj_min, obj_orig = obj_orig)
 }
 
 # iterate a list of permutation iterators, *without* 'NULL's before recycling
@@ -218,22 +191,15 @@ optimize_strata_greedy <- function(
   
   # iteratively test adjacent transpositions for lower objective function values
   perm <- init
-  perms <- lapply(axis_strata, function(x) {
-    order(match(x, perm))
-  })
-  obj <- objective_fun(data, key, value, id, weight, perms)
+  obj <- objective_strata(data, key, value, id, weight, perm)
   repeat {
     step <- FALSE
     for (i in seq_along(perm)[-1]) {
       new_perm <- perm
       new_perm[c(i - 1, i)] <- new_perm[c(i, i - 1)]
-      new_perms <- lapply(axis_strata, function(x) {
-        order(match(x, new_perm))
-      })
-      new_obj <- objective_fun(data, key, value, id, weight, new_perms)
+      new_obj <- objective_strata(data, key, value, id, weight, new_perm)
       if (new_obj < obj) {
         perm <- new_perm
-        perms <- new_perms
         obj <- new_obj
         step <- TRUE
       }
@@ -241,6 +207,9 @@ optimize_strata_greedy <- function(
     if (step == FALSE) break
   }
   
+  perms <- lapply(axis_strata, function(x) {
+    order(match(x, perm))
+  })
   list(perm = perm, perms = perms, obj = obj)
 }
 
@@ -251,14 +220,14 @@ optimize_axis_strata_greedy <- function(
   
   # iteratively test adjacent transpositions for lower objective function values
   perms <- inits
-  obj <- objective_fun(data, key, value, id, weight, perms)
+  obj <- objective_axis_strata(data, key, value, id, weight, perms)
   repeat {
     step <- FALSE
     for (i in seq_along(perms)) {
       for (j in seq_along(perms[[i]])[-1]) {
         new_perms <- perms
         new_perms[[i]][c(j - 1, j)] <- new_perms[[i]][c(j, j - 1)]
-        new_obj <- objective_fun(data, key, value, id, weight, new_perms)
+        new_obj <- objective_axis_strata(data, key, value, id, weight, new_perms)
         if (new_obj < obj) {
           perms <- new_perms
           obj <- new_obj
@@ -275,24 +244,20 @@ optimize_axis_strata_greedy <- function(
   list(perm = perm, perms = perms, obj = obj)
 }
 
-#' @rdname minimize-overlaps
-#' @export
-objective_fun <- function(
+objective_strata <- function(
   data, key, value, id, weight, perm
 ) {
-  if (is.list(perm)) {
-    objective_fun_perms(data, key, value, id, weight, perm)
-  } else {
-    objective_fun_perm(data, key, value, id, weight, perm)
-  }
-}
-
-objective_fun_perm <- function(
-  data, key, value, id, weight, perm
-) {
+  
+  data[[id]] <- contiguate(data[[id]])
   data <- permute_strata(data, key, value, id, perm)
+  # sort alluvia within strata
   data <- data[do.call(order, data[, c(key, value, id)]), ]
   axes <- sort(unique(data[[key]]))
+  
+  if (is.null(weight)) {
+    data[[".weight"]] <- 1
+    weight <- ".weight"
+  }
   
   obj <- 0
   for (i in seq_along(axes)[-1]) {
@@ -307,7 +272,7 @@ objective_fun_perm <- function(
     w[is.na(w)] <- 0
     # identify pairings from the left->right perspective
     rl_combn <- utils::combn(rl_match, 2)
-    # exclude pairings that don't intersect
+    # exclude pairings that don't intersect (relies on contiguation)
     # NOTE: SOME INTERSECTIONS WILL BE PREVENTED BY 'lode.ordering'
     # SO THIS PRODUCES AN OVERESTIMATE OF THE ACTUAL NUMBER OF INTERSECTIONS
     rl_combn <- rl_combn[, rl_combn[1, ] > rl_combn[2, ], drop = FALSE]
@@ -317,45 +282,40 @@ objective_fun_perm <- function(
   obj
 }
 
-objective_fun_perms <- function(
+objective_axis_strata <- function(
   data, key, value, id, weight, perms
 ) {
-  # ensure that 'data' is arranged by alluvium
-  data <- data[do.call(order, data[, c(id, key, value)]), ]
+  
+  data[[id]] <- contiguate(data[[id]])
+  data <- permute_axis_strata(data, key, value, id, perms)
+  # sort alluvia within strata
+  data <- data[do.call(order, data[, c(key, value, id)]), ]
   axes <- sort(unique(data[[key]]))
-  # arrange 'data' as in the alluvial diagram, according to 'perms'
-  for (i in seq_along(axes)) {
-    this_axis <- which(data[[key]] == axes[i])
-    # ORDER BY ALLUVIUM OR BY STRATUM LEVEL?
-    these_values <- sort(unique(data[[value]][this_axis]))
-    these_keyvalues <- if (is.factor(data[[value]])) {
-      as.numeric(droplevels(data[[value]][this_axis]))
-    } else {
-      as.numeric(factor(data[[value]][this_axis], levels = these_values))
-    }
-    data[[value]][this_axis] <- these_values[perms[[i]][these_keyvalues]]
+  
+  if (is.null(weight)) {
+    data[[".weight"]] <- 1
+    weight <- ".weight"
   }
+  
   obj <- 0
   for (i in seq_along(axes)[-1]) {
     # alluvia and strata on each side of the flow segment
     d_left <- data[data[[key]] == axes[i - 1], c(id, value, weight)]
     d_right <- data[data[[key]] == axes[i], c(id, value, weight)]
-    # arrangements of alluvia up to within-stratum permutations
-    # (which are irrelevant to the objective function)
-    p_left <- d_left[[id]][order(d_left[[value]])]
-    p_right <- d_right[[id]][order(d_right[[value]])]
-    # weights in order of alluvia
-    w_left <- d_left[[weight]][order(d_left[[id]])]
-    w_right <- d_right[[weight]][order(d_right[[id]])]
-    w <- (w_left + w_right) / 2
-    # identify the alluvia that intersect
+    # match the alluvia on either side
+    lr_match <- match(d_left[[id]], d_right[[id]])
+    rl_match <- match(d_right[[id]], d_left[[id]])
+    # mean 'weight' in order of 'd_left' (zero if no match)
+    w <- (d_left[[weight]] + d_right[[weight]][lr_match]) / 2
+    w[is.na(w)] <- 0
+    # identify pairings from the left->right perspective
+    rl_combn <- utils::combn(rl_match, 2)
+    # exclude pairings that don't intersect (relies on contiguation)
     # NOTE: SOME INTERSECTIONS WILL BE PREVENTED BY 'lode.ordering'
     # SO THIS PRODUCES AN OVERESTIMATE OF THE ACTUAL NUMBER OF INTERSECTIONS
-    p_match <- match(p_right, p_left)
-    p_combn <- utils::combn(p_match, 2)
-    p_combn <- p_combn[, p_combn[1, ] > p_combn[2, ], drop = FALSE]
-    # increment objective function
-    obj <- obj + sum(apply(rbind(w[p_combn[1, ]], w[p_combn[2, ]]), 2, prod))
+    rl_combn <- rl_combn[, rl_combn[1, ] > rl_combn[2, ], drop = FALSE]
+    # increment by the products of the weights of the intersecting alluvia
+    obj <- obj + sum(apply(rbind(w[rl_combn[1, ]], w[rl_combn[2, ]]), 2, prod))
   }
   obj
 }
@@ -367,10 +327,9 @@ permutation_length <- function(perm) {
 }
 
 #' @rdname minimize-overlaps
-#' @param perm,perms An integer vector or list of integer vectors encoding 
-#'   permutations of the strata, either all together (as output by 
-#'   \code{optimize_strata()}) or for each axis (as output by
-#'   \code{optimize_axis_strata()}).
+#' @param perm,perms An integer vector (\code{perm}) or list of integer vectors 
+#'   (\code{perms}) encoding permutation(s) of the strata, as output by
+#'   \code{optimize_strata()}).
 #' @export
 permute_strata <- function(data, key, value, id, perm) {
   stopifnot(is_alluvial_lodes(data, key, value, id))
@@ -395,10 +354,7 @@ permute_axis_strata <- function(data, key, value, id, perms) {
                                      lex.order = TRUE, drop = TRUE))
   # replace any duplicates with adjusted names
   value_levs <- as.character(data[[value]][!duplicated(keyvalue)])
-  while (anyDuplicated(value_levs)) {
-    which_dupe <- duplicated(value_levs)
-    value_levs[which_dupe] <- paste0(value_levs[which_dupe], " ")
-  }
+  value_levs <- make.unique(value_levs, sep = "")
   # reorder value variable according to 'perms'
   # permute the order of 'keyvalue' at each axis
   perm_cums <- c(0, cumsum(sapply(perms, length)))
