@@ -48,7 +48,7 @@ For now, we use the image as a point of reference to define the following elemen
 - The groups at each axis are depicted as opaque blocks called *strata*. For example, the `Class` axis contains four strata: `1st`, `2nd`, `3rd`, and `Crew`.
 - Horizontal (x-) splines called *alluvia* span the width of the diagram. In this diagram, each alluvium corresponds to a fixed value of each axis variable, indicated by its vertical position at the axis, as well as of the `Survived` variable, indicated by its fill color.
 - The segments of the alluvia between pairs of adjacent axes are *flows*.
-- The alluvia intersect the strata at *lodes*, The lodes are not visualized in the above diagram, but they can be inferred as filled rectangles extending the flows through the strata at each end of the diagram or connecting the flows on either side of the center stratum.
+- The alluvia intersect the strata at *lodes*. The lodes are not visualized in the above diagram, but they can be inferred as filled rectangles extending the flows through the strata at each end of the diagram or connecting the flows on either side of the center stratum.
 
 As the examples in the next section will demonstrate, which of these elements are incorporated into an alluvial diagram depends on both how the underlying data is structured and what the creator wants the diagram to communicate.
 
