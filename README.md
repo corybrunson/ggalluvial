@@ -39,4 +39,4 @@ The documentation contains several examples; use `help()` to call forth examples
 
 ## Contribute
 
-Issues and pull requests are more than welcome!
+Issues and pull requests are more than welcome! Pretty much every fix and feature of this package derives from a problem or question posed by someone with datasets or design goals i hadn't anticipated.
