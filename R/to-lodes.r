@@ -10,10 +10,12 @@
 #' @param key,value,id Character; names given to the axis (variable), stratum
 #'   (value), and alluvium (identifying) variables.
 #' @param axes Numeric or character vector; which variables to use as axes.
+#' @param keep Numeric or character vector; which variables among those passed
+#'   to \code{axes} to merge into the reshapen data by \code{id}.
 #' @export
 to_lodes <- function(data,
                      key = "x", value = "stratum", id = "alluvium",
-                     axes) {
+                     axes, keep = NULL) {
   
   stopifnot(is_alluvial(data, axes = axes, silent = TRUE))
   
@@ -21,19 +23,29 @@ to_lodes <- function(data,
   
   if (is.character(axes)) {
     axes <- match(axes, names(data))
-  } else {
-    axes <- names(data)[axes]
+  }
+  axes <- names(data)[axes]
+  if (!is.null(keep)) {
+    if (is.character(keep)) {
+      keep <- match(keep, names(data))
+    }
+    keep <- names(data)[keep]
+    if (!all(keep %in% axes)) {
+      stop("All 'keep' variables must be 'axes' variables.")
+    }
   }
   strata <- unique(unname(do.call(c, lapply(data[axes],
                                             function(x) levels(as.factor(x))))))
-  for (i in axes) data[[i]] <- as.character(data[[i]])
   
   data[[id]] <- 1:nrow(data)
+  if (!is.null(keep)) keep_data <- data[, c(id, keep), drop = FALSE]
+  for (i in axes) data[[i]] <- as.character(data[[i]])
   
   res <- tidyr::gather_(data,
                         key_col = key, value_col = value,
                         gather_col = axes, factor_key = TRUE)
   res[[value]] <- factor(res[[value]], levels = strata)
+  if (!is.null(keep)) res <- dplyr::left_join(res, keep_data, by = id)
   
   res
 }

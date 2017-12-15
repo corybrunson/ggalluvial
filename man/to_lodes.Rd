@@ -4,7 +4,8 @@
 \alias{to_lodes}
 \title{Combine multiple axis variables into an axis indicator and an axis value}
 \usage{
-to_lodes(data, key = "x", value = "stratum", id = "alluvium", axes)
+to_lodes(data, key = "x", value = "stratum", id = "alluvium", axes,
+  keep = NULL)
 }
 \arguments{
 \item{data}{Data frame.}
@@ -13,6 +14,9 @@ to_lodes(data, key = "x", value = "stratum", id = "alluvium", axes)
 (value), and alluvium (identifying) variables.}
 
 \item{axes}{Numeric or character vector; which variables to use as axes.}
+
+\item{keep}{Numeric or character vector; which variables among those passed
+to \code{axes} to merge into the reshapen data by \code{id}.}
 }
 \description{
 Take a data frame with several designated variables to be used as axes in an 
