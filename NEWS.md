@@ -1,3 +1,8 @@
+# ggalluvial 0.5.0.9000
+
+- Source files and documentation for `is_alluvial_*()` and `to_*()` functions are combined.
+- `to_lodes()` now has a `keep` parameter to join any original variables to the reformatted data by the `id` variable (alluvium). This makes it possible to assign original variables to aesthetics after reformatting, as illustrated in a new example.
+
 # ggalluvial 0.5.0
 
 ## Backward incompatibilities
