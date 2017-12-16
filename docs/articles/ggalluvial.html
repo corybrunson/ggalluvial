@@ -84,14 +84,14 @@
 <li>The groups at each axis are depicted as opaque blocks called <em>strata</em>. For example, the <code>Class</code> axis contains four strata: <code>1st</code>, <code>2nd</code>, <code>3rd</code>, and <code>Crew</code>.</li>
 <li>Horizontal (x-) splines called <em>alluvia</em> span the width of the diagram. In this diagram, each alluvium corresponds to a fixed value of each axis variable, indicated by its vertical position at the axis, as well as of the <code>Survived</code> variable, indicated by its fill color.</li>
 <li>The segments of the alluvia between pairs of adjacent axes are <em>flows</em>.</li>
-<li>The alluvia intersect the strata at <em>lodes</em>. The lodes are not visualized in the above diagram, but they can be inferred as filled rectangles extending the flows through the strata at each end of the diagram or connecting the flows on either side of the center stratum.</li>
+<li>The alluvia intersect the strata at <em>lodes</em>, rectangles extending the flows through the strata at each end of the diagram or connecting the flows on either side of the center stratum. The lodes are generated as parts of the alluvia in the above diagram, but they are obscured from view by the strata.</li>
 </ul>
 <p>As the examples in the next section will demonstrate, which of these elements are incorporated into an alluvial diagram depends on both how the underlying data is structured and what the creator wants the diagram to communicate.</p>
 </div>
 <div id="alluvial-data" class="section level2">
 <h2 class="hasAnchor">
 <a href="#alluvial-data" class="anchor"></a>Alluvial data</h2>
-<p><strong>ggalluvial</strong> recognizes two formats of “alluvial data”, detailed in the following subsections. A third, tabular, form is popular for storing categorical data such as the <code>Titanic</code> and <code>UCBAdmissions</code> datasets used in this vignette.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> For consistency with tidy data principles and <strong>ggplot2</strong> conventions, <strong>ggalluvial</strong> does not accept tabular input.</p>
+<p><strong>ggalluvial</strong> recognizes two formats of “alluvial data”, in which rows record either alluvia or lodes. The formats are related by a pair of operations, <code><a href="../reference/alluvial-data.html">to_lodes()</a></code> and <code><a href="../reference/alluvial-data.html">to_alluvia()</a></code>. These functions are adapted from <code><a href="http://www.rdocumentation.org/packages/tidyr/topics/spread">tidyr::spread()</a></code> and <code><a href="http://www.rdocumentation.org/packages/tidyr/topics/gather">tidyr::gather()</a></code> in order to also maintain the entanglement between alluvia and strata. A third, tabular, form is popular for storing categorical data such as the <code>Titanic</code> and <code>UCBAdmissions</code> datasets used in this vignette.<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> For consistency with tidy data principles and <strong>ggplot2</strong> conventions, <strong>ggalluvial</strong> does not accept tabular input.</p>
 <div id="alluvia-format" class="section level3">
 <h3 class="hasAnchor">
 <a href="#alluvia-format" class="anchor"></a>Alluvia format</h3>
@@ -121,7 +121,8 @@
 <span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">"Gender"</span>, <span class="st">"Dept"</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">"UC Berkeley admissions and rejections, by sex and department"</span>)</code></pre></div>
 <p><img src="ggalluvial_files/figure-html/alluvial%20diagram%20of%20UC%20Berkeley%20admissions%20dataset-1.png" width="576" style="display: block; margin: auto;"></p>
-<p>An important feature of these diagrams is the meaningfulness of the vertical axis: No gaps are inserted between the strata, so the total height of the diagram reflects the cumulative weight of the observations. The diagrams produced by <strong>ggalluvial</strong> conform (somewhat; see below) to the “grammar of graphics” principles of <strong>ggplot2</strong>, and this prevents users from producing “free-floating” diagrams like the Sankey diagrams showcased <a href="https://developers.google.com/chart/interactive/docs/gallery/sankey">here</a>.<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> <strong>ggalluvial</strong> parameters and existing <strong>ggplot2</strong> functionality can also produce <a href="https://eagereyes.org/parallel-sets">parallel sets</a> plots, illustrated here using the <code>Titanic</code> dataset:<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a></p>
+<p>The vertical axis scale is an important feature of these diagrams: No gaps are inserted between the strata, so the total height of the diagram reflects the cumulative weight (in this case, the count) of the observations. The diagrams produced by <strong>ggalluvial</strong> conform (somewhat; see below) to the “grammar of graphics” principles of <strong>ggplot2</strong>, and this prevents users from producing “free-floating” diagrams like the Sankey diagrams showcased <a href="https://developers.google.com/chart/interactive/docs/gallery/sankey">here</a>.</p>
+<p><strong>ggalluvial</strong> parameters and existing <strong>ggplot2</strong> functionality can also produce <a href="https://eagereyes.org/parallel-sets">parallel sets</a> plots, illustrated here using the <code>Titanic</code> dataset:<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">as.data.frame</span>(Titanic),
        <span class="kw">aes</span>(<span class="dt">weight =</span> Freq,
            <span class="dt">axis1 =</span> Survived, <span class="dt">axis2 =</span> Sex, <span class="dt">axis3 =</span> Class)) <span class="op">+</span>
@@ -139,8 +140,8 @@
 <li>The <code>axis[0-9]*</code> position aesthetics are non-standard.</li>
 <li>
 <code><a href="../reference/stat_alluvium.html">stat_alluvium()</a></code> ignores any argument to the <code>group</code> aesthetic; instead, <code>StatAlluvium$compute_panel()</code> uses <code>group</code> to link the rows of the internally-transformed dataset that correspond to the same alluvium.</li>
-<li>The <code>label.strata</code> parameter instructs <code><a href="../reference/stat_stratum.html">stat_stratum()</a></code> (called by <code>geom_text()</code>) to take the values of the axis variables as labels.</li>
-<li>The horizontal axis must be manually corrected (using <code>scale_x_continuous()</code>) to reflect the implicit categorical variable identifying the axis.</li>
+<li>The <code>label.strata</code> parameter instructs <code><a href="../reference/stat_stratum.html">stat_stratum()</a></code> (called by <code>geom_text()</code> in the above code chunk) to take the values of the axis variables as labels.</li>
+<li>The horizontal scale must be manually corrected (using <code>scale_x_continuous()</code>) to reflect the implicit categorical variable indicating which axis variable each horizontal position corresponds to.</li>
 </ul>
 <p>Furthermore, format aesthetics like <code>fill</code> are necessarily fixed for each alluvium; they cannot, for example, change from axis to axis according to the value taken at each. This means that, although they can reproduce the branching-tree structure of parallel sets, this format and functionality cannot produce alluvial diagrams with the color schemes featured <a href="https://epijim.uk/code-snippets/eq5d/">here</a> (“Alluvial diagram”) and <a href="https://developers.google.com/chart/interactive/docs/gallery/sankey">here</a> (“Controlling colors”), which are “reset” at each axis.</p>
 </div>
@@ -168,13 +169,13 @@
 <p>The same stat and geom can receive this data format using a different set of positional aesthetics, also specific to <strong>ggalluvial</strong>:</p>
 <ul>
 <li>
-<code>x</code>, the “key” variable indicating the axis to which the row corresponds, which are to be arranged along the horizontal axis;</li>
+<code>x</code>, the “key” variable indicating the axis to which the row corresponds, which are to be arranged horizontally;</li>
 <li>
 <code>stratum</code>, the “value” taken by the axis variable indicated by <code>x</code>; and</li>
 <li>
-<code>alluvium</code>, the indexing scheme that links the rows of a single alluvium.</li>
+<code>alluvium</code>, the indexing scheme that links the lodes of a single alluvium.</li>
 </ul>
-<p>Weights (and weight totals) can vary from axis to axis, allowing users to produce bump charts like those showcased <a href="http://imgur.com/gallery/gI5p7">here</a>.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> In these cases, the strata are an artifact of the alluvia and usually not plotted. For convenience, both <code><a href="../reference/stat_alluvium.html">stat_alluvium()</a></code> and <code><a href="../reference/stat_flow.html">stat_flow()</a></code> accept arguments for <code>x</code> and <code>alluvium</code> even if none is given for <code>stratum</code>.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a> As an example, we can grop countries in the <code>Refugees</code> dataset by region, in order to compare refugee volumes at different scales:</p>
+<p>Weights (and weight totals) can vary from axis to axis, allowing users to produce bump charts like those showcased <a href="http://imgur.com/gallery/gI5p7">here</a>.<a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> In these cases, the strata are an artifact of the alluvia and usually not plotted. For convenience, both <code><a href="../reference/stat_alluvium.html">stat_alluvium()</a></code> and <code><a href="../reference/stat_flow.html">stat_flow()</a></code> accept arguments for <code>x</code> and <code>alluvium</code> even if none is given for <code>stratum</code>.<a href="#fn4" class="footnoteRef" id="fnref4"><sup>4</sup></a> As an example, we can grop countries in the <code>Refugees</code> dataset by region, in order to compare refugee volumes at different scales:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(Refugees, <span class="dt">package =</span> <span class="st">"alluvial"</span>)
 country_regions &lt;-<span class="st"> </span><span class="kw">c</span>(
   <span class="dt">Afghanistan =</span> <span class="st">"Middle East"</span>,
@@ -200,7 +201,7 @@ Refugees<span class="op">$</span>region &lt;-<span class="st"> </span>country_re
 <span class="st">  </span><span class="kw">facet_wrap</span>(<span class="op">~</span><span class="st"> </span>region, <span class="dt">scales =</span> <span class="st">"fixed"</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">"refugee volume by country and region of origin"</span>)</code></pre></div>
 <p><img src="ggalluvial_files/figure-html/time%20series%20alluvia%20diagram%20of%20refugees%20dataset-1.png" width="576" style="display: block; margin: auto;"></p>
-<p>The format allows us to assign aesthetics that change from axis to axis along the same alluvium, which is useful for repeated measures datasets. This requires generating a separate graphical object for each flow, as implemented in <code><a href="../reference/geom_flow.html">geom_flow()</a></code>. The plot below uses a set of (changes to) students’ academic curricula over the course of several semesters. Since <code><a href="../reference/geom_flow.html">geom_flow()</a></code> calls <code><a href="../reference/stat_flow.html">stat_flow()</a></code> by default (see the next example), we override it with <code><a href="../reference/stat_alluvium.html">stat_alluvium()</a></code> in order to track each student across all semesters:</p>
+<p>The format allows us to assign aesthetics that change from axis to axis along an alluvium, which is useful for repeated measures datasets. This requires generating a separate graphical object for each flow, as implemented in <code><a href="../reference/geom_flow.html">geom_flow()</a></code>. The plot below visualizes a set of (changes to) students’ academic curricula over the course of several semesters. Since <code><a href="../reference/geom_flow.html">geom_flow()</a></code> calls <code><a href="../reference/stat_flow.html">stat_flow()</a></code> by default (see the next example), we override it with <code><a href="../reference/stat_alluvium.html">stat_alluvium()</a></code> in order to track each student across all semesters:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(majors)
 majors<span class="op">$</span>curriculum &lt;-<span class="st"> </span><span class="kw">as.factor</span>(majors<span class="op">$</span>curriculum)
 <span class="kw">ggplot</span>(majors,
@@ -212,7 +213,7 @@ majors<span class="op">$</span>curriculum &lt;-<span class="st"> </span><span cl
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">"bottom"</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">"student curricula across several semesters"</span>)</code></pre></div>
 <p><img src="ggalluvial_files/figure-html/alluvial%20diagram%20of%20majors%20dataset-1.png" width="576" style="display: block; margin: auto;"></p>
-<p>No <code>weight</code> is specified, so each row is assigned unit weight. This example demonstrates one way <strong>ggalluvial</strong> handles missing data. The alternative is to set the parameter <code>na.rm</code> to <code>TRUE</code>.<a href="#fn6" class="footnoteRef" id="fnref6"><sup>6</sup></a> Missing data handling (specifically, the order of the strata) also depends on whether the <code>stratum</code> variable is character or factor/numeric.</p>
+<p>No <code>weight</code> is specified, so each row is assigned unit weight. This example demonstrates one way <strong>ggalluvial</strong> handles missing data. The alternative is to set the parameter <code>na.rm</code> to <code>TRUE</code>.<a href="#fn5" class="footnoteRef" id="fnref5"><sup>5</sup></a> Missing data handling (specifically, the order of the strata) also depends on whether the <code>stratum</code> variable is character or factor/numeric.</p>
 <p>Finally, lode format gives us the option to aggregate the flows between adjacent axes, which may be appropriate when the transitions between adjacent axes are of primary importance. We can demonstrate this option on data from the influenza vaccination surveys conducted by the <a href="https://alpdata.rand.org/">RAND American Life Panel</a>:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">data</span>(vaccinations)
 <span class="kw">levels</span>(vaccinations<span class="op">$</span>response) &lt;-<span class="st"> </span><span class="kw">rev</span>(<span class="kw">levels</span>(vaccinations<span class="op">$</span>response))
@@ -264,11 +265,10 @@ majors<span class="op">$</span>curriculum &lt;-<span class="st"> </span><span cl
 <hr>
 <ol>
 <li id="fn1"><p>See Friendly’s tutorial, linked above, for a discussion.<a href="#fnref1">↩</a></p></li>
-<li id="fn2"><p><a href="https://github.com/thomasp85/ggforce">The <strong>ggforce</strong> package</a> includes parallel set geom and stat layers to produce similar diagrams that can be allowed to free-float.<a href="#fnref2">↩</a></p></li>
-<li id="fn3"><p>A greater variety of parallel sets plots are implemented in <a href="https://github.com/heike/ggparallel">the <strong>ggparallel</strong> package</a>.<a href="#fnref3">↩</a></p></li>
-<li id="fn4"><p>If bumping is unnecessary, consider using <a href="http://www.r-graph-gallery.com/136-stacked-area-chart/"><code>geom_area()</code></a> instead.<a href="#fnref4">↩</a></p></li>
-<li id="fn5"><p><code><a href="../reference/stat_stratum.html">stat_stratum()</a></code> will similarly accept arguments for <code>x</code> and <code>stratum</code> without <code>alluvium</code>. If both strata and either alluvia or flows are to be plotted, though, all three parameters need arguments.<a href="#fnref5">↩</a></p></li>
-<li id="fn6"><p>Be sure to set <code>na.rm</code> consistently in each layer, in this case both the flows and the strata.<a href="#fnref6">↩</a></p></li>
+<li id="fn2"><p>A greater variety of parallel sets plots are implemented in <a href="https://github.com/heike/ggparallel">the <strong>ggparallel</strong> package</a>.<a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p>If bumping is unnecessary, consider using <a href="http://www.r-graph-gallery.com/136-stacked-area-chart/"><code>geom_area()</code></a> instead.<a href="#fnref3">↩</a></p></li>
+<li id="fn4"><p><code><a href="../reference/stat_stratum.html">stat_stratum()</a></code> will similarly accept arguments for <code>x</code> and <code>stratum</code> without <code>alluvium</code>. If both strata and either alluvia or flows are to be plotted, though, all three parameters need arguments.<a href="#fnref4">↩</a></p></li>
+<li id="fn5"><p>Be sure to set <code>na.rm</code> consistently in each layer, in this case both the flows and the strata.<a href="#fnref5">↩</a></p></li>
 </ol>
 </div>
 </div>
