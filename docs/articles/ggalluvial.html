@@ -110,7 +110,7 @@
 ## 10 Rejected   Male    C  205
 ## 11 Admitted Female    C  202
 ## 12 Rejected Female    C  391</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/is_alluvial.html">is_alluvial</a></span>(<span class="kw">as.data.frame</span>(UCBAdmissions), <span class="dt">logical =</span> <span class="ot">FALSE</span>, <span class="dt">silent =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/alluvial-data.html">is_alluvial</a></span>(<span class="kw">as.data.frame</span>(UCBAdmissions), <span class="dt">logical =</span> <span class="ot">FALSE</span>, <span class="dt">silent =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## [1] "alluvia"</code></pre>
 <p>This format is inherited from the first version of <strong>ggalluvial</strong>, which modeled it after usage in <strong>alluvial</strong>. It required a stark departure from the usual position aesthetics: The user declares any number of axis variables, which <code><a href="../reference/stat_alluvium.html">stat_alluvium()</a></code> and <code><a href="../reference/stat_stratum.html">stat_stratum()</a></code> recognize and process in a consistent way:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">as.data.frame</span>(UCBAdmissions),
@@ -147,8 +147,8 @@
 <div id="lodes-format" class="section level3">
 <h3 class="hasAnchor">
 <a href="#lodes-format" class="anchor"></a>Lodes format</h3>
-<p>The second format recognized by <strong>ggalluvial</strong> contains <em>one row per lode</em>, and can be understood as the result of “gathering” (in the <strong>dplyr</strong> sense) the axis columns of a dataset in the alluvia format into a key-value pair of columns encoding the axis as the <code>key</code> and the stratum as the <code>value</code>. This format requires an additional indexing <code>id</code> column that links the rows corresponding to a common cohort, i.e. the lodes of a single alluvium, as illustrated below using the <code><a href="../reference/to_lodes.html">to_lodes()</a></code> defaults on the Berkeley admissions dataset:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">UCB_lodes &lt;-<span class="st"> </span><span class="kw"><a href="../reference/to_lodes.html">to_lodes</a></span>(<span class="kw">as.data.frame</span>(UCBAdmissions), <span class="dt">axes =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)
+<p>The second format recognized by <strong>ggalluvial</strong> contains <em>one row per lode</em>, and can be understood as the result of “gathering” (in the <strong>dplyr</strong> sense) the axis columns of a dataset in the alluvia format into a key-value pair of columns encoding the axis as the <code>key</code> and the stratum as the <code>value</code>. This format requires an additional indexing <code>id</code> column that links the rows corresponding to a common cohort, i.e. the lodes of a single alluvium, as illustrated below using the <code><a href="../reference/alluvial-data.html">to_lodes()</a></code> defaults on the Berkeley admissions dataset:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">UCB_lodes &lt;-<span class="st"> </span><span class="kw"><a href="../reference/alluvial-data.html">to_lodes</a></span>(<span class="kw">as.data.frame</span>(UCBAdmissions), <span class="dt">axes =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)
 <span class="kw">head</span>(UCB_lodes, <span class="dt">n =</span> <span class="dv">12</span>)</code></pre></div>
 <pre><code>##    Freq alluvium     x  stratum
 ## 1   512        1 Admit Admitted
@@ -163,7 +163,7 @@
 ## 10  205       10 Admit Rejected
 ## 11  202       11 Admit Admitted
 ## 12  391       12 Admit Rejected</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/is_alluvial.html">is_alluvial</a></span>(UCB_lodes, <span class="dt">logical =</span> <span class="ot">FALSE</span>, <span class="dt">silent =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/alluvial-data.html">is_alluvial</a></span>(UCB_lodes, <span class="dt">logical =</span> <span class="ot">FALSE</span>, <span class="dt">silent =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <pre><code>## [1] "alluvia"</code></pre>
 <p>The same stat and geom can receive this data format using a different set of positional aesthetics, also specific to <strong>ggalluvial</strong>:</p>
 <ul>

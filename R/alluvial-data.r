@@ -1,4 +1,4 @@
-#' Check a data frame for alluvial structure
+#' Check for alluvial structure and convert between alluvial formats
 #' 
 #' Alluvial diagrams consist of multiple horizontally-distributed columns (axes)
 #' representing factor variables, vertical divisions (strata) of these axes
@@ -21,14 +21,28 @@
 #' \code{is_alluvial} will default to \code{is_alluvial_alluvia} and assume that
 #' all fields in \code{data} (other than \code{weight}, if given) are to be
 #' treated as axes.
-#' @name is_alluvial
-#' @param data Data frame.
+#' 
+
+#' \code{to_lodes} takes a data frame with several designated variables to be 
+#' used as axes in an alluvial diagram, and reshapes the data frame so that the 
+#' axis variable names constitute a new factor variable and their values 
+#' comprise another. Other variables' values will be repeated, and a 
+#' row-grouping variable can be introduced. This function invokes 
+#' \code{\link[tidyr]{gather_}}.
+#' 
+#' \code{to_alluvia} takes a data frame with axis and axis value variables to be
+#' used in an alluvial diagram, and reshape the data frame so that the axes
+#' constitute separate variables whose values are given by the value variable.
+#' This function invokes \code{\link[tidyr]{spread_}}.
+#' 
+
+#' @name alluvial-data
+#' @param data A data frame.
 #' @param ... Additional parameters used to determine method and passed
 #'   thereto. All or none of \code{key}, \code{value}, and \code{id}, or else
 #'   optionally \code{axes}, and (in either case) optionally \code{weight}.
-#' @param logical Whether to return a logical value (TRUE, the default) or a 
-#'   character string indicating the type of alluvial structure ("none", 
-#'   "lodes", or "alluvia")
+#' @param logical Whether to return a logical value or a character string
+#'   indicating the type of alluvial structure ("none", "lodes", or "alluvia")
 #' @param silent Whether to print warning messages.
 #' @param key,value,id Numeric or character; the fields of \code{data}
 #'   corresponding to the axis (variable), stratum (value), and alluvium
@@ -37,7 +51,9 @@
 #'   corresponding to the axi(e)s (variable(s)).
 #' @param weight Optional numeric or character; the fields of \code{data}
 #'   corresponding to alluvium or lode weights (heights when plotted).
-#' @example inst/examples/ex-is-alluvial.r
+#' @param keep Numeric or character vector; which variables among those passed
+#'   to \code{axes} to merge into the reshapen data by \code{id}.
+#' @example inst/examples/ex-alluvial-data.r
 #' @export
 is_alluvial <- function(data, ..., logical = TRUE, silent = FALSE) {
   
@@ -54,7 +70,7 @@ is_alluvial <- function(data, ..., logical = TRUE, silent = FALSE) {
   }
 }
 
-#' @rdname is_alluvial
+#' @rdname alluvial-data
 #' @export
 is_alluvial_lodes <- function(
   data,
@@ -63,9 +79,9 @@ is_alluvial_lodes <- function(
   logical = TRUE, silent = FALSE
 ) {
   
-  if (missing(key) | missing(value) | missing(id)) {
-    stop("Each of 'key', 'value', and 'id' is required.")
-  }
+  key <- ensure_columns(key, data)
+  value <- ensure_columns(value, data)
+  id <- ensure_columns(id, data)
   
   if (any(duplicated(cbind(data[[key]], data[[id]])))) {
     if (!silent) warning("Duplicated id-axis pairings.")
@@ -87,11 +103,11 @@ is_alluvial_lodes <- function(
   if (logical) TRUE else "lodes"
 }
 
-#' @rdname is_alluvial
+#' @rdname alluvial-data
 #' @export
 is_alluvial_alluvia <- function(
   data,
-  axes,
+  axes = NULL,
   weight = NULL,
   logical = TRUE, silent = FALSE
 ) {
@@ -103,14 +119,13 @@ is_alluvial_alluvia <- function(
     }
   }
   
-  if (is.numeric(weight)) weight <- names(data)[weight]
-  axes <- if (missing(axes)) {
-    setdiff(names(data), weight)
-  } else if (is.character(axes)) {
-    match(axes, names(data))
-  } else {
-    names(data)[axes]
+  if (!is.null(weight)) {
+    weight <- ensure_columns(weight, data)
   }
+  if (is.null(axes)) {
+    axes <- setdiff(names(data), weight)
+  }
+  axes <- ensure_columns(axes, data)
   
   n_alluvia <- nrow(dplyr::distinct(data[axes]))
   n_combns <- do.call(prod, lapply(data[axes], dplyr::n_distinct))
@@ -119,4 +134,65 @@ is_alluvial_alluvia <- function(
   }
   
   if (logical) TRUE else "alluvia"
+}
+
+#' @rdname alluvial-data
+#' @export
+to_lodes <- function(data,
+                     key = "x", value = "stratum", id = "alluvium",
+                     axes, keep = NULL) {
+  
+  stopifnot(is_alluvial(data, axes = axes, silent = TRUE))
+  
+  if (!is.data.frame(data)) data <- as.data.frame(data)
+  
+  axes <- ensure_columns(axes, data)
+  if (!is.null(keep)) {
+    keep <- ensure_columns(keep, data)
+    if (!all(keep %in% axes)) {
+      stop("All 'keep' variables must be 'axes' variables.")
+    }
+  }
+  strata <- unique(unname(do.call(c, lapply(data[axes],
+                                            function(x) levels(as.factor(x))))))
+  
+  data[[id]] <- 1:nrow(data)
+  if (!is.null(keep)) keep_data <- data[, c(id, keep), drop = FALSE]
+  for (i in axes) data[[i]] <- as.character(data[[i]])
+  
+  res <- tidyr::gather_(data,
+                        key_col = key, value_col = value,
+                        gather_col = axes, factor_key = TRUE)
+  res[[value]] <- factor(res[[value]], levels = strata)
+  if (!is.null(keep)) res <- dplyr::left_join(res, keep_data, by = id)
+  
+  res
+}
+
+#' @rdname alluvial-data
+#' @export
+to_alluvia <- function(data, key, value, id) {
+  
+  key <- ensure_columns(key, data)
+  value <- ensure_columns(value, data)
+  id <- ensure_columns(id, data)
+  
+  stopifnot(is_alluvial(data, key = key, value = value, id = id, silent = TRUE))
+  
+  # check that remaining columns are fixed by id
+  n_id <- dplyr::n_distinct(data[[id]])
+  n_row <- nrow(unique(data[, setdiff(names(data), c(key, value)),
+                            drop = FALSE]))
+  if (!(n_id == n_row))
+    stop("Non-'key'/'value' fields vary within 'id's.")
+  
+  res <- tidyr::spread_(data, key = key, value = value)
+  res[order(res[[id]]), ]
+}
+
+ensure_columns <- function(x, data) {
+  if (is.character(x)) {
+    x <- match(x, names(data))
+  }
+  names(data)[x]
 }

@@ -20,20 +20,15 @@ ggplot(as.data.frame(Titanic),
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
 
 data(vaccinations)
+gg <- ggplot(vaccinations,
+             aes(x = survey, stratum = response, alluvium = subject,
+                 weight = freq, fill = response)) +
+  geom_stratum(alpha = .5) +
+  geom_text(aes(label = response), stat = "stratum")
 # rightward alluvial aesthetics for vaccine survey data
-ggplot(vaccinations,
-       aes(x = survey, stratum = response, alluvium = subject,
-           weight = freq, fill = response)) +
-  geom_flow(stat = "alluvium", lode.guidance = "rightward") +
-  geom_stratum(alpha = .5) +
-  geom_text(aes(label = response), stat = "stratum")
+gg + geom_flow(stat = "alluvium", lode.guidance = "rightward")
 # memoryless flows for vaccine survey data
-ggplot(vaccinations,
-       aes(x = survey, stratum = response, alluvium = subject,
-           weight = freq, fill = response)) +
-  geom_flow() +
-  geom_stratum(alpha = .5) +
-  geom_text(aes(label = response), stat = "stratum")
+gg + geom_flow()
 
 # aesthetics that vary betwween and within strata
 data(vaccinations)
@@ -47,7 +42,6 @@ ggplot(vaccinations,
   scale_alpha_discrete(range = c(1/3, 2/3)) +
   geom_stratum(alpha = .5) +
   geom_text(stat = "stratum")
-
 # can even set aesthetics that vary both ways
 ggplot(vaccinations,
        aes(x = survey, stratum = response, alluvium = subject,

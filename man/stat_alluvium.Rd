@@ -121,27 +121,20 @@ ggplot(as.data.frame(Titanic),
   scale_x_continuous(breaks = 1:3,
                      labels = c("Class", "Sex", "Age"))
 
-# use of lode controls
-ggplot(as.data.frame(Titanic),
-       aes(weight = Freq,
-           axis1 = Class, axis2 = Sex, axis3 = Age)) +
-  geom_flow(aes(fill = Survived), stat = "alluvium",
-            aes.bind = TRUE, lode.guidance = "rightward") +
+gg <- ggplot(as.data.frame(Titanic),
+             aes(weight = Freq,
+                 axis1 = Class, axis2 = Sex, axis3 = Age)) +
   geom_stratum() + geom_text(stat = "stratum", label.strata = TRUE) +
   scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
-
+# use of lode controls
+gg + geom_flow(aes(fill = Survived), stat = "alluvium",
+               aes.bind = TRUE, lode.guidance = "rightward")
 # use of lode ordering
 lode_ord <- replicate(n = 3, expr = sample(x = 32), simplify = FALSE)
-ggplot(as.data.frame(Titanic),
-       aes(weight = Freq,
-           axis1 = Class, axis2 = Sex, axis3 = Age)) +
-  geom_flow(aes(fill = Survived), stat = "alluvium",
-            lode.ordering = lode_ord) +
-  geom_stratum() + geom_text(stat = "stratum", label.strata = TRUE) +
-  scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
+gg + geom_flow(aes(fill = Survived), stat = "alluvium",
+               lode.ordering = lode_ord)
 
 data(majors)
-
 # omit missing lodes and incident flows
 ggplot(majors,
        aes(x = semester, stratum = curriculum, alluvium = student,
@@ -150,21 +143,17 @@ ggplot(majors,
   geom_stratum(aes(fill = curriculum), color = NA, na.rm = TRUE) +
   theme_bw()
 
-# diagram with outlined alluvia and forward-colored flows
-ggplot(majors,
-       aes(x = semester, stratum = curriculum, alluvium = student,
-           fill = curriculum, label = curriculum)) +
-  geom_flow(stat = "alluvium", lode.guidance = "rightleft",
-            color = "black") +
+gg <- ggplot(majors,
+             aes(x = semester, stratum = curriculum, alluvium = student,
+                 fill = curriculum, label = curriculum)) +
   geom_stratum()
+# diagram with outlined alluvia and forward-colored flows
+gg + geom_flow(stat = "alluvium", lode.guidance = "rightleft",
+               color = "black")
 # same diagram with alluvium aggregation enabled,
 # so that students are aggregated into cohorts
-ggplot(majors,
-       aes(x = semester, stratum = curriculum, alluvium = student,
-           fill = curriculum, label = curriculum)) +
-  geom_flow(stat = "alluvium", lode.guidance = "rightleft",
-            color = "black", aggregate.wts = TRUE) +
-  geom_stratum()
+gg + geom_flow(stat = "alluvium", lode.guidance = "rightleft",
+               color = "black", aggregate.wts = TRUE)
 
 \dontrun{
   data(babynames, package = "babynames")
