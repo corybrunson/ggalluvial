@@ -51,8 +51,10 @@
 #'   corresponding to the axi(e)s (variable(s)).
 #' @param weight Optional numeric or character; the fields of \code{data}
 #'   corresponding to alluvium or lode weights (heights when plotted).
-#' @param keep Numeric or character vector; which variables among those passed
-#'   to \code{axes} to merge into the reshapen data by \code{id}.
+#' @param keep Either a numeric or character vector; which variables among those
+#'   passed to \code{axes} to merge into the reshapen data by \code{id}, or
+#'   logical, indicating whether to merge all (\code{TRUE}) or none
+#'   (\code{FALSE}) of these variables.
 #' @example inst/examples/ex-alluvial-data.r
 #' @export
 is_alluvial <- function(data, ..., logical = TRUE, silent = FALSE) {
@@ -72,12 +74,10 @@ is_alluvial <- function(data, ..., logical = TRUE, silent = FALSE) {
 
 #' @rdname alluvial-data
 #' @export
-is_alluvial_lodes <- function(
-  data,
-  key, value, id,
-  weight = NULL,
-  logical = TRUE, silent = FALSE
-) {
+is_alluvial_lodes <- function(data,
+                              key, value, id,
+                              weight = NULL,
+                              logical = TRUE, silent = FALSE) {
   
   key <- ensure_columns(key, data)
   value <- ensure_columns(value, data)
@@ -105,12 +105,10 @@ is_alluvial_lodes <- function(
 
 #' @rdname alluvial-data
 #' @export
-is_alluvial_alluvia <- function(
-  data,
-  axes = NULL,
-  weight = NULL,
-  logical = TRUE, silent = FALSE
-) {
+is_alluvial_alluvia <- function(data,
+                                axes = NULL,
+                                weight = NULL,
+                                logical = TRUE, silent = FALSE) {
   
   if (!is.null(weight)) {
     if (!is.numeric(data[[weight]])) {
@@ -140,14 +138,16 @@ is_alluvial_alluvia <- function(
 #' @export
 to_lodes <- function(data,
                      key = "x", value = "stratum", id = "alluvium",
-                     axes, keep = NULL) {
+                     axes, keep = FALSE) {
   
   stopifnot(is_alluvial(data, axes = axes, silent = TRUE))
   
   if (!is.data.frame(data)) data <- as.data.frame(data)
   
   axes <- ensure_columns(axes, data)
-  if (!is.null(keep)) {
+  if (is.logical(keep)) {
+    keep <- if (keep) axes else NULL
+  } else {
     keep <- ensure_columns(keep, data)
     if (!all(keep %in% axes)) {
       stop("All 'keep' variables must be 'axes' variables.")

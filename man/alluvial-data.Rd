@@ -18,7 +18,7 @@ is_alluvial_alluvia(data, axes = NULL, weight = NULL, logical = TRUE,
   silent = FALSE)
 
 to_lodes(data, key = "x", value = "stratum", id = "alluvium", axes,
-  keep = NULL)
+  keep = FALSE)
 
 to_alluvia(data, key, value, id)
 }
@@ -44,8 +44,10 @@ corresponding to alluvium or lode weights (heights when plotted).}
 \item{axes}{Numeric or character vector; the field(s) of \code{data}
 corresponding to the axi(e)s (variable(s)).}
 
-\item{keep}{Numeric or character vector; which variables among those passed
-to \code{axes} to merge into the reshapen data by \code{id}.}
+\item{keep}{Either a numeric or character vector; which variables among those
+passed to \code{axes} to merge into the reshapen data by \code{id}, or
+logical, indicating whether to merge all (\code{TRUE}) or none
+(\code{FALSE}) of these variables.}
 }
 \description{
 Alluvial diagrams consist of multiple horizontally-distributed columns (axes)

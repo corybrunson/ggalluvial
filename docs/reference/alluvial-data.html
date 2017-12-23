@@ -115,7 +115,7 @@ treated as axes.</p>
   <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>to_lodes</span>(<span class='no'>data</span>, <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"x"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>, <span class='no'>axes</span>,
-  <span class='kw'>keep</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
+  <span class='kw'>keep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>to_alluvia</span>(<span class='no'>data</span>, <span class='no'>key</span>, <span class='no'>value</span>, <span class='no'>id</span>)</pre>
     
@@ -159,8 +159,10 @@ corresponding to the axi(e)s (variable(s)).</p></td>
     </tr>
     <tr>
       <th>keep</th>
-      <td><p>Numeric or character vector; which variables among those passed
-to <code>axes</code> to merge into the reshapen data by <code>id</code>.</p></td>
+      <td><p>Either a numeric or character vector; which variables among those
+passed to <code>axes</code> to merge into the reshapen data by <code>id</code>, or
+logical, indicating whether to merge all (<code>TRUE</code>) or none
+(<code>FALSE</code>) of these variables.</p></td>
     </tr>
     </table>
     
