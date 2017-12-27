@@ -71,8 +71,9 @@ flows between them, using \code{\link{geom_flow}}.
 }
 \section{Aesthetics}{
 
-\code{geom_alluvium} understands the following aesthetics
-(required aesthetics are in bold):
+\code{geom_alluvium}, \code{geom_flow}, \code{geom_lode}, and
+\code{geom_stratum} understand the following aesthetics (required aesthetics
+are in bold):
 \itemize{
   \item \strong{\code{x}}
   \item \strong{\code{y}}
@@ -107,7 +108,10 @@ gg + geom_alluvium(aes(fill = country),
                    colour = "black", decreasing = NA, width = 0, knot.pos = 0)
 }
 \seealso{
-\code{\link[ggplot2]{layer}} for additional arguments, and
-  \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 
-  intra-axis boxes.
+\code{\link[ggplot2]{layer}} for additional arguments and
+  \code{\link{stat_alluvium}} and
+  \code{\link{stat_flow}} for the corresponding stats.
+
+Other alluvial geom layers: \code{\link{geom_flow}},
+  \code{\link{geom_lode}}, \code{\link{geom_stratum}}
 }

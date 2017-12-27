@@ -4,33 +4,16 @@
 #' vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the \strong{lodes}
 #' of an alluvial diagram, the intersections of the alluvia with the strata.
 #' It plots rectangles for these lodes of a provided \code{width}.
-#' 
-
-#' @section Aesthetics:
-#' \code{geom_lode} understands the following aesthetics
-#' (required aesthetics are in bold):
-#' \itemize{
-#'   \item \strong{\code{x}}
-#'   \item \strong{\code{y}}
-#'   \item \strong{\code{ymin}}
-#'   \item \strong{\code{ymax}}
-#'   \item \code{alpha}
-#'   \item \code{colour}
-#'   \item \code{fill}
-#'   \item \code{linetype}
-#'   \item \code{size}
-#'   \item \code{group}
-#' }
-#' \code{group} is used internally; arguments are ignored.
+#' @template geom-aesthetics
 #' 
 
 #' @import ggplot2
-#' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
-#'   \code{\link{geom_alluvium}} for alluvial flows, and
-#'   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 
-#'   intra-axis stratum rectangles.
+#' @family alluvial geom layers
+#' @seealso \code{\link[ggplot2]{layer}} for additional arguments and
+#'   \code{\link{stat_alluvium}} and
+#'   \code{\link{stat_stratum}} for the corresponding stats.
 #' @inheritParams ggplot2::layer
-#' @template common-params
+#' @template layer-params
 #' @param stat The statistical transformation to use on the data;
 #'    override the default.
 #' @param width Numeric; the width of each stratum, as a proportion of the
