@@ -18,12 +18,12 @@ Depends:
     ggplot2
 Imports:
     stats,
-    grid,
     dplyr,
     tidyr,
-    lazyeval,
-    alluvial
+    lazyeval
 Suggests:
+    grid,
+    alluvial,
     testthat,
     knitr,
     babynames

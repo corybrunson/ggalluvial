@@ -1,5 +1,6 @@
 # ggalluvial 0.5.0.9000
 
+- Per CRAN checks, the **grid** and **alluvial** packages are now `Suggests` rather than `Imports`.
 - Source files and documentation for `is_alluvial_*()` and `to_*()` functions are combined.
 - `to_lodes()` now has a `keep` parameter to join any original variables to the reformatted data by the `id` variable (alluvium). This makes it possible to assign original variables to aesthetics after reformatting, as illustrated in a new example.
 
