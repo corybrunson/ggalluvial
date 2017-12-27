@@ -23,7 +23,7 @@ to_lodes(data, key = "x", value = "stratum", id = "alluvium", axes,
 to_alluvia(data, key, value, id)
 }
 \arguments{
-\item{data}{Data frame.}
+\item{data}{A data frame.}
 
 \item{...}{Additional parameters used to determine method and passed
 thereto. All or none of \code{key}, \code{value}, and \code{id}, or else
