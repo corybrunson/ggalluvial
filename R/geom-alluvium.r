@@ -5,30 +5,14 @@
 #' of an alluvial diagram, the intersections of the alluvia with the strata.
 #' It plots both the lodes themselves, using \code{\link{geom_lode}}, and the
 #' flows between them, using \code{\link{geom_flow}}.
-#' 
-
-#' @section Aesthetics:
-#' \code{geom_alluvium} understands the following aesthetics
-#' (required aesthetics are in bold):
-#' \itemize{
-#'   \item \strong{\code{x}}
-#'   \item \strong{\code{y}}
-#'   \item \strong{\code{ymin}}
-#'   \item \strong{\code{ymax}}
-#'   \item \code{alpha}
-#'   \item \code{colour}
-#'   \item \code{fill}
-#'   \item \code{linetype}
-#'   \item \code{size}
-#'   \item \code{group}
-#' }
-#' \code{group} is used internally; arguments are ignored.
+#' @template geom-aesthetics
 #' 
 
 #' @import ggplot2
-#' @seealso \code{\link[ggplot2]{layer}} for additional arguments, and
-#'   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 
-#'   intra-axis boxes.
+#' @family alluvial geom layers
+#' @seealso \code{\link[ggplot2]{layer}} for additional arguments and
+#'   \code{\link{stat_alluvium}} and
+#'   \code{\link{stat_flow}} for the corresponding stats.
 #' @inheritParams geom_lode
 #' @param knot.pos The horizontal distance between a stratum (\code{width/2}
 #'   from its axis) and the knot of the x-spline, as a proportion of the

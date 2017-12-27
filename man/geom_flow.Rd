@@ -76,8 +76,9 @@ filled rectangles at either end, using a provided \code{width}.
 }
 \section{Aesthetics}{
 
-\code{geom_flow} understands the following aesthetics
-(required aesthetics are in bold):
+\code{geom_alluvium}, \code{geom_flow}, \code{geom_lode}, and
+\code{geom_stratum} understand the following aesthetics (required aesthetics
+are in bold):
 \itemize{
   \item \strong{\code{x}}
   \item \strong{\code{y}}
@@ -130,7 +131,10 @@ ggplot(vaccinations,
   geom_text(stat = "stratum")
 }
 \seealso{
-\code{\link[ggplot2]{layer}} for additional arguments, and
-  \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 
-  intra-axis boxes.
+\code{\link[ggplot2]{layer}} for additional arguments and
+  \code{\link{stat_alluvium}} and
+  \code{\link{stat_flow}} for the corresponding stats.
+
+Other alluvial geom layers: \code{\link{geom_alluvium}},
+  \code{\link{geom_lode}}, \code{\link{geom_stratum}}
 }

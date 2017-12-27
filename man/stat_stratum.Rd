@@ -73,25 +73,31 @@ centroids of the strata at each axis, together with their weights (heights).
 }
 \section{Aesthetics}{
 
-\code{stat_stratum} requires one of two sets of aesthetics:
+\code{stat_alluvium}, \code{stat_flow}, and \code{stat_stratum} require one
+of two sets of aesthetics:
 \itemize{
-  \item \code{x}, \code{stratum}, and (optionally) \code{alluvium}
-  \item any number of \code{axis[0-9]*} (\code{axis1}, \code{axis2}, etc.)
+  \item \strong{\code{x}} and at least one of
+        \strong{\code{alluvium}} and \strong{\code{stratum}}
+  \item any number of \strong{\code{axis[0-9]*}}
+        (\code{axis1}, \code{axis2}, etc.)
 }
-Use \code{x} and \code{stratum} for data in lodes format
-(\code{alluvium} is ignored)
+Use \code{x}, \code{alluvium}, and/or \code{stratum} for data in lodes format
 and \code{axis[0-9]*} for data in alluvia format
 (see \code{\link{is_alluvial}}).
 Arguments to parameters inconsistent with the format will be ignored.
-
-Additionally, \code{stat_stratum} accepts the following optional aesthetics:
+Additionally, each \code{stat_*} layer accepts the following optional
+aesthetics:
 \itemize{
   \item \code{weight}
-  \item \code{label}
   \item \code{group}
 }
 \code{weight} controls the vertical dimensions of the alluvia
 and are aggregated across equivalent observations.
+\code{group} is used internally; arguments are ignored.
+Finally, \code{stat_stratum} accepts the following optional aesthetic:
+\itemize{
+  \item \code{label}
+}
 \code{label} is used to label the strata and must take a unique value across
 the observations within each stratum.
 These and any other aesthetics are aggregated as follows:
@@ -99,7 +105,6 @@ Numeric aesthetics, including \code{weight}, are summed.
 Character and factor aesthetics, including \code{label},
 are assigned to strata provided they take unique values across the
 observations within each stratum (otherwise \code{NA} is assigned).
-\code{group} is used internally; arguments are ignored.
 }
 
 \examples{
@@ -145,8 +150,9 @@ ggplot(as.data.frame(Titanic),
                      labels = c("Class", "Sex", "Age", "Survived"))
 }
 \seealso{
-\code{\link[ggplot2]{layer}} for additional arguments,
-  \code{\link{geom_stratum}} for the corresponding geom, and
-  \code{\link{stat_alluvium}} and \code{\link{geom_alluvium}} for
-  alluvial flows.
+\code{\link[ggplot2]{layer}} for additional arguments and
+  \code{\link{geom_stratum}} for the corresponding geom.
+
+Other alluvial stat layers: \code{\link{stat_alluvium}},
+  \code{\link{stat_flow}}
 }

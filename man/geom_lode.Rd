@@ -63,8 +63,9 @@ It plots rectangles for these lodes of a provided \code{width}.
 }
 \section{Aesthetics}{
 
-\code{geom_lode} understands the following aesthetics
-(required aesthetics are in bold):
+\code{geom_alluvium}, \code{geom_flow}, \code{geom_lode}, and
+\code{geom_stratum} understand the following aesthetics (required aesthetics
+are in bold):
 \itemize{
   \item \strong{\code{x}}
   \item \strong{\code{y}}
@@ -100,8 +101,10 @@ gg + geom_alluvium() +
   geom_stratum(stat = "alluvium")
 }
 \seealso{
-\code{\link[ggplot2]{layer}} for additional arguments,
-  \code{\link{geom_alluvium}} for alluvial flows, and
-  \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for 
-  intra-axis stratum rectangles.
+\code{\link[ggplot2]{layer}} for additional arguments and
+  \code{\link{stat_alluvium}} and
+  \code{\link{stat_stratum}} for the corresponding stats.
+
+Other alluvial geom layers: \code{\link{geom_alluvium}},
+  \code{\link{geom_flow}}, \code{\link{geom_stratum}}
 }

@@ -63,8 +63,9 @@ It plots rectangles for these strata of a provided \code{width}.
 }
 \section{Aesthetics}{
 
-\code{geom_stratum} understands the following aesthetics
-(required aesthetics are in bold):
+\code{geom_alluvium}, \code{geom_flow}, \code{geom_lode}, and
+\code{geom_stratum} understand the following aesthetics (required aesthetics
+are in bold):
 \itemize{
   \item \strong{\code{x}}
   \item \strong{\code{y}}
@@ -99,6 +100,9 @@ ggplot(as.data.frame(Titanic),
   facet_wrap(~ Age, scales = "free_y")
 }
 \seealso{
-\code{\link[ggplot2]{layer}} for additional arguments, and
-  \code{\link{stat_stratum}} for the corresponding geom.
+\code{\link[ggplot2]{layer}} for additional arguments and
+  \code{\link{stat_stratum}} for the corresponding stat.
+
+Other alluvial geom layers: \code{\link{geom_alluvium}},
+  \code{\link{geom_flow}}, \code{\link{geom_lode}}
 }

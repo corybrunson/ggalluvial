@@ -5,33 +5,15 @@
 #' the alluvia with the strata, together with their weights (heights; 
 #' \code{ymin} and \code{ymax}). It leverages the \code{group} aesthetic for 
 #' plotting purposes (for now).
-#' 
-
-#' @section Aesthetics:
-#' \code{stat_alluvium} requires one of two sets of aesthetics:
-#' \itemize{
-#'   \item \code{x}, \code{alluvium}, and (optionally) \code{stratum}
-#'   \item any number of \code{axis[0-9]*} (\code{axis1}, \code{axis2}, etc.)
-#' }
-#' Use \code{x}, \code{alluvium}, and \code{stratum} for data in lodes format
-#' and \code{axis[0-9]*} for data in alluvia format
-#' (see \code{\link{is_alluvial}}).
-#' Arguments to parameters inconsistent with the format will be ignored.
-#' Additionally, \code{stat_alluvium} accepts the following optional aesthetics:
-#' \itemize{
-#'   \item \code{weight}
-#'   \item \code{group}
-#' }
-#' \code{weight} controls the vertical dimensions of the alluvia
-#' and are aggregated across equivalent observations.
-#' \code{group} is used internally; arguments are ignored.
+#' @template stat-aesthetics
 #' 
 
 #' @import ggplot2
-#' @seealso \code{\link[ggplot2]{layer}} for additional arguments,
-#'   \code{\link{geom_alluvium}} for the corresponding geom, and
-#'   \code{\link{stat_stratum}} and \code{\link{geom_stratum}} for
-#'   intra-axis boxes.
+#' @family alluvial stat layers
+#' @seealso \code{\link[ggplot2]{layer}} for additional arguments and
+#'   \code{\link{geom_alluvium}},
+#'   \code{\link{geom_lode}}, and
+#'   \code{\link{geom_flow}} for the corresponding geoms.
 #' @inheritParams stat_flow
 #' @param aggregate.wts Whether to aggregate weights across otherwise equivalent
 #'   rows before computing lode and flow positions. Set to \code{TRUE} to group

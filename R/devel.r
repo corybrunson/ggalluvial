@@ -9,6 +9,6 @@ NULL
 
 release_questions <- function() {
   c(
-    "Is 'NEWS.md' up to date?"
+    "Have previous CRAN NOTEs been addressed?"
   )
 }

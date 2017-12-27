@@ -4,29 +4,13 @@
 #' vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the strata of an
 #' alluvial diagram.
 #' It plots rectangles for these strata of a provided \code{width}.
-#' 
-
-#' @section Aesthetics:
-#' \code{geom_stratum} understands the following aesthetics
-#' (required aesthetics are in bold):
-#' \itemize{
-#'   \item \strong{\code{x}}
-#'   \item \strong{\code{y}}
-#'   \item \strong{\code{ymin}}
-#'   \item \strong{\code{ymax}}
-#'   \item \code{alpha}
-#'   \item \code{colour}
-#'   \item \code{fill}
-#'   \item \code{linetype}
-#'   \item \code{size}
-#'   \item \code{group}
-#' }
-#' \code{group} is used internally; arguments are ignored.
+#' @template geom-aesthetics
 #' 
 
 #' @import ggplot2
-#' @seealso \code{\link[ggplot2]{layer}} for additional arguments, and
-#'   \code{\link{stat_stratum}} for the corresponding geom.
+#' @family alluvial geom layers
+#' @seealso \code{\link[ggplot2]{layer}} for additional arguments and
+#'   \code{\link{stat_stratum}} for the corresponding stat.
 #' @inheritParams geom_lode
 #' @example inst/examples/ex-geom-stratum.r
 #' @export
