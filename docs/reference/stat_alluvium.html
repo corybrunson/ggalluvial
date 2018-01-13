@@ -197,26 +197,41 @@ the default plot specification, e.g. <code>borders</code>.</p></td>
     
     <h2 class="hasAnchor" id="aesthetics"><a class="anchor" href="#aesthetics"></a>Aesthetics</h2>
 
-    <p><code>stat_alluvium</code> requires one of two sets of aesthetics:</p><ul>
-<li><p><code>x</code>, <code>alluvium</code>, and (optionally) <code>stratum</code></p></li>
-<li><p>any number of <code>axis[0-9]*</code> (<code>axis1</code>, <code>axis2</code>, etc.)</p></li>
-</ul><p>Use <code>x</code>, <code>alluvium</code>, and <code>stratum</code> for data in lodes format
+    <p><code>stat_alluvium</code>, <code>stat_flow</code>, and <code>stat_stratum</code> require one
+of two sets of aesthetics:</p><ul>
+<li><p><strong><code>x</code></strong> and at least one of
+        <strong><code>alluvium</code></strong> and <strong><code>stratum</code></strong></p></li>
+<li><p>any number of <strong><code>axis[0-9]*</code></strong>
+        (<code>axis1</code>, <code>axis2</code>, etc.)</p></li>
+</ul><p>Use <code>x</code>, <code>alluvium</code>, and/or <code>stratum</code> for data in lodes format
 and <code>axis[0-9]*</code> for data in alluvia format
 (see <code><a href='alluvial-data.html'>is_alluvial</a></code>).
 Arguments to parameters inconsistent with the format will be ignored.
-Additionally, <code>stat_alluvium</code> accepts the following optional aesthetics:</p><ul>
+Additionally, each <code>stat_*</code> layer accepts the following optional
+aesthetics:</p><ul>
 <li><p><code>weight</code></p></li>
 <li><p><code>group</code></p></li>
 </ul><p><code>weight</code> controls the vertical dimensions of the alluvia
 and are aggregated across equivalent observations.
-<code>group</code> is used internally; arguments are ignored.</p>
+<code>group</code> is used internally; arguments are ignored.
+Finally, <code>stat_stratum</code> accepts the following optional aesthetic:</p><ul>
+<li><p><code>label</code></p></li>
+</ul><p><code>label</code> is used to label the strata and must take a unique value across
+the observations within each stratum.
+These and any other aesthetics are aggregated as follows:
+Numeric aesthetics, including <code>weight</code>, are summed.
+Character and factor aesthetics, including <code>label</code>,
+are assigned to strata provided they take unique values across the
+observations within each stratum (otherwise <code>NA</code> is assigned).</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='http://www.rdocumentation.org/packages/ggplot2/topics/layer'>layer</a></code> for additional arguments,
-  <code><a href='geom_alluvium.html'>geom_alluvium</a></code> for the corresponding geom, and
-  <code><a href='stat_stratum.html'>stat_stratum</a></code> and <code><a href='geom_stratum.html'>geom_stratum</a></code> for
-  intra-axis boxes.</p>
+    <p><code><a href='http://www.rdocumentation.org/packages/ggplot2/topics/layer'>layer</a></code> for additional arguments and
+  <code><a href='geom_alluvium.html'>geom_alluvium</a></code>,
+  <code><a href='geom_lode.html'>geom_lode</a></code>, and
+  <code><a href='geom_flow.html'>geom_flow</a></code> for the corresponding geoms.</p>
+<p>Other alluvial stat layers: <code><a href='stat_flow.html'>stat_flow</a></code>,
+  <code><a href='stat_stratum.html'>stat_stratum</a></code></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -230,7 +245,7 @@ and are aggregated across equivalent observations.
   <span class='fu'>stat_alluvium</span>(<span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"pointrange"</span>) +
   <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
   <span class='fu'>scale_x_continuous</span>(<span class='kw'>breaks</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>,
-                     <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>))</div><div class='img'><img src='stat_alluvium-7.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+                     <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>))</div><div class='img'><img src='stat_alluvium-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='no'>gg</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='fu'>as.data.frame</span>(<span class='no'>Titanic</span>),
              <span class='fu'>aes</span>(<span class='kw'>weight</span> <span class='kw'>=</span> <span class='no'>Freq</span>,
                  <span class='kw'>axis1</span> <span class='kw'>=</span> <span class='no'>Class</span>, <span class='kw'>axis2</span> <span class='kw'>=</span> <span class='no'>Sex</span>, <span class='kw'>axis3</span> <span class='kw'>=</span> <span class='no'>Age</span>)) +
@@ -238,10 +253,10 @@ and are aggregated across equivalent observations.
   <span class='fu'>scale_x_continuous</span>(<span class='kw'>breaks</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>))
 <span class='co'># use of lode controls</span>
 <span class='no'>gg</span> + <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Survived</span>), <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
-               <span class='kw'>aes.bind</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>lode.guidance</span> <span class='kw'>=</span> <span class='st'>"rightward"</span>)</div><div class='img'><img src='stat_alluvium-8.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># use of lode ordering</span>
+               <span class='kw'>aes.bind</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>lode.guidance</span> <span class='kw'>=</span> <span class='st'>"rightward"</span>)</div><div class='img'><img src='stat_alluvium-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># use of lode ordering</span>
 <span class='no'>lode_ord</span> <span class='kw'>&lt;-</span> <span class='fu'>replicate</span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>expr</span> <span class='kw'>=</span> <span class='fu'>sample</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>32</span>), <span class='kw'>simplify</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='no'>gg</span> + <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Survived</span>), <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
-               <span class='kw'>lode.ordering</span> <span class='kw'>=</span> <span class='no'>lode_ord</span>)</div><div class='img'><img src='stat_alluvium-9.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+               <span class='kw'>lode.ordering</span> <span class='kw'>=</span> <span class='no'>lode_ord</span>)</div><div class='img'><img src='stat_alluvium-3.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='fu'>data</span>(<span class='no'>majors</span>)
 <span class='co'># omit missing lodes and incident flows</span>
 <span class='fu'>ggplot</span>(<span class='no'>majors</span>,
@@ -249,17 +264,17 @@ and are aggregated across equivalent observations.
            <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>curriculum</span>)) +
   <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>"darkgrey"</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>curriculum</span>), <span class='kw'>color</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
-  <span class='fu'>theme_bw</span>()</div><div class='img'><img src='stat_alluvium-10.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+  <span class='fu'>theme_bw</span>()</div><div class='img'><img src='stat_alluvium-4.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='no'>gg</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='no'>majors</span>,
              <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>semester</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>curriculum</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>student</span>,
                  <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>curriculum</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>curriculum</span>)) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>()
 <span class='co'># diagram with outlined alluvia and forward-colored flows</span>
 <span class='no'>gg</span> + <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>, <span class='kw'>lode.guidance</span> <span class='kw'>=</span> <span class='st'>"rightleft"</span>,
-               <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"black"</span>)</div><div class='img'><img src='stat_alluvium-11.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># same diagram with alluvium aggregation enabled,</span>
+               <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"black"</span>)</div><div class='img'><img src='stat_alluvium-5.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># same diagram with alluvium aggregation enabled,</span>
 <span class='co'># so that students are aggregated into cohorts</span>
 <span class='no'>gg</span> + <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>, <span class='kw'>lode.guidance</span> <span class='kw'>=</span> <span class='st'>"rightleft"</span>,
-               <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"black"</span>, <span class='kw'>aggregate.wts</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='stat_alluvium-12.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+               <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"black"</span>, <span class='kw'>aggregate.wts</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='stat_alluvium-6.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 </div><span class='co'># NOT RUN {</span>
   <span class='fu'>data</span>(<span class='no'>babynames</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"babynames"</span>)
   <span class='co'># a discontiguous alluvium</span>

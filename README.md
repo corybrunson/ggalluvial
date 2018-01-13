@@ -37,6 +37,8 @@ vignette(topic = "ggalluvial", package = "ggalluvial")
 
 The documentation contains several examples; use `help()` to call forth examples of any layer (`stat_*` or `geom_*`).
 
+If you use **ggalluvial**-generated figures in publication, i'd be grateful to hear about it! You can also cite the package according to `citation("ggalluvial")`.
+
 ## Contribute
 
 Issues and pull requests are more than welcome! Pretty much every fix and feature of this package derives from a problem or question posed by someone with datasets or design goals i hadn't anticipated.

@@ -90,6 +90,8 @@
 <h1 class="hasAnchor">
 <a href="#ggalluvial-0-5-0-9000" class="anchor"></a>ggalluvial 0.5.0.9000</h1>
 <ul>
+<li>Per CRAN checks, the package now <code>Depends</code> on R <code>v3.3.0</code> (patch number zero) instead of <code>v3.3.1</code>. I’ve been unable to install this version locally, so there is a slight chance of incompatibility that i’ll be watchful for going forward.</li>
+<li>Per CRAN checks, the <strong>grid</strong> and <strong>alluvial</strong> packages are now <code>Suggests</code> rather than <code>Imports</code>.</li>
 <li>Source files and documentation for <code>is_alluvial_*()</code> and <code>to_*()</code> functions are combined.</li>
 <li>
 <code><a href="../reference/alluvial-data.html">to_lodes()</a></code> now has a <code>keep</code> parameter to join any original variables to the reformatted data by the <code>id</code> variable (alluvium). This makes it possible to assign original variables to aesthetics after reformatting, as illustrated in a new example.</li>
