@@ -1,3 +1,7 @@
+# ggalluvial 0.5.0.9001
+
+
+
 # ggalluvial 0.5.0.9000
 
 - Per CRAN checks, the package now `Depends` on R `v3.3.0` (patch number zero) instead of `v3.3.1`. I've been unable to install this version locally, so there is a slight chance of incompatibility that i'll be watchful for going forward.
