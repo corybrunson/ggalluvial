@@ -1,7 +1,7 @@
 Package: ggalluvial
 Type: Package
 Title: Alluvial Diagrams in 'ggplot2'
-Version: 0.5.0.9000
+Version: 0.5.0.9001
 Date: 2017-11-23
 Authors@R: person('Jason Cory', 'Brunson', email = 'cornelioid@gmail.com',
     role = c('aut', 'cre'))
@@ -14,7 +14,7 @@ Description: Alluvial diagrams encompass a variety of charts that use x-splines
     layers that interpret multiple data formats compatible with this framework
     while hewing to the principles of tidy data and the grammar of graphics.
 Depends:
-    R (>= 3.3.1),
+    R (>= 3.3.0),
     ggplot2
 Imports:
     stats,

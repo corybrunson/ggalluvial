@@ -177,35 +177,39 @@ plotted in grey (regardless of the color scheme).</p></td>
     
     <h2 class="hasAnchor" id="aesthetics"><a class="anchor" href="#aesthetics"></a>Aesthetics</h2>
 
-    <p><code>stat_stratum</code> requires one of two sets of aesthetics:</p><ul>
-<li><p><code>x</code>, <code>stratum</code>, and (optionally) <code>alluvium</code></p></li>
-<li><p>any number of <code>axis[0-9]*</code> (<code>axis1</code>, <code>axis2</code>, etc.)</p></li>
-</ul><p>Use <code>x</code> and <code>stratum</code> for data in lodes format
-(<code>alluvium</code> is ignored)
+    <p><code>stat_alluvium</code>, <code>stat_flow</code>, and <code>stat_stratum</code> require one
+of two sets of aesthetics:</p><ul>
+<li><p><strong><code>x</code></strong> and at least one of
+        <strong><code>alluvium</code></strong> and <strong><code>stratum</code></strong></p></li>
+<li><p>any number of <strong><code>axis[0-9]*</code></strong>
+        (<code>axis1</code>, <code>axis2</code>, etc.)</p></li>
+</ul><p>Use <code>x</code>, <code>alluvium</code>, and/or <code>stratum</code> for data in lodes format
 and <code>axis[0-9]*</code> for data in alluvia format
 (see <code><a href='alluvial-data.html'>is_alluvial</a></code>).
-Arguments to parameters inconsistent with the format will be ignored.</p>
-<p>Additionally, <code>stat_stratum</code> accepts the following optional aesthetics:</p><ul>
+Arguments to parameters inconsistent with the format will be ignored.
+Additionally, each <code>stat_*</code> layer accepts the following optional
+aesthetics:</p><ul>
 <li><p><code>weight</code></p></li>
-<li><p><code>label</code></p></li>
 <li><p><code>group</code></p></li>
 </ul><p><code>weight</code> controls the vertical dimensions of the alluvia
 and are aggregated across equivalent observations.
-<code>label</code> is used to label the strata and must take a unique value across
+<code>group</code> is used internally; arguments are ignored.
+Finally, <code>stat_stratum</code> accepts the following optional aesthetic:</p><ul>
+<li><p><code>label</code></p></li>
+</ul><p><code>label</code> is used to label the strata and must take a unique value across
 the observations within each stratum.
 These and any other aesthetics are aggregated as follows:
 Numeric aesthetics, including <code>weight</code>, are summed.
 Character and factor aesthetics, including <code>label</code>,
 are assigned to strata provided they take unique values across the
-observations within each stratum (otherwise <code>NA</code> is assigned).
-<code>group</code> is used internally; arguments are ignored.</p>
+observations within each stratum (otherwise <code>NA</code> is assigned).</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='http://www.rdocumentation.org/packages/ggplot2/topics/layer'>layer</a></code> for additional arguments,
-  <code><a href='geom_stratum.html'>geom_stratum</a></code> for the corresponding geom, and
-  <code><a href='stat_alluvium.html'>stat_alluvium</a></code> and <code><a href='geom_alluvium.html'>geom_alluvium</a></code> for
-  alluvial flows.</p>
+    <p><code><a href='http://www.rdocumentation.org/packages/ggplot2/topics/layer'>layer</a></code> for additional arguments and
+  <code><a href='geom_stratum.html'>geom_stratum</a></code> for the corresponding geom.</p>
+<p>Other alluvial stat layers: <code><a href='stat_alluvium.html'>stat_alluvium</a></code>,
+  <code><a href='stat_flow.html'>stat_flow</a></code></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
