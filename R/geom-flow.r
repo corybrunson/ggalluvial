@@ -94,6 +94,9 @@ GeomFlow <- ggproto(
                         aes.flow = "forward",
                         knot.pos = 1/6, ribbon_bend = NULL) {
     
+    # exclude one-sided flows
+    data <- data[complete.cases(data), ]
+    
     # adjoin data with itself by alluvia along adjacent axes
     flow_pos <- intersect(names(data), c("x", "xmin", "xmax", "width",
                                          "y", "ymin", "ymax", "weight",

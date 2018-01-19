@@ -123,7 +123,7 @@ StatFlow <- ggproto(
     
     # stack starts and ends of flows, using 'alluvium' to link them
     x_ran <- range(data$x)
-    data$alluvium <- as.numeric(as.factor(data$alluvium))
+    data$alluvium <- contiguate(data$alluvium)
     alluvium_max <- max(data$alluvium)
     data <- dplyr::bind_rows(
       transform(dplyr::filter(data, x != x_ran[2]),
@@ -136,9 +136,9 @@ StatFlow <- ggproto(
                 side = I("end"))
     )
     data$side <- factor(data$side, levels = c("start", "end"))
-    stopifnot(all(table(data$alluvium) == 2))
     
     # flag flows between common pairs of strata and of aesthetics
+    # (induces NAs for one-sided flows)
     for (var in c("stratum", "fissure")) {
       flow_var <- paste0("flow_", var)
       data <- match_sides(data, var, flow_var)
@@ -147,12 +147,12 @@ StatFlow <- ggproto(
     data$alluvium <- as.numeric(interaction(data[, c("flow_stratum",
                                                      "flow_fissure")],
                                             drop = TRUE))
+    
     # aggregate alluvial segments within flows
     group_cols <- setdiff(names(data), c("weight", "group"))
     dots <- lapply(group_cols, as.symbol)
     data <- as.data.frame(dplyr::summarize(dplyr::group_by_(data, .dots = dots),
                                            weight = sum(weight)))
-    stopifnot(all(table(data$alluvium) == 2))
     data <- transform(data,
                       group = alluvium)
     
