@@ -39,8 +39,7 @@ gg <- ggplot(majors,
 # diagram with outlined alluvia and forward-colored flows
 gg + geom_flow(stat = "alluvium", lode.guidance = "rightleft",
                color = "black")
-# same diagram with alluvium aggregation enabled,
-# so that students are aggregated into cohorts
+# same diagram with students are aggregated into cohorts
 gg + geom_flow(stat = "alluvium", lode.guidance = "rightleft",
                color = "black", aggregate.wts = TRUE)
 
