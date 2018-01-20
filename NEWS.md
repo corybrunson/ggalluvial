@@ -1,5 +1,6 @@
 # ggalluvial 0.5.0.9001
 
+- `to_lodes()` now has a `relevel.strata` parameter to sort or customize the factor levels of the variable containing the aggregated strata. The `stat_*()` functions can pass the same parameter internally and print a warning if the data is already in lodes form.
 - `GeomFlow$draw_panel()` now begins by removing `complete.cases()`, corresponding to one-sided flows. (These are not removed in `StatFlow$compute_panel()`, which would exclude missing aesthetic values from legends.)
 
 # ggalluvial 0.5.0.9000
