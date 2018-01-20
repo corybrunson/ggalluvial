@@ -55,6 +55,12 @@
 #'   passed to \code{axes} to merge into the reshapen data by \code{id}, or
 #'   logical, indicating whether to merge all (\code{TRUE}) or none
 #'   (\code{FALSE}) of these variables.
+#' @param relevel.strata Optional logical value or character vector to control 
+#'   the order of the factor levels of the combined stratum variable. If 
+#'   logical, \code{FALSE} keeps the levels of the combined strata in order of 
+#'   appearance while \code{TRUE} \code{sort()}s the levels. If character,
+#'   interpreted as an ordered vector of factor levels, after which any
+#'   additional levels will be appended.
 #' @example inst/examples/ex-alluvial-data.r
 #' @export
 is_alluvial <- function(data, ..., logical = TRUE, silent = FALSE) {
@@ -140,12 +146,13 @@ is_alluvial_alluvia <- function(data,
 #' @export
 to_lodes <- function(data,
                      key = "x", value = "stratum", id = "alluvium",
-                     axes, keep = FALSE) {
+                     axes, keep = FALSE, relevel.strata = NULL) {
   
   stopifnot(is_alluvial(data, axes = axes, silent = TRUE))
   
   if (!is.data.frame(data)) data <- as.data.frame(data)
   
+  # determine axis variable names
   axes <- ensure_columns(axes, data)
   if (is.logical(keep)) {
     keep <- if (keep) axes else NULL
@@ -155,9 +162,16 @@ to_lodes <- function(data,
       stop("All 'keep' variables must be 'axes' variables.")
     }
   }
-  strata <- unique(unname(do.call(c, lapply(data[axes],
-                                            function(x) levels(as.factor(x))))))
   
+  # combine factor levels
+  c_levels <- unlist(lapply(data[axes], function(x) levels(as.factor(x))))
+  strata <- unique(unname(c_levels))
+  if (any(duplicated(c_levels)) & is.null(relevel.strata)) {
+    warning("Some strata appear at multiple axes; ",
+            "consider passing canonical levels to 'relevel.strata'.")
+  }
+  
+  # format data in preparation for 'gather()'
   data[[id]] <- 1:nrow(data)
   if (!is.null(keep)) keep_data <- data[, c(id, keep), drop = FALSE]
   for (i in axes) data[[i]] <- as.character(data[[i]])
@@ -166,8 +180,23 @@ to_lodes <- function(data,
                         key_col = key, value_col = value,
                         gather_col = axes, factor_key = TRUE)
   res[[value]] <- factor(res[[value]], levels = strata)
-  if (!is.null(keep)) res <- dplyr::left_join(res, keep_data, by = id)
   
+  # order the strata as prescribed
+  if (is.logical(relevel.strata)) {
+    if (relevel.strata) {
+      res[[value]] <- factor(
+        res[[value]],
+        levels = sort(levels(res[[value]]))
+      )
+    }
+  } else if (!is.null(relevel.strata)) {
+    res[[value]] <- factor(
+      res[[value]],
+      levels = c(relevel.strata, setdiff(levels(res[[value]]), relevel.strata))
+    )
+  }
+  
+  if (!is.null(keep)) res <- dplyr::left_join(res, keep_data, by = id)
   res
 }
 

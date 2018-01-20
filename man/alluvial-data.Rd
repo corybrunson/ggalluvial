@@ -18,7 +18,7 @@ is_alluvial_alluvia(data, axes = NULL, weight = NULL, logical = TRUE,
   silent = FALSE)
 
 to_lodes(data, key = "x", value = "stratum", id = "alluvium", axes,
-  keep = FALSE)
+  keep = FALSE, relevel.strata = NULL)
 
 to_alluvia(data, key, value, id)
 }
@@ -48,6 +48,13 @@ corresponding to the axi(e)s (variable(s)).}
 passed to \code{axes} to merge into the reshapen data by \code{id}, or
 logical, indicating whether to merge all (\code{TRUE}) or none
 (\code{FALSE}) of these variables.}
+
+\item{relevel.strata}{Optional logical value or character vector to control 
+the order of the factor levels of the combined stratum variable. If 
+logical, \code{FALSE} keeps the levels of the combined strata in order of 
+appearance while \code{TRUE} \code{sort()}s the levels. If character,
+interpreted as an ordered vector of factor levels, after which any
+additional levels will be appended.}
 }
 \description{
 Alluvial diagrams consist of multiple horizontally-distributed columns (axes)
@@ -121,4 +128,28 @@ head(majors2)
 is_alluvial(majors2,
             axes = 2:9,
             logical = FALSE)
+
+# options to relevel strata
+gg <- ggplot(titanic_alluvia,
+             aes(axis1 = Class, axis2 = Sex, axis3 = Age, weight = Freq))
+gg +
+  geom_flow(aes(fill = Survived), color = "darkgray") +
+  geom_stratum() +
+  geom_text(stat = "stratum", label.strata = TRUE)
+gg +
+  geom_flow(aes(fill = Survived), color = "darkgray", relevel.strata = TRUE) +
+  geom_stratum(relevel.strata = TRUE) +
+  geom_text(stat = "stratum", relevel.strata = TRUE, label.strata = TRUE)
+relevs <- c("Adult", "Child")
+gg +
+  geom_flow(aes(fill = Survived), color = "darkgray", relevel.strata = relevs) +
+  geom_stratum(relevel.strata = relevs) +
+  geom_text(stat = "stratum", relevel.strata = relevs, label.strata = TRUE)
+# warning when inappropriate
+ggplot(titanic_lodes,
+       aes(x = x, stratum = stratum, alluvium = alluvium, weight = Freq,
+           label = stratum)) +
+  geom_flow(color = "darkgray", relevel.strata = TRUE) +
+  geom_stratum(relevel.strata = TRUE) +
+  geom_text(stat = "stratum", relevel.strata = TRUE)
 }

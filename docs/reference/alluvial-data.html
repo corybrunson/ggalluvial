@@ -115,7 +115,7 @@ treated as axes.</p>
   <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>to_lodes</span>(<span class='no'>data</span>, <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"x"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>, <span class='no'>axes</span>,
-  <span class='kw'>keep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+  <span class='kw'>keep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>relevel.strata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
 <span class='fu'>to_alluvia</span>(<span class='no'>data</span>, <span class='no'>key</span>, <span class='no'>value</span>, <span class='no'>id</span>)</pre>
     
@@ -163,6 +163,15 @@ corresponding to the axi(e)s (variable(s)).</p></td>
 passed to <code>axes</code> to merge into the reshapen data by <code>id</code>, or
 logical, indicating whether to merge all (<code>TRUE</code>) or none
 (<code>FALSE</code>) of these variables.</p></td>
+    </tr>
+    <tr>
+      <th>relevel.strata</th>
+      <td><p>Optional logical value or character vector to control 
+the order of the factor levels of the combined stratum variable. If 
+logical, <code>FALSE</code> keeps the levels of the combined strata in order of 
+appearance while <code>TRUE</code> <code>sort()</code>s the levels. If character,
+interpreted as an ordered vector of factor levels, after which any
+additional levels will be appended.</p></td>
     </tr>
     </table>
     
@@ -243,7 +252,27 @@ This function invokes <code><a href='http://www.rdocumentation.org/packages/tidy
 #&gt; 5 Painting
 #&gt; 6     &lt;NA&gt;</div><div class='input'><span class='fu'>is_alluvial</span>(<span class='no'>majors2</span>,
             <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>2</span>:<span class='fl'>9</span>,
-            <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Missing alluvia for some stratum combinations.</span></div><div class='output co'>#&gt; [1] "alluvia"</div></pre>
+            <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Missing alluvia for some stratum combinations.</span></div><div class='output co'>#&gt; [1] "alluvia"</div><div class='input'>
+<span class='co'># options to relevel strata</span>
+<span class='no'>gg</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='no'>titanic_alluvia</span>,
+             <span class='fu'>aes</span>(<span class='kw'>axis1</span> <span class='kw'>=</span> <span class='no'>Class</span>, <span class='kw'>axis2</span> <span class='kw'>=</span> <span class='no'>Sex</span>, <span class='kw'>axis3</span> <span class='kw'>=</span> <span class='no'>Age</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='no'>Freq</span>))
+<span class='no'>gg</span> +
+  <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Survived</span>), <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"darkgray"</span>) +
+  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>() +
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='alluvial-data-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='no'>gg</span> +
+  <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Survived</span>), <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"darkgray"</span>, <span class='kw'>relevel.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
+  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>relevel.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>relevel.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='alluvial-data-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='no'>relevs</span> <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='st'>"Adult"</span>, <span class='st'>"Child"</span>)
+<span class='no'>gg</span> +
+  <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Survived</span>), <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"darkgray"</span>, <span class='kw'>relevel.strata</span> <span class='kw'>=</span> <span class='no'>relevs</span>) +
+  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>relevel.strata</span> <span class='kw'>=</span> <span class='no'>relevs</span>) +
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>relevel.strata</span> <span class='kw'>=</span> <span class='no'>relevs</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='alluvial-data-3.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># warning when inappropriate</span>
+<span class='fu'>ggplot</span>(<span class='no'>titanic_lodes</span>,
+       <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>stratum</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>alluvium</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='no'>Freq</span>,
+           <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>stratum</span>)) +
+  <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"darkgray"</span>, <span class='kw'>relevel.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
+  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>relevel.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>relevel.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so 'relevel.strata' will be ignored.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so 'relevel.strata' will be ignored.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so 'relevel.strata' will be ignored.</span></div><div class='img'><img src='alluvial-data-4.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
