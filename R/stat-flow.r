@@ -190,7 +190,7 @@ StatFlow <- ggproto(
                       ymax = y + weight / 2)
     
     # arrange data by aesthetics for consistent (reverse) z-ordering
-    data <- z_order_colors(data)
+    data <- z_order_aes(data, aesthetics)
     
     data
   }
