@@ -21,6 +21,7 @@ Imports:
     dplyr,
     tidyr,
     lazyeval,
+    rlang,
     iterpc
 Suggests:
     grid,

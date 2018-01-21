@@ -27,9 +27,21 @@ is_alluvial(majors,
             key = "semester", value = "curriculum", id = "student",
             logical = FALSE)
 # curriculum data in alluvia format
-majors2 <- to_alluvia(majors,
-                      key = "semester", value = "curriculum", id = "student")
-head(majors2)
-is_alluvial(majors2,
+majors_alluvia <- to_alluvia(
+  majors,
+  key = "semester", value = "curriculum", id = "student"
+)
+head(majors_alluvia)
+is_alluvial(majors_alluvia,
             axes = 2:9,
             logical = FALSE)
+
+# distill variables that vary within 'id' values
+set.seed(1)
+majors$hypo_grade <- LETTERS[sample(5, size = nrow(majors), replace = TRUE)]
+majors_alluvia2 <- to_alluvia(
+  majors,
+  key = "semester", value = "curriculum", id = "student",
+  distill = "most"
+)
+head(majors_alluvia2)
