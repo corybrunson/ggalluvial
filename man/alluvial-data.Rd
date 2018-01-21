@@ -20,7 +20,7 @@ is_alluvial_alluvia(data, axes = NULL, weight = NULL, logical = TRUE,
 to_lodes(data, key = "x", value = "stratum", id = "alluvium", axes,
   keep = FALSE)
 
-to_alluvia(data, key, value, id)
+to_alluvia(data, key, value, id, distill = FALSE)
 }
 \arguments{
 \item{data}{A data frame.}
@@ -44,10 +44,17 @@ corresponding to alluvium or lode weights (heights when plotted).}
 \item{axes}{Numeric or character vector; the field(s) of \code{data}
 corresponding to the axi(e)s (variable(s)).}
 
-\item{keep}{Either a numeric or character vector; which variables among those
-passed to \code{axes} to merge into the reshapen data by \code{id}, or
-logical, indicating whether to merge all (\code{TRUE}) or none
-(\code{FALSE}) of these variables.}
+\item{keep}{A numeric or character vector indicating which variables among
+those passed to \code{axes} to merge into the reshapen data by \code{id}. 
+Alternatively, a logical value indicating whether to merge all 
+(\code{TRUE}) or none (\code{FALSE}) of these variables.}
+
+\item{distill}{A logical value indicating whether to include variables, other
+than those passed to \code{key} and \code{value}, that vary within values 
+of \code{id}. Alternatively, a function to be used to distill each such 
+variable to a single value. Acceptable functions include 
+\code{\link[dplyr]{first}}, \code{\link[dplyr]{last}}, and \code{most}
+(which returns the modal value; assumed if \code{TRUE}).}
 }
 \description{
 Alluvial diagrams consist of multiple horizontally-distributed columns (axes)

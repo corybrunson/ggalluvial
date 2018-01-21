@@ -20,7 +20,8 @@ Imports:
     stats,
     dplyr,
     tidyr,
-    lazyeval
+    lazyeval,
+    rlang
 Suggests:
     grid,
     alluvial,
