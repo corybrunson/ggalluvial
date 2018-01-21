@@ -117,7 +117,7 @@ treated as axes.</p>
 <span class='fu'>to_lodes</span>(<span class='no'>data</span>, <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"x"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>, <span class='no'>axes</span>,
   <span class='kw'>keep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>to_alluvia</span>(<span class='no'>data</span>, <span class='no'>key</span>, <span class='no'>value</span>, <span class='no'>id</span>)</pre>
+<span class='fu'>to_alluvia</span>(<span class='no'>data</span>, <span class='no'>key</span>, <span class='no'>value</span>, <span class='no'>id</span>, <span class='kw'>distill</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -159,10 +159,19 @@ corresponding to the axi(e)s (variable(s)).</p></td>
     </tr>
     <tr>
       <th>keep</th>
-      <td><p>Either a numeric or character vector; which variables among those
-passed to <code>axes</code> to merge into the reshapen data by <code>id</code>, or
-logical, indicating whether to merge all (<code>TRUE</code>) or none
-(<code>FALSE</code>) of these variables.</p></td>
+      <td><p>A numeric or character vector indicating which variables among
+those passed to <code>axes</code> to merge into the reshapen data by <code>id</code>. 
+Alternatively, a logical value indicating whether to merge all 
+(<code>TRUE</code>) or none (<code>FALSE</code>) of these variables.</p></td>
+    </tr>
+    <tr>
+      <th>distill</th>
+      <td><p>A logical value indicating whether to include variables, other
+than those passed to <code>key</code> and <code>value</code>, that vary within values 
+of <code>id</code>. Alternatively, the name of a function to be used to distill
+each such variable to a single value. Acceptable function names include 
+<code>"first"</code>, <code>"last"</code>, and <code>"most"</code> (which returns the modal
+value; assumed if <code>TRUE</code>).</p></td>
     </tr>
     </table>
     
@@ -206,13 +215,13 @@ This function invokes <code><a href='http://www.rdocumentation.org/packages/tidy
 <span class='no'>titanic_lodes2</span> <span class='kw'>&lt;-</span> <span class='fu'>to_lodes</span>(<span class='no'>titanic_alluvia</span>,
                            <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"variable"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"value"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"passenger"</span>,
                            <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>keep</span> <span class='kw'>=</span> <span class='st'>"Class"</span>)
-<span class='fu'>head</span>(<span class='no'>titanic_lodes2</span>)</div><div class='output co'>#&gt;   Survived Freq passenger variable value Class
-#&gt; 1       No    0         1    Class   1st   1st
-#&gt; 2       No    0         2    Class   2nd   2nd
-#&gt; 3       No   35         3    Class   3rd   3rd
-#&gt; 4       No    0         4    Class  Crew  Crew
-#&gt; 5       No    0         5    Class   1st   1st
-#&gt; 6       No    0         6    Class   2nd   2nd</div><div class='input'><span class='fu'>is_alluvial</span>(<span class='no'>titanic_lodes2</span>,
+<span class='fu'>head</span>(<span class='no'>titanic_lodes2</span>)</div><div class='output co'>#&gt;   passenger Survived Freq variable value Class
+#&gt; 1         1       No    0    Class   1st   1st
+#&gt; 2         1       No    0      Sex  Male   1st
+#&gt; 3         1       No    0      Age Child   1st
+#&gt; 4         2       No    0    Class   2nd   2nd
+#&gt; 5         2       No    0      Sex  Male   2nd
+#&gt; 6         2       No    0      Age Child   2nd</div><div class='input'><span class='fu'>is_alluvial</span>(<span class='no'>titanic_lodes2</span>,
             <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"variable"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"value"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"passenger"</span>,
             <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"Freq"</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 <span class='co'># curriculum data in lodes format</span>
@@ -226,9 +235,11 @@ This function invokes <code><a href='http://www.rdocumentation.org/packages/tidy
 #&gt; 6      10    CURR1   Painting</div><div class='input'><span class='fu'>is_alluvial</span>(<span class='no'>majors</span>,
             <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"semester"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"curriculum"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"student"</span>,
             <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "lodes"</div><div class='input'><span class='co'># curriculum data in alluvia format</span>
-<span class='no'>majors2</span> <span class='kw'>&lt;-</span> <span class='fu'>to_alluvia</span>(<span class='no'>majors</span>,
-                      <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"semester"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"curriculum"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"student"</span>)
-<span class='fu'>head</span>(<span class='no'>majors2</span>)</div><div class='output co'>#&gt;   student    CURR1       CURR3       CURR5    CURR7    CURR9   CURR11   CURR13
+<span class='no'>majors_alluvia</span> <span class='kw'>&lt;-</span> <span class='fu'>to_alluvia</span>(
+  <span class='no'>majors</span>,
+  <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"semester"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"curriculum"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"student"</span>
+)
+<span class='fu'>head</span>(<span class='no'>majors_alluvia</span>)</div><div class='output co'>#&gt;   student    CURR1       CURR3       CURR5    CURR7    CURR9   CURR11   CURR13
 #&gt; 1       1 Painting    Painting    Painting Painting Painting Painting Painting
 #&gt; 2       2 Painting    Painting    Painting Painting Painting Painting     &lt;NA&gt;
 #&gt; 3       6 Sculpure    Sculpure    Painting Painting Painting Painting Painting
@@ -241,9 +252,30 @@ This function invokes <code><a href='http://www.rdocumentation.org/packages/tidy
 #&gt; 3 Painting
 #&gt; 4 Painting
 #&gt; 5 Painting
-#&gt; 6     &lt;NA&gt;</div><div class='input'><span class='fu'>is_alluvial</span>(<span class='no'>majors2</span>,
+#&gt; 6     &lt;NA&gt;</div><div class='input'><span class='fu'>is_alluvial</span>(<span class='no'>majors_alluvia</span>,
             <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>2</span>:<span class='fl'>9</span>,
-            <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Missing alluvia for some stratum combinations.</span></div><div class='output co'>#&gt; [1] "alluvia"</div></pre>
+            <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Missing alluvia for some stratum combinations.</span></div><div class='output co'>#&gt; [1] "alluvia"</div><div class='input'>
+<span class='co'># distill variables that vary within 'id' values</span>
+<span class='fu'>set.seed</span>(<span class='fl'>1</span>)
+<span class='no'>majors</span>$<span class='no'>hypo_grade</span> <span class='kw'>&lt;-</span> <span class='no'>LETTERS</span>[<span class='fu'>sample</span>(<span class='fl'>5</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fu'>nrow</span>(<span class='no'>majors</span>), <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)]
+<span class='no'>majors_alluvia2</span> <span class='kw'>&lt;-</span> <span class='fu'>to_alluvia</span>(
+  <span class='no'>majors</span>,
+  <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"semester"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"curriculum"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"student"</span>,
+  <span class='kw'>distill</span> <span class='kw'>=</span> <span class='st'>"most"</span>
+)</div><div class='output co'>#&gt; <span class='message'>Distilled variables: hypo_grade</span></div><div class='input'><span class='fu'>head</span>(<span class='no'>majors_alluvia2</span>)</div><div class='output co'>#&gt;   student hypo_grade    CURR1       CURR3       CURR5    CURR7    CURR9
+#&gt; 1       1          B Painting    Painting    Painting Painting Painting
+#&gt; 2       2          B Painting    Painting    Painting Painting Painting
+#&gt; 3       6          C Sculpure    Sculpure    Painting Painting Painting
+#&gt; 4       8          B Painting    Painting    Painting Painting     &lt;NA&gt;
+#&gt; 5       9          B Sculpure Art History Art History Painting Painting
+#&gt; 6      10          B Painting    Painting    Painting Painting Painting
+#&gt;     CURR11   CURR13   CURR15
+#&gt; 1 Painting Painting Painting
+#&gt; 2 Painting     &lt;NA&gt;     &lt;NA&gt;
+#&gt; 3 Painting Painting Painting
+#&gt; 4 Painting Painting Painting
+#&gt; 5 Painting Painting Painting
+#&gt; 6 Painting     &lt;NA&gt;     &lt;NA&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

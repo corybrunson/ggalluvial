@@ -1,6 +1,8 @@
 # ggalluvial 0.5.0.9001
 
 - `GeomFlow$draw_panel()` now begins by removing `complete.cases()`, corresponding to one-sided flows. (These are not removed in `StatFlow$compute_panel()`, which would exclude missing aesthetic values from legends.)
+- `to_alluvia()` now has a `distill` parameter to control the inclusion of any original variables that vary within values of `id` into the reformatted data, based on a distilling function that returns a single value from a vector.
+- `is_alluvial_alluvia` now prints a message rather than a warning when some combinations of strata are not linked by any alluvia.
 
 # ggalluvial 0.5.0.9000
 

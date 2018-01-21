@@ -196,15 +196,15 @@ are in bold):</p><ul>
            <span class='kw'>axis</span> <span class='kw'>=</span> <span class='no'>Class</span>)) +
   <span class='fu'>geom_lode</span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Class</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='no'>Survived</span>)) +
   <span class='fu'>scale_x_continuous</span>(<span class='kw'>breaks</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Class"</span>)) +
-  <span class='fu'>scale_alpha_manual</span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>.25</span>, <span class='fl'>.75</span>))</div><div class='img'><img src='geom_lode-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+  <span class='fu'>scale_alpha_manual</span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>.25</span>, <span class='fl'>.75</span>))</div><div class='img'><img src='geom_lode-4.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='no'>gg</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='fu'>as.data.frame</span>(<span class='no'>Titanic</span>),
              <span class='fu'>aes</span>(<span class='kw'>weight</span> <span class='kw'>=</span> <span class='no'>Freq</span>,
                  <span class='kw'>axis1</span> <span class='kw'>=</span> <span class='no'>Class</span>, <span class='kw'>axis2</span> <span class='kw'>=</span> <span class='no'>Sex</span>, <span class='kw'>axis3</span> <span class='kw'>=</span> <span class='no'>Age</span>,
                  <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Survived</span>))
 <span class='co'># alluvia and lodes</span>
-<span class='no'>gg</span> + <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>() + <span class='fu'>geom_lode</span>()</div><div class='img'><img src='geom_lode-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># lodes as strata</span>
+<span class='no'>gg</span> + <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>() + <span class='fu'>geom_lode</span>()</div><div class='img'><img src='geom_lode-5.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># lodes as strata</span>
 <span class='no'>gg</span> + <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>() +
-  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>)</div><div class='img'><img src='geom_lode-3.png' alt='' width='700' height='432.632880098887' /></div></pre>
+  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>)</div><div class='img'><img src='geom_lode-6.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

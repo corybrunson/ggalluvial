@@ -58,10 +58,10 @@
 #'   (\code{TRUE}) or none (\code{FALSE}) of these variables.
 #' @param distill A logical value indicating whether to include variables, other
 #'   than those passed to \code{key} and \code{value}, that vary within values 
-#'   of \code{id}. Alternatively, a function to be used to distill each such 
-#'   variable to a single value. Acceptable functions include 
-#'   \code{\link[dplyr]{first}}, \code{\link[dplyr]{last}}, and \code{most}
-#'   (which returns the modal value; assumed if \code{TRUE}).
+#'   of \code{id}. Alternatively, the name of a function to be used to distill
+#'   each such variable to a single value. Acceptable function names include 
+#'   \code{"first"}, \code{"last"}, and \code{"most"} (which returns the modal
+#'   value; assumed if \code{TRUE}).
 #' @example inst/examples/ex-alluvial-data.r
 #' @export
 is_alluvial <- function(data, ..., logical = TRUE, silent = FALSE) {
@@ -137,7 +137,7 @@ is_alluvial_alluvia <- function(data,
   n_alluvia <- nrow(dplyr::distinct(data[axes]))
   n_combns <- do.call(prod, lapply(data[axes], dplyr::n_distinct))
   if (n_alluvia < n_combns) {
-    if (!silent) warning("Missing alluvia for some stratum combinations.")
+    if (!silent) message("Missing alluvia for some stratum combinations.")
   }
   
   if (logical) TRUE else "alluvia"
@@ -201,7 +201,7 @@ to_alluvia <- function(data, key, value, id,
     ) > uniq_id))
     if (is.logical(distill)) {
       if (distill) {
-        distill <- most
+        distill <- "most"
       } else {
         warning("The following variables vary within 'id's ",
                 "and will be dropped: ",
@@ -210,6 +210,7 @@ to_alluvia <- function(data, key, value, id,
       }
     }
     if (!is.null(distill)) {
+      distill <- get(distill)
       stopifnot(is.function(distill))
       message("Distilled variables: ",
               paste(distill_vars, collapse = ", "))
@@ -226,7 +227,7 @@ to_alluvia <- function(data, key, value, id,
   
   res <- tidyr::spread(data, key = rlang::UQ(key), value = rlang::UQ(value))
   if (!is.null(distill)) {
-    res <- merge(res, distill_data, by = id, all.x = TRUE, all.y = FALSE)
+    res <- merge(distill_data, res, by = id, all.x = FALSE, all.y = TRUE)
   }
   
   res
