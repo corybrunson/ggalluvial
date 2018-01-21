@@ -51,10 +51,17 @@
 #'   corresponding to the axi(e)s (variable(s)).
 #' @param weight Optional numeric or character; the fields of \code{data}
 #'   corresponding to alluvium or lode weights (heights when plotted).
-#' @param keep Either a numeric or character vector; which variables among those
-#'   passed to \code{axes} to merge into the reshapen data by \code{id}, or
-#'   logical, indicating whether to merge all (\code{TRUE}) or none
-#'   (\code{FALSE}) of these variables.
+
+#' @param keep A numeric or character vector indicating which variables among
+#'   those passed to \code{axes} to merge into the reshapen data by \code{id}. 
+#'   Alternatively, a logical value indicating whether to merge all 
+#'   (\code{TRUE}) or none (\code{FALSE}) of these variables.
+#' @param distill A logical value indicating whether to include variables, other
+#'   than those passed to \code{key} and \code{value}, that vary within values 
+#'   of \code{id}. Alternatively, the name of a function to be used to distill
+#'   each such variable to a single value. Acceptable function names include 
+#'   \code{"first"}, \code{"last"}, and \code{"most"} (which returns the modal
+#'   value; assumed if \code{TRUE}).
 #' @param relevel.strata Optional logical value or character vector to control 
 #'   the order of the factor levels of the combined stratum variable. If 
 #'   logical, \code{FALSE} keeps the levels of the combined strata in order of 
@@ -85,9 +92,9 @@ is_alluvial_lodes <- function(data,
                               weight = NULL,
                               logical = TRUE, silent = FALSE) {
   
-  key <- ensure_columns(key, data)
-  value <- ensure_columns(value, data)
-  id <- ensure_columns(id, data)
+  key <- ensure_vars(key, data)
+  value <- ensure_vars(value, data)
+  id <- ensure_vars(id, data)
   
   if (any(duplicated(cbind(data[[key]], data[[id]])))) {
     if (!silent) warning("Duplicated id-axis pairings.")
@@ -126,17 +133,17 @@ is_alluvial_alluvia <- function(data,
   }
   
   if (!is.null(weight)) {
-    weight <- ensure_columns(weight, data)
+    weight <- ensure_vars(weight, data)
   }
   if (is.null(axes)) {
     axes <- setdiff(names(data), weight)
   }
-  axes <- ensure_columns(axes, data)
+  axes <- ensure_vars(axes, data)
   
   n_alluvia <- nrow(dplyr::distinct(data[axes]))
   n_combns <- do.call(prod, lapply(data[axes], dplyr::n_distinct))
   if (n_alluvia < n_combns) {
-    if (!silent) warning("Missing alluvia for some stratum combinations.")
+    if (!silent) message("Missing alluvia for some stratum combinations.")
   }
   
   if (logical) TRUE else "alluvia"
@@ -152,19 +159,18 @@ to_lodes <- function(data,
   
   if (!is.data.frame(data)) data <- as.data.frame(data)
   
-  # determine axis variable names
-  axes <- ensure_columns(axes, data)
+  axes <- ensure_vars(axes, data)
   if (is.logical(keep)) {
     keep <- if (keep) axes else NULL
   } else {
-    keep <- ensure_columns(keep, data)
+    keep <- ensure_vars(keep, data)
     if (!all(keep %in% axes)) {
       stop("All 'keep' variables must be 'axes' variables.")
     }
   }
   
   # combine factor levels
-  c_levels <- unlist(lapply(data[axes], function(x) levels(as.factor(x))))
+  c_levels <- unlist(lapply(lapply(data[axes], as.factor), levels))
   strata <- unique(unname(c_levels))
   if (any(duplicated(c_levels)) & is.null(relevel.strata)) {
     warning("Some strata appear at multiple axes; ",
@@ -176,9 +182,10 @@ to_lodes <- function(data,
   if (!is.null(keep)) keep_data <- data[, c(id, keep), drop = FALSE]
   for (i in axes) data[[i]] <- as.character(data[[i]])
   
-  res <- tidyr::gather_(data,
-                        key_col = key, value_col = value,
-                        gather_col = axes, factor_key = TRUE)
+  res <- tidyr::gather(data,
+                       key = rlang::UQ(key), value = rlang::UQ(value),
+                       rlang::UQ(axes),
+                       factor_key = TRUE)
   res[[value]] <- factor(res[[value]], levels = strata)
   
   # order the strata as prescribed
@@ -196,34 +203,76 @@ to_lodes <- function(data,
     )
   }
   
-  if (!is.null(keep)) res <- dplyr::left_join(res, keep_data, by = id)
+  if (!is.null(keep)) {
+    res <- merge(res, keep_data, by = id, all.x = TRUE, all.y = FALSE)
+  }
+  
   res
 }
 
 #' @rdname alluvial-data
 #' @export
-to_alluvia <- function(data, key, value, id) {
+to_alluvia <- function(data, key, value, id,
+                       distill = FALSE) {
   
-  key <- ensure_columns(key, data)
-  value <- ensure_columns(value, data)
-  id <- ensure_columns(id, data)
+  key <- ensure_vars(key, data)
+  value <- ensure_vars(value, data)
+  id <- ensure_vars(id, data)
   
   stopifnot(is_alluvial(data, key = key, value = value, id = id, silent = TRUE))
   
-  # check that remaining columns are fixed by id
-  n_id <- dplyr::n_distinct(data[[id]])
-  n_row <- nrow(unique(data[, setdiff(names(data), c(key, value)),
-                            drop = FALSE]))
-  if (!(n_id == n_row))
-    stop("Non-'key'/'value' fields vary within 'id's.")
+  # handle any variables that vary within 'id's
+  uniq_id <- length(unique(data[[id]]))
+  uniq_data <- unique(data[, -match(c(key, value), names(data)), drop = FALSE])
+  if (! uniq_id == nrow(uniq_data)) {
+    distill_vars <- names(which(sapply(
+      setdiff(names(uniq_data), id),
+      function(x) nrow(unique(uniq_data[, c(id, x), drop = FALSE]))
+    ) > uniq_id))
+    if (is.logical(distill)) {
+      if (distill) {
+        distill <- "most"
+      } else {
+        warning("The following variables vary within 'id's ",
+                "and will be dropped: ",
+                paste(distill_vars, collapse = ", "))
+        distill <- NULL
+      }
+    }
+    if (!is.null(distill)) {
+      distill <- get(distill)
+      stopifnot(is.function(distill))
+      message("Distilled variables: ",
+              paste(distill_vars, collapse = ", "))
+      distill_data <- unique(dplyr::ungroup(dplyr::mutate_at(
+        dplyr::group_by_at(data[, match(c(id, distill_vars), names(data))], 1),
+        rlang::UQ(distill_vars),
+        distill
+      )))
+    }
+    data <- data[, -match(distill_vars, names(data)), drop = FALSE]
+  } else {
+    distill <- NULL
+  }
   
-  res <- tidyr::spread_(data, key = key, value = value)
-  res[order(res[[id]]), ]
+  res <- tidyr::spread(data, key = rlang::UQ(key), value = rlang::UQ(value))
+  if (!is.null(distill)) {
+    res <- merge(distill_data, res, by = id, all.x = FALSE, all.y = TRUE)
+  }
+  
+  res
 }
 
-ensure_columns <- function(x, data) {
+ensure_vars <- function(x, data) {
   if (is.character(x)) {
     x <- match(x, names(data))
   }
   names(data)[x]
+}
+
+# distilling functions
+first <- dplyr::first
+last <- dplyr::last
+most <- function(x) {
+  x[which(factor(x) == names(which.max(table(factor(x)))))[1]]
 }
