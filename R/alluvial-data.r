@@ -216,7 +216,7 @@ to_alluvia <- function(data, key, value, id,
               paste(distill_vars, collapse = ", "))
       distill_data <- unique(dplyr::ungroup(dplyr::mutate_at(
         dplyr::group_by_at(data[, match(c(id, distill_vars), names(data))], 1),
-        rlang::UQ(distill_vars),
+        dplyr::vars(distill_vars),
         distill
       )))
     }
