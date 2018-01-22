@@ -213,11 +213,12 @@ to_alluvia <- function(data, key, value, id,
       stopifnot(is.function(distill))
       message("Distilled variables: ",
               paste(distill_vars, collapse = ", "))
-      distill_data <- unique(dplyr::ungroup(dplyr::mutate_at(
-        dplyr::group_by_at(data[, match(c(id, distill_vars), names(data))], 1),
-        dplyr::vars(distill_vars),
+      distill_data <- stats::aggregate(
+        data[, match(distill_vars, names(data))],
+        data[, id, drop = FALSE],
         distill
-      )))
+      )
+      if (length(distill_vars) == 1) names(distill_data)[-1] <- distill_vars
     }
     data <- data[, -match(distill_vars, names(data)), drop = FALSE]
   } else {
