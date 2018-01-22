@@ -44,17 +44,10 @@ corresponding to alluvium or lode weights (heights when plotted).}
 \item{axes}{Numeric or character vector; the field(s) of \code{data}
 corresponding to the axi(e)s (variable(s)).}
 
-\item{distill}{A logical value indicating whether to include variables, other
-than those passed to \code{key} and \code{value}, that vary within values 
-of \code{id}. Alternatively, the name of a function to be used to distill
-each such variable to a single value. Acceptable function names include 
-\code{"first"}, \code{"last"}, and \code{"most"} (which returns the modal
-value; assumed if \code{TRUE}).}
-
-\item{keep}{Either a numeric or character vector; which variables among those
-passed to \code{axes} to merge into the reshapen data by \code{id}, or
-logical, indicating whether to merge all (\code{TRUE}) or none
-(\code{FALSE}) of these variables.}
+\item{keep}{A numeric or character vector indicating which variables among
+those passed to \code{axes} to merge into the reshapen data by \code{id}. 
+Alternatively, a logical value indicating whether to merge all 
+(\code{TRUE}) or none (\code{FALSE}) of these variables.}
 
 \item{relevel.strata}{Optional logical value or character vector to control 
 the order of the factor levels of the combined stratum variable. If 
@@ -62,6 +55,13 @@ logical, \code{FALSE} keeps the levels of the combined strata in order of
 appearance while \code{TRUE} \code{sort()}s the levels. If character,
 interpreted as an ordered vector of factor levels, after which any
 additional levels will be appended.}
+
+\item{distill}{A logical value indicating whether to include variables, other
+than those passed to \code{key} and \code{value}, that vary within values 
+of \code{id}. Alternatively, the name of a function to be used to distill
+each such variable to a single value. Acceptable function names include 
+\code{"first"}, \code{"last"}, and \code{"most"} (which returns the modal
+value; assumed if \code{TRUE}).}
 }
 \description{
 Alluvial diagrams consist of multiple horizontally-distributed columns (axes)
