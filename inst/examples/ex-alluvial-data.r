@@ -11,10 +11,10 @@ head(titanic_lodes)
 is_alluvial(titanic_lodes,
             key = "x", value = "stratum", id = "alluvium",
             weight = "Freq")
-# again in lodes format, this time keeping 'Class' as a variable
+# again in lodes format, this time diffusing the 'Class' variable
 titanic_lodes2 <- to_lodes(titanic_alluvia,
                            key = "variable", value = "value", id = "passenger",
-                           axes = 1:3, keep = "Class")
+                           axes = 1:3, diffuse = "Class")
 head(titanic_lodes2)
 is_alluvial(titanic_lodes2,
             key = "variable", value = "value", id = "passenger",

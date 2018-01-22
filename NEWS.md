@@ -1,3 +1,7 @@
+# ggalluvial 0.5.0.9002
+
+- BC: Change `keep` parameter to `diffuse` (more mnemonic with `distill`).
+
 # ggalluvial 0.5.0.9001
 
 - `to_lodes()` now has a `relevel.strata` parameter to sort or customize the factor levels of the variable containing the aggregated strata. The `stat_*()` functions can pass the same parameter internally and print a warning if the data is already in lodes form.

@@ -51,8 +51,7 @@
 #'   corresponding to the axi(e)s (variable(s)).
 #' @param weight Optional numeric or character; the fields of \code{data}
 #'   corresponding to alluvium or lode weights (heights when plotted).
-
-#' @param keep A numeric or character vector indicating which variables among
+#' @param diffuse A numeric or character vector indicating which variables among
 #'   those passed to \code{axes} to merge into the reshapen data by \code{id}. 
 #'   Alternatively, a logical value indicating whether to merge all 
 #'   (\code{TRUE}) or none (\code{FALSE}) of these variables.
@@ -153,19 +152,19 @@ is_alluvial_alluvia <- function(data,
 #' @export
 to_lodes <- function(data,
                      key = "x", value = "stratum", id = "alluvium",
-                     axes, keep = FALSE, relevel.strata = NULL) {
+                     axes, diffuse = FALSE, relevel.strata = NULL) {
   
   stopifnot(is_alluvial(data, axes = axes, silent = TRUE))
   
   if (!is.data.frame(data)) data <- as.data.frame(data)
   
   axes <- ensure_vars(axes, data)
-  if (is.logical(keep)) {
-    keep <- if (keep) axes else NULL
+  if (is.logical(diffuse)) {
+    diffuse <- if (diffuse) axes else NULL
   } else {
-    keep <- ensure_vars(keep, data)
-    if (!all(keep %in% axes)) {
-      stop("All 'keep' variables must be 'axes' variables.")
+    diffuse <- ensure_vars(diffuse, data)
+    if (!all(diffuse %in% axes)) {
+      stop("All 'diffuse' variables must be 'axes' variables.")
     }
   }
   
@@ -179,7 +178,7 @@ to_lodes <- function(data,
   
   # format data in preparation for 'gather()'
   data[[id]] <- 1:nrow(data)
-  if (!is.null(keep)) keep_data <- data[, c(id, keep), drop = FALSE]
+  if (!is.null(diffuse)) diffuse_data <- data[, c(id, diffuse), drop = FALSE]
   for (i in axes) data[[i]] <- as.character(data[[i]])
   
   res <- tidyr::gather(data,
@@ -203,8 +202,8 @@ to_lodes <- function(data,
     )
   }
   
-  if (!is.null(keep)) {
-    res <- merge(res, keep_data, by = id, all.x = TRUE, all.y = FALSE)
+  if (!is.null(diffuse)) {
+    res <- merge(res, diffuse_data, by = id, all.x = TRUE, all.y = FALSE)
   }
   
   res
@@ -244,11 +243,12 @@ to_alluvia <- function(data, key, value, id,
       stopifnot(is.function(distill))
       message("Distilled variables: ",
               paste(distill_vars, collapse = ", "))
-      distill_data <- unique(dplyr::ungroup(dplyr::mutate_at(
-        dplyr::group_by_at(data[, match(c(id, distill_vars), names(data))], 1),
-        dplyr::vars(distill_vars),
+      distill_data <- stats::aggregate(
+        data[, match(distill_vars, names(data))],
+        data[, id, drop = FALSE],
         distill
-      )))
+      )
+      if (length(distill_vars) == 1) names(distill_data)[-1] <- distill_vars
     }
     data <- data[, -match(distill_vars, names(data)), drop = FALSE]
   } else {
