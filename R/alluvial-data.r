@@ -51,8 +51,7 @@
 #'   corresponding to the axi(e)s (variable(s)).
 #' @param weight Optional numeric or character; the fields of \code{data}
 #'   corresponding to alluvium or lode weights (heights when plotted).
-
-#' @param keep A numeric or character vector indicating which variables among
+#' @param diffuse A numeric or character vector indicating which variables among
 #'   those passed to \code{axes} to merge into the reshapen data by \code{id}. 
 #'   Alternatively, a logical value indicating whether to merge all 
 #'   (\code{TRUE}) or none (\code{FALSE}) of these variables.
@@ -147,25 +146,25 @@ is_alluvial_alluvia <- function(data,
 #' @export
 to_lodes <- function(data,
                      key = "x", value = "stratum", id = "alluvium",
-                     axes, keep = FALSE) {
+                     axes, diffuse = FALSE) {
   
   stopifnot(is_alluvial(data, axes = axes, silent = TRUE))
   
   if (!is.data.frame(data)) data <- as.data.frame(data)
   
   axes <- ensure_vars(axes, data)
-  if (is.logical(keep)) {
-    keep <- if (keep) axes else NULL
+  if (is.logical(diffuse)) {
+    diffuse <- if (diffuse) axes else NULL
   } else {
-    keep <- ensure_vars(keep, data)
-    if (!all(keep %in% axes)) {
-      stop("All 'keep' variables must be 'axes' variables.")
+    diffuse <- ensure_vars(diffuse, data)
+    if (!all(diffuse %in% axes)) {
+      stop("All 'diffuse' variables must be 'axes' variables.")
     }
   }
   strata <- unique(unlist(lapply(lapply(data[axes], as.factor), levels)))
   
   data[[id]] <- 1:nrow(data)
-  if (!is.null(keep)) keep_data <- data[, c(id, keep), drop = FALSE]
+  if (!is.null(diffuse)) diffuse_data <- data[, c(id, diffuse), drop = FALSE]
   for (i in axes) data[[i]] <- as.character(data[[i]])
   
   res <- tidyr::gather(data,
@@ -173,8 +172,8 @@ to_lodes <- function(data,
                        rlang::UQ(axes),
                        factor_key = TRUE)
   res[[value]] <- factor(res[[value]], levels = strata)
-  if (!is.null(keep)) {
-    res <- merge(res, keep_data, by = id, all.x = TRUE, all.y = FALSE)
+  if (!is.null(diffuse)) {
+    res <- merge(res, diffuse_data, by = id, all.x = TRUE, all.y = FALSE)
   }
   
   res
