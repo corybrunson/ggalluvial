@@ -277,7 +277,7 @@ observations within each stratum (otherwise <code>NA</code> is assigned).</p>
 </div><span class='co'># NOT RUN {</span>
   <span class='fu'>data</span>(<span class='no'>babynames</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"babynames"</span>)
   <span class='co'># a discontiguous alluvium</span>
-  <span class='no'>bn</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='http://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>babynames</span>,
+  <span class='no'>bn</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/dplyr/topics/filter'>filter</a></span>(<span class='no'>babynames</span>,
                       <span class='no'>prop</span> <span class='kw'>&gt;=</span> <span class='fl'>.01</span> <span class='kw'>&amp;</span> <span class='no'>sex</span> <span class='kw'>==</span> <span class='st'>"F"</span> <span class='kw'>&amp;</span>
                         <span class='no'>year</span> <span class='kw'>&gt;</span> <span class='fl'>1962</span> <span class='kw'>&amp;</span> <span class='no'>year</span> <span class='kw'>&lt;</span> <span class='fl'>1968</span>)
   <span class='fu'>ggplot</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>bn</span>,
