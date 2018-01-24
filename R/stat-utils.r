@@ -2,7 +2,10 @@
 # names, and return their indices in the numerical order of the axis numbers
 # (with \code{axis} first, if present). Only non-negative integers are allowed.
 get_axes <- function(x) {
-  stopifnot(dplyr::n_distinct(x) == length(x))
+  if (anyDuplicated(x)) {
+    dupes <- unique(x[duplicated(x)])
+    stop("Duplicated variables: ", paste(dupes, collapse = ", "))
+  }
   axis_ind <- grep("^axis[0-9]*$", x)
   axis_ind[order(as.numeric(gsub("^axis", "", x[axis_ind])), na.last = FALSE)]
 }

@@ -84,7 +84,7 @@ StatFlow <- ggproto(
       axis_ind <- get_axes(names(data))
       data <- to_lodes(data = data, axes = axis_ind)
       # positioning requires numeric 'x'
-      data <- dplyr::arrange(data, x, stratum, alluvium)
+      data <- data[with(data, order(x, stratum, alluvium)), , drop = FALSE]
       data$x <- contiguate(data$x)
     }
     
@@ -111,9 +111,9 @@ StatFlow <- ggproto(
     arr_fun <- if (reverse) dplyr::desc else identity
     
     # identify aesthetics that vary within strata (at "fissures")
-    n_lodes <- dplyr::n_distinct(data[, c("x", "stratum")])
+    n_lodes <- nrow(unique(data[, c("x", "stratum")]))
     fissure_aes <- aesthetics[which(sapply(aesthetics, function(x) {
-      dplyr::n_distinct(data[, c("x", "stratum", x)])
+      nrow(unique(data[, c("x", "stratum", x)]))
     }) > n_lodes)]
     data$fissure <- if (length(fissure_aes) == 0) {
       1
@@ -125,12 +125,12 @@ StatFlow <- ggproto(
     x_ran <- range(data$x)
     data$alluvium <- contiguate(data$alluvium)
     alluvium_max <- max(data$alluvium)
-    data <- dplyr::bind_rows(
-      transform(dplyr::filter(data, x != x_ran[2]),
+    data <- rbind(
+      transform(data[data$x != x_ran[2], , drop = FALSE],
                 alluvium = alluvium + alluvium_max * (as.numeric(x) - 1),
                 link = as.numeric(x),
                 side = I("start")),
-      transform(dplyr::filter(data, x != x_ran[1]),
+      transform(data[data$x != x_ran[1], , drop = FALSE],
                 alluvium = alluvium + alluvium_max * (as.numeric(x) - 2),
                 link = as.numeric(x) - 1,
                 side = I("end"))

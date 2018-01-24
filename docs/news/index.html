@@ -86,12 +86,23 @@
     </div>
 
     <div class="contents">
+    <div id="ggalluvial-0-5-0-9002" class="section level1">
+<h1 class="hasAnchor">
+<a href="#ggalluvial-0-5-0-9002" class="anchor"></a>ggalluvial 0.5.0.9002</h1>
+<ul>
+<li>BC: Change <code>keep</code> parameter to <code>diffuse</code> (more mnemonic with <code>distill</code>).</li>
+</ul>
+</div>
     <div id="ggalluvial-0-5-0-9001" class="section level1">
 <h1 class="hasAnchor">
 <a href="#ggalluvial-0-5-0-9001" class="anchor"></a>ggalluvial 0.5.0.9001</h1>
 <ul>
 <li>
 <code>GeomFlow$draw_panel()</code> now begins by removing <code>complete.cases()</code>, corresponding to one-sided flows. (These are not removed in <code>StatFlow$compute_panel()</code>, which would exclude missing aesthetic values from legends.)</li>
+<li>
+<code><a href="../reference/alluvial-data.html">to_alluvia()</a></code> now has a <code>distill</code> parameter to control the inclusion of any original variables that vary within values of <code>id</code> into the reformatted data, based on a distilling function that returns a single value from a vector.</li>
+<li>
+<code>is_alluvial_alluvia</code> now prints a message rather than a warning when some combinations of strata are not linked by any alluvia.</li>
 </ul>
 </div>
     <div id="ggalluvial-0-5-0-9000" class="section level1">
@@ -121,6 +132,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#ggalluvial-0-5-0-9002">0.5.0.9002</a></li>
         <li><a href="#ggalluvial-0-5-0-9001">0.5.0.9001</a></li>
         <li><a href="#ggalluvial-0-5-0-9000">0.5.0.9000</a></li>
         <li><a href="#ggalluvial-0-5-0">0.5.0</a></li>
