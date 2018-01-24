@@ -195,7 +195,7 @@ are in bold):</p><ul>
            <span class='kw'>axis1</span> <span class='kw'>=</span> <span class='no'>Class</span>, <span class='kw'>axis2</span> <span class='kw'>=</span> <span class='no'>Sex</span>, <span class='kw'>axis3</span> <span class='kw'>=</span> <span class='no'>Age</span>, <span class='kw'>axis4</span> <span class='kw'>=</span> <span class='no'>Survived</span>)) +
   <span class='fu'>geom_stratum</span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>1</span>) + <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
   <span class='fu'>scale_x_continuous</span>(<span class='kw'>breaks</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>4</span>,
-                     <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>, <span class='st'>"Survived"</span>))</div><div class='img'><img src='geom_stratum-3.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+                     <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>, <span class='st'>"Survived"</span>))</div><div class='img'><img src='geom_stratum-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='co'># use of facets</span>
 <span class='fu'>ggplot</span>(<span class='fu'>as.data.frame</span>(<span class='no'>Titanic</span>),
        <span class='fu'>aes</span>(<span class='kw'>weight</span> <span class='kw'>=</span> <span class='no'>Freq</span>,
@@ -203,7 +203,7 @@ are in bold):</p><ul>
   <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Survived</span>)) +
   <span class='fu'>geom_stratum</span>() + <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
   <span class='fu'>scale_x_continuous</span>(<span class='kw'>breaks</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>)) +
-  <span class='fu'>facet_wrap</span>(~ <span class='no'>Age</span>, <span class='kw'>scales</span> <span class='kw'>=</span> <span class='st'>"free_y"</span>)</div><div class='img'><img src='geom_stratum-4.png' alt='' width='700' height='432.632880098887' /></div></pre>
+  <span class='fu'>facet_wrap</span>(~ <span class='no'>Age</span>, <span class='kw'>scales</span> <span class='kw'>=</span> <span class='st'>"free_y"</span>)</div><div class='img'><img src='geom_stratum-2.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

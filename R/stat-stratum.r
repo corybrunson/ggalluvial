@@ -105,7 +105,7 @@ StatStratum <- ggproto(
       data <- to_lodes(data = data, axes = axis_ind,
                        relevel.strata = params$relevel.strata)
       # positioning requires numeric 'x'
-      data <- dplyr::arrange(data, x, stratum, alluvium)
+      data <- data[with(data, order(x, stratum, alluvium)), , drop = FALSE]
       data$x <- contiguate(data$x)
     } else {
       if (!is.null(params$relevel.strata)) {
@@ -145,10 +145,10 @@ StatStratum <- ggproto(
     # sort in preparation for calculating cumulative weights
     data <- if (is.na(decreasing)) {
       arr_fun <- if (reverse) dplyr::desc else identity
-      dplyr::arrange(data, PANEL, x, arr_fun(stratum))
+      data[with(data, order(PANEL, x, arr_fun(stratum))), , drop = FALSE]
     } else {
       arr_fun <- if (decreasing) dplyr::desc else identity
-      dplyr::arrange(data, PANEL, x, arr_fun(weight))
+      data[with(data, order(PANEL, x, arr_fun(weight))), , drop = FALSE]
     }
     
     # calculate cumulative weights
