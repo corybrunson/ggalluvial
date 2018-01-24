@@ -120,7 +120,7 @@ StatAlluvium <- ggproto(
       axis_ind <- get_axes(names(data))
       data <- to_lodes(data = data, axes = axis_ind)
       # positioning requires numeric 'x'
-      data <- dplyr::arrange(data, x, stratum, alluvium)
+      data <- data[with(data, order(x, stratum, alluvium)), , drop = FALSE]
       data$x <- contiguate(data$x)
     }
     
@@ -195,8 +195,8 @@ StatAlluvium <- ggproto(
     }
     # check that array has correct dimensions
     stopifnot(dim(lode.ordering) ==
-                c(dplyr::n_distinct(data$alluvium),
-                  dplyr::n_distinct(data$x)))
+                c(length(unique(data$alluvium)),
+                  length(unique(data$x))))
     
     # gather lode positions into alluvium-axis-order table
     alluv[, -1] <- apply(lode.ordering, 2, order)
@@ -211,16 +211,16 @@ StatAlluvium <- ggproto(
     data <- dplyr::left_join(data, alluv_pos, by = c("x", "alluvium"))
     
     # calculate lode floors and ceilings from positions by axis
-    data <- dplyr::arrange(data, position)
+    data <- data[order(data$position), , drop = FALSE]
     data <- dplyr::ungroup(dplyr::mutate(dplyr::group_by(data, x),
                                          ymax = cumsum(weight),
                                          ymin = dplyr::lag(ymax, default = 0)))
     stopifnot(isTRUE(all.equal(data$weight, data$ymax - data$ymin)))
     # add vertical centroids
-    data <- dplyr::mutate(data, y = (ymin + ymax) / 2)
+    data <- transform(data, y = (ymin + ymax) / 2)
     
     # within each alluvium, indices at which contiguous subsets start
-    data <- dplyr::arrange(data, x, alluvium)
+    data <- data[with(data, order(x, alluvium)), , drop = FALSE]
     data$starts <- duplicated(data$alluvium) &
       !duplicated(data[, c("x", "alluvium")])
     data$axis <- contiguate(data$x)
@@ -229,7 +229,7 @@ StatAlluvium <- ggproto(
     data <- dplyr::ungroup(dplyr::mutate(dplyr::group_by(data, alluvium),
                                          flow = axis - cumsum(starts)))
     # add 'group' to group contiguous alluvial subsets
-    data <- dplyr::mutate(data, group = as.numeric(interaction(alluvium, flow)))
+    data <- transform(data, group = as.numeric(interaction(alluvium, flow)))
     # arrange data by aesthetics for consistent (reverse) z-ordering
     data <- z_order_colors(data)
     
