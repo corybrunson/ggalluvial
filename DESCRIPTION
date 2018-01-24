@@ -1,8 +1,8 @@
 Package: ggalluvial
 Type: Package
 Title: Alluvial Diagrams in 'ggplot2'
-Version: 0.5.0.9001
-Date: 2017-11-23
+Version: 0.5.0.9002
+Date: 2018-01-22
 Authors@R: person('Jason Cory', 'Brunson', email = 'cornelioid@gmail.com',
     role = c('aut', 'cre'))
 Maintainer: Jason Cory Brunson <cornelioid@gmail.com>

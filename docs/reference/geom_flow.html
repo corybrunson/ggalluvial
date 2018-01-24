@@ -216,7 +216,7 @@ are in bold):</p><ul>
   <span class='fu'>geom_flow</span>() +
   <span class='fu'>scale_x_continuous</span>(<span class='kw'>breaks</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>)) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>() + <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
-  <span class='fu'>ggtitle</span>(<span class='st'>"Alluvial diagram of Titanic passenger demographic data"</span>)</div><div class='img'><img src='geom_flow-5.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+  <span class='fu'>ggtitle</span>(<span class='st'>"Alluvial diagram of Titanic passenger demographic data"</span>)</div><div class='img'><img src='geom_flow-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='co'># use of facets</span>
 <span class='fu'>ggplot</span>(<span class='fu'>as.data.frame</span>(<span class='no'>Titanic</span>),
        <span class='fu'>aes</span>(<span class='kw'>weight</span> <span class='kw'>=</span> <span class='no'>Freq</span>,
@@ -224,13 +224,13 @@ are in bold):</p><ul>
   <span class='fu'>geom_flow</span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Age</span>)) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>() + <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
   <span class='fu'>scale_x_continuous</span>(<span class='kw'>breaks</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>2</span>, <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>)) +
-  <span class='fu'>facet_wrap</span>(~ <span class='no'>Survived</span>, <span class='kw'>scales</span> <span class='kw'>=</span> <span class='st'>"fixed"</span>)</div><div class='img'><img src='geom_flow-6.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+  <span class='fu'>facet_wrap</span>(~ <span class='no'>Survived</span>, <span class='kw'>scales</span> <span class='kw'>=</span> <span class='st'>"fixed"</span>)</div><div class='img'><img src='geom_flow-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='co'># time series alluvia of WorldPhones data</span>
 <span class='no'>wph</span> <span class='kw'>&lt;-</span> <span class='fu'>as.data.frame</span>(<span class='fu'>as.table</span>(<span class='no'>WorldPhones</span>))
 <span class='fu'>names</span>(<span class='no'>wph</span>) <span class='kw'>&lt;-</span> <span class='fu'>c</span>(<span class='st'>"Year"</span>, <span class='st'>"Region"</span>, <span class='st'>"Telephones"</span>)
 <span class='fu'>ggplot</span>(<span class='no'>wph</span>,
        <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>Year</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>Region</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='no'>Telephones</span>)) +
-  <span class='fu'>geom_flow</span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Region</span>, <span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>Region</span>), <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>0</span>)</div><div class='img'><img src='geom_flow-7.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+  <span class='fu'>geom_flow</span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Region</span>, <span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>Region</span>), <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>0</span>)</div><div class='img'><img src='geom_flow-3.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='co'># rightward flow aesthetics for vaccine survey data</span>
 <span class='fu'>data</span>(<span class='no'>vaccinations</span>)
 <span class='fu'>levels</span>(<span class='no'>vaccinations</span>$<span class='no'>response</span>) <span class='kw'>&lt;-</span> <span class='fu'>rev</span>(<span class='fu'>levels</span>(<span class='no'>vaccinations</span>$<span class='no'>response</span>))
@@ -239,7 +239,7 @@ are in bold):</p><ul>
            <span class='kw'>weight</span> <span class='kw'>=</span> <span class='no'>freq</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'>round</span>(<span class='no'>a</span>, <span class='fl'>3</span>))) +
   <span class='fu'><a href='geom_lode.html'>geom_lode</a></span>() + <span class='fu'>geom_flow</span>() +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0</span>) +
-  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='img'><img src='geom_flow-8.png' alt='' width='700' height='432.632880098887' /></div></pre>
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='img'><img src='geom_flow-4.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

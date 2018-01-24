@@ -115,7 +115,7 @@ treated as axes.</p>
   <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>to_lodes</span>(<span class='no'>data</span>, <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"x"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>, <span class='no'>axes</span>,
-  <span class='kw'>keep</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+  <span class='kw'>diffuse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>to_alluvia</span>(<span class='no'>data</span>, <span class='no'>key</span>, <span class='no'>value</span>, <span class='no'>id</span>, <span class='kw'>distill</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
@@ -158,7 +158,7 @@ corresponding to alluvium or lode weights (heights when plotted).</p></td>
 corresponding to the axi(e)s (variable(s)).</p></td>
     </tr>
     <tr>
-      <th>keep</th>
+      <th>diffuse</th>
       <td><p>A numeric or character vector indicating which variables among
 those passed to <code>axes</code> to merge into the reshapen data by <code>id</code>. 
 Alternatively, a logical value indicating whether to merge all 
@@ -211,10 +211,10 @@ This function invokes <code><a href='http://www.rdocumentation.org/packages/tidy
 #&gt; 5    0        5 Class     1st
 #&gt; 6    0        6 Class     2nd</div><div class='input'><span class='fu'>is_alluvial</span>(<span class='no'>titanic_lodes</span>,
             <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"x"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
-            <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"Freq"</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># again in lodes format, this time keeping 'Class' as a variable</span>
+            <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"Freq"</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># again in lodes format, this time diffusing the 'Class' variable</span>
 <span class='no'>titanic_lodes2</span> <span class='kw'>&lt;-</span> <span class='fu'>to_lodes</span>(<span class='no'>titanic_alluvia</span>,
                            <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"variable"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"value"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"passenger"</span>,
-                           <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>keep</span> <span class='kw'>=</span> <span class='st'>"Class"</span>)
+                           <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>diffuse</span> <span class='kw'>=</span> <span class='st'>"Class"</span>)
 <span class='fu'>head</span>(<span class='no'>titanic_lodes2</span>)</div><div class='output co'>#&gt;   passenger Survived Freq variable value Class
 #&gt; 1         1       No    0    Class   1st   1st
 #&gt; 2         1       No    0      Sex  Male   1st

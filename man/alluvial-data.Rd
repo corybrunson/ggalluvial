@@ -18,7 +18,7 @@ is_alluvial_alluvia(data, axes = NULL, weight = NULL, logical = TRUE,
   silent = FALSE)
 
 to_lodes(data, key = "x", value = "stratum", id = "alluvium", axes,
-  keep = FALSE)
+  diffuse = FALSE)
 
 to_alluvia(data, key, value, id, distill = FALSE)
 }
@@ -44,7 +44,7 @@ corresponding to alluvium or lode weights (heights when plotted).}
 \item{axes}{Numeric or character vector; the field(s) of \code{data}
 corresponding to the axi(e)s (variable(s)).}
 
-\item{keep}{A numeric or character vector indicating which variables among
+\item{diffuse}{A numeric or character vector indicating which variables among
 those passed to \code{axes} to merge into the reshapen data by \code{id}. 
 Alternatively, a logical value indicating whether to merge all 
 (\code{TRUE}) or none (\code{FALSE}) of these variables.}
@@ -106,10 +106,10 @@ head(titanic_lodes)
 is_alluvial(titanic_lodes,
             key = "x", value = "stratum", id = "alluvium",
             weight = "Freq")
-# again in lodes format, this time keeping 'Class' as a variable
+# again in lodes format, this time diffusing the 'Class' variable
 titanic_lodes2 <- to_lodes(titanic_alluvia,
                            key = "variable", value = "value", id = "passenger",
-                           axes = 1:3, keep = "Class")
+                           axes = 1:3, diffuse = "Class")
 head(titanic_lodes2)
 is_alluvial(titanic_lodes2,
             key = "variable", value = "value", id = "passenger",
