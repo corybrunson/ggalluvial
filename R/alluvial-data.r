@@ -45,7 +45,7 @@
 #'   indicating the type of alluvial structure ("none", "lodes", or "alluvia")
 #' @param silent Whether to print warning messages.
 #' @param key,value,id Numeric or character; the fields of \code{data}
-#'   corresponding to the axis (variable), stratum (value), and alluvium
+#'   corresponding to the axis (key), stratum (value), and alluvium
 #'   (identifying) variables.
 #' @param axes Numeric or character vector; the field(s) of \code{data}
 #'   corresponding to the axi(e)s (variable(s)).
@@ -61,12 +61,11 @@
 #'   each such variable to a single value. Acceptable function names include 
 #'   \code{"first"}, \code{"last"}, and \code{"most"} (which returns the modal
 #'   value; assumed if \code{TRUE}).
-#' @param relevel.strata Optional logical value or character vector to control 
-#'   the order of the factor levels of the combined stratum variable. If 
-#'   logical, \code{FALSE} keeps the levels of the combined strata in order of 
-#'   appearance while \code{TRUE} \code{sort()}s the levels. If character,
-#'   interpreted as an ordered vector of factor levels, after which any
-#'   additional levels will be appended.
+#' @param discern Logical value indicating whether to suffix values 
+#'   of the variables passed to \code{axes} that appear at more than one
+#'   variable in order to distinguish their factor levels. This forces the
+#'   levels of the combined factor variable \code{value} to be in the order of
+#'   the \code{axes}.
 #' @example inst/examples/ex-alluvial-data.r
 #' @export
 is_alluvial <- function(data, ..., logical = TRUE, silent = FALSE) {
@@ -152,7 +151,7 @@ is_alluvial_alluvia <- function(data,
 #' @export
 to_lodes <- function(data,
                      key = "x", value = "stratum", id = "alluvium",
-                     axes, diffuse = FALSE, relevel.strata = NULL) {
+                     axes, diffuse = FALSE, discern = FALSE) {
   
   stopifnot(is_alluvial(data, axes = axes, silent = TRUE))
   
@@ -169,11 +168,15 @@ to_lodes <- function(data,
   }
   
   # combine factor levels
-  c_levels <- unlist(lapply(lapply(data[axes], as.factor), levels))
-  strata <- unique(unname(c_levels))
-  if (any(duplicated(c_levels)) & is.null(relevel.strata)) {
-    warning("Some strata appear at multiple axes; ",
-            "consider passing canonical levels to 'relevel.strata'.")
+  cat_levels <- unname(unlist(lapply(lapply(data[axes], as.factor), levels)))
+  if (any(duplicated(cat_levels)) & is.null(discern)) {
+    warning("Some strata appear at multiple axes.")
+  }
+  if (isTRUE(discern)) {
+    data <- discern_data(data, axes)
+    strata <- make.unique(unname(cat_levels))
+  } else {
+    strata <- unique(unname(cat_levels))
   }
   
   # format data in preparation for 'gather()'
@@ -186,21 +189,6 @@ to_lodes <- function(data,
                        rlang::UQ(axes),
                        factor_key = TRUE)
   res[[value]] <- factor(res[[value]], levels = strata)
-  
-  # order the strata as prescribed
-  if (is.logical(relevel.strata)) {
-    if (relevel.strata) {
-      res[[value]] <- factor(
-        res[[value]],
-        levels = sort(levels(res[[value]]))
-      )
-    }
-  } else if (!is.null(relevel.strata)) {
-    res[[value]] <- factor(
-      res[[value]],
-      levels = c(relevel.strata, setdiff(levels(res[[value]]), relevel.strata))
-    )
-  }
   
   if (!is.null(diffuse)) {
     res <- merge(res, diffuse_data, by = id, all.x = TRUE, all.y = FALSE)
@@ -275,4 +263,18 @@ first <- dplyr::first
 last <- dplyr::last
 most <- function(x) {
   x[which(factor(x) == names(which.max(table(factor(x)))))[1]]
+}
+
+# 
+discern_data <- function(data, axes, sep = ".") {
+  list_levels <- lapply(lapply(data[axes], as.factor), levels)
+  cat_levels <- unlist(list_levels)
+  new_levels <- make.unique(unname(cat_levels))
+  i_levels <- cumsum(c(0, sapply(list_levels, length)))
+  for (i in seq_along(axes)) {
+    axis_levels <- as.numeric(as.factor(data[[axes[i]]]))
+    level_inds <- (i_levels[i] + 1):i_levels[i + 1]
+    data[[axes[i]]] <- new_levels[level_inds][axis_levels]
+  }
+  data
 }

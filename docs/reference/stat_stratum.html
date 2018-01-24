@@ -91,7 +91,7 @@ centroids of the strata at each axis, together with their weights (heights).</p>
 
     <pre class="usage"><span class='fu'>stat_stratum</span>(<span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>,
   <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"identity"</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>relevel.strata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
   <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
@@ -99,23 +99,23 @@ centroids of the strata at each axis, together with their weights (heights).</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>mapping</th>
-      <td><p>Set of aesthetic mappings created by <code>aes</code> or
-<code>aes_</code>. If specified and <code>inherit.aes = TRUE</code> (the
+      <td><p>Set of aesthetic mappings created by <code>aes()</code> or
+<code>aes_()</code>. If specified and <code>inherit.aes = TRUE</code> (the
 default), it is combined with the default mapping at the top level of the
 plot. You must supply <code>mapping</code> if there is no plot mapping.</p></td>
     </tr>
     <tr>
       <th>data</th>
       <td><p>The data to be displayed in this layer. There are three
-   options:</p>
+options:</p>
 <p>If <code>NULL</code>, the default, the data is inherited from the plot
-   data as specified in the call to <code>ggplot</code>.</p>
+data as specified in the call to <code>ggplot()</code>.</p>
 <p>A <code>data.frame</code>, or other object, will override the plot
-   data. All objects will be fortified to produce a data frame. See
-   <code>fortify</code> for which variables will be created.</p>
+data. All objects will be fortified to produce a data frame. See
+<code>fortify()</code> for which variables will be created.</p>
 <p>A <code>function</code> will be called with a single argument,
-   the plot data. The return value must be a <code>data.frame.</code>, and
-   will be used as the layer data.</p></td>
+the plot data. The return value must be a <code>data.frame.</code>, and
+will be used as the layer data.</p></td>
     </tr>
     <tr>
       <th>geom</th>
@@ -144,9 +144,9 @@ Ignored if <code>decreasing</code> is not <code>NA</code>.
 Defaults to <code>TRUE</code>.</p></td>
     </tr>
     <tr>
-      <th>relevel.strata</th>
-      <td><p>Passed to <code><a href='alluvial-data.html'>to_lodes</a></code> if <code>data</code> is in
-alluvia format.</p></td>
+      <th>discern</th>
+      <td><p>Passed to <code><a href='alluvial-data.html'>to_lodes</a></code> if <code>data</code> is in alluvia
+format.</p></td>
     </tr>
     <tr>
       <th>label.strata</th>
@@ -158,14 +158,16 @@ variables to the strata. Defaults to FALSE, and requires that no
       <th>show.legend</th>
       <td><p>logical. Should this layer be included in the legends?
 <code>NA</code>, the default, includes if any aesthetics are mapped.
-<code>FALSE</code> never includes, and <code>TRUE</code> always includes.</p></td>
+<code>FALSE</code> never includes, and <code>TRUE</code> always includes.
+It can also be a named logical vector to finely select the aesthetics to
+display.</p></td>
     </tr>
     <tr>
       <th>inherit.aes</th>
       <td><p>If <code>FALSE</code>, overrides the default aesthetics,
 rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
-the default plot specification, e.g. <code>borders</code>.</p></td>
+the default plot specification, e.g. <code>borders()</code>.</p></td>
     </tr>
     <tr>
       <th>na.rm</th>
@@ -224,20 +226,20 @@ observations within each stratum (otherwise <code>NA</code> is assigned).</p>
        <span class='fu'>aes</span>(<span class='kw'>weight</span> <span class='kw'>=</span> <span class='no'>freq</span>,
            <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>response</span>,
            <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>response</span>)) +
-  <span class='fu'>stat_stratum</span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>.5</span>)</div><div class='img'><img src='stat_stratum-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+  <span class='fu'>stat_stratum</span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>.5</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so 'discern' will be ignored.</span></div><div class='img'><img src='stat_stratum-11.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='co'># lode data: positioning with weight labels</span>
 <span class='fu'>ggplot</span>(<span class='no'>vaccinations</span>,
        <span class='fu'>aes</span>(<span class='kw'>weight</span> <span class='kw'>=</span> <span class='no'>freq</span>,
            <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>subject</span>,
            <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>freq</span>)) +
   <span class='fu'>stat_stratum</span>(<span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"errorbar"</span>) +
-  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='img'><img src='stat_stratum-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># lode data: positioning with stratum labels</span>
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so 'discern' will be ignored.</span></div><div class='img'><img src='stat_stratum-12.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># lode data: positioning with stratum labels</span>
 <span class='fu'>ggplot</span>(<span class='no'>vaccinations</span>,
        <span class='fu'>aes</span>(<span class='kw'>weight</span> <span class='kw'>=</span> <span class='no'>freq</span>,
            <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>subject</span>,
            <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>response</span>)) +
   <span class='fu'>stat_stratum</span>(<span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"errorbar"</span>) +
-  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='img'><img src='stat_stratum-3.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so 'discern' will be ignored.</span></div><div class='img'><img src='stat_stratum-13.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='co'># alluvium data: positioning with weight labels</span>
 <span class='fu'>ggplot</span>(<span class='fu'>as.data.frame</span>(<span class='no'>Titanic</span>),
        <span class='fu'>aes</span>(<span class='kw'>weight</span> <span class='kw'>=</span> <span class='no'>Freq</span>,
@@ -246,14 +248,14 @@ observations within each stratum (otherwise <code>NA</code> is assigned).</p>
   <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>) +
   <span class='fu'>stat_stratum</span>(<span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"errorbar"</span>) +
   <span class='fu'>scale_x_continuous</span>(<span class='kw'>breaks</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>4</span>,
-                     <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>, <span class='st'>"Survived"</span>))</div><div class='img'><img src='stat_stratum-4.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># alluvium data: positioning with stratum labels</span>
+                     <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>, <span class='st'>"Survived"</span>))</div><div class='img'><img src='stat_stratum-14.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># alluvium data: positioning with stratum labels</span>
 <span class='fu'>ggplot</span>(<span class='fu'>as.data.frame</span>(<span class='no'>Titanic</span>),
        <span class='fu'>aes</span>(<span class='kw'>weight</span> <span class='kw'>=</span> <span class='no'>Freq</span>,
            <span class='kw'>axis1</span> <span class='kw'>=</span> <span class='no'>Class</span>, <span class='kw'>axis2</span> <span class='kw'>=</span> <span class='no'>Sex</span>, <span class='kw'>axis3</span> <span class='kw'>=</span> <span class='no'>Age</span>, <span class='kw'>axis4</span> <span class='kw'>=</span> <span class='no'>Survived</span>)) +
   <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
   <span class='fu'>stat_stratum</span>(<span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"errorbar"</span>) +
   <span class='fu'>scale_x_continuous</span>(<span class='kw'>breaks</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>4</span>,
-                     <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>, <span class='st'>"Survived"</span>))</div><div class='img'><img src='stat_stratum-5.png' alt='' width='700' height='432.632880098887' /></div></pre>
+                     <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>, <span class='st'>"Survived"</span>))</div><div class='img'><img src='stat_stratum-15.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

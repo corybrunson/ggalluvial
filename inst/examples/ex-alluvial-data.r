@@ -46,26 +46,21 @@ majors_alluvia2 <- to_alluvia(
 )
 head(majors_alluvia2)
 
-# options to relevel strata
-gg <- ggplot(titanic_alluvia,
-             aes(axis1 = Class, axis2 = Sex, axis3 = Age, weight = Freq))
+# options to distinguish strata at different axes
+gg <- ggplot(majors_alluvia,
+             aes(axis1 = CURR1, axis2 = CURR7, axis3 = CURR13))
 gg +
-  geom_flow(aes(fill = Survived), color = "darkgray") +
-  geom_stratum() +
-  geom_text(stat = "stratum", label.strata = TRUE)
+  geom_alluvium(aes(fill = as.factor(student)), discern = TRUE) +
+  geom_stratum(discern = TRUE) +
+  geom_text(stat = "stratum", discern = TRUE, label.strata = TRUE)
 gg +
-  geom_flow(aes(fill = Survived), color = "darkgray", relevel.strata = TRUE) +
-  geom_stratum(relevel.strata = TRUE) +
-  geom_text(stat = "stratum", relevel.strata = TRUE, label.strata = TRUE)
-relevs <- c("Adult", "Child")
-gg +
-  geom_flow(aes(fill = Survived), color = "darkgray", relevel.strata = relevs) +
-  geom_stratum(relevel.strata = relevs) +
-  geom_text(stat = "stratum", relevel.strata = relevs, label.strata = TRUE)
+  geom_alluvium(aes(fill = as.factor(student)), discern = FALSE) +
+  geom_stratum(discern = FALSE) +
+  geom_text(stat = "stratum", discern = FALSE, label.strata = TRUE)
 # warning when inappropriate
-ggplot(titanic_lodes,
-       aes(x = x, stratum = stratum, alluvium = alluvium, weight = Freq,
-           label = stratum)) +
-  geom_flow(color = "darkgray", relevel.strata = TRUE) +
-  geom_stratum(relevel.strata = TRUE) +
-  geom_text(stat = "stratum", relevel.strata = TRUE)
+ggplot(majors[majors$semester %in% paste0("CURR", c(1, 7, 13)), ],
+       aes(x = semester, stratum = curriculum, alluvium = student,
+           label = curriculum)) +
+  geom_alluvium(aes(fill = as.factor(student)), discern = TRUE) +
+  geom_stratum(discern = TRUE) +
+  geom_text(stat = "stratum", discern = TRUE)

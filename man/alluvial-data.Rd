@@ -18,7 +18,7 @@ is_alluvial_alluvia(data, axes = NULL, weight = NULL, logical = TRUE,
   silent = FALSE)
 
 to_lodes(data, key = "x", value = "stratum", id = "alluvium", axes,
-  diffuse = FALSE, relevel.strata = NULL)
+  diffuse = FALSE, discern = FALSE)
 
 to_alluvia(data, key, value, id, distill = FALSE)
 }
@@ -35,7 +35,7 @@ indicating the type of alluvial structure ("none", "lodes", or "alluvia")}
 \item{silent}{Whether to print warning messages.}
 
 \item{key, value, id}{Numeric or character; the fields of \code{data}
-corresponding to the axis (variable), stratum (value), and alluvium
+corresponding to the axis (key), stratum (value), and alluvium
 (identifying) variables.}
 
 \item{weight}{Optional numeric or character; the fields of \code{data}
@@ -49,12 +49,11 @@ those passed to \code{axes} to merge into the reshapen data by \code{id}.
 Alternatively, a logical value indicating whether to merge all 
 (\code{TRUE}) or none (\code{FALSE}) of these variables.}
 
-\item{relevel.strata}{Optional logical value or character vector to control 
-the order of the factor levels of the combined stratum variable. If 
-logical, \code{FALSE} keeps the levels of the combined strata in order of 
-appearance while \code{TRUE} \code{sort()}s the levels. If character,
-interpreted as an ordered vector of factor levels, after which any
-additional levels will be appended.}
+\item{discern}{Logical value indicating whether to suffix values 
+of the variables passed to \code{axes} that appear at more than one
+variable in order to distinguish their factor levels. This forces the
+levels of the combined factor variable \code{value} to be in the order of
+the \code{axes}.}
 
 \item{distill}{A logical value indicating whether to include variables, other
 than those passed to \code{key} and \code{value}, that vary within values 
@@ -148,27 +147,22 @@ majors_alluvia2 <- to_alluvia(
 )
 head(majors_alluvia2)
 
-# options to relevel strata
-gg <- ggplot(titanic_alluvia,
-             aes(axis1 = Class, axis2 = Sex, axis3 = Age, weight = Freq))
+# options to distinguish strata at different axes
+gg <- ggplot(majors_alluvia,
+             aes(axis1 = CURR1, axis2 = CURR7, axis3 = CURR13))
 gg +
-  geom_flow(aes(fill = Survived), color = "darkgray") +
-  geom_stratum() +
-  geom_text(stat = "stratum", label.strata = TRUE)
+  geom_alluvium(aes(fill = as.factor(student)), discern = TRUE) +
+  geom_stratum(discern = TRUE) +
+  geom_text(stat = "stratum", discern = TRUE, label.strata = TRUE)
 gg +
-  geom_flow(aes(fill = Survived), color = "darkgray", relevel.strata = TRUE) +
-  geom_stratum(relevel.strata = TRUE) +
-  geom_text(stat = "stratum", relevel.strata = TRUE, label.strata = TRUE)
-relevs <- c("Adult", "Child")
-gg +
-  geom_flow(aes(fill = Survived), color = "darkgray", relevel.strata = relevs) +
-  geom_stratum(relevel.strata = relevs) +
-  geom_text(stat = "stratum", relevel.strata = relevs, label.strata = TRUE)
+  geom_alluvium(aes(fill = as.factor(student)), discern = FALSE) +
+  geom_stratum(discern = FALSE) +
+  geom_text(stat = "stratum", discern = FALSE, label.strata = TRUE)
 # warning when inappropriate
-ggplot(titanic_lodes,
-       aes(x = x, stratum = stratum, alluvium = alluvium, weight = Freq,
-           label = stratum)) +
-  geom_flow(color = "darkgray", relevel.strata = TRUE) +
-  geom_stratum(relevel.strata = TRUE) +
-  geom_text(stat = "stratum", relevel.strata = TRUE)
+ggplot(majors[majors$semester \%in\% paste0("CURR", c(1, 7, 13)), ],
+       aes(x = semester, stratum = curriculum, alluvium = student,
+           label = curriculum)) +
+  geom_alluvium(aes(fill = as.factor(student)), discern = TRUE) +
+  geom_stratum(discern = TRUE) +
+  geom_text(stat = "stratum", discern = TRUE)
 }

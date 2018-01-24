@@ -22,7 +22,7 @@ stat_flow <- function(mapping = NULL,
                       position = "identity",
                       decreasing = NA,
                       reverse = TRUE,
-                      relevel.strata = NULL,
+                      discern = FALSE,
                       aes.bind = FALSE,
                       na.rm = FALSE,
                       show.legend = NA,
@@ -39,7 +39,7 @@ stat_flow <- function(mapping = NULL,
     params = list(
       decreasing = decreasing,
       reverse = reverse,
-      relevel.strata = relevel.strata,
+      discern = discern,
       aes.bind = aes.bind,
       na.rm = na.rm,
       ...
@@ -85,14 +85,14 @@ StatFlow <- ggproto(
     if (type == "alluvia") {
       axis_ind <- get_axes(names(data))
       data <- to_lodes(data = data, axes = axis_ind,
-                       relevel.strata = params$relevel.strata)
+                       discern = params$discern)
       # positioning requires numeric 'x'
       data <- data[with(data, order(x, stratum, alluvium)), , drop = FALSE]
       data$x <- contiguate(data$x)
     } else {
-      if (!is.null(params$relevel.strata)) {
+      if (!is.null(params$discern)) {
         warning("Data is already in lodes format, ",
-                "so 'relevel.strata' will be ignored.")
+                "so 'discern' will be ignored.")
       }
     }
     
@@ -101,7 +101,7 @@ StatFlow <- ggproto(
   
   compute_panel = function(self, data, scales,
                            decreasing = NA, reverse = TRUE,
-                           relevel.strata = NULL,
+                           discern = FALSE,
                            aes.bind = FALSE) {
     
     # aesthetics
