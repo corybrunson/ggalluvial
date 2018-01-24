@@ -29,6 +29,6 @@ Suggests:
     testthat,
     knitr,
     babynames
-License: GPL-2
+License: GPL-3
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
