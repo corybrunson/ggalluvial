@@ -57,9 +57,9 @@
 #'   (\code{TRUE}) or none (\code{FALSE}) of these variables.
 #' @param distill A logical value indicating whether to include variables, other
 #'   than those passed to \code{key} and \code{value}, that vary within values 
-#'   of \code{id}. Alternatively, the name of a function to be used to distill
-#'   each such variable to a single value. Acceptable function names include 
-#'   \code{"first"}, \code{"last"}, and \code{"most"} (which returns the modal
+#'   of \code{id}. Alternatively, a function (or its name) to be used to distill
+#'   each such variable to a single value. Additional functions include 
+#'   \code{first}, \code{last}, and \code{most} (which returns the modal
 #'   value; assumed if \code{TRUE}).
 #' @example inst/examples/ex-alluvial-data.r
 #' @export
@@ -200,16 +200,17 @@ to_alluvia <- function(data, key, value, id,
     ) > uniq_id))
     if (is.logical(distill)) {
       if (distill) {
-        distill <- "most"
+        distill <- most
       } else {
         warning("The following variables vary within 'id's ",
                 "and will be dropped: ",
                 paste(distill_vars, collapse = ", "))
         distill <- NULL
       }
+    } else if (is.character(distill)) {
+      distill <- get(distill)
     }
     if (!is.null(distill)) {
-      distill <- get(distill)
       stopifnot(is.function(distill))
       message("Distilled variables: ",
               paste(distill_vars, collapse = ", "))
