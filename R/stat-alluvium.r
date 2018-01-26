@@ -141,10 +141,8 @@ StatAlluvium <- ggproto(
     # ensure that 'alluvium' values are contiguous starting at 1
     data$alluvium <- contiguate(data$alluvium)
     
-    # aesthetic fields
-    aesthetics <- setdiff(names(data),
-                          c("x", "stratum", "alluvium",
-                            "weight", "PANEL", "group"))
+    # aesthetics (in prescribed order)
+    aesthetics <- intersect(.color_diff_aesthetics, names(data))
     
     # create alluvia-format dataset of alluvium stratum assignments,
     # with strata arranged according to 'decreasing' and 'reverse' parameters

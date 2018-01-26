@@ -109,12 +109,13 @@ alluviate <- function(data, key, value, id) {
 
 # arrange data by aesthetics for consistent (reverse) z-ordering
 z_order_aes <- function(data, aesthetics) {
-  data <- data[order(data$x), ]
+  
   aes_data <- data[!duplicated(data$alluvium),
                    c("alluvium", aesthetics, "group")]
   if (length(aes_data) == 2) return(data)
-  # ensure consistent aesthetics across alluvia
   aes_data <- aes_data[do.call(order, aes_data[, c(aesthetics, "alluvium")]), ]
+  
+  # ensure order of  'group' respects aesthetics
   data$group <- match(data$group, unique(aes_data$group))
-  data[order(data$x), ]
+  data[with(data, order(x, group)), , drop = FALSE]
 }
