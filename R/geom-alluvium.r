@@ -84,6 +84,14 @@ GeomAlluvium <- ggproto(
   
   setup_data = function(data, params) {
     
+    # check whether color or differentiation aesthetics vary within alluvia
+    aesthetics <- intersect(.color_diff_aesthetics, names(data))
+    if (nrow(unique(data[, c("alluvium", aesthetics), drop = FALSE])) !=
+        length(unique(data$alluvium))) {
+      warning("Some color or differentiation aesthetics vary within alluvia; ",
+              "values at the first axis will be diffused across each alluvium.")
+    }
+    
     # positioning parameters
     transform(data,
               knot.pos = params$knot.pos)

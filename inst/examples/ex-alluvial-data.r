@@ -42,7 +42,7 @@ majors$hypo_grade <- LETTERS[sample(5, size = nrow(majors), replace = TRUE)]
 majors_alluvia2 <- to_alluvia(
   majors,
   key = "semester", value = "curriculum", id = "student",
-  distill = most
+  distill = "most"
 )
 head(majors_alluvia2)
 
