@@ -139,12 +139,10 @@ StatAlluvium <- ggproto(
     # sort data by 'x' then 'alluvium' (to match 'alluv' downstream)
     data <- data[do.call(order, data[, c("x", "alluvium")]), ]
     # ensure that 'alluvium' values are contiguous starting at 1
-    data$alluvium <- as.numeric(as.factor(data$alluvium))
+    data$alluvium <- contiguate(data$alluvium)
     
-    # aesthetic fields
-    aesthetics <- setdiff(names(data),
-                          c("x", "stratum", "alluvium",
-                            "weight", "PANEL", "group"))
+    # aesthetics (in prescribed order)
+    aesthetics <- intersect(.color_diff_aesthetics, names(data))
     
     # create alluvia-format dataset of alluvium stratum assignments,
     # with strata arranged according to 'decreasing' and 'reverse' parameters
@@ -231,7 +229,7 @@ StatAlluvium <- ggproto(
     # add 'group' to group contiguous alluvial subsets
     data <- transform(data, group = as.numeric(interaction(alluvium, flow)))
     # arrange data by aesthetics for consistent (reverse) z-ordering
-    data <- z_order_colors(data)
+    data <- z_order_aes(data, aesthetics)
     
     data
   }

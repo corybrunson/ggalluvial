@@ -95,10 +95,8 @@ StatFlow <- ggproto(
                            decreasing = NA, reverse = TRUE,
                            aes.bind = FALSE) {
     
-    # aesthetics
-    aesthetics <- setdiff(names(data),
-                          c("weight", "PANEL", "group",
-                            "alluvium", "x", "stratum"))
+    # aesthetics (in prescribed order)
+    aesthetics <- intersect(.color_diff_aesthetics, names(data))
     
     # sort within axes by weight according to 'decreasing' parameter
     if (!is.na(decreasing)) {
@@ -190,7 +188,7 @@ StatFlow <- ggproto(
                       ymax = y + weight / 2)
     
     # arrange data by aesthetics for consistent (reverse) z-ordering
-    data <- z_order_colors(data)
+    data <- z_order_aes(data, aesthetics)
     
     data
   }

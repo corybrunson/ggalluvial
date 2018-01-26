@@ -26,15 +26,14 @@ gg + geom_flow(aes(fill = Survived), stat = "alluvium",
 data(majors)
 # omit missing lodes and incident flows
 ggplot(majors,
-       aes(x = semester, stratum = curriculum, alluvium = student,
-           label = curriculum)) +
+       aes(x = semester, stratum = curriculum, alluvium = student)) +
   geom_alluvium(fill = "darkgrey", na.rm = TRUE) +
   geom_stratum(aes(fill = curriculum), color = NA, na.rm = TRUE) +
   theme_bw()
 
 gg <- ggplot(majors,
              aes(x = semester, stratum = curriculum, alluvium = student,
-                 fill = curriculum, label = curriculum)) +
+                 fill = curriculum)) +
   geom_stratum()
 # diagram with outlined alluvia and forward-colored flows
 gg + geom_flow(stat = "alluvium", lode.guidance = "rightleft",

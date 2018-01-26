@@ -54,8 +54,7 @@ ggplot(vaccinations,
 data(majors)
 # omit missing lodes and incident flows
 ggplot(majors,
-       aes(x = semester, stratum = curriculum, alluvium = student,
-           label = curriculum)) +
+       aes(x = semester, stratum = curriculum, alluvium = student)) +
   geom_flow(fill = "darkgrey", na.rm = TRUE) +
   geom_stratum(aes(fill = curriculum), color = NA, na.rm = TRUE) +
   theme_bw()

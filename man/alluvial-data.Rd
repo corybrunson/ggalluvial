@@ -52,9 +52,10 @@ Alternatively, a logical value indicating whether to merge all
 \item{distill}{A logical value indicating whether to include variables, other
 than those passed to \code{key} and \code{value}, that vary within values 
 of \code{id}. Alternatively, a function (or its name) to be used to distill
-each such variable to a single value. Additional functions include 
-\code{first}, \code{last}, and \code{most} (which returns the modal
-value; assumed if \code{TRUE}).}
+each such variable to a single value. In addition to existing functions,
+\code{distill} accepts the character values \code{"first"} (used if
+\code{distill} is \code{TRUE}), \code{"last"}, and \code{"most"} (which
+returns the modal value).}
 }
 \description{
 Alluvial diagrams consist of multiple horizontally-distributed columns (axes)
