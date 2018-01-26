@@ -51,9 +51,9 @@ Alternatively, a logical value indicating whether to merge all
 
 \item{distill}{A logical value indicating whether to include variables, other
 than those passed to \code{key} and \code{value}, that vary within values 
-of \code{id}. Alternatively, the name of a function to be used to distill
-each such variable to a single value. Acceptable function names include 
-\code{"first"}, \code{"last"}, and \code{"most"} (which returns the modal
+of \code{id}. Alternatively, a function (or its name) to be used to distill
+each such variable to a single value. Additional functions include 
+\code{first}, \code{last}, and \code{most} (which returns the modal
 value; assumed if \code{TRUE}).}
 }
 \description{
