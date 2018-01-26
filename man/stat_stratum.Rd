@@ -6,8 +6,8 @@
 \usage{
 stat_stratum(mapping = NULL, data = NULL, geom = "stratum",
   position = "identity", decreasing = NA, reverse = TRUE,
-  label.strata = FALSE, show.legend = NA, inherit.aes = TRUE,
-  na.rm = FALSE, ...)
+  discern = FALSE, label.strata = FALSE, show.legend = NA,
+  inherit.aes = TRUE, na.rm = FALSE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link{aes}} or
@@ -46,6 +46,9 @@ in the reverse order of the variable values,
 so that they match the order of the values in the legend.
 Ignored if \code{decreasing} is not \code{NA}.
 Defaults to \code{TRUE}.}
+
+\item{discern}{Passed to \code{\link{to_lodes}} if \code{data} is in alluvia
+format.}
 
 \item{label.strata}{Logical; whether to assign the values of the axis 
 variables to the strata. Defaults to FALSE, and requires that no

@@ -115,7 +115,7 @@ treated as axes.</p>
   <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>to_lodes</span>(<span class='no'>data</span>, <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"x"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>, <span class='no'>axes</span>,
-  <span class='kw'>diffuse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+  <span class='kw'>diffuse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>to_alluvia</span>(<span class='no'>data</span>, <span class='no'>key</span>, <span class='no'>value</span>, <span class='no'>id</span>, <span class='kw'>distill</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
@@ -144,7 +144,7 @@ indicating the type of alluvial structure ("none", "lodes", or "alluvia")</p></t
     <tr>
       <th>key, value, id</th>
       <td><p>Numeric or character; the fields of <code>data</code>
-corresponding to the axis (variable), stratum (value), and alluvium
+corresponding to the axis (key), stratum (value), and alluvium
 (identifying) variables.</p></td>
     </tr>
     <tr>
@@ -163,6 +163,14 @@ corresponding to the axi(e)s (variable(s)).</p></td>
 those passed to <code>axes</code> to merge into the reshapen data by <code>id</code>. 
 Alternatively, a logical value indicating whether to merge all 
 (<code>TRUE</code>) or none (<code>FALSE</code>) of these variables.</p></td>
+    </tr>
+    <tr>
+      <th>discern</th>
+      <td><p>Logical value indicating whether to suffix values 
+of the variables passed to <code>axes</code> that appear at more than one
+variable in order to distinguish their factor levels. This forces the
+levels of the combined factor variable <code>value</code> to be in the order of
+the <code>axes</code>.</p></td>
     </tr>
     <tr>
       <th>distill</th>
@@ -275,7 +283,23 @@ This function invokes <code><a href='http://www.rdocumentation.org/packages/tidy
 #&gt; 3 Painting Painting Painting
 #&gt; 4 Painting Painting Painting
 #&gt; 5 Painting Painting Painting
-#&gt; 6 Painting     &lt;NA&gt;     &lt;NA&gt;</div></pre>
+#&gt; 6 Painting     &lt;NA&gt;     &lt;NA&gt;</div><div class='input'>
+<span class='co'># options to distinguish strata at different axes</span>
+<span class='no'>gg</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='no'>majors_alluvia</span>,
+             <span class='fu'>aes</span>(<span class='kw'>axis1</span> <span class='kw'>=</span> <span class='no'>CURR1</span>, <span class='kw'>axis2</span> <span class='kw'>=</span> <span class='no'>CURR7</span>, <span class='kw'>axis3</span> <span class='kw'>=</span> <span class='no'>CURR13</span>))
+<span class='no'>gg</span> +
+  <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='fu'>as.factor</span>(<span class='no'>student</span>)), <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
+  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Missing alluvia for some stratum combinations.</span></div><div class='output co'>#&gt; <span class='message'>Missing alluvia for some stratum combinations.</span></div><div class='output co'>#&gt; <span class='message'>Missing alluvia for some stratum combinations.</span></div><div class='img'><img src='alluvial-data-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='no'>gg</span> +
+  <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='fu'>as.factor</span>(<span class='no'>student</span>)), <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>) +
+  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>) +
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Missing alluvia for some stratum combinations.</span></div><div class='output co'>#&gt; <span class='message'>Missing alluvia for some stratum combinations.</span></div><div class='output co'>#&gt; <span class='message'>Missing alluvia for some stratum combinations.</span></div><div class='img'><img src='alluvial-data-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># warning when inappropriate</span>
+<span class='fu'>ggplot</span>(<span class='no'>majors</span>[<span class='no'>majors</span>$<span class='no'>semester</span> <span class='kw'>%in%</span> <span class='fu'>paste0</span>(<span class='st'>"CURR"</span>, <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>7</span>, <span class='fl'>13</span>)), ],
+       <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>semester</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>curriculum</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>student</span>,
+           <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>curriculum</span>)) +
+  <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='fu'>as.factor</span>(<span class='no'>student</span>)), <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
+  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so 'discern' will be ignored.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so 'discern' will be ignored.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so 'discern' will be ignored.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 1 rows containing missing values (geom_text).</span></div><div class='img'><img src='alluvial-data-3.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

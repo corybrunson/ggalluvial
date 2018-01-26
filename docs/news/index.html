@@ -91,6 +91,8 @@
 <a href="#ggalluvial-0-5-0-9002" class="anchor"></a>ggalluvial 0.5.0.9002</h1>
 <ul>
 <li>BC: Change <code>keep</code> parameter to <code>diffuse</code> (more mnemonic with <code>distill</code>).</li>
+<li>
+<code><a href="../reference/alluvial-data.html">to_lodes()</a></code> now has a logical <code>discern</code> parameter that uses <code>make.unique()</code> to make stratum values that appear at different axes distinct. The <code>stat_*()</code> functions can pass the same parameter internally and print a warning if the data is already in lodes form.</li>
 </ul>
 </div>
     <div id="ggalluvial-0-5-0-9001" class="section level1">

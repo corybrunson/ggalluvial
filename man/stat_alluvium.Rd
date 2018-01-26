@@ -6,8 +6,9 @@
 \usage{
 stat_alluvium(mapping = NULL, data = NULL, geom = "alluvium",
   position = "identity", decreasing = NA, reverse = TRUE,
-  aggregate.wts = FALSE, lode.guidance = "zigzag", lode.ordering = NULL,
-  na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ...)
+  discern = FALSE, aggregate.wts = FALSE, lode.guidance = "zigzag",
+  lode.ordering = NULL, na.rm = FALSE, show.legend = NA,
+  inherit.aes = TRUE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link{aes}} or
@@ -46,6 +47,9 @@ in the reverse order of the variable values,
 so that they match the order of the values in the legend.
 Ignored if \code{decreasing} is not \code{NA}.
 Defaults to \code{TRUE}.}
+
+\item{discern}{Passed to \code{\link{to_lodes}} if \code{data} is in alluvia
+format.}
 
 \item{aggregate.wts}{Whether to aggregate weights across otherwise equivalent
 rows before computing lode and flow positions. Set to \code{TRUE} to group

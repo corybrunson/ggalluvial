@@ -18,7 +18,7 @@ is_alluvial_alluvia(data, axes = NULL, weight = NULL, logical = TRUE,
   silent = FALSE)
 
 to_lodes(data, key = "x", value = "stratum", id = "alluvium", axes,
-  diffuse = FALSE)
+  diffuse = FALSE, discern = FALSE)
 
 to_alluvia(data, key, value, id, distill = FALSE)
 }
@@ -35,7 +35,7 @@ indicating the type of alluvial structure ("none", "lodes", or "alluvia")}
 \item{silent}{Whether to print warning messages.}
 
 \item{key, value, id}{Numeric or character; the fields of \code{data}
-corresponding to the axis (variable), stratum (value), and alluvium
+corresponding to the axis (key), stratum (value), and alluvium
 (identifying) variables.}
 
 \item{weight}{Optional numeric or character; the fields of \code{data}
@@ -48,6 +48,12 @@ corresponding to the axi(e)s (variable(s)).}
 those passed to \code{axes} to merge into the reshapen data by \code{id}. 
 Alternatively, a logical value indicating whether to merge all 
 (\code{TRUE}) or none (\code{FALSE}) of these variables.}
+
+\item{discern}{Logical value indicating whether to suffix values 
+of the variables passed to \code{axes} that appear at more than one
+variable in order to distinguish their factor levels. This forces the
+levels of the combined factor variable \code{value} to be in the order of
+the \code{axes}.}
 
 \item{distill}{A logical value indicating whether to include variables, other
 than those passed to \code{key} and \code{value}, that vary within values 
@@ -141,4 +147,23 @@ majors_alluvia2 <- to_alluvia(
   distill = "most"
 )
 head(majors_alluvia2)
+
+# options to distinguish strata at different axes
+gg <- ggplot(majors_alluvia,
+             aes(axis1 = CURR1, axis2 = CURR7, axis3 = CURR13))
+gg +
+  geom_alluvium(aes(fill = as.factor(student)), discern = TRUE) +
+  geom_stratum(discern = TRUE) +
+  geom_text(stat = "stratum", discern = TRUE, label.strata = TRUE)
+gg +
+  geom_alluvium(aes(fill = as.factor(student)), discern = FALSE) +
+  geom_stratum(discern = FALSE) +
+  geom_text(stat = "stratum", discern = FALSE, label.strata = TRUE)
+# warning when inappropriate
+ggplot(majors[majors$semester \%in\% paste0("CURR", c(1, 7, 13)), ],
+       aes(x = semester, stratum = curriculum, alluvium = student,
+           label = curriculum)) +
+  geom_alluvium(aes(fill = as.factor(student)), discern = TRUE) +
+  geom_stratum(discern = TRUE) +
+  geom_text(stat = "stratum", discern = TRUE)
 }

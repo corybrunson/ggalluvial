@@ -6,8 +6,8 @@
 \usage{
 stat_flow(mapping = NULL, data = NULL, geom = "flow",
   position = "identity", decreasing = NA, reverse = TRUE,
-  aes.bind = FALSE, na.rm = FALSE, show.legend = NA, inherit.aes = TRUE,
-  ...)
+  discern = FALSE, aes.bind = FALSE, na.rm = FALSE, show.legend = NA,
+  inherit.aes = TRUE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link{aes}} or
@@ -46,6 +46,9 @@ in the reverse order of the variable values,
 so that they match the order of the values in the legend.
 Ignored if \code{decreasing} is not \code{NA}.
 Defaults to \code{TRUE}.}
+
+\item{discern}{Passed to \code{\link{to_lodes}} if \code{data} is in alluvia
+format.}
 
 \item{aes.bind}{Whether to prioritize aesthetics before axes (other than the
 index axis) when ordering the lodes within each stratum. Defaults to FALSE.}

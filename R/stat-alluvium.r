@@ -37,6 +37,7 @@ stat_alluvium <- function(mapping = NULL,
                           position = "identity",
                           decreasing = NA,
                           reverse = TRUE,
+                          discern = FALSE,
                           aggregate.wts = FALSE,
                           lode.guidance = "zigzag",
                           lode.ordering = NULL,
@@ -55,6 +56,7 @@ stat_alluvium <- function(mapping = NULL,
     params = list(
       decreasing = decreasing,
       reverse = reverse,
+      discern = discern,
       aggregate.wts = FALSE,
       lode.guidance = lode.guidance,
       lode.ordering = lode.ordering,
@@ -118,10 +120,16 @@ StatAlluvium <- ggproto(
     # ensure that data is in lode form
     if (type == "alluvia") {
       axis_ind <- get_axes(names(data))
-      data <- to_lodes(data = data, axes = axis_ind)
+      data <- to_lodes(data = data, axes = axis_ind,
+                       discern = params$discern)
       # positioning requires numeric 'x'
       data <- data[with(data, order(x, stratum, alluvium)), , drop = FALSE]
       data$x <- contiguate(data$x)
+    } else {
+      if (!is.null(params$discern)) {
+        warning("Data is already in lodes format, ",
+                "so 'discern' will be ignored.")
+      }
     }
     
     data
@@ -129,6 +137,7 @@ StatAlluvium <- ggproto(
   
   compute_panel = function(data, scales,
                            decreasing = NA, reverse = TRUE,
+                           discern = FALSE,
                            aggregate.wts = FALSE,
                            lode.guidance = "zigzag",
                            aes.bind = FALSE,

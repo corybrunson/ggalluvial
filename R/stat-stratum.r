@@ -23,6 +23,8 @@
 #'   so that they match the order of the values in the legend.
 #'   Ignored if \code{decreasing} is not \code{NA}.
 #'   Defaults to \code{TRUE}.
+#' @param discern Passed to \code{\link{to_lodes}} if \code{data} is in alluvia
+#'   format.
 #' @param label.strata Logical; whether to assign the values of the axis 
 #'   variables to the strata. Defaults to FALSE, and requires that no
 #'   \code{label} aesthetic is assigned.
@@ -34,6 +36,7 @@ stat_stratum <- function(mapping = NULL,
                          position = "identity",
                          decreasing = NA,
                          reverse = TRUE,
+                         discern = FALSE,
                          label.strata = FALSE,
                          show.legend = NA,
                          inherit.aes = TRUE,
@@ -50,6 +53,7 @@ stat_stratum <- function(mapping = NULL,
     params = list(
       decreasing = decreasing,
       reverse = reverse,
+      discern = discern,
       label.strata = label.strata,
       na.rm = na.rm,
       ...
@@ -98,10 +102,16 @@ StatStratum <- ggproto(
     # ensure that data is in lode form
     if (type == "alluvia") {
       axis_ind <- get_axes(names(data))
-      data <- to_lodes(data = data, axes = axis_ind)
+      data <- to_lodes(data = data, axes = axis_ind,
+                       discern = params$discern)
       # positioning requires numeric 'x'
       data <- data[with(data, order(x, stratum, alluvium)), , drop = FALSE]
       data$x <- contiguate(data$x)
+    } else {
+      if (!is.null(params$discern)) {
+        warning("Data is already in lodes format, ",
+                "so 'discern' will be ignored.")
+      }
     }
     
     # nullify 'group' and 'alluvium' fields (to avoid confusion with geoms)
@@ -114,7 +124,7 @@ StatStratum <- ggproto(
   
   compute_panel = function(self, data, scales,
                            decreasing = NA, reverse = TRUE,
-                           label.strata = FALSE) {
+                           discern = FALSE, label.strata = FALSE) {
     
     # introduce label (if absent)
     if (label.strata) {

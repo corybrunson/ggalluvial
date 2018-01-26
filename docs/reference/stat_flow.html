@@ -92,8 +92,8 @@ centroids (<code>x</code> and <code>y</code>) and weights (heights; <code>ymin</
 
     <pre class="usage"><span class='fu'>stat_flow</span>(<span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"flow"</span>,
   <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"identity"</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>aes.bind</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='no'>...</span>)</pre>
+  <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>aes.bind</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -143,6 +143,11 @@ in the reverse order of the variable values,
 so that they match the order of the values in the legend.
 Ignored if <code>decreasing</code> is not <code>NA</code>.
 Defaults to <code>TRUE</code>.</p></td>
+    </tr>
+    <tr>
+      <th>discern</th>
+      <td><p>Passed to <code><a href='alluvial-data.html'>to_lodes</a></code> if <code>data</code> is in alluvia
+format.</p></td>
     </tr>
     <tr>
       <th>aes.bind</th>

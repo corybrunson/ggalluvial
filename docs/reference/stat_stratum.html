@@ -91,8 +91,8 @@ centroids of the strata at each axis, together with their weights (heights).</p>
 
     <pre class="usage"><span class='fu'>stat_stratum</span>(<span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>,
   <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"identity"</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -142,6 +142,11 @@ in the reverse order of the variable values,
 so that they match the order of the values in the legend.
 Ignored if <code>decreasing</code> is not <code>NA</code>.
 Defaults to <code>TRUE</code>.</p></td>
+    </tr>
+    <tr>
+      <th>discern</th>
+      <td><p>Passed to <code><a href='alluvial-data.html'>to_lodes</a></code> if <code>data</code> is in alluvia
+format.</p></td>
     </tr>
     <tr>
       <th>label.strata</th>
@@ -219,20 +224,20 @@ observations within each stratum (otherwise <code>NA</code> is assigned).</p>
        <span class='fu'>aes</span>(<span class='kw'>weight</span> <span class='kw'>=</span> <span class='no'>freq</span>,
            <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>response</span>,
            <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>response</span>)) +
-  <span class='fu'>stat_stratum</span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>.5</span>)</div><div class='img'><img src='stat_stratum-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+  <span class='fu'>stat_stratum</span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>.5</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so 'discern' will be ignored.</span></div><div class='img'><img src='stat_stratum-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='co'># lode data: positioning with weight labels</span>
 <span class='fu'>ggplot</span>(<span class='no'>vaccinations</span>,
        <span class='fu'>aes</span>(<span class='kw'>weight</span> <span class='kw'>=</span> <span class='no'>freq</span>,
            <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>subject</span>,
            <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>freq</span>)) +
   <span class='fu'>stat_stratum</span>(<span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"errorbar"</span>) +
-  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='img'><img src='stat_stratum-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># lode data: positioning with stratum labels</span>
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so 'discern' will be ignored.</span></div><div class='img'><img src='stat_stratum-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># lode data: positioning with stratum labels</span>
 <span class='fu'>ggplot</span>(<span class='no'>vaccinations</span>,
        <span class='fu'>aes</span>(<span class='kw'>weight</span> <span class='kw'>=</span> <span class='no'>freq</span>,
            <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>subject</span>,
            <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>response</span>)) +
   <span class='fu'>stat_stratum</span>(<span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"errorbar"</span>) +
-  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='img'><img src='stat_stratum-3.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so 'discern' will be ignored.</span></div><div class='img'><img src='stat_stratum-3.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='co'># alluvium data: positioning with weight labels</span>
 <span class='fu'>ggplot</span>(<span class='fu'>as.data.frame</span>(<span class='no'>Titanic</span>),
        <span class='fu'>aes</span>(<span class='kw'>weight</span> <span class='kw'>=</span> <span class='no'>Freq</span>,

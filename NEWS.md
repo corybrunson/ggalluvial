@@ -1,6 +1,8 @@
 # ggalluvial 0.5.0.9002
 
 - BC: Change `keep` parameter to `diffuse` (more mnemonic with `distill`).
+- `geom_alluvium()` now throws a warning if some color or differentiation aesthetics vary within alluvia.
+- `to_lodes()` now has a logical `discern` parameter that uses `make.unique()` to make stratum values that appear at different axes distinct. The `stat_*()` functions can pass the same parameter internally and print a warning if the data is already in lodes form.
 
 # ggalluvial 0.5.0.9001
 
