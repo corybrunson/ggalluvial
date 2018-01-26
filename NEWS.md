@@ -1,6 +1,7 @@
 # ggalluvial 0.5.0.9002
 
 - BC: Change `keep` parameter to `diffuse` (more mnemonic with `distill`).
+- `geom_alluvium()` now throws a warning if some color or differentiation aesthetics vary within alluvia.
 
 # ggalluvial 0.5.0.9001
 
