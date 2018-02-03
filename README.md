@@ -29,6 +29,40 @@ devtools::install_github("corybrunson/ggalluvial", ref = "optimization")
 
 ## Usage
 
+### Example
+
+Here is how to generate an alluvial diagram representation of the multi-dimensional categorical dataset of passengers on the Titanic:
+
+```r
+titanic_wide <- data.frame(Titanic)
+ggplot(data = titanic_wide,
+       aes(axis1 = Age, axis2 = Sex, axis3 = Class,
+           weight = Freq)) +
+  geom_alluvium(aes(fill = Survived)) +
+  geom_stratum(label.strata = TRUE)) +
+  theme_minimal() +
+  ggtitle("passengers on the maiden voyage of the Titanic",
+          "stratified by demographics and survival")
+```
+
+The data is in "wide" format, but **ggalluvial** also recognizes data in "long" format and can convert between the two:
+
+```r
+titanic_long <- to_lodes(data.frame(Titanic),
+                         key = "Demographic",
+                         axes = 1:3)
+ggplot(data = titanic_long,
+       aes(x = Demographic, stratum = stratum, alluvium = alluvium,
+           weight = Freq, label = stratum)) +
+  geom_alluvium(aes(fill = Survived)) +
+  geom_stratum() + geom_text(stat = "stratum") +
+  theme_minimal() +
+  ggtitle("passengers on the maiden voyage of the Titanic",
+          "stratified by demographics and survival")
+```
+
+### Resources
+
 For detailed discussion of the data formats recognized by **ggalluvial** and several examples that illustrate its flexibility and limitations, read the vignette:
 
 ```r
@@ -37,8 +71,12 @@ vignette(topic = "ggalluvial", package = "ggalluvial")
 
 The documentation contains several examples; use `help()` to call forth examples of any layer (`stat_*` or `geom_*`).
 
+## Feedback
+
+### Cite
+
 If you use **ggalluvial**-generated figures in publication, i'd be grateful to hear about it! You can also cite the package according to `citation("ggalluvial")`.
 
-## Contribute
+### Contribute
 
 Issues and pull requests are more than welcome! Pretty much every fix and feature of this package derives from a problem or question posed by someone with datasets or design goals i hadn't anticipated.

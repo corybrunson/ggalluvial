@@ -54,20 +54,20 @@ As the examples in the next section will demonstrate, which of these elements ar
 
 ## Alluvial data
 
-**ggalluvial** recognizes two formats of "alluvial data", detailed in the following subsections. A third, tabular, form is popular for storing categorical data such as the `Titanic` and `UCBAdmissions` datasets used in this vignette.[^tableform] For consistency with tidy data principles and **ggplot2** conventions, **ggalluvial** does not accept tabular input.
+**ggalluvial** recognizes two formats of "alluvial data", treated in detail in the following subsections, but which basically correspond to the "wide" and "long" formats of categorical repeated measures data. A third, tabular (or array), form is popular for storing data with multiple categorical dimensions, such as the `Titanic` and `UCBAdmissions` datasets.[^tableform] For consistency with tidy data principles and **ggplot2** conventions, **ggalluvial** does not accept tabular input; `base::data.frame()` converts such an array to an acceptable data frame.
 
 [^tableform]: See Friendly's tutorial, linked above, for a discussion.
 
-### Alluvia format
+### Alluvia (wide) format
 
-The first format reflects the visual arrangement of an alluvial diagram, but "untwisted": _Each row corresponds to a cohort of observations that take a specific value at each variable, and each variable has its own column._ An additional column contains the weight of each row, e.g. the number of observational units in the cohort. This is the format into which the base function `as.data.frame()` transforms a frequency table, for instance the 3-dimensional `UCBAdmissions` dataset:
+The wide format reflects the visual arrangement of an alluvial diagram, but "untwisted": _Each row corresponds to a cohort of observations that take a specific value at each variable, and each variable has its own column._ An additional column contains the weight of each row, e.g. the number of observational units in the cohort. This is the format into which the base function `as.data.frame()` transforms a frequency table, for instance the 3-dimensional `UCBAdmissions` dataset:
 
 ```{r alluvia format of Berkeley admissions dataset}
 head(as.data.frame(UCBAdmissions), n = 12)
 is_alluvial(as.data.frame(UCBAdmissions), logical = FALSE, silent = TRUE)
 ```
 
-This format is inherited from the first version of **ggalluvial**, which modeled it after usage in **alluvial**. It required a stark departure from the usual position aesthetics: The user declares any number of axis variables, which `stat_alluvium()` and `stat_stratum()` recognize and process in a consistent way:
+This format is inherited from the first version of **ggalluvial**, which modeled it after usage in **alluvial**: The user declares any number of axis variables, which `stat_alluvium()` and `stat_stratum()` recognize and process in a consistent way:
 
 ```{r alluvial diagram of UC Berkeley admissions dataset}
 ggplot(as.data.frame(UCBAdmissions),
@@ -76,10 +76,11 @@ ggplot(as.data.frame(UCBAdmissions),
   geom_stratum(width = 1/12, fill = "black", color = "grey") +
   geom_label(stat = "stratum", label.strata = TRUE) +
   scale_x_continuous(breaks = 1:2, labels = c("Gender", "Dept")) +
+  scale_fill_brewer(type = "qual", palette = "Set1") +
   ggtitle("UC Berkeley admissions and rejections, by sex and department")
 ```
 
-An important feature of these diagrams is the meaningfulness of the vertical axis: No gaps are inserted between the strata, so the total height of the diagram reflects the cumulative weight of the observations. The diagrams produced by **ggalluvial** conform (somewhat; see below) to the "grammar of graphics" principles of **ggplot2**, and this prevents users from producing "free-floating" diagrams like the Sankey diagrams showcased [here](https://developers.google.com/chart/interactive/docs/gallery/sankey).[^ggforce]
+An important feature of these diagrams is the meaningfulness of the vertical axis: No gaps are inserted between the strata, so the total height of the diagram reflects the cumulative weight of the observations. The diagrams produced by **ggalluvial** conform (somewhat; keep reading) to the "grammar of graphics" principles of **ggplot2**, and this prevents users from producing "free-floating" diagrams like the Sankey diagrams showcased [here](https://developers.google.com/chart/interactive/docs/gallery/sankey).[^ggforce]
 **ggalluvial** parameters and existing **ggplot2** functionality can also produce [parallel sets](https://eagereyes.org/parallel-sets) plots, illustrated here using the `Titanic` dataset:[^ggparallel]
 
 [^ggforce]: [The **ggforce** package](https://github.com/thomasp85/ggforce) includes parallel set geom and stat layers to produce similar diagrams that can be allowed to free-float.
@@ -99,18 +100,18 @@ ggplot(as.data.frame(Titanic),
   ggtitle("Titanic survival by class and sex")
 ```
 
-This format and functionality are useful and will be retained in future versions. They also involve some conspicuous deviations from **ggplot2** norms:
+This format and functionality are useful for many applications and will be retained in future versions. They also involve some conspicuous deviations from **ggplot2** norms:
 
-- The `axis[0-9]*` position aesthetics are non-standard.
+- The `axis[0-9]*` position aesthetics are non-standard: they are not an explicit set of parameters but a family based on a regular expression pattern; and at least one, but no specific one, is required.
 - `stat_alluvium()` ignores any argument to the `group` aesthetic; instead, `StatAlluvium$compute_panel()` uses `group` to link the rows of the internally-transformed dataset that correspond to the same alluvium.
 - The `label.strata` parameter instructs `stat_stratum()` (called by `geom_text()`) to take the values of the axis variables as labels.
 - The horizontal axis must be manually corrected (using `scale_x_continuous()`) to reflect the implicit categorical variable identifying the axis.
 
 Furthermore, format aesthetics like `fill` are necessarily fixed for each alluvium; they cannot, for example, change from axis to axis according to the value taken at each. This means that, although they can reproduce the branching-tree structure of parallel sets, this format and functionality cannot produce alluvial diagrams with the color schemes featured [here](https://epijim.uk/code-snippets/eq5d/) ("Alluvial diagram") and [here](https://developers.google.com/chart/interactive/docs/gallery/sankey) ("Controlling colors"), which are "reset" at each axis.
 
-### Lodes format
+### Lodes (long) format
 
-The second format recognized by **ggalluvial** contains _one row per lode_, and can be understood as the result of "gathering" (in the **dplyr** sense) the axis columns of a dataset in the alluvia format into a key-value pair of columns encoding the axis as the `key` and the stratum as the `value`. This format requires an additional indexing `id` column that links the rows corresponding to a common cohort, i.e. the lodes of a single alluvium, as illustrated below using the `to_lodes()` defaults on the Berkeley admissions dataset:
+The long format recognized by **ggalluvial** contains _one row per lode_, and can be understood as the result of "gathering" (in the **dplyr** sense) or "pivoting" (in the Microsoft Excel sense) the axis columns of a dataset in the alluvia format into a key-value pair of columns encoding the axis as the key and the stratum as the value. This format requires an additional indexing column that links the rows corresponding to a common cohort, i.e. the lodes of a single alluvium, as illustrated below using the `to_lodes()` defaults on the Berkeley admissions dataset:
 
 ```{r lodes format of Berkeley admissions dataset}
 UCB_lodes <- to_lodes(as.data.frame(UCBAdmissions), axes = 1:3)
@@ -118,13 +119,15 @@ head(UCB_lodes, n = 12)
 is_alluvial(UCB_lodes, logical = FALSE, silent = TRUE)
 ```
 
-The same stat and geom can receive this data format using a different set of positional aesthetics, also specific to **ggalluvial**:
+The functions that convert data between wide (alluvia) and long (lodes) format include several parameters that help preserve ancillary information. See `help("alluvial-data")` for examples.
+
+The same stat and geom can receive data in this format using a different set of positional aesthetics, also specific to **ggalluvial**:
 
 - `x`, the "key" variable indicating the axis to which the row corresponds, which are to be arranged along the horizontal axis;
 - `stratum`, the "value" taken by the axis variable indicated by `x`; and
 - `alluvium`, the indexing scheme that links the rows of a single alluvium.
 
-Weights (and weight totals) can vary from axis to axis, allowing users to produce bump charts like those showcased [here](http://imgur.com/gallery/gI5p7).[^geom-area] In these cases, the strata are an artifact of the alluvia and usually not plotted. For convenience, both `stat_alluvium()` and `stat_flow()` accept arguments for `x` and `alluvium` even if none is given for `stratum`.[^arguments] As an example, we can grop countries in the `Refugees` dataset by region, in order to compare refugee volumes at different scales:
+Weights (and weight totals) can vary from axis to axis, allowing users to produce bump charts like those showcased [here](http://imgur.com/gallery/gI5p7).[^geom-area] In these cases, the strata are an artifact of the alluvia and often not plotted. For convenience, both `stat_alluvium()` and `stat_flow()` will accept arguments for `x` and `alluvium` even if none is given for `stratum`.[^arguments] As an example, we can group countries in the `Refugees` dataset by region, in order to compare refugee volumes at different scales:
 
 [^geom-area]: If bumping is unnecessary, consider using [`geom_area()`](http://www.r-graph-gallery.com/136-stacked-area-chart/) instead.
 [^arguments]: `stat_stratum()` will similarly accept arguments for `x` and `stratum` without `alluvium`. If both strata and either alluvia or flows are to be plotted, though, all three parameters need arguments.
@@ -166,6 +169,7 @@ majors$curriculum <- as.factor(majors$curriculum)
 ggplot(majors,
        aes(x = semester, stratum = curriculum, alluvium = student,
            fill = curriculum, label = curriculum)) +
+  scale_fill_brewer(type = "qual", palette = "Set2") +
   geom_flow(stat = "alluvium", lode.guidance = "rightleft",
             color = "darkgray") +
   geom_stratum() +
