@@ -1,13 +1,13 @@
-
-^data-raw$
-
-^man-roxygen$
-
-^ggplot2-exts$
-
+# custom
 ^sandbox$
 
+# package infrastructure
+^data-raw$
+^man-roxygen$
+^ggplot2-exts$
 ^docs$
+README.Rmd
 
+# hosting infrastructure
 cran-comments.md
 .github
