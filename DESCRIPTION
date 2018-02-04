@@ -29,5 +29,7 @@ Suggests:
     knitr,
     babynames
 License: GPL-3
+URL: http://corybrunson.github.io/ggalluvial/
+BugReports: https://github.com/corybrunson/ggalluvial/issues
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1
