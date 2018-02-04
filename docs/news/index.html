@@ -86,37 +86,43 @@
     </div>
 
     <div class="contents">
-    <div id="ggalluvial-0-5-0-9002" class="section level1">
+    <div id="ggalluvial-0-6-0" class="section level1">
 <h1 class="hasAnchor">
-<a href="#ggalluvial-0-5-0-9002" class="anchor"></a>ggalluvial 0.5.0.9002</h1>
+<a href="#ggalluvial-0-6-0" class="anchor"></a>ggalluvial 0.6.0</h1>
+<div id="cran-checks-for-v0-5-0" class="section level2">
+<h2 class="hasAnchor">
+<a href="#cran-checks-for-v0-5-0" class="anchor"></a>CRAN checks for v0.5.0</h2>
 <ul>
-<li>BC: Change <code>keep</code> parameter to <code>diffuse</code> (more mnemonic with <code>distill</code>).</li>
+<li>The package now <code>Depends</code> on R <code>v3.3.0</code> (patch number zero) instead of <code>v3.3.1</code>. I’ve been unable to install this version locally, so there is a slight chance of incompatibility that i’ll be watchful for going forward.</li>
+<li>The <strong>grid</strong> and <strong>alluvial</strong> packages are now <code>Suggests</code> rather than <code>Imports</code>.</li>
+</ul>
+</div>
+<div id="alluvial-data-functionality" class="section level2">
+<h2 class="hasAnchor">
+<a href="#alluvial-data-functionality" class="anchor"></a>Alluvial data functionality</h2>
+<ul>
+<li>Source files and documentation for <code>is_alluvial_*()</code> and <code>to_*()</code> functions are combined; see <code>help("alluvial-data")</code>.</li>
+<li>
+<code>is_alluvial_alluvia</code> now prints a message rather than a warning when some combinations of strata are not linked by any alluvia.</li>
+<li>
+<code><a href="../reference/alluvial-data.html">to_lodes()</a></code> now has a <code>diffuse</code> parameter to join any original variables to the reformatted data by the <code>id</code> variable (alluvium). This makes it possible to assign original variables to aesthetics after reformatting, as illustrated in a new example.</li>
+<li>
+<code><a href="../reference/alluvial-data.html">to_alluvia()</a></code> now has a <code>distill</code> parameter to control the inclusion of any original variables that vary within values of <code>id</code> into the reformatted data, based on a distilling function that returns a single value from a vector.</li>
 <li>
 <code><a href="../reference/alluvial-data.html">to_lodes()</a></code> now has a logical <code>discern</code> parameter that uses <code>make.unique()</code> to make stratum values that appear at different axes distinct. The <code>stat_*()</code> functions can pass the same parameter internally and print a warning if the data is already in lodes form.</li>
 </ul>
 </div>
-    <div id="ggalluvial-0-5-0-9001" class="section level1">
-<h1 class="hasAnchor">
-<a href="#ggalluvial-0-5-0-9001" class="anchor"></a>ggalluvial 0.5.0.9001</h1>
+<div id="layer-internals" class="section level2">
+<h2 class="hasAnchor">
+<a href="#layer-internals" class="anchor"></a>Layer internals</h2>
 <ul>
 <li>
-<code>GeomFlow$draw_panel()</code> now begins by removing <code>complete.cases()</code>, corresponding to one-sided flows. (These are not removed in <code>StatFlow$compute_panel()</code>, which would exclude missing aesthetic values from legends.)</li>
+<code>GeomFlow$draw_panel()</code> now begins by restricting to <code>complete.cases()</code>, corresponding to one-sided flows. (These are not removed in <code>StatFlow$compute_panel()</code>, which would exclude missing aesthetic values from legends.)</li>
 <li>
-<code><a href="../reference/alluvial-data.html">to_alluvia()</a></code> now has a <code>distill</code> parameter to control the inclusion of any original variables that vary within values of <code>id</code> into the reformatted data, based on a distilling function that returns a single value from a vector.</li>
-<li>
-<code>is_alluvial_alluvia</code> now prints a message rather than a warning when some combinations of strata are not linked by any alluvia.</li>
+<code>GeomAlluvium$setup_data()</code> now throws a warning if some color or differentiation aesthetics vary within alluvia.</li>
+<li>A bug in the processing of a custom <code>lode.ordering</code> argument by <code>StatAlluvium$compute_panel()</code> has been fixed.</li>
 </ul>
 </div>
-    <div id="ggalluvial-0-5-0-9000" class="section level1">
-<h1 class="hasAnchor">
-<a href="#ggalluvial-0-5-0-9000" class="anchor"></a>ggalluvial 0.5.0.9000</h1>
-<ul>
-<li>Per CRAN checks, the package now <code>Depends</code> on R <code>v3.3.0</code> (patch number zero) instead of <code>v3.3.1</code>. I’ve been unable to install this version locally, so there is a slight chance of incompatibility that i’ll be watchful for going forward.</li>
-<li>Per CRAN checks, the <strong>grid</strong> and <strong>alluvial</strong> packages are now <code>Suggests</code> rather than <code>Imports</code>.</li>
-<li>Source files and documentation for <code>is_alluvial_*()</code> and <code>to_*()</code> functions are combined.</li>
-<li>
-<code><a href="../reference/alluvial-data.html">to_lodes()</a></code> now has a <code>keep</code> parameter to join any original variables to the reformatted data by the <code>id</code> variable (alluvium). This makes it possible to assign original variables to aesthetics after reformatting, as illustrated in a new example.</li>
-</ul>
 </div>
     <div id="ggalluvial-0-5-0" class="section level1">
 <h1 class="hasAnchor">
@@ -134,9 +140,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#ggalluvial-0-5-0-9002">0.5.0.9002</a></li>
-        <li><a href="#ggalluvial-0-5-0-9001">0.5.0.9001</a></li>
-        <li><a href="#ggalluvial-0-5-0-9000">0.5.0.9000</a></li>
+        <li><a href="#ggalluvial-0-6-0">0.6.0</a></li>
         <li><a href="#ggalluvial-0-5-0">0.5.0</a></li>
       </ul>
     </div>

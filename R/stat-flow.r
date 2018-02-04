@@ -109,9 +109,9 @@ StatFlow <- ggproto(
     
     # sort within axes by weight according to 'decreasing' parameter
     if (!is.na(decreasing)) {
-      deposits <- aggregate(x = data$weight * (1 - decreasing * 2),
-                            by = data[, c("x", "stratum"), drop = FALSE],
-                            FUN = sum)
+      deposits <- stats::aggregate(x = data$weight * (1 - decreasing * 2),
+                                   by = data[, c("x", "stratum"), drop = FALSE],
+                                   FUN = sum)
       names(deposits)[3] <- "deposit"
     }
     # sort within axes by stratum according to 'reverse' parameter
@@ -155,11 +155,12 @@ StatFlow <- ggproto(
                                                      "flow_fissure")],
                                             drop = TRUE))
     
-    # aggregate alluvial segments within flows
-    group_cols <- setdiff(names(data), c("weight", "group"))
-    dots <- lapply(group_cols, as.symbol)
-    data <- as.data.frame(dplyr::summarize(dplyr::group_by_(data, .dots = dots),
-                                           weight = sum(weight)))
+    # aggregate alluvial segments within flows,
+    # totalling 'weight' and, if numeric, 'label'
+    sum_cols <- c("weight", if (is.numeric(data$label)) "label")
+    group_cols <- setdiff(names(data), c("group", sum_cols))
+    data <- dplyr::summarize_at(dplyr::group_by(data, .dots = group_cols),
+                                sum_cols, sum, na.rm = TRUE)
     data <- transform(data,
                       group = alluvium)
     

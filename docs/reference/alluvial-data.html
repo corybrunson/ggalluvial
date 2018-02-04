@@ -176,10 +176,11 @@ the <code>axes</code>.</p></td>
       <th>distill</th>
       <td><p>A logical value indicating whether to include variables, other
 than those passed to <code>key</code> and <code>value</code>, that vary within values 
-of <code>id</code>. Alternatively, the name of a function to be used to distill
-each such variable to a single value. Acceptable function names include 
-<code>"first"</code>, <code>"last"</code>, and <code>"most"</code> (which returns the modal
-value; assumed if <code>TRUE</code>).</p></td>
+of <code>id</code>. Alternatively, a function (or its name) to be used to distill
+each such variable to a single value. In addition to existing functions,
+<code>distill</code> accepts the character values <code>"first"</code> (used if
+<code>distill</code> is <code>TRUE</code>), <code>"last"</code>, and <code>"most"</code> (which
+returns the modal value).</p></td>
     </tr>
     </table>
     

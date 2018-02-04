@@ -15,7 +15,7 @@
 <![endif]-->
 </head>
 <body>
-    <div class="container template-home">
+    <div class="container template-vignette">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -54,8 +54,14 @@
 
       
       </header><div class="row">
-  <div class="contents col-md-9">
-    <div id="ggalluvial" class="section level1">
+  <div class="col-md-9">
+    
+
+    
+    
+<div class="contents">
+<!-- README.md is generated from README.rmd. Please edit that file -->
+<div id="ggalluvial" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#ggalluvial" class="anchor"></a>ggalluvial</h1></div>
 <div id="design" class="section level2">
@@ -85,21 +91,80 @@
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
 <a href="#usage" class="anchor"></a>Usage</h2>
+<div id="example" class="section level3">
+<h3 class="hasAnchor">
+<a href="#example" class="anchor"></a>Example</h3>
+<p>Here is how to generate an alluvial diagram representation of the multi-dimensional categorical dataset of passengers on the Titanic:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">titanic_wide &lt;-<span class="st"> </span><span class="kw">data.frame</span>(Titanic)
+<span class="kw">head</span>(titanic_wide)
+<span class="co">#&gt;   Class    Sex   Age Survived Freq</span>
+<span class="co">#&gt; 1   1st   Male Child       No    0</span>
+<span class="co">#&gt; 2   2nd   Male Child       No    0</span>
+<span class="co">#&gt; 3   3rd   Male Child       No   35</span>
+<span class="co">#&gt; 4  Crew   Male Child       No    0</span>
+<span class="co">#&gt; 5   1st Female Child       No    0</span>
+<span class="co">#&gt; 6   2nd Female Child       No    0</span>
+<span class="kw">ggplot</span>(<span class="dt">data =</span> titanic_wide,
+       <span class="kw">aes</span>(<span class="dt">axis1 =</span> Class, <span class="dt">axis2 =</span> Sex, <span class="dt">axis3 =</span> Age,
+           <span class="dt">weight =</span> Freq)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">"Class"</span>, <span class="st">"Sex"</span>, <span class="st">"Age"</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="reference/geom_alluvium.html">geom_alluvium</a></span>(<span class="kw">aes</span>(<span class="dt">fill =</span> Survived)) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="reference/geom_stratum.html">geom_stratum</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_text</span>(<span class="dt">stat =</span> <span class="st">"stratum"</span>, <span class="dt">label.strata =</span> <span class="ot">TRUE</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">"passengers on the maiden voyage of the Titanic"</span>,
+          <span class="st">"stratified by demographics and survival"</span>)</code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="672"></p>
+<p>The data is in “wide” format, but <strong>ggalluvial</strong> also recognizes data in “long” format and can convert between the two:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">titanic_long &lt;-<span class="st"> </span><span class="kw"><a href="reference/alluvial-data.html">to_lodes</a></span>(<span class="kw">data.frame</span>(Titanic),
+                         <span class="dt">key =</span> <span class="st">"Demographic"</span>,
+                         <span class="dt">axes =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)
+<span class="kw">head</span>(titanic_long)
+<span class="co">#&gt;   Survived Freq alluvium Demographic stratum</span>
+<span class="co">#&gt; 1       No    0        1       Class     1st</span>
+<span class="co">#&gt; 2       No    0        2       Class     2nd</span>
+<span class="co">#&gt; 3       No   35        3       Class     3rd</span>
+<span class="co">#&gt; 4       No    0        4       Class    Crew</span>
+<span class="co">#&gt; 5       No    0        5       Class     1st</span>
+<span class="co">#&gt; 6       No    0        6       Class     2nd</span>
+<span class="kw">ggplot</span>(<span class="dt">data =</span> titanic_long,
+       <span class="kw">aes</span>(<span class="dt">x =</span> Demographic, <span class="dt">stratum =</span> stratum, <span class="dt">alluvium =</span> alluvium,
+           <span class="dt">weight =</span> Freq, <span class="dt">label =</span> stratum)) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="reference/geom_alluvium.html">geom_alluvium</a></span>(<span class="kw">aes</span>(<span class="dt">fill =</span> Survived)) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="reference/geom_stratum.html">geom_stratum</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_text</span>(<span class="dt">stat =</span> <span class="st">"stratum"</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">"passengers on the maiden voyage of the Titanic"</span>,
+          <span class="st">"stratified by demographics and survival"</span>)</code></pre></div>
+<p><img src="reference/figures/README-unnamed-chunk-7-1.png" width="672"></p>
+</div>
+<div id="resources" class="section level3">
+<h3 class="hasAnchor">
+<a href="#resources" class="anchor"></a>Resources</h3>
 <p>For detailed discussion of the data formats recognized by <strong>ggalluvial</strong> and several examples that illustrate its flexibility and limitations, read the vignette:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">vignette</span>(<span class="dt">topic =</span> <span class="st">"ggalluvial"</span>, <span class="dt">package =</span> <span class="st">"ggalluvial"</span>)</code></pre></div>
 <p>The documentation contains several examples; use <code>help()</code> to call forth examples of any layer (<code>stat_*</code> or <code>geom_*</code>).</p>
+</div>
+</div>
+<div id="feedback" class="section level2">
+<h2 class="hasAnchor">
+<a href="#feedback" class="anchor"></a>Feedback</h2>
+<div id="cite" class="section level3">
+<h3 class="hasAnchor">
+<a href="#cite" class="anchor"></a>Cite</h3>
 <p>If you use <strong>ggalluvial</strong>-generated figures in publication, i’d be grateful to hear about it! You can also cite the package according to <code>citation("ggalluvial")</code>.</p>
 </div>
-<div id="contribute" class="section level2">
-<h2 class="hasAnchor">
-<a href="#contribute" class="anchor"></a>Contribute</h2>
+<div id="contribute" class="section level3">
+<h3 class="hasAnchor">
+<a href="#contribute" class="anchor"></a>Contribute</h3>
 <p>Issues and pull requests are more than welcome! Pretty much every fix and feature of this package derives from a problem or question posed by someone with datasets or design goals i hadn’t anticipated.</p>
+</div>
+</div>
 </div>
 </div>
   </div>
 
-  <div class="col-md-3" id="sidebar">
-    <h2>Links</h2>
+  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+    <h2 class="hasAnchor">
+<a href="#sidebar" class="anchor"></a>Links</h2>
 <ul class="list-unstyled">
 <li>Download from CRAN at <br><a href="https://cran.r-project.org/package=ggalluvial">https://​cran.r-project.org/​package=ggalluvial</a>
 </li>
@@ -111,6 +176,7 @@
 <li>Jason Cory Brunson <br><small class="roles"> Author, maintainer </small> </li>
 </ul>
 </div>
+
 </div>
 
 

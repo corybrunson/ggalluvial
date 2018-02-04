@@ -1,18 +1,18 @@
 Package: ggalluvial
 Type: Package
 Title: Alluvial Diagrams in 'ggplot2'
-Version: 0.5.0.9002
-Date: 2018-01-22
+Version: 0.6.0
+Date: 2018-02-03
 Authors@R: person('Jason Cory', 'Brunson', email = 'cornelioid@gmail.com',
     role = c('aut', 'cre'))
 Maintainer: Jason Cory Brunson <cornelioid@gmail.com>
 Description: Alluvial diagrams encompass a variety of charts that use x-splines
     (alluvia and flows), sometimes augmented with stacked bars (lodes or
     strata), to visualize incidence structures derived from several data types,
-    including repeated categorical measures, evolving classifications, and
-    multi-dimensional categorical data. This package contains stat and geom
-    layers that interpret multiple data formats compatible with this framework
-    while hewing to the principles of tidy data and the grammar of graphics.
+    including categorical repeated measures data and multi-dimensional frequency
+    data. This package contains stat and geom layers that interpret multiple
+    data formats compatible with this framework while hewing to the principles
+    of tidy data and the grammar of graphics.
 Depends:
     R (>= 3.3.0),
     ggplot2

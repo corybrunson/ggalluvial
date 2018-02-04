@@ -199,14 +199,20 @@ StatAlluvium <- ggproto(
         # return the ordering
         do.call(order, ord_dat)
       }))
+      
+      alluv[, -1] <- apply(lode.ordering, 2, order)
+    } else {
+      # check that array has correct dimensions
+      stopifnot(dim(lode.ordering) ==
+                  c(length(unique(data$alluvium)),
+                    length(unique(data$x))))
+      # ensure that data are sorted first by stratum, only then by lode.ordering
+      alluv[, -1] <- sapply(seq_along(alluv_ind), function(i) {
+        order(order(alluv[, alluv_ind[i]], lode.ordering[, i]))
+      })
     }
-    # check that array has correct dimensions
-    stopifnot(dim(lode.ordering) ==
-                c(length(unique(data$alluvium)),
-                  length(unique(data$x))))
     
     # gather lode positions into alluvium-axis-order table
-    alluv[, -1] <- apply(lode.ordering, 2, order)
     alluv_pos <- tidyr::gather(
       alluv,
       key = "x", value = "position",
