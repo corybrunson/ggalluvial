@@ -139,14 +139,13 @@ ggplot(as.data.frame(Titanic),
   geom_line(stat = "alluvium") +
   stat_alluvium(geom = "pointrange") +
   geom_text(stat = "stratum", label.strata = TRUE) +
-  scale_x_continuous(breaks = 1:3,
-                     labels = c("Class", "Sex", "Age"))
+  scale_x_discrete(limits = c("Class", "Sex", "Age"))
 
 gg <- ggplot(as.data.frame(Titanic),
              aes(weight = Freq,
                  axis1 = Class, axis2 = Sex, axis3 = Age)) +
   geom_stratum() + geom_text(stat = "stratum", label.strata = TRUE) +
-  scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age"))
+  scale_x_discrete(limits = c("Class", "Sex", "Age"))
 # use of lode controls
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
                aes.bind = TRUE, lode.guidance = "rightward")
