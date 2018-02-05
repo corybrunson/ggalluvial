@@ -50,17 +50,17 @@ head(majors_alluvia2)
 gg <- ggplot(majors_alluvia,
              aes(axis1 = CURR1, axis2 = CURR7, axis3 = CURR13))
 gg +
-  geom_alluvium(aes(fill = as.factor(student)), discern = TRUE) +
-  geom_stratum(discern = TRUE) +
+  geom_alluvium(aes(fill = as.factor(student)), width = 2/5, discern = TRUE) +
+  geom_stratum(width = 2/5, discern = TRUE) +
   geom_text(stat = "stratum", discern = TRUE, label.strata = TRUE)
 gg +
-  geom_alluvium(aes(fill = as.factor(student)), discern = FALSE) +
-  geom_stratum(discern = FALSE) +
+  geom_alluvium(aes(fill = as.factor(student)), width = 2/5, discern = FALSE) +
+  geom_stratum(width = 2/5, discern = FALSE) +
   geom_text(stat = "stratum", discern = FALSE, label.strata = TRUE)
 # warning when inappropriate
 ggplot(majors[majors$semester %in% paste0("CURR", c(1, 7, 13)), ],
        aes(x = semester, stratum = curriculum, alluvium = student,
            label = curriculum)) +
-  geom_alluvium(aes(fill = as.factor(student)), discern = TRUE) +
-  geom_stratum(discern = TRUE) +
+  geom_alluvium(aes(fill = as.factor(student)), width = 2/5, discern = TRUE) +
+  geom_stratum(width = 2/5, discern = TRUE) +
   geom_text(stat = "stratum", discern = TRUE)
