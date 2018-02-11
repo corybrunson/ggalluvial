@@ -14,9 +14,15 @@ knitr::opts_chunk$set(
 
 # ggalluvial
 
+<!--
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/ggalluvial)](https://cran.r-project.org/package=ggalluvial)
+-->
+
+This is a [**ggplot2** extension](http://www.ggplot2-exts.org/) for alluvial diagrams.
+
 ## Design
 
-This is a [**ggplot2** extension](http://www.ggplot2-exts.org/) for alluvial diagrams. The alluvial plots implemented here can be used to visualize frequency distributions over time or frequency tables involving several categorical variables. The design is derived mostly from the [**alluvial**](https://github.com/mbojan/alluvial) package, but the **ggplot2** framework induced several conspicuous differences:
+The alluvial plots implemented here can be used to visualize frequency distributions over time or frequency tables involving several categorical variables. The design is derived mostly from the [**alluvial**](https://github.com/mbojan/alluvial) package, but the **ggplot2** framework induced several conspicuous differences:
 
 - **alluvial** understands a variety of inputs (vectors, lists, data frames), while **ggalluvial** requires a single data frame;
 - **alluvial** uses each variable of these inputs as a dimension of the data, whereas **ggalluvial** requires the user to specify the dimensions, either as separate aesthetics or as [key-value pairs](http://tidyr.tidyverse.org/);
@@ -57,7 +63,7 @@ head(titanic_wide)
 ggplot(data = titanic_wide,
        aes(axis1 = Class, axis2 = Sex, axis3 = Age,
            weight = Freq)) +
-  scale_x_continuous(breaks = 1:3, labels = c("Class", "Sex", "Age")) +
+  scale_x_discrete(limits = c("Class", "Sex", "Age"), expand = c(.1, .05)) +
   geom_alluvium(aes(fill = Survived)) +
   geom_stratum() + geom_text(stat = "stratum", label.strata = TRUE) +
   theme_minimal() +

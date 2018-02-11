@@ -226,20 +226,20 @@ observations within each stratum (otherwise <code>NA</code> is assigned).</p>
        <span class='fu'>aes</span>(<span class='kw'>weight</span> <span class='kw'>=</span> <span class='no'>freq</span>,
            <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>response</span>,
            <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>response</span>)) +
-  <span class='fu'>stat_stratum</span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>.5</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so 'discern' will be ignored.</span></div><div class='img'><img src='stat_stratum-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+  <span class='fu'>stat_stratum</span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>.5</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so 'discern' will be ignored.</span></div><div class='img'><img src='stat_stratum-6.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='co'># lode data: positioning with weight labels</span>
 <span class='fu'>ggplot</span>(<span class='no'>vaccinations</span>,
        <span class='fu'>aes</span>(<span class='kw'>weight</span> <span class='kw'>=</span> <span class='no'>freq</span>,
            <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>subject</span>,
            <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>freq</span>)) +
   <span class='fu'>stat_stratum</span>(<span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"errorbar"</span>) +
-  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so 'discern' will be ignored.</span></div><div class='img'><img src='stat_stratum-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># lode data: positioning with stratum labels</span>
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so 'discern' will be ignored.</span></div><div class='img'><img src='stat_stratum-7.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># lode data: positioning with stratum labels</span>
 <span class='fu'>ggplot</span>(<span class='no'>vaccinations</span>,
        <span class='fu'>aes</span>(<span class='kw'>weight</span> <span class='kw'>=</span> <span class='no'>freq</span>,
            <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>subject</span>,
            <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>response</span>)) +
   <span class='fu'>stat_stratum</span>(<span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"errorbar"</span>) +
-  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so 'discern' will be ignored.</span></div><div class='img'><img src='stat_stratum-3.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so 'discern' will be ignored.</span></div><div class='img'><img src='stat_stratum-8.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='co'># alluvium data: positioning with weight labels</span>
 <span class='fu'>ggplot</span>(<span class='fu'>as.data.frame</span>(<span class='no'>Titanic</span>),
        <span class='fu'>aes</span>(<span class='kw'>weight</span> <span class='kw'>=</span> <span class='no'>Freq</span>,
@@ -247,15 +247,13 @@ observations within each stratum (otherwise <code>NA</code> is assigned).</p>
            <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>Freq</span>)) +
   <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>) +
   <span class='fu'>stat_stratum</span>(<span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"errorbar"</span>) +
-  <span class='fu'>scale_x_continuous</span>(<span class='kw'>breaks</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>4</span>,
-                     <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>, <span class='st'>"Survived"</span>))</div><div class='img'><img src='stat_stratum-4.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># alluvium data: positioning with stratum labels</span>
+  <span class='fu'>scale_x_discrete</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>, <span class='st'>"Survived"</span>))</div><div class='img'><img src='stat_stratum-9.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># alluvium data: positioning with stratum labels</span>
 <span class='fu'>ggplot</span>(<span class='fu'>as.data.frame</span>(<span class='no'>Titanic</span>),
        <span class='fu'>aes</span>(<span class='kw'>weight</span> <span class='kw'>=</span> <span class='no'>Freq</span>,
            <span class='kw'>axis1</span> <span class='kw'>=</span> <span class='no'>Class</span>, <span class='kw'>axis2</span> <span class='kw'>=</span> <span class='no'>Sex</span>, <span class='kw'>axis3</span> <span class='kw'>=</span> <span class='no'>Age</span>, <span class='kw'>axis4</span> <span class='kw'>=</span> <span class='no'>Survived</span>)) +
   <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
   <span class='fu'>stat_stratum</span>(<span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"errorbar"</span>) +
-  <span class='fu'>scale_x_continuous</span>(<span class='kw'>breaks</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>4</span>,
-                     <span class='kw'>labels</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>, <span class='st'>"Survived"</span>))</div><div class='img'><img src='stat_stratum-5.png' alt='' width='700' height='432.632880098887' /></div></pre>
+  <span class='fu'>scale_x_discrete</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>, <span class='st'>"Survived"</span>))</div><div class='img'><img src='stat_stratum-10.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -278,7 +276,7 @@ observations within each stratum (otherwise <code>NA</code> is assigned).</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

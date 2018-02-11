@@ -1,0 +1,18 @@
+reference:
+- title: Alluvial data
+  desc:  Illustrate, test for, and convert between alluvial formats
+  contents:
+  - '`alluvial-data`'
+  - '`vaccinations`'
+  - '`majors`'
+- title: Layers
+  desc:  Plot layers and auxiliary functions
+  contents:
+  - '`stat_stratum`'
+  - '`stat_alluvium`'
+  - '`stat_flow`'
+  - '`lode-guidance-functions`'
+  - '`geom_stratum`'
+  - '`geom_alluvium`'
+  - '`geom_lode`'
+  - '`geom_flow`'

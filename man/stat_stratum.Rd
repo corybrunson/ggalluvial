@@ -143,16 +143,14 @@ ggplot(as.data.frame(Titanic),
            label = Freq)) +
   geom_text(stat = "stratum") +
   stat_stratum(geom = "errorbar") +
-  scale_x_continuous(breaks = 1:4,
-                     labels = c("Class", "Sex", "Age", "Survived"))
+  scale_x_discrete(limits = c("Class", "Sex", "Age", "Survived"))
 # alluvium data: positioning with stratum labels
 ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age, axis4 = Survived)) +
   geom_text(stat = "stratum", label.strata = TRUE) +
   stat_stratum(geom = "errorbar") +
-  scale_x_continuous(breaks = 1:4,
-                     labels = c("Class", "Sex", "Age", "Survived"))
+  scale_x_discrete(limits = c("Class", "Sex", "Age", "Survived"))
 }
 \seealso{
 \code{\link[ggplot2]{layer}} for additional arguments and

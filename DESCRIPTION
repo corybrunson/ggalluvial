@@ -1,7 +1,7 @@
 Package: ggalluvial
 Type: Package
 Title: Alluvial Diagrams in 'ggplot2'
-Version: 0.6.0
+Version: 0.6.0.9000
 Date: 2018-02-03
 Authors@R: person('Jason Cory', 'Brunson', email = 'cornelioid@gmail.com',
     role = c('aut', 'cre'))
@@ -30,5 +30,7 @@ Suggests:
     knitr,
     babynames
 License: GPL-3
+URL: http://corybrunson.github.io/ggalluvial/
+BugReports: https://github.com/corybrunson/ggalluvial/issues
 VignetteBuilder: knitr
 RoxygenNote: 6.0.1

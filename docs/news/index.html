@@ -117,7 +117,7 @@
 <a href="#layer-internals" class="anchor"></a>Layer internals</h2>
 <ul>
 <li>
-<code>GeomFlow$draw_panel()</code> now begins by restricting to <code>complete.cases()</code>, corresponding to one-sided flows. (These are not removed in <code>StatFlow$compute_panel()</code>, which would exclude missing aesthetic values from legends.)</li>
+<code>GeomFlow$draw_panel()</code> now begins by restricting to <code>complete.cases()</code>, corresponding to flows with both starting and terminating axes. (This is not done in <code>StatFlow$compute_panel()</code>, which would have the effect of excluding missing aesthetic values from legends.)</li>
 <li>
 <code>GeomAlluvium$setup_data()</code> now throws a warning if some color or differentiation aesthetics vary within alluvia.</li>
 <li>A bug in the processing of a custom <code>lode.ordering</code> argument by <code>StatAlluvium$compute_panel()</code> has been fixed.</li>
@@ -154,7 +154,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

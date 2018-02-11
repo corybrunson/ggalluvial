@@ -15,7 +15,7 @@
 
 ## Layer internals
 
-- `GeomFlow$draw_panel()` now begins by restricting to `complete.cases()`, corresponding to one-sided flows. (These are not removed in `StatFlow$compute_panel()`, which would exclude missing aesthetic values from legends.)
+- `GeomFlow$draw_panel()` now begins by restricting to `complete.cases()`, corresponding to flows with both starting and terminating axes. (This is not done in `StatFlow$compute_panel()`, which would have the effect of excluding missing aesthetic values from legends.)
 - `GeomAlluvium$setup_data()` now throws a warning if some color or differentiation aesthetics vary within alluvia.
 - A bug in the processing of a custom `lode.ordering` argument by `StatAlluvium$compute_panel()` has been fixed.
 

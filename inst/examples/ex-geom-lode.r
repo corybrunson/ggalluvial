@@ -3,7 +3,7 @@ ggplot(as.data.frame(Titanic),
        aes(weight = Freq,
            axis = Class)) +
   geom_lode(aes(fill = Class, alpha = Survived)) +
-  scale_x_continuous(breaks = 1, labels = c("Class")) +
+  scale_x_discrete(limits = c("Class")) +
   scale_alpha_manual(values = c(.25, .75))
 
 gg <- ggplot(as.data.frame(Titanic),

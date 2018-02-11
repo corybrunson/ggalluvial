@@ -64,10 +64,14 @@
 <div id="ggalluvial" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#ggalluvial" class="anchor"></a>ggalluvial</h1></div>
+<!--
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/ggalluvial)](https://cran.r-project.org/package=ggalluvial)
+-->
+
 <div id="design" class="section level2">
 <h2 class="hasAnchor">
 <a href="#design" class="anchor"></a>Design</h2>
-<p>This is a <a href="http://www.ggplot2-exts.org/"><strong>ggplot2</strong> extension</a> for alluvial diagrams. The alluvial plots implemented here can be used to visualize frequency distributions over time or frequency tables involving several categorical variables. The design is derived mostly from the <a href="https://github.com/mbojan/alluvial"><strong>alluvial</strong></a> package, but the <strong>ggplot2</strong> framework induced several conspicuous differences:</p>
+<p>The alluvial plots implemented here can be used to visualize frequency distributions over time or frequency tables involving several categorical variables. The design is derived mostly from the <a href="https://github.com/mbojan/alluvial"><strong>alluvial</strong></a> package, but the <strong>ggplot2</strong> framework induced several conspicuous differences:</p>
 <ul>
 <li>
 <strong>alluvial</strong> understands a variety of inputs (vectors, lists, data frames), while <strong>ggalluvial</strong> requires a single data frame;</li>
@@ -107,7 +111,7 @@
 <span class="kw">ggplot</span>(<span class="dt">data =</span> titanic_wide,
        <span class="kw">aes</span>(<span class="dt">axis1 =</span> Class, <span class="dt">axis2 =</span> Sex, <span class="dt">axis3 =</span> Age,
            <span class="dt">weight =</span> Freq)) <span class="op">+</span>
-<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">breaks =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">"Class"</span>, <span class="st">"Sex"</span>, <span class="st">"Age"</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">limits =</span> <span class="kw">c</span>(<span class="st">"Class"</span>, <span class="st">"Sex"</span>, <span class="st">"Age"</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw"><a href="reference/geom_alluvium.html">geom_alluvium</a></span>(<span class="kw">aes</span>(<span class="dt">fill =</span> Survived)) <span class="op">+</span>
 <span class="st">  </span><span class="kw"><a href="reference/geom_stratum.html">geom_stratum</a></span>() <span class="op">+</span><span class="st"> </span><span class="kw">geom_text</span>(<span class="dt">stat =</span> <span class="st">"stratum"</span>, <span class="dt">label.strata =</span> <span class="ot">TRUE</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme_minimal</span>() <span class="op">+</span>
@@ -168,12 +172,18 @@
 <ul class="list-unstyled">
 <li>Download from CRAN at <br><a href="https://cran.r-project.org/package=ggalluvial">https://​cran.r-project.org/​package=ggalluvial</a>
 </li>
+<li>Report a bug at <br><a href="https://github.com/corybrunson/ggalluvial/issues">https://​github.com/​corybrunson/​ggalluvial/​issues</a>
+</li>
 </ul>
 <h2>License</h2>
 <p><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></p>
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>Jason Cory Brunson <br><small class="roles"> Author, maintainer </small> </li>
+</ul>
+<h2>Dev status</h2>
+<ul class="list-unstyled">
+<li><a href="http://www.ggplot2-exts.org/"><strong>ggplot2</strong> extension</a></li>
 </ul>
 </div>
 
@@ -185,7 +195,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
