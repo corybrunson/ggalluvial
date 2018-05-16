@@ -28,15 +28,16 @@
 #' the axis variable names constitute a new factor variable and their values 
 #' comprise another. Other variables' values will be repeated, and a 
 #' row-grouping variable can be introduced. This function invokes 
-#' \code{\link[tidyr]{gather_}}.
+#' \code{\link[tidyr]{gather}}.
 #' 
 #' \code{to_alluvia_form} takes a data frame with axis and axis value variables
 #' to be used in an alluvial diagram, and reshape the data frame so that the
 #' axes constitute separate variables whose values are given by the value
-#' variable. This function invokes \code{\link[tidyr]{spread_}}.
+#' variable. This function invokes \code{\link[tidyr]{spread}}.
 #' 
 
 #' @name alluvial-data
+#' @import tidyselect
 #' @param data A data frame.
 #' @param ... In \code{is_alluvial}, used to determine whether to pass all 
 #'   parameters to \code{is_lodes_form} or to \code{is_alluvia_form}: All or 
@@ -137,6 +138,7 @@ is_alluvial_lodes <- function(...) {
 }
 
 #' @rdname alluvial-data
+#' @importFrom dplyr vars
 #' @export
 is_alluvia_form <- function(data,
                             ..., axes = NULL,
@@ -156,9 +158,10 @@ is_alluvia_form <- function(data,
     }
   }
   
-  if (!is.null(axes)) {
-    deprecate_parameter("axes")
-    axes <- ensure_vars(axes, data)
+  if (!is.null(rlang::enexpr(axes))) {
+    #deprecate_parameter("axes")
+    #axes <- ensure_vars(axes, data)
+    axes <- data_at_vars(data, axes)
   } else {
     quos <- rlang::quos(...)
     if (rlang::is_empty(quos)) {
@@ -185,9 +188,10 @@ is_alluvial_alluvia <- function(...) {
 }
 
 #' @rdname alluvial-data
+#' @importFrom dplyr vars
 #' @export
 to_lodes_form <- function(data,
-                          ..., axes,
+                          ..., axes = NULL,
                           key = "x", value = "stratum", id = "alluvium",
                           diffuse = FALSE, discern = FALSE) {
   
@@ -195,9 +199,10 @@ to_lodes_form <- function(data,
   value_var <- rlang::quo_name(rlang::enexpr(value))
   id_var <- rlang::quo_name(rlang::enexpr(id))
   
-  if (!missing(axes)) {
-    deprecate_parameter("axes")
-    axes <- ensure_vars(axes, data)
+  if (!is.null(rlang::enexpr(axes))) {
+    #deprecate_parameter("axes")
+    #axes <- ensure_vars(axes, data)
+    axes <- data_at_vars(data, axes)
   } else {
     quos <- rlang::quos(...)
     if (rlang::is_empty(quos)) {
@@ -211,10 +216,11 @@ to_lodes_form <- function(data,
   
   if (!is.data.frame(data)) data <- as.data.frame(data)
   
-  if (is.logical(diffuse)) {
+  if (is.logical(rlang::enexpr(diffuse))) {
     diffuse <- if (diffuse) axes else NULL
   } else {
-    diffuse <- unname(tidyselect::vars_select(names(data), diffuse))
+    diffuse <- unname(tidyselect::vars_select(names(data),
+                                              !!rlang::enquo(diffuse)))
     if (!all(diffuse %in% axes)) {
       stop("All `diffuse` variables must be `axes` variables.")
     }
@@ -267,9 +273,9 @@ to_alluvia_form <- function(data,
                             key, value, id,
                             distill = FALSE) {
   
-  key_var <- tidyselect::vars_pull(names(data), !!enquo(key))
-  value_var <- tidyselect::vars_pull(names(data), !!enquo(value))
-  id_var <- tidyselect::vars_pull(names(data), !!enquo(id))
+  key_var <- tidyselect::vars_pull(names(data), !!rlang::enquo(key))
+  value_var <- tidyselect::vars_pull(names(data), !!rlang::enquo(value))
+  id_var <- tidyselect::vars_pull(names(data), !!rlang::enquo(id))
   
   stopifnot(is_lodes_form(data, key_var, value_var, id_var, silent = TRUE))
   
@@ -369,4 +375,24 @@ deprecate_parameter <- function(old, new = NA) {
     },
     "instead."
   ))
+}
+
+# mimic the behavior of `tbl_at_vars()` in `select_at()`
+data_at_vars <- function(data, vars) {
+  data_vars <- names(data)
+  if (rlang::is_character(vars)) {
+    vars
+  } else if (rlang::is_integerish(vars)) {
+    data_vars[vars]
+  } else if (rlang::is_quosures(vars)) {
+    out <- dplyr::select_vars(data_vars, !!!vars)
+    if (!any(rlang::have_name(vars))) {
+      names(out) <- NULL
+    }
+    out
+  } else {
+    stop("Either a character or numeric vector ",
+         "or a `vars()` object ",
+         "is required.")
+  }
 }

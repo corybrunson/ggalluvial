@@ -1,3 +1,14 @@
+# ggalluvial 0.6.1
+
+## Alluvial data functionality
+
+- The functions `is_alluvial_*()` and `to_*()` are renamed to `is_*_form()` and `to_*_form()` for consistency. Their old names are deprecated.
+- The setting `silent = TRUE` now silences all messages.
+- The functions `is_*_form()` now return `FALSE` if any weights are negative, with a message to this effect.
+- These functions now accept unquoted variable names for the `key`, `value`, `id`, `weight`, and `diffuse` parameters, using up-to-date **rlang** and **tidyselect** functionality.
+- The `axes` parameter in `is_alluvia_form()` and `to_lodes_form()` now accepts `dplyr::vars()` objects, as in `dplyr::select_at()`. Alternatively, variables can be fed to these functions as in `dplyr::select()`, to be collected by `rlang::quos(...)` and used as axis variables. If `axes` is not `NULL`, then such additional arguments are ignored, in `is_alluvial()` as well as in `is_alluvia_form()`.
+- The functions `to_*_form()` now merge their internal reshapen data frames with the distilled or diffused variables in a consistent order, placing the distilled or diffused variables to the left.
+
 # ggalluvial 0.6.0
 
 ## CRAN checks for v0.5.0

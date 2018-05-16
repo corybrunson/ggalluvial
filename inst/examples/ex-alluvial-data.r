@@ -4,21 +4,22 @@ head(titanic_alluvia)
 is_alluvial(titanic_alluvia,
             weight = "Freq")
 # Titanic data in lodes format
-titanic_lodes <- to_lodes(titanic_alluvia,
-                          key = "x", value = "stratum", id = "alluvium",
-                          axes = 1:4)
+titanic_lodes <- to_lodes_form(titanic_alluvia,
+                               key = "x", value = "stratum", id = "alluvium",
+                               axes = 1:4)
 head(titanic_lodes)
 is_alluvial(titanic_lodes,
             key = "x", value = "stratum", id = "alluvium",
             weight = "Freq")
-# again in lodes format, this time diffusing the 'Class' variable
-titanic_lodes2 <- to_lodes(titanic_alluvia,
-                           key = "variable", value = "value", id = "passenger",
-                           axes = 1:3, diffuse = "Class")
+# again in lodes format, this time diffusing the `Class` variable
+titanic_lodes2 <- to_lodes_form(titanic_alluvia,
+                                key = variable, value = value,
+                                id = passenger,
+                                1:3, diffuse = Class)
 head(titanic_lodes2)
 is_alluvial(titanic_lodes2,
-            key = "variable", value = "value", id = "passenger",
-            weight = "Freq")
+            key = variable, value = value, id = passenger,
+            weight = Freq)
 
 # curriculum data in lodes format
 data(majors)
@@ -27,23 +28,21 @@ is_alluvial(majors,
             key = "semester", value = "curriculum", id = "student",
             logical = FALSE)
 # curriculum data in alluvia format
-majors_alluvia <- to_alluvia(
-  majors,
-  key = "semester", value = "curriculum", id = "student"
-)
+majors_alluvia <- to_alluvia_form(majors,
+                                  key = "semester", value = "curriculum",
+                                  id = "student")
 head(majors_alluvia)
 is_alluvial(majors_alluvia,
-            axes = 2:9,
+            2:9,
             logical = FALSE)
 
 # distill variables that vary within 'id' values
 set.seed(1)
 majors$hypo_grade <- LETTERS[sample(5, size = nrow(majors), replace = TRUE)]
-majors_alluvia2 <- to_alluvia(
-  majors,
-  key = "semester", value = "curriculum", id = "student",
-  distill = "most"
-)
+majors_alluvia2 <- to_alluvia_form(majors,
+                                   key = "semester", value = "curriculum",
+                                   id = "student",
+                                   distill = "most")
 head(majors_alluvia2)
 
 # options to distinguish strata at different axes
