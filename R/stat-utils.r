@@ -14,19 +14,19 @@ get_alluvial_type <- function(data) {
   # ensure that data is alluvial
   if (!is.null(data$x) | !is.null(data$stratum) | !is.null(data$alluvium)) {
     if (is.null(data$x) | is.null(data$stratum) | is.null(data$alluvium)) {
-      stop("Parameters 'x', 'stratum', and 'alluvium' are required ",
+      stop("Parameters `x`, `stratum`, and `alluvium` are required ",
            "for data in lode form.")
     }
-    return(is_alluvial_lodes(data,
-                             key = "x", value = "stratum", id = "alluvium",
-                             weight = "weight",
-                             logical = FALSE))
+    return(is_lodes_form(data,
+                         key = "x", value = "stratum", id = "alluvium",
+                         weight = "weight",
+                         logical = FALSE))
   } else {
     axis_ind <- get_axes(names(data))
-    return(is_alluvial_alluvia(data,
-                               axes = axis_ind,
-                               weight = "weight",
-                               logical = FALSE))
+    return(is_alluvia_form(data,
+                           axes = axis_ind,
+                           weight = "weight",
+                           logical = FALSE))
   }
 }
 
@@ -34,7 +34,7 @@ get_alluvial_type <- function(data) {
 na_keep <- function(data, type) {
   if (type == "none") {
     stop("Data is not in a recognized alluvial form ",
-         "(see `help(is_alluvial)` for details).")
+         "(see `help('alluvial-data')` for details).")
   } else if (type == "lodes") {
     if (is.factor(data$stratum)) {
       data$stratum <- addNA(data$stratum, ifany = TRUE)
@@ -56,8 +56,8 @@ na_keep <- function(data, type) {
   data
 }
 
-# replace a vector 'x' of any type with
-# a numeric vector of *contiguous* integers that sort in the same order as 'x'
+# replace a vector `x` of any type with
+# a numeric vector of *contiguous* integers that sort in the same order as `x`
 contiguate <- function(x) {
   x <- xtfrm(x)
   match(x, sort(unique(x)))
@@ -72,20 +72,20 @@ aggregate_along <- function(data, key, id, var) {
   ), drop = TRUE))
   # convert to alluvia format
   alluv_data <- alluviate(data, key, "agg_vars", id)
-  # sort by everything except 'id'
+  # sort by everything except `id`
   alluv_data <- alluv_data[do.call(
     order,
     alluv_data[, -match(id, names(alluv_data)), drop = FALSE]
   ), , drop = FALSE]
-  # define map from original to aggregated 'id's
+  # define map from original to aggregated `id`s
   alluv_orig <- alluv_data[[id]]
   alluv_agg <- cumsum(!duplicated(interaction(
     alluv_data[, -match(id, names(alluv_data)), drop = FALSE]
   )))
-  # transform 'id' in 'data' accordingly
+  # transform `id` in `data` accordingly
   data[[id]] <- alluv_agg[match(data[[id]], alluv_orig)]
-  # aggregate 'var' by all other variables
-  # and ensure that no 'key'-'id' pairs are duplicated
+  # aggregate `var` by all other variables
+  # and ensure that no `key`-`id` pairs are duplicated
   data <- unique(merge(
     stats::aggregate(formula = stats::as.formula(paste(var, "~ .")),
                      data = data[, c(key, id, "agg_vars", var)],
@@ -94,14 +94,14 @@ aggregate_along <- function(data, key, id, var) {
     all.x = TRUE, all.y = FALSE
   ))
   data$agg_vars <- NULL
-  # require that no 'key'-'id' pairs are duplicated
+  # require that no `key`-`id` pairs are duplicated
   #stopifnot(all(!duplicated(data[, c(key, id)])))
   data
 }
 
 # build alluvial dataset for reference during lode-ordering
 alluviate <- function(data, key, value, id) {
-  to_alluvia(
+  to_alluvia_form(
     data[, c(key, value, id)],
     key = key, value = value, id = id
   )
@@ -115,7 +115,7 @@ z_order_aes <- function(data, aesthetics) {
   if (length(aes_data) == 2) return(data)
   aes_data <- aes_data[do.call(order, aes_data[, c(aesthetics, "alluvium")]), ]
   
-  # ensure order of  'group' respects aesthetics
+  # ensure order of  `group` respects aesthetics
   data$group <- match(data$group, unique(aes_data$group))
   data[with(data, order(x, group)), , drop = FALSE]
 }

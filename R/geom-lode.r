@@ -60,7 +60,7 @@ GeomLode <- ggproto(
   setup_params = function(data, params) {
     
     if (!is.null(params$axis_width)) {
-      warning("Parameter 'axis_width' is deprecated; use 'width' instead.")
+      warning("Parameter `axis_width` is deprecated; use `width` instead.")
       params$width <- params$axis_width
       params$axis_width <- NULL
     }

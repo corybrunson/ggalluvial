@@ -23,8 +23,8 @@
 #'   so that they match the order of the values in the legend.
 #'   Ignored if \code{decreasing} is not \code{NA}.
 #'   Defaults to \code{TRUE}.
-#' @param discern Passed to \code{\link{to_lodes}} if \code{data} is in alluvia
-#'   format.
+#' @param discern Passed to \code{\link{to_lodes_form}} if \code{data} is in
+#'   alluvia format.
 #' @param label.strata Logical; whether to assign the values of the axis 
 #'   variables to the strata. Defaults to FALSE, and requires that no
 #'   \code{label} aesthetic is assigned.
@@ -71,7 +71,7 @@ StatStratum <- ggproto(
   
   setup_data = function(data, params) {
     
-    # if 'alluvium' not provided, assign each row its own, grouped by 'x'
+    # if `alluvium` not provided, assign each row its own, grouped by `x`
     if (is.null(data$alluvium) & !is.null(data$x)) {
       data$alluvium <- NA
       for (xx in unique(data$x)) {
@@ -90,7 +90,7 @@ StatStratum <- ggproto(
     type <- get_alluvial_type(data)
     if (type == "none") {
       stop("Data is not in a recognized alluvial form ",
-           "(see `help(is_alluvial)` for details).")
+           "(see `help('alluvial-data')` for details).")
     }
     
     if (params$na.rm) {
@@ -102,19 +102,19 @@ StatStratum <- ggproto(
     # ensure that data is in lode form
     if (type == "alluvia") {
       axis_ind <- get_axes(names(data))
-      data <- to_lodes(data = data, axes = axis_ind,
-                       discern = params$discern)
-      # positioning requires numeric 'x'
+      data <- to_lodes_form(data = data, axes = axis_ind,
+                            discern = params$discern)
+      # positioning requires numeric `x`
       data <- data[with(data, order(x, stratum, alluvium)), , drop = FALSE]
       data$x <- contiguate(data$x)
     } else {
-      if (!is.null(params$discern)) {
+      if (!is.null(params$discern) && !(params$discern == FALSE)) {
         warning("Data is already in lodes format, ",
-                "so 'discern' will be ignored.")
+                "so `discern` will be ignored.")
       }
     }
     
-    # nullify 'group' and 'alluvium' fields (to avoid confusion with geoms)
+    # nullify `group` and `alluvium` fields (to avoid confusion with geoms)
     data <- transform(data,
                       group = NULL,
                       alluvium = NULL)
@@ -131,15 +131,15 @@ StatStratum <- ggproto(
       if (is.null(data$label)) {
         data$label <- data$stratum
       } else {
-        warning("Aesthetic 'label' is specified, ",
-                "so parameter 'label.strata' will be ignored.")
+        warning("Aesthetic `label` is specified, ",
+                "so parameter `label.strata` will be ignored.")
       }
     }
     
     # remove empty lodes (including labels)
     data <- subset(data, weight > 0)
     
-    # aggregate data by 'x' and 'stratum'
+    # aggregate data by `x` and `stratum`
     data <- auto_aggregate(data = data, by = c("x", "stratum"))
     
     # sort in preparation for calculating cumulative weights

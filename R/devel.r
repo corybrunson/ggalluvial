@@ -1,7 +1,7 @@
 #' Deprecated functions
 #' 
-#' These functions are deprecated in the current version and will be removed for
-#' the eventual CRAN release.
+#' These functions are deprecated in the current version and may be removed in a
+#' future version.
 #' 
 #' @name ggalluvial-deprecated
 #' @keywords internal

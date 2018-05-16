@@ -66,13 +66,13 @@ GeomFlow <- ggproto(
   setup_params = function(data, params) {
     
     if (!is.null(params$axis_width)) {
-      warning("Parameter 'axis_width' is deprecated; use 'width' instead.")
+      warning("Parameter `axis_width` is deprecated; use `width` instead.")
       params$width <- params$axis_width
       params$axis_width <- NULL
     }
     
     if (!is.null(params$ribbon_bend)) {
-      warning("Parameter 'ribbon_bend' is deprecated; use 'knot.pos' instead.")
+      warning("Parameter `ribbon_bend` is deprecated; use `knot.pos` instead.")
       params$knot.pos <- params$ribbon_bend
       params$ribbon_bend <- NULL
     }
