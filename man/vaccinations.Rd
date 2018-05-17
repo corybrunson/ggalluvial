@@ -3,7 +3,7 @@
 \name{vaccinations}
 \alias{vaccinations}
 \title{Influenza vaccination rates}
-\format{An alluvial data frame in lode form.}
+\format{An alluvial data frame in lodes form.}
 \source{
 RAND American Life Panel \url{https://alpdata.rand.org/}
 }

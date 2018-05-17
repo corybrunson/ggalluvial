@@ -78,7 +78,7 @@ StatAlluvium <- ggproto(
     
     if (!is.null(params$lode.ordering)) {
       if (is.list(params$lode.ordering)) {
-        # replace any null entries with uniform NA vectors
+        # replace any null entries with uniform `NA` vectors
         wh_null <- which(sapply(params$lode.ordering, is.null))
         len <- unique(sapply(params$lode.ordering[wh_null], length))
         if (length(len) > 1) stop("Lode orderings have different lengths.")
@@ -102,7 +102,7 @@ StatAlluvium <- ggproto(
     if (is.null(data$weight)) {
       data$weight <- rep(1, nrow(data))
     } else if (any(is.na(data$weight))) {
-      stop("Data contains NA weights.")
+      stop("Data contains `NA` weights.")
     }
     
     type <- get_alluvial_type(data)

@@ -74,27 +74,6 @@
 #'   factor variable \code{value} to be in the order of the axes.
 #' @example inst/examples/ex-alluvial-data.r
 
-#' @rdname ggalluvial-deprecated
-#' @export
-is_alluvial <- function(data, ..., silent = FALSE) {
-  .Deprecated(msg = paste0(
-    "The function `is_alluvial()` is deprecated; ",
-    "use `is_lodes_form()` or `is_alluvia_form()`."
-  ))
-  
-  # determine method based on arguments given
-  dots <- lazyeval::lazy_dots(...)
-  if (!is.null(dots$key) | !is.null(dots$value) | !is.null(dots$id)) {
-    if (!is.null(dots$axes)) {
-      stop("Arguments to `key`, `value`, and `id` are mutually exclusive ",
-           "with an argument to `axes`.")
-    }
-    is_lodes_form(data = data, ..., silent = silent)
-  } else {
-    is_alluvia_form(data = data, ..., silent = silent)
-  }
-}
-
 #' @rdname alluvial-data
 #' @export
 is_lodes_form <- function(data,
@@ -132,15 +111,7 @@ is_lodes_form <- function(data,
   if (logical) TRUE else "lodes"
 }
 
-#' @rdname ggalluvial-deprecated
-#' @export
-is_alluvial_lodes <- function(...) {
-  .Deprecated("is_lodes_form")
-  is_lodes_form(...)
-}
-
 #' @rdname alluvial-data
-#' @importFrom dplyr vars
 #' @export
 is_alluvia_form <- function(data,
                             ..., axes = NULL,
@@ -183,15 +154,7 @@ is_alluvia_form <- function(data,
   if (logical) TRUE else "alluvia"
 }
 
-#' @rdname ggalluvial-deprecated
-#' @export
-is_alluvial_alluvia <- function(...) {
-  .Deprecated("is_alluvia_form")
-  is_alluvia_form(...)
-}
-
 #' @rdname alluvial-data
-#' @importFrom dplyr vars
 #' @export
 to_lodes_form <- function(data,
                           ..., axes = NULL,
@@ -263,13 +226,6 @@ to_lodes_form <- function(data,
   res
 }
 
-#' @rdname ggalluvial-deprecated
-#' @export
-to_lodes <- function(...) {
-  .Deprecated("to_lodes_form")
-  to_lodes_form(...)
-}
-
 #' @rdname alluvial-data
 #' @export
 to_alluvia_form <- function(data,
@@ -333,13 +289,6 @@ ensure_vars <- function(x, data) {
     x <- match(x, names(data))
   }
   names(data)[x]
-}
-
-#' @rdname ggalluvial-deprecated
-#' @export
-to_alluvia <- function(...) {
-  .Deprecated("to_alluvia_form")
-  to_alluvia_form(...)
 }
 
 # distilling functions

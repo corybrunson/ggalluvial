@@ -17,17 +17,16 @@ get_alluvial_type <- function(data) {
       stop("Parameters `x`, `stratum`, and `alluvium` are required ",
            "for data in lode form.")
     }
-    return(is_lodes_form(data,
-                         key = "x", value = "stratum", id = "alluvium",
-                         weight = "weight",
-                         logical = FALSE))
+    if (is_lodes_form(data,
+                      key = "x", value = "stratum", id = "alluvium",
+                      weight = "weight")) return("lodes")
   } else {
     axis_ind <- get_axes(names(data))
-    return(is_alluvia_form(data,
-                           axes = axis_ind,
-                           weight = "weight",
-                           logical = FALSE))
+    if (is_alluvia_form(data,
+                        axes = axis_ind,
+                        weight = "weight")) return("alluvia")
   }
+  return("none")
 }
 
 # incorporate any missing values into factor levels
