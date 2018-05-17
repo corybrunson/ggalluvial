@@ -31,7 +31,7 @@ majors_alluvia <- to_alluvia_form(majors,
                                   key = "semester", value = "curriculum",
                                   id = "student")
 head(majors_alluvia)
-is_alluvia_form(majors_alluvia, axes = 2:9)
+is_alluvia_form(majors_alluvia, tidyselect::starts_with("CURR"))
 
 # distill variables that vary within `id` values
 set.seed(1)
