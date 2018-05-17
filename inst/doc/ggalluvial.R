@@ -42,9 +42,11 @@ ggplot(as.data.frame(Titanic),
   ggtitle("Titanic survival by class and sex")
 
 ## ----lodes format of Berkeley admissions dataset-------------------------
-UCB_lodes <- to_lodes_form(as.data.frame(UCBAdmissions), axes = 1:3)
+UCB_lodes <- to_lodes_form(as.data.frame(UCBAdmissions),
+                           axes = 1:3,
+                           id = "Cohort")
 head(UCB_lodes, n = 12)
-is_lodes_form(UCB_lodes, key = x, value = stratum, id = alluvium, silent = TRUE)
+is_lodes_form(UCB_lodes, key = x, value = stratum, id = Cohort, silent = TRUE)
 
 ## ----time series alluvia diagram of refugees dataset---------------------
 data(Refugees, package = "alluvial")

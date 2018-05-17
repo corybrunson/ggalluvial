@@ -96,28 +96,25 @@ types of alluvial structure:</p><ul>
         amount of observations having a specific profile of axis values, a
         <code>key</code> field encodes the axis, a <code>value</code> field encodes the
         value within each axis, and a <code>id</code> column identifies multiple
-        lodes corresponding to the same subset or amount of observations.</p></li>
+        lodes corresponding to the same subset or amount of observations.
+        <code>is_lodes_form</code> tests for this structure.</p></li>
 <li><p>One row per <strong>alluvium</strong>, wherein each row encodes a subset or
         amount of observations having a specific profile of axis values and a
-        set <code>axes</code> of fields encodes its values at each axis variable.</p></li>
-</ul><p>If no arguments are assigned to any of these parameters, then
-<code>is_alluvial</code> will default to <code>is_alluvial_alluvia</code> and assume that
-all fields in <code>data</code> (other than <code>weight</code>, if given) are to be
-treated as axes.</p>
+        set <code>axes</code> of fields encodes its values at each axis variable.
+        <code>is_alluvia_form</code> tests for this structure.</p></li>
+</ul>
     
 
-    <pre class="usage"><span class='fu'>is_alluvial</span>(<span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-
-<span class='fu'>is_alluvial_lodes</span>(<span class='no'>data</span>, <span class='no'>key</span>, <span class='no'>value</span>, <span class='no'>id</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+    <pre class="usage"><span class='fu'>is_lodes_form</span>(<span class='no'>data</span>, <span class='no'>key</span>, <span class='no'>value</span>, <span class='no'>id</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>is_alluvial_alluvia</span>(<span class='no'>data</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+<span class='fu'>is_alluvia_form</span>(<span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>to_lodes</span>(<span class='no'>data</span>, <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"x"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>, <span class='no'>axes</span>,
-  <span class='kw'>diffuse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>to_lodes_form</span>(<span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"x"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>,
+  <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>, <span class='kw'>diffuse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>to_alluvia</span>(<span class='no'>data</span>, <span class='no'>key</span>, <span class='no'>value</span>, <span class='no'>id</span>, <span class='kw'>distill</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>to_alluvia_form</span>(<span class='no'>data</span>, <span class='no'>key</span>, <span class='no'>value</span>, <span class='no'>id</span>, <span class='kw'>distill</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -127,75 +124,81 @@ treated as axes.</p>
       <td><p>A data frame.</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>Additional parameters used to determine method and passed
-thereto. All or none of <code>key</code>, <code>value</code>, and <code>id</code>, or else
-optionally <code>axes</code>, and (in either case) optionally <code>weight</code>.</p></td>
-    </tr>
-    <tr>
-      <th>logical</th>
-      <td><p>Whether to return a logical value or a character string
-indicating the type of alluvial structure ("none", "lodes", or "alluvia")</p></td>
-    </tr>
-    <tr>
-      <th>silent</th>
-      <td><p>Whether to print warning messages.</p></td>
-    </tr>
-    <tr>
       <th>key, value, id</th>
-      <td><p>Numeric or character; the fields of <code>data</code>
-corresponding to the axis (key), stratum (value), and alluvium
+      <td><p>In <code>to_lodes_form</code>, handled as in 
+<code><a href='http://www.rdocumentation.org/packages/tidyr/topics/gather'>gather</a></code> and used to name the new axis (key), stratum 
+(value), and alluvium (identifying) variables. In <code>to_alluvia_form</code>, 
+handled as in <code><a href='http://www.rdocumentation.org/packages/tidyr/topics/spread'>spread</a></code> and used to identify the fields 
+of <code>data</code> to be used as the axis (key), stratum (value), and alluvium 
 (identifying) variables.</p></td>
     </tr>
     <tr>
       <th>weight</th>
-      <td><p>Optional numeric or character; the fields of <code>data</code>
-corresponding to alluvium or lode weights (heights when plotted).</p></td>
+      <td><p>Optional field of <code>data</code>, handled using 
+<code><a href='http://www.rdocumentation.org/packages/rlang/topics/quotation'>enquo</a></code>, to be used as heights or depths of the alluvia 
+or lodes.</p></td>
+    </tr>
+    <tr>
+      <th>logical</th>
+      <td><p>Deprecated. Whether to return a logical value or a character
+string indicating the type of alluvial structure ("none", "lodes", or
+"alluvia").</p></td>
+    </tr>
+    <tr>
+      <th>silent</th>
+      <td><p>Whether to print messages.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Used in <code>is_alluvia_form</code> and <code>to_lodes_form</code> as in 
+<code><a href='http://dplyr.tidyverse.org/reference/select.html'>select</a></code> to determine axis variables, as an alternative 
+to <code>axes</code>. Ignored when <code>axes</code> is provided.</p></td>
     </tr>
     <tr>
       <th>axes</th>
-      <td><p>Numeric or character vector; the field(s) of <code>data</code>
-corresponding to the axi(e)s (variable(s)).</p></td>
+      <td><p>In <code>*_alluvia_form</code>, handled as in 
+<code><a href='http://dplyr.tidyverse.org/reference/select.html'>select</a></code> and used to identify the field(s) of 
+<code>data</code> to be used as axes.</p></td>
     </tr>
     <tr>
       <th>diffuse</th>
-      <td><p>A numeric or character vector indicating which variables among
-those passed to <code>axes</code> to merge into the reshapen data by <code>id</code>. 
-Alternatively, a logical value indicating whether to merge all 
-(<code>TRUE</code>) or none (<code>FALSE</code>) of these variables.</p></td>
+      <td><p>Fields of <code>data</code>, handleded using 
+<code><a href='http://www.rdocumentation.org/packages/tidyselect/topics/vars_select'>vars_select</a></code>, to merge into the reshapen data by 
+<code>id</code>. They must be a subset of the axis variables. Alternatively, a 
+logical value indicating whether to merge all (<code>TRUE</code>) or none 
+(<code>FALSE</code>) of the axis variables.</p></td>
     </tr>
     <tr>
       <th>discern</th>
-      <td><p>Logical value indicating whether to suffix values 
-of the variables passed to <code>axes</code> that appear at more than one
-variable in order to distinguish their factor levels. This forces the
-levels of the combined factor variable <code>value</code> to be in the order of
-the <code>axes</code>.</p></td>
+      <td><p>Logical value indicating whether to suffix values of the 
+variables used as axes that appear at more than one variable in order to 
+distinguish their factor levels. This forces the levels of the combined 
+factor variable <code>value</code> to be in the order of the axes.</p></td>
     </tr>
     <tr>
       <th>distill</th>
       <td><p>A logical value indicating whether to include variables, other
 than those passed to <code>key</code> and <code>value</code>, that vary within values 
 of <code>id</code>. Alternatively, a function (or its name) to be used to distill
-each such variable to a single value. In addition to existing functions,
-<code>distill</code> accepts the character values <code>"first"</code> (used if
-<code>distill</code> is <code>TRUE</code>), <code>"last"</code>, and <code>"most"</code> (which
+each such variable to a single value. In addition to existing functions, 
+<code>distill</code> accepts the character values <code>"first"</code> (used if 
+<code>distill</code> is <code>TRUE</code>), <code>"last"</code>, and <code>"most"</code> (which 
 returns the modal value).</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>to_lodes</code> takes a data frame with several designated variables to be 
-used as axes in an alluvial diagram, and reshapes the data frame so that the 
-axis variable names constitute a new factor variable and their values 
+    <p><code>to_lodes_form</code> takes a data frame with several designated variables to
+be used as axes in an alluvial diagram, and reshapes the data frame so that
+the axis variable names constitute a new factor variable and their values 
 comprise another. Other variables' values will be repeated, and a 
 row-grouping variable can be introduced. This function invokes 
-<code><a href='http://www.rdocumentation.org/packages/tidyr/topics/deprecated-se'>gather_</a></code>.
-    <code>to_alluvia</code> takes a data frame with axis and axis value variables to be
-used in an alluvial diagram, and reshape the data frame so that the axes
-constitute separate variables whose values are given by the value variable.
-This function invokes <code><a href='http://www.rdocumentation.org/packages/tidyr/topics/deprecated-se'>spread_</a></code>.</p>
+<code><a href='http://www.rdocumentation.org/packages/tidyr/topics/gather'>gather</a></code>.
+    <code>to_alluvia_form</code> takes a data frame with axis and axis value variables
+to be used in an alluvial diagram, and reshape the data frame so that the
+axes constitute separate variables whose values are given by the value
+variable. This function invokes <code><a href='http://www.rdocumentation.org/packages/tidyr/topics/spread'>spread</a></code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -207,32 +210,33 @@ This function invokes <code><a href='http://www.rdocumentation.org/packages/tidy
 #&gt; 3   3rd   Male Child       No   35
 #&gt; 4  Crew   Male Child       No    0
 #&gt; 5   1st Female Child       No    0
-#&gt; 6   2nd Female Child       No    0</div><div class='input'><span class='fu'>is_alluvial</span>(<span class='no'>titanic_alluvia</span>,
-            <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"Freq"</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># Titanic data in lodes format</span>
-<span class='no'>titanic_lodes</span> <span class='kw'>&lt;-</span> <span class='fu'>to_lodes</span>(<span class='no'>titanic_alluvia</span>,
-                          <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"x"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
-                          <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>4</span>)
+#&gt; 6   2nd Female Child       No    0</div><div class='input'><span class='fu'>is_alluvia_form</span>(<span class='no'>titanic_alluvia</span>,
+                <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"Freq"</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># Titanic data in lodes format</span>
+<span class='no'>titanic_lodes</span> <span class='kw'>&lt;-</span> <span class='fu'>to_lodes_form</span>(<span class='no'>titanic_alluvia</span>,
+                               <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"x"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
+                               <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>4</span>)
 <span class='fu'>head</span>(<span class='no'>titanic_lodes</span>)</div><div class='output co'>#&gt;   Freq alluvium     x stratum
 #&gt; 1    0        1 Class     1st
 #&gt; 2    0        2 Class     2nd
 #&gt; 3   35        3 Class     3rd
 #&gt; 4    0        4 Class    Crew
 #&gt; 5    0        5 Class     1st
-#&gt; 6    0        6 Class     2nd</div><div class='input'><span class='fu'>is_alluvial</span>(<span class='no'>titanic_lodes</span>,
-            <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"x"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
-            <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"Freq"</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># again in lodes format, this time diffusing the 'Class' variable</span>
-<span class='no'>titanic_lodes2</span> <span class='kw'>&lt;-</span> <span class='fu'>to_lodes</span>(<span class='no'>titanic_alluvia</span>,
-                           <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"variable"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"value"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"passenger"</span>,
-                           <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>diffuse</span> <span class='kw'>=</span> <span class='st'>"Class"</span>)
-<span class='fu'>head</span>(<span class='no'>titanic_lodes2</span>)</div><div class='output co'>#&gt;   passenger Survived Freq variable value Class
-#&gt; 1         1       No    0    Class   1st   1st
-#&gt; 2         1       No    0      Sex  Male   1st
-#&gt; 3         1       No    0      Age Child   1st
-#&gt; 4         2       No    0    Class   2nd   2nd
-#&gt; 5         2       No    0      Sex  Male   2nd
-#&gt; 6         2       No    0      Age Child   2nd</div><div class='input'><span class='fu'>is_alluvial</span>(<span class='no'>titanic_lodes2</span>,
-            <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"variable"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"value"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"passenger"</span>,
-            <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"Freq"</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+#&gt; 6    0        6 Class     2nd</div><div class='input'><span class='fu'>is_lodes_form</span>(<span class='no'>titanic_lodes</span>,
+              <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"x"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
+              <span class='kw'>weight</span> <span class='kw'>=</span> <span class='st'>"Freq"</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># again in lodes format, this time diffusing the `Class` variable</span>
+<span class='no'>titanic_lodes2</span> <span class='kw'>&lt;-</span> <span class='fu'>to_lodes_form</span>(<span class='no'>titanic_alluvia</span>,
+                                <span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>variable</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='no'>value</span>,
+                                <span class='kw'>id</span> <span class='kw'>=</span> <span class='no'>passenger</span>,
+                                <span class='fl'>1</span>:<span class='fl'>3</span>, <span class='kw'>diffuse</span> <span class='kw'>=</span> <span class='no'>Class</span>)
+<span class='fu'>head</span>(<span class='no'>titanic_lodes2</span>)</div><div class='output co'>#&gt;   passenger Class Survived Freq variable value
+#&gt; 1         1   1st       No    0    Class   1st
+#&gt; 2         1   1st       No    0      Sex  Male
+#&gt; 3         1   1st       No    0      Age Child
+#&gt; 4         2   2nd       No    0    Class   2nd
+#&gt; 5         2   2nd       No    0      Sex  Male
+#&gt; 6         2   2nd       No    0      Age Child</div><div class='input'><span class='fu'>is_lodes_form</span>(<span class='no'>titanic_lodes2</span>,
+              <span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>variable</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='no'>value</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='no'>passenger</span>,
+              <span class='kw'>weight</span> <span class='kw'>=</span> <span class='no'>Freq</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 <span class='co'># curriculum data in lodes format</span>
 <span class='fu'>data</span>(<span class='no'>majors</span>)
 <span class='fu'>head</span>(<span class='no'>majors</span>)</div><div class='output co'>#&gt;   student semester curriculum
@@ -241,13 +245,11 @@ This function invokes <code><a href='http://www.rdocumentation.org/packages/tidy
 #&gt; 3       6    CURR1   Sculpure
 #&gt; 4       8    CURR1   Painting
 #&gt; 5       9    CURR1   Sculpure
-#&gt; 6      10    CURR1   Painting</div><div class='input'><span class='fu'>is_alluvial</span>(<span class='no'>majors</span>,
-            <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"semester"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"curriculum"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"student"</span>,
-            <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "lodes"</div><div class='input'><span class='co'># curriculum data in alluvia format</span>
-<span class='no'>majors_alluvia</span> <span class='kw'>&lt;-</span> <span class='fu'>to_alluvia</span>(
-  <span class='no'>majors</span>,
-  <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"semester"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"curriculum"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"student"</span>
-)
+#&gt; 6      10    CURR1   Painting</div><div class='input'><span class='fu'>is_lodes_form</span>(<span class='no'>majors</span>,
+              <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"semester"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"curriculum"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"student"</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># curriculum data in alluvia format</span>
+<span class='no'>majors_alluvia</span> <span class='kw'>&lt;-</span> <span class='fu'>to_alluvia_form</span>(<span class='no'>majors</span>,
+                                  <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"semester"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"curriculum"</span>,
+                                  <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"student"</span>)
 <span class='fu'>head</span>(<span class='no'>majors_alluvia</span>)</div><div class='output co'>#&gt;   student    CURR1       CURR3       CURR5    CURR7    CURR9   CURR11   CURR13
 #&gt; 1       1 Painting    Painting    Painting Painting Painting Painting Painting
 #&gt; 2       2 Painting    Painting    Painting Painting Painting Painting     &lt;NA&gt;
@@ -261,17 +263,14 @@ This function invokes <code><a href='http://www.rdocumentation.org/packages/tidy
 #&gt; 3 Painting
 #&gt; 4 Painting
 #&gt; 5 Painting
-#&gt; 6     &lt;NA&gt;</div><div class='input'><span class='fu'>is_alluvial</span>(<span class='no'>majors_alluvia</span>,
-            <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>2</span>:<span class='fl'>9</span>,
-            <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='message'>Missing alluvia for some stratum combinations.</span></div><div class='output co'>#&gt; [1] "alluvia"</div><div class='input'>
-<span class='co'># distill variables that vary within 'id' values</span>
+#&gt; 6     &lt;NA&gt;</div><div class='input'><span class='fu'>is_alluvia_form</span>(<span class='no'>majors_alluvia</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='fl'>2</span>:<span class='fl'>9</span>)</div><div class='output co'>#&gt; <span class='message'>Missing alluvia for some stratum combinations.</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='co'># distill variables that vary within `id` values</span>
 <span class='fu'>set.seed</span>(<span class='fl'>1</span>)
 <span class='no'>majors</span>$<span class='no'>hypo_grade</span> <span class='kw'>&lt;-</span> <span class='no'>LETTERS</span>[<span class='fu'>sample</span>(<span class='fl'>5</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fu'>nrow</span>(<span class='no'>majors</span>), <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)]
-<span class='no'>majors_alluvia2</span> <span class='kw'>&lt;-</span> <span class='fu'>to_alluvia</span>(
-  <span class='no'>majors</span>,
-  <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"semester"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"curriculum"</span>, <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"student"</span>,
-  <span class='kw'>distill</span> <span class='kw'>=</span> <span class='st'>"most"</span>
-)</div><div class='output co'>#&gt; <span class='message'>Distilled variables: hypo_grade</span></div><div class='input'><span class='fu'>head</span>(<span class='no'>majors_alluvia2</span>)</div><div class='output co'>#&gt;   student hypo_grade    CURR1       CURR3       CURR5    CURR7    CURR9
+<span class='no'>majors_alluvia2</span> <span class='kw'>&lt;-</span> <span class='fu'>to_alluvia_form</span>(<span class='no'>majors</span>,
+                                   <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"semester"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"curriculum"</span>,
+                                   <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"student"</span>,
+                                   <span class='kw'>distill</span> <span class='kw'>=</span> <span class='st'>"most"</span>)</div><div class='output co'>#&gt; <span class='message'>Distilled variables: hypo_grade</span></div><div class='input'><span class='fu'>head</span>(<span class='no'>majors_alluvia2</span>)</div><div class='output co'>#&gt;   student hypo_grade    CURR1       CURR3       CURR5    CURR7    CURR9
 #&gt; 1       1          B Painting    Painting    Painting Painting Painting
 #&gt; 2       2          B Painting    Painting    Painting Painting Painting
 #&gt; 3       6          C Sculpure    Sculpure    Painting Painting Painting
@@ -291,16 +290,16 @@ This function invokes <code><a href='http://www.rdocumentation.org/packages/tidy
 <span class='no'>gg</span> +
   <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='fu'>as.factor</span>(<span class='no'>student</span>)), <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>2</span>/<span class='fl'>5</span>, <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>2</span>/<span class='fl'>5</span>, <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
-  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Missing alluvia for some stratum combinations.</span></div><div class='output co'>#&gt; <span class='message'>Missing alluvia for some stratum combinations.</span></div><div class='output co'>#&gt; <span class='message'>Missing alluvia for some stratum combinations.</span></div><div class='img'><img src='alluvial-data-4.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='no'>gg</span> +
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Missing alluvia for some stratum combinations.</span></div><div class='output co'>#&gt; <span class='message'>Missing alluvia for some stratum combinations.</span></div><div class='output co'>#&gt; <span class='message'>Missing alluvia for some stratum combinations.</span></div><div class='img'><img src='alluvial-data-7.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='no'>gg</span> +
   <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='fu'>as.factor</span>(<span class='no'>student</span>)), <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>2</span>/<span class='fl'>5</span>, <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>2</span>/<span class='fl'>5</span>, <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>) +
-  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Missing alluvia for some stratum combinations.</span></div><div class='output co'>#&gt; <span class='message'>Missing alluvia for some stratum combinations.</span></div><div class='output co'>#&gt; <span class='message'>Missing alluvia for some stratum combinations.</span></div><div class='img'><img src='alluvial-data-5.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># warning when inappropriate</span>
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='message'>Missing alluvia for some stratum combinations.</span></div><div class='output co'>#&gt; <span class='message'>Missing alluvia for some stratum combinations.</span></div><div class='output co'>#&gt; <span class='message'>Missing alluvia for some stratum combinations.</span></div><div class='img'><img src='alluvial-data-8.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># warning when inappropriate</span>
 <span class='fu'>ggplot</span>(<span class='no'>majors</span>[<span class='no'>majors</span>$<span class='no'>semester</span> <span class='kw'>%in%</span> <span class='fu'>paste0</span>(<span class='st'>"CURR"</span>, <span class='fu'>c</span>(<span class='fl'>1</span>, <span class='fl'>7</span>, <span class='fl'>13</span>)), ],
        <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>semester</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>curriculum</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>student</span>,
            <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>curriculum</span>)) +
   <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='fu'>as.factor</span>(<span class='no'>student</span>)), <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>2</span>/<span class='fl'>5</span>, <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>2</span>/<span class='fl'>5</span>, <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
-  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so 'discern' will be ignored.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so 'discern' will be ignored.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so 'discern' will be ignored.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 1 rows containing missing values (geom_text).</span></div><div class='img'><img src='alluvial-data-6.png' alt='' width='700' height='432.632880098887' /></div></pre>
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so `discern` will be ignored.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so `discern` will be ignored.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so `discern` will be ignored.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 1 rows containing missing values (geom_text).</span></div><div class='img'><img src='alluvial-data-9.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -321,7 +320,7 @@ This function invokes <code><a href='http://www.rdocumentation.org/packages/tidy
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
 </div>
 
       </footer>

@@ -1,6 +1,8 @@
-# ggalluvial 0.6.1
+# ggalluvial 0.7.0
 
 ## Alluvial data functionality
+
+These changes make the functions that test for and convert between alluvial formats behave more like popular functions in the **tidyverse**. Some of the changes introduce backward incompatibilities, but most result in deprecation warnings.
 
 - The functions `is_alluvial_*()` and `to_*()` are renamed to `is_*_form()` and `to_*_form()` for consistency. Their old names are deprecated.
 - `is_alluvial()` is deprecated and will be removed in a future version.

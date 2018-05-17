@@ -82,9 +82,9 @@ is_lodes_form <- function(data,
                           logical = TRUE, silent = FALSE) {
   if (!isTRUE(logical)) deprecate_parameter("logical")
   
-  key_var <- tidyselect::vars_pull(names(data), !!rlang::enquo(key))
-  value_var <- tidyselect::vars_pull(names(data), !!rlang::enquo(value))
-  id_var <- tidyselect::vars_pull(names(data), !!rlang::enquo(id))
+  key_var <- vars_pull(names(data), !!rlang::enquo(key))
+  value_var <- vars_pull(names(data), !!rlang::enquo(value))
+  id_var <- vars_pull(names(data), !!rlang::enquo(id))
   
   if (any(duplicated(cbind(data[c(key_var, id_var)])))) {
     if (!silent) warning("Duplicated id-axis pairings.")
@@ -98,7 +98,7 @@ is_lodes_form <- function(data,
   
   # if `weight` is not `NULL`, use NSE to identify `weight_var`
   if (!is.null(rlang::enexpr(weight))) {
-    weight_var <- tidyselect::vars_select(names(data), !!rlang::enquo(weight))
+    weight_var <- vars_select(names(data), !!rlang::enquo(weight))
     if (!is.numeric(data[[weight_var]])) {
       if (!silent) message("Lode weights are non-numeric.")
       return(return(if (logical) FALSE else "none"))
@@ -122,7 +122,7 @@ is_alluvia_form <- function(data,
   if (is.null(rlang::enexpr(weight))) {
     weight_var <- NULL
   } else {
-    weight_var <- tidyselect::vars_select(names(data), !!rlang::enquo(weight))
+    weight_var <- vars_select(names(data), !!rlang::enquo(weight))
     if (!is.numeric(data[[weight_var]])) {
       if (!silent) message("Alluvium weights are non-numeric.")
       return(return(if (logical) FALSE else "none"))
@@ -133,15 +133,13 @@ is_alluvia_form <- function(data,
   }
   
   if (!is.null(rlang::enexpr(axes))) {
-    #deprecate_parameter("axes", NULL)
-    #axes <- ensure_vars(axes, data)
     axes <- data_at_vars(data, axes)
   } else {
     quos <- rlang::quos(...)
     if (rlang::is_empty(quos)) {
       axes <- setdiff(names(data), c(weight_var))
     } else {
-      axes <- unname(tidyselect::vars_select(names(data), !!!quos))
+      axes <- unname(vars_select(names(data), !!!quos))
     }
   }
   
@@ -166,15 +164,13 @@ to_lodes_form <- function(data,
   id_var <- rlang::quo_name(rlang::enexpr(id))
   
   if (!is.null(rlang::enexpr(axes))) {
-    #deprecate_parameter("axes", NULL)
-    #axes <- ensure_vars(axes, data)
     axes <- data_at_vars(data, axes)
   } else {
     quos <- rlang::quos(...)
     if (rlang::is_empty(quos)) {
       axes <- names(data)
     } else {
-      axes <- unname(tidyselect::vars_select(names(data), !!!quos))
+      axes <- unname(vars_select(names(data), !!!quos))
     }
   }
   
@@ -185,8 +181,7 @@ to_lodes_form <- function(data,
   if (is.logical(rlang::enexpr(diffuse))) {
     diffuse <- if (diffuse) axes else NULL
   } else {
-    diffuse <- unname(tidyselect::vars_select(names(data),
-                                              !!rlang::enquo(diffuse)))
+    diffuse <- unname(vars_select(names(data), !!rlang::enquo(diffuse)))
     if (!all(diffuse %in% axes)) {
       stop("All `diffuse` variables must be `axes` variables.")
     }
@@ -232,9 +227,9 @@ to_alluvia_form <- function(data,
                             key, value, id,
                             distill = FALSE) {
   
-  key_var <- tidyselect::vars_pull(names(data), !!rlang::enquo(key))
-  value_var <- tidyselect::vars_pull(names(data), !!rlang::enquo(value))
-  id_var <- tidyselect::vars_pull(names(data), !!rlang::enquo(id))
+  key_var <- vars_pull(names(data), !!rlang::enquo(key))
+  value_var <- vars_pull(names(data), !!rlang::enquo(value))
+  id_var <- vars_pull(names(data), !!rlang::enquo(id))
   
   stopifnot(is_lodes_form(data, key_var, value_var, id_var, silent = TRUE))
   
@@ -282,13 +277,6 @@ to_alluvia_form <- function(data,
   }
   
   res
-}
-
-ensure_vars <- function(x, data) {
-  if (is.character(x)) {
-    x <- match(x, names(data))
-  }
-  names(data)[x]
 }
 
 # distilling functions
