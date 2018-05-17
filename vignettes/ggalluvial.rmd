@@ -30,9 +30,9 @@ knitr::opts_chunk$set(fig.width = 6, fig.height = 4, fig.align = "center")
 Here's a quintessential alluvial diagram:
 
 ```{r example alluvial diagram using Titanic dataset, echo=FALSE}
-ggplot(data = to_lodes(as.data.frame(Titanic),
-                       key = "Demographic",
-                       axes = 1:3),
+ggplot(data = to_lodes_form(as.data.frame(Titanic),
+                            key = "Demographic",
+                            axes = 1:3),
        aes(x = Demographic, stratum = stratum, alluvium = alluvium,
            weight = Freq, label = stratum)) +
   geom_alluvium(aes(fill = Survived)) +
@@ -64,7 +64,7 @@ The wide format reflects the visual arrangement of an alluvial diagram, but "unt
 
 ```{r alluvia format of Berkeley admissions dataset}
 head(as.data.frame(UCBAdmissions), n = 12)
-is_alluvial(as.data.frame(UCBAdmissions), logical = FALSE, silent = TRUE)
+is_alluvia_form(as.data.frame(UCBAdmissions), axes = 1:3, silent = TRUE)
 ```
 
 This format is inherited from the first version of **ggalluvial**, which modeled it after usage in **alluvial**: The user declares any number of axis variables, which `stat_alluvium()` and `stat_stratum()` recognize and process in a consistent way:
@@ -111,12 +111,12 @@ Furthermore, format aesthetics like `fill` are necessarily fixed for each alluvi
 
 ### Lodes (long) format
 
-The long format recognized by **ggalluvial** contains _one row per lode_, and can be understood as the result of "gathering" (in the **dplyr** sense) or "pivoting" (in the Microsoft Excel sense) the axis columns of a dataset in the alluvia format into a key-value pair of columns encoding the axis as the key and the stratum as the value. This format requires an additional indexing column that links the rows corresponding to a common cohort, i.e. the lodes of a single alluvium, as illustrated below using the `to_lodes()` defaults on the Berkeley admissions dataset:
+The long format recognized by **ggalluvial** contains _one row per lode_, and can be understood as the result of "gathering" (in the **dplyr** sense) or "pivoting" (in the Microsoft Excel sense) the axis columns of a dataset in the alluvia format into a key-value pair of columns encoding the axis as the key and the stratum as the value. This format requires an additional indexing column that links the rows corresponding to a common cohort, i.e. the lodes of a single alluvium, as illustrated below using the `to_lodes_form()` defaults on the Berkeley admissions dataset:
 
 ```{r lodes format of Berkeley admissions dataset}
-UCB_lodes <- to_lodes(as.data.frame(UCBAdmissions), axes = 1:3)
+UCB_lodes <- to_lodes_form(as.data.frame(UCBAdmissions), axes = 1:3)
 head(UCB_lodes, n = 12)
-is_alluvial(UCB_lodes, logical = FALSE, silent = TRUE)
+is_lodes_form(UCB_lodes, key = x, value = stratum, id = alluvium, silent = TRUE)
 ```
 
 The functions that convert data between wide (alluvia) and long (lodes) format include several parameters that help preserve ancillary information. See `help("alluvial-data")` for examples.

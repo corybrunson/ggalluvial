@@ -1,4 +1,4 @@
-# only 'stratum' assignment is necessary to generate strata
+# only `stratum` assignment is necessary to generate strata
 data(vaccinations)
 ggplot(vaccinations,
        aes(weight = freq,

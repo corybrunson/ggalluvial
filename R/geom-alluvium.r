@@ -68,13 +68,13 @@ GeomAlluvium <- ggproto(
     }
     
     if (!is.null(params$axis_width)) {
-      warning("Parameter `axis_width` is deprecated; use `width` instead.")
+      deprecate_parameter("axis_width", "width")
       params$width <- params$axis_width
       params$axis_width <- NULL
     }
     
     if (!is.null(params$ribbon_bend)) {
-      warning("Parameter `ribbon_bend` is deprecated; use `knot.pos` instead.")
+      deprecate_parameter("ribbon_bend", "knot.pos")
       params$knot.pos <- params$ribbon_bend
       params$ribbon_bend <- NULL
     }

@@ -13,14 +13,12 @@
 #'         \code{key} field encodes the axis, a \code{value} field encodes the
 #'         value within each axis, and a \code{id} column identifies multiple
 #'         lodes corresponding to the same subset or amount of observations.
+#'         \code{is_lodes_form} tests for this structure.
 #'   \item One row per \strong{alluvium}, wherein each row encodes a subset or
 #'         amount of observations having a specific profile of axis values and a
 #'         set \code{axes} of fields encodes its values at each axis variable.
+#'         \code{is_alluvia_form} tests for this structure.
 #' }
-#' If no arguments are assigned to any of these parameters, then
-#' \code{is_alluvial} will default to \code{is_alluvia_form} and assume that
-#' all fields in \code{data} (other than \code{weight}, if given) are to be
-#' treated as axes.
 #' 
 
 #' \code{to_lodes_form} takes a data frame with several designated variables to
@@ -39,14 +37,9 @@
 #' @name alluvial-data
 #' @import tidyselect
 #' @param data A data frame.
-#' @param ... In \code{is_alluvial}, used to determine whether to pass all 
-#'   parameters to \code{is_lodes_form} or to \code{is_alluvia_form}: All or 
-#'   none of \code{key}, \code{value}, and \code{id}, or else optionally 
-#'   \code{axes}, and (in either case) optionally \code{weight}. In 
-#'   \code{is_alluvia_form} and \code{to_lodes_form}, used as in 
-#'   \code{\link[dplyr]{select}} to determine axis variables.
-#' @param logical Whether to return a logical value or a character string 
-#'   indicating the type of alluvial structure ("none", "lodes", or "alluvia")
+#' @param logical Deprecated. Whether to return a logical value or a character
+#'   string indicating the type of alluvial structure ("none", "lodes", or
+#'   "alluvia").
 #' @param silent Whether to print messages.
 #' @param key,value,id In \code{to_lodes_form}, handled as in 
 #'   \code{\link[tidyr]{gather}} and used to name the new axis (key), stratum 
@@ -54,9 +47,12 @@
 #'   handled as in \code{\link[tidyr]{spread}} and used to identify the fields 
 #'   of \code{data} to be used as the axis (key), stratum (value), and alluvium 
 #'   (identifying) variables.
-#' @param axes Numeric or character vector; the field(s) of \code{data} 
-#'   corresponding to the axi(e)s (variable(s)). \strong{Deprecated in favor of 
-#'   \code{...}.}
+#' @param axes In \code{*_alluvia_form}, handled as in 
+#'   \code{\link[dplyr]{select}} and used to identify the field(s) of 
+#'   \code{data} to be used as axes.
+#' @param ... Used in \code{is_alluvia_form} and \code{to_lodes_form} as in 
+#'   \code{\link[dplyr]{select}} to determine axis variables, as an alternative 
+#'   to \code{axes}. Ignored when \code{axes} is provided.
 #' @param weight Optional field of \code{data}, handled using 
 #'   \code{\link[rlang]{enquo}}, to be used as heights or depths of the alluvia 
 #'   or lodes.
@@ -73,24 +69,29 @@
 #'   \code{distill} is \code{TRUE}), \code{"last"}, and \code{"most"} (which 
 #'   returns the modal value).
 #' @param discern Logical value indicating whether to suffix values of the 
-#'   variables used as axes that appear at more than one variable in order to
-#'   distinguish their factor levels. This forces the levels of the combined
+#'   variables used as axes that appear at more than one variable in order to 
+#'   distinguish their factor levels. This forces the levels of the combined 
 #'   factor variable \code{value} to be in the order of the axes.
 #' @example inst/examples/ex-alluvial-data.r
+
+#' @rdname ggalluvial-deprecated
 #' @export
-is_alluvial <- function(data, ..., logical = TRUE, silent = FALSE) {
+is_alluvial <- function(data, ..., silent = FALSE) {
+  .Deprecated(msg = paste0(
+    "The function `is_alluvial()` is deprecated; ",
+    "use `is_lodes_form()` or `is_alluvia_form()`."
+  ))
   
   # determine method based on arguments given
   dots <- lazyeval::lazy_dots(...)
   if (!is.null(dots$key) | !is.null(dots$value) | !is.null(dots$id)) {
-    # remove this check after removing `axes` parameter
     if (!is.null(dots$axes)) {
       stop("Arguments to `key`, `value`, and `id` are mutually exclusive ",
            "with an argument to `axes`.")
     }
-    is_lodes_form(data = data, ..., logical = logical, silent = silent)
+    is_lodes_form(data = data, ..., silent = silent)
   } else {
-    is_alluvia_form(data = data, ..., logical = logical, silent = silent)
+    is_alluvia_form(data = data, ..., silent = silent)
   }
 }
 
@@ -100,6 +101,7 @@ is_lodes_form <- function(data,
                           key, value, id,
                           weight = NULL,
                           logical = TRUE, silent = FALSE) {
+  if (!isTRUE(logical)) deprecate_parameter("logical")
   
   key_var <- tidyselect::vars_pull(names(data), !!rlang::enquo(key))
   value_var <- tidyselect::vars_pull(names(data), !!rlang::enquo(value))
@@ -120,10 +122,10 @@ is_lodes_form <- function(data,
     weight_var <- tidyselect::vars_select(names(data), !!rlang::enquo(weight))
     if (!is.numeric(data[[weight_var]])) {
       if (!silent) message("Lode weights are non-numeric.")
-      return(if (logical) FALSE else "none")
+      return(return(if (logical) FALSE else "none"))
     } else if (any(data[[weight_var]] < 0)) {
       if (!silent) message("Some lode weights are negative.")
-      return(if (logical) FALSE else "none")
+      return(return(if (logical) FALSE else "none"))
     }
   }
   
@@ -144,6 +146,7 @@ is_alluvia_form <- function(data,
                             ..., axes = NULL,
                             weight = NULL,
                             logical = TRUE, silent = FALSE) {
+  if (!isTRUE(logical)) deprecate_parameter("logical")
   
   if (is.null(rlang::enexpr(weight))) {
     weight_var <- NULL
@@ -151,15 +154,15 @@ is_alluvia_form <- function(data,
     weight_var <- tidyselect::vars_select(names(data), !!rlang::enquo(weight))
     if (!is.numeric(data[[weight_var]])) {
       if (!silent) message("Alluvium weights are non-numeric.")
-      return(if (logical) FALSE else "none")
+      return(return(if (logical) FALSE else "none"))
     } else if (any(data[[weight_var]] < 0)) {
       if (!silent) message("Some alluvium weights are negative.")
-      return(if (logical) FALSE else "none")
+      return(return(if (logical) FALSE else "none"))
     }
   }
   
   if (!is.null(rlang::enexpr(axes))) {
-    #deprecate_parameter("axes")
+    #deprecate_parameter("axes", NULL)
     #axes <- ensure_vars(axes, data)
     axes <- data_at_vars(data, axes)
   } else {
@@ -200,7 +203,7 @@ to_lodes_form <- function(data,
   id_var <- rlang::quo_name(rlang::enexpr(id))
   
   if (!is.null(rlang::enexpr(axes))) {
-    #deprecate_parameter("axes")
+    #deprecate_parameter("axes", NULL)
     #axes <- ensure_vars(axes, data)
     axes <- data_at_vars(data, axes)
   } else {
@@ -363,18 +366,6 @@ discern_data <- function(data, axes, sep = ".") {
     data[[axes[i]]] <- new_levels[level_inds][axis_levels]
   }
   data
-}
-
-deprecate_parameter <- function(old, new = NA) {
-  .Deprecated(msg = paste0(
-    "The parameter `", old, "` is deprecated; pass ",
-    if (is.na(new)) {
-      "unparameterized arguments "
-    } else {
-      paste0("arguments to `", new, "` ")
-    },
-    "instead."
-  ))
 }
 
 # mimic the behavior of `tbl_at_vars()` in `select_at()`

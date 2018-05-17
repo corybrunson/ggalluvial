@@ -9,7 +9,7 @@
 #' }
 #' Use \code{x}, \code{alluvium}, and/or \code{stratum} for data in lodes format
 #' and \code{axis[0-9]*} for data in alluvia format
-#' (see \code{\link{is_alluvial}}).
+#' (see \code{\link{"alluvial-data"}}).
 #' Arguments to parameters inconsistent with the format will be ignored.
 #' Additionally, each \code{stat_*} layer accepts the following optional
 #' aesthetics:
