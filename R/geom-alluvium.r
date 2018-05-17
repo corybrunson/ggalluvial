@@ -88,8 +88,9 @@ GeomAlluvium <- ggproto(
     aesthetics <- intersect(.color_diff_aesthetics, names(data))
     if (nrow(unique(data[, c("alluvium", aesthetics), drop = FALSE])) !=
         length(unique(data$alluvium))) {
-      warning("Some color or differentiation aesthetics vary within alluvia; ",
-              "values at the first axis will be diffused across each alluvium.")
+      warning("Some differentiation aesthetics vary within alluvia, ",
+              "and will be diffused by their first value.\n",
+              "Consider using `geom_flow()` instead.")
     }
     
     # positioning parameters
