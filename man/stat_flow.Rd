@@ -115,7 +115,7 @@ observations within each stratum (otherwise \code{NA} is assigned).
 \examples{
 # illustrate positioning
 ggplot(as.data.frame(Titanic),
-       aes(weight = Freq,
+       aes(y = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age,
            color = Survived)) +
   stat_stratum(geom = "errorbar") +
@@ -126,7 +126,7 @@ ggplot(as.data.frame(Titanic),
 
 # use of lode controls
 ggplot(as.data.frame(Titanic),
-       aes(weight = Freq,
+       aes(y = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
   geom_flow(aes(fill = Survived), aes.bind = TRUE, reverse = FALSE) +
   geom_stratum(reverse = FALSE) +
@@ -136,7 +136,7 @@ ggplot(as.data.frame(Titanic),
 data(vaccinations)
 gg <- ggplot(vaccinations,
              aes(x = survey, stratum = response, alluvium = subject,
-                 weight = freq, fill = response)) +
+                 y = freq, fill = response)) +
   geom_stratum(alpha = .5) +
   geom_text(aes(label = response), stat = "stratum")
 # rightward alluvial aesthetics for vaccine survey data
@@ -151,7 +151,7 @@ vaccinations$subgroup <- LETTERS[1:2][rbinom(
 ) + 1][vaccinations$subject]
 ggplot(vaccinations,
        aes(x = survey, stratum = response, alluvium = subject,
-           weight = freq, fill = response, label = response)) +
+           y = freq, fill = response, label = response)) +
   geom_flow(aes(alpha = subgroup)) +
   scale_alpha_discrete(range = c(1/3, 2/3)) +
   geom_stratum(alpha = .5) +
@@ -159,7 +159,7 @@ ggplot(vaccinations,
 # can even set aesthetics that vary both ways
 ggplot(vaccinations,
        aes(x = survey, stratum = response, alluvium = subject,
-           weight = freq, label = response)) +
+           y = freq, label = response)) +
   geom_flow(aes(fill = interaction(response, subgroup)), aes.bind = TRUE) +
   scale_alpha_discrete(range = c(1/3, 2/3)) +
   geom_stratum(alpha = .5) +

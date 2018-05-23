@@ -1,13 +1,13 @@
 # basic
 ggplot(as.data.frame(Titanic),
-       aes(weight = Freq,
+       aes(y = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age,
            fill = Survived)) +
   geom_alluvium() +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 
 gg <- ggplot(alluvial::Refugees,
-             aes(weight = refugees, x = year, alluvium = country))
+             aes(y = refugees, x = year, alluvium = country))
 # time series bump chart
 gg + geom_alluvium(aes(fill = country, colour = country),
                    width = 1/4, alpha = 2/3, decreasing = FALSE)
