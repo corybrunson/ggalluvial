@@ -99,10 +99,16 @@ StatAlluvium <- ggproto(
     }
     
     # assign uniform weight if not provided
-    if (is.null(data$weight)) {
-      data$weight <- rep(1, nrow(data))
-    } else if (any(is.na(data$weight))) {
-      stop("Data contains `NA` weights.")
+    if (is.null(data$y)) {
+      if (is.null(data$weight)) {
+        data$y <- rep(1, nrow(data))
+      } else {
+        deprecate_parameter("weight", "y", type = "aesthetic")
+        data$y <- data$weight
+        data$weight <- NULL
+      }
+    } else if (any(is.na(data$y))) {
+      stop("Data contains missing `y` values.")
     }
     
     type <- get_alluvial_type(data)
@@ -144,7 +150,7 @@ StatAlluvium <- ggproto(
                            lode.ordering = NULL) {
     
     # aggregate weights over otherwise equivalent alluvia
-    if (aggregate.wts) data <- aggregate_along(data, "x", "alluvium", "weight")
+    if (aggregate.wts) data <- aggregate_along(data, "x", "alluvium", "y")
     # sort data by `x` then `alluvium` (to match `alluv` downstream)
     data <- data[do.call(order, data[, c("x", "alluvium")]), ]
     # ensure that `alluvium` values are contiguous starting at 1
@@ -158,7 +164,7 @@ StatAlluvium <- ggproto(
     data$deposit <- if (is.na(decreasing)) {
       if (reverse) -xtfrm(data$stratum) else data$stratum
     } else {
-      if (decreasing) -data$weight else data$weight
+      if (decreasing) -data$y else data$y
     }
     data$deposit <- match(data$deposit, sort(unique(data$deposit)))
     alluv <- alluviate(data, "x", "deposit", "alluvium")
@@ -226,10 +232,10 @@ StatAlluvium <- ggproto(
     # calculate lode floors and ceilings from positions by axis
     data <- data[order(data$position), , drop = FALSE]
     data <- dplyr::ungroup(dplyr::mutate(dplyr::group_by(data, x),
-                                         ymax = cumsum(weight),
+                                         ymax = cumsum(y),
                                          ymin = dplyr::lag(ymax, default = 0)))
-    stopifnot(isTRUE(all.equal(data$weight, data$ymax - data$ymin)))
-    # add vertical centroids
+    stopifnot(isTRUE(all.equal(data$y, data$ymax - data$ymin)))
+    # convert heights to vertical centroids
     data <- transform(data, y = (ymin + ymax) / 2)
     
     # within each alluvium, indices at which contiguous subsets start

@@ -63,10 +63,16 @@ StatFlow <- ggproto(
     }
     
     # assign uniform weight if not provided
-    if (is.null(data$weight)) {
-      data$weight <- rep(1, nrow(data))
-    } else if (any(is.na(data$weight))) {
-      stop("Data contains `NA` weights.")
+    if (is.null(data$y)) {
+      if (is.null(data$weight)) {
+        data$y <- rep(1, nrow(data))
+      } else {
+        deprecate_parameter("weight", "y", type = "aesthetic")
+        data$y <- data$weight
+        data$weight <- NULL
+      }
+    } else if (any(is.na(data$y))) {
+      stop("Data contains missing `y` values.")
     }
     
     type <- get_alluvial_type(data)
@@ -109,7 +115,7 @@ StatFlow <- ggproto(
     
     # sort within axes by weight according to `decreasing` parameter
     if (!is.na(decreasing)) {
-      deposits <- stats::aggregate(x = data$weight * (1 - decreasing * 2),
+      deposits <- stats::aggregate(x = data$y * (1 - decreasing * 2),
                                    by = data[, c("x", "stratum"), drop = FALSE],
                                    FUN = sum)
       names(deposits)[3] <- "deposit"
@@ -157,7 +163,7 @@ StatFlow <- ggproto(
     
     # aggregate alluvial segments within flows,
     # totalling `weight` and, if numeric, `label`
-    sum_cols <- c("weight", if (is.numeric(data$label)) "label")
+    sum_cols <- c("y", if (is.numeric(data$label)) "label")
     group_cols <- setdiff(names(data), c("group", sum_cols))
     data <- dplyr::summarize_at(dplyr::group_by(data, .dots = group_cols),
                                 sum_cols, sum, na.rm = TRUE)
@@ -182,10 +188,10 @@ StatFlow <- ggproto(
     )
     data <- data[do.call(order, data[, sort_fields]), ]
     # calculate cumulative weights
-    data$y <- NA
+    data$ycum <- NA
     for (ll in unique(data$link)) for (ss in unique(data$side)) {
       ww <- which(data$link == ll & data$side == ss)
-      data$y[ww] <- cumsum(data$weight[ww]) - data$weight[ww] / 2
+      data$ycum[ww] <- cumsum(data$y[ww]) - data$y[ww] / 2
     }
     # calculate y bounds
     data <- transform(data,
@@ -194,8 +200,10 @@ StatFlow <- ggproto(
                       flow_fissure = NULL,
                       flow_stratum = NULL,
                       link = NULL,
-                      ymin = y - weight / 2,
-                      ymax = y + weight / 2)
+                      ymin = ycum - y / 2,
+                      ymax = ycum + y / 2,
+                      y = ycum)
+    data$ycum <- NULL
     
     # arrange data by aesthetics for consistent (reverse) z-ordering
     data <- z_order_aes(data, aesthetics)

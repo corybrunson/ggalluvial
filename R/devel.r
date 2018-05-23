@@ -56,9 +56,9 @@ to_alluvia <- function(...) {
   to_alluvia_form(...)
 }
 
-deprecate_parameter <- function(old, new = NA) {
+deprecate_parameter <- function(old, new = NA, type = "parameter") {
   .Deprecated(msg = paste0(
-    "The parameter `", old, "` is deprecated.",
+    "The ", type, " `", old, "` is deprecated.",
     if (is.null(new)) {
       "\nPass unparameterized arguments instead."
     } else if (!is.na(new)) {

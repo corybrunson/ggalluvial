@@ -101,10 +101,11 @@ is_lodes_form <- function(data,
     weight_var <- vars_select(names(data), !!rlang::enquo(weight))
     if (!is.numeric(data[[weight_var]])) {
       if (!silent) message("Lode weights are non-numeric.")
-      return(return(if (logical) FALSE else "none"))
+      return(if (logical) FALSE else "none")
     } else if (any(data[[weight_var]] < 0)) {
       if (!silent) message("Some lode weights are negative.")
-      return(return(if (logical) FALSE else "none"))
+      #return(if (logical) FALSE else "none")
+      return(if (logical) TRUE else "lodes")
     }
   }
   
@@ -125,10 +126,10 @@ is_alluvia_form <- function(data,
     weight_var <- vars_select(names(data), !!rlang::enquo(weight))
     if (!is.numeric(data[[weight_var]])) {
       if (!silent) message("Alluvium weights are non-numeric.")
-      return(return(if (logical) FALSE else "none"))
+      return(if (logical) FALSE else "none")
     } else if (any(data[[weight_var]] < 0)) {
       if (!silent) message("Some alluvium weights are negative.")
-      return(return(if (logical) FALSE else "none"))
+      return(if (logical) FALSE else "none")
     }
   }
   

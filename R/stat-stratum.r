@@ -81,10 +81,16 @@ StatStratum <- ggproto(
     }
     
     # assign uniform weight if not provided
-    if (is.null(data$weight)) {
-      data$weight <- rep(1, nrow(data))
-    } else if (any(is.na(data$weight))) {
-      stop("Data contains `NA` weights.")
+    if (is.null(data$y)) {
+      if (is.null(data$weight)) {
+        data$y <- rep(1, nrow(data))
+      } else {
+        deprecate_parameter("weight", "y", type = "aesthetic")
+        data$y <- data$weight
+        data$weight <- NULL
+      }
+    } else if (any(is.na(data$y))) {
+      stop("Data contains missing `y` values.")
     }
     
     type <- get_alluvial_type(data)
@@ -137,7 +143,7 @@ StatStratum <- ggproto(
     }
     
     # remove empty lodes (including labels)
-    data <- subset(data, weight > 0)
+    data <- subset(data, y != 0)
     
     # aggregate data by `x` and `stratum`
     data <- auto_aggregate(data = data, by = c("x", "stratum"))
@@ -148,20 +154,24 @@ StatStratum <- ggproto(
       data[with(data, order(PANEL, x, arr_fun(stratum))), , drop = FALSE]
     } else {
       arr_fun <- if (decreasing) dplyr::desc else identity
-      data[with(data, order(PANEL, x, arr_fun(weight))), , drop = FALSE]
+      data[with(data, order(PANEL, x, arr_fun(y))), , drop = FALSE]
     }
     
     # calculate cumulative weights
-    data$y <- NA
+    data$ycum <- NA
     for (xx in unique(data$x)) {
       ww <- which(data$x == xx)
-      data$y[ww] <- cumsum(data$weight[ww]) - data$weight[ww] / 2
+      data$ycum[ww] <- cumsum(data$y[ww]) - data$y[ww] / 2
     }
     
     # y bounds
-    transform(data,
-              ymin = y - weight / 2,
-              ymax = y + weight / 2)
+    data <- transform(data,
+                      ymin = ycum - y / 2,
+                      ymax = ycum + y / 2,
+                      y = ycum)
+    data$ycum <- NULL
+    
+    data
   }
 )
 
