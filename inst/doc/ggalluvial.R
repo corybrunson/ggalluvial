@@ -7,7 +7,7 @@ ggplot(data = to_lodes_form(as.data.frame(Titanic),
                             key = "Demographic",
                             axes = 1:3),
        aes(x = Demographic, stratum = stratum, alluvium = alluvium,
-           weight = Freq, label = stratum)) +
+           y = Freq, label = stratum)) +
   scale_x_discrete(expand = c(.05, .05)) +
   geom_alluvium(aes(fill = Survived)) +
   geom_stratum() + geom_text(stat = "stratum") +
@@ -20,7 +20,7 @@ is_alluvia_form(as.data.frame(UCBAdmissions), axes = 1:3, silent = TRUE)
 
 ## ----alluvial diagram of UC Berkeley admissions dataset------------------
 ggplot(as.data.frame(UCBAdmissions),
-       aes(weight = Freq, axis1 = Gender, axis2 = Dept)) +
+       aes(y = Freq, axis1 = Gender, axis2 = Dept)) +
   geom_alluvium(aes(fill = Admit), width = 1/12) +
   geom_stratum(width = 1/12, fill = "black", color = "grey") +
   geom_label(stat = "stratum", label.strata = TRUE) +
@@ -30,7 +30,7 @@ ggplot(as.data.frame(UCBAdmissions),
 
 ## ----parallel sets plot of Titanic dataset-------------------------------
 ggplot(as.data.frame(Titanic),
-       aes(weight = Freq,
+       aes(y = Freq,
            axis1 = Survived, axis2 = Sex, axis3 = Class)) +
   geom_alluvium(aes(fill = Class),
                 width = 0, knot.pos = 0, reverse = FALSE) +
@@ -64,7 +64,7 @@ country_regions <- c(
 )
 Refugees$region <- country_regions[Refugees$country]
 ggplot(data = Refugees,
-       aes(x = year, weight = refugees, alluvium = country)) +
+       aes(x = year, y = refugees, alluvium = country)) +
   geom_alluvium(aes(fill = country, colour = country),
                 alpha = .75, decreasing = FALSE) +
   scale_x_continuous(breaks = seq(2003, 2013, 2)) +
@@ -93,7 +93,7 @@ data(vaccinations)
 levels(vaccinations$response) <- rev(levels(vaccinations$response))
 ggplot(vaccinations,
        aes(x = survey, stratum = response, alluvium = subject,
-           weight = freq,
+           y = freq,
            fill = response, label = response)) +
   scale_x_discrete(expand = c(.05, .05)) +
   geom_flow() +

@@ -25,10 +25,17 @@ gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
 data(majors)
 # omit missing lodes and incident flows
 ggplot(majors,
-       aes(x = semester, stratum = curriculum, alluvium = student)) +
+             aes(x = semester, stratum = curriculum, alluvium = student)) +
   geom_alluvium(fill = "darkgrey", na.rm = TRUE) +
   geom_stratum(aes(fill = curriculum), color = NA, na.rm = TRUE) +
   theme_bw()
+# reverse the vertical axis (requires an explicit `y` aesthetic)
+ggplot(majors,
+       aes(x = semester, stratum = curriculum, alluvium = student, y = 1)) +
+  geom_alluvium(fill = "darkgrey", na.rm = TRUE) +
+  geom_stratum(aes(fill = curriculum), color = NA, na.rm = TRUE) +
+  theme_bw() +
+  scale_y_reverse()
 
 gg <- ggplot(majors,
              aes(x = semester, stratum = curriculum, alluvium = student,
@@ -39,7 +46,7 @@ gg + geom_flow(stat = "alluvium", lode.guidance = "rightleft",
                color = "black")
 # same diagram with students are aggregated into cohorts
 gg + geom_flow(stat = "alluvium", lode.guidance = "rightleft",
-               color = "black", aggregate.wts = TRUE)
+               color = "black", aggregate.y = TRUE)
 
 \dontrun{
   data(babynames, package = "babynames")

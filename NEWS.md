@@ -1,3 +1,14 @@
+# ggalluvial 0.8.0
+
+## Stat layer functionality
+
+- The `weight` aesthetic for the three `stat_*()` functions is replaced by the `y` aesthetic, so that `scale_y_continuous()` will correctly transform the vertical scales of the layers. An example is provided in the documentation for `stat_alluvium()`. _The `y` aesthetic must be present in order for scales to be correctly transformed._ The `weight` parameter is still available but deprecated.
+- For consistency with the switch from `weight` to `y`, the `aggregate.wts` parameter to `stat_alluvium()` is replaced with `aggregate.y`; `aggregate.wts` is deprecated.
+
+## Alluvial data functionality
+
+- Tests for alluvial format are silenced inside the `stat_*()` functions.
+
 # ggalluvial 0.7.0
 
 ## Alluvial data functionality

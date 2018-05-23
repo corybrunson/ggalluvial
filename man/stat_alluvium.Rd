@@ -6,9 +6,9 @@
 \usage{
 stat_alluvium(mapping = NULL, data = NULL, geom = "alluvium",
   position = "identity", decreasing = NA, reverse = TRUE,
-  discern = FALSE, aggregate.wts = FALSE, lode.guidance = "zigzag",
-  lode.ordering = NULL, na.rm = FALSE, show.legend = NA,
-  inherit.aes = TRUE, ...)
+  discern = FALSE, aggregate.y = FALSE, aggregate.wts = NULL,
+  lode.guidance = "zigzag", lode.ordering = NULL, na.rm = FALSE,
+  show.legend = NA, inherit.aes = TRUE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -51,10 +51,12 @@ Defaults to \code{TRUE}.}
 \item{discern}{Passed to \code{\link{to_lodes_form}} if \code{data} is in
 alluvia format.}
 
-\item{aggregate.wts}{Whether to aggregate weights across otherwise equivalent
+\item{aggregate.y}{Whether to aggregate weights across otherwise equivalent
 rows before computing lode and flow positions. Set to \code{TRUE} to group
 observations into cohorts.
 \strong{Warning}: This is currently an expensive operation.}
+
+\item{aggregate.wts}{Deprecated alias for \code{aggregate.y}.}
 
 \item{lode.guidance}{The function to prioritize the axis variables for 
 ordering the lodes within each stratum. Options are "zigzag", "rightleft",
@@ -157,10 +159,17 @@ gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
 data(majors)
 # omit missing lodes and incident flows
 ggplot(majors,
-       aes(x = semester, stratum = curriculum, alluvium = student)) +
+             aes(x = semester, stratum = curriculum, alluvium = student)) +
   geom_alluvium(fill = "darkgrey", na.rm = TRUE) +
   geom_stratum(aes(fill = curriculum), color = NA, na.rm = TRUE) +
   theme_bw()
+# reverse the vertical axis (requires an explicit `y` aesthetic)
+ggplot(majors,
+       aes(x = semester, stratum = curriculum, alluvium = student, y = 1)) +
+  geom_alluvium(fill = "darkgrey", na.rm = TRUE) +
+  geom_stratum(aes(fill = curriculum), color = NA, na.rm = TRUE) +
+  theme_bw() +
+  scale_y_reverse()
 
 gg <- ggplot(majors,
              aes(x = semester, stratum = curriculum, alluvium = student,
@@ -171,7 +180,7 @@ gg + geom_flow(stat = "alluvium", lode.guidance = "rightleft",
                color = "black")
 # same diagram with students are aggregated into cohorts
 gg + geom_flow(stat = "alluvium", lode.guidance = "rightleft",
-               color = "black", aggregate.wts = TRUE)
+               color = "black", aggregate.y = TRUE)
 
 \dontrun{
   data(babynames, package = "babynames")

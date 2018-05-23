@@ -15,10 +15,11 @@
 #'   \code{\link{geom_lode}}, and
 #'   \code{\link{geom_flow}} for the corresponding geoms.
 #' @inheritParams stat_flow
-#' @param aggregate.wts Whether to aggregate weights across otherwise equivalent
+#' @param aggregate.y Whether to aggregate weights across otherwise equivalent
 #'   rows before computing lode and flow positions. Set to \code{TRUE} to group
 #'   observations into cohorts.
 #'   \strong{Warning}: This is currently an expensive operation.
+#' @param aggregate.wts Deprecated alias for \code{aggregate.y}.
 #' @param lode.guidance The function to prioritize the axis variables for 
 #'   ordering the lodes within each stratum. Options are "zigzag", "rightleft",
 #'   "leftright", "rightward", and "leftward" (see 
@@ -38,7 +39,7 @@ stat_alluvium <- function(mapping = NULL,
                           decreasing = NA,
                           reverse = TRUE,
                           discern = FALSE,
-                          aggregate.wts = FALSE,
+                          aggregate.y = FALSE, aggregate.wts = NULL,
                           lode.guidance = "zigzag",
                           lode.ordering = NULL,
                           na.rm = FALSE,
@@ -57,7 +58,7 @@ stat_alluvium <- function(mapping = NULL,
       decreasing = decreasing,
       reverse = reverse,
       discern = discern,
-      aggregate.wts = FALSE,
+      aggregate.y = FALSE, aggregate.wts = NULL,
       lode.guidance = lode.guidance,
       lode.ordering = lode.ordering,
       na.rm = na.rm,
@@ -144,13 +145,17 @@ StatAlluvium <- ggproto(
   compute_panel = function(data, scales,
                            decreasing = NA, reverse = TRUE,
                            discern = FALSE,
-                           aggregate.wts = FALSE,
+                           aggregate.y = FALSE, aggregate.wts = NULL,
                            lode.guidance = "zigzag",
                            aes.bind = FALSE,
                            lode.ordering = NULL) {
     
     # aggregate weights over otherwise equivalent alluvia
-    if (aggregate.wts) data <- aggregate_along(data, "x", "alluvium", "y")
+    if (!is.null(aggregate.wts)) {
+      deprecate_parameter("aggregate.wts", "aggregate.y")
+      aggregate.y <- aggregate.wts
+    }
+    if (aggregate.y) data <- aggregate_along(data, "x", "alluvium", "y")
     # sort data by `x` then `alluvium` (to match `alluv` downstream)
     data <- data[do.call(order, data[, c("x", "alluvium")]), ]
     # ensure that `alluvium` values are contiguous starting at 1
