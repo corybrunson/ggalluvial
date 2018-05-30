@@ -66,6 +66,14 @@ ggplot(data = titanic_wide,
   theme_minimal() +
   ggtitle("passengers on the maiden voyage of the Titanic",
           "stratified by demographics and survival")
+#> Warning: The aesthetic `weight` is deprecated.
+#> Pass arguments to `y` instead.
+
+#> Warning: The aesthetic `weight` is deprecated.
+#> Pass arguments to `y` instead.
+
+#> Warning: The aesthetic `weight` is deprecated.
+#> Pass arguments to `y` instead.
 ```
 
 ![](man/figures/README-unnamed-chunk-6-1.png)
@@ -95,6 +103,13 @@ ggplot(data = titanic_long,
   theme_minimal() +
   ggtitle("passengers on the maiden voyage of the Titanic",
           "stratified by demographics and survival")
+#> Warning: The aesthetic `weight` is deprecated.
+#> Pass arguments to `y` instead.
+#> Warning: The aesthetic `weight` is deprecated.
+#> Pass arguments to `y` instead.
+
+#> Warning: The aesthetic `weight` is deprecated.
+#> Pass arguments to `y` instead.
 ```
 
 ![](man/figures/README-unnamed-chunk-7-1.png)

@@ -5,8 +5,8 @@ reference:
   - '`alluvial-data`'
   - '`vaccinations`'
   - '`majors`'
-- title: Layers
-  desc:  Plot layers and auxiliary functions
+- title: Plot layers
+  desc:  Add alluvial layers to ggplots
   contents:
   - '`stat_stratum`'
   - '`stat_alluvium`'

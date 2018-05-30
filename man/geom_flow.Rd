@@ -110,8 +110,9 @@ ggplot(as.data.frame(Titanic),
 ggplot(as.data.frame(Titanic),
        aes(y = Freq,
            axis1 = Class, axis2 = Sex)) +
-  geom_flow(aes(fill = Age)) +
-  geom_stratum() + geom_text(stat = "stratum", label.strata = TRUE) +
+  geom_flow(aes(fill = Age), width = .4) +
+  geom_stratum(width = .4) +
+  geom_text(stat = "stratum", label.strata = TRUE, size = 3) +
   scale_x_discrete(limits = c("Class", "Sex")) +
   facet_wrap(~ Survived, scales = "fixed")
 
