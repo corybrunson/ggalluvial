@@ -59,21 +59,13 @@ head(titanic_wide)
 #> 6   2nd Female Child       No    0
 ggplot(data = titanic_wide,
        aes(axis1 = Class, axis2 = Sex, axis3 = Age,
-           weight = Freq)) +
+           y = Freq)) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"), expand = c(.1, .05)) +
   geom_alluvium(aes(fill = Survived)) +
   geom_stratum() + geom_text(stat = "stratum", label.strata = TRUE) +
   theme_minimal() +
   ggtitle("passengers on the maiden voyage of the Titanic",
           "stratified by demographics and survival")
-#> Warning: The aesthetic `weight` is deprecated.
-#> Pass arguments to `y` instead.
-
-#> Warning: The aesthetic `weight` is deprecated.
-#> Pass arguments to `y` instead.
-
-#> Warning: The aesthetic `weight` is deprecated.
-#> Pass arguments to `y` instead.
 ```
 
 ![](man/figures/README-unnamed-chunk-6-1.png)
@@ -97,19 +89,12 @@ head(titanic_long)
 #> 6       No    0        6       Class     2nd
 ggplot(data = titanic_long,
        aes(x = Demographic, stratum = stratum, alluvium = alluvium,
-           weight = Freq, label = stratum)) +
+           y = Freq, label = stratum)) +
   geom_alluvium(aes(fill = Survived)) +
   geom_stratum() + geom_text(stat = "stratum") +
   theme_minimal() +
   ggtitle("passengers on the maiden voyage of the Titanic",
           "stratified by demographics and survival")
-#> Warning: The aesthetic `weight` is deprecated.
-#> Pass arguments to `y` instead.
-#> Warning: The aesthetic `weight` is deprecated.
-#> Pass arguments to `y` instead.
-
-#> Warning: The aesthetic `weight` is deprecated.
-#> Pass arguments to `y` instead.
 ```
 
 ![](man/figures/README-unnamed-chunk-7-1.png)
