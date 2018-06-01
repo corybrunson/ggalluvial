@@ -107,6 +107,14 @@ GeomFlow <- ggproto(
     data <- self_adjoin(data, "x", "alluvium", pair = flow_pos,
                         keep0 = flow_fore, keep1 = flow_back)
     
+    # aesthetics (in prescribed order)
+    aesthetics <- intersect(.color_diff_aesthetics, names(data))
+    # arrange data by aesthetics for consistent (reverse) z-ordering
+    data <- data[do.call(order, lapply(
+      data[, c("link", aesthetics)],
+      function(x) factor(x, levels = unique(x))
+    )), ]
+    
     # construct spline grobs
     xspls <- plyr::alply(data, 1, function(row) {
       

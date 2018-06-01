@@ -116,7 +116,7 @@ z_order_aes <- function(data, aesthetics) {
   if (length(aes_data) == 2) return(data)
   aes_data <- aes_data[do.call(order, aes_data[, c(aesthetics, "alluvium")]), ]
   
-  # ensure order of  `group` respects aesthetics
+  # ensure order of "group" respects aesthetics
   data$group <- match(data$group, unique(aes_data$group))
   data[with(data, order(x, group)), , drop = FALSE]
 }

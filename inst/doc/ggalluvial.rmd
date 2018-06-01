@@ -196,7 +196,7 @@ ggplot(vaccinations,
        aes(x = survey, stratum = response, alluvium = subject,
            y = freq,
            fill = response, label = response)) +
-  scale_x_discrete(expand = c(.05, .05)) +
+  scale_x_discrete(expand = c(.1, .1)) +
   geom_flow() +
   geom_stratum(alpha = .5) +
   geom_text(stat = "stratum", size = 3) +
