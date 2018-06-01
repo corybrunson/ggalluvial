@@ -1,3 +1,9 @@
+# ggalluviala 0.8.1
+
+## `geom_alluvium()` patch
+
+An occurrence of `weight` in `geom_alluvium()` was not updated for v0.8.0 and caused `geom_alluvium()` to throw an error in some cases. This has been corrected.
+
 # ggalluvial 0.8.0
 
 ## Stat layer functionality

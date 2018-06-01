@@ -99,8 +99,7 @@ GeomFlow <- ggproto(
     
     # adjoin data with itself by alluvia along adjacent axes
     flow_pos <- intersect(names(data), c("x", "xmin", "xmax", "width",
-                                         "y", "ymin", "ymax", "weight",
-                                         "knot.pos"))
+                                         "y", "ymin", "ymax", "knot.pos"))
     flow_aes <- intersect(names(data), c("size", "linetype",
                                          "colour", "fill", "alpha"))
     flow_fore <- if (aes.flow != "backward") flow_aes else NULL

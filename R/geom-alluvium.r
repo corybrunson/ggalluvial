@@ -107,8 +107,7 @@ GeomAlluvium <- ggproto(
     
     first_row <- data[1, setdiff(names(data),
                                  c("x", "xmin", "xmax", "width",
-                                   "y", "ymin", "ymax", "weight",
-                                   "knot.pos")),
+                                   "y", "ymin", "ymax", "knot.pos")),
                       drop = FALSE]
     rownames(first_row) <- NULL
     
@@ -116,7 +115,7 @@ GeomAlluvium <- ggproto(
       # spline coordinates (one axis)
       spline_data <- with(data, data.frame(
         x = x + width / 2 * c(-1, 1, 1, -1),
-        y = ymin + weight * c(0, 0, 1, 1),
+        y = ymin + y * c(0, 0, 1, 1),
         shape = rep(0, 4)
       ))
     } else {
