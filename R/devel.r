@@ -1,11 +1,73 @@
 #' Deprecated functions
 #' 
-#' These functions are deprecated in the current version and will be removed for
-#' the eventual CRAN release.
+#' These functions are deprecated in the current version and may be removed in a
+#' future version.
 #' 
 #' @name ggalluvial-deprecated
 #' @keywords internal
 NULL
+
+#' @rdname ggalluvial-deprecated
+#' @export
+is_alluvial <- function(data, ..., silent = FALSE) {
+  .Deprecated(msg = paste0(
+    "The function `is_alluvial()` is deprecated; ",
+    "use `is_lodes_form()` or `is_alluvia_form()`."
+  ))
+  
+  # determine method based on arguments given
+  dots <- lazyeval::lazy_dots(...)
+  if (!is.null(dots$key) | !is.null(dots$value) | !is.null(dots$id)) {
+    if (!is.null(dots$axes)) {
+      stop("Arguments to `key`, `value`, and `id` are mutually exclusive ",
+           "with an argument to `axes`.")
+    }
+    is_lodes_form(data = data, ..., silent = silent)
+  } else {
+    is_alluvia_form(data = data, ..., silent = silent)
+  }
+}
+
+#' @rdname ggalluvial-deprecated
+#' @export
+is_alluvial_lodes <- function(...) {
+  .Deprecated("is_lodes_form")
+  is_lodes_form(...)
+}
+
+#' @rdname ggalluvial-deprecated
+#' @export
+is_alluvial_alluvia <- function(...) {
+  .Deprecated("is_alluvia_form")
+  is_alluvia_form(...)
+}
+
+#' @rdname ggalluvial-deprecated
+#' @export
+to_lodes <- function(...) {
+  .Deprecated("to_lodes_form")
+  to_lodes_form(...)
+}
+
+#' @rdname ggalluvial-deprecated
+#' @export
+to_alluvia <- function(...) {
+  .Deprecated("to_alluvia_form")
+  to_alluvia_form(...)
+}
+
+deprecate_parameter <- function(old, new = NA, type = "parameter") {
+  .Deprecated(msg = paste0(
+    "The ", type, " `", old, "` is deprecated.",
+    if (is.null(new)) {
+      "\nPass unparameterized arguments instead."
+    } else if (!is.na(new)) {
+      paste0("\nPass arguments to `", new, "` instead.")
+    } else {
+      ""
+    }
+  ))
+}
 
 release_questions <- function() {
   c(

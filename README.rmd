@@ -62,7 +62,7 @@ titanic_wide <- data.frame(Titanic)
 head(titanic_wide)
 ggplot(data = titanic_wide,
        aes(axis1 = Class, axis2 = Sex, axis3 = Age,
-           weight = Freq)) +
+           y = Freq)) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"), expand = c(.1, .05)) +
   geom_alluvium(aes(fill = Survived)) +
   geom_stratum() + geom_text(stat = "stratum", label.strata = TRUE) +
@@ -80,7 +80,7 @@ titanic_long <- to_lodes(data.frame(Titanic),
 head(titanic_long)
 ggplot(data = titanic_long,
        aes(x = Demographic, stratum = stratum, alluvium = alluvium,
-           weight = Freq, label = stratum)) +
+           y = Freq, label = stratum)) +
   geom_alluvium(aes(fill = Survived)) +
   geom_stratum() + geom_text(stat = "stratum") +
   theme_minimal() +

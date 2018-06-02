@@ -10,9 +10,9 @@ rect_to_poly <- function(xmin, xmax, ymin, ymax) {
 # self-adjoin a dataset, pairing some fields and holding others from one end
 self_adjoin <- function(data, key, also.by,
                         pair = NULL, keep0 = NULL, keep1 = NULL) {
-  # ensure that 'key' is coercible to numeric
+  # ensure that `key` is coercible to numeric
   if (is.character(data[[key]])) data[[key]] <- as.factor(data[[key]])
-  # self-(inner )join position aesthetics by numeric-coerced 'key' and 'also.by'
+  # self-(inner )join position aesthetics by numeric-coerced `key` and `also.by`
   adj <- dplyr::inner_join(
     transform(data,
               link = as.numeric(data[[key]]))[, c("link", also.by, pair)],

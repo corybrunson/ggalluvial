@@ -66,13 +66,13 @@ GeomFlow <- ggproto(
   setup_params = function(data, params) {
     
     if (!is.null(params$axis_width)) {
-      warning("Parameter 'axis_width' is deprecated; use 'width' instead.")
+      deprecate_parameter("axis_width", "width")
       params$width <- params$axis_width
       params$axis_width <- NULL
     }
     
     if (!is.null(params$ribbon_bend)) {
-      warning("Parameter 'ribbon_bend' is deprecated; use 'knot.pos' instead.")
+      deprecate_parameter("ribbon_bend", "knot.pos")
       params$knot.pos <- params$ribbon_bend
       params$ribbon_bend <- NULL
     }
@@ -99,14 +99,21 @@ GeomFlow <- ggproto(
     
     # adjoin data with itself by alluvia along adjacent axes
     flow_pos <- intersect(names(data), c("x", "xmin", "xmax", "width",
-                                         "y", "ymin", "ymax", "weight",
-                                         "knot.pos"))
+                                         "y", "ymin", "ymax", "knot.pos"))
     flow_aes <- intersect(names(data), c("size", "linetype",
                                          "colour", "fill", "alpha"))
     flow_fore <- if (aes.flow != "backward") flow_aes else NULL
     flow_back <- if (aes.flow != "forward") flow_aes else NULL
     data <- self_adjoin(data, "x", "alluvium", pair = flow_pos,
                         keep0 = flow_fore, keep1 = flow_back)
+    
+    # aesthetics (in prescribed order)
+    aesthetics <- intersect(.color_diff_aesthetics, names(data))
+    # arrange data by aesthetics for consistent (reverse) z-ordering
+    data <- data[do.call(order, lapply(
+      data[, c("link", aesthetics)],
+      function(x) factor(x, levels = unique(x))
+    )), ]
     
     # construct spline grobs
     xspls <- plyr::alply(data, 1, function(row) {

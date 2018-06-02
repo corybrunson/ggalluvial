@@ -47,8 +47,8 @@ so that they match the order of the values in the legend.
 Ignored if \code{decreasing} is not \code{NA}.
 Defaults to \code{TRUE}.}
 
-\item{discern}{Passed to \code{\link{to_lodes}} if \code{data} is in alluvia
-format.}
+\item{discern}{Passed to \code{\link{to_lodes_form}} if \code{data} is in
+alluvia format.}
 
 \item{label.strata}{Logical; whether to assign the values of the axis 
 variables to the strata. Defaults to FALSE, and requires that no
@@ -88,16 +88,16 @@ of two sets of aesthetics:
 }
 Use \code{x}, \code{alluvium}, and/or \code{stratum} for data in lodes format
 and \code{axis[0-9]*} for data in alluvia format
-(see \code{\link{is_alluvial}}).
+(see \code{\link{alluvial-data}}).
 Arguments to parameters inconsistent with the format will be ignored.
 Additionally, each \code{stat_*} layer accepts the following optional
 aesthetics:
 \itemize{
-  \item \code{weight}
+  \item \code{y}
   \item \code{group}
 }
-\code{weight} controls the vertical dimensions of the alluvia
-and are aggregated across equivalent observations.
+\code{y} controls the heights of the alluvia
+and may be aggregated across equivalent observations.
 \code{group} is used internally; arguments are ignored.
 Finally, \code{stat_stratum} accepts the following optional aesthetic:
 \itemize{
@@ -106,31 +106,31 @@ Finally, \code{stat_stratum} accepts the following optional aesthetic:
 \code{label} is used to label the strata and must take a unique value across
 the observations within each stratum.
 These and any other aesthetics are aggregated as follows:
-Numeric aesthetics, including \code{weight}, are summed.
+Numeric aesthetics, including \code{y}, are summed.
 Character and factor aesthetics, including \code{label},
 are assigned to strata provided they take unique values across the
 observations within each stratum (otherwise \code{NA} is assigned).
 }
 
 \examples{
-# only 'stratum' assignment is necessary to generate strata
+# only `stratum` assignment is necessary to generate strata
 data(vaccinations)
 ggplot(vaccinations,
-       aes(weight = freq,
+       aes(y = freq,
            x = survey, stratum = response,
            fill = response)) +
   stat_stratum(width = .5)
 
 # lode data: positioning with weight labels
 ggplot(vaccinations,
-       aes(weight = freq,
+       aes(y = freq,
            x = survey, stratum = response, alluvium = subject,
            label = freq)) +
   stat_stratum(geom = "errorbar") +
   geom_text(stat = "stratum")
 # lode data: positioning with stratum labels
 ggplot(vaccinations,
-       aes(weight = freq,
+       aes(y = freq,
            x = survey, stratum = response, alluvium = subject,
            label = response)) +
   stat_stratum(geom = "errorbar") +
@@ -138,7 +138,7 @@ ggplot(vaccinations,
 
 # alluvium data: positioning with weight labels
 ggplot(as.data.frame(Titanic),
-       aes(weight = Freq,
+       aes(y = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age, axis4 = Survived,
            label = Freq)) +
   geom_text(stat = "stratum") +
@@ -146,7 +146,7 @@ ggplot(as.data.frame(Titanic),
   scale_x_discrete(limits = c("Class", "Sex", "Age", "Survived"))
 # alluvium data: positioning with stratum labels
 ggplot(as.data.frame(Titanic),
-       aes(weight = Freq,
+       aes(y = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age, axis4 = Survived)) +
   geom_text(stat = "stratum", label.strata = TRUE) +
   stat_stratum(geom = "errorbar") +

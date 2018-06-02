@@ -2,9 +2,25 @@
 % Please edit documentation in R/devel.r
 \name{ggalluvial-deprecated}
 \alias{ggalluvial-deprecated}
+\alias{is_alluvial}
+\alias{is_alluvial_lodes}
+\alias{is_alluvial_alluvia}
+\alias{to_lodes}
+\alias{to_alluvia}
 \title{Deprecated functions}
+\usage{
+is_alluvial(data, ..., silent = FALSE)
+
+is_alluvial_lodes(...)
+
+is_alluvial_alluvia(...)
+
+to_lodes(...)
+
+to_alluvia(...)
+}
 \description{
-These functions are deprecated in the current version and will be removed for
-the eventual CRAN release.
+These functions are deprecated in the current version and may be removed in a
+future version.
 }
 \keyword{internal}

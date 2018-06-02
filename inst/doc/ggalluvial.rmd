@@ -30,11 +30,12 @@ knitr::opts_chunk$set(fig.width = 6, fig.height = 4, fig.align = "center")
 Here's a quintessential alluvial diagram:
 
 ```{r example alluvial diagram using Titanic dataset, echo=FALSE}
-ggplot(data = to_lodes(as.data.frame(Titanic),
-                       key = "Demographic",
-                       axes = 1:3),
+ggplot(data = to_lodes_form(as.data.frame(Titanic),
+                            key = "Demographic",
+                            axes = 1:3),
        aes(x = Demographic, stratum = stratum, alluvium = alluvium,
-           weight = Freq, label = stratum)) +
+           y = Freq, label = stratum)) +
+  scale_x_discrete(expand = c(.05, .05)) +
   geom_alluvium(aes(fill = Survived)) +
   geom_stratum() + geom_text(stat = "stratum") +
   ggtitle("passengers on the maiden voyage of the Titanic",
@@ -60,18 +61,18 @@ As the examples in the next section will demonstrate, which of these elements ar
 
 ### Alluvia (wide) format
 
-The wide format reflects the visual arrangement of an alluvial diagram, but "untwisted": _Each row corresponds to a cohort of observations that take a specific value at each variable, and each variable has its own column._ An additional column contains the weight of each row, e.g. the number of observational units in the cohort. This is the format into which the base function `as.data.frame()` transforms a frequency table, for instance the 3-dimensional `UCBAdmissions` dataset:
+The wide format reflects the visual arrangement of an alluvial diagram, but "untwisted": Each row corresponds to a cohort of observations that take a specific value at each variable, and each variable has its own column. An additional column contains the weight of each row, e.g. the number of observational units in the cohort, which may be used to control the heights of the strata.[^weight-y] Basically, the wide format consists of _one row per alluvium_. This is the format into which the base function `as.data.frame()` transforms a frequency table, for instance the 3-dimensional `UCBAdmissions` dataset:
 
 ```{r alluvia format of Berkeley admissions dataset}
 head(as.data.frame(UCBAdmissions), n = 12)
-is_alluvial(as.data.frame(UCBAdmissions), logical = FALSE, silent = TRUE)
+is_alluvia_form(as.data.frame(UCBAdmissions), axes = 1:3, silent = TRUE)
 ```
 
 This format is inherited from the first version of **ggalluvial**, which modeled it after usage in **alluvial**: The user declares any number of axis variables, which `stat_alluvium()` and `stat_stratum()` recognize and process in a consistent way:
 
 ```{r alluvial diagram of UC Berkeley admissions dataset}
 ggplot(as.data.frame(UCBAdmissions),
-       aes(weight = Freq, axis1 = Gender, axis2 = Dept)) +
+       aes(y = Freq, axis1 = Gender, axis2 = Dept)) +
   geom_alluvium(aes(fill = Admit), width = 1/12) +
   geom_stratum(width = 1/12, fill = "black", color = "grey") +
   geom_label(stat = "stratum", label.strata = TRUE) +
@@ -88,7 +89,7 @@ An important feature of these diagrams is the meaningfulness of the vertical axi
 
 ```{r parallel sets plot of Titanic dataset}
 ggplot(as.data.frame(Titanic),
-       aes(weight = Freq,
+       aes(y = Freq,
            axis1 = Survived, axis2 = Sex, axis3 = Class)) +
   geom_alluvium(aes(fill = Class),
                 width = 0, knot.pos = 0, reverse = FALSE) +
@@ -111,12 +112,14 @@ Furthermore, format aesthetics like `fill` are necessarily fixed for each alluvi
 
 ### Lodes (long) format
 
-The long format recognized by **ggalluvial** contains _one row per lode_, and can be understood as the result of "gathering" (in the **dplyr** sense) or "pivoting" (in the Microsoft Excel sense) the axis columns of a dataset in the alluvia format into a key-value pair of columns encoding the axis as the key and the stratum as the value. This format requires an additional indexing column that links the rows corresponding to a common cohort, i.e. the lodes of a single alluvium, as illustrated below using the `to_lodes()` defaults on the Berkeley admissions dataset:
+The long format recognized by **ggalluvial** contains _one row per lode_, and can be understood as the result of "gathering" (in the **dplyr** sense) or "pivoting" (in the Microsoft Excel sense) the axis columns of a dataset in the alluvia format into a key-value pair of columns encoding the axis as the key and the stratum as the value. This format requires an additional indexing column that links the rows corresponding to a common cohort, i.e. the lodes of a single alluvium:
 
 ```{r lodes format of Berkeley admissions dataset}
-UCB_lodes <- to_lodes(as.data.frame(UCBAdmissions), axes = 1:3)
+UCB_lodes <- to_lodes_form(as.data.frame(UCBAdmissions),
+                           axes = 1:3,
+                           id = "Cohort")
 head(UCB_lodes, n = 12)
-is_alluvial(UCB_lodes, logical = FALSE, silent = TRUE)
+is_lodes_form(UCB_lodes, key = x, value = stratum, id = Cohort, silent = TRUE)
 ```
 
 The functions that convert data between wide (alluvia) and long (lodes) format include several parameters that help preserve ancillary information. See `help("alluvial-data")` for examples.
@@ -127,7 +130,7 @@ The same stat and geom can receive data in this format using a different set of 
 - `stratum`, the "value" taken by the axis variable indicated by `x`; and
 - `alluvium`, the indexing scheme that links the rows of a single alluvium.
 
-Weights (and weight totals) can vary from axis to axis, allowing users to produce bump charts like those showcased [here](http://imgur.com/gallery/gI5p7).[^geom-area] In these cases, the strata are an artifact of the alluvia and often not plotted. For convenience, both `stat_alluvium()` and `stat_flow()` will accept arguments for `x` and `alluvium` even if none is given for `stratum`.[^arguments] As an example, we can group countries in the `Refugees` dataset by region, in order to compare refugee volumes at different scales:
+Heights can vary from axis to axis, allowing users to produce bump charts like those showcased [here](http://imgur.com/gallery/gI5p7).[^geom-area] In these cases, the strata contain no more information than the alluvia and often not plotted. For convenience, both `stat_alluvium()` and `stat_flow()` will accept arguments for `x` and `alluvium` even if none is given for `stratum`.[^arguments] As an example, we can group countries in the `Refugees` dataset by region, in order to compare refugee volumes at different scales:
 
 [^geom-area]: If bumping is unnecessary, consider using [`geom_area()`](http://www.r-graph-gallery.com/136-stacked-area-chart/) instead.
 [^arguments]: `stat_stratum()` will similarly accept arguments for `x` and `stratum` without `alluvium`. If both strata and either alluvia or flows are to be plotted, though, all three parameters need arguments.
@@ -148,10 +151,11 @@ country_regions <- c(
 )
 Refugees$region <- country_regions[Refugees$country]
 ggplot(data = Refugees,
-       aes(x = year, weight = refugees, alluvium = country)) +
+       aes(x = year, y = refugees, alluvium = country)) +
   geom_alluvium(aes(fill = country, colour = country),
                 alpha = .75, decreasing = FALSE) +
   scale_x_continuous(breaks = seq(2003, 2013, 2)) +
+  theme_bw() +
   theme(axis.text.x = element_text(angle = -30, hjust = 0)) +
   scale_fill_brewer(type = "qual", palette = "Set3") +
   scale_color_brewer(type = "qual", palette = "Set3") +
@@ -177,7 +181,7 @@ ggplot(majors,
   ggtitle("student curricula across several semesters")
 ```
 
-No `weight` is specified, so each row is assigned unit weight.
+The stratum heights `y` are unspecified, so each row is given unit height.
 This example demonstrates one way **ggalluvial** handles missing data. The alternative is to set the parameter `na.rm` to `TRUE`.[^na.rm] Missing data handling (specifically, the order of the strata) also depends on whether the `stratum` variable is character or factor/numeric.
 
 [^na.rm]: Be sure to set `na.rm` consistently in each layer, in this case both the flows and the strata.
@@ -190,8 +194,9 @@ data(vaccinations)
 levels(vaccinations$response) <- rev(levels(vaccinations$response))
 ggplot(vaccinations,
        aes(x = survey, stratum = response, alluvium = subject,
-           weight = freq,
+           y = freq,
            fill = response, label = response)) +
+  scale_x_discrete(expand = c(.1, .1)) +
   geom_flow() +
   geom_stratum(alpha = .5) +
   geom_text(stat = "stratum", size = 3) +
@@ -208,3 +213,5 @@ This diagram ignores any continuity between the flows between axes. This "memory
 ```{r session info}
 sessionInfo()
 ```
+
+[^weight-y]: Previously, weights were passed to the `weight` aesthetic rather than to `y`. This prevented `scale_y_continuous()` from correctly transforming scales, and anyway it was inconsistent with the behavior of `geom_bar()`.

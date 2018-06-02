@@ -53,7 +53,7 @@ GeomStratum <- ggproto(
   setup_params = function(data, params) {
     
     if (!is.null(params$axis_width)) {
-      warning("Parameter 'axis_width' is deprecated; use 'width' instead.")
+      deprecate_parameter("axis_width", "width")
       params$width <- params$axis_width
       params$axis_width <- NULL
     }

@@ -47,8 +47,8 @@ so that they match the order of the values in the legend.
 Ignored if \code{decreasing} is not \code{NA}.
 Defaults to \code{TRUE}.}
 
-\item{discern}{Passed to \code{\link{to_lodes}} if \code{data} is in alluvia
-format.}
+\item{discern}{Passed to \code{\link{to_lodes_form}} if \code{data} is in
+alluvia format.}
 
 \item{aes.bind}{Whether to prioritize aesthetics before axes (other than the
 index axis) when ordering the lodes within each stratum. Defaults to FALSE.}
@@ -88,16 +88,16 @@ of two sets of aesthetics:
 }
 Use \code{x}, \code{alluvium}, and/or \code{stratum} for data in lodes format
 and \code{axis[0-9]*} for data in alluvia format
-(see \code{\link{is_alluvial}}).
+(see \code{\link{alluvial-data}}).
 Arguments to parameters inconsistent with the format will be ignored.
 Additionally, each \code{stat_*} layer accepts the following optional
 aesthetics:
 \itemize{
-  \item \code{weight}
+  \item \code{y}
   \item \code{group}
 }
-\code{weight} controls the vertical dimensions of the alluvia
-and are aggregated across equivalent observations.
+\code{y} controls the heights of the alluvia
+and may be aggregated across equivalent observations.
 \code{group} is used internally; arguments are ignored.
 Finally, \code{stat_stratum} accepts the following optional aesthetic:
 \itemize{
@@ -106,7 +106,7 @@ Finally, \code{stat_stratum} accepts the following optional aesthetic:
 \code{label} is used to label the strata and must take a unique value across
 the observations within each stratum.
 These and any other aesthetics are aggregated as follows:
-Numeric aesthetics, including \code{weight}, are summed.
+Numeric aesthetics, including \code{y}, are summed.
 Character and factor aesthetics, including \code{label},
 are assigned to strata provided they take unique values across the
 observations within each stratum (otherwise \code{NA} is assigned).
@@ -115,7 +115,7 @@ observations within each stratum (otherwise \code{NA} is assigned).
 \examples{
 # illustrate positioning
 ggplot(as.data.frame(Titanic),
-       aes(weight = Freq,
+       aes(y = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age,
            color = Survived)) +
   stat_stratum(geom = "errorbar") +
@@ -126,7 +126,7 @@ ggplot(as.data.frame(Titanic),
 
 # use of lode controls
 ggplot(as.data.frame(Titanic),
-       aes(weight = Freq,
+       aes(y = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
   geom_flow(aes(fill = Survived), aes.bind = TRUE, reverse = FALSE) +
   geom_stratum(reverse = FALSE) +
@@ -136,7 +136,7 @@ ggplot(as.data.frame(Titanic),
 data(vaccinations)
 gg <- ggplot(vaccinations,
              aes(x = survey, stratum = response, alluvium = subject,
-                 weight = freq, fill = response)) +
+                 y = freq, fill = response)) +
   geom_stratum(alpha = .5) +
   geom_text(aes(label = response), stat = "stratum")
 # rightward alluvial aesthetics for vaccine survey data
@@ -151,7 +151,7 @@ vaccinations$subgroup <- LETTERS[1:2][rbinom(
 ) + 1][vaccinations$subject]
 ggplot(vaccinations,
        aes(x = survey, stratum = response, alluvium = subject,
-           weight = freq, fill = response, label = response)) +
+           y = freq, fill = response, label = response)) +
   geom_flow(aes(alpha = subgroup)) +
   scale_alpha_discrete(range = c(1/3, 2/3)) +
   geom_stratum(alpha = .5) +
@@ -159,7 +159,7 @@ ggplot(vaccinations,
 # can even set aesthetics that vary both ways
 ggplot(vaccinations,
        aes(x = survey, stratum = response, alluvium = subject,
-           weight = freq, label = response)) +
+           y = freq, label = response)) +
   geom_flow(aes(fill = interaction(response, subgroup)), aes.bind = TRUE) +
   scale_alpha_discrete(range = c(1/3, 2/3)) +
   geom_stratum(alpha = .5) +

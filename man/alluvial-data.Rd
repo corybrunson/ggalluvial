@@ -2,65 +2,68 @@
 % Please edit documentation in R/alluvial-data.r
 \name{alluvial-data}
 \alias{alluvial-data}
-\alias{is_alluvial}
-\alias{is_alluvial_lodes}
-\alias{is_alluvial_alluvia}
-\alias{to_lodes}
-\alias{to_alluvia}
+\alias{is_lodes_form}
+\alias{is_alluvia_form}
+\alias{to_lodes_form}
+\alias{to_alluvia_form}
 \title{Check for alluvial structure and convert between alluvial formats}
 \usage{
-is_alluvial(data, ..., logical = TRUE, silent = FALSE)
-
-is_alluvial_lodes(data, key, value, id, weight = NULL, logical = TRUE,
+is_lodes_form(data, key, value, id, weight = NULL, logical = TRUE,
   silent = FALSE)
 
-is_alluvial_alluvia(data, axes = NULL, weight = NULL, logical = TRUE,
+is_alluvia_form(data, ..., axes = NULL, weight = NULL, logical = TRUE,
   silent = FALSE)
 
-to_lodes(data, key = "x", value = "stratum", id = "alluvium", axes,
-  diffuse = FALSE, discern = FALSE)
+to_lodes_form(data, ..., axes = NULL, key = "x", value = "stratum",
+  id = "alluvium", diffuse = FALSE, discern = FALSE)
 
-to_alluvia(data, key, value, id, distill = FALSE)
+to_alluvia_form(data, key, value, id, distill = FALSE)
 }
 \arguments{
 \item{data}{A data frame.}
 
-\item{...}{Additional parameters used to determine method and passed
-thereto. All or none of \code{key}, \code{value}, and \code{id}, or else
-optionally \code{axes}, and (in either case) optionally \code{weight}.}
-
-\item{logical}{Whether to return a logical value or a character string
-indicating the type of alluvial structure ("none", "lodes", or "alluvia")}
-
-\item{silent}{Whether to print warning messages.}
-
-\item{key, value, id}{Numeric or character; the fields of \code{data}
-corresponding to the axis (key), stratum (value), and alluvium
+\item{key, value, id}{In \code{to_lodes_form}, handled as in 
+\code{\link[tidyr]{gather}} and used to name the new axis (key), stratum 
+(value), and alluvium (identifying) variables. In \code{to_alluvia_form}, 
+handled as in \code{\link[tidyr]{spread}} and used to identify the fields 
+of \code{data} to be used as the axis (key), stratum (value), and alluvium 
 (identifying) variables.}
 
-\item{weight}{Optional numeric or character; the fields of \code{data}
-corresponding to alluvium or lode weights (heights when plotted).}
+\item{weight}{Optional field of \code{data}, handled using 
+\code{\link[rlang]{enquo}}, to be used as heights or depths of the alluvia 
+or lodes.}
 
-\item{axes}{Numeric or character vector; the field(s) of \code{data}
-corresponding to the axi(e)s (variable(s)).}
+\item{logical}{Deprecated. Whether to return a logical value or a character
+string indicating the type of alluvial structure ("none", "lodes", or
+"alluvia").}
 
-\item{diffuse}{A numeric or character vector indicating which variables among
-those passed to \code{axes} to merge into the reshapen data by \code{id}. 
-Alternatively, a logical value indicating whether to merge all 
-(\code{TRUE}) or none (\code{FALSE}) of these variables.}
+\item{silent}{Whether to print messages.}
 
-\item{discern}{Logical value indicating whether to suffix values 
-of the variables passed to \code{axes} that appear at more than one
-variable in order to distinguish their factor levels. This forces the
-levels of the combined factor variable \code{value} to be in the order of
-the \code{axes}.}
+\item{...}{Used in \code{is_alluvia_form} and \code{to_lodes_form} as in 
+\code{\link[dplyr]{select}} to determine axis variables, as an alternative 
+to \code{axes}. Ignored when \code{axes} is provided.}
+
+\item{axes}{In \code{*_alluvia_form}, handled as in 
+\code{\link[dplyr]{select}} and used to identify the field(s) of 
+\code{data} to be used as axes.}
+
+\item{diffuse}{Fields of \code{data}, handleded using 
+\code{\link[tidyselect]{vars_select}}, to merge into the reshapen data by 
+\code{id}. They must be a subset of the axis variables. Alternatively, a 
+logical value indicating whether to merge all (\code{TRUE}) or none 
+(\code{FALSE}) of the axis variables.}
+
+\item{discern}{Logical value indicating whether to suffix values of the 
+variables used as axes that appear at more than one variable in order to 
+distinguish their factor levels. This forces the levels of the combined 
+factor variable \code{value} to be in the order of the axes.}
 
 \item{distill}{A logical value indicating whether to include variables, other
 than those passed to \code{key} and \code{value}, that vary within values 
 of \code{id}. Alternatively, a function (or its name) to be used to distill
-each such variable to a single value. In addition to existing functions,
-\code{distill} accepts the character values \code{"first"} (used if
-\code{distill} is \code{TRUE}), \code{"last"}, and \code{"most"} (which
+each such variable to a single value. In addition to existing functions, 
+\code{distill} accepts the character values \code{"first"} (used if 
+\code{distill} is \code{TRUE}), \code{"last"}, and \code{"most"} (which 
 returns the modal value).}
 }
 \description{
@@ -77,75 +80,69 @@ types of alluvial structure:
         \code{key} field encodes the axis, a \code{value} field encodes the
         value within each axis, and a \code{id} column identifies multiple
         lodes corresponding to the same subset or amount of observations.
+        \code{is_lodes_form} tests for this structure.
   \item One row per \strong{alluvium}, wherein each row encodes a subset or
         amount of observations having a specific profile of axis values and a
         set \code{axes} of fields encodes its values at each axis variable.
+        \code{is_alluvia_form} tests for this structure.
 }
-If no arguments are assigned to any of these parameters, then
-\code{is_alluvial} will default to \code{is_alluvial_alluvia} and assume that
-all fields in \code{data} (other than \code{weight}, if given) are to be
-treated as axes.
 }
 \details{
-\code{to_lodes} takes a data frame with several designated variables to be 
-used as axes in an alluvial diagram, and reshapes the data frame so that the 
-axis variable names constitute a new factor variable and their values 
+\code{to_lodes_form} takes a data frame with several designated variables to
+be used as axes in an alluvial diagram, and reshapes the data frame so that
+the axis variable names constitute a new factor variable and their values 
 comprise another. Other variables' values will be repeated, and a 
 row-grouping variable can be introduced. This function invokes 
-\code{\link[tidyr]{gather_}}.
+\code{\link[tidyr]{gather}}.
 
-\code{to_alluvia} takes a data frame with axis and axis value variables to be
-used in an alluvial diagram, and reshape the data frame so that the axes
-constitute separate variables whose values are given by the value variable.
-This function invokes \code{\link[tidyr]{spread_}}.
+\code{to_alluvia_form} takes a data frame with axis and axis value variables
+to be used in an alluvial diagram, and reshape the data frame so that the
+axes constitute separate variables whose values are given by the value
+variable. This function invokes \code{\link[tidyr]{spread}}.
 }
 \examples{
 # Titanic data in alluvia format
 titanic_alluvia <- as.data.frame(Titanic)
 head(titanic_alluvia)
-is_alluvial(titanic_alluvia,
-            weight = "Freq")
+is_alluvia_form(titanic_alluvia,
+                weight = "Freq")
 # Titanic data in lodes format
-titanic_lodes <- to_lodes(titanic_alluvia,
-                          key = "x", value = "stratum", id = "alluvium",
-                          axes = 1:4)
+titanic_lodes <- to_lodes_form(titanic_alluvia,
+                               key = "x", value = "stratum", id = "alluvium",
+                               axes = 1:4)
 head(titanic_lodes)
-is_alluvial(titanic_lodes,
-            key = "x", value = "stratum", id = "alluvium",
-            weight = "Freq")
-# again in lodes format, this time diffusing the 'Class' variable
-titanic_lodes2 <- to_lodes(titanic_alluvia,
-                           key = "variable", value = "value", id = "passenger",
-                           axes = 1:3, diffuse = "Class")
+is_lodes_form(titanic_lodes,
+              key = "x", value = "stratum", id = "alluvium",
+              weight = "Freq")
+# again in lodes format, this time diffusing the `Class` variable
+titanic_lodes2 <- to_lodes_form(titanic_alluvia,
+                                key = variable, value = value,
+                                id = passenger,
+                                1:3, diffuse = Class)
 head(titanic_lodes2)
-is_alluvial(titanic_lodes2,
-            key = "variable", value = "value", id = "passenger",
-            weight = "Freq")
+is_lodes_form(titanic_lodes2,
+              key = variable, value = value, id = passenger,
+              weight = Freq)
 
 # curriculum data in lodes format
 data(majors)
 head(majors)
-is_alluvial(majors,
-            key = "semester", value = "curriculum", id = "student",
-            logical = FALSE)
+is_lodes_form(majors,
+              key = "semester", value = "curriculum", id = "student")
 # curriculum data in alluvia format
-majors_alluvia <- to_alluvia(
-  majors,
-  key = "semester", value = "curriculum", id = "student"
-)
+majors_alluvia <- to_alluvia_form(majors,
+                                  key = "semester", value = "curriculum",
+                                  id = "student")
 head(majors_alluvia)
-is_alluvial(majors_alluvia,
-            axes = 2:9,
-            logical = FALSE)
+is_alluvia_form(majors_alluvia, tidyselect::starts_with("CURR"))
 
-# distill variables that vary within 'id' values
+# distill variables that vary within `id` values
 set.seed(1)
 majors$hypo_grade <- LETTERS[sample(5, size = nrow(majors), replace = TRUE)]
-majors_alluvia2 <- to_alluvia(
-  majors,
-  key = "semester", value = "curriculum", id = "student",
-  distill = "most"
-)
+majors_alluvia2 <- to_alluvia_form(majors,
+                                   key = "semester", value = "curriculum",
+                                   id = "student",
+                                   distill = "most")
 head(majors_alluvia2)
 
 # options to distinguish strata at different axes

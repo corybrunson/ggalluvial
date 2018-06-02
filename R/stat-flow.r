@@ -57,22 +57,28 @@ StatFlow <- ggproto(
   
   setup_data = function(data, params) {
     
-    # assign 'alluvium' to 'stratum' if 'stratum' not provided
+    # assign `alluvium` to `stratum` if `stratum` not provided
     if (is.null(data$stratum) & !is.null(data$alluvium)) {
       data <- transform(data, stratum = alluvium)
     }
     
     # assign uniform weight if not provided
-    if (is.null(data$weight)) {
-      data$weight <- rep(1, nrow(data))
-    } else if (any(is.na(data$weight))) {
-      stop("Data contains NA weights.")
+    if (is.null(data$y)) {
+      if (is.null(data$weight)) {
+        data$y <- rep(1, nrow(data))
+      } else {
+        deprecate_parameter("weight", "y", type = "aesthetic")
+        data$y <- data$weight
+        data$weight <- NULL
+      }
+    } else if (any(is.na(data$y))) {
+      stop("Data contains missing `y` values.")
     }
     
     type <- get_alluvial_type(data)
     if (type == "none") {
       stop("Data is not in a recognized alluvial form ",
-           "(see `help(is_alluvial)` for details).")
+           "(see `help('alluvial-data')` for details).")
     }
     
     if (params$na.rm) {
@@ -84,15 +90,15 @@ StatFlow <- ggproto(
     # ensure that data is in lode form
     if (type == "alluvia") {
       axis_ind <- get_axes(names(data))
-      data <- to_lodes(data = data, axes = axis_ind,
-                       discern = params$discern)
-      # positioning requires numeric 'x'
+      data <- to_lodes_form(data = data, axes = axis_ind,
+                            discern = params$discern)
+      # positioning requires numeric `x`
       data <- data[with(data, order(x, stratum, alluvium)), , drop = FALSE]
       data$x <- contiguate(data$x)
     } else {
-      if (!is.null(params$discern)) {
+      if (!is.null(params$discern) && !(params$discern == FALSE)) {
         warning("Data is already in lodes format, ",
-                "so 'discern' will be ignored.")
+                "so `discern` will be ignored.")
       }
     }
     
@@ -107,14 +113,14 @@ StatFlow <- ggproto(
     # aesthetics (in prescribed order)
     aesthetics <- intersect(.color_diff_aesthetics, names(data))
     
-    # sort within axes by weight according to 'decreasing' parameter
+    # sort within axes by weight according to `decreasing` parameter
     if (!is.na(decreasing)) {
-      deposits <- stats::aggregate(x = data$weight * (1 - decreasing * 2),
+      deposits <- stats::aggregate(x = data$y * (1 - decreasing * 2),
                                    by = data[, c("x", "stratum"), drop = FALSE],
                                    FUN = sum)
       names(deposits)[3] <- "deposit"
     }
-    # sort within axes by stratum according to 'reverse' parameter
+    # sort within axes by stratum according to `reverse` parameter
     arr_fun <- if (reverse) dplyr::desc else xtfrm
     
     # identify aesthetics that vary within strata (at "fissures")
@@ -128,7 +134,7 @@ StatFlow <- ggproto(
       interaction(data[, rev(fissure_aes)], drop = TRUE)
     }
     
-    # stack starts and ends of flows, using 'alluvium' to link them
+    # stack starts and ends of flows, using `alluvium` to link them
     x_ran <- range(data$x)
     data$alluvium <- contiguate(data$alluvium)
     alluvium_max <- max(data$alluvium)
@@ -156,8 +162,8 @@ StatFlow <- ggproto(
                                             drop = TRUE))
     
     # aggregate alluvial segments within flows,
-    # totalling 'weight' and, if numeric, 'label'
-    sum_cols <- c("weight", if (is.numeric(data$label)) "label")
+    # totalling `weight` and, if numeric, `label`
+    sum_cols <- c("y", if (is.numeric(data$label)) "label")
     group_cols <- setdiff(names(data), c("group", sum_cols))
     data <- dplyr::summarize_at(dplyr::group_by(data, .dots = group_cols),
                                 sum_cols, sum, na.rm = TRUE)
@@ -182,10 +188,10 @@ StatFlow <- ggproto(
     )
     data <- data[do.call(order, data[, sort_fields]), ]
     # calculate cumulative weights
-    data$y <- NA
+    data$ycum <- NA
     for (ll in unique(data$link)) for (ss in unique(data$side)) {
       ww <- which(data$link == ll & data$side == ss)
-      data$y[ww] <- cumsum(data$weight[ww]) - data$weight[ww] / 2
+      data$ycum[ww] <- cumsum(data$y[ww]) - data$y[ww] / 2
     }
     # calculate y bounds
     data <- transform(data,
@@ -194,8 +200,10 @@ StatFlow <- ggproto(
                       flow_fissure = NULL,
                       flow_stratum = NULL,
                       link = NULL,
-                      ymin = y - weight / 2,
-                      ymax = y + weight / 2)
+                      ymin = ycum - y / 2,
+                      ymax = ycum + y / 2,
+                      y = ycum)
+    data$ycum <- NULL
     
     # arrange data by aesthetics for consistent (reverse) z-ordering
     data <- z_order_aes(data, aesthetics)

@@ -61,20 +61,20 @@ GeomAlluvium <- ggproto(
   setup_params = function(data, params) {
     
     if (!is.null(params$aes.flow)) {
-      warning("Parameter 'aes.flow' cannot be used in 'geom_alluvium', ",
+      warning("Parameter `aes.flow` cannot be used in `geom_alluvium`, ",
               "and will be ignored; ",
-              "use 'geom_lode' and 'geom_flow' instead.")
+              "use `geom_lode` and `geom_flow` instead.")
       params$aes.flow <- NULL
     }
     
     if (!is.null(params$axis_width)) {
-      warning("Parameter 'axis_width' is deprecated; use 'width' instead.")
+      deprecate_parameter("axis_width", "width")
       params$width <- params$axis_width
       params$axis_width <- NULL
     }
     
     if (!is.null(params$ribbon_bend)) {
-      warning("Parameter 'ribbon_bend' is deprecated; use 'knot.pos' instead.")
+      deprecate_parameter("ribbon_bend", "knot.pos")
       params$knot.pos <- params$ribbon_bend
       params$ribbon_bend <- NULL
     }
@@ -88,8 +88,9 @@ GeomAlluvium <- ggproto(
     aesthetics <- intersect(.color_diff_aesthetics, names(data))
     if (nrow(unique(data[, c("alluvium", aesthetics), drop = FALSE])) !=
         length(unique(data$alluvium))) {
-      warning("Some color or differentiation aesthetics vary within alluvia; ",
-              "values at the first axis will be diffused across each alluvium.")
+      warning("Some differentiation aesthetics vary within alluvia, ",
+              "and will be diffused by their first value.\n",
+              "Consider using `geom_flow()` instead.")
     }
     
     # positioning parameters
@@ -106,8 +107,7 @@ GeomAlluvium <- ggproto(
     
     first_row <- data[1, setdiff(names(data),
                                  c("x", "xmin", "xmax", "width",
-                                   "y", "ymin", "ymax", "weight",
-                                   "knot.pos")),
+                                   "y", "ymin", "ymax", "knot.pos")),
                       drop = FALSE]
     rownames(first_row) <- NULL
     
@@ -115,7 +115,7 @@ GeomAlluvium <- ggproto(
       # spline coordinates (one axis)
       spline_data <- with(data, data.frame(
         x = x + width / 2 * c(-1, 1, 1, -1),
-        y = ymin + weight * c(0, 0, 1, 1),
+        y = ymin + y * c(0, 0, 1, 1),
         shape = rep(0, 4)
       ))
     } else {
