@@ -94,6 +94,11 @@
 <a href="#geom_alluvium-patch" class="anchor"></a><code><a href="../reference/geom_alluvium.html">geom_alluvium()</a></code> patch</h2>
 <p>An occurrence of <code>weight</code> in <code><a href="../reference/geom_alluvium.html">geom_alluvium()</a></code> was not updated for v0.8.0 and caused <code><a href="../reference/geom_alluvium.html">geom_alluvium()</a></code> to throw an error in some cases. This has been corrected.</p>
 </div>
+<div id="geom_flow-patch" class="section level2">
+<h2 class="hasAnchor">
+<a href="#geom_flow-patch" class="anchor"></a><code><a href="../reference/geom_flow.html">geom_flow()</a></code> patch</h2>
+<p>An earlier solution to the z-ordering problem sufficed for matched layers (<code>*_alluvium()</code> and <code>*_flow()</code>) but failed for the combination of <code><a href="../reference/stat_alluvium.html">stat_alluvium()</a></code> with <code><a href="../reference/geom_flow.html">geom_flow()</a></code>. This is been corrected in the code for <code>GeomFlow$draw_panel()</code>, though a more elegant and general solution is preferred.</p>
+</div>
 </div>
     <div id="ggalluvial-0-8-0" class="section level1">
 <h1 class="hasAnchor">
@@ -205,7 +210,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>

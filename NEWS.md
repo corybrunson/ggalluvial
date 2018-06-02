@@ -4,6 +4,10 @@
 
 An occurrence of `weight` in `geom_alluvium()` was not updated for v0.8.0 and caused `geom_alluvium()` to throw an error in some cases. This has been corrected.
 
+## `geom_flow()` patch
+
+An earlier solution to the z-ordering problem sufficed for matched layers (`*_alluvium()` and `*_flow()`) but failed for the combination of `stat_alluvium()` with `geom_flow()`. This is been corrected in the code for `GeomFlow$draw_panel()`, though a more elegant and general solution is preferred.
+
 # ggalluvial 0.8.0
 
 ## Stat layer functionality
