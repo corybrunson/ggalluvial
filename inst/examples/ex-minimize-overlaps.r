@@ -1,8 +1,8 @@
 data(Titanic)
-titanic <- to_lodes(as.data.frame(Titanic), axes = 1:4)
+titanic <- to_lodes_form(as.data.frame(Titanic), axes = 1:4)
 ggplot(titanic,
-       aes(x = x, stratum = stratum, alluvium = alluvium,
-           weight = Freq, label = stratum)) +
+       aes(x = x, stratum = stratum, alluvium = alluvium, y = Freq,
+           label = stratum)) +
   geom_alluvium() +
   geom_stratum() + geom_text(stat = "stratum")
 weight_perm <- optimize_strata(
@@ -17,17 +17,16 @@ titanic_weight <- permute_axis_strata(
   perms = weight_perm$perms
 )
 ggplot(titanic_weight,
-       aes(x = x, stratum = stratum, alluvium = alluvium,
-           weight = Freq, label = stratum)) +
+       aes(x = x, stratum = stratum, alluvium = alluvium, y = Freq,
+           label = stratum)) +
   geom_alluvium() +
   geom_stratum() + geom_text(stat = "stratum")
 
 # multiple axes with the same strata
 data(vaccinations)
 ggplot(vaccinations,
-       aes(x = survey, stratum = response, alluvium = subject,
-           weight = freq, fill = response,
-           label = response)) +
+       aes(x = survey, stratum = response, alluvium = subject, y = freq,
+           fill = response, label = response)) +
   geom_flow() +
   geom_stratum() + geom_text(stat = "stratum")
 count_perm <- optimize_strata(
@@ -41,9 +40,8 @@ vaccinations_count <- permute_strata(
   perm = count_perm$perm
 )
 ggplot(vaccinations_count,
-       aes(x = survey, stratum = response, alluvium = subject,
-           weight = freq, fill = response,
-           label = response)) +
+       aes(x = survey, stratum = response, alluvium = subject, y = freq,
+           fill = response, label = response)) +
   geom_flow() +
   geom_stratum() + geom_text(stat = "stratum")
 weight_perm <- optimize_strata(
@@ -58,9 +56,8 @@ vaccinations_weight <- permute_strata(
   perm = weight_perm$perm
 )
 ggplot(vaccinations_weight,
-       aes(x = survey, stratum = response, alluvium = subject,
-           weight = freq, fill = response,
-           label = response)) +
+       aes(x = survey, stratum = response, alluvium = subject, y = freq,
+           fill = response, label = response)) +
   geom_flow() +
   geom_stratum() + geom_text(stat = "stratum")
 

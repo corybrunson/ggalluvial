@@ -51,7 +51,7 @@ different axes.
 }
 \examples{
 data(Titanic)
-titanic <- to_lodes(as.data.frame(Titanic), axes = 1:4)
+titanic <- to_lodes_form(as.data.frame(Titanic), axes = 1:4)
 ggplot(titanic,
        aes(x = x, stratum = stratum, alluvium = alluvium,
            weight = Freq, label = stratum)) +

@@ -34,8 +34,8 @@ optimize_strata <- function(
   method = NULL, niter = 6
 ) {
   
-  if (!is_alluvial_lodes(data = data, key = key, value = value, id = id,
-                         weight = weight, logical = TRUE)) {
+  if (!is_lodes_form(data = data, key = key, value = value, id = id,
+                     weight = weight, logical = TRUE)) {
     stop("Data passed to 'optimize_strata()' must be in 'lodes' format.")
   }
   
@@ -332,7 +332,7 @@ permutation_length <- function(perm) {
 #'   \code{optimize_strata()}).
 #' @export
 permute_strata <- function(data, key, value, id, perm) {
-  stopifnot(is_alluvial_lodes(data, key, value, id))
+  stopifnot(is_lodes_form(data, key, value, id))
   
   # obtain levels of the stratum variable, coercing to factor if necessary
   value_levs <- levels(as.factor(data[[value]]))
@@ -346,7 +346,7 @@ permute_strata <- function(data, key, value, id, perm) {
 #' @export
 permute_axis_strata <- function(data, key, value, id, perms) {
   warning("'permute_axis_strata()' is experimental.")
-  stopifnot(is_alluvial_lodes(data, key, value, id))
+  stopifnot(is_lodes_form(data, key, value, id))
   
   # introduce a key-value interaction variable in axis-stratum order
   data <- data[do.call(order, data[, c(key, value)]), ]
