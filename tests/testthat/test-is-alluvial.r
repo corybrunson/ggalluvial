@@ -2,6 +2,7 @@ library(ggalluvial)
 context("alluvial-data")
 
 titanic_alluvia <- as.data.frame(Titanic)
+null_wt <- NULL
 
 # `is_alluvia_form()` tests
 test_that("`is_alluvia_form()` recognizes alluvia-format Titanic data", {
@@ -13,6 +14,7 @@ test_that("`is_alluvia_form()` recognizes alluvia-format Titanic data", {
                               weight = "Freq"))
   expect_true(is_alluvia_form(titanic_alluvia, axes = 1:4, weight = 5))
   expect_true(is_alluvia_form(titanic_alluvia, Class, Sex, Age, weight = Freq))
+  expect_true(is_alluvia_form(titanic_alluvia, Class, Sex, weight = !!null_wt))
 })
 
 # `to_lodes_form()` tests
@@ -57,6 +59,9 @@ test_that("`is_lodes_form()` recognizes lodes-format Titanic data", {
   expect_true(is_lodes_form(titanic_lodes,
                             key = Variable, value = Value, id = Index,
                             weight = Freq))
+  expect_true(is_lodes_form(titanic_lodes,
+                            key = Variable, value = Value, id = Index,
+                            weight = !!null_wt))
 })
 
 # `to_alluvia_form()` tests
