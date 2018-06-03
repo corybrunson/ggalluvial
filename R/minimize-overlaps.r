@@ -36,7 +36,7 @@ optimize_strata <- function(
   
   if (!is_lodes_form(data = data, key = key, value = value, id = id,
                      weight = weight, logical = TRUE)) {
-    stop("Data passed to 'optimize_strata()' must be in 'lodes' format.")
+    stop("Data passed to `optimize_strata()` must be in `lodes` format.")
   }
   
   # governing parameters
@@ -104,7 +104,7 @@ optimize_strata <- function(
         nrep <- nrep + 1
         perms <- gnapply(Is)
         # if the permutations produce inconsistent stratum orderings, skip them
-        # IDEALLY ONLY FEW CHECKS ARE NEEDED, REGARDING MOST RECENT STEP OF 'Is'
+        # IDEALLY ONLY FEW CHECKS ARE NEEDED, REGARDING MOST RECENT STEP OF `Is`
         perm_strata <- lapply(1:n_axes, function(i) {
           axis_strata[[i]][perms[[i]]]
         })
@@ -135,7 +135,7 @@ optimize_strata <- function(
     sol_perm <- perm_orig
     obj_min <- objective_strata(data, key, value, id, weight, sol_perm)
     obj_orig <- obj_min
-    # 'niter' times, start from a random permutation and heuristically minimize
+    # `niter` times, start from a random permutation and heuristically minimize
     peb <- dplyr::progress_estimated(niter, 2)
     for (i in 1:niter) {
       init <- sample(n_strata)
@@ -161,11 +161,11 @@ optimize_strata <- function(
   list(perm = sol_perm, perms = sol_perms, obj = obj_min, obj_orig = obj_orig)
 }
 
-# iterate a list of permutation iterators, *without* 'NULL's before recycling
+# iterate a list of permutation iterators, *without* `NULL`s before recycling
 # note: iterpc::getcurrent() returns the first permutation when the iterator is
-# at the 'NULL' value
+# at the `NULL` value
 gnapply <- function(Is) {
-  # if all 'NULL's, iterate each to first permutation
+  # if all `NULL`s, iterate each to first permutation
   if (all(sapply(lapply(Is, iterpc::getcurrent), is.null))) {
     return(lapply(Is, iterpc::getnext))
   } else {
@@ -227,7 +227,9 @@ optimize_axis_strata_greedy <- function(
       for (j in seq_along(perms[[i]])[-1]) {
         new_perms <- perms
         new_perms[[i]][c(j - 1, j)] <- new_perms[[i]][c(j, j - 1)]
-        new_obj <- objective_axis_strata(data, key, value, id, weight, new_perms)
+        new_obj <- objective_axis_strata(data,
+                                         key, value, id, weight,
+                                         new_perms)
         if (new_obj < obj) {
           perms <- new_perms
           obj <- new_obj
@@ -267,13 +269,13 @@ objective_strata <- function(
     # match the alluvia on either side
     lr_match <- match(d_left[[id]], d_right[[id]])
     rl_match <- match(d_right[[id]], d_left[[id]])
-    # mean 'weight' in order of 'd_left' (zero if no match)
+    # mean `weight` in order of `d_left` (zero if no match)
     w <- (d_left[[weight]] + d_right[[weight]][lr_match]) / 2
     w[is.na(w)] <- 0
     # identify pairings from the left->right perspective
     rl_combn <- utils::combn(rl_match, 2)
     # exclude pairings that don't intersect (relies on contiguation)
-    # NOTE: SOME INTERSECTIONS WILL BE PREVENTED BY 'lode.ordering'
+    # NOTE: SOME INTERSECTIONS WILL BE PREVENTED BY `lode.ordering`
     # SO THIS PRODUCES AN OVERESTIMATE OF THE ACTUAL NUMBER OF INTERSECTIONS
     rl_combn <- rl_combn[, rl_combn[1, ] > rl_combn[2, ], drop = FALSE]
     # increment by the products of the weights of the intersecting alluvia
@@ -305,13 +307,13 @@ objective_axis_strata <- function(
     # match the alluvia on either side
     lr_match <- match(d_left[[id]], d_right[[id]])
     rl_match <- match(d_right[[id]], d_left[[id]])
-    # mean 'weight' in order of 'd_left' (zero if no match)
+    # mean `weight` in order of `d_left` (zero if no match)
     w <- (d_left[[weight]] + d_right[[weight]][lr_match]) / 2
     w[is.na(w)] <- 0
     # identify pairings from the left->right perspective
     rl_combn <- utils::combn(rl_match, 2)
     # exclude pairings that don't intersect (relies on contiguation)
-    # NOTE: SOME INTERSECTIONS WILL BE PREVENTED BY 'lode.ordering'
+    # NOTE: SOME INTERSECTIONS WILL BE PREVENTED BY `lode.ordering`
     # SO THIS PRODUCES AN OVERESTIMATE OF THE ACTUAL NUMBER OF INTERSECTIONS
     rl_combn <- rl_combn[, rl_combn[1, ] > rl_combn[2, ], drop = FALSE]
     # increment by the products of the weights of the intersecting alluvia
@@ -336,7 +338,7 @@ permute_strata <- function(data, key, value, id, perm) {
   
   # obtain levels of the stratum variable, coercing to factor if necessary
   value_levs <- levels(as.factor(data[[value]]))
-  # reorder the factor levels according to 'perm'
+  # reorder the factor levels according to `perm`
   data[[value]] <- factor(data[[value]], levels = value_levs[perm])
   
   data
@@ -345,7 +347,7 @@ permute_strata <- function(data, key, value, id, perm) {
 #' @rdname minimize-overlaps
 #' @export
 permute_axis_strata <- function(data, key, value, id, perms) {
-  warning("'permute_axis_strata()' is experimental.")
+  warning("`permute_axis_strata()` is experimental.")
   stopifnot(is_lodes_form(data, key, value, id))
   
   # introduce a key-value interaction variable in axis-stratum order
@@ -355,8 +357,8 @@ permute_axis_strata <- function(data, key, value, id, perms) {
   # replace any duplicates with adjusted names
   value_levs <- as.character(data[[value]][!duplicated(keyvalue)])
   value_levs <- make.unique(value_levs, sep = "")
-  # reorder value variable according to 'perms'
-  # permute the order of 'keyvalue' at each axis
+  # reorder value variable according to `perms`
+  # permute the order of `keyvalue` at each axis
   perm_cums <- c(0, cumsum(sapply(perms, length)))
   perm_levs <- unlist(lapply(seq_along(perms),
                              function(i) perms[[i]] + perm_cums[i]))
