@@ -5,8 +5,8 @@
 \title{Lodes at intersections of alluvia and strata}
 \usage{
 geom_lode(mapping = NULL, data = NULL, stat = "alluvium",
-  position = "identity", width = 1/3, axis_width = NULL, na.rm = FALSE,
-  show.legend = NA, inherit.aes = TRUE, ...)
+  position = "identity", width = 1/3, na.rm = FALSE, show.legend = NA,
+  inherit.aes = TRUE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -37,8 +37,6 @@ a call to a position adjustment function.}
 \item{width}{Numeric; the width of each stratum, as a proportion of the
 distance between axes. Defaults to 1/3.}
 
-\item{axis_width}{Deprecated; alias for \code{width}.}
-
 \item{na.rm}{Logical:
 if \code{FALSE}, the default, \code{NA} lodes are not included;
 if \code{TRUE}, \code{NA} lodes constitute a separate category,
@@ -58,7 +56,7 @@ the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
 \item{...}{Additional arguments passed to \code{\link[ggplot2]{layer}}.}
 }
 \description{
-\code{geom_alluvium} receives a dataset of the horizontal (\code{x}) and 
+\code{geom_alluvium} receives a dataset of the horizontal (\code{x}) and
 vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the \strong{lodes}
 of an alluvial diagram, the intersections of the alluvia with the strata.
 It plots rectangles for these lodes of a provided \code{width}.
@@ -81,6 +79,12 @@ are in bold):
   \item \code{group}
 }
 \code{group} is used internally; arguments are ignored.
+}
+
+\section{Defunct parameters}{
+
+The previously deprecated parameters \code{axis_width} and \code{ribbon_bend}
+are now defunct. Use \code{width} and \code{knot.pos} instead.
 }
 
 \examples{

@@ -1,16 +1,11 @@
-# R session data
-**/.Rhistory
-**/**/.Rhistory
+# Mac OS X
+.DS_Store
+
+# R session
+.Rhistory
 .Rapp.history
 .RData
+.Rproj.user
 
-# Mac OS X
-**/.DS_Store
-
-# background infrastructure
-*-raw/
-
-# litter
-ggplot2-exts
+# sandbox
 sandbox
-

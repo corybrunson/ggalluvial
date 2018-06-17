@@ -8,6 +8,10 @@ An occurrence of `weight` in `geom_alluvium()` was not updated for v0.8.0 and ca
 
 An earlier solution to the z-ordering problem sufficed for matched layers (`*_alluvium()` and `*_flow()`) but failed for the combination of `stat_alluvium()` with `geom_flow()`. This is been corrected in the code for `GeomFlow$draw_panel()`, though a more elegant and general solution is preferred.
 
+## Deprecated parameters removed
+
+The deprecated parameters `axis_width` (all geom layers) and `ribbon_bend` (`geom_alluvium()` and `geom_flow()`) are removed and an explanatory note added to the layers' documentation.
+
 # ggalluvial 0.8.0
 
 ## Stat layer functionality

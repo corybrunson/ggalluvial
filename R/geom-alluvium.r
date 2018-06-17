@@ -1,12 +1,13 @@
 #' Alluvia across strata
-#' 
-#' \code{geom_alluvium} receives a dataset of the horizontal (\code{x}) and 
+#'
+#' \code{geom_alluvium} receives a dataset of the horizontal (\code{x}) and
 #' vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the \strong{lodes}
 #' of an alluvial diagram, the intersections of the alluvia with the strata.
 #' It plots both the lodes themselves, using \code{\link{geom_lode}}, and the
 #' flows between them, using \code{\link{geom_flow}}.
 #' @template geom-aesthetics
-#' 
+#' @template defunct-geom-params
+#'
 
 #' @import ggplot2
 #' @family alluvial geom layers
@@ -17,15 +18,14 @@
 #' @param knot.pos The horizontal distance between a stratum (\code{width/2}
 #'   from its axis) and the knot of the x-spline, as a proportion of the
 #'   separation between strata. Defaults to 1/6.
-#' @param ribbon_bend Deprecated; alias for \code{knot.pos}.
 #' @example inst/examples/ex-geom-alluvium.r
 #' @export
 geom_alluvium <- function(mapping = NULL,
                           data = NULL,
                           stat = "alluvium",
                           position = "identity",
-                          width = 1/3, axis_width = NULL,
-                          knot.pos = 1/6, ribbon_bend = NULL,
+                          width = 1/3,
+                          knot.pos = 1/6,
                           na.rm = FALSE,
                           show.legend = NA,
                           inherit.aes = TRUE,
@@ -39,8 +39,8 @@ geom_alluvium <- function(mapping = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
-      width = width, axis_width = axis_width,
-      knot.pos = knot.pos, ribbon_bend = ribbon_bend,
+      width = width,
+      knot.pos = knot.pos,
       na.rm = na.rm,
       ...
     )
@@ -52,38 +52,26 @@ geom_alluvium <- function(mapping = NULL,
 #' @export
 GeomAlluvium <- ggproto(
   "GeomAlluvium", Geom,
-  
+
   required_aes = c("x", "y", "ymin", "ymax"),
-  
+
   default_aes = aes(size = .5, linetype = 1,
                     colour = 0, fill = "gray", alpha = .5),
-  
+
   setup_params = function(data, params) {
-    
+
     if (!is.null(params$aes.flow)) {
       warning("Parameter `aes.flow` cannot be used in `geom_alluvium`, ",
               "and will be ignored; ",
               "use `geom_lode` and `geom_flow` instead.")
       params$aes.flow <- NULL
     }
-    
-    if (!is.null(params$axis_width)) {
-      deprecate_parameter("axis_width", "width")
-      params$width <- params$axis_width
-      params$axis_width <- NULL
-    }
-    
-    if (!is.null(params$ribbon_bend)) {
-      deprecate_parameter("ribbon_bend", "knot.pos")
-      params$knot.pos <- params$ribbon_bend
-      params$ribbon_bend <- NULL
-    }
-    
+
     params
   },
-  
+
   setup_data = function(data, params) {
-    
+
     # check whether color or differentiation aesthetics vary within alluvia
     aesthetics <- intersect(.color_diff_aesthetics, names(data))
     if (nrow(unique(data[, c("alluvium", aesthetics), drop = FALSE])) !=
@@ -92,25 +80,24 @@ GeomAlluvium <- ggproto(
               "and will be diffused by their first value.\n",
               "Consider using `geom_flow()` instead.")
     }
-    
+
     # positioning parameters
     transform(data,
               knot.pos = params$knot.pos)
   },
-  
+
   draw_group = function(self, data, panel_scales, coord,
-                        width = 1/3, axis_width = NULL,
-                        knot.pos = 1/6, ribbon_bend = NULL) {
-    
+                        width = 1/3, knot.pos = 1/6) {
+
     # add width to data
     data <- transform(data, width = width)
-    
+
     first_row <- data[1, setdiff(names(data),
                                  c("x", "xmin", "xmax", "width",
                                    "y", "ymin", "ymax", "knot.pos")),
                       drop = FALSE]
     rownames(first_row) <- NULL
-    
+
     if (nrow(data) == 1) {
       # spline coordinates (one axis)
       spline_data <- with(data, data.frame(
@@ -123,10 +110,10 @@ GeomAlluvium <- ggproto(
       spline_data <- data_to_xspl(data)
     }
     data <- data.frame(first_row, spline_data)
-    
+
     # transform (after calculating spline paths)
     coords <- coord$transform(data, panel_scales)
-    
+
     # graphics object
     grid::xsplineGrob(
       x = coords$x, y = coords$y, shape = coords$shape,
@@ -137,7 +124,7 @@ GeomAlluvium <- ggproto(
       )
     )
   },
-  
+
   draw_key = draw_key_polygon
 )
 
