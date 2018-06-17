@@ -5,9 +5,9 @@
 \title{Flows between lodes or strata}
 \usage{
 geom_flow(mapping = NULL, data = NULL, stat = "flow",
-  position = "identity", width = 1/3, axis_width = NULL, knot.pos = 1/6,
-  ribbon_bend = NULL, aes.flow = "forward", na.rm = FALSE,
-  show.legend = NA, inherit.aes = TRUE, ...)
+  position = "identity", width = 1/3, knot.pos = 1/6,
+  aes.flow = "forward", na.rm = FALSE, show.legend = NA,
+  inherit.aes = TRUE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -38,13 +38,9 @@ a call to a position adjustment function.}
 \item{width}{Numeric; the width of each stratum, as a proportion of the
 distance between axes. Defaults to 1/3.}
 
-\item{axis_width}{Deprecated; alias for \code{width}.}
-
 \item{knot.pos}{The horizontal distance between a stratum (\code{width/2}
 from its axis) and the knot of the x-spline, as a proportion of the
 separation between strata. Defaults to 1/6.}
-
-\item{ribbon_bend}{Deprecated; alias for \code{knot.pos}.}
 
 \item{aes.flow}{Character; how inter-lode flows assume aesthetics from lodes.
 Options are "forward" and "backward".}
@@ -68,7 +64,7 @@ the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
 \item{...}{Additional arguments passed to \code{\link[ggplot2]{layer}}.}
 }
 \description{
-\code{geom_flow} receives a dataset of the horizontal (\code{x}) and 
+\code{geom_flow} receives a dataset of the horizontal (\code{x}) and
 vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the \strong{lodes}
 of an alluvial diagram, the intersections of the alluvia with the strata.
 It reconfigures these into alluvial segments connecting pairs of
@@ -94,6 +90,12 @@ are in bold):
   \item \code{group}
 }
 \code{group} is used internally; arguments are ignored.
+}
+
+\section{Defunct parameters}{
+
+The previously deprecated parameters \code{axis_width} and \code{ribbon_bend}
+are now defunct. Use \code{width} and \code{knot.pos} instead.
 }
 
 \examples{

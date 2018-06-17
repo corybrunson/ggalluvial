@@ -1,8 +1,31 @@
+
+deprecate_parameter <- function(old, new = NA, type = "parameter") {
+  .Deprecated(msg = paste0(
+    "The ", type, " `", old, "` is deprecated.",
+    if (is.null(new)) {
+      "\nPass unparameterized arguments instead."
+    } else if (!is.na(new)) {
+      paste0("\nPass arguments to `", new, "` instead.")
+    } else {
+      ""
+    }
+  ))
+}
+
+release_questions <- function() {
+  c(
+    "Have previous CRAN NOTEs been addressed?"
+  )
+}
+
 #' Deprecated functions
-#' 
+#'
 #' These functions are deprecated in the current version and may be removed in a
 #' future version.
-#' 
+#'
+#' Use \code{is_*_form} instead of \code{is_alluvial} and \code{is_alluvial_*}.
+#' Use \code{to_*_form} instead of \code{to_*}.
+#'
 #' @name ggalluvial-deprecated
 #' @keywords internal
 NULL
@@ -14,7 +37,7 @@ is_alluvial <- function(data, ..., silent = FALSE) {
     "The function `is_alluvial()` is deprecated; ",
     "use `is_lodes_form()` or `is_alluvia_form()`."
   ))
-  
+
   # determine method based on arguments given
   dots <- lazyeval::lazy_dots(...)
   if (!is.null(dots$key) | !is.null(dots$value) | !is.null(dots$id)) {
@@ -54,23 +77,4 @@ to_lodes <- function(...) {
 to_alluvia <- function(...) {
   .Deprecated("to_alluvia_form")
   to_alluvia_form(...)
-}
-
-deprecate_parameter <- function(old, new = NA, type = "parameter") {
-  .Deprecated(msg = paste0(
-    "The ", type, " `", old, "` is deprecated.",
-    if (is.null(new)) {
-      "\nPass unparameterized arguments instead."
-    } else if (!is.na(new)) {
-      paste0("\nPass arguments to `", new, "` instead.")
-    } else {
-      ""
-    }
-  ))
-}
-
-release_questions <- function() {
-  c(
-    "Have previous CRAN NOTEs been addressed?"
-  )
 }

@@ -23,4 +23,8 @@ to_alluvia(...)
 These functions are deprecated in the current version and may be removed in a
 future version.
 }
+\details{
+Use \code{is_*_form} instead of \code{is_alluvial} and \code{is_alluvial_*}.
+Use \code{to_*_form} instead of \code{to_*}.
+}
 \keyword{internal}

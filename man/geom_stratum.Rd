@@ -6,7 +6,7 @@
 \usage{
 geom_stratum(mapping = NULL, data = NULL, stat = "stratum",
   position = "identity", show.legend = NA, inherit.aes = TRUE,
-  width = 1/3, axis_width = NULL, na.rm = FALSE, ...)
+  width = 1/3, na.rm = FALSE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -48,8 +48,6 @@ the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
 \item{width}{Numeric; the width of each stratum, as a proportion of the
 distance between axes. Defaults to 1/3.}
 
-\item{axis_width}{Deprecated; alias for \code{width}.}
-
 \item{na.rm}{Logical:
 if \code{FALSE}, the default, \code{NA} lodes are not included;
 if \code{TRUE}, \code{NA} lodes constitute a separate category,
@@ -81,6 +79,12 @@ are in bold):
   \item \code{group}
 }
 \code{group} is used internally; arguments are ignored.
+}
+
+\section{Defunct parameters}{
+
+The previously deprecated parameters \code{axis_width} and \code{ribbon_bend}
+are now defunct. Use \code{width} and \code{knot.pos} instead.
 }
 
 \examples{
