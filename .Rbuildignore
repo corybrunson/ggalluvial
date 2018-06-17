@@ -7,9 +7,10 @@
 ^ggplot2-exts$
 ^docs$
 README.Rmd
-^_pkgdown\.yml$
+^.*\.Rproj$
+^\.Rproj\.user$
 
 # hosting infrastructure
-cran-comments.md
 .github
-
+cran-comments.md
+^_pkgdown\.yml$
