@@ -40,6 +40,18 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+<li>
+      <a href="../articles/labels.html">Labeling small strata</a>
+    </li>
+  </ul>
+</li>
 <li>
   <a href="../news/index.html">News</a>
 </li>
@@ -59,7 +71,7 @@
       <h1>Alluvial Diagrams in ggplot2</h1>
                         <h4 class="author">Jason Cory Brunson</h4>
             
-            <h4 class="date">2018-06-02</h4>
+            <h4 class="date">2018-06-22</h4>
           </div>
 
     
@@ -241,34 +253,65 @@ majors<span class="op">$</span>curriculum &lt;-<span class="st"> </span><span cl
 <div id="appendix" class="section level2">
 <h2 class="hasAnchor">
 <a href="#appendix" class="anchor"></a>Appendix</h2>
-<p><a href="https://github.com/mbojan">Michał Bojanowski</a> makes a habit of including R session info in each vignette. This makes eminent sense to me, so i’m doing it here.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">sessionInfo</span>()</code></pre></div>
-<pre><code>## R version 3.3.2 (2016-10-31)
-## Platform: x86_64-apple-darwin13.4.0 (64-bit)
-## Running under: OS X Mavericks 10.9.5
-## 
-## locale:
-## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-## 
-## attached base packages:
-## [1] stats     graphics  grDevices utils     datasets  methods   base     
-## 
-## other attached packages:
-## [1] bindrcpp_0.2       ggalluvial_0.8.1   ggplot2_2.2.1.9000
-## 
-## loaded via a namespace (and not attached):
-##  [1] Rcpp_0.12.15       bindr_0.1          knitr_1.19        
-##  [4] magrittr_1.5       tidyselect_0.2.3   munsell_0.4.3     
-##  [7] colorspace_1.3-2   R6_2.2.2           rlang_0.2.0.9001  
-## [10] stringr_1.2.0      plyr_1.8.4         dplyr_0.7.4       
-## [13] tools_3.3.2        grid_3.3.2         gtable_0.2.0      
-## [16] withr_2.1.2        htmltools_0.3.6    yaml_2.1.16       
-## [19] lazyeval_0.2.1     rprojroot_1.3-2    digest_0.6.15     
-## [22] assertthat_0.2.0   tibble_1.4.2       RColorBrewer_1.1-2
-## [25] tidyr_0.8.0        purrr_0.2.4        glue_1.2.0        
-## [28] evaluate_0.10.1    rmarkdown_1.8      labeling_0.3      
-## [31] stringi_1.1.6      pillar_1.1.0       scales_0.5.0.9000 
-## [34] backports_1.1.2    pkgconfig_2.0.1</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/session_info">session_info</a></span>()</code></pre></div>
+<pre><code>## Session info -------------------------------------------------------------</code></pre>
+<pre><code>##  setting  value                       
+##  version  R version 3.3.2 (2016-10-31)
+##  system   x86_64, darwin13.4.0        
+##  ui       X11                         
+##  language (EN)                        
+##  collate  en_US.UTF-8                 
+##  tz       America/New_York            
+##  date     2018-06-22</code></pre>
+<pre><code>## Packages -----------------------------------------------------------------</code></pre>
+<pre><code>##  package      * version    date       source                            
+##  assertthat     0.2.0      2017-04-11 cran (@0.2.0)                     
+##  backports      1.1.2      2017-12-13 CRAN (R 3.3.2)                    
+##  base         * 3.3.2      2016-10-31 local                             
+##  bindr          0.1        2016-11-13 cran (@0.1)                       
+##  bindrcpp     * 0.2        2017-06-17 cran (@0.2)                       
+##  colorspace     1.3-2      2016-12-14 CRAN (R 3.3.2)                    
+##  datasets     * 3.3.2      2016-10-31 local                             
+##  devtools       1.13.5     2018-02-18 CRAN (R 3.3.2)                    
+##  digest         0.6.15     2018-01-28 CRAN (R 3.3.2)                    
+##  dplyr          0.7.4      2017-09-28 CRAN (R 3.3.2)                    
+##  evaluate       0.10.1     2017-06-24 cran (@0.10.1)                    
+##  ggalluvial   * 0.8.1      2018-06-17 local (corybrunson/ggalluvial@NA) 
+##  ggplot2      * 2.2.1.9000 2018-06-17 Github (tidyverse/ggplot2@ff41bc8)
+##  glue           1.2.0      2017-10-29 CRAN (R 3.3.2)                    
+##  graphics     * 3.3.2      2016-10-31 local                             
+##  grDevices    * 3.3.2      2016-10-31 local                             
+##  grid           3.3.2      2016-10-31 local                             
+##  gtable         0.2.0      2016-02-26 CRAN (R 3.3.0)                    
+##  htmltools      0.3.6      2017-04-28 cran (@0.3.6)                     
+##  knitr          1.19       2018-01-29 CRAN (R 3.3.2)                    
+##  labeling       0.3        2014-08-23 CRAN (R 3.3.0)                    
+##  lazyeval       0.2.1      2017-10-29 cran (@0.2.1)                     
+##  magrittr       1.5        2014-11-22 CRAN (R 3.3.0)                    
+##  memoise        1.1.0      2017-04-21 cran (@1.1.0)                     
+##  methods      * 3.3.2      2016-10-31 local                             
+##  munsell        0.4.3      2016-02-13 CRAN (R 3.3.0)                    
+##  pillar         1.1.0      2018-01-14 CRAN (R 3.3.2)                    
+##  pkgconfig      2.0.1      2017-03-21 CRAN (R 3.3.2)                    
+##  plyr           1.8.4      2016-06-08 CRAN (R 3.3.0)                    
+##  purrr          0.2.4      2017-10-18 cran (@0.2.4)                     
+##  R6             2.2.2      2017-06-17 cran (@2.2.2)                     
+##  RColorBrewer   1.1-2      2014-12-07 CRAN (R 3.3.0)                    
+##  Rcpp           0.12.15    2018-01-20 CRAN (R 3.3.2)                    
+##  rlang          0.2.0.9001 2018-06-17 Github (tidyverse/rlang@ba4fb06)  
+##  rmarkdown      1.8        2017-11-17 CRAN (R 3.3.2)                    
+##  rprojroot      1.3-2      2018-01-03 CRAN (R 3.3.2)                    
+##  scales         0.5.0.9000 2018-06-17 Github (hadley/scales@4056ec3)    
+##  stats        * 3.3.2      2016-10-31 local                             
+##  stringi        1.1.6      2017-11-17 CRAN (R 3.3.2)                    
+##  stringr        1.2.0      2017-02-18 CRAN (R 3.3.2)                    
+##  tibble         1.4.2      2018-01-22 CRAN (R 3.3.2)                    
+##  tidyr          0.8.0      2018-01-29 CRAN (R 3.3.2)                    
+##  tidyselect     0.2.3      2017-11-06 CRAN (R 3.3.2)                    
+##  tools          3.3.2      2016-10-31 local                             
+##  utils        * 3.3.2      2016-10-31 local                             
+##  withr          2.1.2      2018-06-17 Github (jimhester/withr@dbcd7cd)  
+##  yaml           2.1.16     2017-12-12 CRAN (R 3.3.2)</code></pre>
 </div>
 <div class="footnotes">
 <hr>

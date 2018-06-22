@@ -63,6 +63,18 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/labels.html">Labeling small strata</a>
+    </li>
+  </ul>
+</li>
 <li>
   <a href="../news/index.html">News</a>
 </li>
@@ -85,15 +97,15 @@
     </div>
 
     
-    <p><code>geom_alluvium</code> receives a dataset of the horizontal (<code>x</code>) and 
+    <p><code>geom_alluvium</code> receives a dataset of the horizontal (<code>x</code>) and
 vertical (<code>y</code>, <code>ymin</code>, <code>ymax</code>) positions of the <strong>lodes</strong>
 of an alluvial diagram, the intersections of the alluvia with the strata.
 It plots rectangles for these lodes of a provided <code>width</code>.</p>
     
 
     <pre class="usage"><span class='fu'>geom_lode</span>(<span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
-  <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"identity"</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>3</span>, <span class='kw'>axis_width</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"identity"</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>3</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
     <table class="ref-arguments">
@@ -132,10 +144,6 @@ a call to a position adjustment function.</p></td>
       <th>width</th>
       <td><p>Numeric; the width of each stratum, as a proportion of the
 distance between axes. Defaults to 1/3.</p></td>
-    </tr>
-    <tr>
-      <th>axis_width</th>
-      <td><p>Deprecated; alias for <code>width</code>.</p></td>
     </tr>
     <tr>
       <th>na.rm</th>
@@ -182,6 +190,12 @@ are in bold):</p><ul>
 <li><p><code>group</code></p></li>
 </ul><p><code>group</code> is used internally; arguments are ignored.</p>
     
+    <h2 class="hasAnchor" id="defunct-parameters"><a class="anchor" href="#defunct-parameters"></a>Defunct parameters</h2>
+
+    
+    <p>The previously deprecated parameters <code>axis_width</code> and <code>ribbon_bend</code>
+are now defunct. Use <code>width</code> and <code>knot.pos</code> instead.</p>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <p><code><a href='http://www.rdocumentation.org/packages/ggplot2/topics/layer'>layer</a></code> for additional arguments and
@@ -198,15 +212,15 @@ are in bold):</p><ul>
            <span class='kw'>axis</span> <span class='kw'>=</span> <span class='no'>Class</span>)) +
   <span class='fu'>geom_lode</span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Class</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='no'>Survived</span>)) +
   <span class='fu'>scale_x_discrete</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Class"</span>)) +
-  <span class='fu'>scale_alpha_manual</span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>.25</span>, <span class='fl'>.75</span>))</div><div class='img'><img src='geom_lode-4.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+  <span class='fu'>scale_alpha_manual</span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>.25</span>, <span class='fl'>.75</span>))</div><div class='img'><img src='geom_lode-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
 <span class='no'>gg</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='fu'>as.data.frame</span>(<span class='no'>Titanic</span>),
              <span class='fu'>aes</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>Freq</span>,
                  <span class='kw'>axis1</span> <span class='kw'>=</span> <span class='no'>Class</span>, <span class='kw'>axis2</span> <span class='kw'>=</span> <span class='no'>Sex</span>, <span class='kw'>axis3</span> <span class='kw'>=</span> <span class='no'>Age</span>,
                  <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Survived</span>))
 <span class='co'># alluvia and lodes</span>
-<span class='no'>gg</span> + <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>() + <span class='fu'>geom_lode</span>()</div><div class='img'><img src='geom_lode-5.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># lodes as strata</span>
+<span class='no'>gg</span> + <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>() + <span class='fu'>geom_lode</span>()</div><div class='img'><img src='geom_lode-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># lodes as strata</span>
 <span class='no'>gg</span> + <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>() +
-  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>)</div><div class='img'><img src='geom_lode-6.png' alt='' width='700' height='432.632880098887' /></div></pre>
+  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>)</div><div class='img'><img src='geom_lode-3.png' alt='' width='700' height='432.632880098887' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -214,6 +228,8 @@ are in bold):</p><ul>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#aesthetics">Aesthetics</a></li>
+
+      <li><a href="#defunct-parameters">Defunct parameters</a></li>
 
       <li><a href="#see-also">See also</a></li>
       

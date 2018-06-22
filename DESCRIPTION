@@ -25,7 +25,10 @@ Suggests:
     alluvial,
     testthat,
     knitr,
-    babynames
+    babynames,
+    devtools,
+    ggrepel,
+    ggfittext
 License: GPL-3
 URL: http://corybrunson.github.io/ggalluvial/
 BugReports: https://github.com/corybrunson/ggalluvial/issues
