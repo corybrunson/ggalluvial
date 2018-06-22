@@ -12,6 +12,10 @@ An earlier solution to the z-ordering problem sufficed for matched layers (`*_al
 
 The deprecated parameters `axis_width` (all geom layers) and `ribbon_bend` (`geom_alluvium()` and `geom_flow()`) are removed and an explanatory note added to the layers' documentation.
 
+## Vignette on labeling small strata
+
+A vignette illustrating two methods for labeling small strata, using other **ggplot2** extensions, is included.
+
 # ggalluvial 0.8.0
 
 ## Stat layer functionality
