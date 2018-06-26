@@ -102,7 +102,7 @@ GeomFlow <- ggproto(
     aesthetics <- intersect(.color_diff_aesthetics, names(data))
     # arrange data by aesthetics for consistent (reverse) z-ordering
     data <- data[do.call(order, lapply(
-      data[, c("pair", aesthetics)],
+      data[, c("step", aesthetics)],
       function(x) factor(x, levels = unique(x))
     )), ]
 

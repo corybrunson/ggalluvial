@@ -42,9 +42,9 @@ self_adjoin <- function(
 
   # self-(inner )join `link` variables by `key` and `by`
   adj <- dplyr::inner_join(
-    transform(data, pair = key_num)[, c("pair", by, link)],
-    transform(data, pair = key_num - 1)[, c("pair", by, link)],
-    by = c("pair", by),
+    transform(data, step = key_num)[, c("step", by, link)],
+    transform(data, step = key_num - 1)[, c("step", by, link)],
+    by = c("step", by),
     suffix = suffix
   )
 
@@ -52,15 +52,15 @@ self_adjoin <- function(
   if (!is.null(keep.x)) {
     adj <- dplyr::left_join(
       adj,
-      transform(data, pair = key_num)[, c("pair", by, keep.x)],
-      by = c("pair", by)
+      transform(data, step = key_num)[, c("step", by, keep.x)],
+      by = c("step", by)
     )
   }
   if (!is.null(keep.y)) {
     adj <- dplyr::left_join(
       adj,
-      transform(data, pair = key_num - 1)[, c("pair", by, keep.y)],
-      by = c("pair", by)
+      transform(data, step = key_num - 1)[, c("step", by, keep.y)],
+      by = c("step", by)
     )
   }
 
