@@ -1,4 +1,4 @@
-# ggalluviala 0.8.1
+# ggalluviala 0.9.0
 
 ## `geom_alluvium()` patch
 
@@ -15,6 +15,10 @@ The deprecated parameters `axis_width` (all geom layers) and `ribbon_bend` (`geo
 ## Vignette on labeling small strata
 
 A vignette illustrating two methods for labeling small strata, using other **ggplot2** extensions, is included.
+
+## `self_adjoin()` export
+
+The internal function `self_adjoin()`, invoked by `geom_flow()`, is revised, exported, documented, and exemplified.
 
 # ggalluvial 0.8.0
 

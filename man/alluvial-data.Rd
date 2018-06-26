@@ -22,15 +22,15 @@ to_alluvia_form(data, key, value, id, distill = FALSE)
 \arguments{
 \item{data}{A data frame.}
 
-\item{key, value, id}{In \code{to_lodes_form}, handled as in 
-\code{\link[tidyr]{gather}} and used to name the new axis (key), stratum 
-(value), and alluvium (identifying) variables. In \code{to_alluvia_form}, 
-handled as in \code{\link[tidyr]{spread}} and used to identify the fields 
-of \code{data} to be used as the axis (key), stratum (value), and alluvium 
+\item{key, value, id}{In \code{to_lodes_form}, handled as in
+\code{\link[tidyr]{gather}} and used to name the new axis (key), stratum
+(value), and alluvium (identifying) variables. In \code{to_alluvia_form},
+handled as in \code{\link[tidyr]{spread}} and used to identify the fields
+of \code{data} to be used as the axis (key), stratum (value), and alluvium
 (identifying) variables.}
 
-\item{weight}{Optional field of \code{data}, handled using 
-\code{\link[rlang]{enquo}}, to be used as heights or depths of the alluvia 
+\item{weight}{Optional field of \code{data}, handled using
+\code{\link[rlang]{enquo}}, to be used as heights or depths of the alluvia
 or lodes.}
 
 \item{logical}{Deprecated. Whether to return a logical value or a character
@@ -39,31 +39,31 @@ string indicating the type of alluvial structure ("none", "lodes", or
 
 \item{silent}{Whether to print messages.}
 
-\item{...}{Used in \code{is_alluvia_form} and \code{to_lodes_form} as in 
-\code{\link[dplyr]{select}} to determine axis variables, as an alternative 
+\item{...}{Used in \code{is_alluvia_form} and \code{to_lodes_form} as in
+\code{\link[dplyr]{select}} to determine axis variables, as an alternative
 to \code{axes}. Ignored when \code{axes} is provided.}
 
-\item{axes}{In \code{*_alluvia_form}, handled as in 
-\code{\link[dplyr]{select}} and used to identify the field(s) of 
+\item{axes}{In \code{*_alluvia_form}, handled as in
+\code{\link[dplyr]{select}} and used to identify the field(s) of
 \code{data} to be used as axes.}
 
-\item{diffuse}{Fields of \code{data}, handleded using 
-\code{\link[tidyselect]{vars_select}}, to merge into the reshapen data by 
-\code{id}. They must be a subset of the axis variables. Alternatively, a 
-logical value indicating whether to merge all (\code{TRUE}) or none 
+\item{diffuse}{Fields of \code{data}, handleded using
+\code{\link[tidyselect]{vars_select}}, to merge into the reshapen data by
+\code{id}. They must be a subset of the axis variables. Alternatively, a
+logical value indicating whether to merge all (\code{TRUE}) or none
 (\code{FALSE}) of the axis variables.}
 
-\item{discern}{Logical value indicating whether to suffix values of the 
-variables used as axes that appear at more than one variable in order to 
-distinguish their factor levels. This forces the levels of the combined 
+\item{discern}{Logical value indicating whether to suffix values of the
+variables used as axes that appear at more than one variable in order to
+distinguish their factor levels. This forces the levels of the combined
 factor variable \code{value} to be in the order of the axes.}
 
 \item{distill}{A logical value indicating whether to include variables, other
-than those passed to \code{key} and \code{value}, that vary within values 
+than those passed to \code{key} and \code{value}, that vary within values
 of \code{id}. Alternatively, a function (or its name) to be used to distill
-each such variable to a single value. In addition to existing functions, 
-\code{distill} accepts the character values \code{"first"} (used if 
-\code{distill} is \code{TRUE}), \code{"last"}, and \code{"most"} (which 
+each such variable to a single value. In addition to existing functions,
+\code{distill} accepts the character values \code{"first"} (used if
+\code{distill} is \code{TRUE}), \code{"last"}, and \code{"most"} (which
 returns the modal value).}
 }
 \description{
@@ -90,9 +90,9 @@ types of alluvial structure:
 \details{
 \code{to_lodes_form} takes a data frame with several designated variables to
 be used as axes in an alluvial diagram, and reshapes the data frame so that
-the axis variable names constitute a new factor variable and their values 
-comprise another. Other variables' values will be repeated, and a 
-row-grouping variable can be introduced. This function invokes 
+the axis variable names constitute a new factor variable and their values
+comprise another. Other variables' values will be repeated, and a
+row-grouping variable can be introduced. This function invokes
 \code{\link[tidyr]{gather}}.
 
 \code{to_alluvia_form} takes a data frame with axis and axis value variables
@@ -163,4 +163,7 @@ ggplot(majors[majors$semester \%in\% paste0("CURR", c(1, 7, 13)), ],
   geom_alluvium(aes(fill = as.factor(student)), width = 2/5, discern = TRUE) +
   geom_stratum(width = 2/5, discern = TRUE) +
   geom_text(stat = "stratum", discern = TRUE)
+}
+\seealso{
+Other alluvial data manipulation: \code{\link{self-adjoin}}
 }

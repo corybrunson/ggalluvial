@@ -3,6 +3,7 @@ reference:
   desc:  Illustrate, test for, and convert between alluvial formats
   contents:
   - '`alluvial-data`'
+  - '`self-adjoin`'
   - '`vaccinations`'
   - '`majors`'
 - title: Plot layers

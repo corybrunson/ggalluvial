@@ -1,8 +1,13 @@
 #' Lode guidance functions
-#' 
-#' Each function orders the numbers 1 through \code{n}, starting at index 
-#' \code{i}. The choice of function made in \code{\link{stat_alluvium}} 
-#' determines the order in which the other axes contribute to the sorting of 
+#'
+#' These functions control the order of lodes within strata in an alluvial
+#' diagram. They are invoked by \code{\link{stat_alluvium}} and can be passed to
+#' the \code{lode.guidance} parameter.
+#'
+
+#' Each function orders the numbers 1 through \code{n}, starting at index
+#' \code{i}. The choice of function made in \code{\link{stat_alluvium}}
+#' determines the order in which the other axes contribute to the sorting of
 #' lodes within each index axis. After starting at \code{i}, the functions order
 #' the remaining axes as follows:
 #' \itemize{
@@ -22,20 +27,20 @@ NULL
 #' @rdname lode-guidance-functions
 #' @export
 lode_zigzag <- function(n, i) {
-  
+
   # radii
   r1 <- i - 1
   r2 <- n - i
   r <- min(r1, r2)
-  
+
   # attempt cohesion in the direction of the closer end
   leftward <- (i <= n / 2)
-  
+
   # setup
   sgn <- if(r1 == r2) 0 else (r2 - r1) / abs(r2 - r1)
   rem <- (i + sgn * (r + 1)):((n+1)/2 + sgn * (n-1)/2)
   zz <- (1 - 2 * leftward) * c(1, -1)
-  
+
   # order
   c(i,
     if(r == 0) c() else sapply(1:r, function(j) i + j * zz),
