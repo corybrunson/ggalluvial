@@ -137,17 +137,17 @@ types of alluvial structure:</p><ul>
     </tr>
     <tr>
       <th>key, value, id</th>
-      <td><p>In <code>to_lodes_form</code>, handled as in 
-<code><a href='http://www.rdocumentation.org/packages/tidyr/topics/gather'>gather</a></code> and used to name the new axis (key), stratum 
-(value), and alluvium (identifying) variables. In <code>to_alluvia_form</code>, 
-handled as in <code><a href='http://www.rdocumentation.org/packages/tidyr/topics/spread'>spread</a></code> and used to identify the fields 
-of <code>data</code> to be used as the axis (key), stratum (value), and alluvium 
+      <td><p>In <code>to_lodes_form</code>, handled as in
+<code><a href='http://www.rdocumentation.org/packages/tidyr/topics/gather'>gather</a></code> and used to name the new axis (key), stratum
+(value), and alluvium (identifying) variables. In <code>to_alluvia_form</code>,
+handled as in <code><a href='http://www.rdocumentation.org/packages/tidyr/topics/spread'>spread</a></code> and used to identify the fields
+of <code>data</code> to be used as the axis (key), stratum (value), and alluvium
 (identifying) variables.</p></td>
     </tr>
     <tr>
       <th>weight</th>
-      <td><p>Optional field of <code>data</code>, handled using 
-<code><a href='http://www.rdocumentation.org/packages/rlang/topics/quotation'>enquo</a></code>, to be used as heights or depths of the alluvia 
+      <td><p>Optional field of <code>data</code>, handled using
+<code><a href='http://www.rdocumentation.org/packages/rlang/topics/quotation'>enquo</a></code>, to be used as heights or depths of the alluvia
 or lodes.</p></td>
     </tr>
     <tr>
@@ -162,39 +162,39 @@ string indicating the type of alluvial structure ("none", "lodes", or
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Used in <code>is_alluvia_form</code> and <code>to_lodes_form</code> as in 
-<code><a href='http://dplyr.tidyverse.org/reference/select.html'>select</a></code> to determine axis variables, as an alternative 
+      <td><p>Used in <code>is_alluvia_form</code> and <code>to_lodes_form</code> as in
+<code><a href='http://dplyr.tidyverse.org/reference/select.html'>select</a></code> to determine axis variables, as an alternative
 to <code>axes</code>. Ignored when <code>axes</code> is provided.</p></td>
     </tr>
     <tr>
       <th>axes</th>
-      <td><p>In <code>*_alluvia_form</code>, handled as in 
-<code><a href='http://dplyr.tidyverse.org/reference/select.html'>select</a></code> and used to identify the field(s) of 
+      <td><p>In <code>*_alluvia_form</code>, handled as in
+<code><a href='http://dplyr.tidyverse.org/reference/select.html'>select</a></code> and used to identify the field(s) of
 <code>data</code> to be used as axes.</p></td>
     </tr>
     <tr>
       <th>diffuse</th>
-      <td><p>Fields of <code>data</code>, handleded using 
-<code><a href='http://www.rdocumentation.org/packages/tidyselect/topics/vars_select'>vars_select</a></code>, to merge into the reshapen data by 
-<code>id</code>. They must be a subset of the axis variables. Alternatively, a 
-logical value indicating whether to merge all (<code>TRUE</code>) or none 
+      <td><p>Fields of <code>data</code>, handleded using
+<code><a href='http://www.rdocumentation.org/packages/tidyselect/topics/vars_select'>vars_select</a></code>, to merge into the reshapen data by
+<code>id</code>. They must be a subset of the axis variables. Alternatively, a
+logical value indicating whether to merge all (<code>TRUE</code>) or none
 (<code>FALSE</code>) of the axis variables.</p></td>
     </tr>
     <tr>
       <th>discern</th>
-      <td><p>Logical value indicating whether to suffix values of the 
-variables used as axes that appear at more than one variable in order to 
-distinguish their factor levels. This forces the levels of the combined 
+      <td><p>Logical value indicating whether to suffix values of the
+variables used as axes that appear at more than one variable in order to
+distinguish their factor levels. This forces the levels of the combined
 factor variable <code>value</code> to be in the order of the axes.</p></td>
     </tr>
     <tr>
       <th>distill</th>
       <td><p>A logical value indicating whether to include variables, other
-than those passed to <code>key</code> and <code>value</code>, that vary within values 
+than those passed to <code>key</code> and <code>value</code>, that vary within values
 of <code>id</code>. Alternatively, a function (or its name) to be used to distill
-each such variable to a single value. In addition to existing functions, 
-<code>distill</code> accepts the character values <code>"first"</code> (used if 
-<code>distill</code> is <code>TRUE</code>), <code>"last"</code>, and <code>"most"</code> (which 
+each such variable to a single value. In addition to existing functions,
+<code>distill</code> accepts the character values <code>"first"</code> (used if
+<code>distill</code> is <code>TRUE</code>), <code>"last"</code>, and <code>"most"</code> (which
 returns the modal value).</p></td>
     </tr>
     </table>
@@ -203,14 +203,18 @@ returns the modal value).</p></td>
 
     <p><code>to_lodes_form</code> takes a data frame with several designated variables to
 be used as axes in an alluvial diagram, and reshapes the data frame so that
-the axis variable names constitute a new factor variable and their values 
-comprise another. Other variables' values will be repeated, and a 
-row-grouping variable can be introduced. This function invokes 
+the axis variable names constitute a new factor variable and their values
+comprise another. Other variables' values will be repeated, and a
+row-grouping variable can be introduced. This function invokes
 <code><a href='http://www.rdocumentation.org/packages/tidyr/topics/gather'>gather</a></code>.
     <code>to_alluvia_form</code> takes a data frame with axis and axis value variables
 to be used in an alluvial diagram, and reshape the data frame so that the
 axes constitute separate variables whose values are given by the value
 variable. This function invokes <code><a href='http://www.rdocumentation.org/packages/tidyr/topics/spread'>spread</a></code>.</p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <p>Other alluvial data manipulation: <code><a href='self-adjoin.html'>self-adjoin</a></code></p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -319,6 +323,8 @@ variable. This function invokes <code><a href='http://www.rdocumentation.org/pac
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
@@ -332,7 +338,7 @@ variable. This function invokes <code><a href='http://www.rdocumentation.org/pac
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
 </div>
 
       </footer>
