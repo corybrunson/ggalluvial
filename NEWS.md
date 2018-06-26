@@ -1,4 +1,4 @@
-# ggalluviala 0.9.0
+# ggalluvial 0.9.0
 
 ## `geom_alluvium()` patch
 
