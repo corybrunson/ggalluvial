@@ -91,14 +91,18 @@ GeomFlow <- ggproto(
                                          "colour", "fill", "alpha"))
     flow_fore <- if (aes.flow != "backward") flow_aes else NULL
     flow_back <- if (aes.flow != "forward") flow_aes else NULL
-    data <- self_adjoin(data, "x", "alluvium", pair = flow_pos,
-                        keep0 = flow_fore, keep1 = flow_back)
+    data <- self_adjoin(
+      data = data, key = "x", by = "alluvium",
+      link = flow_pos,
+      keep.x = flow_fore, keep.y = flow_back,
+      suffix = c(".0", ".1")
+    )
 
     # aesthetics (in prescribed order)
     aesthetics <- intersect(.color_diff_aesthetics, names(data))
     # arrange data by aesthetics for consistent (reverse) z-ordering
     data <- data[do.call(order, lapply(
-      data[, c("link", aesthetics)],
+      data[, c("step", aesthetics)],
       function(x) factor(x, levels = unique(x))
     )), ]
 
@@ -106,9 +110,9 @@ GeomFlow <- ggproto(
     xspls <- plyr::alply(data, 1, function(row) {
 
       # spline paths and aesthetics
-      xspl <- knots_to_xspl(row$xmax0, row$xmin1,
-                            row$ymin0, row$ymax0, row$ymin1, row$ymax1,
-                            row$knot.pos0, row$knot.pos1)
+      xspl <- knots_to_xspl(row$xmax.0, row$xmin.1,
+                            row$ymin.0, row$ymax.0, row$ymin.1, row$ymax.1,
+                            row$knot.pos.0, row$knot.pos.1)
       aes <- as.data.frame(row[flow_aes],
                            stringsAsFactors = FALSE)[rep(1, 8), ]
       f_data <- cbind(xspl, aes)

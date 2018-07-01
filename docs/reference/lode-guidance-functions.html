@@ -63,6 +63,18 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/labels.html">Labeling small strata</a>
+    </li>
+  </ul>
+</li>
 <li>
   <a href="../news/index.html">News</a>
 </li>
@@ -85,19 +97,9 @@
     </div>
 
     
-    <p>Each function orders the numbers 1 through <code>n</code>, starting at index 
-<code>i</code>. The choice of function made in <code><a href='stat_alluvium.html'>stat_alluvium</a></code> 
-determines the order in which the other axes contribute to the sorting of 
-lodes within each index axis. After starting at <code>i</code>, the functions order
-the remaining axes as follows:</p><ul>
-<li><p><code>zigzag</code>: Zigzag outward from <code>i</code></p></li>
-<li><p><code>rightward</code>: Increasing order</p></li>
-<li><p><code>leftward</code>: Decreasing order</p></li>
-<li><p><code>rightleft</code>: Proceed rightward from <code>i</code> to <code>n</code>, then
-        leftward to 1</p></li>
-<li><p><code>leftright</code>: Proceed leftward from <code>i</code> to 1, then rightward
-        to <code>n</code></p></li>
-</ul>
+    <p>These functions control the order of lodes within strata in an alluvial
+diagram. They are invoked by <code><a href='stat_alluvium.html'>stat_alluvium</a></code> and can be passed to
+the <code>lode.guidance</code> parameter.</p>
     
 
     <pre class="usage"><span class='fu'>lode_zigzag</span>(<span class='no'>n</span>, <span class='no'>i</span>)
@@ -123,13 +125,31 @@ the remaining axes as follows:</p><ul>
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Each function orders the numbers 1 through <code>n</code>, starting at index
+<code>i</code>. The choice of function made in <code><a href='stat_alluvium.html'>stat_alluvium</a></code>
+determines the order in which the other axes contribute to the sorting of
+lodes within each index axis. After starting at <code>i</code>, the functions order
+the remaining axes as follows:</p><ul>
+<li><p><code>zigzag</code>: Zigzag outward from <code>i</code></p></li>
+<li><p><code>rightward</code>: Increasing order</p></li>
+<li><p><code>leftward</code>: Decreasing order</p></li>
+<li><p><code>rightleft</code>: Proceed rightward from <code>i</code> to <code>n</code>, then
+        leftward to 1</p></li>
+<li><p><code>leftright</code>: Proceed leftward from <code>i</code> to 1, then rightward
+        to <code>n</code></p></li>
+</ul>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-                </ul>
+      
+      <li><a href="#details">Details</a></li>
+          </ul>
 
   </div>
 </div>
@@ -140,7 +160,7 @@ the remaining axes as follows:</p><ul>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
 </div>
 
       </footer>
