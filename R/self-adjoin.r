@@ -40,29 +40,14 @@ self_adjoin <- function(
   if (is.character(key_num)) key_num <- as.factor(key_num)
   key_num <- as.numeric(key_num)
 
-  # self-(inner )join `link` variables by `key` and `by`
-  adj <- dplyr::inner_join(
-    transform(data, step = key_num)[, c("step", by, link)],
-    transform(data, step = key_num - 1)[, c("step", by, link)],
+  # select datasets `x` and `y`
+  x <- transform(data, step = key_num)[, c("step", by, link, keep.x)]
+  y <- transform(data, step = key_num - 1)[, c("step", by, link, keep.y)]
+
+  # return inner join of `x` and `y`
+  dplyr::inner_join(
+    x, y,
     by = c("step", by),
     suffix = suffix
   )
-
-  # bind `keep.*` variables
-  if (!is.null(keep.x)) {
-    adj <- dplyr::left_join(
-      adj,
-      transform(data, step = key_num)[, c("step", by, keep.x)],
-      by = c("step", by)
-    )
-  }
-  if (!is.null(keep.y)) {
-    adj <- dplyr::left_join(
-      adj,
-      transform(data, step = key_num - 1)[, c("step", by, keep.y)],
-      by = c("step", by)
-    )
-  }
-
-  adj
 }
