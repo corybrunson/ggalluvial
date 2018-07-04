@@ -18,13 +18,27 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Flow positions — stat_flow" />
+
+<meta property="og:description" content="Given a dataset with alluvial structure, stat_flow calculates the
+centroids (x and y) and weights (heights; ymin and
+ymax) of alluvial flows between each pair of adjacent axes." />
+<meta name="twitter:card" content="summary" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +61,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">ggalluvial</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">ggalluvial</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.0</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,7 +76,7 @@
   </a>
 </li>
 <li>
-  <a href="../articles/ggalluvial.html">Get Started</a>
+  <a href="../articles/ggalluvial.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -76,13 +94,14 @@
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -90,24 +109,28 @@
       
       </header>
 
-      <div class="row">
+<div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Flow positions</h1>
+    
+    <div class="hidden name"><code>stat_flow.Rd</code></div>
     </div>
 
+    <div class="ref-description">
     
     <p>Given a dataset with alluvial structure, <code>stat_flow</code> calculates the
 centroids (<code>x</code> and <code>y</code>) and weights (heights; <code>ymin</code> and
 <code>ymax</code>) of alluvial flows between each pair of adjacent axes.</p>
     
+    </div>
 
     <pre class="usage"><span class='fu'>stat_flow</span>(<span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"flow"</span>,
   <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"identity"</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>aes.bind</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
   <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a> Arguments</h2>
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
@@ -196,6 +219,7 @@ the default plot specification, e.g. <code>borders()</code>.</p></td>
     
     <h2 class="hasAnchor" id="aesthetics"><a class="anchor" href="#aesthetics"></a>Aesthetics</h2>
 
+    
     <p><code>stat_alluvium</code>, <code>stat_flow</code>, and <code>stat_stratum</code> require one
 of two sets of aesthetics:</p><ul>
 <li><p><strong><code>x</code></strong> and at least one of
@@ -225,11 +249,11 @@ observations within each stratum (otherwise <code>NA</code> is assigned).</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <p><code><a href='http://www.rdocumentation.org/packages/ggplot2/topics/layer'>layer</a></code> for additional arguments and
+    <div class='dont-index'><p><code><a href='http://www.rdocumentation.org/packages/ggplot2/topics/layer'>layer</a></code> for additional arguments and
   <code><a href='geom_alluvium.html'>geom_alluvium</a></code> and
   <code><a href='geom_flow.html'>geom_flow</a></code> for the corresponding geoms.</p>
 <p>Other alluvial stat layers: <code><a href='stat_alluvium.html'>stat_alluvium</a></code>,
-  <code><a href='stat_stratum.html'>stat_stratum</a></code></p>
+  <code><a href='stat_stratum.html'>stat_stratum</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -242,7 +266,7 @@ observations within each stratum (otherwise <code>NA</code> is assigned).</p>
   <span class='fu'>geom_line</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"flow"</span>) +
   <span class='fu'>stat_flow</span>(<span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"pointrange"</span>) +
   <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
-  <span class='fu'>scale_x_discrete</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>))</div><div class='img'><img src='stat_flow-1.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+  <span class='fu'>scale_x_discrete</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>))</div><div class='img'><img src='stat_flow-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># use of lode controls</span>
 <span class='fu'>ggplot</span>(<span class='fu'>as.data.frame</span>(<span class='no'>Titanic</span>),
        <span class='fu'>aes</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>Freq</span>,
@@ -250,7 +274,7 @@ observations within each stratum (otherwise <code>NA</code> is assigned).</p>
   <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Survived</span>), <span class='kw'>aes.bind</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>) +
   <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>) +
-  <span class='fu'>scale_x_discrete</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>))</div><div class='img'><img src='stat_flow-2.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+  <span class='fu'>scale_x_discrete</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>))</div><div class='img'><img src='stat_flow-2.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='fu'>data</span>(<span class='no'>vaccinations</span>)
 <span class='no'>gg</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='no'>vaccinations</span>,
              <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>subject</span>,
@@ -258,8 +282,8 @@ observations within each stratum (otherwise <code>NA</code> is assigned).</p>
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.5</span>) +
   <span class='fu'>geom_text</span>(<span class='fu'>aes</span>(<span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>response</span>), <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)
 <span class='co'># rightward alluvial aesthetics for vaccine survey data</span>
-<span class='no'>gg</span> + <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>, <span class='kw'>lode.guidance</span> <span class='kw'>=</span> <span class='st'>"rightward"</span>)</div><div class='img'><img src='stat_flow-3.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># memoryless flows for vaccine survey data</span>
-<span class='no'>gg</span> + <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>()</div><div class='img'><img src='stat_flow-4.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+<span class='no'>gg</span> + <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>, <span class='kw'>lode.guidance</span> <span class='kw'>=</span> <span class='st'>"rightward"</span>)</div><div class='img'><img src='stat_flow-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># memoryless flows for vaccine survey data</span>
+<span class='no'>gg</span> + <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>()</div><div class='img'><img src='stat_flow-4.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># aesthetics that vary betwween and within strata</span>
 <span class='fu'>data</span>(<span class='no'>vaccinations</span>)
 <span class='no'>vaccinations</span>$<span class='no'>subgroup</span> <span class='kw'>&lt;-</span> <span class='no'>LETTERS</span>[<span class='fl'>1</span>:<span class='fl'>2</span>][<span class='fu'>rbinom</span>(
@@ -271,21 +295,21 @@ observations within each stratum (otherwise <code>NA</code> is assigned).</p>
   <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='fu'>aes</span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='no'>subgroup</span>)) +
   <span class='fu'>scale_alpha_discrete</span>(<span class='kw'>range</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>/<span class='fl'>3</span>, <span class='fl'>2</span>/<span class='fl'>3</span>)) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.5</span>) +
-  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='img'><img src='stat_flow-5.png' alt='' width='700' height='432.632880098887' /></div><div class='input'><span class='co'># can even set aesthetics that vary both ways</span>
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='img'><img src='stat_flow-5.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># can even set aesthetics that vary both ways</span>
 <span class='fu'>ggplot</span>(<span class='no'>vaccinations</span>,
        <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>subject</span>,
            <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>freq</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>response</span>)) +
   <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='fu'>interaction</span>(<span class='no'>response</span>, <span class='no'>subgroup</span>)), <span class='kw'>aes.bind</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
   <span class='fu'>scale_alpha_discrete</span>(<span class='kw'>range</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>1</span>/<span class='fl'>3</span>, <span class='fl'>2</span>/<span class='fl'>3</span>)) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.5</span>) +
-  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='img'><img src='stat_flow-6.png' alt='' width='700' height='432.632880098887' /></div><div class='input'>
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='img'><img src='stat_flow-6.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='fu'>data</span>(<span class='no'>majors</span>)
 <span class='co'># omit missing lodes and incident flows</span>
 <span class='fu'>ggplot</span>(<span class='no'>majors</span>,
        <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>semester</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>curriculum</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>student</span>)) +
   <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>"darkgrey"</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>curriculum</span>), <span class='kw'>color</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
-  <span class='fu'>theme_bw</span>()</div><div class='img'><img src='stat_flow-7.png' alt='' width='700' height='432.632880098887' /></div></pre>
+  <span class='fu'>theme_bw</span>()</div><div class='img'><img src='stat_flow-7.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -308,11 +332,14 @@ observations within each stratum (otherwise <code>NA</code> is assigned).</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

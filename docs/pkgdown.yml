@@ -1,0 +1,7 @@
+pandoc: 1.19.2.1
+pkgdown: 1.1.0
+pkgdown_sha: ~
+articles:
+  ggalluvial: ggalluvial.html
+  labels: labels.html
+
