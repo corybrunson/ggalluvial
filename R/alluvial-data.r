@@ -57,7 +57,7 @@
 #' @param weight Optional field of \code{data}, handled using
 #'   \code{\link[rlang]{enquo}}, to be used as heights or depths of the alluvia
 #'   or lodes.
-#' @param diffuse Fields of \code{data}, handleded using
+#' @param diffuse Fields of \code{data}, handled using
 #'   \code{\link[tidyselect]{vars_select}}, to merge into the reshapen data by
 #'   \code{id}. They must be a subset of the axis variables. Alternatively, a
 #'   logical value indicating whether to merge all (\code{TRUE}) or none
