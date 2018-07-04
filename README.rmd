@@ -42,7 +42,7 @@ Development versions can be installed from GitHub:
 devtools::install_github("corybrunson/ggalluvial", build_vignettes = TRUE)
 ```
 The
-[optimization branch](https://github.com/corybrunson/ggalluvial/tree/optimization) contains a development version with experimental functions to reduce the number or area of alluvial overlaps (see issue [#6](/../../issues/6)). Install it as follows:
+[optimization branch](https://github.com/corybrunson/ggalluvial/tree/optimization) contains a development version with experimental functions to reduce the number or area of alluvial overlaps (see issue [#6](https://github.com/corybrunson/ggalluvial/issues/6)). Install it as follows:
 ```{r eval=FALSE}
 devtools::install_github("corybrunson/ggalluvial", ref = "optimization")
 ```
@@ -106,4 +106,4 @@ If you use **ggalluvial**-generated figures in publication, i'd be grateful to h
 
 ### Contribute
 
-[Issues](/../../issues) and [pull requests](/../../pulls) are more than welcome! Pretty much every fix and feature of this package derives from a problem or question posed by someone with datasets or design goals i hadn't anticipated.
+[Issues](https://github.com/corybrunson/ggalluvial/issues) and [pull requests](https://github.com/corybrunson/ggalluvial/pulls) are more than welcome! Pretty much every fix and feature of this package derives from a problem or question posed by someone with datasets or design goals i hadn't anticipated.
