@@ -78,7 +78,7 @@
       <h1>Labeling small strata</h1>
                         <h4 class="author">Jason Cory Brunson</h4>
             
-            <h4 class="date">2018-07-04</h4>
+            <h4 class="date">2018-07-06</h4>
       
       
       <div class="hidden name"><code>labels.rmd</code></div>
@@ -116,7 +116,8 @@
 <div id="solutions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#solutions" class="anchor"></a>Solutions</h2>
-<p>Two <strong>ggplot2</strong> extensions are well-suited to this problem: <a href="https://github.com/slowkow/ggrepel"><strong>ggrepel</strong></a> and <a href="https://github.com/wilkox/ggfittext"><strong>ggfittext</strong></a>. They provide new geom layers that use the output of existing stat layers to situate text: <code><a href="http://www.rdocumentation.org/packages/ggrepel/topics/geom_text_repel">ggrepel::geom_text_repel()</a></code> takes the same aesthetics as <code><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_text">ggplot2::geom_text()</a></code>, namely <code>x</code>, <code>y</code>, and <code>label</code>. In contrast, <code><a href="http://www.rdocumentation.org/packages/ggfittext/topics/geom_fit_text">ggfittext::geom_fit_text()</a></code> only specifically requires <code>label</code> but also needs enough information to determine the rectangle that will contain the text. This can be encoded as <code>xmin</code> and <code>xmax</code> or as <code>x</code> and <code>width</code> for the horizontal direction, and as <code>ymin</code> and <code>ymax</code> or as <code>y</code> and <code>height</code> for the vertical direction. Conveniently, <code><a href="../reference/stat_stratum.html">ggalluvial::stat_stratum()</a></code> produces more than enough information for both geoms, including <code>x</code>, <code>xmin</code>, <code>xmax</code>, and their vertical counterparts. All this can be gleaned from the <code>ggproto</code> objects that construct the layers:</p>
+<p>Two <strong>ggplot2</strong> extensions are well-suited to this problem: <a href="https://github.com/slowkow/ggrepel"><strong>ggrepel</strong></a> and <a href="https://github.com/wilkox/ggfittext"><strong>ggfittext</strong></a>. They provide new geom layers that use the output of existing stat layers to situate text: <code><a href="http://www.rdocumentation.org/packages/ggrepel/topics/geom_text_repel">ggrepel::geom_text_repel()</a></code> takes the same aesthetics as <code><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_text">ggplot2::geom_text()</a></code>, namely <code>x</code>, <code>y</code>, and <code>label</code>. In contrast, <code><a href="http://www.rdocumentation.org/packages/ggfittext/topics/geom_fit_text">ggfittext::geom_fit_text()</a></code> only specifically requires <code>label</code> but also needs enough information to determine the rectangle that will contain the text. This can be encoded as <code>xmin</code> and <code>xmax</code> or as <code>x</code> and <code>width</code> for the horizontal direction, and as <code>ymin</code> and <code>ymax</code> or as <code>y</code> and <code>height</code> for the vertical direction. Conveniently, <code><a href="../reference/stat_stratum.html">ggalluvial::stat_stratum()</a></code> produces more than enough information for both geoms, including <code>x</code>, <code>xmin</code>, <code>xmax</code>, and their vertical counterparts.</p>
+<p>All this can be gleaned from the <code>ggproto</code> objects that construct the layers:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(ggrepel<span class="op">::</span>GeomTextRepel<span class="op">$</span>required_aes)</code></pre></div>
 <pre><code>## [1] "x"     "y"     "label"</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(ggfittext<span class="op">:::</span>GeomFitText<span class="op">$</span>required_aes)</code></pre></div>
@@ -130,15 +131,21 @@
 ##   &lt;Inner function (f)&gt;
 ##     function (data, params) 
 ## {
+##     if ("width" %in% names(data)) {
+##         warning("`width` is now an argument, not an aesthetic, and will be removed in a future version")
+##     }
+##     if ("height" %in% names(data)) {
+##         warning("`height` is now an argument, not an aesthetic, and will be removed in a future version")
+##     }
 ##     if (!(("xmin" %in% names(data) &amp; "xmax" %in% names(data)) | 
 ##         ("x" %in% names(data)))) {
 ##         stop("geom_fit_text needs either 'xmin' and 'xmax', or 'x'", 
-##             .call = F)
+##             .call = FALSE)
 ##     }
 ##     if (!("ymin" %in% names(data) &amp; "ymax" %in% names(data) | 
 ##         "y" %in% names(data))) {
 ##         stop("geom_fit_text needs either 'ymin' and 'ymax', or 'y'", 
-##             .call = F)
+##             .call = FALSE)
 ##     }
 ##     if (is.null(data$xmin) &amp; is.null(data$xmax) &amp; class(params$width) != 
 ##         "unit") {
@@ -200,7 +207,7 @@
 <h3 class="hasAnchor">
 <a href="#solution-1-ggrepel" class="anchor"></a>Solution 1: <strong>ggrepel</strong>
 </h3>
-<p><strong>ggrepel</strong> is most often (in my experience) used to repel text away from symbols in a scatterplot, in whatever directions effectively prevent them from overlapping the symbols and each other. In this case, however, it makes much more sense to align them vertically a fixed horizontal distance (<code>nudge_x</code>) away from the strata, repelling them vertically from each other (<code>direction = "y"</code>) just enough to print them without overlap. It takes an extra bit of effort to render text <em>only</em> for the strata at the first (or at the last) axis, but the result is worth it.</p>
+<p><strong>ggrepel</strong> is most often (in my experience) used to repel text away from symbols in a scatterplot, in whatever directions prevent them from overlapping the symbols and each other. In this case, however, it makes much more sense to align them vertically a fixed horizontal distance (<code>nudge_x</code>) away from the strata and repel them vertically from each other (<code>direction = "y"</code>) just enough to print them without overlap. It takes an extra bit of effort to render text <em>only</em> for the strata at the first (or at the last) axis, but the result is worth it.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(vaccinations,
        <span class="kw">aes</span>(<span class="dt">x =</span> survey, <span class="dt">stratum =</span> response, <span class="dt">alluvium =</span> subject, <span class="dt">y =</span> freq,
            <span class="dt">fill =</span> response)) <span class="op">+</span>
@@ -227,7 +234,7 @@
 <h3 class="hasAnchor">
 <a href="#solution-2-ggfittext" class="anchor"></a>Solution 2: <strong>ggfittext</strong>
 </h3>
-<p><strong>ggfittext</strong> is simplicity itself: The stratum are just rectangles, so no more parameter specifications are necessary to fit the text into them. One key parameter is <code>min.size</code>, which defaults to <code>4</code> and controls how small the text is allowed to get without being omitted.</p>
+<p><strong>ggfittext</strong> is simplicity itself: The strata are just rectangles, so no more parameter specifications are necessary to fit the text into them. One key parameter is <code>min.size</code>, which defaults to <code>4</code> and controls how small the text is allowed to get without being omitted.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(vaccinations,
        <span class="kw">aes</span>(<span class="dt">x =</span> survey, <span class="dt">stratum =</span> response, <span class="dt">alluvium =</span> subject, <span class="dt">y =</span> freq,
            <span class="dt">fill =</span> response, <span class="dt">label =</span> response)) <span class="op">+</span>
@@ -238,7 +245,7 @@
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">"none"</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">"vaccination survey responses"</span>, <span class="st">"labeled using `geom_fit_text()`"</span>)</code></pre></div>
 <p><img src="labels_files/figure-html/ggfittext-1.png" width="576" style="display: block; margin: auto;"></p>
-<p>Note that <strong>ggfittext</strong> in particular is under development, so the functionality may change in the future.</p>
+<p>Note that this solution requires <strong>ggfittext</strong> v0.6.0.</p>
 </div>
 </div>
 <div id="appendix" class="section level2">
@@ -253,65 +260,65 @@
 ##  language (EN)                        
 ##  collate  en_US.UTF-8                 
 ##  tz       America/New_York            
-##  date     2018-07-04</code></pre>
+##  date     2018-07-06</code></pre>
 <pre><code>## Packages -----------------------------------------------------------------</code></pre>
-<pre><code>##  package    * version    date       source                                
-##  assertthat   0.2.0      2017-04-11 cran (@0.2.0)                         
-##  backports    1.1.2      2017-12-13 CRAN (R 3.3.2)                        
-##  base       * 3.3.2      2016-10-31 local                                 
-##  bindr        0.1.1      2018-03-13 CRAN (R 3.3.2)                        
-##  bindrcpp     0.2.2      2018-03-29 CRAN (R 3.3.2)                        
-##  colorspace   1.3-2      2016-12-14 CRAN (R 3.3.2)                        
-##  commonmark   1.5        2018-04-28 CRAN (R 3.3.2)                        
-##  crayon       1.3.4      2017-09-16 cran (@1.3.4)                         
-##  datasets   * 3.3.2      2016-10-31 local                                 
-##  desc         1.2.0      2018-05-01 CRAN (R 3.3.2)                        
-##  devtools     1.13.5     2018-02-18 CRAN (R 3.3.2)                        
-##  digest       0.6.15     2018-01-28 CRAN (R 3.3.2)                        
-##  dplyr        0.7.5      2018-05-19 CRAN (R 3.3.2)                        
-##  evaluate     0.10.1     2017-06-24 cran (@0.10.1)                        
-##  fs           1.2.3      2018-06-08 CRAN (R 3.3.2)                        
-##  ggalluvial * 0.9.0      2018-07-04 local (corybrunson/ggalluvial@24a7d98)
-##  ggfittext    0.5.0.9003 2018-01-13 Github (wilkox/ggfittext@50021c0)     
-##  ggplot2    * 3.0.0      2018-07-03 CRAN (R 3.3.2)                        
-##  ggrepel      0.8.0      2018-05-09 CRAN (R 3.3.2)                        
-##  glue         1.2.0      2017-10-29 CRAN (R 3.3.2)                        
-##  graphics   * 3.3.2      2016-10-31 local                                 
-##  grDevices  * 3.3.2      2016-10-31 local                                 
-##  grid         3.3.2      2016-10-31 local                                 
-##  gtable       0.2.0      2016-02-26 CRAN (R 3.3.0)                        
-##  htmltools    0.3.6      2017-04-28 cran (@0.3.6)                         
-##  knitr        1.20       2018-02-20 CRAN (R 3.3.2)                        
-##  labeling     0.3        2014-08-23 CRAN (R 3.3.0)                        
-##  lazyeval     0.2.1      2017-10-29 cran (@0.2.1)                         
-##  magrittr     1.5        2014-11-22 CRAN (R 3.3.0)                        
-##  MASS         7.3-50     2018-04-30 CRAN (R 3.3.2)                        
-##  memoise      1.1.0      2017-04-21 cran (@1.1.0)                         
-##  methods    * 3.3.2      2016-10-31 local                                 
-##  munsell      0.5.0      2018-06-12 CRAN (R 3.3.2)                        
-##  pillar       1.2.3      2018-05-25 CRAN (R 3.3.2)                        
-##  pkgconfig    2.0.1      2017-03-21 CRAN (R 3.3.2)                        
-##  pkgdown      1.1.0      2018-06-02 CRAN (R 3.3.2)                        
-##  plyr         1.8.4      2016-06-08 CRAN (R 3.3.0)                        
-##  purrr        0.2.5      2018-05-29 CRAN (R 3.3.2)                        
-##  R6           2.2.2      2017-06-17 cran (@2.2.2)                         
-##  Rcpp         0.12.17    2018-05-18 CRAN (R 3.3.2)                        
-##  rlang        0.2.1      2018-05-30 CRAN (R 3.3.2)                        
-##  rmarkdown    1.10       2018-06-11 CRAN (R 3.3.2)                        
-##  roxygen2     6.0.1      2017-02-06 CRAN (R 3.3.2)                        
-##  rprojroot    1.3-2      2018-01-03 CRAN (R 3.3.2)                        
-##  scales       0.5.0.9000 2018-06-17 Github (hadley/scales@4056ec3)        
-##  stats      * 3.3.2      2016-10-31 local                                 
-##  stringi      1.2.3      2018-06-12 CRAN (R 3.3.2)                        
-##  stringr      1.3.1      2018-05-10 CRAN (R 3.3.2)                        
-##  tibble       1.4.2      2018-01-22 CRAN (R 3.3.2)                        
-##  tidyr        0.8.1      2018-05-18 CRAN (R 3.3.2)                        
-##  tidyselect   0.2.4      2018-02-26 CRAN (R 3.3.2)                        
-##  tools        3.3.2      2016-10-31 local                                 
-##  utils      * 3.3.2      2016-10-31 local                                 
-##  withr        2.1.2      2018-06-23 Github (jimhester/withr@dbcd7cd)      
-##  xml2         1.1.1      2017-01-24 CRAN (R 3.3.2)                        
-##  yaml         2.1.19     2018-05-01 CRAN (R 3.3.2)</code></pre>
+<pre><code>##  package    * version date       source                           
+##  assertthat   0.2.0   2017-04-11 cran (@0.2.0)                    
+##  backports    1.1.2   2017-12-13 CRAN (R 3.3.2)                   
+##  base       * 3.3.2   2016-10-31 local                            
+##  bindr        0.1.1   2018-03-13 CRAN (R 3.3.2)                   
+##  bindrcpp     0.2.2   2018-03-29 CRAN (R 3.3.2)                   
+##  colorspace   1.3-2   2016-12-14 CRAN (R 3.3.2)                   
+##  commonmark   1.5     2018-04-28 CRAN (R 3.3.2)                   
+##  crayon       1.3.4   2017-09-16 cran (@1.3.4)                    
+##  datasets   * 3.3.2   2016-10-31 local                            
+##  desc         1.2.0   2018-05-01 CRAN (R 3.3.2)                   
+##  devtools     1.13.5  2018-02-18 CRAN (R 3.3.2)                   
+##  digest       0.6.15  2018-01-28 CRAN (R 3.3.2)                   
+##  dplyr        0.7.5   2018-05-19 CRAN (R 3.3.2)                   
+##  evaluate     0.10.1  2017-06-24 cran (@0.10.1)                   
+##  fs           1.2.3   2018-06-08 CRAN (R 3.3.2)                   
+##  ggalluvial * 0.9.0   2018-07-06 local (corybrunson/ggalluvial@NA)
+##  ggfittext    0.6.0   2018-07-06 CRAN (R 3.3.2)                   
+##  ggplot2    * 3.0.0   2018-07-03 CRAN (R 3.3.2)                   
+##  ggrepel      0.8.0   2018-05-09 CRAN (R 3.3.2)                   
+##  glue         1.2.0   2017-10-29 CRAN (R 3.3.2)                   
+##  graphics   * 3.3.2   2016-10-31 local                            
+##  grDevices  * 3.3.2   2016-10-31 local                            
+##  grid         3.3.2   2016-10-31 local                            
+##  gtable       0.2.0   2016-02-26 CRAN (R 3.3.0)                   
+##  htmltools    0.3.6   2017-04-28 cran (@0.3.6)                    
+##  knitr        1.20    2018-02-20 CRAN (R 3.3.2)                   
+##  labeling     0.3     2014-08-23 CRAN (R 3.3.0)                   
+##  lazyeval     0.2.1   2017-10-29 cran (@0.2.1)                    
+##  magrittr     1.5     2014-11-22 CRAN (R 3.3.0)                   
+##  MASS         7.3-50  2018-04-30 CRAN (R 3.3.2)                   
+##  memoise      1.1.0   2017-04-21 cran (@1.1.0)                    
+##  methods    * 3.3.2   2016-10-31 local                            
+##  munsell      0.5.0   2018-06-12 CRAN (R 3.3.2)                   
+##  pillar       1.2.3   2018-05-25 CRAN (R 3.3.2)                   
+##  pkgconfig    2.0.1   2017-03-21 CRAN (R 3.3.2)                   
+##  pkgdown      1.1.0   2018-06-02 CRAN (R 3.3.2)                   
+##  plyr         1.8.4   2016-06-08 CRAN (R 3.3.0)                   
+##  purrr        0.2.5   2018-05-29 CRAN (R 3.3.2)                   
+##  R6           2.2.2   2017-06-17 cran (@2.2.2)                    
+##  Rcpp         0.12.17 2018-05-18 CRAN (R 3.3.2)                   
+##  rlang        0.2.1   2018-05-30 CRAN (R 3.3.2)                   
+##  rmarkdown    1.10    2018-06-11 CRAN (R 3.3.2)                   
+##  roxygen2     6.0.1   2017-02-06 CRAN (R 3.3.2)                   
+##  rprojroot    1.3-2   2018-01-03 CRAN (R 3.3.2)                   
+##  scales       0.5.0   2017-08-24 CRAN (R 3.3.2)                   
+##  stats      * 3.3.2   2016-10-31 local                            
+##  stringi      1.2.3   2018-06-12 CRAN (R 3.3.2)                   
+##  stringr      1.3.1   2018-05-10 CRAN (R 3.3.2)                   
+##  tibble       1.4.2   2018-01-22 CRAN (R 3.3.2)                   
+##  tidyr        0.8.1   2018-05-18 CRAN (R 3.3.2)                   
+##  tidyselect   0.2.4   2018-02-26 CRAN (R 3.3.2)                   
+##  tools        3.3.2   2016-10-31 local                            
+##  utils      * 3.3.2   2016-10-31 local                            
+##  withr        2.1.2   2018-06-23 Github (jimhester/withr@dbcd7cd) 
+##  xml2         1.1.1   2017-01-24 CRAN (R 3.3.2)                   
+##  yaml         2.1.19  2018-05-01 CRAN (R 3.3.2)</code></pre>
 </div>
   </div>
 
