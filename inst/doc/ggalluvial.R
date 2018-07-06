@@ -103,5 +103,5 @@ ggplot(vaccinations,
   ggtitle("vaccination survey responses at three points in time")
 
 ## ----session info--------------------------------------------------------
-sessionInfo()
+devtools::session_info()
 

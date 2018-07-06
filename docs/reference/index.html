@@ -18,13 +18,22 @@
 <!-- Font Awesome icons -->
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 
+<!-- clipboard.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
+
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
-  
-  
+
+
+
+<meta property="og:title" content="Function reference" />
+
+
+
 <!-- mathjax -->
 <script src='https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML'></script>
 
@@ -47,8 +56,12 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="../index.html">ggalluvial</a>
+      <span class="navbar-brand">
+        <a class="navbar-link" href="../index.html">ggalluvial</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.0</span>
+      </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
@@ -58,7 +71,7 @@
   </a>
 </li>
 <li>
-  <a href="../articles/ggalluvial.html">Get Started</a>
+  <a href="../articles/ggalluvial.html">Get started</a>
 </li>
 <li>
   <a href="../reference/index.html">Reference</a>
@@ -76,13 +89,14 @@
   </ul>
 </li>
 <li>
-  <a href="../news/index.html">News</a>
+  <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
       
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -90,114 +104,110 @@
       
       </header>
 
-      <div class="row">
-  <div class="col-md-9">
+<div class="row">
+  <div class="contents col-md-9">
     <div class="page-header">
-      <h1>
-        Reference
-        <small>version&nbsp;0.9.0</small>
-      </h1>
+      <h1>Reference</h1>
     </div>
 
-    <div class="contents">
-      <table class="ref-index">
+    <table class="ref-index">
 
-      <colgroup>
-        <col class="alias" />
-        <col class="title" />
-      </colgroup>
+    <colgroup>
+      
+      <col class="alias" />
+      <col class="title" />
+    </colgroup>
 
-      <tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-alluvial-data" class="hasAnchor"><a href="#section-alluvial-data" class="anchor"></a>Alluvial data</h2>
-            <p class="section-desc"><p>Illustrate, test for, and convert between alluvial formats</p></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="alluvial-data.html">is_lodes_form</a></code> <code><a href="alluvial-data.html">is_alluvia_form</a></code> <code><a href="alluvial-data.html">to_lodes_form</a></code> <code><a href="alluvial-data.html">to_alluvia_form</a></code> </p>
-          </td>
-          <td><p>Check for alluvial structure and convert between alluvial formats</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="self-adjoin.html">self_adjoin</a></code> </p>
-          </td>
-          <td><p>Adjoin a dataset to itself</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="vaccinations.html">vaccinations</a></code> </p>
-          </td>
-          <td><p>Influenza vaccination rates</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="majors.html">majors</a></code> </p>
-          </td>
-          <td><p>Student curricula across semesters</p></td>
-        </tr>
-      </tbody><tbody>
-        <tr>
-          <th colspan="2">
-            <h2 id="section-plot-layers" class="hasAnchor"><a href="#section-plot-layers" class="anchor"></a>Plot layers</h2>
-            <p class="section-desc"><p>Add alluvial layers to ggplots</p></p>
-          </th>
-        </tr>
-        <tr>
-          <!--  -->
-          <td>
-            <p><code><a href="stat_stratum.html">stat_stratum</a></code> </p>
-          </td>
-          <td><p>Stratum positions</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="stat_alluvium.html">stat_alluvium</a></code> </p>
-          </td>
-          <td><p>Alluvial positions</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="stat_flow.html">stat_flow</a></code> </p>
-          </td>
-          <td><p>Flow positions</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="lode-guidance-functions.html">lode_zigzag</a></code> <code><a href="lode-guidance-functions.html">lode_rightward</a></code> <code><a href="lode-guidance-functions.html">lode_leftward</a></code> <code><a href="lode-guidance-functions.html">lode_rightleft</a></code> <code><a href="lode-guidance-functions.html">lode_leftright</a></code> </p>
-          </td>
-          <td><p>Lode guidance functions</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="geom_stratum.html">geom_stratum</a></code> </p>
-          </td>
-          <td><p>Strata at axes</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="geom_alluvium.html">geom_alluvium</a></code> </p>
-          </td>
-          <td><p>Alluvia across strata</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="geom_lode.html">geom_lode</a></code> </p>
-          </td>
-          <td><p>Lodes at intersections of alluvia and strata</p></td>
-        </tr><tr>
-          <!--  -->
-          <td>
-            <p><code><a href="geom_flow.html">geom_flow</a></code> </p>
-          </td>
-          <td><p>Flows between lodes or strata</p></td>
-        </tr>
-      </tbody>
-      </table>
-    </div>
+    <tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-alluvial-data" class="hasAnchor"><a href="#section-alluvial-data" class="anchor"></a>Alluvial data</h2>
+          <p class="section-desc"><p>Illustrate, test for, and convert between alluvial formats</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="alluvial-data.html">is_lodes_form()</a></code> <code><a href="alluvial-data.html">is_alluvia_form()</a></code> <code><a href="alluvial-data.html">to_lodes_form()</a></code> <code><a href="alluvial-data.html">to_alluvia_form()</a></code> </p>
+        </td>
+        <td><p>Check for alluvial structure and convert between alluvial formats</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="self-adjoin.html">self_adjoin()</a></code> </p>
+        </td>
+        <td><p>Adjoin a dataset to itself</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="vaccinations.html">vaccinations</a></code> </p>
+        </td>
+        <td><p>Influenza vaccination rates</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="majors.html">majors</a></code> </p>
+        </td>
+        <td><p>Student curricula across semesters</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-plot-layers" class="hasAnchor"><a href="#section-plot-layers" class="anchor"></a>Plot layers</h2>
+          <p class="section-desc"><p>Add alluvial layers to ggplots</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="stat_stratum.html">stat_stratum()</a></code> </p>
+        </td>
+        <td><p>Stratum positions</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="stat_alluvium.html">stat_alluvium()</a></code> </p>
+        </td>
+        <td><p>Alluvial positions</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="stat_flow.html">stat_flow()</a></code> </p>
+        </td>
+        <td><p>Flow positions</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="lode-guidance-functions.html">lode_zigzag()</a></code> <code><a href="lode-guidance-functions.html">lode_rightward()</a></code> <code><a href="lode-guidance-functions.html">lode_leftward()</a></code> <code><a href="lode-guidance-functions.html">lode_rightleft()</a></code> <code><a href="lode-guidance-functions.html">lode_leftright()</a></code> </p>
+        </td>
+        <td><p>Lode guidance functions</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="geom_stratum.html">geom_stratum()</a></code> </p>
+        </td>
+        <td><p>Strata at axes</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="geom_alluvium.html">geom_alluvium()</a></code> </p>
+        </td>
+        <td><p>Alluvia across strata</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="geom_lode.html">geom_lode()</a></code> </p>
+        </td>
+        <td><p>Lodes at intersections of alluvia and strata</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="geom_flow.html">geom_flow()</a></code> </p>
+        </td>
+        <td><p>Flows between lodes or strata</p></td>
+      </tr>
+    </tbody>
+    </table>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -215,11 +225,14 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="http://hadley.github.io/pkgdown/">pkgdown</a>.</p>
+  <p>Site built with <a href="http://pkgdown.r-lib.org/">pkgdown</a>.</p>
 </div>
 
       </footer>
    </div>
 
+  
+
   </body>
 </html>
+

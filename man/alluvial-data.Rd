@@ -47,7 +47,7 @@ to \code{axes}. Ignored when \code{axes} is provided.}
 \code{\link[dplyr]{select}} and used to identify the field(s) of
 \code{data} to be used as axes.}
 
-\item{diffuse}{Fields of \code{data}, handleded using
+\item{diffuse}{Fields of \code{data}, handled using
 \code{\link[tidyselect]{vars_select}}, to merge into the reshapen data by
 \code{id}. They must be a subset of the axis variables. Alternatively, a
 logical value indicating whether to merge all (\code{TRUE}) or none
