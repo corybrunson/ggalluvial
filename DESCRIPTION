@@ -12,11 +12,11 @@ Description: Alluvial diagrams use x-splines, sometimes augmented with stacked
     produce alluvial diagrams from tidy data.
 Depends:
     R (>= 3.3.0),
-    ggplot2
+    ggplot2 (>= 2.2.0)
 Imports:
     stats,
-    dplyr,
-    tidyr,
+    dplyr (>= 0.7.0),
+    tidyr (>= 0.7.0),
     lazyeval,
     rlang,
     tidyselect
