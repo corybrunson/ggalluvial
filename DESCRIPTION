@@ -1,7 +1,7 @@
 Package: ggalluvial
 Type: Package
 Title: Alluvial Diagrams in 'ggplot2'
-Version: 0.9.0
+Version: 0.9.1
 Date: 2018-07-06
 Authors@R: person('Jason Cory', 'Brunson', email = 'cornelioid@gmail.com',
     role = c('aut', 'cre'))
@@ -26,7 +26,7 @@ Suggests:
     testthat,
     knitr,
     babynames,
-    devtools,
+    sessioninfo,
     ggrepel,
     ggfittext (>= 0.6.0)
 License: GPL-3

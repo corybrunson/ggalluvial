@@ -52,5 +52,5 @@ ggplot(vaccinations,
   ggtitle("vaccination survey responses", "labeled using `geom_fit_text()`")
 
 ## ----session info--------------------------------------------------------
-devtools::session_info()
+sessioninfo::session_info()
 
