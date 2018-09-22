@@ -209,7 +209,7 @@ This diagram ignores any continuity between the flows between axes. This "memory
 ## Appendix
 
 ```{r session info}
-devtools::session_info()
+sessioninfo::session_info()
 ```
 
 [^weight-y]: Previously, weights were passed to the `weight` aesthetic rather than to `y`. This prevented `scale_y_continuous()` from correctly transforming scales, and anyway it was inconsistent with the behavior of `geom_bar()`.

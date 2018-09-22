@@ -100,5 +100,5 @@ Note that this solution requires **ggfittext** v0.6.0.
 ## Appendix
 
 ```{r session info}
-devtools::session_info()
+sessioninfo::session_info()
 ```
