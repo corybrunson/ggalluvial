@@ -6,8 +6,8 @@
 \usage{
 stat_flow(mapping = NULL, data = NULL, geom = "flow",
   position = "identity", decreasing = NA, reverse = TRUE,
-  discern = FALSE, aes.bind = FALSE, na.rm = FALSE, show.legend = NA,
-  inherit.aes = TRUE, ...)
+  discern = FALSE, aes.bind = FALSE, na.rm = FALSE,
+  show.legend = NA, inherit.aes = TRUE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -181,3 +181,4 @@ ggplot(majors,
 Other alluvial stat layers: \code{\link{stat_alluvium}},
   \code{\link{stat_stratum}}
 }
+\concept{alluvial stat layers}

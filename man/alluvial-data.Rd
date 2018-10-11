@@ -11,8 +11,8 @@
 is_lodes_form(data, key, value, id, weight = NULL, logical = TRUE,
   silent = FALSE)
 
-is_alluvia_form(data, ..., axes = NULL, weight = NULL, logical = TRUE,
-  silent = FALSE)
+is_alluvia_form(data, ..., axes = NULL, weight = NULL,
+  logical = TRUE, silent = FALSE)
 
 to_lodes_form(data, ..., axes = NULL, key = "x", value = "stratum",
   id = "alluvium", diffuse = FALSE, discern = FALSE)
@@ -167,3 +167,4 @@ ggplot(majors[majors$semester \%in\% paste0("CURR", c(1, 7, 13)), ],
 \seealso{
 Other alluvial data manipulation: \code{\link{self-adjoin}}
 }
+\concept{alluvial data manipulation}

@@ -62,3 +62,4 @@ head(vaccination_steps)
 \seealso{
 Other alluvial data manipulation: \code{\link{alluvial-data}}
 }
+\concept{alluvial data manipulation}

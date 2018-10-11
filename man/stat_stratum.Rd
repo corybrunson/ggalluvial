@@ -159,3 +159,4 @@ ggplot(as.data.frame(Titanic),
 Other alluvial stat layers: \code{\link{stat_alluvium}},
   \code{\link{stat_flow}}
 }
+\concept{alluvial stat layers}
