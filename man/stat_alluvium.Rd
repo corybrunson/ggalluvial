@@ -48,7 +48,7 @@ so that they match the order of the values in the legend.
 Ignored if \code{decreasing} is not \code{NA}.
 Defaults to \code{TRUE}.}
 
-\item{discern}{Passed to \code{\link{to_lodes_form}} if \code{data} is in
+\item{discern}{Passed to \code{\link[=to_lodes_form]{to_lodes_form()}} if \code{data} is in
 alluvia format.}
 
 \item{aggregate.y}{Whether to aggregate weights across otherwise equivalent
@@ -58,16 +58,16 @@ observations into cohorts.
 
 \item{aggregate.wts}{Deprecated alias for \code{aggregate.y}.}
 
-\item{lode.guidance}{The function to prioritize the axis variables for 
+\item{lode.guidance}{The function to prioritize the axis variables for
 ordering the lodes within each stratum. Options are "zigzag", "rightleft",
-"leftright", "rightward", and "leftward" (see 
+"leftright", "rightward", and "leftward" (see
 \code{\link{lode-guidance-functions}}).}
 
 \item{lode.ordering}{A list (of length the number of axes) of integer vectors
-(each of length the number of rows of \code{data}) or NULL entries 
+(each of length the number of rows of \code{data}) or NULL entries
 (indicating no imposed ordering), or else a numeric matrix of corresponding
-dimensions, giving the preferred ordering of alluvia at each axis. This 
-will be used to order the lodes within each stratum by sorting the lodes 
+dimensions, giving the preferred ordering of alluvia at each axis. This
+will be used to order the lodes within each stratum by sorting the lodes
 first by stratum and then by the provided vectors.}
 
 \item{na.rm}{Logical:
@@ -86,13 +86,13 @@ rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
 
-\item{...}{Additional arguments passed to \code{\link[ggplot2]{layer}}.}
+\item{...}{Additional arguments passed to \code{\link[ggplot2:layer]{ggplot2::layer()}}.}
 }
 \description{
-Given a dataset with alluvial structure, \code{stat_alluvium} calculates the 
+Given a dataset with alluvial structure, \code{stat_alluvium} calculates the
 centroids (\code{x} and \code{y}) of the \strong{lodes}, the intersections of
-the alluvia with the strata, together with their weights (heights; 
-\code{ymin} and \code{ymax}). It leverages the \code{group} aesthetic for 
+the alluvia with the strata, together with their weights (heights;
+\code{ymin} and \code{ymax}). It leverages the \code{group} aesthetic for
 plotting purposes (for now).
 }
 \section{Aesthetics}{
@@ -100,10 +100,10 @@ plotting purposes (for now).
 \code{stat_alluvium}, \code{stat_flow}, and \code{stat_stratum} require one
 of two sets of aesthetics:
 \itemize{
-  \item \strong{\code{x}} and at least one of
-        \strong{\code{alluvium}} and \strong{\code{stratum}}
-  \item any number of \strong{\code{axis[0-9]*}}
-        (\code{axis1}, \code{axis2}, etc.)
+\item \strong{\code{x}} and at least one of
+\strong{\code{alluvium}} and \strong{\code{stratum}}
+\item any number of \strong{\code{axis[0-9]*}}
+(\code{axis1}, \code{axis2}, etc.)
 }
 Use \code{x}, \code{alluvium}, and/or \code{stratum} for data in lodes format
 and \code{axis[0-9]*} for data in alluvia format
@@ -112,15 +112,15 @@ Arguments to parameters inconsistent with the format will be ignored.
 Additionally, each \code{stat_*} layer accepts the following optional
 aesthetics:
 \itemize{
-  \item \code{y}
-  \item \code{group}
+\item \code{y}
+\item \code{group}
 }
 \code{y} controls the heights of the alluvia
 and may be aggregated across equivalent observations.
 \code{group} is used internally; arguments are ignored.
 Finally, \code{stat_stratum} accepts the following optional aesthetic:
 \itemize{
-  \item \code{label}
+\item \code{label}
 }
 \code{label} is used to label the strata and must take a unique value across
 the observations within each stratum.
@@ -206,10 +206,10 @@ gg + geom_flow(stat = "alluvium", lode.guidance = "rightleft",
 }
 }
 \seealso{
-\code{\link[ggplot2]{layer}} for additional arguments and
-  \code{\link{geom_alluvium}},
-  \code{\link{geom_lode}}, and
-  \code{\link{geom_flow}} for the corresponding geoms.
+\code{\link[ggplot2:layer]{ggplot2::layer()}} for additional arguments and
+\code{\link[=geom_alluvium]{geom_alluvium()}},
+\code{\link[=geom_lode]{geom_lode()}}, and
+\code{\link[=geom_flow]{geom_flow()}} for the corresponding geoms.
 
 Other alluvial stat layers: \code{\link{stat_flow}},
   \code{\link{stat_stratum}}

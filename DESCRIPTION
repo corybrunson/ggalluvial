@@ -34,3 +34,4 @@ URL: http://corybrunson.github.io/ggalluvial/
 BugReports: https://github.com/corybrunson/ggalluvial/issues
 VignetteBuilder: knitr
 RoxygenNote: 6.1.0
+Roxygen: list(markdown = TRUE)

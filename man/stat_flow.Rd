@@ -47,7 +47,7 @@ so that they match the order of the values in the legend.
 Ignored if \code{decreasing} is not \code{NA}.
 Defaults to \code{TRUE}.}
 
-\item{discern}{Passed to \code{\link{to_lodes_form}} if \code{data} is in
+\item{discern}{Passed to \code{\link[=to_lodes_form]{to_lodes_form()}} if \code{data} is in
 alluvia format.}
 
 \item{aes.bind}{Whether to prioritize aesthetics before axes (other than the
@@ -69,22 +69,22 @@ rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
 
-\item{...}{Additional arguments passed to \code{\link[ggplot2]{layer}}.}
+\item{...}{Additional arguments passed to \code{\link[ggplot2:layer]{ggplot2::layer()}}.}
 }
 \description{
-Given a dataset with alluvial structure, \code{stat_flow} calculates the
-centroids (\code{x} and \code{y}) and weights (heights; \code{ymin} and
-\code{ymax}) of alluvial flows between each pair of adjacent axes.
+Given a dataset with alluvial structure, \code{stat_flow} calculates the centroids
+(\code{x} and \code{y}) and weights (heights; \code{ymin} and \code{ymax}) of alluvial flows
+between each pair of adjacent axes.
 }
 \section{Aesthetics}{
 
 \code{stat_alluvium}, \code{stat_flow}, and \code{stat_stratum} require one
 of two sets of aesthetics:
 \itemize{
-  \item \strong{\code{x}} and at least one of
-        \strong{\code{alluvium}} and \strong{\code{stratum}}
-  \item any number of \strong{\code{axis[0-9]*}}
-        (\code{axis1}, \code{axis2}, etc.)
+\item \strong{\code{x}} and at least one of
+\strong{\code{alluvium}} and \strong{\code{stratum}}
+\item any number of \strong{\code{axis[0-9]*}}
+(\code{axis1}, \code{axis2}, etc.)
 }
 Use \code{x}, \code{alluvium}, and/or \code{stratum} for data in lodes format
 and \code{axis[0-9]*} for data in alluvia format
@@ -93,15 +93,15 @@ Arguments to parameters inconsistent with the format will be ignored.
 Additionally, each \code{stat_*} layer accepts the following optional
 aesthetics:
 \itemize{
-  \item \code{y}
-  \item \code{group}
+\item \code{y}
+\item \code{group}
 }
 \code{y} controls the heights of the alluvia
 and may be aggregated across equivalent observations.
 \code{group} is used internally; arguments are ignored.
 Finally, \code{stat_stratum} accepts the following optional aesthetic:
 \itemize{
-  \item \code{label}
+\item \code{label}
 }
 \code{label} is used to label the strata and must take a unique value across
 the observations within each stratum.
@@ -174,9 +174,9 @@ ggplot(majors,
   theme_bw()
 }
 \seealso{
-\code{\link[ggplot2]{layer}} for additional arguments and
-  \code{\link{geom_alluvium}} and
-  \code{\link{geom_flow}} for the corresponding geoms.
+\code{\link[ggplot2:layer]{ggplot2::layer()}} for additional arguments and
+\code{\link[=geom_alluvium]{geom_alluvium()}} and
+\code{\link[=geom_flow]{geom_flow()}} for the corresponding geoms.
 
 Other alluvial stat layers: \code{\link{stat_alluvium}},
   \code{\link{stat_stratum}}

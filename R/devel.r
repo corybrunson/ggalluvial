@@ -4,7 +4,7 @@ deprecate_parameter <- function(old, new = NA, type = "parameter") {
     "The ", type, " `", old, "` is deprecated.",
     if (is.null(new)) {
       "\nPass unparameterized arguments instead."
-    } else if (!is.na(new)) {
+    } else if (! is.na(new)) {
       paste0("\nPass arguments to `", new, "` instead.")
     } else {
       ""
@@ -23,8 +23,8 @@ release_questions <- function() {
 #' These functions are deprecated in the current version and may be removed in a
 #' future version.
 #'
-#' Use \code{is_*_form} instead of \code{is_alluvial} and \code{is_alluvial_*}.
-#' Use \code{to_*_form} instead of \code{to_*}.
+#' Use `is_*_form` instead of `is_alluvial` and `is_alluvial_*`.
+#' Use `to_*_form` instead of `to_*`.
 #'
 #' @name ggalluvial-deprecated
 #' @keywords internal
@@ -40,8 +40,8 @@ is_alluvial <- function(data, ..., silent = FALSE) {
 
   # determine method based on arguments given
   dots <- lazyeval::lazy_dots(...)
-  if (!is.null(dots$key) | !is.null(dots$value) | !is.null(dots$id)) {
-    if (!is.null(dots$axes)) {
+  if (! is.null(dots$key) | ! is.null(dots$value) | ! is.null(dots$id)) {
+    if (! is.null(dots$axes)) {
       stop("Arguments to `key`, `value`, and `id` are mutually exclusive ",
            "with an argument to `axes`.")
     }

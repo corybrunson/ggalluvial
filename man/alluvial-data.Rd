@@ -75,16 +75,16 @@ subsets or amounts of observations that take the corresponding values of the
 corresponding variables. This function checks a data frame for either of two
 types of alluvial structure:
 \itemize{
-  \item One row per \strong{lode}, wherein each row encodes a subset or
-        amount of observations having a specific profile of axis values, a
-        \code{key} field encodes the axis, a \code{value} field encodes the
-        value within each axis, and a \code{id} column identifies multiple
-        lodes corresponding to the same subset or amount of observations.
-        \code{is_lodes_form} tests for this structure.
-  \item One row per \strong{alluvium}, wherein each row encodes a subset or
-        amount of observations having a specific profile of axis values and a
-        set \code{axes} of fields encodes its values at each axis variable.
-        \code{is_alluvia_form} tests for this structure.
+\item One row per \strong{lode}, wherein each row encodes a subset or
+amount of observations having a specific profile of axis values, a
+\code{key} field encodes the axis, a \code{value} field encodes the
+value within each axis, and a \code{id} column identifies multiple
+lodes corresponding to the same subset or amount of observations.
+\code{is_lodes_form} tests for this structure.
+\item One row per \strong{alluvium}, wherein each row encodes a subset or
+amount of observations having a specific profile of axis values and a
+set \code{axes} of fields encodes its values at each axis variable.
+\code{is_alluvia_form} tests for this structure.
 }
 }
 \details{
@@ -93,12 +93,12 @@ be used as axes in an alluvial diagram, and reshapes the data frame so that
 the axis variable names constitute a new factor variable and their values
 comprise another. Other variables' values will be repeated, and a
 row-grouping variable can be introduced. This function invokes
-\code{\link[tidyr]{gather}}.
+\code{\link[tidyr:gather]{tidyr::gather()}}.
 
 \code{to_alluvia_form} takes a data frame with axis and axis value variables
 to be used in an alluvial diagram, and reshape the data frame so that the
 axes constitute separate variables whose values are given by the value
-variable. This function invokes \code{\link[tidyr]{spread}}.
+variable. This function invokes \code{\link[tidyr:spread]{tidyr::spread()}}.
 }
 \examples{
 # Titanic data in alluvia format

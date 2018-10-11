@@ -12,8 +12,8 @@ self_adjoin(data, key, by = NULL, link = NULL, keep.x = NULL,
 \item{data}{A data frame in lodes form (repeated measures data; see
 \code{\link{alluvial-data}}).}
 
-\item{key}{Column of \code{data} indicating sequential collection; handled as
-in \code{\link[tidyr]{spread}}.}
+\item{key}{Column of \code{data} indicating sequential collection; handled as in
+\code{\link[tidyr:spread]{tidyr::spread()}}.}
 
 \item{by}{Character vector of variables to self-adjoin by; passed to
 \code{\link[dplyr]{join}} functions.}
@@ -26,19 +26,19 @@ first (respectively, second) copy of \code{data} after adjoining. These
 variables can overlap with each other but cannot overlap with \code{by} or
 \code{link}.}
 
-\item{suffix}{Suffixes to add to the adjoined \code{link} variables; passed
-to \code{\link[dplyr]{join}} functions.}
+\item{suffix}{Suffixes to add to the adjoined \code{link} variables; passed to
+\code{\link[dplyr]{join}} functions.}
 }
 \description{
 This function binds a dataset to itself along adjacent pairs of a \code{key}
-variable. It is invoked by \code{\link{geom_flow}} to convert data in lodes
+variable. It is invoked by \code{\link[=geom_flow]{geom_flow()}} to convert data in lodes
 form to something similar to alluvia form.
 }
 \details{
-\code{self_adjoin} invokes \code{\link[dplyr]{join}} functions in order to
-convert a dataset with measures along a discrete \code{key} variable into a
-dataset consisting of column bindings of these measures (by any \code{by}
-variables) along adjacent values of \code{key}.
+\code{self_adjoin} invokes \code{\link[dplyr]{join}} functions in order to convert
+a dataset with measures along a discrete \code{key} variable into a dataset
+consisting of column bindings of these measures (by any \code{by} variables) along
+adjacent values of \code{key}.
 }
 \examples{
 # self-adjoin `majors` data

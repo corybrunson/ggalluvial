@@ -57,39 +57,38 @@ rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
 
-\item{...}{Additional arguments passed to \code{\link[ggplot2]{layer}}.}
+\item{...}{Additional arguments passed to \code{\link[ggplot2:layer]{ggplot2::layer()}}.}
 }
 \description{
 \code{geom_alluvium} receives a dataset of the horizontal (\code{x}) and
 vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the \strong{lodes}
 of an alluvial diagram, the intersections of the alluvia with the strata.
-It plots both the lodes themselves, using \code{\link{geom_lode}}, and the
-flows between them, using \code{\link{geom_flow}}.
+It plots both the lodes themselves, using \code{\link[=geom_lode]{geom_lode()}}, and the
+flows between them, using \code{\link[=geom_flow]{geom_flow()}}.
 }
 \section{Aesthetics}{
 
-\code{geom_alluvium}, \code{geom_flow}, \code{geom_lode}, and
-\code{geom_stratum} understand the following aesthetics (required aesthetics
-are in bold):
+\code{geom_alluvium}, \code{geom_flow}, \code{geom_lode}, and \code{geom_stratum} understand the
+following aesthetics (required aesthetics are in bold):
 \itemize{
-  \item \strong{\code{x}}
-  \item \strong{\code{y}}
-  \item \strong{\code{ymin}}
-  \item \strong{\code{ymax}}
-  \item \code{alpha}
-  \item \code{colour}
-  \item \code{fill}
-  \item \code{linetype}
-  \item \code{size}
-  \item \code{group}
+\item \strong{\code{x}}
+\item \strong{\code{y}}
+\item \strong{\code{ymin}}
+\item \strong{\code{ymax}}
+\item \code{alpha}
+\item \code{colour}
+\item \code{fill}
+\item \code{linetype}
+\item \code{size}
+\item \code{group}
 }
 \code{group} is used internally; arguments are ignored.
 }
 
 \section{Defunct parameters}{
 
-The previously deprecated parameters \code{axis_width} and \code{ribbon_bend}
-are now defunct. Use \code{width} and \code{knot.pos} instead.
+The previously deprecated parameters \code{axis_width} and \code{ribbon_bend} are now
+defunct. Use \code{width} and \code{knot.pos} instead.
 }
 
 \examples{
@@ -111,9 +110,9 @@ gg + geom_alluvium(aes(fill = country, colour = country),
                    decreasing = NA, width = 0, knot.pos = 0)
 }
 \seealso{
-\code{\link[ggplot2]{layer}} for additional arguments and
-  \code{\link{stat_alluvium}} and
-  \code{\link{stat_flow}} for the corresponding stats.
+\code{\link[ggplot2:layer]{ggplot2::layer()}} for additional arguments and
+\code{\link[=stat_alluvium]{stat_alluvium()}} and
+\code{\link[=stat_flow]{stat_flow()}} for the corresponding stats.
 
 Other alluvial geom layers: \code{\link{geom_flow}},
   \code{\link{geom_lode}}, \code{\link{geom_stratum}}
