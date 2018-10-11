@@ -5,8 +5,8 @@
 \title{Alluvia across strata}
 \usage{
 geom_alluvium(mapping = NULL, data = NULL, stat = "alluvium",
-  position = "identity", width = 1/3, knot.pos = 1/6, na.rm = FALSE,
-  show.legend = NA, inherit.aes = TRUE, ...)
+  position = "identity", width = 1/3, knot.pos = 1/6,
+  na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -118,3 +118,4 @@ gg + geom_alluvium(aes(fill = country, colour = country),
 Other alluvial geom layers: \code{\link{geom_flow}},
   \code{\link{geom_lode}}, \code{\link{geom_stratum}}
 }
+\concept{alluvial geom layers}

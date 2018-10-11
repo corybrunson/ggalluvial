@@ -214,3 +214,4 @@ gg + geom_flow(stat = "alluvium", lode.guidance = "rightleft",
 Other alluvial stat layers: \code{\link{stat_flow}},
   \code{\link{stat_stratum}}
 }
+\concept{alluvial stat layers}

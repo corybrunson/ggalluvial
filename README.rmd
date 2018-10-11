@@ -64,6 +64,7 @@ ggplot(data = titanic_wide,
        aes(axis1 = Class, axis2 = Sex, axis3 = Age,
            y = Freq)) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"), expand = c(.1, .05)) +
+  xlab("Demographic") +
   geom_alluvium(aes(fill = Survived)) +
   geom_stratum() + geom_text(stat = "stratum", label.strata = TRUE) +
   theme_minimal() +

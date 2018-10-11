@@ -111,3 +111,4 @@ ggplot(as.data.frame(Titanic),
 Other alluvial geom layers: \code{\link{geom_alluvium}},
   \code{\link{geom_flow}}, \code{\link{geom_lode}}
 }
+\concept{alluvial geom layers}

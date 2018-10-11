@@ -5,8 +5,8 @@
 \title{Lodes at intersections of alluvia and strata}
 \usage{
 geom_lode(mapping = NULL, data = NULL, stat = "alluvium",
-  position = "identity", width = 1/3, na.rm = FALSE, show.legend = NA,
-  inherit.aes = TRUE, ...)
+  position = "identity", width = 1/3, na.rm = FALSE,
+  show.legend = NA, inherit.aes = TRUE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -114,3 +114,4 @@ gg + geom_alluvium() +
 Other alluvial geom layers: \code{\link{geom_alluvium}},
   \code{\link{geom_flow}}, \code{\link{geom_stratum}}
 }
+\concept{alluvial geom layers}

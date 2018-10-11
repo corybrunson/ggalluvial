@@ -143,3 +143,4 @@ ggplot(vaccinations,
 Other alluvial geom layers: \code{\link{geom_alluvium}},
   \code{\link{geom_lode}}, \code{\link{geom_stratum}}
 }
+\concept{alluvial geom layers}
