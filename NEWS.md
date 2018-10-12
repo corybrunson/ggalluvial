@@ -4,6 +4,10 @@
 
 Because the only functional (e.g. out `README.md`) occurrence of **devtools** is to call `session_info()` at the ends of the vignettes, and as [recommended by the **tidyverse** maintainers](), this suggestion and usage are switched to **sessioninfo**.
 
+## markdown formatting
+
+Documentation is slightly reformatted due to switching **roxygen** syntax to markdown.
+
 # ggalluvial 0.9.0
 
 ## `geom_alluvium()` patch
