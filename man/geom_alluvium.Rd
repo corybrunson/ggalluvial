@@ -82,6 +82,7 @@ following aesthetics (required aesthetics are in bold):
 \item \code{size}
 \item \code{group}
 }
+
 \code{group} is used internally; arguments are ignored.
 }
 

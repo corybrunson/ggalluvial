@@ -23,14 +23,14 @@ to_alluvia_form(data, key, value, id, distill = FALSE)
 \item{data}{A data frame.}
 
 \item{key, value, id}{In \code{to_lodes_form}, handled as in
-\code{\link[tidyr]{gather}} and used to name the new axis (key), stratum
+\code{\link[tidyr:gather]{tidyr::gather()}} and used to name the new axis (key), stratum
 (value), and alluvium (identifying) variables. In \code{to_alluvia_form},
-handled as in \code{\link[tidyr]{spread}} and used to identify the fields
+handled as in \code{\link[tidyr:spread]{tidyr::spread()}} and used to identify the fields
 of \code{data} to be used as the axis (key), stratum (value), and alluvium
 (identifying) variables.}
 
 \item{weight}{Optional field of \code{data}, handled using
-\code{\link[rlang]{enquo}}, to be used as heights or depths of the alluvia
+\code{\link[rlang:enquo]{rlang::enquo()}}, to be used as heights or depths of the alluvia
 or lodes.}
 
 \item{logical}{Deprecated. Whether to return a logical value or a character
@@ -40,15 +40,15 @@ string indicating the type of alluvial structure ("none", "lodes", or
 \item{silent}{Whether to print messages.}
 
 \item{...}{Used in \code{is_alluvia_form} and \code{to_lodes_form} as in
-\code{\link[dplyr]{select}} to determine axis variables, as an alternative
+\code{\link[dplyr:select]{dplyr::select()}} to determine axis variables, as an alternative
 to \code{axes}. Ignored when \code{axes} is provided.}
 
 \item{axes}{In \code{*_alluvia_form}, handled as in
-\code{\link[dplyr]{select}} and used to identify the field(s) of
+\code{\link[dplyr:select]{dplyr::select()}} and used to identify the field(s) of
 \code{data} to be used as axes.}
 
 \item{diffuse}{Fields of \code{data}, handled using
-\code{\link[tidyselect]{vars_select}}, to merge into the reshapen data by
+\code{\link[tidyselect:vars_select]{tidyselect::vars_select()}}, to merge into the reshapen data by
 \code{id}. They must be a subset of the axis variables. Alternatively, a
 logical value indicating whether to merge all (\code{TRUE}) or none
 (\code{FALSE}) of the axis variables.}
@@ -74,20 +74,20 @@ vertical subdivisions (lodes) within strata of adjacent axes representing
 subsets or amounts of observations that take the corresponding values of the
 corresponding variables. This function checks a data frame for either of two
 types of alluvial structure:
-\itemize{
-\item One row per \strong{lode}, wherein each row encodes a subset or
-amount of observations having a specific profile of axis values, a
-\code{key} field encodes the axis, a \code{value} field encodes the
-value within each axis, and a \code{id} column identifies multiple
-lodes corresponding to the same subset or amount of observations.
-\code{is_lodes_form} tests for this structure.
-\item One row per \strong{alluvium}, wherein each row encodes a subset or
-amount of observations having a specific profile of axis values and a
-set \code{axes} of fields encodes its values at each axis variable.
-\code{is_alluvia_form} tests for this structure.
-}
 }
 \details{
+\itemize{
+\item One row per \strong{lode}, wherein each row encodes a subset or amount of
+observations having a specific profile of axis values, a \code{key} field
+encodes the axis, a \code{value} field encodes the value within each axis, and a
+\code{id} column identifies multiple lodes corresponding to the same subset or
+amount of observations. \code{is_lodes_form} tests for this structure.
+\item One row per \strong{alluvium}, wherein each row encodes a subset or amount of
+observations having a specific profile of axis values and a set \code{axes} of
+fields encodes its values at each axis variable. \code{is_alluvia_form} tests
+for this structure.
+}
+
 \code{to_lodes_form} takes a data frame with several designated variables to
 be used as axes in an alluvial diagram, and reshapes the data frame so that
 the axis variable names constitute a new factor variable and their values

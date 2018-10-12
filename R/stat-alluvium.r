@@ -23,7 +23,7 @@
 #' @param lode.guidance The function to prioritize the axis variables for
 #'   ordering the lodes within each stratum. Options are "zigzag", "rightleft",
 #'   "leftright", "rightward", and "leftward" (see
-#'   \code{\link{lode-guidance-functions}}).
+#'   [`lode-guidance-functions`]).
 #' @param lode.ordering A list (of length the number of axes) of integer vectors
 #'   (each of length the number of rows of `data`) or NULL entries
 #'   (indicating no imposed ordering), or else a numeric matrix of corresponding

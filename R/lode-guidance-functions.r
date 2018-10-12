@@ -1,24 +1,22 @@
 #' Lode guidance functions
 #'
 #' These functions control the order of lodes within strata in an alluvial
-#' diagram. They are invoked by \code{\link{stat_alluvium}} and can be passed to
+#' diagram. They are invoked by [stat_alluvium()] and can be passed to
 #' the `lode.guidance` parameter.
 #'
 
 #' Each function orders the numbers 1 through `n`, starting at index
-#' `i`. The choice of function made in \code{\link{stat_alluvium}}
+#' `i`. The choice of function made in [stat_alluvium()]
 #' determines the order in which the other axes contribute to the sorting of
 #' lodes within each index axis. After starting at `i`, the functions order
 #' the remaining axes as follows:
-#' \itemize{
-#'   \item `zigzag`: Zigzag outward from `i`
-#'   \item `rightward`: Increasing order
-#'   \item `leftward`: Decreasing order
-#'   \item `rightleft`: Proceed rightward from `i` to `n`, then
-#'         leftward to 1
-#'   \item `leftright`: Proceed leftward from `i` to 1, then rightward
-#'         to `n`
-#' }
+#'
+#' - `zigzag`: Zigzag outward from `i`
+#' - `rightward`: Increasing order
+#' - `leftward`: Decreasing order
+#' - `rightleft`: Proceed rightward from `i` to `n`, then leftward to 1
+#' - `leftright`: Proceed leftward from `i` to 1, then rightward to `n`
+#'
 #' @name lode-guidance-functions
 #' @param n Numeric, a positive integer
 #' @param i Numeric, a positive integer at most `n`

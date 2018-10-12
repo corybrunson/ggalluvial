@@ -7,20 +7,17 @@
 #' subsets or amounts of observations that take the corresponding values of the
 #' corresponding variables. This function checks a data frame for either of two
 #' types of alluvial structure:
-#' \itemize{
-#'   \item One row per **lode**, wherein each row encodes a subset or
-#'         amount of observations having a specific profile of axis values, a
-#'         `key` field encodes the axis, a `value` field encodes the
-#'         value within each axis, and a `id` column identifies multiple
-#'         lodes corresponding to the same subset or amount of observations.
-#'         `is_lodes_form` tests for this structure.
-#'   \item One row per **alluvium**, wherein each row encodes a subset or
-#'         amount of observations having a specific profile of axis values and a
-#'         set `axes` of fields encodes its values at each axis variable.
-#'         `is_alluvia_form` tests for this structure.
-#' }
 #'
-
+#' - One row per **lode**, wherein each row encodes a subset or amount of
+#'   observations having a specific profile of axis values, a `key` field
+#'   encodes the axis, a `value` field encodes the value within each axis, and a
+#'   `id` column identifies multiple lodes corresponding to the same subset or
+#'   amount of observations. `is_lodes_form` tests for this structure.
+#' - One row per **alluvium**, wherein each row encodes a subset or amount of
+#'   observations having a specific profile of axis values and a set `axes` of
+#'   fields encodes its values at each axis variable. `is_alluvia_form` tests
+#'   for this structure.
+#'
 #' `to_lodes_form` takes a data frame with several designated variables to
 #' be used as axes in an alluvial diagram, and reshapes the data frame so that
 #' the axis variable names constitute a new factor variable and their values
@@ -43,22 +40,22 @@
 #'   "alluvia").
 #' @param silent Whether to print messages.
 #' @param key,value,id In `to_lodes_form`, handled as in
-#'   \code{\link[tidyr]{gather}} and used to name the new axis (key), stratum
+#'   [tidyr::gather()] and used to name the new axis (key), stratum
 #'   (value), and alluvium (identifying) variables. In `to_alluvia_form`,
-#'   handled as in \code{\link[tidyr]{spread}} and used to identify the fields
+#'   handled as in [tidyr::spread()] and used to identify the fields
 #'   of `data` to be used as the axis (key), stratum (value), and alluvium
 #'   (identifying) variables.
 #' @param axes In `*_alluvia_form`, handled as in
-#'   \code{\link[dplyr]{select}} and used to identify the field(s) of
+#'   [dplyr::select()] and used to identify the field(s) of
 #'   `data` to be used as axes.
 #' @param ... Used in `is_alluvia_form` and `to_lodes_form` as in
-#'   \code{\link[dplyr]{select}} to determine axis variables, as an alternative
+#'   [dplyr::select()] to determine axis variables, as an alternative
 #'   to `axes`. Ignored when `axes` is provided.
 #' @param weight Optional field of `data`, handled using
-#'   \code{\link[rlang]{enquo}}, to be used as heights or depths of the alluvia
+#'   [rlang::enquo()], to be used as heights or depths of the alluvia
 #'   or lodes.
 #' @param diffuse Fields of `data`, handled using
-#'   \code{\link[tidyselect]{vars_select}}, to merge into the reshapen data by
+#'   [tidyselect::vars_select()], to merge into the reshapen data by
 #'   `id`. They must be a subset of the axis variables. Alternatively, a
 #'   logical value indicating whether to merge all (`TRUE`) or none
 #'   (`FALSE`) of the axis variables.

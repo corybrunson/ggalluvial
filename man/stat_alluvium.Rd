@@ -100,14 +100,12 @@ plotting purposes (for now).
 \code{stat_alluvium}, \code{stat_flow}, and \code{stat_stratum} require one
 of two sets of aesthetics:
 \itemize{
-\item \strong{\code{x}} and at least one of
-\strong{\code{alluvium}} and \strong{\code{stratum}}
-\item any number of \strong{\code{axis[0-9]*}}
-(\code{axis1}, \code{axis2}, etc.)
+\item \strong{\code{x}} and at least one of \strong{\code{alluvium}} and \strong{\code{stratum}}
+\item any number of \strong{\code{axis[0-9]*}} (\code{axis1}, \code{axis2}, etc.)
 }
+
 Use \code{x}, \code{alluvium}, and/or \code{stratum} for data in lodes format
-and \code{axis[0-9]*} for data in alluvia format
-(see \code{\link{alluvial-data}}).
+and \code{axis[0-9]*} for data in alluvia format (see \code{\link{alluvial-data}}).
 Arguments to parameters inconsistent with the format will be ignored.
 Additionally, each \code{stat_*} layer accepts the following optional
 aesthetics:
@@ -115,6 +113,7 @@ aesthetics:
 \item \code{y}
 \item \code{group}
 }
+
 \code{y} controls the heights of the alluvia
 and may be aggregated across equivalent observations.
 \code{group} is used internally; arguments are ignored.
@@ -122,6 +121,7 @@ Finally, \code{stat_stratum} accepts the following optional aesthetic:
 \itemize{
 \item \code{label}
 }
+
 \code{label} is used to label the strata and must take a unique value across
 the observations within each stratum.
 These and any other aesthetics are aggregated as follows:
