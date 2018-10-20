@@ -243,17 +243,22 @@ StatAlluvium <- ggproto(
     # convert heights to vertical centroids
     data <- transform(data, y = (ymin + ymax) / 2)
 
-    # within each alluvium, indices at which contiguous subsets start
+    # within each alluvium, indices at which subsets are contiguous
     data <- data[with(data, order(x, alluvium)), , drop = FALSE]
-    data$starts <- duplicated(data$alluvium) &
+    data$cont <- duplicated(data$alluvium) &
       ! duplicated(data[, c("x", "alluvium")])
     data$axis <- contiguate(data$x)
     # within each alluvium, group contiguous subsets
     # (data is sorted by `x` and `alluvium`; group_by() does not reorder it)
     data <- dplyr::ungroup(dplyr::mutate(dplyr::group_by(data, alluvium),
-                                         flow = axis - cumsum(starts)))
+                                         flow = axis - cumsum(cont)))
     # add `group` to group contiguous alluvial subsets
     data <- transform(data, group = as.numeric(interaction(alluvium, flow)))
+    # remove unused fields
+    data$cont <- NULL
+    data$axis <- NULL
+    data$flow <- NULL
+
     # arrange data by aesthetics for consistent (reverse) z-ordering
     data <- z_order_aes(data, aesthetics)
 

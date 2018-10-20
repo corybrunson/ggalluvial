@@ -126,6 +126,11 @@
 <a href="#markdown-formatting" class="anchor"></a>markdown formatting</h2>
 <p>Documentation is slightly reformatted due to switching <strong>roxygen</strong> syntax to markdown.</p>
 </div>
+<div id="z-ordering-patch" class="section level2">
+<h2 class="hasAnchor">
+<a href="#z-ordering-patch" class="anchor"></a>z-ordering patch</h2>
+<p>The internal z-ordering function <code>z_order_aes</code> failed to recognize contiguous segments of alluvia, thereby assigning later segments missing values of <code>'group'</code> and preventing them from being rendered. This has been corrected.</p>
+</div>
 </div>
     <div id="ggalluvial-0-9-0" class="section level1">
 <h1 class="page-header">
@@ -193,7 +198,7 @@
 <li>The setting <code>silent = TRUE</code> now silences all messages.</li>
 <li>The functions <code>is_*_form()</code> now return <code>FALSE</code> if any weights are negative, with a message to this effect.</li>
 <li>These functions now accept unquoted variable names for the <code>key</code>, <code>value</code>, <code>id</code>, <code>weight</code>, and <code>diffuse</code> parameters, using up-to-date <strong>rlang</strong> and <strong>tidyselect</strong> functionality.</li>
-<li>The <code>axes</code> parameter in <code><a href="../reference/alluvial-data.html">is_alluvia_form()</a></code> and <code><a href="../reference/alluvial-data.html">to_lodes_form()</a></code> now accepts <code><a href="http://dplyr.tidyverse.org/reference/vars.html">dplyr::vars()</a></code> objects, as in <code><a href="http://dplyr.tidyverse.org/reference/select_all.html">dplyr::select_at()</a></code>. Alternatively, variables can be fed to these functions as in <code><a href="http://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code>, to be collected by <code><a href="http://www.rdocumentation.org/packages/rlang/topics/quotation">rlang::quos(...)</a></code> and used as axis variables. If <code>axes</code> is not <code>NULL</code>, then such additional arguments are ignored.</li>
+<li>The <code>axes</code> parameter in <code><a href="../reference/alluvial-data.html">is_alluvia_form()</a></code> and <code><a href="../reference/alluvial-data.html">to_lodes_form()</a></code> now accepts <code><a href="http://dplyr.tidyverse.org/reference/vars.html">dplyr::vars()</a></code> objects, as in <code><a href="http://dplyr.tidyverse.org/reference/select_all.html">dplyr::select_at()</a></code>. Alternatively, variables can be fed to these functions as in <code><a href="http://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code>, to be collected by <code><a href="https://rlang.r-lib.org/reference/quotation.html">rlang::quos(...)</a></code> and used as axis variables. If <code>axes</code> is not <code>NULL</code>, then such additional arguments are ignored.</li>
 <li>The functions <code>to_*_form()</code> now merge their internal reshapen data frames with the distilled or diffused variables in a consistent order, placing the distilled or diffused variables to the left.</li>
 </ul>
 </div>

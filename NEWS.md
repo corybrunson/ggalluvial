@@ -8,6 +8,10 @@ Because the only functional (e.g. out `README.md`) occurrence of **devtools** is
 
 Documentation is slightly reformatted due to switching **roxygen** syntax to markdown.
 
+## z-ordering patch
+
+The internal z-ordering function `z_order_aes` failed to recognize contiguous segments of alluvia, thereby assigning later segments missing values of `'group'` and preventing them from being rendered. This has been corrected.
+
 # ggalluvial 0.9.0
 
 ## `geom_alluvium()` patch
