@@ -141,12 +141,9 @@
           <span class="st">"stratified by demographics and survival"</span>)</code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="700"></p>
 <p>The data is in “wide” format, but <strong>ggalluvial</strong> also recognizes data in “long” format and can convert between the two:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">titanic_long &lt;-<span class="st"> </span><span class="kw"><a href="reference/ggalluvial-deprecated.html">to_lodes</a></span>(<span class="kw">data.frame</span>(Titanic),
-                         <span class="dt">key =</span> <span class="st">"Demographic"</span>,
-                         <span class="dt">axes =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)
-<span class="co">#&gt; Warning: 'to_lodes' is deprecated.</span>
-<span class="co">#&gt; Use 'to_lodes_form' instead.</span>
-<span class="co">#&gt; See help("Deprecated")</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">titanic_long &lt;-<span class="st"> </span><span class="kw"><a href="reference/alluvial-data.html">to_lodes_form</a></span>(<span class="kw">data.frame</span>(Titanic),
+                              <span class="dt">key =</span> <span class="st">"Demographic"</span>,
+                              <span class="dt">axes =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)
 <span class="kw">head</span>(titanic_long)
 <span class="co">#&gt;   Survived Freq alluvium Demographic stratum</span>
 <span class="co">#&gt; 1       No    0        1       Class     1st</span>

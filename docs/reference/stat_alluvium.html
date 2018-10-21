@@ -309,7 +309,7 @@ observations within each stratum (otherwise <code>NA</code> is assigned).</p>
 <span class='fu'>data</span>(<span class='no'>majors</span>)
 <span class='co'># omit missing lodes and incident flows</span>
 <span class='fu'>ggplot</span>(<span class='no'>majors</span>,
-             <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>semester</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>curriculum</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>student</span>)) +
+       <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>semester</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>curriculum</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>student</span>)) +
   <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>"darkgrey"</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>curriculum</span>), <span class='kw'>color</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
   <span class='fu'>theme_bw</span>()</div><div class='img'><img src='stat_alluvium-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># reverse the vertical axis (requires an explicit `y` aesthetic)</span>
@@ -329,26 +329,26 @@ observations within each stratum (otherwise <code>NA</code> is assigned).</p>
 <span class='no'>gg</span> + <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>, <span class='kw'>lode.guidance</span> <span class='kw'>=</span> <span class='st'>"rightleft"</span>,
                <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"black"</span>, <span class='kw'>aggregate.y</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='stat_alluvium-7.png' alt='' width='700' height='433' /></div><div class='input'>
 </div><span class='co'># NOT RUN {</span>
-  <span class='fu'>data</span>(<span class='no'>babynames</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"babynames"</span>)
-  <span class='co'># a discontiguous alluvium</span>
-  <span class='no'>bn</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='http://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>babynames</span>,
-                      <span class='no'>prop</span> <span class='kw'>&gt;=</span> <span class='fl'>.01</span> <span class='kw'>&amp;</span> <span class='no'>sex</span> <span class='kw'>==</span> <span class='st'>"F"</span> <span class='kw'>&amp;</span>
-                        <span class='no'>year</span> <span class='kw'>&gt;</span> <span class='fl'>1962</span> <span class='kw'>&amp;</span> <span class='no'>year</span> <span class='kw'>&lt;</span> <span class='fl'>1968</span>)
-  <span class='fu'>ggplot</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>bn</span>,
-         <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>year</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>name</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>prop</span>)) +
-    <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>name</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>name</span> <span class='kw'>==</span> <span class='st'>"Tammy"</span>),
-                  <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>) +
-    <span class='fu'>scale_color_manual</span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"#00000000"</span>, <span class='st'>"#000000"</span>))
-  <span class='co'># filling in missing zeros</span>
-  <span class='no'>bn2</span> <span class='kw'>&lt;-</span> <span class='fu'>merge</span>(<span class='no'>bn</span>,
-               <span class='fu'>expand.grid</span>(<span class='kw'>year</span> <span class='kw'>=</span> <span class='fu'>unique</span>(<span class='no'>bn</span>$<span class='no'>year</span>), <span class='kw'>name</span> <span class='kw'>=</span> <span class='fu'>unique</span>(<span class='no'>bn</span>$<span class='no'>name</span>)),
-               <span class='kw'>all</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-  <span class='no'>bn2</span>$<span class='no'>prop</span>[<span class='fu'>is.na</span>(<span class='no'>bn2</span>$<span class='no'>prop</span>)] <span class='kw'>&lt;-</span> <span class='fl'>0</span>
-  <span class='fu'>ggplot</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>bn2</span>,
-         <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>year</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>name</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>prop</span>)) +
-    <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>name</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>name</span> <span class='kw'>==</span> <span class='st'>"Tammy"</span>),
-                  <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>) +
-    <span class='fu'>scale_color_manual</span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"#00000000"</span>, <span class='st'>"#000000"</span>))
+<span class='fu'>data</span>(<span class='no'>babynames</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"babynames"</span>)
+<span class='co'># a discontiguous alluvium</span>
+<span class='no'>bn</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='http://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>babynames</span>,
+                    <span class='no'>prop</span> <span class='kw'>&gt;=</span> <span class='fl'>.01</span> <span class='kw'>&amp;</span> <span class='no'>sex</span> <span class='kw'>==</span> <span class='st'>"F"</span> <span class='kw'>&amp;</span>
+                      <span class='no'>year</span> <span class='kw'>&gt;</span> <span class='fl'>1962</span> <span class='kw'>&amp;</span> <span class='no'>year</span> <span class='kw'>&lt;</span> <span class='fl'>1968</span>)
+<span class='fu'>ggplot</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>bn</span>,
+       <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>year</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>name</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>prop</span>)) +
+  <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>name</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>name</span> <span class='kw'>==</span> <span class='st'>"Tammy"</span>),
+                <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>) +
+  <span class='fu'>scale_color_manual</span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"#00000000"</span>, <span class='st'>"#000000"</span>))
+<span class='co'># filling in missing zeros</span>
+<span class='no'>bn2</span> <span class='kw'>&lt;-</span> <span class='fu'>merge</span>(<span class='no'>bn</span>,
+             <span class='fu'>expand.grid</span>(<span class='kw'>year</span> <span class='kw'>=</span> <span class='fu'>unique</span>(<span class='no'>bn</span>$<span class='no'>year</span>), <span class='kw'>name</span> <span class='kw'>=</span> <span class='fu'>unique</span>(<span class='no'>bn</span>$<span class='no'>name</span>)),
+             <span class='kw'>all</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='no'>bn2</span>$<span class='no'>prop</span>[<span class='fu'>is.na</span>(<span class='no'>bn2</span>$<span class='no'>prop</span>)] <span class='kw'>&lt;-</span> <span class='fl'>0</span>
+<span class='fu'>ggplot</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>bn2</span>,
+       <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>year</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>name</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>prop</span>)) +
+  <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>name</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>name</span> <span class='kw'>==</span> <span class='st'>"Tammy"</span>),
+                <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>) +
+  <span class='fu'>scale_color_manual</span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"#00000000"</span>, <span class='st'>"#000000"</span>))
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
