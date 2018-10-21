@@ -102,7 +102,7 @@ GeomAlluvium <- ggproto(
       # spline coordinates (one axis)
       spline_data <- with(data, data.frame(
         x = x + width / 2 * c(-1, 1, 1, -1),
-        y = ymin + y * c(0, 0, 1, 1),
+        y = ymin + (ymax - ymin) * c(0, 0, 1, 1),
         shape = rep(0, 4)
       ))
     } else {
