@@ -74,12 +74,9 @@ ggplot(data = titanic_wide,
 The data is in "wide" format, but **ggalluvial** also recognizes data in "long" format and can convert between the two:
 
 ``` r
-titanic_long <- to_lodes(data.frame(Titanic),
-                         key = "Demographic",
-                         axes = 1:3)
-#> Warning: 'to_lodes' is deprecated.
-#> Use 'to_lodes_form' instead.
-#> See help("Deprecated")
+titanic_long <- to_lodes_form(data.frame(Titanic),
+                              key = "Demographic",
+                              axes = 1:3)
 head(titanic_long)
 #>   Survived Freq alluvium Demographic stratum
 #> 1       No    0        1       Class     1st
