@@ -2,14 +2,17 @@ Package: ggalluvial
 Type: Package
 Title: Alluvial Diagrams in 'ggplot2'
 Version: 0.9.1
-Date: 2018-07-06
+Date: 2018-10-21
 Authors@R: person('Jason Cory', 'Brunson', email = 'cornelioid@gmail.com',
     role = c('aut', 'cre'))
 Maintainer: Jason Cory Brunson <cornelioid@gmail.com>
 Description: Alluvial diagrams use x-splines, sometimes augmented with stacked
     histograms, to visualize multi-dimensional or repeated-measures data with
-    categorical or ordinal variables. This package provides ggplot2 layers to
-    produce alluvial diagrams from tidy data.
+    categorical or ordinal variables. They can be viewed as simplified and
+    standardized Sankey diagrams; see Riehmann, Hanfler, and Froehlich (2005)
+    <doi:10.1109/INFVIS.2005.1532152> and Rosvall and Bergstrom (2010)
+    <doi:10.1371/journal.pone.0008694>. This package provides ggplot2 layers
+    to produce alluvial diagrams from tidy data.
 Depends:
     R (>= 3.3.0),
     ggplot2 (>= 2.2.0)
@@ -35,3 +38,4 @@ URL: http://corybrunson.github.io/ggalluvial/
 BugReports: https://github.com/corybrunson/ggalluvial/issues
 VignetteBuilder: knitr
 RoxygenNote: 6.1.0
+Roxygen: list(markdown = TRUE)

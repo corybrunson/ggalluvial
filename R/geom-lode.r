@@ -1,18 +1,18 @@
 #' Lodes at intersections of alluvia and strata
 #'
-#' \code{geom_alluvium} receives a dataset of the horizontal (\code{x}) and
-#' vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the \strong{lodes}
-#' of an alluvial diagram, the intersections of the alluvia with the strata.
-#' It plots rectangles for these lodes of a provided \code{width}.
+#' `geom_alluvium` receives a dataset of the horizontal (`x`) and vertical (`y`,
+#' `ymin`, `ymax`) positions of the **lodes** of an alluvial diagram, the
+#' intersections of the alluvia with the strata. It plots rectangles for these
+#' lodes of a provided `width`.
 #' @template geom-aesthetics
 #' @template defunct-geom-params
 #'
 
 #' @import ggplot2
 #' @family alluvial geom layers
-#' @seealso \code{\link[ggplot2]{layer}} for additional arguments and
-#'   \code{\link{stat_alluvium}} and
-#'   \code{\link{stat_stratum}} for the corresponding stats.
+#' @seealso [ggplot2::layer()] for additional arguments and
+#'   [stat_alluvium()] and
+#'   [stat_stratum()] for the corresponding stats.
 #' @inheritParams ggplot2::layer
 #' @template layer-params
 #' @param stat The statistical transformation to use on the data;

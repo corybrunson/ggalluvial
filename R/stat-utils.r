@@ -1,6 +1,6 @@
 # Identify elements in a character vector that fit the pattern of axis aesthetic
 # names, and return their indices in the numerical order of the axis numbers
-# (with \code{axis} first, if present). Only non-negative integers are allowed.
+# (with `axis` first, if present). Only non-negative integers are allowed.
 get_axes <- function(x) {
   if (anyDuplicated(x)) {
     dupes <- unique(x[duplicated(x)])
@@ -110,12 +110,13 @@ alluviate <- function(data, key, value, id) {
 
 # arrange data by aesthetics for consistent (reverse) z-ordering
 z_order_aes <- function(data, aesthetics) {
-  
-  aes_data <- data[!duplicated(data$alluvium),
+
+  # `aesthetics` and 'group' are fixed within contiguous alluvial segments
+  aes_data <- data[! duplicated(data[, c("alluvium", "group")]),
                    c("alluvium", aesthetics, "group")]
   if (length(aes_data) == 2) return(data)
   aes_data <- aes_data[do.call(order, aes_data[, c(aesthetics, "alluvium")]), ]
-  
+
   # ensure order of "group" respects aesthetics
   data$group <- match(data$group, unique(aes_data$group))
   data[with(data, order(x, group)), , drop = FALSE]

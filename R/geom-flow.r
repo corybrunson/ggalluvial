@@ -1,21 +1,21 @@
 #' Flows between lodes or strata
 #'
-#' \code{geom_flow} receives a dataset of the horizontal (\code{x}) and
-#' vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the \strong{lodes}
+#' `geom_flow` receives a dataset of the horizontal (`x`) and
+#' vertical (`y`, `ymin`, `ymax`) positions of the **lodes**
 #' of an alluvial diagram, the intersections of the alluvia with the strata.
 #' It reconfigures these into alluvial segments connecting pairs of
 #' corresponding lodes in adjacent strata and plots filled x-splines between
-#' each such pair, using a provided knot position parameter \code{knot.pos}, and
-#' filled rectangles at either end, using a provided \code{width}.
+#' each such pair, using a provided knot position parameter `knot.pos`, and
+#' filled rectangles at either end, using a provided `width`.
 #' @template geom-aesthetics
 #' @template defunct-geom-params
 #'
 
 #' @import ggplot2
 #' @family alluvial geom layers
-#' @seealso \code{\link[ggplot2]{layer}} for additional arguments and
-#'   \code{\link{stat_alluvium}} and
-#'   \code{\link{stat_flow}} for the corresponding stats.
+#' @seealso [ggplot2::layer()] for additional arguments and
+#'   [stat_alluvium()] and
+#'   [stat_flow()] for the corresponding stats.
 #' @inheritParams geom_alluvium
 #' @param aes.flow Character; how inter-lode flows assume aesthetics from lodes.
 #'   Options are "forward" and "backward".

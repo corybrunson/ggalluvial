@@ -53,38 +53,37 @@ if \code{FALSE}, the default, \code{NA} lodes are not included;
 if \code{TRUE}, \code{NA} lodes constitute a separate category,
 plotted in grey (regardless of the color scheme).}
 
-\item{...}{Additional arguments passed to \code{\link[ggplot2]{layer}}.}
+\item{...}{Additional arguments passed to \code{\link[ggplot2:layer]{ggplot2::layer()}}.}
 }
 \description{
-\code{geom_stratum} receives a dataset of the horizontal (\code{x}) and
-vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the strata of an
-alluvial diagram.
-It plots rectangles for these strata of a provided \code{width}.
+\code{geom_stratum} receives a dataset of the horizontal (\code{x}) and vertical (\code{y},
+\code{ymin}, \code{ymax}) positions of the strata of an alluvial diagram. It plots
+rectangles for these strata of a provided \code{width}.
 }
 \section{Aesthetics}{
 
-\code{geom_alluvium}, \code{geom_flow}, \code{geom_lode}, and
-\code{geom_stratum} understand the following aesthetics (required aesthetics
-are in bold):
+\code{geom_alluvium}, \code{geom_flow}, \code{geom_lode}, and \code{geom_stratum} understand the
+following aesthetics (required aesthetics are in bold):
 \itemize{
-  \item \strong{\code{x}}
-  \item \strong{\code{y}}
-  \item \strong{\code{ymin}}
-  \item \strong{\code{ymax}}
-  \item \code{alpha}
-  \item \code{colour}
-  \item \code{fill}
-  \item \code{linetype}
-  \item \code{size}
-  \item \code{group}
+\item \strong{\code{x}}
+\item \strong{\code{y}}
+\item \strong{\code{ymin}}
+\item \strong{\code{ymax}}
+\item \code{alpha}
+\item \code{colour}
+\item \code{fill}
+\item \code{linetype}
+\item \code{size}
+\item \code{group}
 }
+
 \code{group} is used internally; arguments are ignored.
 }
 
 \section{Defunct parameters}{
 
-The previously deprecated parameters \code{axis_width} and \code{ribbon_bend}
-are now defunct. Use \code{width} and \code{knot.pos} instead.
+The previously deprecated parameters \code{axis_width} and \code{ribbon_bend} are now
+defunct. Use \code{width} and \code{knot.pos} instead.
 }
 
 \examples{
@@ -105,8 +104,8 @@ ggplot(as.data.frame(Titanic),
   facet_wrap(~ Age, scales = "free_y")
 }
 \seealso{
-\code{\link[ggplot2]{layer}} for additional arguments and
-  \code{\link{stat_stratum}} for the corresponding stat.
+\code{\link[ggplot2:layer]{ggplot2::layer()}} for additional arguments and
+\code{\link[=stat_stratum]{stat_stratum()}} for the corresponding stat.
 
 Other alluvial geom layers: \code{\link{geom_alluvium}},
   \code{\link{geom_flow}}, \code{\link{geom_lode}}
