@@ -36,3 +36,11 @@ ggplot(as.data.frame(Titanic),
   geom_text(stat = "stratum", label.strata = TRUE) +
   stat_stratum(geom = "errorbar") +
   scale_x_discrete(limits = c("Class", "Sex", "Age", "Survived"))
+
+# omit labels for strata outside a weight range
+ggplot(vaccinations,
+       aes(y = freq,
+           x = survey, stratum = response,
+           fill = response, label = response)) +
+  stat_stratum(width = .5) +
+  geom_text(stat = "stratum", min.height = 100)

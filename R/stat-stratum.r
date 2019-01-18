@@ -28,6 +28,9 @@
 #' @param label.strata Logical; whether to assign the values of the axis
 #'   variables to the strata. Defaults to FALSE, and requires that no
 #'   `label` aesthetic is assigned.
+#' @param min.height,max.height Numeric; bounds on the heights (weights) of the
+#'   strata to be rendered. Use these bounds to exclude strata outside a certain
+#'   range, for example when labeling strata using [ggplot2::geom_text()].
 #' @example inst/examples/ex-stat-stratum.r
 #' @export
 stat_stratum <- function(mapping = NULL,
@@ -38,6 +41,7 @@ stat_stratum <- function(mapping = NULL,
                          reverse = TRUE,
                          discern = FALSE,
                          label.strata = FALSE,
+                         min.height = NULL, max.height = NULL,
                          show.legend = NA,
                          inherit.aes = TRUE,
                          na.rm = FALSE,
@@ -55,6 +59,7 @@ stat_stratum <- function(mapping = NULL,
       reverse = reverse,
       discern = discern,
       label.strata = label.strata,
+      min.height = min.height, max.height = max.height,
       na.rm = na.rm,
       ...
     )
@@ -130,7 +135,8 @@ StatStratum <- ggproto(
 
   compute_panel = function(self, data, scales,
                            decreasing = NA, reverse = TRUE,
-                           discern = FALSE, label.strata = FALSE) {
+                           discern = FALSE, label.strata = FALSE,
+                           min.height = NULL, max.height = NULL) {
 
     # introduce label (if absent)
     if (label.strata) {
@@ -170,6 +176,14 @@ StatStratum <- ggproto(
                       ymax = ycum + y / 2,
                       y = ycum)
     data$ycum <- NULL
+
+    # impose height restrictions
+    if (! is.null(min.height)) {
+      data <- data[data$ymax - data$ymin >= min.height, , drop = FALSE]
+    }
+    if (! is.null(max.height)) {
+      data <- data[data$ymax - data$ymin <= max.height, , drop = FALSE]
+    }
 
     data
   }
