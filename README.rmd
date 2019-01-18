@@ -39,12 +39,12 @@ The [cran branch](https://github.com/corybrunson/ggalluvial/tree/cran) will cont
 
 Development versions can be installed from GitHub:
 ```{r eval=FALSE}
-devtools::install_github("corybrunson/ggalluvial", build_vignettes = TRUE)
+remotes::install_github("corybrunson/ggalluvial", build_vignettes = TRUE)
 ```
 The
 [optimization branch](https://github.com/corybrunson/ggalluvial/tree/optimization) contains a development version with experimental functions to reduce the number or area of alluvial overlaps (see issue [#6](https://github.com/corybrunson/ggalluvial/issues/6)). Install it as follows:
 ```{r eval=FALSE}
-devtools::install_github("corybrunson/ggalluvial", ref = "optimization")
+remotes::install_github("corybrunson/ggalluvial", ref = "optimization")
 ```
 
 ## Usage
