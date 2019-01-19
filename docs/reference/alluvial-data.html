@@ -67,7 +67,7 @@ types of alluvial structure:" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.2</span>
       </span>
     </div>
 
@@ -154,16 +154,16 @@ types of alluvial structure:</p>
     <tr>
       <th>key, value, id</th>
       <td><p>In <code>to_lodes_form</code>, handled as in
-<code><a href='http://www.rdocumentation.org/packages/tidyr/topics/gather'>tidyr::gather()</a></code> and used to name the new axis (key), stratum
+<code><a href='https://tidyr.tidyverse.org/reference/gather.html'>tidyr::gather()</a></code> and used to name the new axis (key), stratum
 (value), and alluvium (identifying) variables. In <code>to_alluvia_form</code>,
-handled as in <code><a href='http://www.rdocumentation.org/packages/tidyr/topics/spread'>tidyr::spread()</a></code> and used to identify the fields
+handled as in <code><a href='https://tidyr.tidyverse.org/reference/spread.html'>tidyr::spread()</a></code> and used to identify the fields
 of <code>data</code> to be used as the axis (key), stratum (value), and alluvium
 (identifying) variables.</p></td>
     </tr>
     <tr>
       <th>weight</th>
       <td><p>Optional field of <code>data</code>, handled using
-<code><a href='https://rlang.r-lib.org/reference/quotation.html'>rlang::enquo()</a></code>, to be used as heights or depths of the alluvia
+<code><a href='http://www.rdocumentation.org/packages/rlang/topics/quotation'>rlang::enquo()</a></code>, to be used as heights or depths of the alluvia
 or lodes.</p></td>
     </tr>
     <tr>
@@ -179,13 +179,13 @@ string indicating the type of alluvial structure ("none", "lodes", or
     <tr>
       <th>...</th>
       <td><p>Used in <code>is_alluvia_form</code> and <code>to_lodes_form</code> as in
-<code><a href='http://dplyr.tidyverse.org/reference/select.html'>dplyr::select()</a></code> to determine axis variables, as an alternative
+<code><a href='https://dplyr.tidyverse.org/reference/select.html'>dplyr::select()</a></code> to determine axis variables, as an alternative
 to <code>axes</code>. Ignored when <code>axes</code> is provided.</p></td>
     </tr>
     <tr>
       <th>axes</th>
       <td><p>In <code>*_alluvia_form</code>, handled as in
-<code><a href='http://dplyr.tidyverse.org/reference/select.html'>dplyr::select()</a></code> and used to identify the field(s) of
+<code><a href='https://dplyr.tidyverse.org/reference/select.html'>dplyr::select()</a></code> and used to identify the field(s) of
 <code>data</code> to be used as axes.</p></td>
     </tr>
     <tr>
@@ -233,11 +233,11 @@ be used as axes in an alluvial diagram, and reshapes the data frame so that
 the axis variable names constitute a new factor variable and their values
 comprise another. Other variables' values will be repeated, and a
 row-grouping variable can be introduced. This function invokes
-<code><a href='http://www.rdocumentation.org/packages/tidyr/topics/gather'>tidyr::gather()</a></code>.</p>
+<code><a href='https://tidyr.tidyverse.org/reference/gather.html'>tidyr::gather()</a></code>.</p>
 <p><code>to_alluvia_form</code> takes a data frame with axis and axis value variables
 to be used in an alluvial diagram, and reshape the data frame so that the
 axes constitute separate variables whose values are given by the value
-variable. This function invokes <code><a href='http://www.rdocumentation.org/packages/tidyr/topics/spread'>tidyr::spread()</a></code>.</p>
+variable. This function invokes <code><a href='https://tidyr.tidyverse.org/reference/spread.html'>tidyr::spread()</a></code>.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 

@@ -65,7 +65,7 @@ plotting purposes (for now)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.2</span>
       </span>
     </div>
 
@@ -240,7 +240,7 @@ the default plot specification, e.g. <code>borders()</code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Additional arguments passed to <code><a href='http://www.rdocumentation.org/packages/ggplot2/topics/layer'>ggplot2::layer()</a></code>.</p></td>
+      <td><p>Additional arguments passed to <code><a href='https://ggplot2.tidyverse.org/reference/layer.html'>ggplot2::layer()</a></code>.</p></td>
     </tr>
     </table>
     
@@ -276,7 +276,7 @@ observations within each stratum (otherwise <code>NA</code> is assigned).</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='http://www.rdocumentation.org/packages/ggplot2/topics/layer'>ggplot2::layer()</a></code> for additional arguments and
+    <div class='dont-index'><p><code><a href='https://ggplot2.tidyverse.org/reference/layer.html'>ggplot2::layer()</a></code> for additional arguments and
 <code><a href='geom_alluvium.html'>geom_alluvium()</a></code>,
 <code><a href='geom_lode.html'>geom_lode()</a></code>, and
 <code><a href='geom_flow.html'>geom_flow()</a></code> for the corresponding geoms.</p>
@@ -331,7 +331,7 @@ observations within each stratum (otherwise <code>NA</code> is assigned).</p>
 </div><span class='co'># NOT RUN {</span>
 <span class='fu'>data</span>(<span class='no'>babynames</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"babynames"</span>)
 <span class='co'># a discontiguous alluvium</span>
-<span class='no'>bn</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='http://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>babynames</span>,
+<span class='no'>bn</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>babynames</span>,
                     <span class='no'>prop</span> <span class='kw'>&gt;=</span> <span class='fl'>.01</span> <span class='kw'>&amp;</span> <span class='no'>sex</span> <span class='kw'>==</span> <span class='st'>"F"</span> <span class='kw'>&amp;</span>
                       <span class='no'>year</span> <span class='kw'>&gt;</span> <span class='fl'>1962</span> <span class='kw'>&amp;</span> <span class='no'>year</span> <span class='kw'>&lt;</span> <span class='fl'>1968</span>)
 <span class='fu'>ggplot</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>bn</span>,

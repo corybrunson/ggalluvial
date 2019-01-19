@@ -63,7 +63,7 @@ form to something similar to alluvia form." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.2</span>
       </span>
     </div>
 
@@ -139,12 +139,12 @@ form to something similar to alluvia form.</p>
     <tr>
       <th>key</th>
       <td><p>Column of <code>data</code> indicating sequential collection; handled as in
-<code><a href='http://www.rdocumentation.org/packages/tidyr/topics/spread'>tidyr::spread()</a></code>.</p></td>
+<code><a href='https://tidyr.tidyverse.org/reference/spread.html'>tidyr::spread()</a></code>.</p></td>
     </tr>
     <tr>
       <th>by</th>
       <td><p>Character vector of variables to self-adjoin by; passed to
-<code><a href='http://dplyr.tidyverse.org/reference/join.html'>dplyr::join</a></code> functions.</p></td>
+<code><a href='https://dplyr.tidyverse.org/reference/join.html'>dplyr::join</a></code> functions.</p></td>
     </tr>
     <tr>
       <th>link</th>
@@ -161,13 +161,13 @@ variables can overlap with each other but cannot overlap with <code>by</code> or
     <tr>
       <th>suffix</th>
       <td><p>Suffixes to add to the adjoined <code>link</code> variables; passed to
-<code><a href='http://dplyr.tidyverse.org/reference/join.html'>dplyr::join</a></code> functions.</p></td>
+<code><a href='https://dplyr.tidyverse.org/reference/join.html'>dplyr::join</a></code> functions.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>self_adjoin</code> invokes <code><a href='http://dplyr.tidyverse.org/reference/join.html'>dplyr::join</a></code> functions in order to convert
+    <p><code>self_adjoin</code> invokes <code><a href='https://dplyr.tidyverse.org/reference/join.html'>dplyr::join</a></code> functions in order to convert
 a dataset with measures along a discrete <code>key</code> variable into a dataset
 consisting of column bindings of these measures (by any <code>by</code> variables) along
 adjacent values of <code>key</code>.</p>
