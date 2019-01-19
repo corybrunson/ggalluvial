@@ -1,3 +1,9 @@
+# ggalluvial 0.9.2
+
+## Height limits on strata
+
+Parameters `min.height` and `max.height` are introduced to `stat_stratum()` to allow users to omit strata outside a given height range. This is probably most relevant for stratum labeling, as illustrated in the updated vignette.
+
 # ggalluvial 0.9.1
 
 ## Suggest **sessioninfo** for `session_info()`

@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.2</span>
       </span>
     </div>
 
@@ -78,7 +78,7 @@
       <h1>Labeling small strata</h1>
                         <h4 class="author">Jason Cory Brunson</h4>
             
-            <h4 class="date">2018-10-21</h4>
+            <h4 class="date">2019-01-18</h4>
       
       
       <div class="hidden name"><code>labels.rmd</code></div>
@@ -112,11 +112,25 @@
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">"none"</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">"vaccination survey responses"</span>, <span class="st">"labeled using `geom_text()`"</span>)</code></pre></div>
 <p><img src="labels_files/figure-html/raw-1.png" width="576" style="display: block; margin: auto;"></p>
+<p>One option is to simply omit those labels that don’t fit within their strata. In response to <a href="https://github.com/corybrunson/ggalluvial/issues/27">an issue</a>, <code>v0.9.2</code> includes parameters in <code><a href="../reference/stat_stratum.html">stat_stratum()</a></code> to exclude strata outside a specified height range; while few would use this to omit the rectangles themselves, it can be used in tandem with <code>geom_text()</code> to shirk this problem, at least when the labels are concise:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(vaccinations,
+       <span class="kw">aes</span>(<span class="dt">x =</span> survey, <span class="dt">stratum =</span> response, <span class="dt">alluvium =</span> subject, <span class="dt">y =</span> freq,
+           <span class="dt">fill =</span> response, <span class="dt">label =</span> response)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">expand =</span> <span class="kw">c</span>(.<span class="dv">1</span>, <span class="dv">0</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="../reference/geom_flow.html">geom_flow</a></span>(<span class="dt">width =</span> <span class="dv">1</span><span class="op">/</span><span class="dv">4</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="../reference/geom_stratum.html">geom_stratum</a></span>(<span class="dt">alpha =</span> .<span class="dv">5</span>, <span class="dt">width =</span> <span class="dv">1</span><span class="op">/</span><span class="dv">4</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">stat =</span> <span class="st">"stratum"</span>, <span class="dt">size =</span> <span class="dv">4</span>, <span class="dt">min.height =</span> <span class="dv">100</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">"none"</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(
+    <span class="st">"vaccination survey responses"</span>,
+    <span class="st">"labeled using `geom_text()` with `min.height = 100`"</span>
+  )</code></pre></div>
+<p><img src="labels_files/figure-html/omit-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div id="solutions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#solutions" class="anchor"></a>Solutions</h2>
-<p>Two <strong>ggplot2</strong> extensions are well-suited to this problem: <a href="https://github.com/slowkow/ggrepel"><strong>ggrepel</strong></a> and <a href="https://github.com/wilkox/ggfittext"><strong>ggfittext</strong></a>. They provide new geom layers that use the output of existing stat layers to situate text: <code><a href="http://www.rdocumentation.org/packages/ggrepel/topics/geom_text_repel">ggrepel::geom_text_repel()</a></code> takes the same aesthetics as <code><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_text">ggplot2::geom_text()</a></code>, namely <code>x</code>, <code>y</code>, and <code>label</code>. In contrast, <code><a href="http://www.rdocumentation.org/packages/ggfittext/topics/geom_fit_text">ggfittext::geom_fit_text()</a></code> only specifically requires <code>label</code> but also needs enough information to determine the rectangle that will contain the text. This can be encoded as <code>xmin</code> and <code>xmax</code> or as <code>x</code> and <code>width</code> for the horizontal direction, and as <code>ymin</code> and <code>ymax</code> or as <code>y</code> and <code>height</code> for the vertical direction. Conveniently, <code><a href="../reference/stat_stratum.html">ggalluvial::stat_stratum()</a></code> produces more than enough information for both geoms, including <code>x</code>, <code>xmin</code>, <code>xmax</code>, and their vertical counterparts.</p>
+<p>Two <strong>ggplot2</strong> extensions are well-suited to this problem: <a href="https://github.com/slowkow/ggrepel"><strong>ggrepel</strong></a> and <a href="https://github.com/wilkox/ggfittext"><strong>ggfittext</strong></a>. They provide new geom layers that use the output of existing stat layers to situate text: <code><a href="http://www.rdocumentation.org/packages/ggrepel/topics/geom_text_repel">ggrepel::geom_text_repel()</a></code> takes the same aesthetics as <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">ggplot2::geom_text()</a></code>, namely <code>x</code>, <code>y</code>, and <code>label</code>. In contrast, <code><a href="http://www.rdocumentation.org/packages/ggfittext/topics/geom_fit_text">ggfittext::geom_fit_text()</a></code> only specifically requires <code>label</code> but also needs enough information to determine the rectangle that will contain the text. This can be encoded as <code>xmin</code> and <code>xmax</code> or as <code>x</code> and <code>width</code> for the horizontal direction, and as <code>ymin</code> and <code>ymax</code> or as <code>y</code> and <code>height</code> for the vertical direction. Conveniently, <code><a href="../reference/stat_stratum.html">ggalluvial::stat_stratum()</a></code> produces more than enough information for both geoms, including <code>x</code>, <code>xmin</code>, <code>xmax</code>, and their vertical counterparts.</p>
 <p>All this can be gleaned from the <code>ggproto</code> objects that construct the layers:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(ggrepel<span class="op">::</span>GeomTextRepel<span class="op">$</span>required_aes)</code></pre></div>
 <pre><code>## [1] "x"     "y"     "label"</code></pre>
@@ -167,7 +181,8 @@
 ## 
 ##   &lt;Inner function (f)&gt;
 ##     function (self, data, scales, decreasing = NA, reverse = TRUE, 
-##     discern = FALSE, label.strata = FALSE) 
+##     discern = FALSE, label.strata = FALSE, min.height = NULL, 
+##     max.height = NULL) 
 ## {
 ##     if (label.strata) {
 ##         if (is.null(data$label)) {
@@ -200,6 +215,12 @@
 ##     data &lt;- transform(data, ymin = ycum - y/2, ymax = ycum + 
 ##         y/2, y = ycum)
 ##     data$ycum &lt;- NULL
+##     if (!is.null(min.height)) {
+##         data &lt;- data[data$ymax - data$ymin &gt;= min.height, , drop = FALSE]
+##     }
+##     if (!is.null(max.height)) {
+##         data &lt;- data[data$ymax - data$ymin &lt;= max.height, , drop = FALSE]
+##     }
 ##     data
 ## }</code></pre>
 <p>I reached the specific solutions through trial and error. They may not be the best tricks for most cases, but they demonstrate what these packages can do. For many more examples, see the respective package vignettes: <a href="https://CRAN.R-project.org/package=ggrepel/vignettes/ggrepel.html">for <strong>ggrepel</strong></a>, and <a href="https://CRAN.R-project.org/package=ggfittext/vignettes/introduction-to-ggfittext.html">for <strong>ggfittext</strong></a>.</p>
@@ -262,7 +283,7 @@
 ##  collate  en_US.UTF-8                 
 ##  ctype    en_US.UTF-8                 
 ##  tz       America/New_York            
-##  date     2018-10-21                  
+##  date     2019-01-18                  
 ## 
 ## ─ Packages ──────────────────────────────────────────────────────────────
 ##  package     * version date       lib source                           
@@ -279,7 +300,7 @@
 ##  dplyr         0.7.6   2018-06-29 [1] CRAN (R 3.3.2)                   
 ##  evaluate      0.11    2018-07-17 [1] CRAN (R 3.3.2)                   
 ##  fs            1.2.6   2018-08-23 [1] CRAN (R 3.3.2)                   
-##  ggalluvial  * 0.9.1   2018-10-21 [1] local (corybrunson/ggalluvial@NA)
+##  ggalluvial  * 0.9.2   2019-01-19 [1] local (corybrunson/ggalluvial@NA)
 ##  ggfittext     0.6.0   2018-07-06 [1] CRAN (R 3.3.2)                   
 ##  ggplot2     * 3.0.0   2018-07-03 [1] CRAN (R 3.3.2)                   
 ##  ggrepel       0.8.0   2018-05-09 [1] CRAN (R 3.3.2)                   
@@ -300,7 +321,7 @@
 ##  purrr         0.2.5   2018-05-29 [1] CRAN (R 3.3.2)                   
 ##  R6            2.2.2   2017-06-17 [1] CRAN (R 3.3.2)                   
 ##  Rcpp          0.12.18 2018-07-23 [1] CRAN (R 3.3.2)                   
-##  rlang         0.2.2   2018-08-16 [1] CRAN (R 3.3.2)                   
+##  rlang         0.3.0.1 2018-10-25 [1] CRAN (R 3.3.2)                   
 ##  rmarkdown     1.10    2018-06-11 [1] CRAN (R 3.3.2)                   
 ##  roxygen2      6.1.0   2018-07-27 [1] CRAN (R 3.3.2)                   
 ##  rprojroot     1.3-2   2018-01-03 [1] CRAN (R 3.3.2)                   
