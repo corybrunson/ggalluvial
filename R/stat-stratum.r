@@ -200,7 +200,8 @@ auto_aggregate <- function(data, by) {
     agg_var <- stats::aggregate(
       x = data[[var]],
       by = data[, by],
-      FUN = if (var %in% c("size", "linetype", "fill", "color", "alpha",
+      FUN = if (var %in% c("size", "linetype", "fill",
+                           "colour", "color", "alpha",
                            "PANEL", "group")) {
         only
       } else {
