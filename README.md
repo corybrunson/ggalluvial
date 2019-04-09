@@ -3,9 +3,9 @@
 
 # ggalluvial
 
-<!--
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/ggalluvial)](https://cran.r-project.org/package=ggalluvial)
--->
+[![Travis build
+status](https://travis-ci.org/corybrunson/ggalluvial.svg?branch=master)](https://travis-ci.org/corybrunson/ggalluvial)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/ggalluvial)](https://cran.r-project.org/package=ggalluvial)
 
 This is a [**ggplot2** extension](http://www.ggplot2-exts.org/) for
 alluvial diagrams.
