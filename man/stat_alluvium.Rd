@@ -27,8 +27,9 @@ data. All objects will be fortified to produce a data frame. See
 \code{\link[=fortify]{fortify()}} for which variables will be created.
 
 A \code{function} will be called with a single argument,
-the plot data. The return value must be a \code{data.frame.}, and
-will be used as the layer data.}
+the plot data. The return value must be a \code{data.frame}, and
+will be used as the layer data. A \code{function} can be created
+from a \code{formula} (e.g. \code{~ head(.x, 10)}).}
 
 \item{geom}{The geometric object to use display the data;
 override the default.}
@@ -155,6 +156,19 @@ gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
 lode_ord <- replicate(n = 3, expr = sample(x = 32), simplify = FALSE)
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
                lode.ordering = lode_ord)
+# use of custom luide guidance function
+lode_custom <- function(n, i) {
+  stopifnot(n == 4)
+  switch(
+    i,
+    `1` = 1:4,
+    `2` = c(2,3,1,4),
+    `3` = c(3,2,4,1),
+    `4` = 4:1
+  )
+}
+gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
+               aes.bind = TRUE, lode.guidance = "custom")
 
 data(majors)
 # omit missing lodes and incident flows

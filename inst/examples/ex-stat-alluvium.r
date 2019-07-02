@@ -21,6 +21,19 @@ gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
 lode_ord <- replicate(n = 3, expr = sample(x = 32), simplify = FALSE)
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
                lode.ordering = lode_ord)
+# use of custom luide guidance function
+lode_custom <- function(n, i) {
+  stopifnot(n == 4)
+  switch(
+    i,
+    `1` = 1:4,
+    `2` = c(2,3,1,4),
+    `3` = c(3,2,4,1),
+    `4` = 4:1
+  )
+}
+gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
+               aes.bind = TRUE, lode.guidance = "custom")
 
 data(majors)
 # omit missing lodes and incident flows
