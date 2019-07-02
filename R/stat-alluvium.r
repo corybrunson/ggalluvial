@@ -10,26 +10,24 @@
 
 #' @import ggplot2
 #' @family alluvial stat layers
-#' @seealso [ggplot2::layer()] for additional arguments and
-#'   [geom_alluvium()],
-#'   [geom_lode()], and
-#'   [geom_flow()] for the corresponding geoms.
+#' @seealso [ggplot2::layer()] for additional arguments and [geom_alluvium()],
+#'   [geom_lode()], and [geom_flow()] for the corresponding geoms.
 #' @inheritParams stat_flow
 #' @param aggregate.y Whether to aggregate weights across otherwise equivalent
 #'   rows before computing lode and flow positions. Set to `TRUE` to group
-#'   observations into cohorts.
-#'   **Warning**: This is currently an expensive operation.
+#'   observations into cohorts. **Warning**: This is currently an expensive
+#'   operation.
 #' @param aggregate.wts Deprecated alias for `aggregate.y`.
 #' @param lode.guidance The function to prioritize the axis variables for
-#'   ordering the lodes within each stratum. Options are "zigzag", "rightleft",
-#'   "leftright", "rightward", and "leftward" (see
-#'   [`lode-guidance-functions`]).
+#'   ordering the lodes within each stratum, or else a character string
+#'   identifying the function. Character options are "zigzag", "rightleft",
+#'   "leftright", "rightward", and "leftward" (see [`lode-guidance-functions`]).
 #' @param lode.ordering A list (of length the number of axes) of integer vectors
-#'   (each of length the number of rows of `data`) or NULL entries
-#'   (indicating no imposed ordering), or else a numeric matrix of corresponding
-#'   dimensions, giving the preferred ordering of alluvia at each axis. This
-#'   will be used to order the lodes within each stratum by sorting the lodes
-#'   first by stratum and then by the provided vectors.
+#'   (each of length the number of rows of `data`) or NULL entries (indicating
+#'   no imposed ordering), or else a numeric matrix of corresponding dimensions,
+#'   giving the preferred ordering of alluvia at each axis. This will be used to
+#'   order the lodes within each stratum by sorting the lodes first by stratum
+#'   and then by the provided vectors.
 #' @example inst/examples/ex-stat-alluvium.r
 #' @export
 stat_alluvium <- function(mapping = NULL,
@@ -182,12 +180,15 @@ StatAlluvium <- ggproto(
     # if `lode.ordering` not provided, generate it
     if (is.null(lode.ordering)) {
       # invoke surrounding axes in the order prescribed by `lode.guidance`
-      lode_fun <- get(paste0("lode_", lode.guidance))
+      if (is.character(lode.guidance)) {
+        lode.guidance <- get(paste0("lode_", lode.guidance))
+      }
+      stopifnot(is.function(lode.guidance))
       # construct a matrix of orderings
       lode.ordering <- do.call(cbind, lapply(seq_along(alluv_ind), function(i) {
 
         # order surrounding axes according to `lode.guidance`
-        axis_seq <- alluv_ind[lode_fun(n = length(alluv_ind), i = i)]
+        axis_seq <- alluv_ind[lode.guidance(n = length(alluv_ind), i = i)]
         # order axis aesthetics ...
         aes_dat <- data[data$x == names(alluv)[alluv_ind[i]],
                         c("alluvium", aesthetics),

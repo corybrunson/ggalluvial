@@ -23,15 +23,16 @@ gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
                lode.ordering = lode_ord)
 # use of custom luide guidance function
 lode_custom <- function(n, i) {
-  stopifnot(n == 4)
+  stopifnot(n == 3)
   switch(
     i,
-    `1` = 1:4,
-    `2` = c(2,3,1,4),
-    `3` = c(3,2,4,1),
-    `4` = 4:1
+    `1` = 1:3,
+    `2` = c(2, 3, 1),
+    `3` = 3:1
   )
 }
+gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
+               aes.bind = TRUE, lode.guidance = lode_custom)
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
                aes.bind = TRUE, lode.guidance = "custom")
 

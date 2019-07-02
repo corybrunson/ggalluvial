@@ -1,3 +1,9 @@
+# next version
+
+## Custom lode guidance functions
+
+The `lode.guidance` argument of `stat_alluvial()` now accepts functions as input, making the use of custom functions easier as demonstrated in an example.
+
 # ggalluvial 0.9.2
 
 ## Height limits on strata

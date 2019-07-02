@@ -54,22 +54,22 @@ alluvia format.}
 
 \item{aggregate.y}{Whether to aggregate weights across otherwise equivalent
 rows before computing lode and flow positions. Set to \code{TRUE} to group
-observations into cohorts.
-\strong{Warning}: This is currently an expensive operation.}
+observations into cohorts. \strong{Warning}: This is currently an expensive
+operation.}
 
 \item{aggregate.wts}{Deprecated alias for \code{aggregate.y}.}
 
 \item{lode.guidance}{The function to prioritize the axis variables for
-ordering the lodes within each stratum. Options are "zigzag", "rightleft",
-"leftright", "rightward", and "leftward" (see
-\code{\link{lode-guidance-functions}}).}
+ordering the lodes within each stratum, or else a character string
+identifying the function. Character options are "zigzag", "rightleft",
+"leftright", "rightward", and "leftward" (see \code{\link{lode-guidance-functions}}).}
 
 \item{lode.ordering}{A list (of length the number of axes) of integer vectors
-(each of length the number of rows of \code{data}) or NULL entries
-(indicating no imposed ordering), or else a numeric matrix of corresponding
-dimensions, giving the preferred ordering of alluvia at each axis. This
-will be used to order the lodes within each stratum by sorting the lodes
-first by stratum and then by the provided vectors.}
+(each of length the number of rows of \code{data}) or NULL entries (indicating
+no imposed ordering), or else a numeric matrix of corresponding dimensions,
+giving the preferred ordering of alluvia at each axis. This will be used to
+order the lodes within each stratum by sorting the lodes first by stratum
+and then by the provided vectors.}
 
 \item{na.rm}{Logical:
 if \code{FALSE}, the default, \code{NA} lodes are not included;
@@ -158,15 +158,16 @@ gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
                lode.ordering = lode_ord)
 # use of custom luide guidance function
 lode_custom <- function(n, i) {
-  stopifnot(n == 4)
+  stopifnot(n == 3)
   switch(
     i,
-    `1` = 1:4,
-    `2` = c(2,3,1,4),
-    `3` = c(3,2,4,1),
-    `4` = 4:1
+    `1` = 1:3,
+    `2` = c(2, 3, 1),
+    `3` = 3:1
   )
 }
+gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
+               aes.bind = TRUE, lode.guidance = lode_custom)
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
                aes.bind = TRUE, lode.guidance = "custom")
 
@@ -220,10 +221,8 @@ ggplot(data = bn2,
 }
 }
 \seealso{
-\code{\link[ggplot2:layer]{ggplot2::layer()}} for additional arguments and
-\code{\link[=geom_alluvium]{geom_alluvium()}},
-\code{\link[=geom_lode]{geom_lode()}}, and
-\code{\link[=geom_flow]{geom_flow()}} for the corresponding geoms.
+\code{\link[ggplot2:layer]{ggplot2::layer()}} for additional arguments and \code{\link[=geom_alluvium]{geom_alluvium()}},
+\code{\link[=geom_lode]{geom_lode()}}, and \code{\link[=geom_flow]{geom_flow()}} for the corresponding geoms.
 
 Other alluvial stat layers: \code{\link{stat_flow}},
   \code{\link{stat_stratum}}
