@@ -21,11 +21,25 @@ gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
 lode_ord <- replicate(n = 3, expr = sample(x = 32), simplify = FALSE)
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
                lode.ordering = lode_ord)
+# use of custom luide guidance function
+lode_custom <- function(n, i) {
+  stopifnot(n == 3)
+  switch(
+    i,
+    `1` = 1:3,
+    `2` = c(2, 3, 1),
+    `3` = 3:1
+  )
+}
+gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
+               aes.bind = TRUE, lode.guidance = lode_custom)
+gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
+               aes.bind = TRUE, lode.guidance = "custom")
 
 data(majors)
 # omit missing lodes and incident flows
 ggplot(majors,
-             aes(x = semester, stratum = curriculum, alluvium = student)) +
+       aes(x = semester, stratum = curriculum, alluvium = student)) +
   geom_alluvium(fill = "darkgrey", na.rm = TRUE) +
   geom_stratum(aes(fill = curriculum), color = NA, na.rm = TRUE) +
   theme_bw()
@@ -49,24 +63,24 @@ gg + geom_flow(stat = "alluvium", lode.guidance = "rightleft",
                color = "black", aggregate.y = TRUE)
 
 \dontrun{
-  data(babynames, package = "babynames")
-  # a discontiguous alluvium
-  bn <- dplyr::filter(babynames,
-                      prop >= .01 & sex == "F" &
-                        year > 1962 & year < 1968)
-  ggplot(data = bn,
-         aes(x = year, alluvium = name, y = prop)) +
-    geom_alluvium(aes(fill = name, color = name == "Tammy"),
-                  decreasing = TRUE, show.legend = FALSE) +
-    scale_color_manual(values = c("#00000000", "#000000"))
-  # filling in missing zeros
-  bn2 <- merge(bn,
-               expand.grid(year = unique(bn$year), name = unique(bn$name)),
-               all = TRUE)
-  bn2$prop[is.na(bn2$prop)] <- 0
-  ggplot(data = bn2,
-         aes(x = year, alluvium = name, y = prop)) +
-    geom_alluvium(aes(fill = name, color = name == "Tammy"),
-                  decreasing = TRUE, show.legend = FALSE) +
-    scale_color_manual(values = c("#00000000", "#000000"))
+data(babynames, package = "babynames")
+# a discontiguous alluvium
+bn <- dplyr::filter(babynames,
+                    prop >= .01 & sex == "F" &
+                      year > 1962 & year < 1968)
+ggplot(data = bn,
+       aes(x = year, alluvium = name, y = prop)) +
+  geom_alluvium(aes(fill = name, color = name == "Tammy"),
+                decreasing = TRUE, show.legend = FALSE) +
+  scale_color_manual(values = c("#00000000", "#000000"))
+# filling in missing zeros
+bn2 <- merge(bn,
+             expand.grid(year = unique(bn$year), name = unique(bn$name)),
+             all = TRUE)
+bn2$prop[is.na(bn2$prop)] <- 0
+ggplot(data = bn2,
+       aes(x = year, alluvium = name, y = prop)) +
+  geom_alluvium(aes(fill = name, color = name == "Tammy"),
+                decreasing = TRUE, show.legend = FALSE) +
+  scale_color_manual(values = c("#00000000", "#000000"))
 }

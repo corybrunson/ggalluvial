@@ -32,10 +32,10 @@
 
 <meta property="og:title" content="Lodes at intersections of alluvia and strata — geom_lode" />
 
-<meta property="og:description" content="geom_alluvium receives a dataset of the horizontal (x) and
-vertical (y, ymin, ymax) positions of the lodes
-of an alluvial diagram, the intersections of the alluvia with the strata.
-It plots rectangles for these lodes of a provided width." />
+<meta property="og:description" content="geom_alluvium receives a dataset of the horizontal (x) and vertical (y,
+ymin, ymax) positions of the lodes of an alluvial diagram, the
+intersections of the alluvia with the strata. It plots rectangles for these
+lodes of a provided width." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -64,7 +64,7 @@ It plots rectangles for these lodes of a provided width." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.2</span>
       </span>
     </div>
 
@@ -120,16 +120,16 @@ It plots rectangles for these lodes of a provided width." />
 
     <div class="ref-description">
     
-    <p><code>geom_alluvium</code> receives a dataset of the horizontal (<code>x</code>) and
-vertical (<code>y</code>, <code>ymin</code>, <code>ymax</code>) positions of the <strong>lodes</strong>
-of an alluvial diagram, the intersections of the alluvia with the strata.
-It plots rectangles for these lodes of a provided <code>width</code>.</p>
+    <p><code>geom_alluvium</code> receives a dataset of the horizontal (<code>x</code>) and vertical (<code>y</code>,
+<code>ymin</code>, <code>ymax</code>) positions of the <strong>lodes</strong> of an alluvial diagram, the
+intersections of the alluvia with the strata. It plots rectangles for these
+lodes of a provided <code>width</code>.</p>
     
     </div>
 
     <pre class="usage"><span class='fu'>geom_lode</span>(<span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
-  <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"identity"</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>3</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"identity"</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>3</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -193,16 +193,15 @@ the default plot specification, e.g. <code>borders()</code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Additional arguments passed to <code><a href='http://www.rdocumentation.org/packages/ggplot2/topics/layer'>layer</a></code>.</p></td>
+      <td><p>Additional arguments passed to <code><a href='https://ggplot2.tidyverse.org/reference/layer.html'>ggplot2::layer()</a></code>.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="aesthetics"><a class="anchor" href="#aesthetics"></a>Aesthetics</h2>
 
     
-    <p><code>geom_alluvium</code>, <code>geom_flow</code>, <code>geom_lode</code>, and
-<code>geom_stratum</code> understand the following aesthetics (required aesthetics
-are in bold):</p><ul>
+    <p><code>geom_alluvium</code>, <code>geom_flow</code>, <code>geom_lode</code>, and <code>geom_stratum</code> understand the
+following aesthetics (required aesthetics are in bold):</p><ul>
 <li><p><strong><code>x</code></strong></p></li>
 <li><p><strong><code>y</code></strong></p></li>
 <li><p><strong><code>ymin</code></strong></p></li>
@@ -213,19 +212,20 @@ are in bold):</p><ul>
 <li><p><code>linetype</code></p></li>
 <li><p><code>size</code></p></li>
 <li><p><code>group</code></p></li>
-</ul><p><code>group</code> is used internally; arguments are ignored.</p>
+</ul>
+    <p><code>group</code> is used internally; arguments are ignored.</p>
     
     <h2 class="hasAnchor" id="defunct-parameters"><a class="anchor" href="#defunct-parameters"></a>Defunct parameters</h2>
 
     
-    <p>The previously deprecated parameters <code>axis_width</code> and <code>ribbon_bend</code>
-are now defunct. Use <code>width</code> and <code>knot.pos</code> instead.</p>
+    <p>The previously deprecated parameters <code>axis_width</code> and <code>ribbon_bend</code> are now
+defunct. Use <code>width</code> and <code>knot.pos</code> instead.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='http://www.rdocumentation.org/packages/ggplot2/topics/layer'>layer</a></code> for additional arguments and
-  <code><a href='stat_alluvium.html'>stat_alluvium</a></code> and
-  <code><a href='stat_stratum.html'>stat_stratum</a></code> for the corresponding stats.</p>
+    <div class='dont-index'><p><code><a href='https://ggplot2.tidyverse.org/reference/layer.html'>ggplot2::layer()</a></code> for additional arguments and
+<code><a href='stat_alluvium.html'>stat_alluvium()</a></code> and
+<code><a href='stat_stratum.html'>stat_stratum()</a></code> for the corresponding stats.</p>
 <p>Other alluvial geom layers: <code><a href='geom_alluvium.html'>geom_alluvium</a></code>,
   <code><a href='geom_flow.html'>geom_flow</a></code>, <code><a href='geom_stratum.html'>geom_stratum</a></code></p></div>
     

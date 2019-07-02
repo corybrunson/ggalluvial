@@ -23,7 +23,7 @@ levels(vaccinations$response) <- rev(levels(vaccinations$response))
 
 ## Problem
 
-The issue on the table: Strata are most helpful when they're overlaid with text labels. Yet the strata often vary in height, and the labels in length, to such a degree that fitting the text inside the strata at a uniform size renders them illegible. In principle, the user could treat `size` as a variable aesthetic and manually fit text to strata, but this is cumbersome, and doesn't help anyway in cases where large text is needed. Fortunately, two wonderful packages provide more elegant solutions.
+The issue on the table: Strata are most helpful when they're overlaid with text labels. Yet the strata often vary in height, and the labels in length, to such a degree that fitting the text inside the strata at a uniform size renders them illegible. In principle, the user could treat `size` as a variable aesthetic and manually fit text to strata, but this is cumbersome, and doesn't help anyway in cases where large text is needed.
 
 To illustrate the problem, check out the diagram below. It's by no means an egregious case, but it'll do. (For a more practical example, see [this question on StackOverflow](https://stackoverflow.com/questions/50720718/labelling-and-theme-of-ggalluvial-plot-in-r), which prompted this vignette.)
 
@@ -38,6 +38,27 @@ ggplot(vaccinations,
   theme(legend.position = "none") +
   ggtitle("vaccination survey responses", "labeled using `geom_text()`")
 ```
+
+### Fix
+
+One option is to simply omit those labels that don't fit within their strata. In response to [an issue](https://github.com/corybrunson/ggalluvial/issues/27), `v0.9.2` includes parameters in `stat_stratum()` to exclude strata outside a specified height range; while few would use this to omit the rectangles themselves, it can be used in tandem with `geom_text()` to shirk this problem, at least when the labels are concise:
+
+```{r omit}
+ggplot(vaccinations,
+       aes(x = survey, stratum = response, alluvium = subject, y = freq,
+           fill = response, label = response)) +
+  scale_x_discrete(expand = c(.1, 0)) +
+  geom_flow(width = 1/4) +
+  geom_stratum(alpha = .5, width = 1/4) +
+  geom_text(stat = "stratum", size = 4, min.height = 100) +
+  theme(legend.position = "none") +
+  ggtitle(
+    "vaccination survey responses",
+    "labeled using `geom_text()` with `min.height = 100`"
+  )
+```
+
+This is a useful fix for some cases. Still, if the goal is a publication-ready graphic, then it reaffirms the need for more adaptable and elegant solutions. Fortunately, two wonderful packages deliver with, shall we say, flowing colors.
 
 ## Solutions
 

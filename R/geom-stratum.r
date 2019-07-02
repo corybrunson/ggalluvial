@@ -1,17 +1,16 @@
 #' Strata at axes
 #'
-#' \code{geom_stratum} receives a dataset of the horizontal (\code{x}) and
-#' vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the strata of an
-#' alluvial diagram.
-#' It plots rectangles for these strata of a provided \code{width}.
+#' `geom_stratum` receives a dataset of the horizontal (`x`) and vertical (`y`,
+#' `ymin`, `ymax`) positions of the strata of an alluvial diagram. It plots
+#' rectangles for these strata of a provided `width`.
 #' @template geom-aesthetics
 #' @template defunct-geom-params
 #'
 
 #' @import ggplot2
 #' @family alluvial geom layers
-#' @seealso \code{\link[ggplot2]{layer}} for additional arguments and
-#'   \code{\link{stat_stratum}} for the corresponding stat.
+#' @seealso [ggplot2::layer()] for additional arguments and
+#'   [stat_stratum()] for the corresponding stat.
 #' @inheritParams geom_lode
 #' @example inst/examples/ex-geom-stratum.r
 #' @export

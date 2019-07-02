@@ -18,7 +18,7 @@
 Base ggproto classes for ggalluvial
 }
 \seealso{
-\code{\link[ggplot2]{ggplot2-ggproto}}
+\code{\link[ggplot2:ggplot2-ggproto]{ggplot2::ggplot2-ggproto}}
 }
 \keyword{datasets}
 \keyword{internal}

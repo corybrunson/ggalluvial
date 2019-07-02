@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.2</span>
       </span>
     </div>
 
@@ -78,7 +78,7 @@
       <h1>Labeling small strata</h1>
                         <h4 class="author">Jason Cory Brunson</h4>
             
-            <h4 class="date">2018-10-11</h4>
+            <h4 class="date">2019-01-18</h4>
       
       
       <div class="hidden name"><code>labels.rmd</code></div>
@@ -100,7 +100,7 @@
 <div id="problem" class="section level2">
 <h2 class="hasAnchor">
 <a href="#problem" class="anchor"></a>Problem</h2>
-<p>The issue on the table: Strata are most helpful when they’re overlaid with text labels. Yet the strata often vary in height, and the labels in length, to such a degree that fitting the text inside the strata at a uniform size renders them illegible. In principle, the user could treat <code>size</code> as a variable aesthetic and manually fit text to strata, but this is cumbersome, and doesn’t help anyway in cases where large text is needed. Fortunately, two wonderful packages provide more elegant solutions.</p>
+<p>The issue on the table: Strata are most helpful when they’re overlaid with text labels. Yet the strata often vary in height, and the labels in length, to such a degree that fitting the text inside the strata at a uniform size renders them illegible. In principle, the user could treat <code>size</code> as a variable aesthetic and manually fit text to strata, but this is cumbersome, and doesn’t help anyway in cases where large text is needed.</p>
 <p>To illustrate the problem, check out the diagram below. It’s by no means an egregious case, but it’ll do. (For a more practical example, see <a href="https://stackoverflow.com/questions/50720718/labelling-and-theme-of-ggalluvial-plot-in-r">this question on StackOverflow</a>, which prompted this vignette.)</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(vaccinations,
        <span class="kw">aes</span>(<span class="dt">x =</span> survey, <span class="dt">stratum =</span> response, <span class="dt">alluvium =</span> subject, <span class="dt">y =</span> freq,
@@ -112,11 +112,30 @@
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">"none"</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">"vaccination survey responses"</span>, <span class="st">"labeled using `geom_text()`"</span>)</code></pre></div>
 <p><img src="labels_files/figure-html/raw-1.png" width="576" style="display: block; margin: auto;"></p>
+<div id="fix" class="section level3">
+<h3 class="hasAnchor">
+<a href="#fix" class="anchor"></a>Fix</h3>
+<p>One option is to simply omit those labels that don’t fit within their strata. In response to <a href="https://github.com/corybrunson/ggalluvial/issues/27">an issue</a>, <code>v0.9.2</code> includes parameters in <code><a href="../reference/stat_stratum.html">stat_stratum()</a></code> to exclude strata outside a specified height range; while few would use this to omit the rectangles themselves, it can be used in tandem with <code>geom_text()</code> to shirk this problem, at least when the labels are concise:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(vaccinations,
+       <span class="kw">aes</span>(<span class="dt">x =</span> survey, <span class="dt">stratum =</span> response, <span class="dt">alluvium =</span> subject, <span class="dt">y =</span> freq,
+           <span class="dt">fill =</span> response, <span class="dt">label =</span> response)) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_discrete</span>(<span class="dt">expand =</span> <span class="kw">c</span>(.<span class="dv">1</span>, <span class="dv">0</span>)) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="../reference/geom_flow.html">geom_flow</a></span>(<span class="dt">width =</span> <span class="dv">1</span><span class="op">/</span><span class="dv">4</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="../reference/geom_stratum.html">geom_stratum</a></span>(<span class="dt">alpha =</span> .<span class="dv">5</span>, <span class="dt">width =</span> <span class="dv">1</span><span class="op">/</span><span class="dv">4</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">stat =</span> <span class="st">"stratum"</span>, <span class="dt">size =</span> <span class="dv">4</span>, <span class="dt">min.height =</span> <span class="dv">100</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">"none"</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">ggtitle</span>(
+    <span class="st">"vaccination survey responses"</span>,
+    <span class="st">"labeled using `geom_text()` with `min.height = 100`"</span>
+  )</code></pre></div>
+<p><img src="labels_files/figure-html/omit-1.png" width="576" style="display: block; margin: auto;"></p>
+<p>This is a useful fix for some cases. Still, if the goal is a publication-ready graphic, then it reaffirms the need for more adaptable and elegant solutions. Fortunately, two wonderful packages deliver with, shall we say, flowing colors.</p>
+</div>
 </div>
 <div id="solutions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#solutions" class="anchor"></a>Solutions</h2>
-<p>Two <strong>ggplot2</strong> extensions are well-suited to this problem: <a href="https://github.com/slowkow/ggrepel"><strong>ggrepel</strong></a> and <a href="https://github.com/wilkox/ggfittext"><strong>ggfittext</strong></a>. They provide new geom layers that use the output of existing stat layers to situate text: <code><a href="http://www.rdocumentation.org/packages/ggrepel/topics/geom_text_repel">ggrepel::geom_text_repel()</a></code> takes the same aesthetics as <code><a href="http://www.rdocumentation.org/packages/ggplot2/topics/geom_text">ggplot2::geom_text()</a></code>, namely <code>x</code>, <code>y</code>, and <code>label</code>. In contrast, <code><a href="http://www.rdocumentation.org/packages/ggfittext/topics/geom_fit_text">ggfittext::geom_fit_text()</a></code> only specifically requires <code>label</code> but also needs enough information to determine the rectangle that will contain the text. This can be encoded as <code>xmin</code> and <code>xmax</code> or as <code>x</code> and <code>width</code> for the horizontal direction, and as <code>ymin</code> and <code>ymax</code> or as <code>y</code> and <code>height</code> for the vertical direction. Conveniently, <code><a href="../reference/stat_stratum.html">ggalluvial::stat_stratum()</a></code> produces more than enough information for both geoms, including <code>x</code>, <code>xmin</code>, <code>xmax</code>, and their vertical counterparts.</p>
+<p>Two <strong>ggplot2</strong> extensions are well-suited to this problem: <a href="https://github.com/slowkow/ggrepel"><strong>ggrepel</strong></a> and <a href="https://github.com/wilkox/ggfittext"><strong>ggfittext</strong></a>. They provide new geom layers that use the output of existing stat layers to situate text: <code><a href="http://www.rdocumentation.org/packages/ggrepel/topics/geom_text_repel">ggrepel::geom_text_repel()</a></code> takes the same aesthetics as <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">ggplot2::geom_text()</a></code>, namely <code>x</code>, <code>y</code>, and <code>label</code>. In contrast, <code><a href="http://www.rdocumentation.org/packages/ggfittext/topics/geom_fit_text">ggfittext::geom_fit_text()</a></code> only specifically requires <code>label</code> but also needs enough information to determine the rectangle that will contain the text. This can be encoded as <code>xmin</code> and <code>xmax</code> or as <code>x</code> and <code>width</code> for the horizontal direction, and as <code>ymin</code> and <code>ymax</code> or as <code>y</code> and <code>height</code> for the vertical direction. Conveniently, <code><a href="../reference/stat_stratum.html">ggalluvial::stat_stratum()</a></code> produces more than enough information for both geoms, including <code>x</code>, <code>xmin</code>, <code>xmax</code>, and their vertical counterparts.</p>
 <p>All this can be gleaned from the <code>ggproto</code> objects that construct the layers:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">print</span>(ggrepel<span class="op">::</span>GeomTextRepel<span class="op">$</span>required_aes)</code></pre></div>
 <pre><code>## [1] "x"     "y"     "label"</code></pre>
@@ -167,7 +186,8 @@
 ## 
 ##   &lt;Inner function (f)&gt;
 ##     function (self, data, scales, decreasing = NA, reverse = TRUE, 
-##     discern = FALSE, label.strata = FALSE) 
+##     discern = FALSE, label.strata = FALSE, min.height = NULL, 
+##     max.height = NULL) 
 ## {
 ##     if (label.strata) {
 ##         if (is.null(data$label)) {
@@ -200,6 +220,12 @@
 ##     data &lt;- transform(data, ymin = ycum - y/2, ymax = ycum + 
 ##         y/2, y = ycum)
 ##     data$ycum &lt;- NULL
+##     if (!is.null(min.height)) {
+##         data &lt;- data[data$ymax - data$ymin &gt;= min.height, , drop = FALSE]
+##     }
+##     if (!is.null(max.height)) {
+##         data &lt;- data[data$ymax - data$ymin &lt;= max.height, , drop = FALSE]
+##     }
 ##     data
 ## }</code></pre>
 <p>I reached the specific solutions through trial and error. They may not be the best tricks for most cases, but they demonstrate what these packages can do. For many more examples, see the respective package vignettes: <a href="https://CRAN.R-project.org/package=ggrepel/vignettes/ggrepel.html">for <strong>ggrepel</strong></a>, and <a href="https://CRAN.R-project.org/package=ggfittext/vignettes/introduction-to-ggfittext.html">for <strong>ggfittext</strong></a>.</p>
@@ -254,7 +280,7 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">sessioninfo<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/sessioninfo/topics/session_info">session_info</a></span>()</code></pre></div>
 <pre><code>## ─ Session info ──────────────────────────────────────────────────────────
 ##  setting  value                       
-##  version  R version 3.3.3 (2017-03-06)
+##  version  R version 3.3.2 (2016-10-31)
 ##  os       OS X Mavericks 10.9.5       
 ##  system   x86_64, darwin13.4.0        
 ##  ui       X11                         
@@ -262,59 +288,58 @@
 ##  collate  en_US.UTF-8                 
 ##  ctype    en_US.UTF-8                 
 ##  tz       America/New_York            
-##  date     2018-10-11                  
+##  date     2019-01-18                  
 ## 
 ## ─ Packages ──────────────────────────────────────────────────────────────
-##  package     * version    date       lib source                           
-##  assertthat    0.2.0      2017-04-11 [1] CRAN (R 3.3.2)                   
-##  backports     1.1.2      2017-12-13 [1] CRAN (R 3.3.2)                   
-##  bindr         0.1.1      2018-03-13 [1] CRAN (R 3.3.3)                   
-##  bindrcpp      0.2.2      2018-03-29 [1] CRAN (R 3.3.3)                   
-##  cli           1.0.1      2018-09-25 [1] CRAN (R 3.3.3)                   
-##  colorspace    1.3-2      2016-12-14 [1] CRAN (R 3.3.2)                   
-##  commonmark    1.5        2018-04-28 [1] CRAN (R 3.3.3)                   
-##  crayon        1.3.4      2017-09-16 [1] CRAN (R 3.3.2)                   
-##  desc          1.2.0      2018-05-01 [1] CRAN (R 3.3.3)                   
-##  digest        0.6.17     2018-09-12 [1] CRAN (R 3.3.3)                   
-##  dplyr         0.7.6      2018-06-29 [1] CRAN (R 3.3.3)                   
-##  evaluate      0.11       2018-07-17 [1] CRAN (R 3.3.3)                   
-##  fs            1.2.6      2018-08-23 [1] CRAN (R 3.3.3)                   
-##  ggalluvial  * 0.9.1      2018-10-11 [1] local (corybrunson/ggalluvial@NA)
-##  ggfittext     0.6.0      2018-07-06 [1] CRAN (R 3.3.3)                   
-##  ggplot2     * 3.0.0      2018-07-03 [1] CRAN (R 3.3.3)                   
-##  ggrepel       0.8.0      2018-05-09 [1] CRAN (R 3.3.3)                   
-##  glue          1.3.0      2018-07-17 [1] CRAN (R 3.3.3)                   
-##  gtable        0.2.0      2016-02-26 [1] CRAN (R 3.3.0)                   
-##  htmltools     0.3.6      2017-04-28 [1] CRAN (R 3.3.2)                   
-##  knitr         1.20.15    2018-09-10 [1] Github (yihui/knitr@4cf7a6f)     
-##  labeling      0.3        2014-08-23 [1] CRAN (R 3.3.0)                   
-##  lazyeval      0.2.1      2017-10-29 [1] CRAN (R 3.3.2)                   
-##  magrittr      1.5        2014-11-22 [1] CRAN (R 3.3.0)                   
-##  MASS          7.3-50     2018-04-30 [1] CRAN (R 3.3.3)                   
-##  memoise       1.1.0      2017-04-21 [1] CRAN (R 3.3.2)                   
-##  munsell       0.5.0      2018-06-12 [1] CRAN (R 3.3.3)                   
-##  pillar        1.3.0.9000 2018-09-26 [1] Github (r-lib/pillar@7be5b8a)    
-##  pkgconfig     2.0.2      2018-08-16 [1] CRAN (R 3.3.3)                   
-##  pkgdown       1.1.0      2018-06-02 [1] CRAN (R 3.3.3)                   
-##  plyr          1.8.4      2016-06-08 [1] CRAN (R 3.3.0)                   
-##  purrr         0.2.5      2018-05-29 [1] CRAN (R 3.3.3)                   
-##  R6            2.2.2      2017-06-17 [1] CRAN (R 3.3.2)                   
-##  Rcpp          0.12.18    2018-07-23 [1] CRAN (R 3.3.3)                   
-##  rlang         0.2.2      2018-08-16 [1] CRAN (R 3.3.3)                   
-##  rmarkdown     1.10       2018-06-11 [1] CRAN (R 3.3.3)                   
-##  roxygen2      6.1.0      2018-07-27 [1] CRAN (R 3.3.3)                   
-##  rprojroot     1.3-2      2018-01-03 [1] CRAN (R 3.3.3)                   
-##  scales        1.0.0      2018-08-09 [1] CRAN (R 3.3.3)                   
-##  sessioninfo   1.1.0      2018-09-25 [1] CRAN (R 3.3.3)                   
-##  stringi       1.2.4      2018-07-20 [1] CRAN (R 3.3.3)                   
-##  stringr       1.3.1      2018-05-10 [1] CRAN (R 3.3.3)                   
-##  tibble        1.4.2      2018-01-22 [1] CRAN (R 3.3.3)                   
-##  tidyr         0.8.1      2018-05-18 [1] CRAN (R 3.3.3)                   
-##  tidyselect    0.2.4      2018-02-26 [1] CRAN (R 3.3.3)                   
-##  withr         2.1.2      2018-09-10 [1] Github (jimhester/withr@8b9cee2) 
-##  xfun          0.3        2018-07-06 [1] CRAN (R 3.3.3)                   
-##  xml2          1.1.1      2017-01-24 [1] CRAN (R 3.3.2)                   
-##  yaml          2.2.0      2018-07-25 [1] CRAN (R 3.3.3)                   
+##  package     * version date       lib source                           
+##  assertthat    0.2.0   2017-04-11 [1] CRAN (R 3.3.2)                   
+##  backports     1.1.2   2017-12-13 [1] CRAN (R 3.3.2)                   
+##  bindr         0.1.1   2018-03-13 [1] CRAN (R 3.3.2)                   
+##  bindrcpp      0.2.2   2018-03-29 [1] CRAN (R 3.3.2)                   
+##  cli           1.0.1   2018-09-25 [1] CRAN (R 3.3.2)                   
+##  colorspace    1.3-2   2016-12-14 [1] CRAN (R 3.3.2)                   
+##  commonmark    1.5     2018-04-28 [1] CRAN (R 3.3.2)                   
+##  crayon        1.3.4   2017-09-16 [1] CRAN (R 3.3.2)                   
+##  desc          1.2.0   2018-05-01 [1] CRAN (R 3.3.2)                   
+##  digest        0.6.17  2018-09-12 [1] CRAN (R 3.3.2)                   
+##  dplyr         0.7.6   2018-06-29 [1] CRAN (R 3.3.2)                   
+##  evaluate      0.11    2018-07-17 [1] CRAN (R 3.3.2)                   
+##  fs            1.2.6   2018-08-23 [1] CRAN (R 3.3.2)                   
+##  ggalluvial  * 0.9.2   2019-01-19 [1] local (corybrunson/ggalluvial@NA)
+##  ggfittext     0.6.0   2018-07-06 [1] CRAN (R 3.3.2)                   
+##  ggplot2     * 3.0.0   2018-07-03 [1] CRAN (R 3.3.2)                   
+##  ggrepel       0.8.0   2018-05-09 [1] CRAN (R 3.3.2)                   
+##  glue          1.3.0   2018-07-17 [1] CRAN (R 3.3.2)                   
+##  gtable        0.2.0   2016-02-26 [1] CRAN (R 3.3.0)                   
+##  htmltools     0.3.6   2017-04-28 [1] CRAN (R 3.3.2)                   
+##  knitr         1.20    2018-02-20 [1] CRAN (R 3.3.2)                   
+##  labeling      0.3     2014-08-23 [1] CRAN (R 3.3.0)                   
+##  lazyeval      0.2.1   2017-10-29 [1] CRAN (R 3.3.2)                   
+##  magrittr      1.5     2014-11-22 [1] CRAN (R 3.3.0)                   
+##  MASS          7.3-50  2018-04-30 [1] CRAN (R 3.3.2)                   
+##  memoise       1.1.0   2017-04-21 [1] CRAN (R 3.3.2)                   
+##  munsell       0.5.0   2018-06-12 [1] CRAN (R 3.3.2)                   
+##  pillar        1.3.0   2018-07-14 [1] CRAN (R 3.3.2)                   
+##  pkgconfig     2.0.2   2018-08-16 [1] CRAN (R 3.3.2)                   
+##  pkgdown       1.1.0   2018-06-02 [1] CRAN (R 3.3.2)                   
+##  plyr          1.8.4   2016-06-08 [1] CRAN (R 3.3.0)                   
+##  purrr         0.2.5   2018-05-29 [1] CRAN (R 3.3.2)                   
+##  R6            2.2.2   2017-06-17 [1] CRAN (R 3.3.2)                   
+##  Rcpp          0.12.18 2018-07-23 [1] CRAN (R 3.3.2)                   
+##  rlang         0.3.0.1 2018-10-25 [1] CRAN (R 3.3.2)                   
+##  rmarkdown     1.10    2018-06-11 [1] CRAN (R 3.3.2)                   
+##  roxygen2      6.1.0   2018-07-27 [1] CRAN (R 3.3.2)                   
+##  rprojroot     1.3-2   2018-01-03 [1] CRAN (R 3.3.2)                   
+##  scales        1.0.0   2018-08-09 [1] CRAN (R 3.3.2)                   
+##  sessioninfo   1.1.0   2018-09-25 [1] CRAN (R 3.3.2)                   
+##  stringi       1.2.4   2018-07-20 [1] CRAN (R 3.3.2)                   
+##  stringr       1.3.1   2018-05-10 [1] CRAN (R 3.3.2)                   
+##  tibble        1.4.2   2018-01-22 [1] CRAN (R 3.3.2)                   
+##  tidyr         0.8.1   2018-05-18 [1] CRAN (R 3.3.2)                   
+##  tidyselect    0.2.4   2018-02-26 [1] CRAN (R 3.3.2)                   
+##  withr         2.1.2   2018-06-23 [1] Github (jimhester/withr@dbcd7cd) 
+##  xml2          1.1.1   2017-01-24 [1] CRAN (R 3.3.2)                   
+##  yaml          2.2.0   2018-07-25 [1] CRAN (R 3.3.2)                   
 ## 
 ## [1] /Library/Frameworks/R.framework/Versions/3.3/Resources/library</code></pre>
 </div>

@@ -1,34 +1,31 @@
 #' @section Aesthetics:
-#' \code{stat_alluvium}, \code{stat_flow}, and \code{stat_stratum} require one
+#' `stat_alluvium`, `stat_flow`, and `stat_stratum` require one
 #' of two sets of aesthetics:
-#' \itemize{
-#'   \item \strong{\code{x}} and at least one of
-#'         \strong{\code{alluvium}} and \strong{\code{stratum}}
-#'   \item any number of \strong{\code{axis[0-9]*}}
-#'         (\code{axis1}, \code{axis2}, etc.)
-#' }
-#' Use \code{x}, \code{alluvium}, and/or \code{stratum} for data in lodes format
-#' and \code{axis[0-9]*} for data in alluvia format
-#' (see \code{\link{alluvial-data}}).
+#'
+#' - **`x`** and at least one of **`alluvium`** and **`stratum`**
+#' - any number of **`axis[0-9]*`** (`axis1`, `axis2`, etc.)
+#'
+#' Use `x`, `alluvium`, and/or `stratum` for data in lodes format
+#' and `axis[0-9]*` for data in alluvia format (see [`alluvial-data`]).
 #' Arguments to parameters inconsistent with the format will be ignored.
-#' Additionally, each \code{stat_*} layer accepts the following optional
+#' Additionally, each `stat_*` layer accepts the following optional
 #' aesthetics:
-#' \itemize{
-#'   \item \code{y}
-#'   \item \code{group}
-#' }
-#' \code{y} controls the heights of the alluvia
+#'
+#' - `y`
+#' - `group`
+#'
+#' `y` controls the heights of the alluvia
 #' and may be aggregated across equivalent observations.
-#' \code{group} is used internally; arguments are ignored.
-#' Finally, \code{stat_stratum} accepts the following optional aesthetic:
-#' \itemize{
-#'   \item \code{label}
-#' }
-#' \code{label} is used to label the strata and must take a unique value across
+#' `group` is used internally; arguments are ignored.
+#' Finally, `stat_stratum` accepts the following optional aesthetic:
+#'
+#' - `label`
+#'
+#' `label` is used to label the strata and must take a unique value across
 #' the observations within each stratum.
 #' These and any other aesthetics are aggregated as follows:
-#' Numeric aesthetics, including \code{y}, are summed.
-#' Character and factor aesthetics, including \code{label},
+#' Numeric aesthetics, including `y`, are summed.
+#' Character and factor aesthetics, including `label`,
 #' are assigned to strata provided they take unique values across the
-#' observations within each stratum (otherwise \code{NA} is assigned).
-#' 
+#' observations within each stratum (otherwise `NA` is assigned).
+#'

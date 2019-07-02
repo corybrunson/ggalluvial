@@ -38,18 +38,7 @@ representing these variables' values; and splines (alluvial flows) connecting
 vertical subdivisions (lodes) within strata of adjacent axes representing
 subsets or amounts of observations that take the corresponding values of the
 corresponding variables. This function checks a data frame for either of two
-types of alluvial structure:
-One row per lode, wherein each row encodes a subset or
-        amount of observations having a specific profile of axis values, a
-        key field encodes the axis, a value field encodes the
-        value within each axis, and a id column identifies multiple
-        lodes corresponding to the same subset or amount of observations.
-        is_lodes_form tests for this structure.
-One row per alluvium, wherein each row encodes a subset or
-        amount of observations having a specific profile of axis values and a
-        set axes of fields encodes its values at each axis variable.
-        is_alluvia_form tests for this structure.
-" />
+types of alluvial structure:" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -78,7 +67,7 @@ One row per alluvium, wherein each row encodes a subset or
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.2</span>
       </span>
     </div>
 
@@ -140,26 +129,15 @@ representing these variables' values; and splines (alluvial flows) connecting
 vertical subdivisions (lodes) within strata of adjacent axes representing
 subsets or amounts of observations that take the corresponding values of the
 corresponding variables. This function checks a data frame for either of two
-types of alluvial structure:</p><ul>
-<li><p>One row per <strong>lode</strong>, wherein each row encodes a subset or
-        amount of observations having a specific profile of axis values, a
-        <code>key</code> field encodes the axis, a <code>value</code> field encodes the
-        value within each axis, and a <code>id</code> column identifies multiple
-        lodes corresponding to the same subset or amount of observations.
-        <code>is_lodes_form</code> tests for this structure.</p></li>
-<li><p>One row per <strong>alluvium</strong>, wherein each row encodes a subset or
-        amount of observations having a specific profile of axis values and a
-        set <code>axes</code> of fields encodes its values at each axis variable.
-        <code>is_alluvia_form</code> tests for this structure.</p></li>
-</ul>
+types of alluvial structure:</p>
     
     </div>
 
     <pre class="usage"><span class='fu'>is_lodes_form</span>(<span class='no'>data</span>, <span class='no'>key</span>, <span class='no'>value</span>, <span class='no'>id</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>is_alluvia_form</span>(<span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>is_alluvia_form</span>(<span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>to_lodes_form</span>(<span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"x"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>,
   <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>, <span class='kw'>diffuse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
@@ -176,16 +154,16 @@ types of alluvial structure:</p><ul>
     <tr>
       <th>key, value, id</th>
       <td><p>In <code>to_lodes_form</code>, handled as in
-<code><a href='http://www.rdocumentation.org/packages/tidyr/topics/gather'>gather</a></code> and used to name the new axis (key), stratum
+<code><a href='https://tidyr.tidyverse.org/reference/gather.html'>tidyr::gather()</a></code> and used to name the new axis (key), stratum
 (value), and alluvium (identifying) variables. In <code>to_alluvia_form</code>,
-handled as in <code><a href='http://www.rdocumentation.org/packages/tidyr/topics/spread'>spread</a></code> and used to identify the fields
+handled as in <code><a href='https://tidyr.tidyverse.org/reference/spread.html'>tidyr::spread()</a></code> and used to identify the fields
 of <code>data</code> to be used as the axis (key), stratum (value), and alluvium
 (identifying) variables.</p></td>
     </tr>
     <tr>
       <th>weight</th>
       <td><p>Optional field of <code>data</code>, handled using
-<code><a href='http://www.rdocumentation.org/packages/rlang/topics/quotation'>enquo</a></code>, to be used as heights or depths of the alluvia
+<code><a href='http://www.rdocumentation.org/packages/rlang/topics/quotation'>rlang::enquo()</a></code>, to be used as heights or depths of the alluvia
 or lodes.</p></td>
     </tr>
     <tr>
@@ -201,19 +179,19 @@ string indicating the type of alluvial structure ("none", "lodes", or
     <tr>
       <th>...</th>
       <td><p>Used in <code>is_alluvia_form</code> and <code>to_lodes_form</code> as in
-<code><a href='http://dplyr.tidyverse.org/reference/select.html'>select</a></code> to determine axis variables, as an alternative
+<code><a href='https://dplyr.tidyverse.org/reference/select.html'>dplyr::select()</a></code> to determine axis variables, as an alternative
 to <code>axes</code>. Ignored when <code>axes</code> is provided.</p></td>
     </tr>
     <tr>
       <th>axes</th>
       <td><p>In <code>*_alluvia_form</code>, handled as in
-<code><a href='http://dplyr.tidyverse.org/reference/select.html'>select</a></code> and used to identify the field(s) of
+<code><a href='https://dplyr.tidyverse.org/reference/select.html'>dplyr::select()</a></code> and used to identify the field(s) of
 <code>data</code> to be used as axes.</p></td>
     </tr>
     <tr>
       <th>diffuse</th>
       <td><p>Fields of <code>data</code>, handled using
-<code><a href='http://www.rdocumentation.org/packages/tidyselect/topics/vars_select'>vars_select</a></code>, to merge into the reshapen data by
+<code><a href='http://www.rdocumentation.org/packages/tidyselect/topics/vars_select'>tidyselect::vars_select()</a></code>, to merge into the reshapen data by
 <code>id</code>. They must be a subset of the axis variables. Alternatively, a
 logical value indicating whether to merge all (<code>TRUE</code>) or none
 (<code>FALSE</code>) of the axis variables.</p></td>
@@ -239,16 +217,27 @@ returns the modal value).</p></td>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
+    <ul>
+<li><p>One row per <strong>lode</strong>, wherein each row encodes a subset or amount of
+observations having a specific profile of axis values, a <code>key</code> field
+encodes the axis, a <code>value</code> field encodes the value within each axis, and a
+<code>id</code> column identifies multiple lodes corresponding to the same subset or
+amount of observations. <code>is_lodes_form</code> tests for this structure.</p></li>
+<li><p>One row per <strong>alluvium</strong>, wherein each row encodes a subset or amount of
+observations having a specific profile of axis values and a set <code>axes</code> of
+fields encodes its values at each axis variable. <code>is_alluvia_form</code> tests
+for this structure.</p></li>
+</ul>
     <p><code>to_lodes_form</code> takes a data frame with several designated variables to
 be used as axes in an alluvial diagram, and reshapes the data frame so that
 the axis variable names constitute a new factor variable and their values
 comprise another. Other variables' values will be repeated, and a
 row-grouping variable can be introduced. This function invokes
-<code><a href='http://www.rdocumentation.org/packages/tidyr/topics/gather'>gather</a></code>.</p>
+<code><a href='https://tidyr.tidyverse.org/reference/gather.html'>tidyr::gather()</a></code>.</p>
 <p><code>to_alluvia_form</code> takes a data frame with axis and axis value variables
 to be used in an alluvial diagram, and reshape the data frame so that the
 axes constitute separate variables whose values are given by the value
-variable. This function invokes <code><a href='http://www.rdocumentation.org/packages/tidyr/topics/spread'>spread</a></code>.</p>
+variable. This function invokes <code><a href='https://tidyr.tidyverse.org/reference/spread.html'>tidyr::spread()</a></code>.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 

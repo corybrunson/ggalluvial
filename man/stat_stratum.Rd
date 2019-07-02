@@ -6,8 +6,9 @@
 \usage{
 stat_stratum(mapping = NULL, data = NULL, geom = "stratum",
   position = "identity", decreasing = NA, reverse = TRUE,
-  discern = FALSE, label.strata = FALSE, show.legend = NA,
-  inherit.aes = TRUE, na.rm = FALSE, ...)
+  discern = FALSE, label.strata = FALSE, min.height = NULL,
+  max.height = NULL, show.legend = NA, inherit.aes = TRUE,
+  na.rm = FALSE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -26,8 +27,9 @@ data. All objects will be fortified to produce a data frame. See
 \code{\link[=fortify]{fortify()}} for which variables will be created.
 
 A \code{function} will be called with a single argument,
-the plot data. The return value must be a \code{data.frame.}, and
-will be used as the layer data.}
+the plot data. The return value must be a \code{data.frame}, and
+will be used as the layer data. A \code{function} can be created
+from a \code{formula} (e.g. \code{~ head(.x, 10)}).}
 
 \item{geom}{The geometric object to use display the data;
 override the default.}
@@ -47,12 +49,16 @@ so that they match the order of the values in the legend.
 Ignored if \code{decreasing} is not \code{NA}.
 Defaults to \code{TRUE}.}
 
-\item{discern}{Passed to \code{\link{to_lodes_form}} if \code{data} is in
+\item{discern}{Passed to \code{\link[=to_lodes_form]{to_lodes_form()}} if \code{data} is in
 alluvia format.}
 
-\item{label.strata}{Logical; whether to assign the values of the axis 
+\item{label.strata}{Logical; whether to assign the values of the axis
 variables to the strata. Defaults to FALSE, and requires that no
 \code{label} aesthetic is assigned.}
+
+\item{min.height, max.height}{Numeric; bounds on the heights (weights) of the
+strata to be rendered. Use these bounds to exclude strata outside a certain
+range, for example when labeling strata using \code{\link[ggplot2:geom_text]{ggplot2::geom_text()}}.}
 
 \item{show.legend}{logical. Should this layer be included in the legends?
 \code{NA}, the default, includes if any aesthetics are mapped.
@@ -70,7 +76,7 @@ if \code{FALSE}, the default, \code{NA} lodes are not included;
 if \code{TRUE}, \code{NA} lodes constitute a separate category,
 plotted in grey (regardless of the color scheme).}
 
-\item{...}{Additional arguments passed to \code{\link[ggplot2]{layer}}.}
+\item{...}{Additional arguments passed to \code{\link[ggplot2:layer]{ggplot2::layer()}}.}
 }
 \description{
 Given a dataset with alluvial structure, \code{stat_stratum} calculates the
@@ -81,28 +87,28 @@ centroids of the strata at each axis, together with their weights (heights).
 \code{stat_alluvium}, \code{stat_flow}, and \code{stat_stratum} require one
 of two sets of aesthetics:
 \itemize{
-  \item \strong{\code{x}} and at least one of
-        \strong{\code{alluvium}} and \strong{\code{stratum}}
-  \item any number of \strong{\code{axis[0-9]*}}
-        (\code{axis1}, \code{axis2}, etc.)
+\item \strong{\code{x}} and at least one of \strong{\code{alluvium}} and \strong{\code{stratum}}
+\item any number of \strong{\code{axis[0-9]*}} (\code{axis1}, \code{axis2}, etc.)
 }
+
 Use \code{x}, \code{alluvium}, and/or \code{stratum} for data in lodes format
-and \code{axis[0-9]*} for data in alluvia format
-(see \code{\link{alluvial-data}}).
+and \code{axis[0-9]*} for data in alluvia format (see \code{\link{alluvial-data}}).
 Arguments to parameters inconsistent with the format will be ignored.
 Additionally, each \code{stat_*} layer accepts the following optional
 aesthetics:
 \itemize{
-  \item \code{y}
-  \item \code{group}
+\item \code{y}
+\item \code{group}
 }
+
 \code{y} controls the heights of the alluvia
 and may be aggregated across equivalent observations.
 \code{group} is used internally; arguments are ignored.
 Finally, \code{stat_stratum} accepts the following optional aesthetic:
 \itemize{
-  \item \code{label}
+\item \code{label}
 }
+
 \code{label} is used to label the strata and must take a unique value across
 the observations within each stratum.
 These and any other aesthetics are aggregated as follows:
@@ -151,10 +157,18 @@ ggplot(as.data.frame(Titanic),
   geom_text(stat = "stratum", label.strata = TRUE) +
   stat_stratum(geom = "errorbar") +
   scale_x_discrete(limits = c("Class", "Sex", "Age", "Survived"))
+
+# omit labels for strata outside a weight range
+ggplot(vaccinations,
+       aes(y = freq,
+           x = survey, stratum = response,
+           fill = response, label = response)) +
+  stat_stratum(width = .5) +
+  geom_text(stat = "stratum", min.height = 100)
 }
 \seealso{
-\code{\link[ggplot2]{layer}} for additional arguments and
-  \code{\link{geom_stratum}} for the corresponding geom.
+\code{\link[ggplot2:layer]{ggplot2::layer()}} for additional arguments and
+\code{\link[=geom_stratum]{geom_stratum()}} for the corresponding geom.
 
 Other alluvial stat layers: \code{\link{stat_alluvium}},
   \code{\link{stat_flow}}

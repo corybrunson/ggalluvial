@@ -62,7 +62,7 @@ centroids of the strata at each axis, together with their weights (heights)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.2</span>
       </span>
     </div>
 
@@ -125,8 +125,9 @@ centroids of the strata at each axis, together with their weights (heights).</p>
 
     <pre class="usage"><span class='fu'>stat_stratum</span>(<span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>,
   <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"identity"</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>min.height</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>max.height</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -179,14 +180,20 @@ Defaults to <code>TRUE</code>.</p></td>
     </tr>
     <tr>
       <th>discern</th>
-      <td><p>Passed to <code><a href='alluvial-data.html'>to_lodes_form</a></code> if <code>data</code> is in
+      <td><p>Passed to <code><a href='alluvial-data.html'>to_lodes_form()</a></code> if <code>data</code> is in
 alluvia format.</p></td>
     </tr>
     <tr>
       <th>label.strata</th>
-      <td><p>Logical; whether to assign the values of the axis 
+      <td><p>Logical; whether to assign the values of the axis
 variables to the strata. Defaults to FALSE, and requires that no
 <code>label</code> aesthetic is assigned.</p></td>
+    </tr>
+    <tr>
+      <th>min.height, max.height</th>
+      <td><p>Numeric; bounds on the heights (weights) of the
+strata to be rendered. Use these bounds to exclude strata outside a certain
+range, for example when labeling strata using <code><a href='https://ggplot2.tidyverse.org/reference/geom_text.html'>ggplot2::geom_text()</a></code>.</p></td>
     </tr>
     <tr>
       <th>show.legend</th>
@@ -212,7 +219,7 @@ plotted in grey (regardless of the color scheme).</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Additional arguments passed to <code><a href='http://www.rdocumentation.org/packages/ggplot2/topics/layer'>layer</a></code>.</p></td>
+      <td><p>Additional arguments passed to <code><a href='https://ggplot2.tidyverse.org/reference/layer.html'>ggplot2::layer()</a></code>.</p></td>
     </tr>
     </table>
     
@@ -221,24 +228,24 @@ plotted in grey (regardless of the color scheme).</p></td>
     
     <p><code>stat_alluvium</code>, <code>stat_flow</code>, and <code>stat_stratum</code> require one
 of two sets of aesthetics:</p><ul>
-<li><p><strong><code>x</code></strong> and at least one of
-        <strong><code>alluvium</code></strong> and <strong><code>stratum</code></strong></p></li>
-<li><p>any number of <strong><code>axis[0-9]*</code></strong>
-        (<code>axis1</code>, <code>axis2</code>, etc.)</p></li>
-</ul><p>Use <code>x</code>, <code>alluvium</code>, and/or <code>stratum</code> for data in lodes format
-and <code>axis[0-9]*</code> for data in alluvia format
-(see <code><a href='alluvial-data.html'>alluvial-data</a></code>).
+<li><p><strong><code>x</code></strong> and at least one of <strong><code>alluvium</code></strong> and <strong><code>stratum</code></strong></p></li>
+<li><p>any number of <strong><code>axis[0-9]*</code></strong> (<code>axis1</code>, <code>axis2</code>, etc.)</p></li>
+</ul>
+    <p>Use <code>x</code>, <code>alluvium</code>, and/or <code>stratum</code> for data in lodes format
+and <code>axis[0-9]*</code> for data in alluvia format (see <code><a href='alluvial-data.html'>alluvial-data</a></code>).
 Arguments to parameters inconsistent with the format will be ignored.
 Additionally, each <code>stat_*</code> layer accepts the following optional
 aesthetics:</p><ul>
 <li><p><code>y</code></p></li>
 <li><p><code>group</code></p></li>
-</ul><p><code>y</code> controls the heights of the alluvia
+</ul>
+    <p><code>y</code> controls the heights of the alluvia
 and may be aggregated across equivalent observations.
 <code>group</code> is used internally; arguments are ignored.
 Finally, <code>stat_stratum</code> accepts the following optional aesthetic:</p><ul>
 <li><p><code>label</code></p></li>
-</ul><p><code>label</code> is used to label the strata and must take a unique value across
+</ul>
+    <p><code>label</code> is used to label the strata and must take a unique value across
 the observations within each stratum.
 These and any other aesthetics are aggregated as follows:
 Numeric aesthetics, including <code>y</code>, are summed.
@@ -248,8 +255,8 @@ observations within each stratum (otherwise <code>NA</code> is assigned).</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='http://www.rdocumentation.org/packages/ggplot2/topics/layer'>layer</a></code> for additional arguments and
-  <code><a href='geom_stratum.html'>geom_stratum</a></code> for the corresponding geom.</p>
+    <div class='dont-index'><p><code><a href='https://ggplot2.tidyverse.org/reference/layer.html'>ggplot2::layer()</a></code> for additional arguments and
+<code><a href='geom_stratum.html'>geom_stratum()</a></code> for the corresponding geom.</p>
 <p>Other alluvial stat layers: <code><a href='stat_alluvium.html'>stat_alluvium</a></code>,
   <code><a href='stat_flow.html'>stat_flow</a></code></p></div>
     
@@ -288,7 +295,14 @@ observations within each stratum (otherwise <code>NA</code> is assigned).</p>
            <span class='kw'>axis1</span> <span class='kw'>=</span> <span class='no'>Class</span>, <span class='kw'>axis2</span> <span class='kw'>=</span> <span class='no'>Sex</span>, <span class='kw'>axis3</span> <span class='kw'>=</span> <span class='no'>Age</span>, <span class='kw'>axis4</span> <span class='kw'>=</span> <span class='no'>Survived</span>)) +
   <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
   <span class='fu'>stat_stratum</span>(<span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"errorbar"</span>) +
-  <span class='fu'>scale_x_discrete</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>, <span class='st'>"Survived"</span>))</div><div class='img'><img src='stat_stratum-5.png' alt='' width='700' height='433' /></div></pre>
+  <span class='fu'>scale_x_discrete</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>, <span class='st'>"Survived"</span>))</div><div class='img'><img src='stat_stratum-5.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='co'># omit labels for strata outside a weight range</span>
+<span class='fu'>ggplot</span>(<span class='no'>vaccinations</span>,
+       <span class='fu'>aes</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>freq</span>,
+           <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>response</span>,
+           <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>response</span>)) +
+  <span class='fu'>stat_stratum</span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>.5</span>) +
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>min.height</span> <span class='kw'>=</span> <span class='fl'>100</span>)</div><div class='img'><img src='stat_stratum-6.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

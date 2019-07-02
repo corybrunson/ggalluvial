@@ -58,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.2</span>
       </span>
     </div>
 
@@ -111,15 +111,35 @@
       
     </div>
 
+    <div id="ggalluvial-0-9-2" class="section level1">
+<h1 class="page-header">
+<a href="#ggalluvial-0-9-2" class="anchor"></a>ggalluvial 0.9.2<small> Unreleased </small>
+</h1>
+<div id="height-limits-on-strata" class="section level2">
+<h2 class="hasAnchor">
+<a href="#height-limits-on-strata" class="anchor"></a>Height limits on strata</h2>
+<p>Parameters <code>min.height</code> and <code>max.height</code> are introduced to <code><a href="../reference/stat_stratum.html">stat_stratum()</a></code> to allow users to omit strata outside a given height range. This is probably most relevant for stratum labeling, as illustrated in the updated vignette.</p>
+</div>
+</div>
     <div id="ggalluvial-0-9-1" class="section level1">
 <h1 class="page-header">
-<a href="#ggalluvial-0-9-1" class="anchor"></a>ggalluvial 0.9.1<small> Unreleased </small>
+<a href="#ggalluvial-0-9-1" class="anchor"></a>ggalluvial 0.9.1<small> 2018-10-21 </small>
 </h1>
 <div id="suggest-sessioninfo-for-session_info" class="section level2">
 <h2 class="hasAnchor">
 <a href="#suggest-sessioninfo-for-session_info" class="anchor"></a>Suggest <strong>sessioninfo</strong> for <code>session_info()</code>
 </h2>
-<p>Because the only functional (e.g. out <code>README.md</code>) occurrence of <strong>devtools</strong> is to call <code>session_info()</code> at the ends of the vignettes, and as <a href="">recommended by the <strong>tidyverse</strong> maintainers</a>, this suggestion and usage are switched to <strong>sessioninfo</strong>.</p>
+<p>Because the only functional (e.g. out <code>README.md</code>) occurrence of <strong>devtools</strong> is to call <code>session_info()</code> at the ends of the vignettes, this suggestion and usage are switched to <strong>sessioninfo</strong>.</p>
+</div>
+<div id="markdown-formatting" class="section level2">
+<h2 class="hasAnchor">
+<a href="#markdown-formatting" class="anchor"></a>markdown formatting</h2>
+<p>Documentation is slightly reformatted due to switching <strong>roxygen</strong> syntax to markdown.</p>
+</div>
+<div id="z-ordering-patch" class="section level2">
+<h2 class="hasAnchor">
+<a href="#z-ordering-patch" class="anchor"></a>z-ordering patch</h2>
+<p>The internal z-ordering function <code>z_order_aes</code> failed to recognize contiguous segments of alluvia, thereby assigning later segments missing values of <code>'group'</code> and preventing them from being rendered. This has been corrected.</p>
 </div>
 </div>
     <div id="ggalluvial-0-9-0" class="section level1">
@@ -188,7 +208,7 @@
 <li>The setting <code>silent = TRUE</code> now silences all messages.</li>
 <li>The functions <code>is_*_form()</code> now return <code>FALSE</code> if any weights are negative, with a message to this effect.</li>
 <li>These functions now accept unquoted variable names for the <code>key</code>, <code>value</code>, <code>id</code>, <code>weight</code>, and <code>diffuse</code> parameters, using up-to-date <strong>rlang</strong> and <strong>tidyselect</strong> functionality.</li>
-<li>The <code>axes</code> parameter in <code><a href="../reference/alluvial-data.html">is_alluvia_form()</a></code> and <code><a href="../reference/alluvial-data.html">to_lodes_form()</a></code> now accepts <code><a href="http://dplyr.tidyverse.org/reference/vars.html">dplyr::vars()</a></code> objects, as in <code><a href="http://dplyr.tidyverse.org/reference/select_all.html">dplyr::select_at()</a></code>. Alternatively, variables can be fed to these functions as in <code><a href="http://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code>, to be collected by <code><a href="http://www.rdocumentation.org/packages/rlang/topics/quotation">rlang::quos(...)</a></code> and used as axis variables. If <code>axes</code> is not <code>NULL</code>, then such additional arguments are ignored.</li>
+<li>The <code>axes</code> parameter in <code><a href="../reference/alluvial-data.html">is_alluvia_form()</a></code> and <code><a href="../reference/alluvial-data.html">to_lodes_form()</a></code> now accepts <code><a href="https://dplyr.tidyverse.org/reference/vars.html">dplyr::vars()</a></code> objects, as in <code><a href="https://dplyr.tidyverse.org/reference/select_all.html">dplyr::select_at()</a></code>. Alternatively, variables can be fed to these functions as in <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code>, to be collected by <code><a href="http://www.rdocumentation.org/packages/rlang/topics/quotation">rlang::quos(...)</a></code> and used as axis variables. If <code>axes</code> is not <code>NULL</code>, then such additional arguments are ignored.</li>
 <li>The functions <code>to_*_form()</code> now merge their internal reshapen data frames with the distilled or diffused variables in a consistent order, placing the distilled or diffused variables to the left.</li>
 </ul>
 </div>
@@ -248,6 +268,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#ggalluvial-0-9-2">0.9.2</a></li>
         <li><a href="#ggalluvial-0-9-1">0.9.1</a></li>
         <li><a href="#ggalluvial-0-9-0">0.9.0</a></li>
         <li><a href="#ggalluvial-0-8-0">0.8.0</a></li>

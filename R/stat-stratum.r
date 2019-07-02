@@ -1,33 +1,36 @@
 #' Stratum positions
-#' 
-#' Given a dataset with alluvial structure, \code{stat_stratum} calculates the
+#'
+#' Given a dataset with alluvial structure, `stat_stratum` calculates the
 #' centroids of the strata at each axis, together with their weights (heights).
 #' @template stat-aesthetics
-#' 
+#'
 
 #' @import ggplot2
 #' @family alluvial stat layers
-#' @seealso \code{\link[ggplot2]{layer}} for additional arguments and
-#'   \code{\link{geom_stratum}} for the corresponding geom.
+#' @seealso [ggplot2::layer()] for additional arguments and
+#'   [geom_stratum()] for the corresponding geom.
 #' @inheritParams ggplot2::layer
 #' @template layer-params
 #' @param geom The geometric object to use display the data;
 #'    override the default.
 #' @param decreasing Logical; whether to arrange the strata at each axis
-#'   in the order of the variable values (\code{NA}, the default),
-#'   in ascending order of total weight (largest on top, \code{FALSE}), or
-#'   in descending order of total weight (largest on bottom, \code{TRUE}).
-#' @param reverse Logical; if \code{decreasing} is \code{NA},
+#'   in the order of the variable values (`NA`, the default),
+#'   in ascending order of total weight (largest on top, `FALSE`), or
+#'   in descending order of total weight (largest on bottom, `TRUE`).
+#' @param reverse Logical; if `decreasing` is `NA`,
 #'   whether to arrange the strata at each axis
 #'   in the reverse order of the variable values,
 #'   so that they match the order of the values in the legend.
-#'   Ignored if \code{decreasing} is not \code{NA}.
-#'   Defaults to \code{TRUE}.
-#' @param discern Passed to \code{\link{to_lodes_form}} if \code{data} is in
+#'   Ignored if `decreasing` is not `NA`.
+#'   Defaults to `TRUE`.
+#' @param discern Passed to [to_lodes_form()] if `data` is in
 #'   alluvia format.
-#' @param label.strata Logical; whether to assign the values of the axis 
+#' @param label.strata Logical; whether to assign the values of the axis
 #'   variables to the strata. Defaults to FALSE, and requires that no
-#'   \code{label} aesthetic is assigned.
+#'   `label` aesthetic is assigned.
+#' @param min.height,max.height Numeric; bounds on the heights (weights) of the
+#'   strata to be rendered. Use these bounds to exclude strata outside a certain
+#'   range, for example when labeling strata using [ggplot2::geom_text()].
 #' @example inst/examples/ex-stat-stratum.r
 #' @export
 stat_stratum <- function(mapping = NULL,
@@ -38,6 +41,7 @@ stat_stratum <- function(mapping = NULL,
                          reverse = TRUE,
                          discern = FALSE,
                          label.strata = FALSE,
+                         min.height = NULL, max.height = NULL,
                          show.legend = NA,
                          inherit.aes = TRUE,
                          na.rm = FALSE,
@@ -55,6 +59,7 @@ stat_stratum <- function(mapping = NULL,
       reverse = reverse,
       discern = discern,
       label.strata = label.strata,
+      min.height = min.height, max.height = max.height,
       na.rm = na.rm,
       ...
     )
@@ -66,20 +71,20 @@ stat_stratum <- function(mapping = NULL,
 #' @export
 StatStratum <- ggproto(
   "StatStratum", Stat,
-  
+
   required_aes = c("x"),
-  
+
   setup_data = function(data, params) {
-    
+
     # if `alluvium` not provided, assign each row its own, grouped by `x`
-    if (is.null(data$alluvium) & !is.null(data$x)) {
+    if (is.null(data$alluvium) & ! is.null(data$x)) {
       data$alluvium <- NA
       for (xx in unique(data$x)) {
         ww <- which(data$x == xx)
         data$alluvium[ww] <- 1:length(ww)
       }
     }
-    
+
     # assign uniform weight if not provided
     if (is.null(data$y)) {
       if (is.null(data$weight)) {
@@ -92,19 +97,19 @@ StatStratum <- ggproto(
     } else if (any(is.na(data$y))) {
       stop("Data contains missing `y` values.")
     }
-    
+
     type <- get_alluvial_type(data)
     if (type == "none") {
       stop("Data is not in a recognized alluvial form ",
            "(see `help('alluvial-data')` for details).")
     }
-    
+
     if (params$na.rm) {
       data <- na.omit(object = data)
     } else {
       data <- na_keep(data = data, type = type)
     }
-    
+
     # ensure that data is in lode form
     if (type == "alluvia") {
       axis_ind <- get_axes(names(data))
@@ -114,24 +119,25 @@ StatStratum <- ggproto(
       data <- data[with(data, order(x, stratum, alluvium)), , drop = FALSE]
       data$x <- contiguate(data$x)
     } else {
-      if (!is.null(params$discern) && !(params$discern == FALSE)) {
+      if (! is.null(params$discern) && ! (params$discern == FALSE)) {
         warning("Data is already in lodes format, ",
                 "so `discern` will be ignored.")
       }
     }
-    
+
     # nullify `group` and `alluvium` fields (to avoid confusion with geoms)
     data <- transform(data,
                       group = NULL,
                       alluvium = NULL)
-    
+
     data
   },
-  
+
   compute_panel = function(self, data, scales,
                            decreasing = NA, reverse = TRUE,
-                           discern = FALSE, label.strata = FALSE) {
-    
+                           discern = FALSE, label.strata = FALSE,
+                           min.height = NULL, max.height = NULL) {
+
     # introduce label (if absent)
     if (label.strata) {
       if (is.null(data$label)) {
@@ -141,13 +147,13 @@ StatStratum <- ggproto(
                 "so parameter `label.strata` will be ignored.")
       }
     }
-    
+
     # remove empty lodes (including labels)
     data <- subset(data, y != 0)
-    
+
     # aggregate data by `x` and `stratum`
     data <- auto_aggregate(data = data, by = c("x", "stratum"))
-    
+
     # sort in preparation for calculating cumulative weights
     data <- if (is.na(decreasing)) {
       arr_fun <- if (reverse) dplyr::desc else xtfrm
@@ -156,21 +162,29 @@ StatStratum <- ggproto(
       arr_fun <- if (decreasing) dplyr::desc else xtfrm
       data[with(data, order(PANEL, x, arr_fun(y))), , drop = FALSE]
     }
-    
+
     # calculate cumulative weights
     data$ycum <- NA
     for (xx in unique(data$x)) {
       ww <- which(data$x == xx)
       data$ycum[ww] <- cumsum(data$y[ww]) - data$y[ww] / 2
     }
-    
+
     # y bounds
     data <- transform(data,
                       ymin = ycum - y / 2,
                       ymax = ycum + y / 2,
                       y = ycum)
     data$ycum <- NULL
-    
+
+    # impose height restrictions
+    if (! is.null(min.height)) {
+      data <- data[data$ymax - data$ymin >= min.height, , drop = FALSE]
+    }
+    if (! is.null(max.height)) {
+      data <- data[data$ymax - data$ymin <= max.height, , drop = FALSE]
+    }
+
     data
   }
 )
@@ -186,7 +200,8 @@ auto_aggregate <- function(data, by) {
     agg_var <- stats::aggregate(
       x = data[[var]],
       by = data[, by],
-      FUN = if (var %in% c("size", "linetype", "fill", "color", "alpha",
+      FUN = if (var %in% c("size", "linetype", "fill",
+                           "colour", "color", "alpha",
                            "PANEL", "group")) {
         only
       } else {

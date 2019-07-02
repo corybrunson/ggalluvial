@@ -25,8 +25,9 @@ data. All objects will be fortified to produce a data frame. See
 \code{\link[=fortify]{fortify()}} for which variables will be created.
 
 A \code{function} will be called with a single argument,
-the plot data. The return value must be a \code{data.frame.}, and
-will be used as the layer data.}
+the plot data. The return value must be a \code{data.frame}, and
+will be used as the layer data. A \code{function} can be created
+from a \code{formula} (e.g. \code{~ head(.x, 10)}).}
 
 \item{stat}{The statistical transformation to use on the data;
 override the default.}
@@ -53,38 +54,38 @@ rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
 
-\item{...}{Additional arguments passed to \code{\link[ggplot2]{layer}}.}
+\item{...}{Additional arguments passed to \code{\link[ggplot2:layer]{ggplot2::layer()}}.}
 }
 \description{
-\code{geom_alluvium} receives a dataset of the horizontal (\code{x}) and
-vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the \strong{lodes}
-of an alluvial diagram, the intersections of the alluvia with the strata.
-It plots rectangles for these lodes of a provided \code{width}.
+\code{geom_alluvium} receives a dataset of the horizontal (\code{x}) and vertical (\code{y},
+\code{ymin}, \code{ymax}) positions of the \strong{lodes} of an alluvial diagram, the
+intersections of the alluvia with the strata. It plots rectangles for these
+lodes of a provided \code{width}.
 }
 \section{Aesthetics}{
 
-\code{geom_alluvium}, \code{geom_flow}, \code{geom_lode}, and
-\code{geom_stratum} understand the following aesthetics (required aesthetics
-are in bold):
+\code{geom_alluvium}, \code{geom_flow}, \code{geom_lode}, and \code{geom_stratum} understand the
+following aesthetics (required aesthetics are in bold):
 \itemize{
-  \item \strong{\code{x}}
-  \item \strong{\code{y}}
-  \item \strong{\code{ymin}}
-  \item \strong{\code{ymax}}
-  \item \code{alpha}
-  \item \code{colour}
-  \item \code{fill}
-  \item \code{linetype}
-  \item \code{size}
-  \item \code{group}
+\item \strong{\code{x}}
+\item \strong{\code{y}}
+\item \strong{\code{ymin}}
+\item \strong{\code{ymax}}
+\item \code{alpha}
+\item \code{colour}
+\item \code{fill}
+\item \code{linetype}
+\item \code{size}
+\item \code{group}
 }
+
 \code{group} is used internally; arguments are ignored.
 }
 
 \section{Defunct parameters}{
 
-The previously deprecated parameters \code{axis_width} and \code{ribbon_bend}
-are now defunct. Use \code{width} and \code{knot.pos} instead.
+The previously deprecated parameters \code{axis_width} and \code{ribbon_bend} are now
+defunct. Use \code{width} and \code{knot.pos} instead.
 }
 
 \examples{
@@ -107,9 +108,9 @@ gg + geom_alluvium() +
   geom_stratum(stat = "alluvium")
 }
 \seealso{
-\code{\link[ggplot2]{layer}} for additional arguments and
-  \code{\link{stat_alluvium}} and
-  \code{\link{stat_stratum}} for the corresponding stats.
+\code{\link[ggplot2:layer]{ggplot2::layer()}} for additional arguments and
+\code{\link[=stat_alluvium]{stat_alluvium()}} and
+\code{\link[=stat_stratum]{stat_stratum()}} for the corresponding stats.
 
 Other alluvial geom layers: \code{\link{geom_alluvium}},
   \code{\link{geom_flow}}, \code{\link{geom_stratum}}

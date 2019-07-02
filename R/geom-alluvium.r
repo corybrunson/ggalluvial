@@ -1,21 +1,21 @@
 #' Alluvia across strata
 #'
-#' \code{geom_alluvium} receives a dataset of the horizontal (\code{x}) and
-#' vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the \strong{lodes}
+#' `geom_alluvium` receives a dataset of the horizontal (`x`) and
+#' vertical (`y`, `ymin`, `ymax`) positions of the **lodes**
 #' of an alluvial diagram, the intersections of the alluvia with the strata.
-#' It plots both the lodes themselves, using \code{\link{geom_lode}}, and the
-#' flows between them, using \code{\link{geom_flow}}.
+#' It plots both the lodes themselves, using [geom_lode()], and the
+#' flows between them, using [geom_flow()].
 #' @template geom-aesthetics
 #' @template defunct-geom-params
 #'
 
 #' @import ggplot2
 #' @family alluvial geom layers
-#' @seealso \code{\link[ggplot2]{layer}} for additional arguments and
-#'   \code{\link{stat_alluvium}} and
-#'   \code{\link{stat_flow}} for the corresponding stats.
+#' @seealso [ggplot2::layer()] for additional arguments and
+#'   [stat_alluvium()] and
+#'   [stat_flow()] for the corresponding stats.
 #' @inheritParams geom_lode
-#' @param knot.pos The horizontal distance between a stratum (\code{width/2}
+#' @param knot.pos The horizontal distance between a stratum (`width/2`
 #'   from its axis) and the knot of the x-spline, as a proportion of the
 #'   separation between strata. Defaults to 1/6.
 #' @example inst/examples/ex-geom-alluvium.r
@@ -60,7 +60,7 @@ GeomAlluvium <- ggproto(
 
   setup_params = function(data, params) {
 
-    if (!is.null(params$aes.flow)) {
+    if (! is.null(params$aes.flow)) {
       warning("Parameter `aes.flow` cannot be used in `geom_alluvium`, ",
               "and will be ignored; ",
               "use `geom_lode` and `geom_flow` instead.")
@@ -102,7 +102,7 @@ GeomAlluvium <- ggproto(
       # spline coordinates (one axis)
       spline_data <- with(data, data.frame(
         x = x + width / 2 * c(-1, 1, 1, -1),
-        y = ymin + y * c(0, 0, 1, 1),
+        y = ymin + (ymax - ymin) * c(0, 0, 1, 1),
         shape = rep(0, 4)
       ))
     } else {

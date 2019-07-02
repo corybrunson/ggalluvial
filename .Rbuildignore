@@ -14,3 +14,4 @@ README.Rmd
 .github
 cran-comments.md
 ^_pkgdown\.yml$
+^\.travis\.yml$

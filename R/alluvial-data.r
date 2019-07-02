@@ -7,31 +7,28 @@
 #' subsets or amounts of observations that take the corresponding values of the
 #' corresponding variables. This function checks a data frame for either of two
 #' types of alluvial structure:
-#' \itemize{
-#'   \item One row per \strong{lode}, wherein each row encodes a subset or
-#'         amount of observations having a specific profile of axis values, a
-#'         \code{key} field encodes the axis, a \code{value} field encodes the
-#'         value within each axis, and a \code{id} column identifies multiple
-#'         lodes corresponding to the same subset or amount of observations.
-#'         \code{is_lodes_form} tests for this structure.
-#'   \item One row per \strong{alluvium}, wherein each row encodes a subset or
-#'         amount of observations having a specific profile of axis values and a
-#'         set \code{axes} of fields encodes its values at each axis variable.
-#'         \code{is_alluvia_form} tests for this structure.
-#' }
 #'
-
-#' \code{to_lodes_form} takes a data frame with several designated variables to
+#' - One row per **lode**, wherein each row encodes a subset or amount of
+#'   observations having a specific profile of axis values, a `key` field
+#'   encodes the axis, a `value` field encodes the value within each axis, and a
+#'   `id` column identifies multiple lodes corresponding to the same subset or
+#'   amount of observations. `is_lodes_form` tests for this structure.
+#' - One row per **alluvium**, wherein each row encodes a subset or amount of
+#'   observations having a specific profile of axis values and a set `axes` of
+#'   fields encodes its values at each axis variable. `is_alluvia_form` tests
+#'   for this structure.
+#'
+#' `to_lodes_form` takes a data frame with several designated variables to
 #' be used as axes in an alluvial diagram, and reshapes the data frame so that
 #' the axis variable names constitute a new factor variable and their values
 #' comprise another. Other variables' values will be repeated, and a
 #' row-grouping variable can be introduced. This function invokes
-#' \code{\link[tidyr]{gather}}.
+#' [tidyr::gather()].
 #'
-#' \code{to_alluvia_form} takes a data frame with axis and axis value variables
+#' `to_alluvia_form` takes a data frame with axis and axis value variables
 #' to be used in an alluvial diagram, and reshape the data frame so that the
 #' axes constitute separate variables whose values are given by the value
-#' variable. This function invokes \code{\link[tidyr]{spread}}.
+#' variable. This function invokes [tidyr::spread()].
 #'
 
 #' @name alluvial-data
@@ -42,37 +39,37 @@
 #'   string indicating the type of alluvial structure ("none", "lodes", or
 #'   "alluvia").
 #' @param silent Whether to print messages.
-#' @param key,value,id In \code{to_lodes_form}, handled as in
-#'   \code{\link[tidyr]{gather}} and used to name the new axis (key), stratum
-#'   (value), and alluvium (identifying) variables. In \code{to_alluvia_form},
-#'   handled as in \code{\link[tidyr]{spread}} and used to identify the fields
-#'   of \code{data} to be used as the axis (key), stratum (value), and alluvium
+#' @param key,value,id In `to_lodes_form`, handled as in
+#'   [tidyr::gather()] and used to name the new axis (key), stratum
+#'   (value), and alluvium (identifying) variables. In `to_alluvia_form`,
+#'   handled as in [tidyr::spread()] and used to identify the fields
+#'   of `data` to be used as the axis (key), stratum (value), and alluvium
 #'   (identifying) variables.
-#' @param axes In \code{*_alluvia_form}, handled as in
-#'   \code{\link[dplyr]{select}} and used to identify the field(s) of
-#'   \code{data} to be used as axes.
-#' @param ... Used in \code{is_alluvia_form} and \code{to_lodes_form} as in
-#'   \code{\link[dplyr]{select}} to determine axis variables, as an alternative
-#'   to \code{axes}. Ignored when \code{axes} is provided.
-#' @param weight Optional field of \code{data}, handled using
-#'   \code{\link[rlang]{enquo}}, to be used as heights or depths of the alluvia
+#' @param axes In `*_alluvia_form`, handled as in
+#'   [dplyr::select()] and used to identify the field(s) of
+#'   `data` to be used as axes.
+#' @param ... Used in `is_alluvia_form` and `to_lodes_form` as in
+#'   [dplyr::select()] to determine axis variables, as an alternative
+#'   to `axes`. Ignored when `axes` is provided.
+#' @param weight Optional field of `data`, handled using
+#'   [rlang::enquo()], to be used as heights or depths of the alluvia
 #'   or lodes.
-#' @param diffuse Fields of \code{data}, handled using
-#'   \code{\link[tidyselect]{vars_select}}, to merge into the reshapen data by
-#'   \code{id}. They must be a subset of the axis variables. Alternatively, a
-#'   logical value indicating whether to merge all (\code{TRUE}) or none
-#'   (\code{FALSE}) of the axis variables.
+#' @param diffuse Fields of `data`, handled using
+#'   [tidyselect::vars_select()], to merge into the reshapen data by
+#'   `id`. They must be a subset of the axis variables. Alternatively, a
+#'   logical value indicating whether to merge all (`TRUE`) or none
+#'   (`FALSE`) of the axis variables.
 #' @param distill A logical value indicating whether to include variables, other
-#'   than those passed to \code{key} and \code{value}, that vary within values
-#'   of \code{id}. Alternatively, a function (or its name) to be used to distill
+#'   than those passed to `key` and `value`, that vary within values
+#'   of `id`. Alternatively, a function (or its name) to be used to distill
 #'   each such variable to a single value. In addition to existing functions,
-#'   \code{distill} accepts the character values \code{"first"} (used if
-#'   \code{distill} is \code{TRUE}), \code{"last"}, and \code{"most"} (which
+#'   `distill` accepts the character values `"first"` (used if
+#'   `distill` is `TRUE`), `"last"`, and `"most"` (which
 #'   returns the modal value).
 #' @param discern Logical value indicating whether to suffix values of the
 #'   variables used as axes that appear at more than one variable in order to
 #'   distinguish their factor levels. This forces the levels of the combined
-#'   factor variable \code{value} to be in the order of the axes.
+#'   factor variable `value` to be in the order of the axes.
 #' @example inst/examples/ex-alluvial-data.r
 
 #' @rdname alluvial-data
@@ -81,30 +78,30 @@ is_lodes_form <- function(data,
                           key, value, id,
                           weight = NULL,
                           logical = TRUE, silent = FALSE) {
-  if (!isTRUE(logical)) deprecate_parameter("logical")
+  if (! isTRUE(logical)) deprecate_parameter("logical")
 
-  key_var <- vars_pull(names(data), !!rlang::enquo(key))
-  value_var <- vars_pull(names(data), !!rlang::enquo(value))
-  id_var <- vars_pull(names(data), !!rlang::enquo(id))
+  key_var <- vars_pull(names(data), !! rlang::enquo(key))
+  value_var <- vars_pull(names(data), !! rlang::enquo(value))
+  id_var <- vars_pull(names(data), !! rlang::enquo(id))
 
   if (any(duplicated(cbind(data[c(key_var, id_var)])))) {
-    if (!silent) warning("Duplicated id-axis pairings.")
+    if (! silent) warning("Duplicated id-axis pairings.")
   }
 
   n_pairs <-
     dplyr::n_distinct(data[key_var]) * dplyr::n_distinct(data[id_var])
   if (nrow(data) < n_pairs) {
-    if (!silent) warning("Missing id-axis pairings.")
+    if (! silent) warning("Missing id-axis pairings.")
   }
 
   # if `weight` is not `NULL`, use NSE to identify `weight_var`
-  if (!is.null(rlang::enexpr(weight))) {
-    weight_var <- vars_select(names(data), !!rlang::enquo(weight))
-    if (!is.numeric(data[[weight_var]])) {
-      if (!silent) message("Lode weights are non-numeric.")
+  if (! is.null(rlang::enexpr(weight))) {
+    weight_var <- vars_select(names(data), !! rlang::enquo(weight))
+    if (! is.numeric(data[[weight_var]])) {
+      if (! silent) message("Lode weights are non-numeric.")
       return(if (logical) FALSE else "none")
     } else if (any(data[[weight_var]] < 0)) {
-      if (!silent) message("Some lode weights are negative.")
+      if (! silent) message("Some lode weights are negative.")
       #return(if (logical) FALSE else "none")
       return(if (logical) TRUE else "lodes")
     }
@@ -119,36 +116,36 @@ is_alluvia_form <- function(data,
                             ..., axes = NULL,
                             weight = NULL,
                             logical = TRUE, silent = FALSE) {
-  if (!isTRUE(logical)) deprecate_parameter("logical")
+  if (! isTRUE(logical)) deprecate_parameter("logical")
 
   if (is.null(rlang::enexpr(weight))) {
     weight_var <- NULL
   } else {
-    weight_var <- vars_select(names(data), !!rlang::enquo(weight))
-    if (!is.numeric(data[[weight_var]])) {
-      if (!silent) message("Alluvium weights are non-numeric.")
+    weight_var <- vars_select(names(data), !! rlang::enquo(weight))
+    if (! is.numeric(data[[weight_var]])) {
+      if (! silent) message("Alluvium weights are non-numeric.")
       return(if (logical) FALSE else "none")
     } else if (any(data[[weight_var]] < 0)) {
-      if (!silent) message("Some alluvium weights are negative.")
+      if (! silent) message("Some alluvium weights are negative.")
       return(if (logical) FALSE else "none")
     }
   }
 
-  if (!is.null(rlang::enexpr(axes))) {
+  if (! is.null(rlang::enexpr(axes))) {
     axes <- data_at_vars(data, axes)
   } else {
     quos <- rlang::quos(...)
     if (rlang::is_empty(quos)) {
       axes <- setdiff(names(data), c(weight_var))
     } else {
-      axes <- unname(vars_select(names(data), !!!quos))
+      axes <- unname(vars_select(names(data), !!! quos))
     }
   }
 
   n_alluvia <- nrow(dplyr::distinct(data[axes]))
   n_combns <- do.call(prod, lapply(data[axes], dplyr::n_distinct))
   if (n_alluvia < n_combns) {
-    if (!silent) message("Missing alluvia for some stratum combinations.")
+    if (! silent) message("Missing alluvia for some stratum combinations.")
   }
 
   if (logical) TRUE else "alluvia"
@@ -165,26 +162,26 @@ to_lodes_form <- function(data,
   value_var <- rlang::quo_name(rlang::enexpr(value))
   id_var <- rlang::quo_name(rlang::enexpr(id))
 
-  if (!is.null(rlang::enexpr(axes))) {
+  if (! is.null(rlang::enexpr(axes))) {
     axes <- data_at_vars(data, axes)
   } else {
     quos <- rlang::quos(...)
     if (rlang::is_empty(quos)) {
       axes <- names(data)
     } else {
-      axes <- unname(vars_select(names(data), !!!quos))
+      axes <- unname(vars_select(names(data), !!! quos))
     }
   }
 
   stopifnot(is_alluvia_form(data, axes, silent = TRUE))
 
-  if (!is.data.frame(data)) data <- as.data.frame(data)
+  if (! is.data.frame(data)) data <- as.data.frame(data)
 
   if (is.logical(rlang::enexpr(diffuse))) {
     diffuse <- if (diffuse) axes else NULL
   } else {
-    diffuse <- unname(vars_select(names(data), !!rlang::enquo(diffuse)))
-    if (!all(diffuse %in% axes)) {
+    diffuse <- unname(vars_select(names(data), !! rlang::enquo(diffuse)))
+    if (! all(diffuse %in% axes)) {
       stop("All `diffuse` variables must be `axes` variables.")
     }
   }
@@ -204,19 +201,19 @@ to_lodes_form <- function(data,
 
   # format data in preparation for `gather()`
   data[[id_var]] <- 1:nrow(data)
-  if (!is.null(diffuse)) {
+  if (! is.null(diffuse)) {
     diffuse_data <- data[, c(id_var, diffuse), drop = FALSE]
   }
   for (i in axes) data[[i]] <- as.character(data[[i]])
 
   # `gather()` by `axes`
   res <- tidyr::gather(data,
-                       key = !!key_var, value = !!value_var,
+                       key = !! key_var, value = !! value_var,
                        axes,
                        factor_key = TRUE)
   res[[value_var]] <- factor(res[[value_var]], levels = strata)
   # recombine with `diffuse_data`
-  if (!is.null(diffuse)) {
+  if (! is.null(diffuse)) {
     res <- merge(diffuse_data, res, by = id_var, all.x = FALSE, all.y = TRUE)
   }
 
@@ -229,9 +226,9 @@ to_alluvia_form <- function(data,
                             key, value, id,
                             distill = FALSE) {
 
-  key_var <- vars_pull(names(data), !!rlang::enquo(key))
-  value_var <- vars_pull(names(data), !!rlang::enquo(value))
-  id_var <- vars_pull(names(data), !!rlang::enquo(id))
+  key_var <- vars_pull(names(data), !! rlang::enquo(key))
+  value_var <- vars_pull(names(data), !! rlang::enquo(value))
+  id_var <- vars_pull(names(data), !! rlang::enquo(id))
 
   stopifnot(is_lodes_form(data, key_var, value_var, id_var, silent = TRUE))
 
@@ -255,7 +252,7 @@ to_alluvia_form <- function(data,
     } else if (is.character(distill)) {
       distill <- get(distill)
     }
-    if (!is.null(distill)) {
+    if (! is.null(distill)) {
       stopifnot(is.function(distill))
       message("Distilled variables: ",
               paste(distill_vars, collapse = ", "))
@@ -272,9 +269,9 @@ to_alluvia_form <- function(data,
   }
 
   # `spread()` by designated `key` and `value`
-  res <- tidyr::spread(data, key = !!key_var, value = !!value_var)
+  res <- tidyr::spread(data, key = !! key_var, value = !! value_var)
   # recombine with `distill_data`
-  if (!is.null(distill)) {
+  if (! is.null(distill)) {
     res <- merge(distill_data, res, by = id_var, all.x = FALSE, all.y = TRUE)
   }
 
@@ -315,8 +312,8 @@ data_at_vars <- function(data, vars) {
   } else if (rlang::is_integerish(vars)) {
     data_vars[vars]
   } else if (rlang::is_quosures(vars)) {
-    out <- dplyr::select_vars(data_vars, !!!vars)
-    if (!any(rlang::have_name(vars))) {
+    out <- dplyr::select_vars(data_vars, !!! vars)
+    if (! any(rlang::have_name(vars))) {
       names(out) <- NULL
     }
     out

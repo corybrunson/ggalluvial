@@ -12,8 +12,11 @@
 <script src="pkgdown.js"></script><meta property="og:title" content="Alluvial Diagrams in 'ggplot2'">
 <meta property="og:description" content="Alluvial diagrams use x-splines, sometimes augmented with stacked
     histograms, to visualize multi-dimensional or repeated-measures data with
-    categorical or ordinal variables. This package provides ggplot2 layers to
-    produce alluvial diagrams from tidy data.">
+    categorical or ordinal variables. They can be viewed as simplified and
+    standardized Sankey diagrams; see Riehmann, Hanfler, and Froehlich (2005)
+    &lt;doi:10.1109/INFVIS.2005.1532152&gt; and Rosvall and Bergstrom (2010)
+    &lt;doi:10.1371/journal.pone.0008694&gt;. This package provides ggplot2 layers
+    to produce alluvial diagrams from tidy data.">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -32,7 +35,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">ggalluvial</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.1</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">0.9.2</span>
       </span>
     </div>
 
@@ -109,9 +112,9 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"ggalluvial"</span>)</code></pre></div>
 <p>The <a href="https://github.com/corybrunson/ggalluvial/tree/cran">cran branch</a> will contain the version most recently submitted to <a href="https://cran.r-project.org/package=ggalluvial">CRAN</a>.</p>
 <p>Development versions can be installed from GitHub:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"corybrunson/ggalluvial"</span>, <span class="dt">build_vignettes =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">remotes<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"corybrunson/ggalluvial"</span>, <span class="dt">build_vignettes =</span> <span class="ot">TRUE</span>)</code></pre></div>
 <p>The <a href="https://github.com/corybrunson/ggalluvial/tree/optimization">optimization branch</a> contains a development version with experimental functions to reduce the number or area of alluvial overlaps (see issue <a href="https://github.com/corybrunson/ggalluvial/issues/6">#6</a>). Install it as follows:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"corybrunson/ggalluvial"</span>, <span class="dt">ref =</span> <span class="st">"optimization"</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">remotes<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/remotes/topics/install_github">install_github</a></span>(<span class="st">"corybrunson/ggalluvial"</span>, <span class="dt">ref =</span> <span class="st">"optimization"</span>)</code></pre></div>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
@@ -141,12 +144,9 @@
           <span class="st">"stratified by demographics and survival"</span>)</code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-6-1.png" width="700"></p>
 <p>The data is in “wide” format, but <strong>ggalluvial</strong> also recognizes data in “long” format and can convert between the two:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">titanic_long &lt;-<span class="st"> </span><span class="kw"><a href="reference/ggalluvial-deprecated.html">to_lodes</a></span>(<span class="kw">data.frame</span>(Titanic),
-                         <span class="dt">key =</span> <span class="st">"Demographic"</span>,
-                         <span class="dt">axes =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)
-<span class="co">#&gt; Warning: 'to_lodes' is deprecated.</span>
-<span class="co">#&gt; Use 'to_lodes_form' instead.</span>
-<span class="co">#&gt; See help("Deprecated")</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">titanic_long &lt;-<span class="st"> </span><span class="kw"><a href="reference/alluvial-data.html">to_lodes_form</a></span>(<span class="kw">data.frame</span>(Titanic),
+                              <span class="dt">key =</span> <span class="st">"Demographic"</span>,
+                              <span class="dt">axes =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>)
 <span class="kw">head</span>(titanic_long)
 <span class="co">#&gt;   Survived Freq alluvium Demographic stratum</span>
 <span class="co">#&gt; 1       No    0        1       Class     1st</span>

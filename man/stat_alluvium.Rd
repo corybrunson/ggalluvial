@@ -27,8 +27,9 @@ data. All objects will be fortified to produce a data frame. See
 \code{\link[=fortify]{fortify()}} for which variables will be created.
 
 A \code{function} will be called with a single argument,
-the plot data. The return value must be a \code{data.frame.}, and
-will be used as the layer data.}
+the plot data. The return value must be a \code{data.frame}, and
+will be used as the layer data. A \code{function} can be created
+from a \code{formula} (e.g. \code{~ head(.x, 10)}).}
 
 \item{geom}{The geometric object to use display the data;
 override the default.}
@@ -48,27 +49,27 @@ so that they match the order of the values in the legend.
 Ignored if \code{decreasing} is not \code{NA}.
 Defaults to \code{TRUE}.}
 
-\item{discern}{Passed to \code{\link{to_lodes_form}} if \code{data} is in
+\item{discern}{Passed to \code{\link[=to_lodes_form]{to_lodes_form()}} if \code{data} is in
 alluvia format.}
 
 \item{aggregate.y}{Whether to aggregate weights across otherwise equivalent
 rows before computing lode and flow positions. Set to \code{TRUE} to group
-observations into cohorts.
-\strong{Warning}: This is currently an expensive operation.}
+observations into cohorts. \strong{Warning}: This is currently an expensive
+operation.}
 
 \item{aggregate.wts}{Deprecated alias for \code{aggregate.y}.}
 
-\item{lode.guidance}{The function to prioritize the axis variables for 
-ordering the lodes within each stratum. Options are "zigzag", "rightleft",
-"leftright", "rightward", and "leftward" (see 
-\code{\link{lode-guidance}}).}
+\item{lode.guidance}{The function to prioritize the axis variables for
+ordering the lodes within each stratum, or else a character string
+identifying the function. Character options are "zigzag", "rightleft",
+"leftright", "rightward", and "leftward" (see \code{\link{lode-guidance}}).}
 
 \item{lode.ordering}{A list (of length the number of axes) of integer vectors
-(each of length the number of rows of \code{data}) or NULL entries 
-(indicating no imposed ordering), or else a numeric matrix of corresponding
-dimensions, giving the preferred ordering of alluvia at each axis. This 
-will be used to order the lodes within each stratum by sorting the lodes 
-first by stratum and then by the provided vectors.}
+(each of length the number of rows of \code{data}) or NULL entries (indicating
+no imposed ordering), or else a numeric matrix of corresponding dimensions,
+giving the preferred ordering of alluvia at each axis. This will be used to
+order the lodes within each stratum by sorting the lodes first by stratum
+and then by the provided vectors.}
 
 \item{na.rm}{Logical:
 if \code{FALSE}, the default, \code{NA} lodes are not included;
@@ -86,13 +87,13 @@ rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
 
-\item{...}{Additional arguments passed to \code{\link[ggplot2]{layer}}.}
+\item{...}{Additional arguments passed to \code{\link[ggplot2:layer]{ggplot2::layer()}}.}
 }
 \description{
-Given a dataset with alluvial structure, \code{stat_alluvium} calculates the 
+Given a dataset with alluvial structure, \code{stat_alluvium} calculates the
 centroids (\code{x} and \code{y}) of the \strong{lodes}, the intersections of
-the alluvia with the strata, together with their weights (heights; 
-\code{ymin} and \code{ymax}). It leverages the \code{group} aesthetic for 
+the alluvia with the strata, together with their weights (heights;
+\code{ymin} and \code{ymax}). It leverages the \code{group} aesthetic for
 plotting purposes (for now).
 }
 \section{Aesthetics}{
@@ -100,28 +101,28 @@ plotting purposes (for now).
 \code{stat_alluvium}, \code{stat_flow}, and \code{stat_stratum} require one
 of two sets of aesthetics:
 \itemize{
-  \item \strong{\code{x}} and at least one of
-        \strong{\code{alluvium}} and \strong{\code{stratum}}
-  \item any number of \strong{\code{axis[0-9]*}}
-        (\code{axis1}, \code{axis2}, etc.)
+\item \strong{\code{x}} and at least one of \strong{\code{alluvium}} and \strong{\code{stratum}}
+\item any number of \strong{\code{axis[0-9]*}} (\code{axis1}, \code{axis2}, etc.)
 }
+
 Use \code{x}, \code{alluvium}, and/or \code{stratum} for data in lodes format
-and \code{axis[0-9]*} for data in alluvia format
-(see \code{\link{alluvial-data}}).
+and \code{axis[0-9]*} for data in alluvia format (see \code{\link{alluvial-data}}).
 Arguments to parameters inconsistent with the format will be ignored.
 Additionally, each \code{stat_*} layer accepts the following optional
 aesthetics:
 \itemize{
-  \item \code{y}
-  \item \code{group}
+\item \code{y}
+\item \code{group}
 }
+
 \code{y} controls the heights of the alluvia
 and may be aggregated across equivalent observations.
 \code{group} is used internally; arguments are ignored.
 Finally, \code{stat_stratum} accepts the following optional aesthetic:
 \itemize{
-  \item \code{label}
+\item \code{label}
 }
+
 \code{label} is used to label the strata and must take a unique value across
 the observations within each stratum.
 These and any other aesthetics are aggregated as follows:
@@ -155,11 +156,25 @@ gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
 lode_ord <- replicate(n = 3, expr = sample(x = 32), simplify = FALSE)
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
                lode.ordering = lode_ord)
+# use of custom luide guidance function
+lode_custom <- function(n, i) {
+  stopifnot(n == 3)
+  switch(
+    i,
+    `1` = 1:3,
+    `2` = c(2, 3, 1),
+    `3` = 3:1
+  )
+}
+gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
+               aes.bind = TRUE, lode.guidance = lode_custom)
+gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
+               aes.bind = TRUE, lode.guidance = "custom")
 
 data(majors)
 # omit missing lodes and incident flows
 ggplot(majors,
-             aes(x = semester, stratum = curriculum, alluvium = student)) +
+       aes(x = semester, stratum = curriculum, alluvium = student)) +
   geom_alluvium(fill = "darkgrey", na.rm = TRUE) +
   geom_stratum(aes(fill = curriculum), color = NA, na.rm = TRUE) +
   theme_bw()
@@ -183,33 +198,31 @@ gg + geom_flow(stat = "alluvium", lode.guidance = "rightleft",
                color = "black", aggregate.y = TRUE)
 
 \dontrun{
-  data(babynames, package = "babynames")
-  # a discontiguous alluvium
-  bn <- dplyr::filter(babynames,
-                      prop >= .01 & sex == "F" &
-                        year > 1962 & year < 1968)
-  ggplot(data = bn,
-         aes(x = year, alluvium = name, y = prop)) +
-    geom_alluvium(aes(fill = name, color = name == "Tammy"),
-                  decreasing = TRUE, show.legend = FALSE) +
-    scale_color_manual(values = c("#00000000", "#000000"))
-  # filling in missing zeros
-  bn2 <- merge(bn,
-               expand.grid(year = unique(bn$year), name = unique(bn$name)),
-               all = TRUE)
-  bn2$prop[is.na(bn2$prop)] <- 0
-  ggplot(data = bn2,
-         aes(x = year, alluvium = name, y = prop)) +
-    geom_alluvium(aes(fill = name, color = name == "Tammy"),
-                  decreasing = TRUE, show.legend = FALSE) +
-    scale_color_manual(values = c("#00000000", "#000000"))
+data(babynames, package = "babynames")
+# a discontiguous alluvium
+bn <- dplyr::filter(babynames,
+                    prop >= .01 & sex == "F" &
+                      year > 1962 & year < 1968)
+ggplot(data = bn,
+       aes(x = year, alluvium = name, y = prop)) +
+  geom_alluvium(aes(fill = name, color = name == "Tammy"),
+                decreasing = TRUE, show.legend = FALSE) +
+  scale_color_manual(values = c("#00000000", "#000000"))
+# filling in missing zeros
+bn2 <- merge(bn,
+             expand.grid(year = unique(bn$year), name = unique(bn$name)),
+             all = TRUE)
+bn2$prop[is.na(bn2$prop)] <- 0
+ggplot(data = bn2,
+       aes(x = year, alluvium = name, y = prop)) +
+  geom_alluvium(aes(fill = name, color = name == "Tammy"),
+                decreasing = TRUE, show.legend = FALSE) +
+  scale_color_manual(values = c("#00000000", "#000000"))
 }
 }
 \seealso{
-\code{\link[ggplot2]{layer}} for additional arguments and
-  \code{\link{geom_alluvium}},
-  \code{\link{geom_lode}}, and
-  \code{\link{geom_flow}} for the corresponding geoms.
+\code{\link[ggplot2:layer]{ggplot2::layer()}} for additional arguments and \code{\link[=geom_alluvium]{geom_alluvium()}},
+\code{\link[=geom_lode]{geom_lode()}}, and \code{\link[=geom_flow]{geom_flow()}} for the corresponding geoms.
 
 Other alluvial stat layers: \code{\link{stat_flow}},
   \code{\link{stat_stratum}}
