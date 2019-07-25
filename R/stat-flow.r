@@ -13,7 +13,8 @@
 #'   [geom_flow()] for the corresponding geoms.
 #' @inheritParams stat_stratum
 #' @param aes.bind Whether to prioritize aesthetics before axes (other than the
-#'   index axis) when ordering the lodes within each stratum. Defaults to FALSE.
+#'   index axis) when ordering the lodes within each stratum. Defaults to
+#'   `FALSE`.
 #' @example inst/examples/ex-stat-flow.r
 #' @export
 stat_flow <- function(mapping = NULL,

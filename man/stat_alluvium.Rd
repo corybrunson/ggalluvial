@@ -6,9 +6,10 @@
 \usage{
 stat_alluvium(mapping = NULL, data = NULL, geom = "alluvium",
   position = "identity", decreasing = NA, reverse = TRUE,
-  discern = FALSE, aggregate.y = FALSE, aggregate.wts = NULL,
-  lode.guidance = "zigzag", lode.ordering = NULL, na.rm = FALSE,
-  show.legend = NA, inherit.aes = TRUE, ...)
+  discern = FALSE, aes.bind = FALSE, aggregate.y = FALSE,
+  aggregate.wts = NULL, lode.guidance = "zigzag",
+  lode.ordering = NULL, na.rm = FALSE, show.legend = NA,
+  inherit.aes = TRUE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -51,6 +52,10 @@ Defaults to \code{TRUE}.}
 
 \item{discern}{Passed to \code{\link[=to_lodes_form]{to_lodes_form()}} if \code{data} is in
 alluvia format.}
+
+\item{aes.bind}{Whether to prioritize aesthetics before axes (other than the
+index axis) when ordering the lodes within each stratum. Defaults to
+\code{FALSE}.}
 
 \item{aggregate.y}{Whether to aggregate weights across otherwise equivalent
 rows before computing lode and flow positions. Set to \code{TRUE} to group

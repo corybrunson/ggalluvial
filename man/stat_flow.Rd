@@ -52,7 +52,8 @@ Defaults to \code{TRUE}.}
 alluvia format.}
 
 \item{aes.bind}{Whether to prioritize aesthetics before axes (other than the
-index axis) when ordering the lodes within each stratum. Defaults to FALSE.}
+index axis) when ordering the lodes within each stratum. Defaults to
+\code{FALSE}.}
 
 \item{na.rm}{Logical:
 if \code{FALSE}, the default, \code{NA} lodes are not included;
