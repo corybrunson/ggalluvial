@@ -1,0 +1,18 @@
+---
+title: "The Order of the Lodes"
+author: "Jason Cory Brunson"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{lode ordering}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+How the lodes within each stratum are ordered, and how to control their order, is a complicated but essential part of **ggalluvial**'s functionality. This vignette explains the motivations behind the implementation and explores the functionality in greater detail than in the examples.
+
+## Motivations
+
+The amount of control the stat layers `stat_alluvial()` and `stat_flow()` exert over the [positional aesthetics](https://ggplot2.tidyverse.org/reference/aes_position.html) of graphical objects (grobs) is unusual, by the standards of **ggplot2** and many if not most of its extensions. In [the layered grammar of graphics framework](https://www.tandfonline.com/doi/abs/10.1198/jcgs.2009.07098), the role of a statistical transformation is usually to summarize the original data, for example by binning (`stat_bin()`) or by calculating quantiles (`stat_qq()`). These transformed data are _then_ sent to geom layers for positioning. The positions of grobs may be adjusted after the statistical transformation, for example when points are jittered (`geom_jitter()`), but the numerical data communicated by the plot is still the product of the stat.
+
