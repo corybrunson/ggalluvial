@@ -1,18 +1,76 @@
 ---
-title: "The Order of the Lodes"
+title: "The Ordering of the Lodes"
 author: "Jason Cory Brunson"
 date: "`r Sys.Date()`"
 output:
   rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{lode ordering}
+  %\VignetteIndexEntry{ordering of lodes}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
 
-How the lodes within each stratum are ordered, and how to control their order, is a complicated but essential part of **ggalluvial**'s functionality. This vignette explains the motivations behind the implementation and explores the functionality in greater detail than in the examples.
+How the lodes within each stratum are ordered, and how to control their order, is a complicated but essential part of **ggalluvial**'s functionality. This vignette explains the motivations behind the implementation and explores the functionality in greater detail than the examples.
+
+## Setup
+
+All of the functionality discussed in this vignette is exported by **ggalluvial**. We'll also need a toy data set to play with:
+
+```{r attach}
+library(ggalluvial)
+# toy data set
+toy <- data.frame(
+  subject = rep(1:3, times = 3),
+  collection = rep(1:3, each = 3),
+  category = I(c("A", "A", "B", "A", "B", "B", "A", "B", "A"))
+)
+print(toy)
+```
+
+```{r error, eval=FALSE}
+ggplot(toy, aes(x=collection,stratum=category)) + stat_stratum()
+```
 
 ## Motivations
 
-The amount of control the stat layers `stat_alluvial()` and `stat_flow()` exert over the [positional aesthetics](https://ggplot2.tidyverse.org/reference/aes_position.html) of graphical objects (grobs) is unusual, by the standards of **ggplot2** and many if not most of its extensions. In [the layered grammar of graphics framework](https://www.tandfonline.com/doi/abs/10.1198/jcgs.2009.07098), the role of a statistical transformation is usually to summarize the original data, for example by binning (`stat_bin()`) or by calculating quantiles (`stat_qq()`). These transformed data are _then_ sent to geom layers for positioning. The positions of grobs may be adjusted after the statistical transformation, for example when points are jittered (`geom_jitter()`), but the numerical data communicated by the plot is still the product of the stat.
+The amount of control the stat layers `stat_alluvial()` and `stat_flow()` exert over the [positional aesthetics](https://ggplot2.tidyverse.org/reference/aes_position.html) of graphical objects (grobs) is unusual, by the standards of **ggplot2** and many of its extensions. In [the layered grammar of graphics framework](https://www.tandfonline.com/doi/abs/10.1198/jcgs.2009.07098), the role of a statistical transformation is usually to summarize the original data, for example by binning (`stat_bin()`) or by calculating quantiles (`stat_qq()`). These transformed data are _then_ sent to geom layers for positioning. The positions of grobs may be adjusted after the statistical transformation, for example when points are jittered (`geom_jitter()`), but the numerical data communicated by the plot is still the product of the stat.
 
+**ggalluvial** works differently. The only meaningful data transformation is between "lodes" (long) form and "alluvia" (wide) form, as illustrated in [the titular vignette](http://corybrunson.github.io/ggalluvial/articles/ggalluvial.html). This can be done manually using [the exported conversion functions](http://corybrunson.github.io/ggalluvial/reference/alluvial-data.html) but is usually handled internally by the stat layers.
+To avoid this complication, `toy` is already in lodes form.
+
+## Positioning the strata
+
+The stat layers themselves convert repeated categorical data into the `x` and `y` coordinates of a sequence of stacked bar plots; the geom layers then render rectangles and splines, using these coordinates as guides.
+In this way, the layers of **ggalluvial** behave like `stat_ellipse()` and its default `geom_path()`: `StatEllipse()` transforms point cloud data into a set of coordinates on a confidence (or other) ellipse in sequential order, which are then connected by line segments to mimic a smooth ellipse using `GeomPath()`.
+
+The outputs of the stat layers demarcate one rectangle within each stack for each category and one stack for each data collection point. The variables containing the data collection points and the categories are passed to the `x` and `stratum` aesthetics, respectively. To generate the sequence of stacked bar plots, only these two aesthetics are required:
+
+```{r}
+# collection point and category variables only
+data <- setNames(toy[, 2:3], c("x", "stratum"))
+# required fields for stat transformations
+data$y <- 1
+data$PANEL <- 1
+# stratum transformation
+StatStratum$compute_panel(data)
+```
+
+Comparing this output to `toy`, notice first that the data have been aggregated: Each distinct combination of `x` and `stratum` occupies only one row. `x` encodes the horizontal positions of the rectangles---each position value defines an _axis_---and is subject to functionality specific to this positional aesthetic, e.g. `scale_x_*()` transformations. Within each axis, `stratum` is in reverse order so that the bars proceed in the original order from top to bottom.[^reverse]
+
+`ymin` and `ymax` are the lower and upper bounds of the rectangles, and `y` is their centers. Each stacked rectangle begins where the one belowe it ends, and their heights are the numbers of subjects that take the corresponding category value at the corresponding collection point.
+
+The reason for calculating both limits and centers is to enable more geoms to pair with the stat. For example, `geom_rect()` requires the center `y`, while `geom_errorbar()` requires the limits `ymin` and `ymax`. **Ensure that `geom_rect()` can be pared with `stat_stratum()`.**
+
+```{r}
+# collection point, category, and subject variables
+data <- setNames(toy, c("alluvium", "x", "stratum"))
+# required fields for stat transformations
+data$y <- 1
+data$PANEL <- 1
+# flow transformation
+StatFlow$compute_panel(data)
+# alluvium transformation
+StatAlluvium$compute_panel(data)
+```
+
+[^reverse]: This can be prevented by setting `reverse = FALSE` in `stat_stratum()`.
