@@ -74,3 +74,9 @@ StatAlluvium$compute_panel(data)
 ```
 
 [^reverse]: This can be prevented by setting `reverse = FALSE` in `stat_stratum()`.
+
+## Appendix
+
+```{r session info}
+sessioninfo::session_info()
+```
