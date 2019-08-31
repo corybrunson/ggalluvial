@@ -58,7 +58,7 @@ GeomAlluvium <- ggproto(
   default_aes = aes(size = .5, linetype = 1,
                     colour = 0, fill = "gray", alpha = .5),
   
-  setup_params = function(data, params) {
+  setup_data = function(data, params) {
     
     if (! is.null(params$aes.flow)) {
       warning("Parameter `aes.flow` cannot be used in `geom_alluvium`, ",
@@ -66,11 +66,6 @@ GeomAlluvium <- ggproto(
               "use `geom_lode` and `geom_flow` instead.")
       params$aes.flow <- NULL
     }
-    
-    params
-  },
-  
-  setup_data = function(data, params) {
     
     # check whether color or differentiation aesthetics vary within alluvia
     aesthetics <- intersect(.color_diff_aesthetics, names(data))
@@ -81,9 +76,18 @@ GeomAlluvium <- ggproto(
               "Consider using `geom_flow()` instead.")
     }
     
+    knot.pos <- params$knot.pos
+    if (is.null(knot.pos)) {
+      warning(
+        "Missing `geom_alluvium()` parameter `knot.pos` will default to 1/6.",
+        call. = FALSE
+      )
+      knot.pos <- 1/6
+    }
+    
     # positioning parameters
     transform(data,
-              knot.pos = params$knot.pos)
+              knot.pos = knot.pos)
   },
   
   draw_group = function(self, data, panel_scales, coord,

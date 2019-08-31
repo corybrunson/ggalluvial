@@ -64,18 +64,27 @@ GeomFlow <- ggproto(
   default_aes = aes(size = .5, linetype = 1,
                     colour = 0, fill = "gray", alpha = .5),
   
-  setup_params = function(data, params) {
-    
-    params
-  },
-  
   setup_data = function(data, params) {
+    
+    width <- params$width
+    if (is.null(width)) {
+      warning("Missing `geom_flow()` parameter `width` will default to 1/3.",
+              call. = FALSE)
+      width <- 1/3
+    }
+    
+    knot.pos <- params$knot.pos
+    if (is.null(knot.pos)) {
+      warning("Missing `geom_flow()` parameter `knot.pos` will default to 1/6.",
+              call. = FALSE)
+      knot.pos <- 1/6
+    }
     
     # positioning parameters
     transform(data,
-              xmin = x - params$width / 2,
-              xmax = x + params$width / 2,
-              knot.pos = params$knot.pos)
+              xmin = x - width / 2,
+              xmax = x + width / 2,
+              knot.pos = knot.pos)
   },
   
   draw_panel = function(self, data, panel_params, coord,

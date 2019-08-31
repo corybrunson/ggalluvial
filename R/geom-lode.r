@@ -57,16 +57,18 @@ GeomLode <- ggproto(
   default_aes = aes(size = .5, linetype = 1,
                     colour = 0, fill = "gray", alpha = .5),
   
-  setup_params = function(data, params) {
-    
-    params
-  },
-  
   setup_data = function(data, params) {
     
+    width <- params$width
+    if (is.null(width)) {
+      warning("Missing `geom_lode()` parameter `width` will default to 1/3.",
+              call. = FALSE)
+      width <- 1/3
+    }
+    
     transform(data,
-              xmin = x - params$width / 2,
-              xmax = x + params$width / 2)
+              xmin = x - width / 2,
+              xmax = x + width / 2)
   },
   
   draw_panel = function(data, panel_params, coord,
