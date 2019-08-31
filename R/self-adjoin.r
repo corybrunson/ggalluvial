@@ -39,11 +39,11 @@ self_adjoin <- function(
   key_num <- data[[key_var]]
   if (is.character(key_num)) key_num <- as.factor(key_num)
   key_num <- as.numeric(key_num)
-
+  
   # select datasets `x` and `y`
   x <- transform(data, step = key_num)[, c("step", by, link, keep.x)]
   y <- transform(data, step = key_num - 1)[, c("step", by, link, keep.y)]
-
+  
   # return inner join of `x` and `y`
   dplyr::inner_join(
     x, y,

@@ -1,5 +1,17 @@
 # next version
 
+## Defunct parameters
+
+The following parameters, deprecated in previous versions, are now defunct (with informative messages):
+
+- `weight` in the `stat_*()`s (replaced with `y`)
+- `aggregate.wts` in `stat_alluvium()` (replaced with `aggregate.y`)
+- `logical` in the `is_*_form()`s
+
+## Default geom layer parameters
+
+The `width` and `knot.pos` parameters sometimes required by `Geom*$setup_data()` are now set to the same defaults as in the `geom_*()`s when called from a stat, with a warning (since they should be manually set).
+
 ## Custom lode guidance functions
 
 The `lode.guidance` argument of `stat_alluvial()` now accepts functions as input, making the use of custom functions easier as demonstrated in an example.

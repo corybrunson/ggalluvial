@@ -71,11 +71,11 @@ stat_stratum <- function(mapping = NULL,
 #' @export
 StatStratum <- ggproto(
   "StatStratum", Stat,
-
+  
   required_aes = c("x"),
-
+  
   setup_data = function(data, params) {
-
+    
     # if `alluvium` not provided, assign each row its own, grouped by `x`
     if (is.null(data$alluvium) & ! is.null(data$x)) {
       data$alluvium <- NA
@@ -84,32 +84,32 @@ StatStratum <- ggproto(
         data$alluvium[ww] <- 1:length(ww)
       }
     }
-
+    
     # assign uniform weight if not provided
     if (is.null(data$y)) {
       if (is.null(data$weight)) {
         data$y <- rep(1, nrow(data))
       } else {
-        deprecate_parameter("weight", "y", type = "aesthetic")
+        defunct_parameter("weight", "y", type = "aesthetic")
         data$y <- data$weight
         data$weight <- NULL
       }
     } else if (any(is.na(data$y))) {
       stop("Data contains missing `y` values.")
     }
-
+    
     type <- get_alluvial_type(data)
     if (type == "none") {
       stop("Data is not in a recognized alluvial form ",
            "(see `help('alluvial-data')` for details).")
     }
-
+    
     if (params$na.rm) {
       data <- na.omit(object = data)
     } else {
       data <- na_keep(data = data, type = type)
     }
-
+    
     # ensure that data is in lode form
     if (type == "alluvia") {
       axis_ind <- get_axes(names(data))
@@ -124,20 +124,20 @@ StatStratum <- ggproto(
                 "so `discern` will be ignored.")
       }
     }
-
+    
     # nullify `group` and `alluvium` fields (to avoid confusion with geoms)
     data <- transform(data,
                       group = NULL,
                       alluvium = NULL)
-
+    
     data
   },
-
+  
   compute_panel = function(self, data, scales,
                            decreasing = NA, reverse = TRUE,
                            discern = FALSE, label.strata = FALSE,
                            min.height = NULL, max.height = NULL) {
-
+    
     # introduce label (if absent)
     if (label.strata) {
       if (is.null(data$label)) {
@@ -147,13 +147,13 @@ StatStratum <- ggproto(
                 "so parameter `label.strata` will be ignored.")
       }
     }
-
+    
     # remove empty lodes (including labels)
     data <- subset(data, y != 0)
-
+    
     # aggregate data by `x` and `stratum`
     data <- auto_aggregate(data = data, by = c("x", "stratum"))
-
+    
     # sort in preparation for calculating cumulative weights
     data <- if (is.na(decreasing)) {
       arr_fun <- if (reverse) dplyr::desc else identity
@@ -162,21 +162,21 @@ StatStratum <- ggproto(
       arr_fun <- if (decreasing) dplyr::desc else identity
       data[with(data, order(PANEL, x, arr_fun(y))), , drop = FALSE]
     }
-
+    
     # calculate cumulative weights
     data$ycum <- NA
     for (xx in unique(data$x)) {
       ww <- which(data$x == xx)
       data$ycum[ww] <- cumsum(data$y[ww]) - data$y[ww] / 2
     }
-
+    
     # y bounds
     data <- transform(data,
                       ymin = ycum - y / 2,
                       ymax = ycum + y / 2,
                       y = ycum)
     data$ycum <- NULL
-
+    
     # impose height restrictions
     if (! is.null(min.height)) {
       data <- data[data$ymax - data$ymin >= min.height, , drop = FALSE]
@@ -184,7 +184,7 @@ StatStratum <- ggproto(
     if (! is.null(max.height)) {
       data <- data[data$ymax - data$ymin <= max.height, , drop = FALSE]
     }
-
+    
     data
   }
 )

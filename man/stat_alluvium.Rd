@@ -62,7 +62,7 @@ rows before computing lode and flow positions. Set to \code{TRUE} to group
 observations into cohorts. \strong{Warning}: This is currently an expensive
 operation.}
 
-\item{aggregate.wts}{Deprecated alias for \code{aggregate.y}.}
+\item{aggregate.wts}{Defunct alias for \code{aggregate.y}.}
 
 \item{lode.guidance}{The function to prioritize the axis variables for
 ordering the lodes within each stratum, or else a character string
