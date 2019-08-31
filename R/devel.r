@@ -12,6 +12,19 @@ deprecate_parameter <- function(old, new = NA, type = "parameter") {
   ))
 }
 
+defunct_parameter <- function(old, new = NA, type = "parameter") {
+  .Defunct(msg = paste0(
+    "The ", type, " `", old, "` is defunct.",
+    if (is.null(new)) {
+      "\nPass unparameterized arguments instead."
+    } else if (! is.na(new)) {
+      paste0("\nPass arguments to `", new, "` instead.")
+    } else {
+      ""
+    }
+  ))
+}
+
 release_questions <- function() {
   c(
     "Have previous CRAN NOTEs been addressed?"

@@ -78,7 +78,7 @@ is_lodes_form <- function(data,
                           key, value, id,
                           weight = NULL,
                           logical = TRUE, silent = FALSE) {
-  if (! isTRUE(logical)) deprecate_parameter("logical")
+  if (! isTRUE(logical)) defunct_parameter("logical")
   
   key_var <- vars_pull(names(data), !! rlang::enquo(key))
   value_var <- vars_pull(names(data), !! rlang::enquo(value))
@@ -116,7 +116,7 @@ is_alluvia_form <- function(data,
                             ..., axes = NULL,
                             weight = NULL,
                             logical = TRUE, silent = FALSE) {
-  if (! isTRUE(logical)) deprecate_parameter("logical")
+  if (! isTRUE(logical)) defunct_parameter("logical")
   
   if (is.null(rlang::enexpr(weight))) {
     weight_var <- NULL

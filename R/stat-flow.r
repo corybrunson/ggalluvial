@@ -68,7 +68,7 @@ StatFlow <- ggproto(
       if (is.null(data$weight)) {
         data$y <- rep(1, nrow(data))
       } else {
-        deprecate_parameter("weight", "y", type = "aesthetic")
+        defunct_parameter("weight", "y", type = "aesthetic")
         data$y <- data$weight
         data$weight <- NULL
       }
