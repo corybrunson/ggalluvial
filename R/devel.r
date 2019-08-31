@@ -37,7 +37,7 @@ is_alluvial <- function(data, ..., silent = FALSE) {
     "The function `is_alluvial()` is deprecated; ",
     "use `is_lodes_form()` or `is_alluvia_form()`."
   ))
-
+  
   # determine method based on arguments given
   dots <- lazyeval::lazy_dots(...)
   if (! is.null(dots$key) | ! is.null(dots$value) | ! is.null(dots$id)) {

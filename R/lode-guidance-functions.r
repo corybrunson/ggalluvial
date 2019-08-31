@@ -25,20 +25,20 @@ NULL
 #' @rdname lode-guidance-functions
 #' @export
 lode_zigzag <- function(n, i) {
-
+  
   # radii
   r1 <- i - 1
   r2 <- n - i
   r <- min(r1, r2)
-
+  
   # attempt cohesion in the direction of the closer end
   leftward <- (i <= n / 2)
-
+  
   # setup
   sgn <- if(r1 == r2) 0 else (r2 - r1) / abs(r2 - r1)
   rem <- (i + sgn * (r + 1)):((n+1)/2 + sgn * (n-1)/2)
   zz <- (1 - 2 * leftward) * c(1, -1)
-
+  
   # order
   c(i,
     if(r == 0) c() else sapply(1:r, function(j) i + j * zz),
