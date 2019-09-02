@@ -19,23 +19,29 @@ knitr::opts_chunk$set(fig.width = 6, fig.height = 3, fig.align = "center")
 library(ggalluvial)
 ```
 
-All of the functionality discussed in this vignette is exported by **ggalluvial**. We'll also need a toy data set to play with:
+All of the functionality discussed in this vignette is exported by **ggalluvial**. We'll also need a toy data set to play with. I conjured the data frame `toy` to be nearly as small as possible while complex enough to illustrate the positional controls:
 
 ```{r data}
 # toy data set
+set.seed(0)
 toy <- data.frame(
-  subject = rep(c("X", "Y", "Z"), times = 3),
-  collection = rep(1:3, each = 3),
-  category = I(c("A", "A", "B", "A", "B", "B", "A", "B", "A"))
+  subject = rep(LETTERS[1:5], times = 4),
+  collection = rep(1:4, each  = 5),
+  category = rep(
+    sample(c("X", "Y"), 16, replace = TRUE),
+    rep(c(1, 2, 1, 1), times = 4)
+  ),
+  class = c("one", "one", "one", "two", "two")
 )
 print(toy)
 ```
 
-Here's how **ggalluvial** might visualize these data under default settings:
+The subjects are classified into categories at each collection point but are also members of fixed classes.
+Here's how **ggalluvial** visualizes these data under default settings:
 
 ```{r plot}
 ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
-  geom_alluvium(aes(fill = subject)) +
+  geom_alluvium(aes(fill = class)) +
   geom_stratum()
 ```
 
@@ -48,19 +54,16 @@ The stat layers convert repeated measures data into the coordinates for a sequen
 Thus, the results of the statistical transformation are not so much intrinsically meaningful as underpinning of an interpretable plot annotation.
 In this way, the layers of **ggalluvial** behave like `stat_ellipse()` and its default `geom_path()`: `StatEllipse()` transforms point cloud data into a set of coordinates on a confidence (or other) ellipse in sequential order, which are then connected by line segments to mimic a smooth ellipse using `GeomPath()`.
 
-(The only _interpretative_ data transformation is between "lodes" (long) form and "alluvia" (wide) form, as illustrated in [the technical introduction](http://corybrunson.github.io/ggalluvial/articles/ggalluvial.html). This can be done manually using [the exported conversion functions](http://corybrunson.github.io/ggalluvial/reference/alluvial-data.html) but is usually handled internally by the stat layers.
-To avoid this complication, `toy` is already in lodes form.)
-
 There are two key reasons for this behavior:
 
 1. The coordinates returned by some stat layers can be coupled with multiple geom layers. For example, all four geoms can couple with the `alluvium` stat. Moreover, as showcased in [the examples](http://corybrunson.github.io/ggalluvial/reference/index.html), the stats can also meaningfully couple with exogenous geoms like `text`, `pointrange`, and `errorbar`. (In principle, the geoms could also couple with exogenous stats, but i haven't done this or seen it in the wild.)
 2. Different parameters control the calculations of the coordinates (e.g. `aes.bind` and `aggregate.y`) and the rendering of the graphical elements (`width`, `knot.pos`, and `aes.flow`), and it makes intuitive sense to handle these separately. For example, the heights of the strata and lodes convey information about the underlying data, whereas their widths are arbitrary.
 
-## Positioning within the axes
+(If the data are provided in alluvia format, then `Stat*$setup_data()` converts them to lodes format in preparation for the main transformation. This can be done manually using [the exported conversion functions](http://corybrunson.github.io/ggalluvial/reference/alluvial-data.html), and this vignette will assume the data are already in lodes format.)
+
+## Positioning strata
 
 Each stat layer demarcates one stack for each data collection point and one rectangle within each stack for each (non-empty) category. In [**ggalluvial** terms](http://corybrunson.github.io/ggalluvial/articles/ggalluvial.html), the collection points are axes and the rectangles are strata or lodes.
-
-### Strata
 
 To generate a sequence of stacked bar plots with no connecting flows, only the aesthetics `x` and `stratum` are required:
 
@@ -76,27 +79,49 @@ StatStratum$compute_panel(data)
 
 Comparing this output to `toy`, notice first that the data have been aggregated: Each distinct combination of `x` and `stratum` occupies only one row.
 `x` encodes the axes and is subject to layers specific to this positional aesthetic, e.g. `scale_x_*()` transformations.
+`ymin` and `ymax` are the lower and upper bounds of the rectangles, and `y` is their vertical centers. Each stacked rectangle begins where the one below it ends, and their heights are the numbers of subjects (or the totals of their `y` values, if `y` is passed a numerical variable) that take the corresponding category value at the corresponding collection point.
+
+Here's the plot this strata-only transformation yields:
+
+```{r strata plot}
+ggplot(toy, aes(x = collection, stratum = category)) +
+  stat_stratum() +
+  stat_stratum(geom = "text", aes(label = category))
+```
+
+In this vignette, i'll use the `stat_*()` functions to add layers, so that the parameters that control their behavior are accessible via tab-completion.
+
+### Reversing the strata
+
 Within each axis, `stratum` defaults to reverse order so that the bars proceed in the original order from top to bottom. This can be overridden by setting `reverse = FALSE` in `stat_stratum()`:
 
 ```{r strata reverse}
 # stratum transformation with strata in original order
 StatStratum$compute_panel(data, reverse = FALSE)
-```
-
-`ymin` and `ymax` are the lower and upper bounds of the rectangles, and `y` is their vertical centers. Each stacked rectangle begins where the one below it ends, and their heights are the numbers of subjects (or the totals of their `y` values, if `y` is passed a numerical variable) that take the corresponding category value at the corresponding collection point.
-
-Henceforth, since our ultimate focus is the ordering of the lodes within the strata, we'll use the default (reverse) ordering of the strata themselves.
-The caveat to this is that, _if `reverse` is declared in any layer, then it must be declared in every layer_, so that the layers will not be misaligned. An easy way to ensure this is to set the alluvial aesthetics in the `ggplot()` call rather than in the separate layers.
-
-Here's how this strata-only plot renders:
-
-```{r strata plot}
 ggplot(toy, aes(x = collection, stratum = category)) +
-  geom_stratum() +
-  geom_text(stat = "stratum", aes(label = category))
+  stat_stratum(reverse = FALSE) +
+  stat_stratum(geom = "text", aes(label = category), reverse = FALSE)
 ```
 
-### Alluvia
+The caveat to this is that, _if `reverse` is declared in any layer, then it must be declared in every layer_, so that the layers will not be misaligned.
+This includes any `alluvium`, `flow`, and `lode` layers, since their graphical elements are organized within the bounds of the strata.
+
+### Sorting the strata by size
+
+When the strata are defined by a factor variable, they default to the order of the factor. This can be overridden by the `decreasing` parameter, which defaults to `NA` but can be set to `TRUE` or `FALSE` to arrange the strata in decreasing or increasing order in the `y` direction:
+
+```{r strata decreasing}
+# stratum transformation with strata in original order
+StatStratum$compute_panel(data, reverse = FALSE)
+ggplot(toy, aes(x = collection, stratum = category)) +
+  stat_stratum(decreasing = TRUE) +
+  stat_stratum(geom = "text", aes(label = category), decreasing = TRUE)
+```
+
+The same caveat applies to `decreasing` as to `reverse`: Make sure that all layers using alluvial stats are passed the same values!
+Henceforth, we'll use the default (reverse and categorical) ordering of the strata themselves.
+
+## Positioning lodes within strata
 
 In the strata-only plot, each subject is represented once at each axis.
 _Alluvia_ are x-splines that connect these multiple representations of the same subjects across the axes. In order to avoid having these splines overlap at the axes, the `alluvium` stat must stack the alluvial cohorts---subsets of subjects who have a common profile across all axes---within each stratum. These smaller cohort-specific rectangles are the _lodes_.
@@ -104,7 +129,7 @@ This calculation requires the additional `alluvium` aesthetic, which identifies 
 
 ```{r alluvia}
 # collection point, category, and subject variables
-data <- setNames(toy, c("alluvium", "x", "stratum"))
+data <- setNames(toy[, 1:3], c("alluvium", "x", "stratum"))
 # required fields for stat transformations
 data$y <- 1
 data$PANEL <- 1
@@ -114,16 +139,75 @@ StatAlluvium$compute_panel(data)
 
 The transformed data now contain _one row per cohort_---instead of per category---_per collection point_. The vertical positional aesthetics describe the lodes rather than the strata, and the `group` variable encodes the `alluvia` (a convenience for the geom layer). The `position` variable is vestigial to the internal calculations and will eventually be dropped.
 
-Here's how this transformation translates into an alluvial diagram:
+Here's how this transformation translates into the alluvial diagram that began the vignette:
 
 ```{r alluvia plot}
 ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
-  geom_alluvium(aes(fill = subject)) +
-  geom_stratum() +
-  geom_text(stat = "stratum", aes(label = category))
+  stat_alluvium(aes(fill = class)) +
+  stat_stratum() +
+  stat_stratum(geom = "text", aes(label = category))
 ```
 
-**Embellish the toy example to make it suitable for illustrating `aes.bind` and lode controls.**
+### Lode guidance
+
+As the number of strata at each axis grows, heterogeneous cases or cohorts can produce highly complex alluvia and very messy diagrams. **ggalluvial** mitigates this by strategically arranging the lodes---the intersections of the alluvia with the strata---so as to minimize their crossings between adjacent axes. This strategy is executed locally: Within each axis $i$, the order of the lodes is guided by the orders of the strata at _all_ axes, starting with $i$ (so that the lodes are actually positioned within the correct strata). The order in which the remaining axes are factored into this calculation is calculated by the _lode guidance function_.
+
+A lode guidance function can be passed to the `lode.guidance` parameter, which defaults to `"zigzag"`. This function puts the nearest (adjacent) axes first, then zigzags outward from there:
+
+```{r lode zigzag}
+for (i in 1:4) print(lode_zigzag(4, i))
+```
+
+Four alternative `lode_*()` functions are available: `"rightleft"` and `"leftright"`, which behave like `"zigzag"` but extend completely in one outward direction from axis $i$ before the other; and `"rightward"` and `"leftward"`, which put the remaining axes in increasing and decreasing order. Two are illustrated below:
+
+```{r alluvia plot w/ leftright guidance}
+for (i in 1:4) print(lode_leftright(4, i))
+ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
+  stat_alluvium(aes(fill = class), lode.guidance = "leftright") +
+  stat_stratum() +
+  stat_stratum(geom = "text", aes(label = category))
+```
+
+The difference between `"leftright"` guidance and `"zigzag"` guidance can be seen in the order of the lodes of the `"Y"` stratum at axis `3`: Whereas `"zigzag"` minimized the crossings between axes `3` and `4`, locating the distinctive class-`"one"` case above the others, `"leftright"` minimized the crossings between axes `2` and `3` (axis `2` being immediately leftward of axis `3`), locating this case below the others.
+
+```{r alluvia plot w/ leftward guidance}
+for (i in 1:4) print(lode_leftward(4, i))
+ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
+  stat_alluvium(aes(fill = class), lode.guidance = "leftward") +
+  stat_stratum() +
+  stat_stratum(geom = "text", aes(label = category))
+```
+
+The effect of `"leftward"` guidance is to keep the right part of the diagram as tidy as possible while allowing the left part to become as messy as necessary. (`"rightward"` has the opposite effect.)
+
+### Aesthetic binding
+
+It often makes sense to bundle together the cases and cohorts that fall into common groups used to assign differentiation aesthetics: most commonly `fill`, but also `alpha`, which controls the opacity of the `fill` colors, and `colour`, `linetype`, and `size`, which control the borders of the alluvia, flows, and lodes.
+
+The `aes.bind` parameter defaults to `FALSE`; setting it to `TRUE` prioritizes any such aesthetics _after_ the strata of the current axis and _before_ those of the remaining axes.
+In the toy example, this results in the lodes within each stratum being sorted first by class:
+
+```{r alluvia plot w/ aesthetic binding}
+ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
+  stat_alluvium(aes(fill = class), aes.bind = TRUE) +
+  stat_stratum() +
+  stat_stratum(geom = "text", aes(label = category))
+```
+
+### Manual lode ordering
+
+Finally, one may wish to put the lodes at each axis in a predefined order (subject to their being located in the correct strata). This can be done by passing an integer matrix or a list of integer vectors to `lode.ordering`, which takes the columns or elements to prescribe the order of the cases at the axes.
+For the toy example, we can put the cases in the order of their IDs in the data:
+
+```{r alluvia plot w/ manual lode ordering}
+lode_ord <- matrix(1:5, nrow = 5, ncol = 4)
+ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
+  stat_alluvium(aes(fill = class), lode.ordering = lode_ord) +
+  stat_stratum() +
+  stat_stratum(geom = "text", aes(label = category))
+```
+
+Within each stratum at each axis, the cases are now in order from bottom to top. A shortcut is in the works to allow to pass a single numerical vector to `lode.ordering`, having length the number of cases, which will be used to sort the lodes at each axis.
 
 ### Flows
 
