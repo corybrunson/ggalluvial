@@ -1,16 +1,16 @@
 ---
-title: "The Ordering of the Lodes"
+title: "The Order of the Rectangles"
 author: "Jason Cory Brunson"
 date: "`r Sys.Date()`"
 output:
   rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{ordering of lodes}
+  %\VignetteIndexEntry{order of rectangles}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
 
-How the lodes within each stratum are ordered, and how to control their order, is a complicated but essential part of **ggalluvial**'s functionality. This vignette explains the motivations behind the implementation and explores the functionality in greater detail than the examples.
+How the strata and lodes at each axis are ordered, and how to control their order, is a complicated but essential part of **ggalluvial**'s functionality. This vignette explains the motivations behind the implementation and explores the functionality in greater detail than the examples.
 
 ## Setup
 

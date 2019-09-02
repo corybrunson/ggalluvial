@@ -1,4 +1,5 @@
-# next version
+
+# ggalluvial 0.10.0
 
 ## Lode guidance and ordering
 

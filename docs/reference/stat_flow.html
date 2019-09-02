@@ -65,7 +65,7 @@ between each pair of adjacent axes." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.9.2.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.10.0</span>
       </span>
     </div>
 
@@ -92,6 +92,9 @@ between each pair of adjacent axes." />
   <ul class="dropdown-menu" role="menu">
     <li>
       <a href="../articles/labels.html">Labeling small strata</a>
+    </li>
+    <li>
+      <a href="../articles/order-rectangles.html">The Order of the Rectangles</a>
     </li>
   </ul>
 </li>
@@ -286,7 +289,7 @@ observations within each stratum (otherwise <code>NA</code> is assigned).</p>
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.5</span>) +
   <span class='fu'>geom_text</span>(<span class='fu'>aes</span>(<span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>response</span>), <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)
 <span class='co'># rightward alluvial aesthetics for vaccine survey data</span>
-<span class='no'>gg</span> + <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>, <span class='kw'>lode.guidance</span> <span class='kw'>=</span> <span class='st'>"rightward"</span>)</div><div class='img'><img src='stat_flow-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># memoryless flows for vaccine survey data</span>
+<span class='no'>gg</span> + <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>, <span class='kw'>lode.guidance</span> <span class='kw'>=</span> <span class='st'>"forward"</span>)</div><div class='img'><img src='stat_flow-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># memoryless flows for vaccine survey data</span>
 <span class='no'>gg</span> + <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>()</div><div class='img'><img src='stat_flow-4.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># aesthetics that vary betwween and within strata</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/data'>data</a></span>(<span class='no'>vaccinations</span>)
