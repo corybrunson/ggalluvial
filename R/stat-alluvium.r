@@ -216,6 +216,12 @@ StatAlluvium <- ggproto(
       
       alluv[, -1] <- apply(lode.ordering, 2, order)
     } else {
+      # bind a vector to itself to create a matrix
+      if (is.vector(lode.ordering)) {
+        lode.ordering <- matrix(lode.ordering,
+                                nrow = length(lode.ordering),
+                                ncol = length(unique(data$x)))
+      }
       # check that array has correct dimensions
       stopifnot(dim(lode.ordering) ==
                   c(length(unique(data$alluvium)),

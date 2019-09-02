@@ -22,8 +22,12 @@ gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
                aes.bind = TRUE, lode.guidance = "rightward")
 # use of lode ordering
 lode_ord <- replicate(n = 3, expr = sample(x = 32), simplify = FALSE)
+print(lode_ord)
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
                lode.ordering = lode_ord)
+# fixed lode ordering across axes
+gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
+               lode.ordering = lode_ord[[1]])
 # use of custom luide guidance function
 lode_custom <- function(n, i) {
   stopifnot(n == 3)
