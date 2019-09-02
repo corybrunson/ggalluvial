@@ -1,8 +1,8 @@
 # next version
 
-## Lode ordering functions
+## Lode guidance and ordering
 
-The lode ordering functions have been renamed as follows and their original names retained as aliases:
+The lode guidance functions have been renamed as follows and their original names retained as aliases:
 
 | original  | renamed   |
 |-----------|-----------|
@@ -12,6 +12,8 @@ The lode ordering functions have been renamed as follows and their original name
 | leftright | backfront |
 
 Additionally, `lode.ordering` now accepts a single integer vector of length the number of cases (alluvia), and will use the vector to sort the lodes within strata at each axis.
+
+Finally, a new vignette showcases this and related functionality using a small example.
 
 ## Defunct parameters
 

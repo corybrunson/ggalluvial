@@ -123,6 +123,8 @@ Henceforth, we'll use the default (reverse and categorical) ordering of the stra
 
 ## Positioning lodes within strata
 
+## Alluvia and flows
+
 In the strata-only plot, each subject is represented once at each axis.
 _Alluvia_ are x-splines that connect these multiple representations of the same subjects across the axes. In order to avoid having these splines overlap at the axes, the `alluvium` stat must stack the alluvial cohorts---subsets of subjects who have a common profile across all axes---within each stratum. These smaller cohort-specific rectangles are the _lodes_.
 This calculation requires the additional `alluvium` aesthetic, which identifies common subjects across the axes:
@@ -148,9 +150,28 @@ ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
   stat_stratum(geom = "text", aes(label = category))
 ```
 
+The `flow` stat differs from the `alluvium` stat by allowing the orders of the lodes within strata to differ from one side of an axis to the other. Put differently, the `flow` stat allows _mixing_ at the axes, rather than requiring that each case or cohort is follows a continuous trajectory from one end of the diagram to the other. As a result, flow diagrams are often much clearer, with the trade-off that cases and cohorts cannot be tracked through them.
+
+```{r flows}
+# flow transformation
+StatFlow$compute_panel(data)
+```
+
+The `flow` stat transformation yields _one row per cohort per side per flow_. Each interior axis appears twice in the data, once for the incoming flow and once for the outgoing flow. (The starting and ending axes only have rows for outgoing and incoming flows, respectively.)
+Here is the flow version of the preceding alluvial diagram:
+
+```{r flows plot}
+ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
+  stat_stratum() +
+  stat_flow(aes(fill = class)) +
+  stat_stratum(geom = "text", aes(label = category))
+```
+
+Note: The `aes.flow` parameter tells `geom_flow()` how flows should inherit differentiation aesthetics from adjacent axes---`"forward"` or `"backward"`. It does _not_ influence their positions.
+
 ### Lode guidance
 
-As the number of strata at each axis grows, heterogeneous cases or cohorts can produce highly complex alluvia and very messy diagrams. **ggalluvial** mitigates this by strategically arranging the lodes---the intersections of the alluvia with the strata---so as to minimize their crossings between adjacent axes. This strategy is executed locally: Within each axis $i$, the order of the lodes is guided by the orders of the strata at _all_ axes, starting with $i$ (so that the lodes are actually positioned within the correct strata). The order in which the remaining axes are factored into this calculation is calculated by the _lode guidance function_.
+As the number of strata at each axis grows, heterogeneous cases or cohorts can produce highly complex alluvia and very messy diagrams. **ggalluvial** mitigates this by strategically arranging the lodes---the intersections of the alluvia with the strata---so as to minimize their crossings between adjacent axes. This strategy is executed locally: Within each axis $i$, the order of the lodes is guided by the orders of the strata at _all_ axes, starting with $i$ (so that the lodes are actually positioned within the correct strata). The order in which the remaining axes are factored into this calculation is calculated by the _lode guidance function_. (Because flows do not extend beyond two adjacent axes, the `flow` stat cannot make use of lode guidance functions.)
 
 A lode guidance function can be passed to the `lode.guidance` parameter, which defaults to `"zigzag"`. This function puts the nearest (adjacent) axes first, then zigzags outward from there:
 
@@ -194,6 +215,17 @@ ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
   stat_stratum(geom = "text", aes(label = category))
 ```
 
+Rather than ordering lodes _within_, the `flow` stat separately orders the flows _into_ and _out from_, each stratum.
+By default, the flows are ordered with respect first to the orders of the strata at the present axis and second to those at the adjacent axis.
+In this case, `aes.bind = TRUE` tells `stat_flow()` to prioritize flow aesthetics after the present axis and before the adjacent:
+
+```{r flows plot w/ aesthetic binding}
+ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
+  stat_flow(aes(fill = class), aes.bind = TRUE) +
+  stat_stratum() +
+  stat_stratum(geom = "text", aes(label = category))
+```
+
 ### Manual lode ordering
 
 Finally, one may wish to put the lodes at each axis in a predefined order (subject to their being located in the correct strata). This can be done by passing an integer matrix or a list of integer vectors to `lode.ordering`, which takes the columns or elements to prescribe the order of the cases at the axes.
@@ -209,12 +241,9 @@ ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
 
 Within each stratum at each axis, the cases are now in order from bottom to top. A shortcut is in the works to allow to pass a single numerical vector to `lode.ordering`, having length the number of cases, which will be used to sort the lodes at each axis.
 
-### Flows
+## More examples
 
-```{r flows}
-# flow transformation
-StatFlow$compute_panel(data)
-```
+More examples of all of the functionality showcased here can be found in the documentation for the `stat_*()` functions, [browsable on the package website](http://corybrunson.github.io/ggalluvial/reference/index.html).
 
 ## Appendix
 
