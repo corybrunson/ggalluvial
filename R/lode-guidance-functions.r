@@ -12,10 +12,12 @@
 #' the remaining axes as follows:
 #'
 #' - `zigzag`: Zigzag outward from `i`
-#' - `rightward`: Increasing order
-#' - `leftward`: Decreasing order
-#' - `rightleft`: Proceed rightward from `i` to `n`, then leftward to 1
-#' - `leftright`: Proceed leftward from `i` to 1, then rightward to `n`
+#' - `forward`: Increasing order (alias `rightward`)
+#' - `backward`: Decreasing order (alias `leftward`)
+#' - `frontback`: Proceed forward from `i` to `n`, then backward to 1
+#'   (alias `rightleft`)
+#' - `backfront`: Proceed backward from `i` to 1, then forward to `n`
+#'   (alias `leftright`)
 #'
 #' @name lode-guidance-functions
 #' @param n Numeric, a positive integer
@@ -32,12 +34,12 @@ lode_zigzag <- function(n, i) {
   r <- min(r1, r2)
   
   # attempt cohesion in the direction of the closer end
-  leftward <- (i <= n / 2)
+  backward <- (i <= n / 2)
   
   # setup
   sgn <- if(r1 == r2) 0 else (r2 - r1) / abs(r2 - r1)
   rem <- (i + sgn * (r + 1)):((n+1)/2 + sgn * (n-1)/2)
-  zz <- (1 - 2 * leftward) * c(1, -1)
+  zz <- (1 - 2 * backward) * c(1, -1)
   
   # order
   c(i,
@@ -47,24 +49,40 @@ lode_zigzag <- function(n, i) {
 
 #' @rdname lode-guidance-functions
 #' @export
-lode_rightward <- function(n, i) {
+lode_forward <- function(n, i) {
   if (i == 1) 1:n else if (i == n) c(n, 1:(n-1)) else c(i, 1:(i-1), (i+1):n)
 }
 
 #' @rdname lode-guidance-functions
 #' @export
-lode_leftward <- function(n, i) {
+lode_rightward <- lode_forward
+
+#' @rdname lode-guidance-functions
+#' @export
+lode_backward <- function(n, i) {
   if (i == 1) c(i, n:2) else if (i == n) n:1 else c(i, n:(i+1), (i-1):1)
 }
 
 #' @rdname lode-guidance-functions
 #' @export
-lode_rightleft <- function(n, i) {
+lode_leftward <- lode_backward
+
+#' @rdname lode-guidance-functions
+#' @export
+lode_frontback <- function(n, i) {
   if (i == 1) 1:n else if (i == n) n:1 else c(i, (i+1):n, (i-1):1)
 }
 
 #' @rdname lode-guidance-functions
 #' @export
-lode_leftright <- function(n, i) {
+lode_rightleft <- lode_frontback
+
+#' @rdname lode-guidance-functions
+#' @export
+lode_backfront <- function(n, i) {
   if (i == 1) 1:n else if (i == n) n:1 else c(i, (i-1):1, (i+1):n)
 }
+
+#' @rdname lode-guidance-functions
+#' @export
+lode_leftright <- lode_backfront

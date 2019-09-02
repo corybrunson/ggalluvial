@@ -16,10 +16,10 @@ gg <- ggplot(as.data.frame(Titanic),
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 # use of lode controls
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
-               lode.guidance = "rightward")
+               lode.guidance = "forward")
 # prioritize aesthetic binding
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
-               aes.bind = TRUE, lode.guidance = "rightward")
+               aes.bind = TRUE, lode.guidance = "forward")
 # use of lode ordering
 lode_ord <- replicate(n = 3, expr = sample(x = 32), simplify = FALSE)
 print(lode_ord)
@@ -63,10 +63,10 @@ gg <- ggplot(majors,
                  fill = curriculum)) +
   geom_stratum()
 # diagram with outlined alluvia and forward-colored flows
-gg + geom_flow(stat = "alluvium", lode.guidance = "rightleft",
+gg + geom_flow(stat = "alluvium", lode.guidance = "frontback",
                color = "black")
 # same diagram with students are aggregated into cohorts
-gg + geom_flow(stat = "alluvium", lode.guidance = "rightleft",
+gg + geom_flow(stat = "alluvium", lode.guidance = "frontback",
                color = "black", aggregate.y = TRUE)
 
 \dontrun{

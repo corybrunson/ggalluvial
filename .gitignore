@@ -1,3 +1,5 @@
+Meta
+doc
 # Mac OS X
 .DS_Store
 
@@ -6,6 +8,5 @@
 .Rapp.history
 .RData
 .Rproj.user
-
 # sandbox
 sandbox

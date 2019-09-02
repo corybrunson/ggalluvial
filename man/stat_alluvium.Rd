@@ -66,8 +66,8 @@ operation.}
 
 \item{lode.guidance}{The function to prioritize the axis variables for
 ordering the lodes within each stratum, or else a character string
-identifying the function. Character options are "zigzag", "rightleft",
-"leftright", "rightward", and "leftward" (see \code{\link{lode-guidance-functions}}).}
+identifying the function. Character options are "zigzag", "frontback",
+"backfront", "forward", and "backward" (see \code{\link{lode-guidance-functions}}).}
 
 \item{lode.ordering}{A list (of length the number of axes) of integer vectors
 (each of length the number of rows of \code{data}) or NULL entries (indicating
@@ -156,10 +156,10 @@ gg <- ggplot(as.data.frame(Titanic),
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 # use of lode controls
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
-               lode.guidance = "rightward")
+               lode.guidance = "forward")
 # prioritize aesthetic binding
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
-               aes.bind = TRUE, lode.guidance = "rightward")
+               aes.bind = TRUE, lode.guidance = "forward")
 # use of lode ordering
 lode_ord <- replicate(n = 3, expr = sample(x = 32), simplify = FALSE)
 print(lode_ord)
@@ -203,10 +203,10 @@ gg <- ggplot(majors,
                  fill = curriculum)) +
   geom_stratum()
 # diagram with outlined alluvia and forward-colored flows
-gg + geom_flow(stat = "alluvium", lode.guidance = "rightleft",
+gg + geom_flow(stat = "alluvium", lode.guidance = "frontback",
                color = "black")
 # same diagram with students are aggregated into cohorts
-gg + geom_flow(stat = "alluvium", lode.guidance = "rightleft",
+gg + geom_flow(stat = "alluvium", lode.guidance = "frontback",
                color = "black", aggregate.y = TRUE)
 
 \dontrun{

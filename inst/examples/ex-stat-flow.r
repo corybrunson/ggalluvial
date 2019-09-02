@@ -25,7 +25,7 @@ gg <- ggplot(vaccinations,
   geom_stratum(alpha = .5) +
   geom_text(aes(label = response), stat = "stratum")
 # rightward alluvial aesthetics for vaccine survey data
-gg + geom_flow(stat = "alluvium", lode.guidance = "rightward")
+gg + geom_flow(stat = "alluvium", lode.guidance = "forward")
 # memoryless flows for vaccine survey data
 gg + geom_flow()
 

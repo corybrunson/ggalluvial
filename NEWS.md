@@ -1,5 +1,19 @@
 # next version
 
+## Lode ordering functions
+
+The lode ordering functions have been renamed as follows and their original names retained as aliases:
+
+| original  | renamed   |
++-----------+-----------+
+| rightward | forward   |
+| leftward  | backward  |
+| rightleft | frontback |
+| leftright | backfront |
++-----------+-----------|
+
+Additionally, `lode.ordering` now accepts a single integer vector of length the number of cases (alluvia), and will use the vector to sort the lodes within strata at each axis.
+
 ## Defunct parameters
 
 The following parameters, deprecated in previous versions, are now defunct (with informative messages):

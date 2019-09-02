@@ -3,19 +3,31 @@
 \name{lode-guidance-functions}
 \alias{lode-guidance-functions}
 \alias{lode_zigzag}
+\alias{lode_forward}
 \alias{lode_rightward}
+\alias{lode_backward}
 \alias{lode_leftward}
+\alias{lode_frontback}
 \alias{lode_rightleft}
+\alias{lode_backfront}
 \alias{lode_leftright}
 \title{Lode guidance functions}
 \usage{
 lode_zigzag(n, i)
 
+lode_forward(n, i)
+
 lode_rightward(n, i)
+
+lode_backward(n, i)
 
 lode_leftward(n, i)
 
+lode_frontback(n, i)
+
 lode_rightleft(n, i)
+
+lode_backfront(n, i)
 
 lode_leftright(n, i)
 }
@@ -37,9 +49,11 @@ lodes within each index axis. After starting at \code{i}, the functions order
 the remaining axes as follows:
 \itemize{
 \item \code{zigzag}: Zigzag outward from \code{i}
-\item \code{rightward}: Increasing order
-\item \code{leftward}: Decreasing order
-\item \code{rightleft}: Proceed rightward from \code{i} to \code{n}, then leftward to 1
-\item \code{leftright}: Proceed leftward from \code{i} to 1, then rightward to \code{n}
+\item \code{forward}: Increasing order (alias \code{rightward})
+\item \code{backward}: Decreasing order (alias \code{leftward})
+\item \code{frontback}: Proceed forward from \code{i} to \code{n}, then backward to 1
+(alias \code{rightleft})
+\item \code{backfront}: Proceed backward from \code{i} to 1, then forward to \code{n}
+(alias \code{leftright})
 }
 }

@@ -20,8 +20,8 @@
 #' @param aggregate.wts Defunct alias for `aggregate.y`.
 #' @param lode.guidance The function to prioritize the axis variables for
 #'   ordering the lodes within each stratum, or else a character string
-#'   identifying the function. Character options are "zigzag", "rightleft",
-#'   "leftright", "rightward", and "leftward" (see [`lode-guidance-functions`]).
+#'   identifying the function. Character options are "zigzag", "frontback",
+#'   "backfront", "forward", and "backward" (see [`lode-guidance-functions`]).
 #' @param lode.ordering A list (of length the number of axes) of integer vectors
 #'   (each of length the number of rows of `data`) or NULL entries (indicating
 #'   no imposed ordering), or else a numeric matrix of corresponding dimensions,
