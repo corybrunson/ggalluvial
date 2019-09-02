@@ -69,6 +69,17 @@ gg + geom_flow(stat = "alluvium", lode.guidance = "frontback",
 gg + geom_flow(stat = "alluvium", lode.guidance = "frontback",
                color = "black", aggregate.y = TRUE)
 
+# irregular spacing between axes of a continuous variable
+data(Refugees, package = "alluvial")
+refugees_sub <- subset(Refugees, year %in% c(2003, 2005, 2010, 2013))
+ggplot(data = refugees_sub,
+       aes(x = year, y = refugees, alluvium = country)) +
+  geom_alluvium(aes(fill = country),
+                alpha = .75, decreasing = FALSE, knot.pos = 1) +
+  geom_stratum(aes(stratum = country), decreasing = FALSE, width = 1/2) +
+  theme_bw() +
+  scale_fill_brewer(type = "qual", palette = "Set3")
+
 \dontrun{
 data(babynames, package = "babynames")
 # a discontiguous alluvium
