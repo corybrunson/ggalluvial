@@ -139,7 +139,7 @@ data$PANEL <- 1
 StatAlluvium$compute_panel(data)
 ```
 
-The transformed data now contain _one row per cohort_---instead of per category---_per collection point_. The vertical positional aesthetics describe the lodes rather than the strata, and the `group` variable encodes the `alluvia` (a convenience for the geom layer). The `position` variable is vestigial to the internal calculations and will eventually be dropped.
+The transformed data now contain _one row per cohort_---instead of per category---_per collection point_. The vertical positional aesthetics describe the lodes rather than the strata, and the `group` variable encodes the `alluvia` (a convenience for the geom layer).
 
 Here's how this transformation translates into the alluvial diagram that began the vignette:
 
@@ -229,7 +229,7 @@ ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
 ### Manual lode ordering
 
 Finally, one may wish to put the lodes at each axis in a predefined order (subject to their being located in the correct strata). This can be done by passing an integer matrix or a list of integer vectors to `lode.ordering`, which takes the columns or elements to prescribe the order of the cases at the axes.
-For the toy example, we can put the cases in the order of their IDs in the data:
+For the toy example, we can use a shortcut---a single vector---to put the cases in the order of their IDs in the data at every axis:
 
 ```{r alluvia plot w/ manual lode ordering}
 lode_ord <- matrix(1:5, nrow = 5, ncol = 4)
@@ -239,8 +239,7 @@ ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
   stat_stratum(geom = "text", aes(label = category))
 ```
 
-Within each stratum at each axis, the cases are now in order from bottom to top. A shortcut is in the works to allow to pass a single numerical vector to `lode.ordering`, having length the number of cases, which will be used to sort the lodes at each axis.
-
+Within each stratum at each axis, the cases are now in order from bottom to top. 
 ## More examples
 
 More examples of all of the functionality showcased here can be found in the documentation for the `stat_*()` functions, [browsable on the package website](http://corybrunson.github.io/ggalluvial/reference/index.html).

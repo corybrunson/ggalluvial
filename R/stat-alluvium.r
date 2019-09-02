@@ -235,16 +235,16 @@ StatAlluvium <- ggproto(
     # gather lode positions into alluvium-axis-order table
     alluv_pos <- tidyr::gather(
       alluv,
-      key = "x", value = "position",
+      key = "x", value = "pos",
       alluv_ind
     )
     rm(alluv) # avoid confusion
     alluv_pos$x <- as.integer(alluv_pos$x)
-    # join position variable into `data`
+    # join 'pos' variable into `data`
     data <- dplyr::left_join(data, alluv_pos, by = c("x", "alluvium"))
     
     # calculate lode floors and ceilings from positions by axis
-    data <- data[order(data$position), , drop = FALSE]
+    data <- data[order(data$pos), , drop = FALSE]
     data <- dplyr::ungroup(dplyr::mutate(dplyr::group_by(data, x),
                                          ymax = cumsum(y),
                                          ymin = dplyr::lag(ymax, default = 0)))
@@ -264,6 +264,7 @@ StatAlluvium <- ggproto(
     # add `group` to group contiguous alluvial subsets
     data <- transform(data, group = as.numeric(interaction(alluvium, flow)))
     # remove unused fields
+    data$pos <- NULL
     data$cont <- NULL
     data$axis <- NULL
     data$flow <- NULL
