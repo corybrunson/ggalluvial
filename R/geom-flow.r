@@ -68,17 +68,11 @@ GeomFlow <- ggproto(
     
     width <- params$width
     if (is.null(width)) {
-      warning("Missing `geom_flow()` parameter `width` will default to 1/3.",
-              call. = FALSE)
       width <- 1/3
     }
     
     knot.pos <- params$knot.pos
-    if (is.null(knot.pos)) {
-      warning("Missing `geom_flow()` parameter `knot.pos` will default to 1/6.",
-              call. = FALSE)
-      knot.pos <- 1/6
-    }
+    if (is.null(knot.pos)) knot.pos <- 1/6
     
     # positioning parameters
     transform(data,

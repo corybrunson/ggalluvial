@@ -77,13 +77,7 @@ GeomAlluvium <- ggproto(
     }
     
     knot.pos <- params$knot.pos
-    if (is.null(knot.pos)) {
-      warning(
-        "Missing `geom_alluvium()` parameter `knot.pos` will default to 1/6.",
-        call. = FALSE
-      )
-      knot.pos <- 1/6
-    }
+    if (is.null(knot.pos)) knot.pos <- 1/6
     
     # positioning parameters
     transform(data,

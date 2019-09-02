@@ -60,11 +60,7 @@ GeomLode <- ggproto(
   setup_data = function(data, params) {
     
     width <- params$width
-    if (is.null(width)) {
-      warning("Missing `geom_lode()` parameter `width` will default to 1/3.",
-              call. = FALSE)
-      width <- 1/3
-    }
+    if (is.null(width)) width <- 1/3
     
     transform(data,
               xmin = x - width / 2,
