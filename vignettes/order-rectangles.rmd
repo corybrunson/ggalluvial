@@ -239,7 +239,8 @@ ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
   stat_stratum(geom = "text", aes(label = category))
 ```
 
-Within each stratum at each axis, the cases are now in order from bottom to top. 
+Within each stratum at each axis, the cases are now in order from bottom to top.
+
 ## More examples
 
 More examples of all of the functionality showcased here can be found in the documentation for the `stat_*()` functions, [browsable on the package website](http://corybrunson.github.io/ggalluvial/reference/index.html).
