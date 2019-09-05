@@ -118,26 +118,26 @@ ggplot(data = titanic_long,
 
 ![](man/figures/README-unnamed-chunk-7-1.png)<!-- -->
 
-### Resources
+### Documentation
 
 For detailed discussion of the data formats recognized by **ggalluvial**
 and several examples that illustrate its flexibility and limitations,
-read the vignette:
+read the technical vignette:
 
 ``` r
 vignette(topic = "ggalluvial", package = "ggalluvial")
 ```
 
 The documentation contains several examples; use `help()` to call forth
-examples of any layer (`stat_*` or `geom_*`).
+examples of any layer (`stat_*` or `geom_*`) or of the conversion
+functions (`to_*_form`).
 
-## Feedback
+## Acknowledgment
 
-### Cite
+### Resources
 
-If you use **ggalluvial**-generated figures in publication, i’d be
-grateful to hear about it\! You can also cite the package according to
-`citation("ggalluvial")`.
+Development of this package benefitted from the use of equipment and the
+support of colleagues at [UConn Health](https://health.uconn.edu/).
 
 ### Contribute
 
@@ -146,3 +146,9 @@ requests](https://github.com/corybrunson/ggalluvial/pulls) are more than
 welcome\! Pretty much every fix and feature of this package derives from
 a problem or question posed by someone with datasets or design goals i
 hadn’t anticipated.
+
+### Cite
+
+If you use **ggalluvial**-generated figures in publication, i’d be
+grateful to hear about it\! You can also cite the package according to
+`citation("ggalluvial")`.

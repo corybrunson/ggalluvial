@@ -1,4 +1,6 @@
 
+# next version (v1.0.0?)
+
 # ggalluvial 0.10.0
 
 ## Lode guidance and ordering
@@ -26,7 +28,7 @@ The following parameters, deprecated in previous versions, are now defunct (with
 
 ## Default geom layer parameters
 
-The `width` and `knot.pos` parameters sometimes required by `Geom*$setup_data()` are now set to the same defaults as in the `geom_*()`s when called from a stat, with a warning (since they should be manually set).
+The `width` and `knot.pos` parameters sometimes required by `Geom*$setup_data()` are now set to the same defaults as in the `geom_*()`s when called from a stat. Previously-implemented warnings have been removed.
 
 ## Custom lode guidance functions
 
