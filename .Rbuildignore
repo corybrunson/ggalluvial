@@ -1,3 +1,6 @@
+^Meta$
+^doc$
+
 # custom
 ^sandbox$
 
@@ -6,12 +9,15 @@
 ^man-roxygen$
 ^ggplot2-exts$
 ^docs$
+
+# project files
 README.Rmd
 ^.*\.Rproj$
 ^\.Rproj\.user$
 
 # hosting infrastructure
 .github
-cran-comments.md
 ^_pkgdown\.yml$
 ^\.travis\.yml$
+cran-comments.md
+^CRAN-RELEASE$

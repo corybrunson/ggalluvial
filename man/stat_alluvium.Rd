@@ -6,9 +6,10 @@
 \usage{
 stat_alluvium(mapping = NULL, data = NULL, geom = "alluvium",
   position = "identity", decreasing = NA, reverse = TRUE,
-  discern = FALSE, aggregate.y = FALSE, aggregate.wts = NULL,
-  lode.guidance = "zigzag", lode.ordering = NULL, na.rm = FALSE,
-  show.legend = NA, inherit.aes = TRUE, ...)
+  discern = FALSE, aes.bind = FALSE, aggregate.y = FALSE,
+  aggregate.wts = NULL, lode.guidance = "zigzag",
+  lode.ordering = NULL, na.rm = FALSE, show.legend = NA,
+  inherit.aes = TRUE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -52,17 +53,21 @@ Defaults to \code{TRUE}.}
 \item{discern}{Passed to \code{\link[=to_lodes_form]{to_lodes_form()}} if \code{data} is in
 alluvia format.}
 
+\item{aes.bind}{Whether to prioritize aesthetics before axes (other than the
+index axis) when ordering the lodes within each stratum. Defaults to
+\code{FALSE}.}
+
 \item{aggregate.y}{Whether to aggregate weights across otherwise equivalent
 rows before computing lode and flow positions. Set to \code{TRUE} to group
 observations into cohorts. \strong{Warning}: This is currently an expensive
 operation.}
 
-\item{aggregate.wts}{Deprecated alias for \code{aggregate.y}.}
+\item{aggregate.wts}{Defunct alias for \code{aggregate.y}.}
 
 \item{lode.guidance}{The function to prioritize the axis variables for
 ordering the lodes within each stratum, or else a character string
-identifying the function. Character options are "zigzag", "rightleft",
-"leftright", "rightward", and "leftward" (see \code{\link{lode-guidance}}).}
+identifying the function. Character options are "zigzag", "frontback",
+"backfront", "forward", and "backward" (see \code{\link{lode-guidance}}).}
 
 \item{lode.ordering}{A list (of length the number of axes) of integer vectors
 (each of length the number of rows of \code{data}) or NULL entries (indicating
@@ -151,11 +156,18 @@ gg <- ggplot(as.data.frame(Titanic),
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 # use of lode controls
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
-               aes.bind = TRUE, lode.guidance = "rightward")
+               lode.guidance = "forward")
+# prioritize aesthetic binding
+gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
+               aes.bind = TRUE, lode.guidance = "forward")
 # use of lode ordering
 lode_ord <- replicate(n = 3, expr = sample(x = 32), simplify = FALSE)
+print(lode_ord)
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
                lode.ordering = lode_ord)
+# fixed lode ordering across axes
+gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
+               lode.ordering = lode_ord[[1]])
 # use of custom luide guidance function
 lode_custom <- function(n, i) {
   stopifnot(n == 3)
@@ -191,11 +203,22 @@ gg <- ggplot(majors,
                  fill = curriculum)) +
   geom_stratum()
 # diagram with outlined alluvia and forward-colored flows
-gg + geom_flow(stat = "alluvium", lode.guidance = "rightleft",
+gg + geom_flow(stat = "alluvium", lode.guidance = "frontback",
                color = "black")
 # same diagram with students are aggregated into cohorts
-gg + geom_flow(stat = "alluvium", lode.guidance = "rightleft",
+gg + geom_flow(stat = "alluvium", lode.guidance = "frontback",
                color = "black", aggregate.y = TRUE)
+
+# irregular spacing between axes of a continuous variable
+data(Refugees, package = "alluvial")
+refugees_sub <- subset(Refugees, year \%in\% c(2003, 2005, 2010, 2013))
+ggplot(data = refugees_sub,
+       aes(x = year, y = refugees, alluvium = country)) +
+  geom_alluvium(aes(fill = country),
+                alpha = .75, decreasing = FALSE, knot.pos = 1) +
+  geom_stratum(aes(stratum = country), decreasing = FALSE, width = 1/2) +
+  theme_bw() +
+  scale_fill_brewer(type = "qual", palette = "Set3")
 
 \dontrun{
 data(babynames, package = "babynames")

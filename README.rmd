@@ -48,7 +48,7 @@ remotes::install_github("corybrunson/ggalluvial", ref = "optimization")
 
 ## Usage
 
-```{r eval=TRUE, echo=FALSE, message=FALSE}
+```{r eval=TRUE, echo=FALSE, message=FALSE, warning=FALSE}
 devtools::load_all()
 ```
 

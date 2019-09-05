@@ -43,8 +43,7 @@ The [cran branch](https://github.com/corybrunson/ggalluvial/tree/cran)
 will contain the version most recently submitted to
 [CRAN](https://cran.r-project.org/package=ggalluvial).
 
-Development versions can be installed from
-GitHub:
+Development versions can be installed from GitHub:
 
 ``` r
 remotes::install_github("corybrunson/ggalluvial", build_vignettes = TRUE)

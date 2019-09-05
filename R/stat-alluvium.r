@@ -17,11 +17,11 @@
 #'   rows before computing lode and flow positions. Set to `TRUE` to group
 #'   observations into cohorts. **Warning**: This is currently an expensive
 #'   operation.
-#' @param aggregate.wts Deprecated alias for `aggregate.y`.
+#' @param aggregate.wts Defunct alias for `aggregate.y`.
 #' @param lode.guidance The function to prioritize the axis variables for
 #'   ordering the lodes within each stratum, or else a character string
-#'   identifying the function. Character options are "zigzag", "rightleft",
-#'   "leftright", "rightward", and "leftward" (see [`lode-guidance`]).
+#'   identifying the function. Character options are "zigzag", "frontback",
+#'   "backfront", "forward", and "backward" (see [`lode-guidance`]).
 #' @param lode.ordering A list (of length the number of axes) of integer vectors
 #'   (each of length the number of rows of `data`) or NULL entries (indicating
 #'   no imposed ordering), or else a numeric matrix of corresponding dimensions,
@@ -37,6 +37,7 @@ stat_alluvium <- function(mapping = NULL,
                           decreasing = NA,
                           reverse = TRUE,
                           discern = FALSE,
+                          aes.bind = FALSE,
                           aggregate.y = FALSE, aggregate.wts = NULL,
                           lode.guidance = "zigzag",
                           lode.ordering = NULL,
@@ -56,7 +57,8 @@ stat_alluvium <- function(mapping = NULL,
       decreasing = decreasing,
       reverse = reverse,
       discern = discern,
-      aggregate.y = FALSE, aggregate.wts = NULL,
+      aes.bind = aes.bind,
+      aggregate.y = aggregate.y, aggregate.wts = aggregate.wts,
       lode.guidance = lode.guidance,
       lode.ordering = lode.ordering,
       na.rm = na.rm,
@@ -102,7 +104,7 @@ StatAlluvium <- ggproto(
       if (is.null(data$weight)) {
         data$y <- rep(1, nrow(data))
       } else {
-        deprecate_parameter("weight", "y", type = "aesthetic")
+        defunct_parameter("weight", "y", type = "aesthetic")
         data$y <- data$weight
         data$weight <- NULL
       }
@@ -150,7 +152,7 @@ StatAlluvium <- ggproto(
 
     # aggregate weights over otherwise equivalent alluvia
     if (! is.null(aggregate.wts)) {
-      deprecate_parameter("aggregate.wts", "aggregate.y")
+      defunct_parameter("aggregate.wts", "aggregate.y")
       aggregate.y <- aggregate.wts
     }
     if (aggregate.y) data <- aggregate_along(data, "x", "alluvium", "y")
@@ -214,6 +216,12 @@ StatAlluvium <- ggproto(
 
       alluv[, -1] <- apply(lode.ordering, 2, order)
     } else {
+      # bind a vector to itself to create a matrix
+      if (is.vector(lode.ordering)) {
+        lode.ordering <- matrix(lode.ordering,
+                                nrow = length(lode.ordering),
+                                ncol = length(unique(data$x)))
+      }
       # check that array has correct dimensions
       stopifnot(dim(lode.ordering) ==
                   c(length(unique(data$alluvium)),
@@ -227,16 +235,16 @@ StatAlluvium <- ggproto(
     # gather lode positions into alluvium-axis-order table
     alluv_pos <- tidyr::gather(
       alluv,
-      key = "x", value = "position",
+      key = "x", value = "pos",
       alluv_ind
     )
     rm(alluv) # avoid confusion
     alluv_pos$x <- as.integer(alluv_pos$x)
-    # join position variable into `data`
+    # join 'pos' variable into `data`
     data <- dplyr::left_join(data, alluv_pos, by = c("x", "alluvium"))
 
     # calculate lode floors and ceilings from positions by axis
-    data <- data[order(data$position), , drop = FALSE]
+    data <- data[order(data$pos), , drop = FALSE]
     data <- dplyr::ungroup(dplyr::mutate(dplyr::group_by(data, x),
                                          ymax = cumsum(y),
                                          ymin = dplyr::lag(ymax, default = 0)))
@@ -256,6 +264,7 @@ StatAlluvium <- ggproto(
     # add `group` to group contiguous alluvial subsets
     data <- transform(data, group = as.numeric(interaction(alluvium, flow)))
     # remove unused fields
+    data$pos <- NULL
     data$cont <- NULL
     data$axis <- NULL
     data$flow <- NULL
