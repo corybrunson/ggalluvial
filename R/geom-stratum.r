@@ -44,47 +44,45 @@ geom_stratum <- function(mapping = NULL,
 #' @export
 GeomStratum <- ggproto(
   "GeomStratum", GeomRect,
-
+  
   required_aes = c("x", "y", "ymin", "ymax"),
-
+  
   default_aes = aes(size = .5, linetype = 1,
                     colour = "black", fill = "white", alpha = 1),
-
-  setup_params = function(data, params) {
-
-    params
-  },
-
+  
   setup_data = function(data, params) {
-
+    
+    width <- params$width
+    if (is.null(width)) width <- 1/3
+    
     transform(data,
-              xmin = x - params$width / 2,
-              xmax = x + params$width / 2)
+              xmin = x - width / 2,
+              xmax = x + width / 2)
   },
-
+  
   draw_panel = function(self, data, panel_params, coord,
                         width = 1/3) {
     # taken from GeomRect
-
+    
     strat_aes <- setdiff(
       names(data), c("x", "y", "xmin", "xmax", "ymin", "ymax")
     )
-
+    
     # construct polygon grobs
     polys <- plyr::alply(data, 1, function(row) {
-
+      
       poly <- rect_to_poly(row$xmin, row$xmax, row$ymin, row$ymax)
       aes <- as.data.frame(row[strat_aes],
                            stringsAsFactors = FALSE)[rep(1, 5), ]
-
+      
       GeomPolygon$draw_panel(cbind(poly, aes, group = 1), panel_params, coord)
     })
-
+    
     # combine polygon grobs
     grob <- do.call(grid::grobTree, polys)
     grob$name <- grid::grobName(grob, "bar")
     grob
   },
-
+  
   draw_key = draw_key_polygon
 )

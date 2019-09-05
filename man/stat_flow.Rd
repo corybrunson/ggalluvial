@@ -26,8 +26,9 @@ data. All objects will be fortified to produce a data frame. See
 \code{\link[=fortify]{fortify()}} for which variables will be created.
 
 A \code{function} will be called with a single argument,
-the plot data. The return value must be a \code{data.frame.}, and
-will be used as the layer data.}
+the plot data. The return value must be a \code{data.frame}, and
+will be used as the layer data. A \code{function} can be created
+from a \code{formula} (e.g. \code{~ head(.x, 10)}).}
 
 \item{geom}{The geometric object to use display the data;
 override the default.}
@@ -51,7 +52,8 @@ Defaults to \code{TRUE}.}
 alluvia format.}
 
 \item{aes.bind}{Whether to prioritize aesthetics before axes (other than the
-index axis) when ordering the lodes within each stratum. Defaults to FALSE.}
+index axis) when ordering the lodes within each stratum. Defaults to
+\code{FALSE}.}
 
 \item{na.rm}{Logical:
 if \code{FALSE}, the default, \code{NA} lodes are not included;
@@ -140,7 +142,7 @@ gg <- ggplot(vaccinations,
   geom_stratum(alpha = .5) +
   geom_text(aes(label = response), stat = "stratum")
 # rightward alluvial aesthetics for vaccine survey data
-gg + geom_flow(stat = "alluvium", lode.guidance = "rightward")
+gg + geom_flow(stat = "alluvium", lode.guidance = "forward")
 # memoryless flows for vaccine survey data
 gg + geom_flow()
 

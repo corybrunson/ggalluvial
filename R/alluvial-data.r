@@ -78,22 +78,22 @@ is_lodes_form <- function(data,
                           key, value, id,
                           weight = NULL,
                           logical = TRUE, silent = FALSE) {
-  if (! isTRUE(logical)) deprecate_parameter("logical")
-
+  if (! isTRUE(logical)) defunct_parameter("logical")
+  
   key_var <- vars_pull(names(data), !! rlang::enquo(key))
   value_var <- vars_pull(names(data), !! rlang::enquo(value))
   id_var <- vars_pull(names(data), !! rlang::enquo(id))
-
+  
   if (any(duplicated(cbind(data[c(key_var, id_var)])))) {
     if (! silent) warning("Duplicated id-axis pairings.")
   }
-
+  
   n_pairs <-
     dplyr::n_distinct(data[key_var]) * dplyr::n_distinct(data[id_var])
   if (nrow(data) < n_pairs) {
     if (! silent) warning("Missing id-axis pairings.")
   }
-
+  
   # if `weight` is not `NULL`, use NSE to identify `weight_var`
   if (! is.null(rlang::enexpr(weight))) {
     weight_var <- vars_select(names(data), !! rlang::enquo(weight))
@@ -106,7 +106,7 @@ is_lodes_form <- function(data,
       return(if (logical) TRUE else "lodes")
     }
   }
-
+  
   if (logical) TRUE else "lodes"
 }
 
@@ -116,8 +116,8 @@ is_alluvia_form <- function(data,
                             ..., axes = NULL,
                             weight = NULL,
                             logical = TRUE, silent = FALSE) {
-  if (! isTRUE(logical)) deprecate_parameter("logical")
-
+  if (! isTRUE(logical)) defunct_parameter("logical")
+  
   if (is.null(rlang::enexpr(weight))) {
     weight_var <- NULL
   } else {
@@ -130,7 +130,7 @@ is_alluvia_form <- function(data,
       return(if (logical) FALSE else "none")
     }
   }
-
+  
   if (! is.null(rlang::enexpr(axes))) {
     axes <- data_at_vars(data, axes)
   } else {
@@ -141,13 +141,13 @@ is_alluvia_form <- function(data,
       axes <- unname(vars_select(names(data), !!! quos))
     }
   }
-
+  
   n_alluvia <- nrow(dplyr::distinct(data[axes]))
   n_combns <- do.call(prod, lapply(data[axes], dplyr::n_distinct))
   if (n_alluvia < n_combns) {
     if (! silent) message("Missing alluvia for some stratum combinations.")
   }
-
+  
   if (logical) TRUE else "alluvia"
 }
 
@@ -157,11 +157,11 @@ to_lodes_form <- function(data,
                           ..., axes = NULL,
                           key = "x", value = "stratum", id = "alluvium",
                           diffuse = FALSE, discern = FALSE) {
-
+  
   key_var <- rlang::quo_name(rlang::enexpr(key))
   value_var <- rlang::quo_name(rlang::enexpr(value))
   id_var <- rlang::quo_name(rlang::enexpr(id))
-
+  
   if (! is.null(rlang::enexpr(axes))) {
     axes <- data_at_vars(data, axes)
   } else {
@@ -172,11 +172,11 @@ to_lodes_form <- function(data,
       axes <- unname(vars_select(names(data), !!! quos))
     }
   }
-
+  
   stopifnot(is_alluvia_form(data, axes, silent = TRUE))
-
+  
   if (! is.data.frame(data)) data <- as.data.frame(data)
-
+  
   if (is.logical(rlang::enexpr(diffuse))) {
     diffuse <- if (diffuse) axes else NULL
   } else {
@@ -185,7 +185,7 @@ to_lodes_form <- function(data,
       stop("All `diffuse` variables must be `axes` variables.")
     }
   }
-
+  
   # combine factor levels
   cat_levels <- unname(unlist(lapply(lapply(data[axes], as.factor), levels)))
   if (any(duplicated(cat_levels)) & is.null(discern)) {
@@ -198,14 +198,14 @@ to_lodes_form <- function(data,
   } else {
     strata <- unique(unname(cat_levels))
   }
-
+  
   # format data in preparation for `gather()`
   data[[id_var]] <- 1:nrow(data)
   if (! is.null(diffuse)) {
     diffuse_data <- data[, c(id_var, diffuse), drop = FALSE]
   }
   for (i in axes) data[[i]] <- as.character(data[[i]])
-
+  
   # `gather()` by `axes`
   res <- tidyr::gather(data,
                        key = !! key_var, value = !! value_var,
@@ -216,7 +216,7 @@ to_lodes_form <- function(data,
   if (! is.null(diffuse)) {
     res <- merge(diffuse_data, res, by = id_var, all.x = FALSE, all.y = TRUE)
   }
-
+  
   res
 }
 
@@ -225,13 +225,13 @@ to_lodes_form <- function(data,
 to_alluvia_form <- function(data,
                             key, value, id,
                             distill = FALSE) {
-
+  
   key_var <- vars_pull(names(data), !! rlang::enquo(key))
   value_var <- vars_pull(names(data), !! rlang::enquo(value))
   id_var <- vars_pull(names(data), !! rlang::enquo(id))
-
+  
   stopifnot(is_lodes_form(data, key_var, value_var, id_var, silent = TRUE))
-
+  
   # handle any variables that vary within `id`s
   uniq_id <- length(unique(data[[id_var]]))
   uniq_data <- unique(data[setdiff(names(data), c(key_var, value_var))])
@@ -267,14 +267,14 @@ to_alluvia_form <- function(data,
   } else {
     distill <- NULL
   }
-
+  
   # `spread()` by designated `key` and `value`
   res <- tidyr::spread(data, key = !! key_var, value = !! value_var)
   # recombine with `distill_data`
   if (! is.null(distill)) {
     res <- merge(distill_data, res, by = id_var, all.x = FALSE, all.y = TRUE)
   }
-
+  
   res
 }
 

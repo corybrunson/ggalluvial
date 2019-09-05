@@ -12,6 +12,19 @@ deprecate_parameter <- function(old, new = NA, type = "parameter") {
   ))
 }
 
+defunct_parameter <- function(old, new = NA, type = "parameter") {
+  .Defunct(msg = paste0(
+    "The ", type, " `", old, "` is defunct.",
+    if (is.null(new)) {
+      "\nPass unparameterized arguments instead."
+    } else if (! is.na(new)) {
+      paste0("\nPass arguments to `", new, "` instead.")
+    } else {
+      ""
+    }
+  ))
+}
+
 release_questions <- function() {
   c(
     "Have previous CRAN NOTEs been addressed?"
@@ -37,7 +50,7 @@ is_alluvial <- function(data, ..., silent = FALSE) {
     "The function `is_alluvial()` is deprecated; ",
     "use `is_lodes_form()` or `is_alluvia_form()`."
   ))
-
+  
   # determine method based on arguments given
   dots <- lazyeval::lazy_dots(...)
   if (! is.null(dots$key) | ! is.null(dots$value) | ! is.null(dots$id)) {

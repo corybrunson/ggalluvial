@@ -6,8 +6,9 @@
 \usage{
 stat_stratum(mapping = NULL, data = NULL, geom = "stratum",
   position = "identity", decreasing = NA, reverse = TRUE,
-  discern = FALSE, label.strata = FALSE, show.legend = NA,
-  inherit.aes = TRUE, na.rm = FALSE, ...)
+  discern = FALSE, label.strata = FALSE, min.height = NULL,
+  max.height = NULL, show.legend = NA, inherit.aes = TRUE,
+  na.rm = FALSE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -26,8 +27,9 @@ data. All objects will be fortified to produce a data frame. See
 \code{\link[=fortify]{fortify()}} for which variables will be created.
 
 A \code{function} will be called with a single argument,
-the plot data. The return value must be a \code{data.frame.}, and
-will be used as the layer data.}
+the plot data. The return value must be a \code{data.frame}, and
+will be used as the layer data. A \code{function} can be created
+from a \code{formula} (e.g. \code{~ head(.x, 10)}).}
 
 \item{geom}{The geometric object to use display the data;
 override the default.}
@@ -53,6 +55,10 @@ alluvia format.}
 \item{label.strata}{Logical; whether to assign the values of the axis
 variables to the strata. Defaults to FALSE, and requires that no
 \code{label} aesthetic is assigned.}
+
+\item{min.height, max.height}{Numeric; bounds on the heights (weights) of the
+strata to be rendered. Use these bounds to exclude strata outside a certain
+range, for example when labeling strata using \code{\link[ggplot2:geom_text]{ggplot2::geom_text()}}.}
 
 \item{show.legend}{logical. Should this layer be included in the legends?
 \code{NA}, the default, includes if any aesthetics are mapped.
@@ -151,6 +157,14 @@ ggplot(as.data.frame(Titanic),
   geom_text(stat = "stratum", label.strata = TRUE) +
   stat_stratum(geom = "errorbar") +
   scale_x_discrete(limits = c("Class", "Sex", "Age", "Survived"))
+
+# omit labels for strata outside a weight range
+ggplot(vaccinations,
+       aes(y = freq,
+           x = survey, stratum = response,
+           fill = response, label = response)) +
+  stat_stratum(width = .5) +
+  geom_text(stat = "stratum", min.height = 100)
 }
 \seealso{
 \code{\link[ggplot2:layer]{ggplot2::layer()}} for additional arguments and

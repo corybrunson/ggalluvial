@@ -17,35 +17,35 @@ permute_axis_strata(data, key, value, id, perms)
 \arguments{
 \item{data}{Data frame in lode form (see \code{\link{to_lodes}}).}
 
-\item{key, value, id}{Numeric or character; the fields of \code{data} 
-corresponding to the axis (variable), stratum (value), and alluvium 
+\item{key, value, id}{Numeric or character; the fields of \code{data}
+corresponding to the axis (variable), stratum (value), and alluvium
 (identifying) variables.}
 
 \item{weight}{Numeric or character; the field of \code{data} corresponding to
 flow weights (heights in the diagram). The default value \code{NULL}
 assigns every alluvium, hence every overlap, unit weight.}
 
-\item{method}{Character; whether to exhaust all permutations of all axes 
-(\code{"exhaustive"}) versus to perform heuristic optimization from random 
-initial permutations (\code{"heuristic"}). Default, \code{NULL}, is to use 
+\item{method}{Character; whether to exhaust all permutations of all axes
+(\code{"exhaustive"}) versus to perform heuristic optimization from random
+initial permutations (\code{"heuristic"}). Default, \code{NULL}, is to use
 the heuristic algorithm unless no axis has six or more strata.}
 
-\item{niter}{Positive integer; if \code{method} is \code{"heuristic"}, the 
-number of iterations to perform from randomly sampled seed permutation 
+\item{niter}{Positive integer; if \code{method} is \code{"heuristic"}, the
+number of iterations to perform from randomly sampled seed permutation
 sets.}
 
-\item{perm, perms}{An integer vector (\code{perm}) or list of integer vectors 
+\item{perm, perms}{An integer vector (\code{perm}) or list of integer vectors
 (\code{perms}) encoding permutation(s) of the strata, as output by
 \code{optimize_strata()}).}
 }
 \description{
-The function \code{optimize_strata()} attempts to order the strata at each 
-axis so as to maximize the readability of the diagram, by minimizing a 
+The function \code{optimize_strata()} attempts to order the strata at each
+axis so as to maximize the readability of the diagram, by minimizing a
 weighted total of the overlaps of crossing flows. The weight assigned to each
 overlap is the product of the mean \code{weight}s of the overlapping flows at
-each incident axis. The function \code{permute_strata()} applies the stratum 
-permutations to the stratum variable of the data frame; the experimental 
-function \code{permute_axis_strata()} applies a list of permutations 
+each incident axis. The function \code{permute_strata()} applies the stratum
+permutations to the stratum variable of the data frame; the experimental
+function \code{permute_axis_strata()} applies a list of permutations
 axis-wise, potentially resulting in different orderings of the same strata at
 different axes.
 }
@@ -53,8 +53,8 @@ different axes.
 data(Titanic)
 titanic <- to_lodes_form(as.data.frame(Titanic), axes = 1:4)
 ggplot(titanic,
-       aes(x = x, stratum = stratum, alluvium = alluvium,
-           weight = Freq, label = stratum)) +
+       aes(x = x, stratum = stratum, alluvium = alluvium, y = Freq,
+           label = stratum)) +
   geom_alluvium() +
   geom_stratum() + geom_text(stat = "stratum")
 weight_perm <- optimize_strata(
@@ -69,17 +69,16 @@ titanic_weight <- permute_axis_strata(
   perms = weight_perm$perms
 )
 ggplot(titanic_weight,
-       aes(x = x, stratum = stratum, alluvium = alluvium,
-           weight = Freq, label = stratum)) +
+       aes(x = x, stratum = stratum, alluvium = alluvium, y = Freq,
+           label = stratum)) +
   geom_alluvium() +
   geom_stratum() + geom_text(stat = "stratum")
 
 # multiple axes with the same strata
 data(vaccinations)
 ggplot(vaccinations,
-       aes(x = survey, stratum = response, alluvium = subject,
-           weight = freq, fill = response,
-           label = response)) +
+       aes(x = survey, stratum = response, alluvium = subject, y = freq,
+           fill = response, label = response)) +
   geom_flow() +
   geom_stratum() + geom_text(stat = "stratum")
 count_perm <- optimize_strata(
@@ -93,9 +92,8 @@ vaccinations_count <- permute_strata(
   perm = count_perm$perm
 )
 ggplot(vaccinations_count,
-       aes(x = survey, stratum = response, alluvium = subject,
-           weight = freq, fill = response,
-           label = response)) +
+       aes(x = survey, stratum = response, alluvium = subject, y = freq,
+           fill = response, label = response)) +
   geom_flow() +
   geom_stratum() + geom_text(stat = "stratum")
 weight_perm <- optimize_strata(
@@ -110,9 +108,8 @@ vaccinations_weight <- permute_strata(
   perm = weight_perm$perm
 )
 ggplot(vaccinations_weight,
-       aes(x = survey, stratum = response, alluvium = subject,
-           weight = freq, fill = response,
-           label = response)) +
+       aes(x = survey, stratum = response, alluvium = subject, y = freq,
+           fill = response, label = response)) +
   geom_flow() +
   geom_stratum() + geom_text(stat = "stratum")
 

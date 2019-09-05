@@ -16,11 +16,32 @@ gg <- ggplot(as.data.frame(Titanic),
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 # use of lode controls
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
-               aes.bind = TRUE, lode.guidance = "rightward")
+               lode.guidance = "forward")
+# prioritize aesthetic binding
+gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
+               aes.bind = TRUE, lode.guidance = "forward")
 # use of lode ordering
 lode_ord <- replicate(n = 3, expr = sample(x = 32), simplify = FALSE)
+print(lode_ord)
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
                lode.ordering = lode_ord)
+# fixed lode ordering across axes
+gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
+               lode.ordering = lode_ord[[1]])
+# use of custom luide guidance function
+lode_custom <- function(n, i) {
+  stopifnot(n == 3)
+  switch(
+    i,
+    `1` = 1:3,
+    `2` = c(2, 3, 1),
+    `3` = 3:1
+  )
+}
+gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
+               aes.bind = TRUE, lode.guidance = lode_custom)
+gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
+               aes.bind = TRUE, lode.guidance = "custom")
 
 data(majors)
 # omit missing lodes and incident flows
@@ -42,11 +63,22 @@ gg <- ggplot(majors,
                  fill = curriculum)) +
   geom_stratum()
 # diagram with outlined alluvia and forward-colored flows
-gg + geom_flow(stat = "alluvium", lode.guidance = "rightleft",
+gg + geom_flow(stat = "alluvium", lode.guidance = "frontback",
                color = "black")
 # same diagram with students are aggregated into cohorts
-gg + geom_flow(stat = "alluvium", lode.guidance = "rightleft",
+gg + geom_flow(stat = "alluvium", lode.guidance = "frontback",
                color = "black", aggregate.y = TRUE)
+
+# irregular spacing between axes of a continuous variable
+data(Refugees, package = "alluvial")
+refugees_sub <- subset(Refugees, year %in% c(2003, 2005, 2010, 2013))
+ggplot(data = refugees_sub,
+       aes(x = year, y = refugees, alluvium = country)) +
+  geom_alluvium(aes(fill = country),
+                alpha = .75, decreasing = FALSE, knot.pos = 1) +
+  geom_stratum(aes(stratum = country), decreasing = FALSE, width = 1/2) +
+  theme_bw() +
+  scale_fill_brewer(type = "qual", palette = "Set3")
 
 \dontrun{
 data(babynames, package = "babynames")
