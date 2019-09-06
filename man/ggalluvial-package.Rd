@@ -14,6 +14,16 @@ Alluvial diagrams use x-splines, sometimes augmented with stacked
     <doi:10.1371/journal.pone.0008694>. This package provides ggplot2 layers
     to produce alluvial diagrams from tidy data.
 }
+\section{Acknowledgments}{
+
+
+Many users identified problems and suggested improvements via email and the
+GitHub issue tracker
+
+Development benefitted from the use of equipment and the support of
+colleagues at \href{https://health.uconn.edu/}{UConn Health}.
+}
+
 \seealso{
 Useful links:
 \itemize{
