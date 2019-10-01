@@ -85,7 +85,7 @@ An important feature of these diagrams is the meaningfulness of the vertical axi
 **ggalluvial** parameters and existing **ggplot2** functionality can also produce [parallel sets](https://eagereyes.org/parallel-sets) plots, illustrated here using the `Titanic` dataset:[^ggparallel]
 
 [^ggforce]: [The **ggforce** package](https://github.com/thomasp85/ggforce) includes parallel set geom and stat layers to produce similar diagrams that can be allowed to free-float.
-[^ggparallel]: A greater variety of parallel sets plots are implemented in [the **ggparallel** package](https://github.com/heike/ggparallel).
+[^ggparallel]: A greater variety of parallel sets plots are implemented in the [**ggparallel**](https://github.com/heike/ggparallel) and [**ggpcp**](https://github.com/yaweige/ggpcp) packages.
 
 ```{r parallel sets plot of Titanic dataset}
 ggplot(as.data.frame(Titanic),
