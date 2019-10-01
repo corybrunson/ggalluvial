@@ -8,8 +8,8 @@ stat_alluvium(mapping = NULL, data = NULL, geom = "alluvium",
   position = "identity", decreasing = NA, reverse = TRUE,
   discern = FALSE, aes.bind = FALSE, aggregate.y = FALSE,
   aggregate.wts = NULL, lode.guidance = "zigzag",
-  lode.ordering = NULL, na.rm = FALSE, show.legend = NA,
-  inherit.aes = TRUE, ...)
+  lode.ordering = NULL, min.y = NULL, max.y = NULL, na.rm = FALSE,
+  show.legend = NA, inherit.aes = TRUE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -75,6 +75,14 @@ no imposed ordering), or else a numeric matrix of corresponding dimensions,
 giving the preferred ordering of alluvia at each axis. This will be used to
 order the lodes within each stratum by sorting the lodes first by stratum
 and then by the provided vectors.}
+
+\item{min.y}{Numeric; bounds on the heights (weights) of the
+strata to be rendered. Use these bounds to exclude strata outside a certain
+range, for example when labeling strata using \code{\link[ggplot2:geom_text]{ggplot2::geom_text()}}.}
+
+\item{max.y}{Numeric; bounds on the heights (weights) of the
+strata to be rendered. Use these bounds to exclude strata outside a certain
+range, for example when labeling strata using \code{\link[ggplot2:geom_text]{ggplot2::geom_text()}}.}
 
 \item{na.rm}{Logical:
 if \code{FALSE}, the default, \code{NA} lodes are not included;

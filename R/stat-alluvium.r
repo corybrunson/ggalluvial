@@ -41,6 +41,7 @@ stat_alluvium <- function(mapping = NULL,
                           aggregate.y = FALSE, aggregate.wts = NULL,
                           lode.guidance = "zigzag",
                           lode.ordering = NULL,
+                          min.y = NULL, max.y = NULL,
                           na.rm = FALSE,
                           show.legend = NA,
                           inherit.aes = TRUE,
@@ -57,10 +58,11 @@ stat_alluvium <- function(mapping = NULL,
       decreasing = decreasing,
       reverse = reverse,
       discern = discern,
-      aes.bind = aes.bind,
       aggregate.y = aggregate.y, aggregate.wts = aggregate.wts,
       lode.guidance = lode.guidance,
       lode.ordering = lode.ordering,
+      min.y = min.y, max.y = max.y,
+      aes.bind = aes.bind,
       na.rm = na.rm,
       ...
     )
@@ -147,6 +149,7 @@ StatAlluvium <- ggproto(
                            discern = FALSE,
                            aggregate.y = FALSE, aggregate.wts = NULL,
                            lode.guidance = "zigzag",
+                           min.y = NULL, max.y = NULL,
                            aes.bind = FALSE,
                            lode.ordering = NULL) {
     
@@ -268,6 +271,14 @@ StatAlluvium <- ggproto(
     data$cont <- NULL
     data$axis <- NULL
     data$flow <- NULL
+    
+    # impose height restrictions
+    if (! is.null(min.y)) {
+      data <- data[data$ymax - data$ymin >= min.y, , drop = FALSE]
+    }
+    if (! is.null(max.y)) {
+      data <- data[data$ymax - data$ymin <= max.y, , drop = FALSE]
+    }
     
     # arrange data by aesthetics for consistent (reverse) z-ordering
     data <- z_order_aes(data, aesthetics)

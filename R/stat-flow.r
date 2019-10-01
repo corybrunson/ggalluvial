@@ -25,6 +25,7 @@ stat_flow <- function(mapping = NULL,
                       reverse = TRUE,
                       discern = FALSE,
                       aes.bind = FALSE,
+                      min.y = NULL, max.y = NULL,
                       na.rm = FALSE,
                       show.legend = NA,
                       inherit.aes = TRUE,
@@ -41,6 +42,7 @@ stat_flow <- function(mapping = NULL,
       decreasing = decreasing,
       reverse = reverse,
       discern = discern,
+      min.y = min.y, max.y = max.y,
       aes.bind = aes.bind,
       na.rm = na.rm,
       ...
@@ -109,6 +111,7 @@ StatFlow <- ggproto(
   compute_panel = function(self, data, scales,
                            decreasing = NA, reverse = TRUE,
                            discern = FALSE,
+                           min.y = NULL, max.y = NULL,
                            aes.bind = FALSE) {
     
     # aesthetics (in prescribed order)
@@ -205,6 +208,14 @@ StatFlow <- ggproto(
                       ymax = ycum + y / 2,
                       y = ycum)
     data$ycum <- NULL
+    
+    # impose height restrictions
+    if (! is.null(min.y)) {
+      data <- data[data$ymax - data$ymin >= min.y, , drop = FALSE]
+    }
+    if (! is.null(max.y)) {
+      data <- data[data$ymax - data$ymin <= max.y, , drop = FALSE]
+    }
     
     # arrange data by aesthetics for consistent (reverse) z-ordering
     data <- z_order_aes(data, aesthetics)

@@ -28,9 +28,10 @@
 #' @param label.strata Logical; whether to assign the values of the axis
 #'   variables to the strata. Defaults to FALSE, and requires that no
 #'   `label` aesthetic is assigned.
-#' @param min.height,max.height Numeric; bounds on the heights (weights) of the
+#' @param min.y,max.y Numeric; bounds on the heights (weights) of the
 #'   strata to be rendered. Use these bounds to exclude strata outside a certain
 #'   range, for example when labeling strata using [ggplot2::geom_text()].
+#' @param min.height,max.height Deprecated aliases for `min.y` and `max.y`.
 #' @example inst/examples/ex-stat-stratum.r
 #' @export
 stat_stratum <- function(mapping = NULL,
@@ -41,6 +42,7 @@ stat_stratum <- function(mapping = NULL,
                          reverse = TRUE,
                          discern = FALSE,
                          label.strata = FALSE,
+                         min.y = NULL, max.y = NULL,
                          min.height = NULL, max.height = NULL,
                          show.legend = NA,
                          inherit.aes = TRUE,
@@ -59,6 +61,7 @@ stat_stratum <- function(mapping = NULL,
       reverse = reverse,
       discern = discern,
       label.strata = label.strata,
+      min.y = min.y, max.y = max.y,
       min.height = min.height, max.height = max.height,
       na.rm = na.rm,
       ...
@@ -136,6 +139,7 @@ StatStratum <- ggproto(
   compute_panel = function(self, data, scales,
                            decreasing = NA, reverse = TRUE,
                            discern = FALSE, label.strata = FALSE,
+                           min.y = NULL, max.y = NULL,
                            min.height = NULL, max.height = NULL) {
     
     # introduce label (if absent)
@@ -179,10 +183,18 @@ StatStratum <- ggproto(
     
     # impose height restrictions
     if (! is.null(min.height)) {
-      data <- data[data$ymax - data$ymin >= min.height, , drop = FALSE]
+      deprecate_parameter("min.height", "min.y")
+      min.y <- min.height
     }
     if (! is.null(max.height)) {
-      data <- data[data$ymax - data$ymin <= max.height, , drop = FALSE]
+      deprecate_parameter("max.height", "max.y")
+      max.y <- max.height
+    }
+    if (! is.null(min.y)) {
+      data <- data[data$ymax - data$ymin >= min.y, , drop = FALSE]
+    }
+    if (! is.null(max.y)) {
+      data <- data[data$ymax - data$ymin <= max.y, , drop = FALSE]
     }
     
     data

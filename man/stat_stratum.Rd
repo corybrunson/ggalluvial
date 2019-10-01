@@ -6,9 +6,9 @@
 \usage{
 stat_stratum(mapping = NULL, data = NULL, geom = "stratum",
   position = "identity", decreasing = NA, reverse = TRUE,
-  discern = FALSE, label.strata = FALSE, min.height = NULL,
-  max.height = NULL, show.legend = NA, inherit.aes = TRUE,
-  na.rm = FALSE, ...)
+  discern = FALSE, label.strata = FALSE, min.y = NULL,
+  max.y = NULL, min.height = NULL, max.height = NULL,
+  show.legend = NA, inherit.aes = TRUE, na.rm = FALSE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -56,9 +56,11 @@ alluvia format.}
 variables to the strata. Defaults to FALSE, and requires that no
 \code{label} aesthetic is assigned.}
 
-\item{min.height, max.height}{Numeric; bounds on the heights (weights) of the
+\item{min.y, max.y}{Numeric; bounds on the heights (weights) of the
 strata to be rendered. Use these bounds to exclude strata outside a certain
 range, for example when labeling strata using \code{\link[ggplot2:geom_text]{ggplot2::geom_text()}}.}
+
+\item{min.height, max.height}{Deprecated aliases for \code{min.y} and \code{max.y}.}
 
 \item{show.legend}{logical. Should this layer be included in the legends?
 \code{NA}, the default, includes if any aesthetics are mapped.
@@ -164,7 +166,7 @@ ggplot(vaccinations,
            x = survey, stratum = response,
            fill = response, label = response)) +
   stat_stratum(width = .5) +
-  geom_text(stat = "stratum", min.height = 100)
+  geom_text(stat = "stratum", min.y = 100)
 }
 \seealso{
 \code{\link[ggplot2:layer]{ggplot2::layer()}} for additional arguments and

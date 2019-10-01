@@ -29,6 +29,23 @@ gg + geom_flow(stat = "alluvium", lode.guidance = "forward")
 # memoryless flows for vaccine survey data
 gg + geom_flow()
 
+# omit small flows
+ggplot(vaccinations,
+       aes(y = freq,
+           x = survey, stratum = response, alluvium = subject,
+           fill = response, label = response)) +
+  stat_stratum(alpha = .5) +
+  geom_flow(min.y = 50) +
+  geom_text(stat = "stratum")
+# omit large flows
+ggplot(vaccinations,
+       aes(y = freq,
+           x = survey, stratum = response, alluvium = subject,
+           fill = response, label = response)) +
+  stat_stratum(alpha = .5) +
+  geom_flow(max.y = 100) +
+  geom_text(stat = "stratum")
+
 # aesthetics that vary betwween and within strata
 data(vaccinations)
 vaccinations$subgroup <- LETTERS[1:2][rbinom(

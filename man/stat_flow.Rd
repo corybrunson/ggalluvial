@@ -6,8 +6,8 @@
 \usage{
 stat_flow(mapping = NULL, data = NULL, geom = "flow",
   position = "identity", decreasing = NA, reverse = TRUE,
-  discern = FALSE, aes.bind = FALSE, na.rm = FALSE,
-  show.legend = NA, inherit.aes = TRUE, ...)
+  discern = FALSE, aes.bind = FALSE, min.y = NULL, max.y = NULL,
+  na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -54,6 +54,14 @@ alluvia format.}
 \item{aes.bind}{Whether to prioritize aesthetics before axes (other than the
 index axis) when ordering the lodes within each stratum. Defaults to
 \code{FALSE}.}
+
+\item{min.y}{Numeric; bounds on the heights (weights) of the
+strata to be rendered. Use these bounds to exclude strata outside a certain
+range, for example when labeling strata using \code{\link[ggplot2:geom_text]{ggplot2::geom_text()}}.}
+
+\item{max.y}{Numeric; bounds on the heights (weights) of the
+strata to be rendered. Use these bounds to exclude strata outside a certain
+range, for example when labeling strata using \code{\link[ggplot2:geom_text]{ggplot2::geom_text()}}.}
 
 \item{na.rm}{Logical:
 if \code{FALSE}, the default, \code{NA} lodes are not included;
@@ -145,6 +153,23 @@ gg <- ggplot(vaccinations,
 gg + geom_flow(stat = "alluvium", lode.guidance = "forward")
 # memoryless flows for vaccine survey data
 gg + geom_flow()
+
+# omit small flows
+ggplot(vaccinations,
+       aes(y = freq,
+           x = survey, stratum = response, alluvium = subject,
+           fill = response, label = response)) +
+  stat_stratum(alpha = .5) +
+  geom_flow(min.y = 50) +
+  geom_text(stat = "stratum")
+# omit large flows
+ggplot(vaccinations,
+       aes(y = freq,
+           x = survey, stratum = response, alluvium = subject,
+           fill = response, label = response)) +
+  stat_stratum(alpha = .5) +
+  geom_flow(max.y = 100) +
+  geom_text(stat = "stratum")
 
 # aesthetics that vary betwween and within strata
 data(vaccinations)

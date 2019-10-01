@@ -1,6 +1,8 @@
 
 # next version (v1.0.0?)
 
+The `min.height` and `max.height` parameters of `stat_stratum()` are deprecated in favor of `min.y` and `max.y` (which better adhere to **ggplot2** conventions) and extended to the other `stat_*()` layers.
+
 # ggalluvial 0.10.0
 
 ## Lode guidance and ordering

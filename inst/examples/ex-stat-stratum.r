@@ -43,4 +43,4 @@ ggplot(vaccinations,
            x = survey, stratum = response,
            fill = response, label = response)) +
   stat_stratum(width = .5) +
-  geom_text(stat = "stratum", min.height = 100)
+  geom_text(stat = "stratum", min.y = 100)
