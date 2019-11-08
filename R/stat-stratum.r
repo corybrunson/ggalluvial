@@ -23,11 +23,16 @@
 #'   so that they match the order of the values in the legend.
 #'   Ignored if `decreasing` is not `NA`.
 #'   Defaults to `TRUE`.
+#' @param absolute Logical; if some cases or strata are negative,
+#'   whether to arrange them (respecting `decreasing` and `reverse`)
+#'   using negative or absolute values of `y`.
 #' @param discern Passed to [to_lodes_form()] if `data` is in
 #'   alluvia format.
 #' @param label.strata Logical; whether to assign the values of the axis
 #'   variables to the strata. Defaults to FALSE, and requires that no
 #'   `label` aesthetic is assigned.
+#' @param negate.strata A vector of values of the `stratum` aesthetic to be
+#'   treated as negative (will ignore missing values with a warning).
 #' @param min.y,max.y Numeric; bounds on the heights (weights) of the
 #'   strata to be rendered. Use these bounds to exclude strata outside a certain
 #'   range, for example when labeling strata using [ggplot2::geom_text()].
@@ -40,6 +45,7 @@ stat_stratum <- function(mapping = NULL,
                          position = "identity",
                          decreasing = NA,
                          reverse = TRUE,
+                         absolute = FALSE,
                          discern = FALSE,
                          label.strata = FALSE,
                          min.y = NULL, max.y = NULL,
@@ -59,6 +65,7 @@ stat_stratum <- function(mapping = NULL,
     params = list(
       decreasing = decreasing,
       reverse = reverse,
+      absolute = absolute,
       discern = discern,
       label.strata = label.strata,
       min.y = min.y, max.y = max.y,
@@ -137,7 +144,7 @@ StatStratum <- ggproto(
   },
   
   compute_panel = function(self, data, scales,
-                           decreasing = NA, reverse = TRUE,
+                           decreasing = NA, reverse = TRUE, absolute = FALSE,
                            discern = FALSE, label.strata = FALSE,
                            min.y = NULL, max.y = NULL,
                            min.height = NULL, max.height = NULL) {
@@ -155,30 +162,43 @@ StatStratum <- ggproto(
     # remove empty lodes (including labels)
     data <- subset(data, y != 0)
     
+    # sign variable
+    # (sorts positives before negatives)
+    # (will have no effect if all values are non-negative)
+    data$yneg <- data$y < 0
+    
     # aggregate data by `x` and `stratum`
-    data <- auto_aggregate(data = data, by = c("x", "stratum"))
+    data <- auto_aggregate(data = data, by = c("x", "yneg", "stratum"))
     
     # sort in preparation for calculating cumulative weights
     data <- if (is.na(decreasing)) {
-      arr_fun <- if (reverse) dplyr::desc else identity
-      data[with(data, order(PANEL, x, arr_fun(stratum))), , drop = FALSE]
+      data[with(data, order(
+        PANEL, x, yneg,
+        xtfrm(stratum) * (-1) ^ (reverse + yneg * ! absolute)
+      )), , drop = FALSE]
     } else {
-      arr_fun <- if (decreasing) dplyr::desc else identity
-      data[with(data, order(PANEL, x, arr_fun(y))), , drop = FALSE]
+      data[with(data, order(
+        PANEL, x, yneg,
+        xtfrm(y) * (-1) ^ (decreasing + yneg * ! absolute),
+        xtfrm(stratum) * (-1) ^ (reverse + yneg * ! absolute)
+      )), , drop = FALSE]
     }
     
-    # calculate cumulative weights
+    # calculate cumulative weights (grouped by sign)
     data$ycum <- NA
     for (xx in unique(data$x)) {
-      ww <- which(data$x == xx)
-      data$ycum[ww] <- cumsum(data$y[ww]) - data$y[ww] / 2
+      for (yn in c(FALSE, TRUE)) {
+        ww <- which(data$x == xx & data$yneg == yn)
+        data$ycum[ww] <- cumsum(data$y[ww]) - data$y[ww] / 2
+      }
     }
     
     # y bounds
     data <- transform(data,
-                      ymin = ycum - y / 2,
-                      ymax = ycum + y / 2,
+                      ymin = ycum - abs(y) / 2,
+                      ymax = ycum + abs(y) / 2,
                       y = ycum)
+    data$yneg <- NULL
     data$ycum <- NULL
     
     # impose height restrictions
@@ -206,7 +226,7 @@ auto_aggregate <- function(data, by) {
   agg <- stats::aggregate(x = rep(1, nrow(data)),
                           by = data[, by],
                           FUN = unique)
-  agg[[3]] <- NULL
+  agg[[ncol(agg)]] <- NULL
   rem_vars <- setdiff(names(data), by)
   for (var in rem_vars) {
     agg_var <- stats::aggregate(

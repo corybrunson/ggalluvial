@@ -23,6 +23,7 @@ stat_flow <- function(mapping = NULL,
                       position = "identity",
                       decreasing = NA,
                       reverse = TRUE,
+                      absolute = FALSE,
                       discern = FALSE,
                       aes.bind = FALSE,
                       min.y = NULL, max.y = NULL,
@@ -41,6 +42,7 @@ stat_flow <- function(mapping = NULL,
     params = list(
       decreasing = decreasing,
       reverse = reverse,
+      absolute = absolute,
       discern = discern,
       min.y = min.y, max.y = max.y,
       aes.bind = aes.bind,
@@ -109,23 +111,51 @@ StatFlow <- ggproto(
   },
   
   compute_panel = function(self, data, scales,
-                           decreasing = NA, reverse = TRUE,
+                           decreasing = NA, reverse = TRUE, absolute = FALSE,
                            discern = FALSE,
                            min.y = NULL, max.y = NULL,
                            aes.bind = FALSE) {
     
+    save(data, scales,
+         decreasing, reverse, absolute,
+         discern,
+         min.y, max.y,
+         aes.bind,
+         file = "temp.rda")
+    load("temp.rda")
+    
     # aesthetics (in prescribed order)
     aesthetics <- intersect(.color_diff_aesthetics, names(data))
     
-    # sort within axes by weight according to `decreasing` parameter
-    if (! is.na(decreasing)) {
-      deposits <- stats::aggregate(x = data$y * (1 - decreasing * 2),
-                                   by = data[, c("x", "stratum"), drop = FALSE],
-                                   FUN = sum)
-      names(deposits)[3] <- "deposit"
+    # sign variable
+    # (sorts positives before negatives)
+    # (will have no effect if all values are non-negative)
+    data$yneg <- data$y < 0
+    
+    # define 'deposit' variable to rank (signed) strata
+    if (is.na(decreasing)) {
+      deposits <- unique(data[, c("x", "yneg", "stratum")])
+      deposits <- transform(deposits, deposit = order(order(
+        x, yneg,
+        xtfrm(stratum) * (-1) ^ (reverse + yneg * ! absolute)
+      )))
+    } else {
+      deposits <- stats::aggregate(
+        x = data$y,
+        by = data[, c("x", "yneg", "stratum"), drop = FALSE],
+        FUN = sum
+      )
+      names(deposits)[ncol(deposits)] <- "y"
+      deposits <- transform(deposits, deposit = order(order(
+        x, yneg,
+        xtfrm(y) * (-1) ^ (decreasing + yneg * ! absolute),
+        xtfrm(stratum) * (-1) ^ (reverse + yneg * ! absolute)
+      )))
+      deposits$y <- NULL
     }
-    # sort within axes by stratum according to `reverse` parameter
-    arr_fun <- if (reverse) dplyr::desc else identity
+    data <- merge(data, deposits,
+                  by = c("x", "yneg", "stratum"),
+                  all.x = TRUE, all.y = FALSE)
     
     # identify aesthetics that vary within strata (at "fissures")
     n_lodes <- nrow(unique(data[, c("x", "stratum")]))
@@ -138,7 +168,7 @@ StatFlow <- ggproto(
       interaction(data[, rev(fissure_aes)], drop = TRUE)
     }
     
-    # stack starts and ends of flows, using `alluvium` to link them
+    # stack contacts of flows to strata, using `alluvium` to link them
     x_ran <- range(data$x)
     data$alluvium <- contiguate(data$alluvium)
     alluvium_max <- max(data$alluvium)
@@ -146,22 +176,22 @@ StatFlow <- ggproto(
       transform(data[data$x != x_ran[2], , drop = FALSE],
                 alluvium = alluvium + alluvium_max * (as.numeric(x) - 1),
                 link = as.numeric(x),
-                side = I("start")),
+                contact = I("back")),
       transform(data[data$x != x_ran[1], , drop = FALSE],
                 alluvium = alluvium + alluvium_max * (as.numeric(x) - 2),
                 link = as.numeric(x) - 1,
-                side = I("end"))
+                contact = I("front"))
     )
-    data$side <- factor(data$side, levels = c("start", "end"))
+    data$contact <- factor(data$contact, levels = c("back", "front"))
     
     # flag flows between common pairs of strata and of aesthetics
     # (induces NAs for one-sided flows)
-    for (var in c("stratum", "fissure")) {
+    for (var in c("deposit", "fissure")) {
       flow_var <- paste0("flow_", var)
-      data <- match_sides(data, var, flow_var)
-      data[[flow_var]] <- arr_fun(data[[flow_var]])
+      data <- match_contacts(data, var, flow_var)
+      data[[flow_var]] <- xtfrm(data[[flow_var]])
     }
-    data$alluvium <- as.numeric(interaction(data[, c("flow_stratum",
+    data$alluvium <- as.numeric(interaction(data[, c("flow_deposit",
                                                      "flow_fissure")],
                                             drop = TRUE))
     
@@ -174,39 +204,39 @@ StatFlow <- ggproto(
     data <- transform(data,
                       group = alluvium)
     
-    # sort in preparation for calculating cumulative weights
-    if (! is.na(decreasing)) {
-      data <- merge(data, deposits, all.x = TRUE, all.y = FALSE)
-    } else {
-      data$deposit <- arr_fun(data$stratum)
-    }
     sort_fields <- c(
       "link", "x",
       "deposit",
       if (aes.bind) {
-        c("flow_fissure", "flow_stratum")
+        c("flow_fissure", "flow_deposit")
       } else {
-        c("flow_stratum", "flow_fissure")
+        c("flow_deposit", "flow_fissure")
       },
-      "alluvium", "side"
+      "alluvium", "contact"
     )
-    data <- data[do.call(order, data[, sort_fields]), ]
+    sort_order <- do.call(order, data[, sort_fields])
+    data <- data[sort_order, , drop = FALSE]
     # calculate cumulative weights
     data$ycum <- NA
-    for (ll in unique(data$link)) for (ss in unique(data$side)) {
-      ww <- which(data$link == ll & data$side == ss)
-      data$ycum[ww] <- cumsum(data$y[ww]) - data$y[ww] / 2
+    for (ll in unique(data$link)) {
+      for (ss in unique(data$contact)) {
+        for (yn in c(FALSE, TRUE)) {
+          ww <- which(data$link == ll & data$contact == ss & data$yneg == yn)
+          data$ycum[ww] <- cumsum(data$y[ww]) - data$y[ww] / 2
+        }
+      }
     }
     # calculate y bounds
     data <- transform(data,
                       deposit = NULL,
                       fissure = NULL,
+                      flow_deposit = NULL,
                       flow_fissure = NULL,
-                      flow_stratum = NULL,
                       link = NULL,
-                      ymin = ycum - y / 2,
-                      ymax = ycum + y / 2,
+                      ymin = ycum - abs(y) / 2,
+                      ymax = ycum + abs(y) / 2,
                       y = ycum)
+    data$yneg <- NULL
     data$ycum <- NULL
     
     # impose height restrictions
@@ -224,10 +254,10 @@ StatFlow <- ggproto(
   }
 )
 
-match_sides <- function(data, var, var_col) {
-  adj <- tidyr::spread_(data[, c("alluvium", "link", "side", var)],
-                        key = "side", value = var)
-  adj[[var_col]] <- interaction(adj$link, adj$start, adj$end, drop = TRUE)
+match_contacts <- function(data, var, var_col) {
+  adj <- tidyr::spread_(data[, c("alluvium", "link", "contact", var)],
+                        key = "contact", value = var)
+  adj[[var_col]] <- interaction(adj$link, adj$back, adj$front, drop = TRUE)
   merge(data,
         adj[, c("alluvium", var_col)],
         by = "alluvium", all.x = TRUE, all.y = FALSE)
