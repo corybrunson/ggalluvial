@@ -26,6 +26,7 @@ stat_flow <- function(mapping = NULL,
                       absolute = FALSE,
                       discern = FALSE,
                       aes.bind = FALSE,
+                      negate.strata = NULL,
                       min.y = NULL, max.y = NULL,
                       na.rm = FALSE,
                       show.legend = NA,
@@ -44,8 +45,9 @@ stat_flow <- function(mapping = NULL,
       reverse = reverse,
       absolute = absolute,
       discern = discern,
-      min.y = min.y, max.y = max.y,
       aes.bind = aes.bind,
+      negate.strata = negate.strata,
+      min.y = min.y, max.y = max.y,
       na.rm = na.rm,
       ...
     )
@@ -107,22 +109,24 @@ StatFlow <- ggproto(
       }
     }
     
+    # negate strata
+    if (! is.null(params$negate.strata)) {
+      if (! all(params$negate.strata %in% unique(data$stratum))) {
+        warning("Some values of `negate.strata` are not among strata.")
+      }
+      wneg <- which(data$stratum %in% params$negate.strata)
+      if (length(wneg) > 0) data$y[wneg] <- -data$y[wneg]
+    }
+    
     data
   },
   
   compute_panel = function(self, data, scales,
                            decreasing = NA, reverse = TRUE, absolute = FALSE,
                            discern = FALSE,
-                           min.y = NULL, max.y = NULL,
-                           aes.bind = FALSE) {
-    
-    save(data, scales,
-         decreasing, reverse, absolute,
-         discern,
-         min.y, max.y,
-         aes.bind,
-         file = "temp.rda")
-    load("temp.rda")
+                           aes.bind = FALSE,
+                           negate.strata = NULL,
+                           min.y = NULL, max.y = NULL) {
     
     # aesthetics (in prescribed order)
     aesthetics <- intersect(.color_diff_aesthetics, names(data))
@@ -186,14 +190,26 @@ StatFlow <- ggproto(
     
     # flag flows between common pairs of strata and of aesthetics
     # (induces NAs for one-sided flows)
-    for (var in c("deposit", "fissure")) {
-      flow_var <- paste0("flow_", var)
-      data <- match_contacts(data, var, flow_var)
-      data[[flow_var]] <- xtfrm(data[[flow_var]])
+    vars <- c("deposit", "fissure")
+    flow_vars <- paste0("flow_", vars)
+    # interactions of link:back:front
+    for (i in seq(vars)) {
+      data <- match_contacts(data, vars[i], flow_vars[i])
+      #data[[flow_var]] <- xtfrm(data[[flow_var]])
     }
-    data$alluvium <- as.numeric(interaction(data[, c("flow_deposit",
-                                                     "flow_fissure")],
-                                            drop = TRUE))
+    # designate these flow pairings the alluvia
+    data$alluvium <- as.integer(interaction(data[, flow_vars], drop = TRUE))
+    # flag flows between positive and negative strata
+    ypn <- stats::aggregate(data$yneg,
+                            by = data[, "alluvium", drop = FALSE],
+                            FUN = "sum")
+    names(ypn)[length(ypn)] <- "yposneg"
+    ypn$yposneg <- ypn$yposneg == 1
+    data <- merge(data, ypn, by = "alluvium", all.x = TRUE, all.y = FALSE)
+    # reverse orders of these flow flags
+    for (fv in flow_vars) {
+      data[[fv]] <- as.integer(data[[fv]]) * (-1) ^ data$yposneg
+    }
     
     # aggregate alluvial segments within flows,
     # totalling `weight` and, if numeric, `label`
@@ -204,6 +220,7 @@ StatFlow <- ggproto(
     data <- transform(data,
                       group = alluvium)
     
+    # sort data in preparation for `y` sums
     sort_fields <- c(
       "link", "x",
       "deposit",
@@ -214,8 +231,7 @@ StatFlow <- ggproto(
       },
       "alluvium", "contact"
     )
-    sort_order <- do.call(order, data[, sort_fields])
-    data <- data[sort_order, , drop = FALSE]
+    data <- data[do.call(order, data[, sort_fields]), , drop = FALSE]
     # calculate cumulative weights
     data$ycum <- NA
     for (ll in unique(data$link)) {

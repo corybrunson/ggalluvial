@@ -6,8 +6,9 @@
 \usage{
 stat_flow(mapping = NULL, data = NULL, geom = "flow",
   position = "identity", decreasing = NA, reverse = TRUE,
-  discern = FALSE, aes.bind = FALSE, min.y = NULL, max.y = NULL,
-  na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ...)
+  absolute = FALSE, discern = FALSE, aes.bind = FALSE,
+  negate.strata = NULL, min.y = NULL, max.y = NULL, na.rm = FALSE,
+  show.legend = NA, inherit.aes = TRUE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -48,12 +49,19 @@ so that they match the order of the values in the legend.
 Ignored if \code{decreasing} is not \code{NA}.
 Defaults to \code{TRUE}.}
 
+\item{absolute}{Logical; if some cases or strata are negative,
+whether to arrange them (respecting \code{decreasing} and \code{reverse})
+using negative or absolute values of \code{y}.}
+
 \item{discern}{Passed to \code{\link[=to_lodes_form]{to_lodes_form()}} if \code{data} is in
 alluvia format.}
 
 \item{aes.bind}{Whether to prioritize aesthetics before axes (other than the
 index axis) when ordering the lodes within each stratum. Defaults to
 \code{FALSE}.}
+
+\item{negate.strata}{A vector of values of the \code{stratum} aesthetic to be
+treated as negative (will ignore missing values with a warning).}
 
 \item{min.y}{Numeric; bounds on the heights (weights) of the
 strata to be rendered. Use these bounds to exclude strata outside a certain

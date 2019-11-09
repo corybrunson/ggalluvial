@@ -6,9 +6,10 @@
 \usage{
 stat_stratum(mapping = NULL, data = NULL, geom = "stratum",
   position = "identity", decreasing = NA, reverse = TRUE,
-  discern = FALSE, label.strata = FALSE, min.y = NULL,
-  max.y = NULL, min.height = NULL, max.height = NULL,
-  show.legend = NA, inherit.aes = TRUE, na.rm = FALSE, ...)
+  absolute = FALSE, discern = FALSE, label.strata = FALSE,
+  negate.strata = NULL, min.y = NULL, max.y = NULL,
+  min.height = NULL, max.height = NULL, show.legend = NA,
+  inherit.aes = TRUE, na.rm = FALSE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -49,12 +50,19 @@ so that they match the order of the values in the legend.
 Ignored if \code{decreasing} is not \code{NA}.
 Defaults to \code{TRUE}.}
 
+\item{absolute}{Logical; if some cases or strata are negative,
+whether to arrange them (respecting \code{decreasing} and \code{reverse})
+using negative or absolute values of \code{y}.}
+
 \item{discern}{Passed to \code{\link[=to_lodes_form]{to_lodes_form()}} if \code{data} is in
 alluvia format.}
 
 \item{label.strata}{Logical; whether to assign the values of the axis
 variables to the strata. Defaults to FALSE, and requires that no
 \code{label} aesthetic is assigned.}
+
+\item{negate.strata}{A vector of values of the \code{stratum} aesthetic to be
+treated as negative (will ignore missing values with a warning).}
 
 \item{min.y, max.y}{Numeric; bounds on the heights (weights) of the
 strata to be rendered. Use these bounds to exclude strata outside a certain

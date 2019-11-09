@@ -6,10 +6,11 @@
 \usage{
 stat_alluvium(mapping = NULL, data = NULL, geom = "alluvium",
   position = "identity", decreasing = NA, reverse = TRUE,
-  discern = FALSE, aes.bind = FALSE, aggregate.y = FALSE,
-  aggregate.wts = NULL, lode.guidance = "zigzag",
-  lode.ordering = NULL, min.y = NULL, max.y = NULL, na.rm = FALSE,
-  show.legend = NA, inherit.aes = TRUE, ...)
+  absolute = FALSE, discern = FALSE, aes.bind = FALSE,
+  aggregate.y = FALSE, aggregate.wts = NULL,
+  lode.guidance = "zigzag", lode.ordering = NULL, min.y = NULL,
+  max.y = NULL, na.rm = FALSE, show.legend = NA,
+  inherit.aes = TRUE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -49,6 +50,10 @@ in the reverse order of the variable values,
 so that they match the order of the values in the legend.
 Ignored if \code{decreasing} is not \code{NA}.
 Defaults to \code{TRUE}.}
+
+\item{absolute}{Logical; if some cases or strata are negative,
+whether to arrange them (respecting \code{decreasing} and \code{reverse})
+using negative or absolute values of \code{y}.}
 
 \item{discern}{Passed to \code{\link[=to_lodes_form]{to_lodes_form()}} if \code{data} is in
 alluvia format.}

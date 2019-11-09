@@ -48,6 +48,7 @@ stat_stratum <- function(mapping = NULL,
                          absolute = FALSE,
                          discern = FALSE,
                          label.strata = FALSE,
+                         negate.strata = NULL,
                          min.y = NULL, max.y = NULL,
                          min.height = NULL, max.height = NULL,
                          show.legend = NA,
@@ -68,6 +69,7 @@ stat_stratum <- function(mapping = NULL,
       absolute = absolute,
       discern = discern,
       label.strata = label.strata,
+      negate.strata = negate.strata,
       min.y = min.y, max.y = max.y,
       min.height = min.height, max.height = max.height,
       na.rm = na.rm,
@@ -135,6 +137,15 @@ StatStratum <- ggproto(
       }
     }
     
+    # negate strata
+    if (! is.null(params$negate.strata)) {
+      if (! all(params$negate.strata %in% unique(data$stratum))) {
+        warning("Some values of `negate.strata` are not among strata.")
+      }
+      wneg <- which(data$stratum %in% params$negate.strata)
+      if (length(wneg) > 0) data$y[wneg] <- -data$y[wneg]
+    }
+    
     # nullify `group` and `alluvium` fields (to avoid confusion with geoms)
     data <- transform(data,
                       group = NULL,
@@ -145,7 +156,9 @@ StatStratum <- ggproto(
   
   compute_panel = function(self, data, scales,
                            decreasing = NA, reverse = TRUE, absolute = FALSE,
-                           discern = FALSE, label.strata = FALSE,
+                           discern = FALSE,
+                           label.strata = FALSE,
+                           negate.strata = NULL,
                            min.y = NULL, max.y = NULL,
                            min.height = NULL, max.height = NULL) {
     

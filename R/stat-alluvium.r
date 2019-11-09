@@ -36,6 +36,7 @@ stat_alluvium <- function(mapping = NULL,
                           position = "identity",
                           decreasing = NA,
                           reverse = TRUE,
+                          absolute = FALSE,
                           discern = FALSE,
                           aes.bind = FALSE,
                           aggregate.y = FALSE, aggregate.wts = NULL,
@@ -57,6 +58,7 @@ stat_alluvium <- function(mapping = NULL,
     params = list(
       decreasing = decreasing,
       reverse = reverse,
+      absolute = absolute,
       discern = discern,
       aggregate.y = aggregate.y, aggregate.wts = aggregate.wts,
       lode.guidance = lode.guidance,
@@ -145,13 +147,24 @@ StatAlluvium <- ggproto(
   },
   
   compute_panel = function(data, scales,
-                           decreasing = NA, reverse = TRUE,
+                           decreasing = NA, reverse = TRUE, absolute = FALSE,
                            discern = FALSE,
                            aggregate.y = FALSE, aggregate.wts = NULL,
                            lode.guidance = "zigzag",
                            min.y = NULL, max.y = NULL,
                            aes.bind = FALSE,
                            lode.ordering = NULL) {
+    
+    save(data, scales,
+         decreasing, reverse, absolute,
+         discern,
+         aggregate.y, aggregate.wts,
+         lode.guidance,
+         min.y, max.y,
+         aes.bind,
+         lode.ordering,
+         file = "temp.rda")
+    load("temp.rda")
     
     # aggregate weights over otherwise equivalent alluvia
     if (! is.null(aggregate.wts)) {
@@ -166,6 +179,36 @@ StatAlluvium <- ggproto(
     
     # aesthetics (in prescribed order)
     aesthetics <- intersect(.color_diff_aesthetics, names(data))
+    
+    # sign variable
+    # (sorts positives before negatives)
+    # (will have no effect if all values are non-negative)
+    data$yneg <- data$y < 0
+    
+    # define 'deposit' variable to rank (signed) strata
+    if (is.na(decreasing)) {
+      deposits <- unique(data[, c("x", "yneg", "stratum")])
+      deposits <- transform(deposits, deposit = order(order(
+        x, yneg,
+        xtfrm(stratum) * (-1) ^ (reverse + yneg * ! absolute)
+      )))
+    } else {
+      deposits <- stats::aggregate(
+        x = data$y,
+        by = data[, c("x", "yneg", "stratum"), drop = FALSE],
+        FUN = sum
+      )
+      names(deposits)[ncol(deposits)] <- "y"
+      deposits <- transform(deposits, deposit = order(order(
+        x, yneg,
+        xtfrm(y) * (-1) ^ (decreasing + yneg * ! absolute),
+        xtfrm(stratum) * (-1) ^ (reverse + yneg * ! absolute)
+      )))
+      deposits$y <- NULL
+    }
+    data <- merge(data, deposits,
+                  by = c("x", "yneg", "stratum"),
+                  all.x = TRUE, all.y = FALSE)
     
     # create alluvia-format dataset of alluvium stratum assignments,
     # with strata arranged according to `decreasing` and `reverse` parameters
