@@ -41,6 +41,7 @@ stat_alluvium <- function(mapping = NULL,
                           aggregate.y = FALSE,
                           lode.guidance = "zigzag",
                           lode.ordering = NULL,
+                          negate.strata = NULL,
                           min.y = NULL, max.y = NULL,
                           na.rm = FALSE,
                           show.legend = NA,
@@ -62,6 +63,7 @@ stat_alluvium <- function(mapping = NULL,
       aggregate.y = aggregate.y,
       lode.guidance = lode.guidance,
       lode.ordering = lode.ordering,
+      negate.strata = negate.strata,
       min.y = min.y, max.y = max.y,
       aes.bind = aes.bind,
       na.rm = na.rm,
@@ -142,6 +144,15 @@ StatAlluvium <- ggproto(
       }
     }
     
+    # negate strata
+    if (! is.null(params$negate.strata)) {
+      if (! all(params$negate.strata %in% unique(data$stratum))) {
+        warning("Some values of `negate.strata` are not among strata.")
+      }
+      wneg <- which(data$stratum %in% params$negate.strata)
+      if (length(wneg) > 0) data$y[wneg] <- -data$y[wneg]
+    }
+    
     data
   },
   
@@ -150,20 +161,10 @@ StatAlluvium <- ggproto(
                            discern = FALSE,
                            aggregate.y = FALSE,
                            lode.guidance = "zigzag",
+                           negate.strata = NULL,
                            min.y = NULL, max.y = NULL,
                            aes.bind = FALSE,
                            lode.ordering = NULL) {
-    
-    save(data, scales,
-         decreasing, reverse, absolute,
-         discern,
-         aggregate.y,
-         lode.guidance,
-         min.y, max.y,
-         aes.bind,
-         lode.ordering,
-         file = "temp.rda")
-    load("temp.rda")
     
     # aesthetics (in prescribed order)
     aesthetics <- intersect(.color_diff_aesthetics, names(data))
@@ -173,11 +174,6 @@ StatAlluvium <- ggproto(
     
     # aggregate weights over otherwise equivalent alluvia
     if (aggregate.y) data <- aggregate_y_along(data, "x", "alluvium")
-    
-    # sort data by `x` then `alluvium` (to match `alluv` downstream)
-    #data <- data[do.call(order, data[, c("x", "alluvium")]), ]
-    # ensure that `alluvium` values are contiguous starting at 1
-    #data$alluvium <- contiguate(data$alluvium)
     
     # define 'deposit' variable to rank (signed) strata
     # deposits will be stacked positively, then negatively, from zero
@@ -209,10 +205,6 @@ StatAlluvium <- ggproto(
     #alluv_dep <- alluviate(data, "x", "deposit", "alluvium")
     data <- transform(data, depth = deposit * (-1) ^ yneg)
     alluv_dep <- alluviate(data, "x", "depth", "alluvium")
-    #data$deposit <- NULL
-    #data$depth <- NULL
-    # sort by `alluvium` (to match `data`)
-    #alluv_dep <- alluv_dep[order(alluv_dep$alluvium), ]
     # axis indices
     alluv_ind <- seq_along(alluv_dep)[-1]
     
@@ -226,8 +218,25 @@ StatAlluvium <- ggproto(
       # construct a matrix of orderings
       lode.ordering <- do.call(cbind, lapply(seq_along(alluv_ind), function(i) {
         
+        # -+- align alluvia between positive and negative strata -+-
+        # -+- insert 'ypn' variable after adjacent deposits and aesthetics -+-
+        # use 'depth' rather than 'deposit' above
+        # make `dep_dat` based on `alluv_dep` with absolute depths (deposits)
+        # within each index deposit:
+        #   reverse order of adjacent deposits with opposite sign
+        dep_dat <- alluv_dep
+        dep_dat[, alluv_ind] <- abs(dep_dat[, alluv_ind])
+        for (d in unique(dep_dat[[alluv_ind[i]]])) {
+          for (j in setdiff(alluv_ind, alluv_ind[i])) {
+            ypn <- sign(alluv_dep[[j]][dep_dat[[alluv_ind[i]]] == d]) !=
+              sign(alluv_dep[[alluv_ind[i]]][dep_dat[[alluv_ind[i]]] == d])
+            dep_dat[[j]][dep_dat[[alluv_ind[i]]] == d][ypn] <-
+              rev(dep_dat[[j]][dep_dat[[alluv_ind[i]]] == d][ypn])
+          }
+        }
+        
         # order surrounding axes according to `lode.guidance`
-        axis_seq <- alluv_ind[lode.guidance(n = length(alluv_ind), i = i)]
+        axis_col <- alluv_ind[lode.guidance(n = length(alluv_ind), i = i)[-1]]
         
         # order axis aesthetics ...
         aes_dat <- data[data$x == names(alluv_dep)[alluv_ind[i]],
@@ -240,24 +249,20 @@ StatAlluvium <- ggproto(
         }
         
         # order on aesthetics and surrounding axes
-        ord_dat <- merge(alluv_dep, aes_dat, all.x = TRUE, all.y = FALSE)
-        # change depth to deposit at this axis
-        ord_dat[[axis_seq[i]]] <- abs(ord_dat[[axis_seq[i]]])
+        ord_dat <- merge(dep_dat, aes_dat, all.x = TRUE, all.y = FALSE)
         # prioritize aesthetics according as `aes.bind`
         ord_col <- if (aes.bind) {
-          c(names(alluv_dep)[axis_seq[1]],
-            names(aes_dat)[-1],
-            names(alluv_dep)[axis_seq[-1]])
+          c(names(aes_dat)[-1], names(dep_dat)[axis_col])
         } else {
-          c(names(alluv_dep)[axis_seq],
-            names(aes_dat)[-1])
+          c(names(dep_dat)[axis_col], names(aes_dat)[-1])
         }
         ord_dat <- ord_dat[, ord_col, drop = FALSE]
-        # return the ordering
-        do.call(order, ord_dat)
+        
+        # return a variable encoding this ordering
+        order(do.call(order, ord_dat))
       }))
       
-      alluv_dep[, -1] <- apply(lode.ordering, 2, order)
+      alluv_dep[, -1] <- lode.ordering
     } else {
       # bind a vector to itself to create a matrix
       if (is.vector(lode.ordering)) {
@@ -271,7 +276,7 @@ StatAlluvium <- ggproto(
                     length(unique(data$x))))
       # ensure that data are sorted first by deposit, only then by lode.ordering
       alluv_dep[, -1] <- sapply(seq_along(alluv_ind), function(i) {
-        order(order(alluv_dep[, alluv_ind[i]], lode.ordering[, i]))
+        order(order(abs(alluv_dep[, alluv_ind[i]]), lode.ordering[, i]))
       })
     }
     
@@ -281,13 +286,12 @@ StatAlluvium <- ggproto(
       key = "x", value = "pos",
       alluv_ind
     )
-    #rm(alluv_dep) # avoid confusion
     alluv_pos$x <- as.integer(alluv_pos$x)
     # join 'pos' variable into `data`
     data <- merge(data, alluv_pos, all.x = TRUE, all.y = FALSE)
     
-    # sort data by position in preparation for 'y' sums
-    data <- data[order(data$pos), , drop = FALSE]
+    # sort data by deposit, then position, in preparation for 'y' sums
+    data <- data[do.call(order, data[, c("deposit", "pos")]), , drop = FALSE]
     # calculate cumulative weights
     data$ycum <- NA
     for (xx in unique(data$x)) {

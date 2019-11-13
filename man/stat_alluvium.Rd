@@ -7,8 +7,8 @@
 stat_alluvium(mapping = NULL, data = NULL, geom = "alluvium",
   position = "identity", decreasing = NA, reverse = TRUE,
   absolute = FALSE, discern = FALSE, aes.bind = FALSE,
-  aggregate.y = FALSE, aggregate.wts = NULL,
-  lode.guidance = "zigzag", lode.ordering = NULL, min.y = NULL,
+  aggregate.y = FALSE, lode.guidance = "zigzag",
+  lode.ordering = NULL, negate.strata = NULL, min.y = NULL,
   max.y = NULL, na.rm = FALSE, show.legend = NA,
   inherit.aes = TRUE, ...)
 }
@@ -67,8 +67,6 @@ rows before computing lode and flow positions. Set to \code{TRUE} to group
 observations into cohorts. \strong{Warning}: This is currently an expensive
 operation.}
 
-\item{aggregate.wts}{Defunct alias for \code{aggregate.y}.}
-
 \item{lode.guidance}{The function to prioritize the axis variables for
 ordering the lodes within each stratum, or else a character string
 identifying the function. Character options are "zigzag", "frontback",
@@ -80,6 +78,9 @@ no imposed ordering), or else a numeric matrix of corresponding dimensions,
 giving the preferred ordering of alluvia at each axis. This will be used to
 order the lodes within each stratum by sorting the lodes first by stratum
 and then by the provided vectors.}
+
+\item{negate.strata}{A vector of values of the \code{stratum} aesthetic to be
+treated as negative (will ignore missing values with a warning).}
 
 \item{min.y}{Numeric; bounds on the heights (weights) of the
 strata to be rendered. Use these bounds to exclude strata outside a certain
