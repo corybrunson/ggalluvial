@@ -131,9 +131,7 @@ StatFlow <- ggproto(
     # aesthetics (in prescribed order)
     aesthetics <- intersect(.color_diff_aesthetics, names(data))
     
-    # sign variable
-    # (sorts positives before negatives)
-    # (will have no effect if all values are non-negative)
+    # sign variable (sorts positives before negatives)
     data$yneg <- data$y < 0
     
     # define 'deposit' variable to rank (signed) strata
@@ -158,7 +156,7 @@ StatFlow <- ggproto(
       deposits$y <- NULL
     }
     data <- merge(data, deposits,
-                  by = c("x", "yneg", "stratum"),
+                  #by = c("x", "yneg", "stratum"),
                   all.x = TRUE, all.y = FALSE)
     
     # identify aesthetics that vary within strata (at "fissures")
@@ -199,6 +197,7 @@ StatFlow <- ggproto(
     }
     # designate these flow pairings the alluvia
     data$alluvium <- as.integer(interaction(data[, flow_vars], drop = TRUE))
+    
     # flag flows between positive and negative strata
     ypn <- stats::aggregate(data$yneg,
                             by = data[, "alluvium", drop = FALSE],
@@ -220,7 +219,7 @@ StatFlow <- ggproto(
     data <- transform(data,
                       group = alluvium)
     
-    # sort data in preparation for `y` sums
+    # sort data in preparation for 'y' sums
     sort_fields <- c(
       "link", "x",
       "deposit",

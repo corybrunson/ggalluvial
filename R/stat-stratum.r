@@ -175,12 +175,10 @@ StatStratum <- ggproto(
     # remove empty lodes (including labels)
     data <- subset(data, y != 0)
     
-    # sign variable
-    # (sorts positives before negatives)
-    # (will have no effect if all values are non-negative)
+    # sign variable (sorts positives before negatives)
     data$yneg <- data$y < 0
     
-    # aggregate data by `x` and `stratum`
+    # aggregate data by 'x', 'yneg', and 'stratum'
     data <- auto_aggregate(data = data, by = c("x", "yneg", "stratum"))
     
     # sort in preparation for calculating cumulative weights

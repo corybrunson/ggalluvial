@@ -17,7 +17,6 @@
 #'   rows before computing lode and flow positions. Set to `TRUE` to group
 #'   observations into cohorts. **Warning**: This is currently an expensive
 #'   operation.
-#' @param aggregate.wts Defunct alias for `aggregate.y`.
 #' @param lode.guidance The function to prioritize the axis variables for
 #'   ordering the lodes within each stratum, or else a character string
 #'   identifying the function. Character options are "zigzag", "frontback",
@@ -39,7 +38,7 @@ stat_alluvium <- function(mapping = NULL,
                           absolute = FALSE,
                           discern = FALSE,
                           aes.bind = FALSE,
-                          aggregate.y = FALSE, aggregate.wts = NULL,
+                          aggregate.y = FALSE,
                           lode.guidance = "zigzag",
                           lode.ordering = NULL,
                           min.y = NULL, max.y = NULL,
@@ -60,7 +59,7 @@ stat_alluvium <- function(mapping = NULL,
       reverse = reverse,
       absolute = absolute,
       discern = discern,
-      aggregate.y = aggregate.y, aggregate.wts = aggregate.wts,
+      aggregate.y = aggregate.y,
       lode.guidance = lode.guidance,
       lode.ordering = lode.ordering,
       min.y = min.y, max.y = max.y,
@@ -149,7 +148,7 @@ StatAlluvium <- ggproto(
   compute_panel = function(data, scales,
                            decreasing = NA, reverse = TRUE, absolute = FALSE,
                            discern = FALSE,
-                           aggregate.y = FALSE, aggregate.wts = NULL,
+                           aggregate.y = FALSE,
                            lode.guidance = "zigzag",
                            min.y = NULL, max.y = NULL,
                            aes.bind = FALSE,
@@ -158,7 +157,7 @@ StatAlluvium <- ggproto(
     save(data, scales,
          decreasing, reverse, absolute,
          discern,
-         aggregate.y, aggregate.wts,
+         aggregate.y,
          lode.guidance,
          min.y, max.y,
          aes.bind,
@@ -166,26 +165,22 @@ StatAlluvium <- ggproto(
          file = "temp.rda")
     load("temp.rda")
     
-    # aggregate weights over otherwise equivalent alluvia
-    if (! is.null(aggregate.wts)) {
-      defunct_parameter("aggregate.wts", "aggregate.y")
-      aggregate.y <- aggregate.wts
-    }
-    if (aggregate.y) data <- aggregate_along(data, "x", "alluvium", "y")
-    # sort data by `x` then `alluvium` (to match `alluv` downstream)
-    data <- data[do.call(order, data[, c("x", "alluvium")]), ]
-    # ensure that `alluvium` values are contiguous starting at 1
-    data$alluvium <- contiguate(data$alluvium)
-    
     # aesthetics (in prescribed order)
     aesthetics <- intersect(.color_diff_aesthetics, names(data))
     
-    # sign variable
-    # (sorts positives before negatives)
-    # (will have no effect if all values are non-negative)
+    # sign variable (sorts positives before negatives)
     data$yneg <- data$y < 0
     
+    # aggregate weights over otherwise equivalent alluvia
+    if (aggregate.y) data <- aggregate_y_along(data, "x", "alluvium")
+    
+    # sort data by `x` then `alluvium` (to match `alluv` downstream)
+    #data <- data[do.call(order, data[, c("x", "alluvium")]), ]
+    # ensure that `alluvium` values are contiguous starting at 1
+    #data$alluvium <- contiguate(data$alluvium)
+    
     # define 'deposit' variable to rank (signed) strata
+    # deposits will be stacked positively, then negatively, from zero
     if (is.na(decreasing)) {
       deposits <- unique(data[, c("x", "yneg", "stratum")])
       deposits <- transform(deposits, deposit = order(order(
@@ -207,23 +202,19 @@ StatAlluvium <- ggproto(
       deposits$y <- NULL
     }
     data <- merge(data, deposits,
-                  by = c("x", "yneg", "stratum"),
+                  #by = c("x", "yneg", "stratum"),
                   all.x = TRUE, all.y = FALSE)
     
-    # create alluvia-format dataset of alluvium stratum assignments,
-    # with strata arranged according to `decreasing` and `reverse` parameters
-    data$deposit <- if (is.na(decreasing)) {
-      if (reverse) -xtfrm(data$stratum) else data$stratum
-    } else {
-      if (decreasing) -data$y else data$y
-    }
-    data$deposit <- match(data$deposit, sort(unique(data$deposit)))
-    alluv <- alluviate(data, "x", "deposit", "alluvium")
-    data$deposit <- NULL
+    # summary data of alluvial deposits
+    #alluv_dep <- alluviate(data, "x", "deposit", "alluvium")
+    data <- transform(data, depth = deposit * (-1) ^ yneg)
+    alluv_dep <- alluviate(data, "x", "depth", "alluvium")
+    #data$deposit <- NULL
+    #data$depth <- NULL
     # sort by `alluvium` (to match `data`)
-    alluv <- alluv[order(alluv$alluvium), ]
+    #alluv_dep <- alluv_dep[order(alluv_dep$alluvium), ]
     # axis indices
-    alluv_ind <- seq_along(alluv)[-1]
+    alluv_ind <- seq_along(alluv_dep)[-1]
     
     # if `lode.ordering` not provided, generate it
     if (is.null(lode.ordering)) {
@@ -237,22 +228,28 @@ StatAlluvium <- ggproto(
         
         # order surrounding axes according to `lode.guidance`
         axis_seq <- alluv_ind[lode.guidance(n = length(alluv_ind), i = i)]
+        
         # order axis aesthetics ...
-        aes_dat <- data[data$x == names(alluv)[alluv_ind[i]],
+        aes_dat <- data[data$x == names(alluv_dep)[alluv_ind[i]],
                         c("alluvium", aesthetics),
                         drop = FALSE]
         # ... in the order prescribed by `reverse`
-        if (reverse) {
-          aes_dat <- dplyr::mutate_at(aes_dat, -1, dplyr::funs(dplyr::desc))
+        for (j in seq(ncol(aes_dat))[-1]) {
+          aes_dat[[j]] <- xtfrm(aes_dat[[j]])
+          if (reverse) aes_dat[[j]] <- -aes_dat[[j]]
         }
-        # order on aesthetics and surrounding axes according to `aes.bind`
-        ord_dat <- dplyr::left_join(alluv, aes_dat, by = "alluvium")
+        
+        # order on aesthetics and surrounding axes
+        ord_dat <- merge(alluv_dep, aes_dat, all.x = TRUE, all.y = FALSE)
+        # change depth to deposit at this axis
+        ord_dat[[axis_seq[i]]] <- abs(ord_dat[[axis_seq[i]]])
+        # prioritize aesthetics according as `aes.bind`
         ord_col <- if (aes.bind) {
-          c(names(alluv)[axis_seq[1]],
+          c(names(alluv_dep)[axis_seq[1]],
             names(aes_dat)[-1],
-            names(alluv)[axis_seq[-1]])
+            names(alluv_dep)[axis_seq[-1]])
         } else {
-          c(names(alluv)[axis_seq],
+          c(names(alluv_dep)[axis_seq],
             names(aes_dat)[-1])
         }
         ord_dat <- ord_dat[, ord_col, drop = FALSE]
@@ -260,7 +257,7 @@ StatAlluvium <- ggproto(
         do.call(order, ord_dat)
       }))
       
-      alluv[, -1] <- apply(lode.ordering, 2, order)
+      alluv_dep[, -1] <- apply(lode.ordering, 2, order)
     } else {
       # bind a vector to itself to create a matrix
       if (is.vector(lode.ordering)) {
@@ -272,31 +269,39 @@ StatAlluvium <- ggproto(
       stopifnot(dim(lode.ordering) ==
                   c(length(unique(data$alluvium)),
                     length(unique(data$x))))
-      # ensure that data are sorted first by stratum, only then by lode.ordering
-      alluv[, -1] <- sapply(seq_along(alluv_ind), function(i) {
-        order(order(alluv[, alluv_ind[i]], lode.ordering[, i]))
+      # ensure that data are sorted first by deposit, only then by lode.ordering
+      alluv_dep[, -1] <- sapply(seq_along(alluv_ind), function(i) {
+        order(order(alluv_dep[, alluv_ind[i]], lode.ordering[, i]))
       })
     }
     
     # gather lode positions into alluvium-axis-order table
     alluv_pos <- tidyr::gather(
-      alluv,
+      alluv_dep,
       key = "x", value = "pos",
       alluv_ind
     )
-    rm(alluv) # avoid confusion
+    #rm(alluv_dep) # avoid confusion
     alluv_pos$x <- as.integer(alluv_pos$x)
     # join 'pos' variable into `data`
-    data <- dplyr::left_join(data, alluv_pos, by = c("x", "alluvium"))
+    data <- merge(data, alluv_pos, all.x = TRUE, all.y = FALSE)
     
-    # calculate lode floors and ceilings from positions by axis
+    # sort data by position in preparation for 'y' sums
     data <- data[order(data$pos), , drop = FALSE]
-    data <- dplyr::ungroup(dplyr::mutate(dplyr::group_by(data, x),
-                                         ymax = cumsum(y),
-                                         ymin = dplyr::lag(ymax, default = 0)))
-    stopifnot(isTRUE(all.equal(data$y, data$ymax - data$ymin)))
-    # convert heights to vertical centroids
-    data <- transform(data, y = (ymin + ymax) / 2)
+    # calculate cumulative weights
+    data$ycum <- NA
+    for (xx in unique(data$x)) {
+      for (yn in c(FALSE, TRUE)) {
+        ww <- which(data$x == xx & data$yneg == yn)
+        data$ycum[ww] <- cumsum(data$y[ww]) - data$y[ww] / 2
+      }
+    }
+    # calculate y bounds
+    data <- transform(data,
+                      pos = NULL,
+                      ymin = ycum - abs(y) / 2,
+                      ymax = ycum + abs(y) / 2,
+                      y = ycum)
     
     # within each alluvium, indices at which subsets are contiguous
     data <- data[with(data, order(x, alluvium)), , drop = FALSE]
@@ -310,7 +315,6 @@ StatAlluvium <- ggproto(
     # add `group` to group contiguous alluvial subsets
     data <- transform(data, group = as.numeric(interaction(alluvium, flow)))
     # remove unused fields
-    data$pos <- NULL
     data$cont <- NULL
     data$axis <- NULL
     data$flow <- NULL
@@ -329,3 +333,82 @@ StatAlluvium <- ggproto(
     data
   }
 )
+
+# aggregate weights over otherwise equivalent alluvia (omitting missing values)
+aggregate_y_along_old <- function(data, key, id) {
+  
+  # interaction of all variables to aggregate over (without dropping NAs)
+  data$binding <- as.numeric(interaction(lapply(
+    data[, -match(c(key, id, "y"), names(data)), drop = FALSE],
+    addNA, ifany = FALSE
+  ), drop = TRUE))
+  # convert to alluvia format with 'binding' entries
+  alluv_data <- alluviate(data, key, "binding", id)
+  # sort by all axes (everything except `id`)
+  alluv_data <- alluv_data[do.call(
+    order,
+    alluv_data[, -match(id, names(alluv_data)), drop = FALSE]
+  ), , drop = FALSE]
+  
+  # define map from original to aggregated `id`s
+  alluv_orig <- alluv_data[[id]]
+  alluv_agg <- cumsum(! duplicated(interaction(
+    alluv_data[, -match(id, names(alluv_data)), drop = FALSE]
+  )))
+  # transform `id` in `data` accordingly
+  data[[id]] <- alluv_agg[match(data[[id]], alluv_orig)]
+  
+  # aggregate `var` by all other variables
+  data_agg <- stats::aggregate(formula = y ~ .,
+                               data = data[, c(key, id, "binding", "y")],
+                               FUN = sum)
+  # merge into `data`, ensuring that no `key`-`id` pairs are duplicated
+  data <- unique(merge(
+    data_agg,
+    data[, -match("y", names(data))],
+    all.x = TRUE, all.y = FALSE
+  ))
+  data$binding <- NULL
+  
+  data
+}
+
+# aggregate weights over otherwise equivalent alluvia (omitting missing values)
+aggregate_y_along <- function(data, key, id) {
+  
+  # interaction of all variables to aggregate over (without dropping NAs)
+  data$.binding <- as.numeric(interaction(lapply(
+    data[, -match(c(key, id, "y"), names(data)), drop = FALSE],
+    addNA, ifany = FALSE
+  ), drop = TRUE))
+  
+  # convert to alluvia format with '.binding' entries
+  alluv_data <- alluviate(data, key, ".binding", id)
+  
+  # redefine 'alluvium' with only as many distinct values as distinct alluvia
+  alluv_agg <- stats::aggregate(
+    alluv_data[[id]],
+    by = alluv_data[, rev(setdiff(names(alluv_data), id))],
+    FUN = most
+  )
+  names(alluv_agg)[ncol(alluv_agg)] <- ".id"
+  alluv_data <- merge(alluv_data, alluv_agg, all.x = TRUE, all.y = FALSE)
+  data[[id]] <- alluv_data$.id[match(data[[id]], alluv_data[[id]])]
+  
+  # aggregate 'y' by `key`, `id`, and .binding
+  data_agg <- stats::aggregate(
+    formula = y ~ .,
+    data = data[, c(key, id, ".binding", "y")],
+    FUN = sum
+  )
+  
+  # merge into `data`, ensuring that no `key`-`id` pairs are duplicated
+  data <- merge(
+    data_agg,
+    data[, -match("y", names(data))],
+    all.x = TRUE, all.y = FALSE
+  )
+  data$.binding <- NULL
+  
+  data
+}
