@@ -28,7 +28,7 @@
 #'   using negative or absolute values of `y`.
 #' @param discern Passed to [to_lodes_form()] if `data` is in
 #'   alluvia format.
-#' @param label.strata Logical; whether to assign the values of the axis
+#' @param overlay.label Logical; whether to assign the values of the axis
 #'   variables to the strata. Defaults to FALSE, and requires that no
 #'   `label` aesthetic is assigned.
 #' @param negate.strata A vector of values of the `stratum` aesthetic to be
@@ -47,7 +47,7 @@ stat_stratum <- function(mapping = NULL,
                          reverse = TRUE,
                          absolute = FALSE,
                          discern = FALSE,
-                         label.strata = FALSE,
+                         overlay.label = FALSE, label.strata = NULL,
                          negate.strata = NULL,
                          min.y = NULL, max.y = NULL,
                          min.height = NULL, max.height = NULL,
@@ -68,7 +68,7 @@ stat_stratum <- function(mapping = NULL,
       reverse = reverse,
       absolute = absolute,
       discern = discern,
-      label.strata = label.strata,
+      overlay.label = overlay.label, label.strata = label.strata,
       negate.strata = negate.strata,
       min.y = min.y, max.y = max.y,
       min.height = min.height, max.height = max.height,
@@ -157,54 +157,78 @@ StatStratum <- ggproto(
   compute_panel = function(self, data, scales,
                            decreasing = NA, reverse = TRUE, absolute = FALSE,
                            discern = FALSE,
-                           label.strata = FALSE,
+                           overlay.label = FALSE, label.strata = NULL,
                            negate.strata = NULL,
                            min.y = NULL, max.y = NULL,
                            min.height = NULL, max.height = NULL) {
     
-    # introduce label (if absent)
-    if (label.strata) {
+    save(data, scales,
+         decreasing, reverse, absolute,
+         discern,
+         overlay.label, label.strata,
+         negate.strata,
+         min.y, max.y,
+         min.height, max.height,
+         file = "temp.rda")
+    load("temp.rda")
+    
+    # introduce label
+    if (! is.null(label.strata)) {
+      deprecate_parameter("label.strata", "overlay.label")
+      overlay.label <- label.strata
+    }
+    if (overlay.label) {
       if (is.null(data$label)) {
         data$label <- data$stratum
       } else {
         warning("Aesthetic `label` is specified, ",
-                "so parameter `label.strata` will be ignored.")
+                "so parameter `overlay.label` will be ignored.")
       }
     }
     
-    # remove empty lodes (including labels)
-    data <- subset(data, y != 0)
+    # aesthetics (in prescribed order)
+    aesthetics <- intersect(.color_diff_aesthetics, names(data))
     
     # sign variable (sorts positives before negatives)
     data$yneg <- data$y < 0
     
-    # aggregate data by 'x', 'yneg', and 'stratum'
-    data <- auto_aggregate(data = data, by = c("x", "yneg", "stratum"))
+    # aggregate 'y' over 'x', 'yneg', and 'stratum',
+    # requiring other variables hold constant (or else be lost)
+    agg_dat <- unique(data[, c("x", "yneg", "stratum")])
+    for (var in setdiff(names(data), c("x", "yneg", "stratum"))) {
+      agg_var <- stats::aggregate(
+        data[[var]],
+        by = data[, c("x", "yneg", "stratum")],
+        FUN = if (var %in% c(aesthetics, "group", "PANEL")) {
+          only
+        } else {
+          agg_fun(data[[var]])
+        }
+      )
+      names(agg_var)[ncol(agg_var)] <- var
+      agg_dat <- merge(agg_dat, agg_var,
+                       by = c("x", "yneg", "stratum"), all = TRUE)
+    }
+    data <- agg_dat
+    
+    # remove empty lodes (including labels)
+    data <- subset(data, y != 0)
+    
+    # define 'deposit' variable to rank strata vertically
+    data <- deposit_data(data, decreasing, reverse, absolute)
     
     # sort in preparation for calculating cumulative weights
-    data <- if (is.na(decreasing)) {
-      data[with(data, order(
-        PANEL, x, yneg,
-        xtfrm(stratum) * (-1) ^ (reverse + yneg * ! absolute)
-      )), , drop = FALSE]
-    } else {
-      data[with(data, order(
-        PANEL, x, yneg,
-        xtfrm(y) * (-1) ^ (decreasing + yneg * ! absolute),
-        xtfrm(stratum) * (-1) ^ (reverse + yneg * ! absolute)
-      )), , drop = FALSE]
-    }
+    data <- data[with(data, order(deposit)), , drop = FALSE]
     
     # calculate cumulative weights (grouped by sign)
     data$ycum <- NA
     for (xx in unique(data$x)) {
       for (yn in c(FALSE, TRUE)) {
         ww <- which(data$x == xx & data$yneg == yn)
-        data$ycum[ww] <- cumsum(data$y[ww]) - data$y[ww] / 2
+        data$ycum[ww] <- cumulate(data$y[ww])
       }
     }
-    
-    # y bounds
+    # calculate y bounds
     data <- transform(data,
                       ymin = ycum - abs(y) / 2,
                       ymax = ycum + abs(y) / 2,
@@ -232,33 +256,8 @@ StatStratum <- ggproto(
   }
 )
 
-# summarize (or else return NAs) over numeric, character, and factor fields
-auto_aggregate <- function(data, by) {
-  agg <- stats::aggregate(x = rep(1, nrow(data)),
-                          by = data[, by],
-                          FUN = unique)
-  agg[[ncol(agg)]] <- NULL
-  rem_vars <- setdiff(names(data), by)
-  for (var in rem_vars) {
-    agg_var <- stats::aggregate(
-      x = data[[var]],
-      by = data[, by],
-      FUN = if (var %in% c("size", "linetype", "fill",
-                           "colour", "color", "alpha",
-                           "PANEL", "group")) {
-        only
-      } else {
-        agg_fn(data[[var]])
-      }
-    )
-    names(agg_var) <- c(by, var)
-    agg <- merge(agg, agg_var, by = by, all = TRUE)
-  }
-  agg
-}
-
 # select aggregation function based on variable type
-agg_fn <- function(x) {
+agg_fun <- function(x) {
   if (is.character(x) | is.factor(x)) {
     function(y) as.character(only(y))
   } else if (is.numeric(x)) {

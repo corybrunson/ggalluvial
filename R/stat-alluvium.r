@@ -41,6 +41,7 @@ stat_alluvium <- function(mapping = NULL,
                           aggregate.y = FALSE,
                           lode.guidance = "zigzag",
                           lode.ordering = NULL,
+                          overlay.label = FALSE,
                           negate.strata = NULL,
                           min.y = NULL, max.y = NULL,
                           na.rm = FALSE,
@@ -63,6 +64,7 @@ stat_alluvium <- function(mapping = NULL,
       aggregate.y = aggregate.y,
       lode.guidance = lode.guidance,
       lode.ordering = lode.ordering,
+      overlay.label = overlay.label,
       negate.strata = negate.strata,
       min.y = min.y, max.y = max.y,
       aes.bind = aes.bind,
@@ -161,10 +163,34 @@ StatAlluvium <- ggproto(
                            discern = FALSE,
                            aggregate.y = FALSE,
                            lode.guidance = "zigzag",
+                           overlay.label = FALSE,
                            negate.strata = NULL,
                            min.y = NULL, max.y = NULL,
                            aes.bind = FALSE,
                            lode.ordering = NULL) {
+    
+    save(data, scales,
+         decreasing, reverse, absolute,
+         discern,
+         aggregate.y,
+         lode.guidance,
+         overlay.label,
+         negate.strata,
+         min.y, max.y,
+         aes.bind,
+         lode.ordering,
+         file = "temp.rda")
+    load("temp.rda")
+    
+    # introduce label
+    if (overlay.label) {
+      if (is.null(data$label)) {
+        data$label <- data$alluvium
+      } else {
+        warning("Aesthetic `label` is specified, ",
+                "so parameter `overlay.label` will be ignored.")
+      }
+    }
     
     # aesthetics (in prescribed order)
     aesthetics <- intersect(.color_diff_aesthetics, names(data))
@@ -175,31 +201,8 @@ StatAlluvium <- ggproto(
     # aggregate weights over otherwise equivalent alluvia
     if (aggregate.y) data <- aggregate_y_along(data, "x", "alluvium")
     
-    # define 'deposit' variable to rank (signed) strata
-    # deposits will be stacked positively, then negatively, from zero
-    if (is.na(decreasing)) {
-      deposits <- unique(data[, c("x", "yneg", "stratum")])
-      deposits <- transform(deposits, deposit = order(order(
-        x, yneg,
-        xtfrm(stratum) * (-1) ^ (reverse + yneg * ! absolute)
-      )))
-    } else {
-      deposits <- stats::aggregate(
-        x = data$y,
-        by = data[, c("x", "yneg", "stratum"), drop = FALSE],
-        FUN = sum
-      )
-      names(deposits)[ncol(deposits)] <- "y"
-      deposits <- transform(deposits, deposit = order(order(
-        x, yneg,
-        xtfrm(y) * (-1) ^ (decreasing + yneg * ! absolute),
-        xtfrm(stratum) * (-1) ^ (reverse + yneg * ! absolute)
-      )))
-      deposits$y <- NULL
-    }
-    data <- merge(data, deposits,
-                  #by = c("x", "yneg", "stratum"),
-                  all.x = TRUE, all.y = FALSE)
+    # define 'deposit' variable to rank strata vertically
+    data <- deposit_data(data, decreasing, reverse, absolute)
     
     # summary data of alluvial deposits
     #alluv_dep <- alluviate(data, "x", "deposit", "alluvium")
@@ -297,7 +300,7 @@ StatAlluvium <- ggproto(
     for (xx in unique(data$x)) {
       for (yn in c(FALSE, TRUE)) {
         ww <- which(data$x == xx & data$yneg == yn)
-        data$ycum[ww] <- cumsum(data$y[ww]) - data$y[ww] / 2
+        data$ycum[ww] <- cumulate(data$y[ww])
       }
     }
     # calculate y bounds

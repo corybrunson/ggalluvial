@@ -72,6 +72,69 @@ alluviate <- function(data, key, value, id) {
   )
 }
 
+# define 'deposit' variable to rank strata vertically
+deposit_data <- function(data, decreasing, reverse, absolute) {
+  if (is.na(decreasing)) {
+    deposits <- unique(data[, c("x", "yneg", "stratum")])
+    deposits <- transform(deposits, deposit = order(order(
+      x, -yneg,
+      xtfrm(stratum) * (-1) ^ (yneg * absolute + reverse)
+    )))
+  } else {
+    deposits <- stats::aggregate(
+      x = data$y,
+      by = data[, c("x", "yneg", "stratum"), drop = FALSE],
+      FUN = sum
+    )
+    names(deposits)[ncol(deposits)] <- "y"
+    deposits <- transform(deposits, deposit = order(order(
+      x, yneg,
+      xtfrm(y) * (-1) ^ (yneg * absolute + decreasing),
+      xtfrm(stratum) * (-1) ^ (yneg * absolute + reverse)
+    )))
+    deposits$y <- NULL
+  }
+  merge(data, deposits, all.x = TRUE, all.y = FALSE)
+}
+
+# define 'deposit' variable to rank strata outward from zero (pos then neg)
+# -+- originally used to simplify 'ycum' calculation; deprecated -+-
+deposit_data_abs <- function(data, decreasing, reverse, absolute) {
+  if (is.na(decreasing)) {
+    deposits <- unique(data[, c("x", "yneg", "stratum")])
+    deposits <- transform(deposits, deposit = order(order(
+      x, yneg,
+      xtfrm(stratum) * (-1) ^ (reverse + yneg * ! absolute)
+    )))
+  } else {
+    deposits <- stats::aggregate(
+      x = data$y,
+      by = data[, c("x", "yneg", "stratum"), drop = FALSE],
+      FUN = sum
+    )
+    names(deposits)[ncol(deposits)] <- "y"
+    deposits <- transform(deposits, deposit = order(order(
+      x, yneg,
+      xtfrm(y) * (-1) ^ (decreasing + yneg * ! absolute),
+      xtfrm(stratum) * (-1) ^ (reverse + yneg * ! absolute)
+    )))
+    deposits$y <- NULL
+  }
+  merge(data, deposits, all.x = TRUE, all.y = FALSE)
+}
+
+# calculate cumulative 'y' values, accounting for sign
+cumulate <- function(x) {
+  if (length(x) == 0) return(x)
+  s <- unique(sign(x))
+  stopifnot(length(s) == 1 && s %in% c(-1, 1))
+  if (s == 1) {
+    cumsum(x) - x / 2
+  } else {
+    rev(cumsum(rev(x))) - rev(x) / 2
+  }
+}
+
 # arrange data by aesthetics for consistent (reverse) z-ordering
 z_order_aes <- function(data, aesthetics) {
   

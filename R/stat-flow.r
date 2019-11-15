@@ -26,6 +26,7 @@ stat_flow <- function(mapping = NULL,
                       absolute = FALSE,
                       discern = FALSE,
                       aes.bind = FALSE,
+                      overlay.label = FALSE,
                       negate.strata = NULL,
                       min.y = NULL, max.y = NULL,
                       na.rm = FALSE,
@@ -46,6 +47,7 @@ stat_flow <- function(mapping = NULL,
       absolute = absolute,
       discern = discern,
       aes.bind = aes.bind,
+      overlay.label = overlay.label,
       negate.strata = negate.strata,
       min.y = min.y, max.y = max.y,
       na.rm = na.rm,
@@ -125,8 +127,28 @@ StatFlow <- ggproto(
                            decreasing = NA, reverse = TRUE, absolute = FALSE,
                            discern = FALSE,
                            aes.bind = FALSE,
+                           overlay.label = FALSE,
                            negate.strata = NULL,
                            min.y = NULL, max.y = NULL) {
+    
+    save(data, scales,
+         decreasing, reverse, absolute,
+         discern, aes.bind,
+         overlay.label,
+         negate.strata,
+         min.y, max.y,
+         file = "temp.rda")
+    load("temp.rda")
+    
+    # introduce label
+    if (overlay.label) {
+      if (is.null(data$label)) {
+        data$label <- data$alluvium
+      } else {
+        warning("Aesthetic `label` is specified, ",
+                "so parameter `overlay.label` will be ignored.")
+      }
+    }
     
     # aesthetics (in prescribed order)
     aesthetics <- intersect(.color_diff_aesthetics, names(data))
@@ -134,30 +156,8 @@ StatFlow <- ggproto(
     # sign variable (sorts positives before negatives)
     data$yneg <- data$y < 0
     
-    # define 'deposit' variable to rank (signed) strata
-    if (is.na(decreasing)) {
-      deposits <- unique(data[, c("x", "yneg", "stratum")])
-      deposits <- transform(deposits, deposit = order(order(
-        x, yneg,
-        xtfrm(stratum) * (-1) ^ (reverse + yneg * ! absolute)
-      )))
-    } else {
-      deposits <- stats::aggregate(
-        x = data$y,
-        by = data[, c("x", "yneg", "stratum"), drop = FALSE],
-        FUN = sum
-      )
-      names(deposits)[ncol(deposits)] <- "y"
-      deposits <- transform(deposits, deposit = order(order(
-        x, yneg,
-        xtfrm(y) * (-1) ^ (decreasing + yneg * ! absolute),
-        xtfrm(stratum) * (-1) ^ (reverse + yneg * ! absolute)
-      )))
-      deposits$y <- NULL
-    }
-    data <- merge(data, deposits,
-                  #by = c("x", "yneg", "stratum"),
-                  all.x = TRUE, all.y = FALSE)
+    # define 'deposit' variable to rank strata vertically
+    data <- deposit_data(data, decreasing, reverse, absolute)
     
     # identify aesthetics that vary within strata (at "fissures")
     n_lodes <- nrow(unique(data[, c("x", "stratum")]))
@@ -170,7 +170,8 @@ StatFlow <- ggproto(
       interaction(data[, rev(fissure_aes)], drop = TRUE)
     }
     
-    # stack contacts of flows to strata, using `alluvium` to link them
+    # stack contacts of flows to strata, using 'alluvium' to link them
+    # -+- why is 'x' necessarily continuous? -+-
     x_ran <- range(data$x)
     data$alluvium <- contiguate(data$alluvium)
     alluvium_max <- max(data$alluvium)
@@ -237,7 +238,7 @@ StatFlow <- ggproto(
       for (ss in unique(data$contact)) {
         for (yn in c(FALSE, TRUE)) {
           ww <- which(data$link == ll & data$contact == ss & data$yneg == yn)
-          data$ycum[ww] <- cumsum(data$y[ww]) - data$y[ww] / 2
+          data$ycum[ww] <- cumulate(data$y[ww])
         }
       }
     }
