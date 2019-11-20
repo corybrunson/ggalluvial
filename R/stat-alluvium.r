@@ -35,7 +35,7 @@ stat_alluvium <- function(mapping = NULL,
                           position = "identity",
                           decreasing = NA,
                           reverse = TRUE,
-                          absolute = FALSE,
+                          absolute = TRUE,
                           discern = FALSE,
                           aes.bind = FALSE,
                           aggregate.y = FALSE,
@@ -102,7 +102,7 @@ StatAlluvium <- ggproto(
   setup_data = function(data, params) {
     
     # assign `alluvium` to `stratum` if `stratum` not provided
-    if (is.null(data$stratum) & ! is.null(data$alluvium)) {
+    if (is.null(data$stratum) && ! is.null(data$alluvium)) {
       data <- transform(data, stratum = alluvium)
     }
     
@@ -159,7 +159,7 @@ StatAlluvium <- ggproto(
   },
   
   compute_panel = function(data, scales,
-                           decreasing = NA, reverse = TRUE, absolute = FALSE,
+                           decreasing = NA, reverse = TRUE, absolute = TRUE,
                            discern = FALSE,
                            aggregate.y = FALSE,
                            lode.guidance = "zigzag",
@@ -168,19 +168,6 @@ StatAlluvium <- ggproto(
                            min.y = NULL, max.y = NULL,
                            aes.bind = FALSE,
                            lode.ordering = NULL) {
-    
-    save(data, scales,
-         decreasing, reverse, absolute,
-         discern,
-         aggregate.y,
-         lode.guidance,
-         overlay.label,
-         negate.strata,
-         min.y, max.y,
-         aes.bind,
-         lode.ordering,
-         file = "temp.rda")
-    load("temp.rda")
     
     # introduce label
     if (overlay.label) {
@@ -204,98 +191,84 @@ StatAlluvium <- ggproto(
     # define 'deposit' variable to rank strata vertically
     data <- deposit_data(data, decreasing, reverse, absolute)
     
-    # summary data of alluvial deposits
-    #alluv_dep <- alluviate(data, "x", "deposit", "alluvium")
-    data <- transform(data, depth = deposit * (-1) ^ yneg)
-    alluv_dep <- alluviate(data, "x", "depth", "alluvium")
-    # axis indices
-    alluv_ind <- seq_along(alluv_dep)[-1]
-    
-    # if `lode.ordering` not provided, generate it
+    # if `lode.ordering` not provided, calculate it (ignoring aesthetics)
     if (is.null(lode.ordering)) {
       # invoke surrounding axes in the order prescribed by `lode.guidance`
       if (is.character(lode.guidance)) {
         lode.guidance <- get(paste0("lode_", lode.guidance))
       }
       stopifnot(is.function(lode.guidance))
-      # construct a matrix of orderings
-      lode.ordering <- do.call(cbind, lapply(seq_along(alluv_ind), function(i) {
-        
-        # -+- align alluvia between positive and negative strata -+-
-        # -+- insert 'ypn' variable after adjacent deposits and aesthetics -+-
-        # use 'depth' rather than 'deposit' above
-        # make `dep_dat` based on `alluv_dep` with absolute depths (deposits)
-        # within each index deposit:
-        #   reverse order of adjacent deposits with opposite sign
-        dep_dat <- alluv_dep
-        dep_dat[, alluv_ind] <- abs(dep_dat[, alluv_ind])
-        for (d in unique(dep_dat[[alluv_ind[i]]])) {
-          for (j in setdiff(alluv_ind, alluv_ind[i])) {
-            ypn <- sign(alluv_dep[[j]][dep_dat[[alluv_ind[i]]] == d]) !=
-              sign(alluv_dep[[alluv_ind[i]]][dep_dat[[alluv_ind[i]]] == d])
-            dep_dat[[j]][dep_dat[[alluv_ind[i]]] == d][ypn] <-
-              rev(dep_dat[[j]][dep_dat[[alluv_ind[i]]] == d][ypn])
-          }
-        }
-        
-        # order surrounding axes according to `lode.guidance`
-        axis_col <- alluv_ind[lode.guidance(n = length(alluv_ind), i = i)[-1]]
-        
-        # order axis aesthetics ...
-        aes_dat <- data[data$x == names(alluv_dep)[alluv_ind[i]],
-                        c("alluvium", aesthetics),
-                        drop = FALSE]
-        # ... in the order prescribed by `reverse`
-        for (j in seq(ncol(aes_dat))[-1]) {
-          aes_dat[[j]] <- xtfrm(aes_dat[[j]])
-          if (reverse) aes_dat[[j]] <- -aes_dat[[j]]
-        }
-        
-        # order on aesthetics and surrounding axes
-        ord_dat <- merge(dep_dat, aes_dat, all.x = TRUE, all.y = FALSE)
-        # prioritize aesthetics according as `aes.bind`
-        ord_col <- if (aes.bind) {
-          c(names(aes_dat)[-1], names(dep_dat)[axis_col])
-        } else {
-          c(names(dep_dat)[axis_col], names(aes_dat)[-1])
-        }
-        ord_dat <- ord_dat[, ord_col, drop = FALSE]
-        
-        # return a variable encoding this ordering
-        order(do.call(order, ord_dat))
-      }))
-      
-      alluv_dep[, -1] <- lode.ordering
-    } else {
-      # bind a vector to itself to create a matrix
-      if (is.vector(lode.ordering)) {
-        lode.ordering <- matrix(lode.ordering,
-                                nrow = length(lode.ordering),
-                                ncol = length(unique(data$x)))
+      # summary data of alluvial deposits
+      alluv_dep <- alluviate(data, "x", "deposit", "alluvium")
+      # axis indices
+      alluv_x <- setdiff(names(alluv_dep), "alluvium")
+      # calculate `lode.ordering` from `lode.guidance`
+      lode.ordering <- matrix(NA_integer_,
+                              nrow = nrow(alluv_dep), ncol = length(alluv_x))
+      dimnames(lode.ordering) <- list(alluv_dep$alluvium, alluv_x)
+      for (xx in alluv_x) {
+        ord_x <- lode.guidance(length(alluv_x), match(xx, alluv_x))
+        # order by aesthetics in order
+        lode.ordering[, xx] <- interaction(alluv_dep[, alluv_x[rev(ord_x)]],
+                                           drop = TRUE)
       }
-      # check that array has correct dimensions
-      stopifnot(dim(lode.ordering) ==
-                  c(length(unique(data$alluvium)),
-                    length(unique(data$x))))
-      # ensure that data are sorted first by deposit, only then by lode.ordering
-      alluv_dep[, -1] <- sapply(seq_along(alluv_ind), function(i) {
-        order(order(abs(alluv_dep[, alluv_ind[i]]), lode.ordering[, i]))
-      })
+      # bind a vector to itself to create a matrix
+    } else if (is.vector(lode.ordering)) {
+      lode.ordering <- matrix(lode.ordering,
+                              nrow = length(lode.ordering),
+                              ncol = length(unique(data$x)))
+    }
+    # check that array has correct dimensions
+    stopifnot(dim(lode.ordering) ==
+                c(length(unique(data$alluvium)), length(unique(data$x))))
+    
+    # convert `lode.ordering` into a single sorting variable 'rem_deposit'
+    # that orders index lodes by remaining / remote deposits
+    lode_ord <- as.data.frame(lode.ordering)
+    names(lode_ord) <- sort(unique(data$x))
+    lode_ord$alluvium <- if (is.null(rownames(lode.ordering))) {
+      if (is.factor(data$alluvium)) {
+        levels(data$alluvium)
+      } else if (is.numeric(data$alluvium)) {
+        sort(unique(data$alluvium))
+      } else {
+        unique(data$alluvium)
+      }
+    } else {
+      rownames(lode.ordering)
+    }
+    lode_ord <- tidyr::gather(lode_ord,
+                              key = "x", value = "rem_deposit",
+                              as.character(sort(unique(data$x))))
+    data <- merge(data, lode_ord, by = c("x", "alluvium"),
+                  all.x = TRUE, all.y = FALSE)
+    
+    # identify fissures at aesthetics that vary within strata
+    n_lodes <- nrow(unique(data[, c("x", "stratum")]))
+    fissure_aes <- aesthetics[which(sapply(aesthetics, function(x) {
+      nrow(unique(data[, c("x", "stratum", x)]))
+    }) > n_lodes)]
+    data$fissure <- if (length(fissure_aes) == 0) {
+      1
+    } else {
+      # order by aesthetics in order
+      as.integer(interaction(data[, rev(fissure_aes)], drop = TRUE)) *
+        (-1) ^ (data$yneg * absolute + reverse)
     }
     
-    # gather lode positions into alluvium-axis-order table
-    alluv_pos <- tidyr::gather(
-      alluv_dep,
-      key = "x", value = "pos",
-      alluv_ind
+    # sort data in preparation for 'y' sums
+    sort_fields <- c(
+      "x",
+      "deposit",
+      if (aes.bind) {
+        c("fissure", "rem_deposit")
+      } else {
+        c("rem_deposit", "fissure")
+      },
+      "alluvium"
     )
-    alluv_pos$x <- as.integer(alluv_pos$x)
-    # join 'pos' variable into `data`
-    data <- merge(data, alluv_pos, all.x = TRUE, all.y = FALSE)
-    
-    # sort data by deposit, then position, in preparation for 'y' sums
-    data <- data[do.call(order, data[, c("deposit", "pos")]), , drop = FALSE]
-    # calculate cumulative weights
+    data <- data[do.call(order, data[, sort_fields]), , drop = FALSE]
+    # calculate 'y' sums
     data$ycum <- NA
     for (xx in unique(data$x)) {
       for (yn in c(FALSE, TRUE)) {
@@ -305,10 +278,14 @@ StatAlluvium <- ggproto(
     }
     # calculate y bounds
     data <- transform(data,
-                      pos = NULL,
+                      deposit = NULL,
+                      rem_deposit = NULL,
+                      fissure = NULL,
                       ymin = ycum - abs(y) / 2,
                       ymax = ycum + abs(y) / 2,
                       y = ycum)
+    data$yneg <- NULL
+    data$ycum <- NULL
     
     # within each alluvium, indices at which subsets are contiguous
     data <- data[with(data, order(x, alluvium)), , drop = FALSE]
@@ -327,12 +304,8 @@ StatAlluvium <- ggproto(
     data$flow <- NULL
     
     # impose height restrictions
-    if (! is.null(min.y)) {
-      data <- data[data$ymax - data$ymin >= min.y, , drop = FALSE]
-    }
-    if (! is.null(max.y)) {
-      data <- data[data$ymax - data$ymin <= max.y, , drop = FALSE]
-    }
+    if (! is.null(min.y)) data <- subset(data, ymax - ymin >= min.y)
+    if (! is.null(max.y)) data <- subset(data, ymax - ymin <= max.y)
     
     # arrange data by aesthetics for consistent (reverse) z-ordering
     data <- z_order_aes(data, aesthetics)
@@ -342,7 +315,7 @@ StatAlluvium <- ggproto(
 )
 
 # aggregate weights over otherwise equivalent alluvia (omitting missing values)
-aggregate_y_along_old <- function(data, key, id) {
+aggregate_y_along <- function(data, key, id) {
   
   # interaction of all variables to aggregate over (without dropping NAs)
   data$binding <- as.numeric(interaction(lapply(
@@ -381,7 +354,7 @@ aggregate_y_along_old <- function(data, key, id) {
 }
 
 # aggregate weights over otherwise equivalent alluvia (omitting missing values)
-aggregate_y_along <- function(data, key, id) {
+aggregate_y_along_alt <- function(data, key, id) {
   
   # interaction of all variables to aggregate over (without dropping NAs)
   data$.binding <- as.numeric(interaction(lapply(
@@ -418,4 +391,12 @@ aggregate_y_along <- function(data, key, id) {
   data$.binding <- NULL
   
   data
+}
+
+# build alluvial dataset for reference during lode-ordering
+alluviate <- function(data, key, value, id) {
+  to_alluvia_form(
+    data[, c(key, value, id)],
+    key = key, value = value, id = id
+  )
 }

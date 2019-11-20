@@ -64,14 +64,6 @@ contiguate <- function(x) {
   match(x, sort(unique(x)))
 }
 
-# build alluvial dataset for reference during lode-ordering
-alluviate <- function(data, key, value, id) {
-  to_alluvia_form(
-    data[, c(key, value, id)],
-    key = key, value = value, id = id
-  )
-}
-
 # define 'deposit' variable to rank strata vertically
 deposit_data <- function(data, decreasing, reverse, absolute) {
   if (is.na(decreasing)) {
@@ -88,7 +80,7 @@ deposit_data <- function(data, decreasing, reverse, absolute) {
     )
     names(deposits)[ncol(deposits)] <- "y"
     deposits <- transform(deposits, deposit = order(order(
-      x, yneg,
+      x, -yneg,
       xtfrm(y) * (-1) ^ (yneg * absolute + decreasing),
       xtfrm(stratum) * (-1) ^ (yneg * absolute + reverse)
     )))
@@ -126,12 +118,12 @@ deposit_data_abs <- function(data, decreasing, reverse, absolute) {
 # calculate cumulative 'y' values, accounting for sign
 cumulate <- function(x) {
   if (length(x) == 0) return(x)
-  s <- unique(sign(x))
+  s <- setdiff(unique(sign(x)), 0)
   stopifnot(length(s) == 1 && s %in% c(-1, 1))
   if (s == 1) {
     cumsum(x) - x / 2
   } else {
-    rev(cumsum(rev(x))) - rev(x) / 2
+    rev(cumsum(rev(x)) - rev(x) / 2)
   }
 }
 

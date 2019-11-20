@@ -6,10 +6,10 @@
 \usage{
 stat_alluvium(mapping = NULL, data = NULL, geom = "alluvium",
   position = "identity", decreasing = NA, reverse = TRUE,
-  absolute = FALSE, discern = FALSE, aes.bind = FALSE,
+  absolute = TRUE, discern = FALSE, aes.bind = FALSE,
   aggregate.y = FALSE, lode.guidance = "zigzag",
-  lode.ordering = NULL, negate.strata = NULL, min.y = NULL,
-  max.y = NULL, na.rm = FALSE, show.legend = NA,
+  lode.ordering = NULL, overlay.label = FALSE, negate.strata = NULL,
+  min.y = NULL, max.y = NULL, na.rm = FALSE, show.legend = NA,
   inherit.aes = TRUE, ...)
 }
 \arguments{
@@ -78,6 +78,10 @@ no imposed ordering), or else a numeric matrix of corresponding dimensions,
 giving the preferred ordering of alluvia at each axis. This will be used to
 order the lodes within each stratum by sorting the lodes first by stratum
 and then by the provided vectors.}
+
+\item{overlay.label}{Logical; whether to assign the values of the axis
+variables to the strata. Defaults to FALSE, and requires that no
+\code{label} aesthetic is assigned.}
 
 \item{negate.strata}{A vector of values of the \code{stratum} aesthetic to be
 treated as negative (will ignore missing values with a warning).}
@@ -160,13 +164,13 @@ ggplot(as.data.frame(Titanic),
   stat_stratum(geom = "errorbar") +
   geom_line(stat = "alluvium") +
   stat_alluvium(geom = "pointrange") +
-  geom_text(stat = "stratum", label.strata = TRUE) +
+  geom_text(stat = "stratum", overlay.label = TRUE) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 
 gg <- ggplot(as.data.frame(Titanic),
              aes(y = Freq,
                  axis1 = Class, axis2 = Sex, axis3 = Age)) +
-  geom_stratum() + geom_text(stat = "stratum", label.strata = TRUE) +
+  geom_stratum() + geom_text(stat = "stratum", overlay.label = TRUE) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 # use of lode controls
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",

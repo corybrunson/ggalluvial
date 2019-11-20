@@ -6,9 +6,10 @@
 \usage{
 stat_flow(mapping = NULL, data = NULL, geom = "flow",
   position = "identity", decreasing = NA, reverse = TRUE,
-  absolute = FALSE, discern = FALSE, aes.bind = FALSE,
-  negate.strata = NULL, min.y = NULL, max.y = NULL, na.rm = FALSE,
-  show.legend = NA, inherit.aes = TRUE, ...)
+  absolute = TRUE, discern = FALSE, aes.bind = FALSE,
+  overlay.label = FALSE, negate.strata = NULL, min.y = NULL,
+  max.y = NULL, na.rm = FALSE, show.legend = NA,
+  inherit.aes = TRUE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -59,6 +60,10 @@ alluvia format.}
 \item{aes.bind}{Whether to prioritize aesthetics before axes (other than the
 index axis) when ordering the lodes within each stratum. Defaults to
 \code{FALSE}.}
+
+\item{overlay.label}{Logical; whether to assign the values of the axis
+variables to the strata. Defaults to FALSE, and requires that no
+\code{label} aesthetic is assigned.}
 
 \item{negate.strata}{A vector of values of the \code{stratum} aesthetic to be
 treated as negative (will ignore missing values with a warning).}
@@ -139,7 +144,7 @@ ggplot(as.data.frame(Titanic),
   stat_stratum(geom = "errorbar") +
   geom_line(stat = "flow") +
   stat_flow(geom = "pointrange") +
-  geom_text(stat = "stratum", label.strata = TRUE) +
+  geom_text(stat = "stratum", overlay.label = TRUE) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 
 # use of lode controls
@@ -148,7 +153,7 @@ ggplot(as.data.frame(Titanic),
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
   geom_flow(aes(fill = Survived), aes.bind = TRUE, reverse = FALSE) +
   geom_stratum(reverse = FALSE) +
-  geom_text(stat = "stratum", label.strata = TRUE, reverse = FALSE) +
+  geom_text(stat = "stratum", overlay.label = TRUE, reverse = FALSE) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 
 data(vaccinations)

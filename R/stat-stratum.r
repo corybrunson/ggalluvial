@@ -31,6 +31,7 @@
 #' @param overlay.label Logical; whether to assign the values of the axis
 #'   variables to the strata. Defaults to FALSE, and requires that no
 #'   `label` aesthetic is assigned.
+#' @param label.strata Deprecated; alias for `overlay.label`.
 #' @param negate.strata A vector of values of the `stratum` aesthetic to be
 #'   treated as negative (will ignore missing values with a warning).
 #' @param min.y,max.y Numeric; bounds on the heights (weights) of the
@@ -45,7 +46,7 @@ stat_stratum <- function(mapping = NULL,
                          position = "identity",
                          decreasing = NA,
                          reverse = TRUE,
-                         absolute = FALSE,
+                         absolute = TRUE,
                          discern = FALSE,
                          overlay.label = FALSE, label.strata = NULL,
                          negate.strata = NULL,
@@ -89,7 +90,7 @@ StatStratum <- ggproto(
   setup_data = function(data, params) {
     
     # if `alluvium` not provided, assign each row its own, grouped by `x`
-    if (is.null(data$alluvium) & ! is.null(data$x)) {
+    if (is.null(data$alluvium) && ! is.null(data$x)) {
       data$alluvium <- NA
       for (xx in unique(data$x)) {
         ww <- which(data$x == xx)
@@ -155,22 +156,12 @@ StatStratum <- ggproto(
   },
   
   compute_panel = function(self, data, scales,
-                           decreasing = NA, reverse = TRUE, absolute = FALSE,
+                           decreasing = NA, reverse = TRUE, absolute = TRUE,
                            discern = FALSE,
                            overlay.label = FALSE, label.strata = NULL,
                            negate.strata = NULL,
                            min.y = NULL, max.y = NULL,
                            min.height = NULL, max.height = NULL) {
-    
-    save(data, scales,
-         decreasing, reverse, absolute,
-         discern,
-         overlay.label, label.strata,
-         negate.strata,
-         min.y, max.y,
-         min.height, max.height,
-         file = "temp.rda")
-    load("temp.rda")
     
     # introduce label
     if (! is.null(label.strata)) {
@@ -192,8 +183,9 @@ StatStratum <- ggproto(
     # sign variable (sorts positives before negatives)
     data$yneg <- data$y < 0
     
-    # aggregate 'y' over 'x', 'yneg', and 'stratum',
-    # requiring other variables hold constant (or else be lost)
+    # aggregate variables over 'x', 'yneg', and 'stratum':
+    # take sums of 'y' and, if numeric, of 'label'
+    # require others hold constant (or else be lost)
     agg_dat <- unique(data[, c("x", "yneg", "stratum")])
     for (var in setdiff(names(data), c("x", "yneg", "stratum"))) {
       agg_var <- stats::aggregate(
@@ -217,10 +209,10 @@ StatStratum <- ggproto(
     # define 'deposit' variable to rank strata vertically
     data <- deposit_data(data, decreasing, reverse, absolute)
     
-    # sort in preparation for calculating cumulative weights
+    # sort data in preparation for 'y' sums
     data <- data[with(data, order(deposit)), , drop = FALSE]
     
-    # calculate cumulative weights (grouped by sign)
+    # calculate 'y' sums
     data$ycum <- NA
     for (xx in unique(data$x)) {
       for (yn in c(FALSE, TRUE)) {
@@ -245,12 +237,8 @@ StatStratum <- ggproto(
       deprecate_parameter("max.height", "max.y")
       max.y <- max.height
     }
-    if (! is.null(min.y)) {
-      data <- data[data$ymax - data$ymin >= min.y, , drop = FALSE]
-    }
-    if (! is.null(max.y)) {
-      data <- data[data$ymax - data$ymin <= max.y, , drop = FALSE]
-    }
+    if (! is.null(min.y)) data <- subset(data, ymax - ymin >= min.y)
+    if (! is.null(max.y)) data <- subset(data, ymax - ymin <= max.y)
     
     data
   }

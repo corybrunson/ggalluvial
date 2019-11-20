@@ -6,10 +6,10 @@
 \usage{
 stat_stratum(mapping = NULL, data = NULL, geom = "stratum",
   position = "identity", decreasing = NA, reverse = TRUE,
-  absolute = FALSE, discern = FALSE, label.strata = FALSE,
-  negate.strata = NULL, min.y = NULL, max.y = NULL,
-  min.height = NULL, max.height = NULL, show.legend = NA,
-  inherit.aes = TRUE, na.rm = FALSE, ...)
+  absolute = TRUE, discern = FALSE, overlay.label = FALSE,
+  label.strata = NULL, negate.strata = NULL, min.y = NULL,
+  max.y = NULL, min.height = NULL, max.height = NULL,
+  show.legend = NA, inherit.aes = TRUE, na.rm = FALSE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -57,9 +57,11 @@ using negative or absolute values of \code{y}.}
 \item{discern}{Passed to \code{\link[=to_lodes_form]{to_lodes_form()}} if \code{data} is in
 alluvia format.}
 
-\item{label.strata}{Logical; whether to assign the values of the axis
+\item{overlay.label}{Logical; whether to assign the values of the axis
 variables to the strata. Defaults to FALSE, and requires that no
 \code{label} aesthetic is assigned.}
+
+\item{label.strata}{Deprecated; alias for \code{overlay.label}.}
 
 \item{negate.strata}{A vector of values of the \code{stratum} aesthetic to be
 treated as negative (will ignore missing values with a warning).}
@@ -164,7 +166,7 @@ ggplot(as.data.frame(Titanic),
 ggplot(as.data.frame(Titanic),
        aes(y = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age, axis4 = Survived)) +
-  geom_text(stat = "stratum", label.strata = TRUE) +
+  geom_text(stat = "stratum", overlay.label = TRUE) +
   stat_stratum(geom = "errorbar") +
   scale_x_discrete(limits = c("Class", "Sex", "Age", "Survived"))
 

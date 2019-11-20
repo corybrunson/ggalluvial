@@ -3,6 +3,7 @@
 \name{lode-guidance-functions}
 \alias{lode-guidance-functions}
 \alias{lode_zigzag}
+\alias{lode_zagzig}
 \alias{lode_forward}
 \alias{lode_rightward}
 \alias{lode_backward}
@@ -14,6 +15,8 @@
 \title{Lode guidance functions}
 \usage{
 lode_zigzag(n, i)
+
+lode_zagzig(n, i)
 
 lode_forward(n, i)
 
@@ -48,7 +51,8 @@ determines the order in which the other axes contribute to the sorting of
 lodes within each index axis. After starting at \code{i}, the functions order
 the remaining axes as follows:
 \itemize{
-\item \code{zigzag}: Zigzag outward from \code{i}
+\item \code{zigzag}: Zigzag outward from \code{i}, starting in the outward direction
+\item \code{zigzag}: Zigzag outward from \code{i}, starting in the inward direction
 \item \code{forward}: Increasing order (alias \code{rightward})
 \item \code{backward}: Decreasing order (alias \code{leftward})
 \item \code{frontback}: Proceed forward from \code{i} to \code{n}, then backward to 1

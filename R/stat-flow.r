@@ -23,7 +23,7 @@ stat_flow <- function(mapping = NULL,
                       position = "identity",
                       decreasing = NA,
                       reverse = TRUE,
-                      absolute = FALSE,
+                      absolute = TRUE,
                       discern = FALSE,
                       aes.bind = FALSE,
                       overlay.label = FALSE,
@@ -67,7 +67,7 @@ StatFlow <- ggproto(
   setup_data = function(data, params) {
     
     # assign `alluvium` to `stratum` if `stratum` not provided
-    if (is.null(data$stratum) & ! is.null(data$alluvium)) {
+    if (is.null(data$stratum) && ! is.null(data$alluvium)) {
       data <- transform(data, stratum = alluvium)
     }
     
@@ -124,21 +124,12 @@ StatFlow <- ggproto(
   },
   
   compute_panel = function(self, data, scales,
-                           decreasing = NA, reverse = TRUE, absolute = FALSE,
+                           decreasing = NA, reverse = TRUE, absolute = TRUE,
                            discern = FALSE,
                            aes.bind = FALSE,
                            overlay.label = FALSE,
                            negate.strata = NULL,
                            min.y = NULL, max.y = NULL) {
-    
-    save(data, scales,
-         decreasing, reverse, absolute,
-         discern, aes.bind,
-         overlay.label,
-         negate.strata,
-         min.y, max.y,
-         file = "temp.rda")
-    load("temp.rda")
     
     # introduce label
     if (overlay.label) {
@@ -159,7 +150,7 @@ StatFlow <- ggproto(
     # define 'deposit' variable to rank strata vertically
     data <- deposit_data(data, decreasing, reverse, absolute)
     
-    # identify aesthetics that vary within strata (at "fissures")
+    # identify fissures at aesthetics that vary within strata
     n_lodes <- nrow(unique(data[, c("x", "stratum")]))
     fissure_aes <- aesthetics[which(sapply(aesthetics, function(x) {
       nrow(unique(data[, c("x", "stratum", x)]))
@@ -167,7 +158,9 @@ StatFlow <- ggproto(
     data$fissure <- if (length(fissure_aes) == 0) {
       1
     } else {
-      interaction(data[, rev(fissure_aes)], drop = TRUE)
+      # order by aesthetics in order
+      as.integer(interaction(data[, rev(fissure_aes)], drop = TRUE)) *
+        (-1) ^ (data$yneg * absolute + reverse)
     }
     
     # stack contacts of flows to strata, using 'alluvium' to link them
@@ -190,49 +183,40 @@ StatFlow <- ggproto(
     # flag flows between common pairs of strata and of aesthetics
     # (induces NAs for one-sided flows)
     vars <- c("deposit", "fissure")
-    flow_vars <- paste0("flow_", vars)
+    adj_vars <- paste0("adj_", vars)
     # interactions of link:back:front
     for (i in seq(vars)) {
-      data <- match_contacts(data, vars[i], flow_vars[i])
-      #data[[flow_var]] <- xtfrm(data[[flow_var]])
+      data <- match_contacts(data, vars[i], adj_vars[i])
+      #data[[adj_vars[i]]] <- xtfrm(data[[adj_vars[i]]])
     }
     # designate these flow pairings the alluvia
-    data$alluvium <- as.integer(interaction(data[, flow_vars], drop = TRUE))
+    data$alluvium <- as.integer(interaction(data[, adj_vars], drop = TRUE))
     
-    # flag flows between positive and negative strata
-    ypn <- stats::aggregate(data$yneg,
-                            by = data[, "alluvium", drop = FALSE],
-                            FUN = "sum")
-    names(ypn)[length(ypn)] <- "yposneg"
-    ypn$yposneg <- ypn$yposneg == 1
-    data <- merge(data, ypn, by = "alluvium", all.x = TRUE, all.y = FALSE)
-    # reverse orders of these flow flags
-    for (fv in flow_vars) {
-      data[[fv]] <- as.integer(data[[fv]]) * (-1) ^ data$yposneg
-    }
-    
-    # aggregate alluvial segments within flows,
-    # totalling `weight` and, if numeric, `label`
-    sum_cols <- c("y", if (is.numeric(data$label)) "label")
-    group_cols <- setdiff(names(data), c("group", sum_cols))
-    data <- dplyr::summarize_at(dplyr::group_by(data, .dots = group_cols),
-                                sum_cols, sum, na.rm = TRUE)
-    data <- transform(data,
-                      group = alluvium)
+    # sum 'y' and, if numeric, 'label' over 'x', 'yneg', and 'stratum'
+    sum_vars <- c("y", if (is.numeric(data$label)) "label")
+    # exclude 'group' because it will be redefined below
+    data$group <- NULL
+    by_vars <- setdiff(names(data), c("group", sum_vars))
+    # keep NAs in order to correctly position flows
+    data <- dplyr::summarize_at(dplyr::group_by(data, .dots = by_vars),
+                                sum_vars, sum, na.rm = TRUE)
+    # redefine 'group' to be used to control grobs in the geom step
+    data <- transform(data, group = alluvium)
     
     # sort data in preparation for 'y' sums
     sort_fields <- c(
       "link", "x",
       "deposit",
+      if (aes.bind) "fissure",
       if (aes.bind) {
-        c("flow_fissure", "flow_deposit")
+        c("adj_fissure", "adj_deposit")
       } else {
-        c("flow_deposit", "flow_fissure")
+        c("adj_deposit", "adj_fissure")
       },
       "alluvium", "contact"
     )
     data <- data[do.call(order, data[, sort_fields]), , drop = FALSE]
-    # calculate cumulative weights
+    # calculate 'y' sums
     data$ycum <- NA
     for (ll in unique(data$link)) {
       for (ss in unique(data$contact)) {
@@ -246,8 +230,8 @@ StatFlow <- ggproto(
     data <- transform(data,
                       deposit = NULL,
                       fissure = NULL,
-                      flow_deposit = NULL,
-                      flow_fissure = NULL,
+                      adj_deposit = NULL,
+                      adj_fissure = NULL,
                       link = NULL,
                       ymin = ycum - abs(y) / 2,
                       ymax = ycum + abs(y) / 2,
@@ -256,12 +240,8 @@ StatFlow <- ggproto(
     data$ycum <- NULL
     
     # impose height restrictions
-    if (! is.null(min.y)) {
-      data <- data[data$ymax - data$ymin >= min.y, , drop = FALSE]
-    }
-    if (! is.null(max.y)) {
-      data <- data[data$ymax - data$ymin <= max.y, , drop = FALSE]
-    }
+    if (! is.null(min.y)) data <- subset(data, ymax - ymin >= min.y)
+    if (! is.null(max.y)) data <- subset(data, ymax - ymin <= max.y)
     
     # arrange data by aesthetics for consistent (reverse) z-ordering
     data <- z_order_aes(data, aesthetics)

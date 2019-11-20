@@ -11,7 +11,8 @@
 #' lodes within each index axis. After starting at `i`, the functions order
 #' the remaining axes as follows:
 #'
-#' - `zigzag`: Zigzag outward from `i`
+#' - `zigzag`: Zigzag outward from `i`, starting in the outward direction
+#' - `zigzag`: Zigzag outward from `i`, starting in the inward direction
 #' - `forward`: Increasing order (alias `rightward`)
 #' - `backward`: Decreasing order (alias `leftward`)
 #' - `frontback`: Proceed forward from `i` to `n`, then backward to 1
@@ -24,9 +25,7 @@
 #' @param i Numeric, a positive integer at most `n`
 NULL
 
-#' @rdname lode-guidance-functions
-#' @export
-lode_zigzag <- function(n, i) {
+lode_zz <- function(n, i, outward) {
   
   # radii
   r1 <- i - 1
@@ -34,7 +33,7 @@ lode_zigzag <- function(n, i) {
   r <- min(r1, r2)
   
   # attempt cohesion in the direction of the closer end
-  backward <- (i <= n / 2)
+  backward <- (i <= n / 2) == outward
   
   # setup
   sgn <- if(r1 == r2) 0 else (r2 - r1) / abs(r2 - r1)
@@ -45,6 +44,18 @@ lode_zigzag <- function(n, i) {
   c(i,
     if(r == 0) c() else sapply(1:r, function(j) i + j * zz),
     if(sgn == 0) c() else rem)
+}
+
+#' @rdname lode-guidance-functions
+#' @export
+lode_zigzag <- function(n, i) {
+  lode_zz(n, i, outward = TRUE)
+}
+
+#' @rdname lode-guidance-functions
+#' @export
+lode_zagzig <- function(n, i) {
+  lode_zz(n, i, outward = FALSE)
 }
 
 #' @rdname lode-guidance-functions
