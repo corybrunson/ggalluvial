@@ -12,20 +12,27 @@
 #'   [geom_alluvium()] and
 #'   [geom_flow()] for the corresponding geoms.
 #' @inheritParams stat_stratum
-#' @param aes.bind Whether to prioritize aesthetics before axes (other than the
-#'   index axis) when ordering the lodes within each stratum. Defaults to
-#'   `FALSE`.
+#' @param aes.bind At what grouping level, if any, to prioritize differentiation
+#'   aesthetics when ordering the lodes within each stratum. Defaults to
+#'   `"none"` (no aesthetic binding) with intermediate option `"linked"` to bind
+#'   aesthetics after stratifying by axes linked to the index axis (the one
+#'   adjacent axis in `stat_flow()`; all remaining axes in `stat_alluvium()`)
+#'   and strongest option `"index"` to bind aesthetics after stratifying by the
+#'   index axis but before stratifying by linked axes. Stratification by any
+#'   axis is done with respect to the strata at that axis, after separating
+#'   positive and negative strata, consistent with the values of `decreasing`,
+#'   `reverse`, and `absolute`. Thus, if `"none"`, then lode orderings will not
+#'   depend on aesthetic variables. All aesthetic variables are used, in the
+#'   order in which they are specified in `aes()`.
 #' @example inst/examples/ex-stat-flow.r
 #' @export
 stat_flow <- function(mapping = NULL,
                       data = NULL,
                       geom = "flow",
                       position = "identity",
-                      decreasing = NA,
-                      reverse = TRUE,
-                      absolute = TRUE,
+                      decreasing = NA, reverse = TRUE, absolute = TRUE,
                       discern = FALSE,
-                      aes.bind = FALSE,
+                      aes.bind = "none",
                       overlay.label = FALSE,
                       negate.strata = NULL,
                       min.y = NULL, max.y = NULL,
@@ -42,9 +49,7 @@ stat_flow <- function(mapping = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
-      decreasing = decreasing,
-      reverse = reverse,
-      absolute = absolute,
+      decreasing = decreasing, reverse = reverse, absolute = absolute,
       discern = discern,
       aes.bind = aes.bind,
       overlay.label = overlay.label,
@@ -126,7 +131,7 @@ StatFlow <- ggproto(
   compute_panel = function(self, data, scales,
                            decreasing = NA, reverse = TRUE, absolute = TRUE,
                            discern = FALSE,
-                           aes.bind = FALSE,
+                           aes.bind = "none",
                            overlay.label = FALSE,
                            negate.strata = NULL,
                            min.y = NULL, max.y = NULL) {
@@ -143,6 +148,16 @@ StatFlow <- ggproto(
     
     # aesthetics (in prescribed order)
     aesthetics <- intersect(.color_diff_aesthetics, names(data))
+    # match arguments for `aes.bind`
+    if (! is.null(aes.bind)) {
+      if (is.logical(aes.bind)) {
+        aes.bind.rep <- if (aes.bind) "index" else "linked"
+        warning("Logical values of `aes.bind` are deprecated; ",
+                "replacing ", aes.bind, " with '", aes.bind.rep, "'.")
+        aes.bind <- aes.bind.rep
+      }
+      aes.bind <- match.arg(aes.bind, c("none", "linked", "index"))
+    }
     
     # sign variable (sorts positives before negatives)
     data$yneg <- data$y < 0
@@ -207,12 +222,9 @@ StatFlow <- ggproto(
     sort_fields <- c(
       "link", "x",
       "deposit",
-      if (aes.bind) "fissure",
-      if (aes.bind) {
-        c("adj_fissure", "adj_deposit")
-      } else {
-        c("adj_deposit", "adj_fissure")
-      },
+      if (aes.bind == "index") c("fissure", "adj_fissure"),
+      "adj_deposit",
+      if (aes.bind == "linked") "adj_fissure",
       "alluvium", "contact"
     )
     data <- data[do.call(order, data[, sort_fields]), , drop = FALSE]

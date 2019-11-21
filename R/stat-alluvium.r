@@ -33,14 +33,12 @@ stat_alluvium <- function(mapping = NULL,
                           data = NULL,
                           geom = "alluvium",
                           position = "identity",
-                          decreasing = NA,
-                          reverse = TRUE,
-                          absolute = TRUE,
+                          decreasing = NA, reverse = TRUE, absolute = TRUE,
                           discern = FALSE,
-                          aes.bind = FALSE,
                           aggregate.y = FALSE,
                           lode.guidance = "zigzag",
                           lode.ordering = NULL,
+                          aes.bind = "none",
                           overlay.label = FALSE,
                           negate.strata = NULL,
                           min.y = NULL, max.y = NULL,
@@ -57,17 +55,15 @@ stat_alluvium <- function(mapping = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
-      decreasing = decreasing,
-      reverse = reverse,
-      absolute = absolute,
+      decreasing = decreasing, reverse = reverse, absolute = absolute,
       discern = discern,
       aggregate.y = aggregate.y,
       lode.guidance = lode.guidance,
       lode.ordering = lode.ordering,
+      aes.bind = aes.bind,
       overlay.label = overlay.label,
       negate.strata = negate.strata,
       min.y = min.y, max.y = max.y,
-      aes.bind = aes.bind,
       na.rm = na.rm,
       ...
     )
@@ -163,10 +159,10 @@ StatAlluvium <- ggproto(
                            discern = FALSE,
                            aggregate.y = FALSE,
                            lode.guidance = "zigzag",
+                           aes.bind = "none",
                            overlay.label = FALSE,
                            negate.strata = NULL,
                            min.y = NULL, max.y = NULL,
-                           aes.bind = FALSE,
                            lode.ordering = NULL) {
     
     # introduce label
@@ -181,6 +177,16 @@ StatAlluvium <- ggproto(
     
     # aesthetics (in prescribed order)
     aesthetics <- intersect(.color_diff_aesthetics, names(data))
+    # match arguments for `aes.bind`
+    if (! is.null(aes.bind)) {
+      if (is.logical(aes.bind)) {
+        aes.bind.rep <- if (aes.bind) "index" else "linked"
+        warning("Logical values of `aes.bind` are deprecated; ",
+                "replacing ", aes.bind, " with '", aes.bind.rep, "'.")
+        aes.bind <- aes.bind.rep
+      }
+      aes.bind <- match.arg(aes.bind, c("none", "linked", "index"))
+    }
     
     # sign variable (sorts positives before negatives)
     data$yneg <- data$y < 0
@@ -260,11 +266,9 @@ StatAlluvium <- ggproto(
     sort_fields <- c(
       "x",
       "deposit",
-      if (aes.bind) {
-        c("fissure", "rem_deposit")
-      } else {
-        c("rem_deposit", "fissure")
-      },
+      if (aes.bind == "index") "fissure",
+      "rem_deposit",
+      if (aes.bind == "linked") "fissure",
       "alluvium"
     )
     data <- data[do.call(order, data[, sort_fields]), , drop = FALSE]

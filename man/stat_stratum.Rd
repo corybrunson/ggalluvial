@@ -9,7 +9,7 @@ stat_stratum(mapping = NULL, data = NULL, geom = "stratum",
   absolute = TRUE, discern = FALSE, overlay.label = FALSE,
   label.strata = NULL, negate.strata = NULL, min.y = NULL,
   max.y = NULL, min.height = NULL, max.height = NULL,
-  show.legend = NA, inherit.aes = TRUE, na.rm = FALSE, ...)
+  na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -72,6 +72,11 @@ range, for example when labeling strata using \code{\link[ggplot2:geom_text]{ggp
 
 \item{min.height, max.height}{Deprecated aliases for \code{min.y} and \code{max.y}.}
 
+\item{na.rm}{Logical:
+if \code{FALSE}, the default, \code{NA} lodes are not included;
+if \code{TRUE}, \code{NA} lodes constitute a separate category,
+plotted in grey (regardless of the color scheme).}
+
 \item{show.legend}{logical. Should this layer be included in the legends?
 \code{NA}, the default, includes if any aesthetics are mapped.
 \code{FALSE} never includes, and \code{TRUE} always includes.
@@ -82,11 +87,6 @@ display.}
 rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
-
-\item{na.rm}{Logical:
-if \code{FALSE}, the default, \code{NA} lodes are not included;
-if \code{TRUE}, \code{NA} lodes constitute a separate category,
-plotted in grey (regardless of the color scheme).}
 
 \item{...}{Additional arguments passed to \code{\link[ggplot2:layer]{ggplot2::layer()}}.}
 }

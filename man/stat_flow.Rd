@@ -6,7 +6,7 @@
 \usage{
 stat_flow(mapping = NULL, data = NULL, geom = "flow",
   position = "identity", decreasing = NA, reverse = TRUE,
-  absolute = TRUE, discern = FALSE, aes.bind = FALSE,
+  absolute = TRUE, discern = FALSE, aes.bind = "none",
   overlay.label = FALSE, negate.strata = NULL, min.y = NULL,
   max.y = NULL, na.rm = FALSE, show.legend = NA,
   inherit.aes = TRUE, ...)
@@ -57,9 +57,18 @@ using negative or absolute values of \code{y}.}
 \item{discern}{Passed to \code{\link[=to_lodes_form]{to_lodes_form()}} if \code{data} is in
 alluvia format.}
 
-\item{aes.bind}{Whether to prioritize aesthetics before axes (other than the
-index axis) when ordering the lodes within each stratum. Defaults to
-\code{FALSE}.}
+\item{aes.bind}{At what grouping level, if any, to prioritize differentiation
+aesthetics when ordering the lodes within each stratum. Defaults to
+\code{"none"} (no aesthetic binding) with intermediate option \code{"linked"} to bind
+aesthetics after stratifying by axes linked to the index axis (the one
+adjacent axis in \code{stat_flow()}; all remaining axes in \code{stat_alluvium()})
+and strongest option \code{"index"} to bind aesthetics after stratifying by the
+index axis but before stratifying by linked axes. Stratification by any
+axis is done with respect to the strata at that axis, after separating
+positive and negative strata, consistent with the values of \code{decreasing},
+\code{reverse}, and \code{absolute}. Thus, if \code{"none"}, then lode orderings will not
+depend on aesthetic variables. All aesthetic variables are used, in the
+order in which they are specified in \code{aes()}.}
 
 \item{overlay.label}{Logical; whether to assign the values of the axis
 variables to the strata. Defaults to FALSE, and requires that no
