@@ -6,8 +6,8 @@
 \usage{
 stat_flow(mapping = NULL, data = NULL, geom = "flow",
   position = "identity", decreasing = NA, reverse = TRUE,
-  absolute = TRUE, discern = FALSE, aes.bind = "none",
-  overlay.label = FALSE, negate.strata = NULL, min.y = NULL,
+  absolute = TRUE, discern = FALSE, negate.strata = NULL,
+  aes.bind = "none", overlay.label = FALSE, min.y = NULL,
   max.y = NULL, na.rm = FALSE, show.legend = NA,
   inherit.aes = TRUE, ...)
 }
@@ -57,6 +57,9 @@ using negative or absolute values of \code{y}.}
 \item{discern}{Passed to \code{\link[=to_lodes_form]{to_lodes_form()}} if \code{data} is in
 alluvia format.}
 
+\item{negate.strata}{A vector of values of the \code{stratum} aesthetic to be
+treated as negative (will ignore missing values with a warning).}
+
 \item{aes.bind}{At what grouping level, if any, to prioritize differentiation
 aesthetics when ordering the lodes within each stratum. Defaults to
 \code{"none"} (no aesthetic binding) with intermediate option \code{"linked"} to bind
@@ -73,9 +76,6 @@ order in which they are specified in \code{aes()}.}
 \item{overlay.label}{Logical; whether to assign the values of the axis
 variables to the strata. Defaults to FALSE, and requires that no
 \code{label} aesthetic is assigned.}
-
-\item{negate.strata}{A vector of values of the \code{stratum} aesthetic to be
-treated as negative (will ignore missing values with a warning).}
 
 \item{min.y}{Numeric; bounds on the heights (weights) of the
 strata to be rendered. Use these bounds to exclude strata outside a certain

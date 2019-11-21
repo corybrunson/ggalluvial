@@ -6,11 +6,11 @@
 \usage{
 stat_alluvium(mapping = NULL, data = NULL, geom = "alluvium",
   position = "identity", decreasing = NA, reverse = TRUE,
-  absolute = TRUE, discern = FALSE, aggregate.y = FALSE,
+  absolute = TRUE, discern = FALSE, negate.strata = NULL,
+  aggregate.y = NULL, cement.alluvia = FALSE,
   lode.guidance = "zigzag", lode.ordering = NULL, aes.bind = "none",
-  overlay.label = FALSE, negate.strata = NULL, min.y = NULL,
-  max.y = NULL, na.rm = FALSE, show.legend = NA,
-  inherit.aes = TRUE, ...)
+  overlay.label = FALSE, min.y = NULL, max.y = NULL, na.rm = FALSE,
+  show.legend = NA, inherit.aes = TRUE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -58,10 +58,17 @@ using negative or absolute values of \code{y}.}
 \item{discern}{Passed to \code{\link[=to_lodes_form]{to_lodes_form()}} if \code{data} is in
 alluvia format.}
 
-\item{aggregate.y}{Whether to aggregate weights across otherwise equivalent
-rows before computing lode and flow positions. Set to \code{TRUE} to group
-observations into cohorts. \strong{Warning}: This is currently an expensive
-operation.}
+\item{negate.strata}{A vector of values of the \code{stratum} aesthetic to be
+treated as negative (will ignore missing values with a warning).}
+
+\item{aggregate.y}{Deprecated alias for \code{cement.alluvia}.}
+
+\item{cement.alluvia}{Logical value indicating whether to aggregate \code{y}
+values over equivalent alluvia before computing lode and flow positions.
+Alternatively, a function (or its name) to combine the labels (if any) of
+equivalent alluvia, similar to the \code{distill} parameter of
+\code{\link[=to_alluvia_form]{to_alluvia_form()}}). If set to \code{TRUE}, defaults to function
+\code{[dplyr::first()]}.}
 
 \item{lode.guidance}{The function to prioritize the axis variables for
 ordering the lodes within each stratum, or else a character string
@@ -91,9 +98,6 @@ order in which they are specified in \code{aes()}.}
 \item{overlay.label}{Logical; whether to assign the values of the axis
 variables to the strata. Defaults to FALSE, and requires that no
 \code{label} aesthetic is assigned.}
-
-\item{negate.strata}{A vector of values of the \code{stratum} aesthetic to be
-treated as negative (will ignore missing values with a warning).}
 
 \item{min.y}{Numeric; bounds on the heights (weights) of the
 strata to be rendered. Use these bounds to exclude strata outside a certain
@@ -232,9 +236,19 @@ gg <- ggplot(majors,
 # diagram with outlined alluvia and forward-colored flows
 gg + geom_flow(stat = "alluvium", lode.guidance = "frontback",
                color = "black")
-# same diagram with students are aggregated into cohorts
+# same diagram with students are cemented into cohorts
 gg + geom_flow(stat = "alluvium", lode.guidance = "frontback",
-               color = "black", aggregate.y = TRUE)
+               color = "black", cement.alluvia = TRUE)
+# cemented diagram with default label cementation
+gg +
+  geom_flow(stat = "alluvium", color = "black", cement.alluvia = TRUE) +
+  geom_text(aes(label = as.integer(student)), stat = "alluvium",
+            cement.alluvia = TRUE)
+# cemented diagram with custom label cementation
+gg +
+  geom_flow(stat = "alluvium", color = "black", cement.alluvia = TRUE) +
+  geom_text(aes(label = as.integer(student)), stat = "alluvium",
+            cement.alluvia = function(x) paste(x, collapse = "; "))
 
 # irregular spacing between axes of a continuous variable
 data(Refugees, package = "alluvial")

@@ -32,9 +32,9 @@ stat_flow <- function(mapping = NULL,
                       position = "identity",
                       decreasing = NA, reverse = TRUE, absolute = TRUE,
                       discern = FALSE,
+                      negate.strata = NULL,
                       aes.bind = "none",
                       overlay.label = FALSE,
-                      negate.strata = NULL,
                       min.y = NULL, max.y = NULL,
                       na.rm = FALSE,
                       show.legend = NA,
@@ -51,9 +51,9 @@ stat_flow <- function(mapping = NULL,
     params = list(
       decreasing = decreasing, reverse = reverse, absolute = absolute,
       discern = discern,
+      negate.strata = negate.strata,
       aes.bind = aes.bind,
       overlay.label = overlay.label,
-      negate.strata = negate.strata,
       min.y = min.y, max.y = max.y,
       na.rm = na.rm,
       ...
@@ -131,9 +131,9 @@ StatFlow <- ggproto(
   compute_panel = function(self, data, scales,
                            decreasing = NA, reverse = TRUE, absolute = TRUE,
                            discern = FALSE,
+                           negate.strata = NULL,
                            aes.bind = "none",
                            overlay.label = FALSE,
-                           negate.strata = NULL,
                            min.y = NULL, max.y = NULL) {
     
     # introduce label

@@ -28,12 +28,12 @@
 #'   using negative or absolute values of `y`.
 #' @param discern Passed to [to_lodes_form()] if `data` is in
 #'   alluvia format.
+#' @param negate.strata A vector of values of the `stratum` aesthetic to be
+#'   treated as negative (will ignore missing values with a warning).
 #' @param overlay.label Logical; whether to assign the values of the axis
 #'   variables to the strata. Defaults to FALSE, and requires that no
 #'   `label` aesthetic is assigned.
 #' @param label.strata Deprecated; alias for `overlay.label`.
-#' @param negate.strata A vector of values of the `stratum` aesthetic to be
-#'   treated as negative (will ignore missing values with a warning).
 #' @param min.y,max.y Numeric; bounds on the heights (weights) of the
 #'   strata to be rendered. Use these bounds to exclude strata outside a certain
 #'   range, for example when labeling strata using [ggplot2::geom_text()].
@@ -46,8 +46,8 @@ stat_stratum <- function(mapping = NULL,
                          position = "identity",
                          decreasing = NA, reverse = TRUE, absolute = TRUE,
                          discern = FALSE,
-                         overlay.label = FALSE, label.strata = NULL,
                          negate.strata = NULL,
+                         overlay.label = FALSE, label.strata = NULL,
                          min.y = NULL, max.y = NULL,
                          min.height = NULL, max.height = NULL,
                          na.rm = FALSE,
@@ -65,8 +65,8 @@ stat_stratum <- function(mapping = NULL,
     params = list(
       decreasing = decreasing, reverse = reverse, absolute = absolute,
       discern = discern,
-      overlay.label = overlay.label, label.strata = label.strata,
       negate.strata = negate.strata,
+      overlay.label = overlay.label, label.strata = label.strata,
       min.y = min.y, max.y = max.y,
       min.height = min.height, max.height = max.height,
       na.rm = na.rm,
@@ -154,8 +154,8 @@ StatStratum <- ggproto(
   compute_panel = function(self, data, scales,
                            decreasing = NA, reverse = TRUE, absolute = TRUE,
                            discern = FALSE,
-                           overlay.label = FALSE, label.strata = NULL,
                            negate.strata = NULL,
+                           overlay.label = FALSE, label.strata = NULL,
                            min.y = NULL, max.y = NULL,
                            min.height = NULL, max.height = NULL) {
     

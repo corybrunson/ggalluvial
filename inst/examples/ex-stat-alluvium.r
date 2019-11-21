@@ -65,9 +65,19 @@ gg <- ggplot(majors,
 # diagram with outlined alluvia and forward-colored flows
 gg + geom_flow(stat = "alluvium", lode.guidance = "frontback",
                color = "black")
-# same diagram with students are aggregated into cohorts
+# same diagram with students are cemented into cohorts
 gg + geom_flow(stat = "alluvium", lode.guidance = "frontback",
-               color = "black", aggregate.y = TRUE)
+               color = "black", cement.alluvia = TRUE)
+# cemented diagram with default label cementation
+gg +
+  geom_flow(stat = "alluvium", color = "black", cement.alluvia = TRUE) +
+  geom_text(aes(label = as.integer(student)), stat = "alluvium",
+            cement.alluvia = TRUE)
+# cemented diagram with custom label cementation
+gg +
+  geom_flow(stat = "alluvium", color = "black", cement.alluvia = TRUE) +
+  geom_text(aes(label = as.integer(student)), stat = "alluvium",
+            cement.alluvia = function(x) paste(x, collapse = "; "))
 
 # irregular spacing between axes of a continuous variable
 data(Refugees, package = "alluvial")
