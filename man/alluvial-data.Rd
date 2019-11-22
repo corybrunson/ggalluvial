@@ -67,7 +67,7 @@ each such variable to a single value. In addition to existing functions,
 returns the modal value).}
 }
 \description{
-Alluvial diagrams consist of multiple horizontally-distributed columns (axes)
+Alluvial plots consist of multiple horizontally-distributed columns (axes)
 representing factor variables, vertical divisions (strata) of these axes
 representing these variables' values; and splines (alluvial flows) connecting
 vertical subdivisions (lodes) within strata of adjacent axes representing
@@ -89,14 +89,14 @@ for this structure.
 }
 
 \code{to_lodes_form} takes a data frame with several designated variables to
-be used as axes in an alluvial diagram, and reshapes the data frame so that
+be used as axes in an alluvial plot, and reshapes the data frame so that
 the axis variable names constitute a new factor variable and their values
 comprise another. Other variables' values will be repeated, and a
 row-grouping variable can be introduced. This function invokes
 \code{\link[tidyr:gather]{tidyr::gather()}}.
 
 \code{to_alluvia_form} takes a data frame with axis and axis value variables
-to be used in an alluvial diagram, and reshape the data frame so that the
+to be used in an alluvial plot, and reshape the data frame so that the
 axes constitute separate variables whose values are given by the value
 variable. This function invokes \code{\link[tidyr:spread]{tidyr::spread()}}.
 }
@@ -151,11 +151,11 @@ gg <- ggplot(majors_alluvia,
 gg +
   geom_alluvium(aes(fill = as.factor(student)), width = 2/5, discern = TRUE) +
   geom_stratum(width = 2/5, discern = TRUE) +
-  geom_text(stat = "stratum", discern = TRUE, overlay.label = TRUE)
+  geom_text(stat = "stratum", discern = TRUE, infer.label = TRUE)
 gg +
   geom_alluvium(aes(fill = as.factor(student)), width = 2/5, discern = FALSE) +
   geom_stratum(width = 2/5, discern = FALSE) +
-  geom_text(stat = "stratum", discern = FALSE, overlay.label = TRUE)
+  geom_text(stat = "stratum", discern = FALSE, infer.label = TRUE)
 # warning when inappropriate
 ggplot(majors[majors$semester \%in\% paste0("CURR", c(1, 7, 13)), ],
        aes(x = semester, stratum = curriculum, alluvium = student,

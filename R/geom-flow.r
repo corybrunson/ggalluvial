@@ -2,7 +2,7 @@
 #'
 #' `geom_flow` receives a dataset of the horizontal (`x`) and
 #' vertical (`y`, `ymin`, `ymax`) positions of the **lodes**
-#' of an alluvial diagram, the intersections of the alluvia with the strata.
+#' of an alluvial plot, the intersections of the alluvia with the strata.
 #' It reconfigures these into alluvial segments connecting pairs of
 #' corresponding lodes in adjacent strata and plots filled x-splines between
 #' each such pair, using a provided knot position parameter `knot.pos`, and

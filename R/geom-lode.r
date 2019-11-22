@@ -1,7 +1,7 @@
 #' Lodes at intersections of alluvia and strata
 #'
 #' `geom_alluvium` receives a dataset of the horizontal (`x`) and vertical (`y`,
-#' `ymin`, `ymax`) positions of the **lodes** of an alluvial diagram, the
+#' `ymin`, `ymax`) positions of the **lodes** of an alluvial plot, the
 #' intersections of the alluvia with the strata. It plots rectangles for these
 #' lodes of a provided `width`.
 #' @template geom-aesthetics

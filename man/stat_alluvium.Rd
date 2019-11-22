@@ -9,7 +9,7 @@ stat_alluvium(mapping = NULL, data = NULL, geom = "alluvium",
   absolute = TRUE, discern = FALSE, negate.strata = NULL,
   aggregate.y = NULL, cement.alluvia = FALSE,
   lode.guidance = "zigzag", lode.ordering = NULL, aes.bind = "none",
-  overlay.label = FALSE, min.y = NULL, max.y = NULL, na.rm = FALSE,
+  infer.label = FALSE, min.y = NULL, max.y = NULL, na.rm = FALSE,
   show.legend = NA, inherit.aes = TRUE, ...)
 }
 \arguments{
@@ -95,9 +95,11 @@ positive and negative strata, consistent with the values of \code{decreasing},
 depend on aesthetic variables. All aesthetic variables are used, in the
 order in which they are specified in \code{aes()}.}
 
-\item{overlay.label}{Logical; whether to assign the values of the axis
-variables to the strata. Defaults to FALSE, and requires that no
-\code{label} aesthetic is assigned.}
+\item{infer.label}{Logical; whether to assign the \code{stratum} or \code{alluvium}
+variable to the \code{label} aesthetic. Defaults to \code{FALSE}, and requires that
+no \code{label} aesthetic is assigned. This parameter is intended only for uses
+in which the data are in alluva form and are therefore converted to lode
+form before the statistical transformation.}
 
 \item{min.y}{Numeric; bounds on the heights (weights) of the
 strata to be rendered. Use these bounds to exclude strata outside a certain
@@ -177,13 +179,13 @@ ggplot(as.data.frame(Titanic),
   stat_stratum(geom = "errorbar") +
   geom_line(stat = "alluvium") +
   stat_alluvium(geom = "pointrange") +
-  geom_text(stat = "stratum", overlay.label = TRUE) +
+  geom_text(stat = "stratum", infer.label = TRUE) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 
 gg <- ggplot(as.data.frame(Titanic),
              aes(y = Freq,
                  axis1 = Class, axis2 = Sex, axis3 = Age)) +
-  geom_stratum() + geom_text(stat = "stratum", overlay.label = TRUE) +
+  geom_stratum() + geom_text(stat = "stratum", infer.label = TRUE) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 # use of lode controls
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",

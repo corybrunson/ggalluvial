@@ -43,7 +43,7 @@ stat_alluvium <- function(mapping = NULL,
                           lode.guidance = "zigzag",
                           lode.ordering = NULL,
                           aes.bind = "none",
-                          overlay.label = FALSE,
+                          infer.label = FALSE,
                           min.y = NULL, max.y = NULL,
                           na.rm = FALSE,
                           show.legend = NA,
@@ -65,7 +65,7 @@ stat_alluvium <- function(mapping = NULL,
       lode.guidance = lode.guidance,
       lode.ordering = lode.ordering,
       aes.bind = aes.bind,
-      overlay.label = overlay.label,
+      infer.label = infer.label,
       min.y = min.y, max.y = max.y,
       na.rm = na.rm,
       ...
@@ -164,17 +164,17 @@ StatAlluvium <- ggproto(
                            aggregate.y = NULL, cement.alluvia = FALSE,
                            lode.guidance = "zigzag",
                            aes.bind = "none",
-                           overlay.label = FALSE,
+                           infer.label = FALSE,
                            min.y = NULL, max.y = NULL,
                            lode.ordering = NULL) {
     
     # introduce label
-    if (overlay.label) {
+    if (infer.label) {
       if (is.null(data$label)) {
         data$label <- data$alluvium
       } else {
         warning("Aesthetic `label` is specified, ",
-                "so parameter `overlay.label` will be ignored.")
+                "so parameter `infer.label` will be ignored.")
       }
     }
     

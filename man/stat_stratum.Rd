@@ -7,7 +7,7 @@
 stat_stratum(mapping = NULL, data = NULL, geom = "stratum",
   position = "identity", decreasing = NA, reverse = TRUE,
   absolute = TRUE, discern = FALSE, negate.strata = NULL,
-  overlay.label = FALSE, label.strata = NULL, min.y = NULL,
+  infer.label = FALSE, label.strata = NULL, min.y = NULL,
   max.y = NULL, min.height = NULL, max.height = NULL,
   na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ...)
 }
@@ -60,11 +60,13 @@ alluvia format.}
 \item{negate.strata}{A vector of values of the \code{stratum} aesthetic to be
 treated as negative (will ignore missing values with a warning).}
 
-\item{overlay.label}{Logical; whether to assign the values of the axis
-variables to the strata. Defaults to FALSE, and requires that no
-\code{label} aesthetic is assigned.}
+\item{infer.label}{Logical; whether to assign the \code{stratum} or \code{alluvium}
+variable to the \code{label} aesthetic. Defaults to \code{FALSE}, and requires that
+no \code{label} aesthetic is assigned. This parameter is intended only for uses
+in which the data are in alluva form and are therefore converted to lode
+form before the statistical transformation.}
 
-\item{label.strata}{Deprecated; alias for \code{overlay.label}.}
+\item{label.strata}{Deprecated; alias for \code{infer.label}.}
 
 \item{min.y, max.y}{Numeric; bounds on the heights (weights) of the
 strata to be rendered. Use these bounds to exclude strata outside a certain
@@ -166,7 +168,7 @@ ggplot(as.data.frame(Titanic),
 ggplot(as.data.frame(Titanic),
        aes(y = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age, axis4 = Survived)) +
-  geom_text(stat = "stratum", overlay.label = TRUE) +
+  geom_text(stat = "stratum", infer.label = TRUE) +
   stat_stratum(geom = "errorbar") +
   scale_x_discrete(limits = c("Class", "Sex", "Age", "Survived"))
 

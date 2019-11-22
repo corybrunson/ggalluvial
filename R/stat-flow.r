@@ -34,7 +34,7 @@ stat_flow <- function(mapping = NULL,
                       discern = FALSE,
                       negate.strata = NULL,
                       aes.bind = "none",
-                      overlay.label = FALSE,
+                      infer.label = FALSE,
                       min.y = NULL, max.y = NULL,
                       na.rm = FALSE,
                       show.legend = NA,
@@ -53,7 +53,7 @@ stat_flow <- function(mapping = NULL,
       discern = discern,
       negate.strata = negate.strata,
       aes.bind = aes.bind,
-      overlay.label = overlay.label,
+      infer.label = infer.label,
       min.y = min.y, max.y = max.y,
       na.rm = na.rm,
       ...
@@ -133,16 +133,16 @@ StatFlow <- ggproto(
                            discern = FALSE,
                            negate.strata = NULL,
                            aes.bind = "none",
-                           overlay.label = FALSE,
+                           infer.label = FALSE,
                            min.y = NULL, max.y = NULL) {
     
     # introduce label
-    if (overlay.label) {
+    if (infer.label) {
       if (is.null(data$label)) {
         data$label <- data$alluvium
       } else {
         warning("Aesthetic `label` is specified, ",
-                "so parameter `overlay.label` will be ignored.")
+                "so parameter `infer.label` will be ignored.")
       }
     }
     
@@ -222,7 +222,7 @@ StatFlow <- ggproto(
     sort_fields <- c(
       "link", "x",
       "deposit",
-      if (aes.bind == "index") c("fissure", "adj_fissure"),
+      if (aes.bind == "index") "adj_fissure",
       "adj_deposit",
       if (aes.bind == "linked") "adj_fissure",
       "alluvium", "contact"

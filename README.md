@@ -8,18 +8,18 @@ status](https://travis-ci.org/corybrunson/ggalluvial.svg?branch=master)](https:/
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/ggalluvial)](https://cran.r-project.org/package=ggalluvial)
 
 This is a [**ggplot2** extension](http://www.ggplot2-exts.org/) for
-alluvial diagrams.
+alluvial plots.
 
 ## Design
 
 The alluvial plots implemented here can be used to visualize frequency
 distributions over time or frequency tables involving several
-categorical variables. The design is derived mostly from the
+categorical variables. The design is inspired by the
 [**alluvial**](https://github.com/mbojan/alluvial) package, but the
 **ggplot2** framework induced several conspicuous differences:
 
   - **alluvial** understands a variety of inputs (vectors, lists, data
-    frames), while **ggalluvial** requires a single data frame;
+    frames), whereas **ggalluvial** requires a single data frame;
   - **alluvial** uses each variable of these inputs as a dimension of
     the data, whereas **ggalluvial** requires the user to specify the
     dimensions, either as separate aesthetics or as [key-value
@@ -30,6 +30,10 @@ categorical variables. The design is derived mostly from the
     whereas **ggalluvial** relies on separate layers (stats and geoms)
     to produce strata, alluvia, and alluvial segments called *lodes* and
     *flows*.
+
+Additionally, **ggalluvial** arranges these layers vertically without
+gaps, so that the secondary plotting axis indicates the cumulative
+values of the strata at each dimension.
 
 ## Installation
 
@@ -60,11 +64,14 @@ as follows:
 remotes::install_github("corybrunson/ggalluvial", ref = "optimization")
 ```
 
+Note, however, that this branch has not kept pace with the `master`
+branch or with recent upgrades on CRAN.
+
 ## Usage
 
 ### Example
 
-Here is how to generate an alluvial diagram representation of the
+Here is how to generate an alluvial plot representation of the
 multi-dimensional categorical dataset of passengers on the Titanic:
 
 ``` r
@@ -87,6 +94,8 @@ ggplot(data = titanic_wide,
   theme_minimal() +
   ggtitle("passengers on the maiden voyage of the Titanic",
           "stratified by demographics and survival")
+#> Warning: The parameter `label.strata` is deprecated.
+#> Pass arguments to `overlay.label` instead.
 ```
 
 ![](man/figures/README-unnamed-chunk-6-1.png)<!-- -->

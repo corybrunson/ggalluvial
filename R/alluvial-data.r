@@ -1,6 +1,6 @@
 #' Check for alluvial structure and convert between alluvial formats
 #'
-#' Alluvial diagrams consist of multiple horizontally-distributed columns (axes)
+#' Alluvial plots consist of multiple horizontally-distributed columns (axes)
 #' representing factor variables, vertical divisions (strata) of these axes
 #' representing these variables' values; and splines (alluvial flows) connecting
 #' vertical subdivisions (lodes) within strata of adjacent axes representing
@@ -19,14 +19,14 @@
 #'   for this structure.
 #'
 #' `to_lodes_form` takes a data frame with several designated variables to
-#' be used as axes in an alluvial diagram, and reshapes the data frame so that
+#' be used as axes in an alluvial plot, and reshapes the data frame so that
 #' the axis variable names constitute a new factor variable and their values
 #' comprise another. Other variables' values will be repeated, and a
 #' row-grouping variable can be introduced. This function invokes
 #' [tidyr::gather()].
 #'
 #' `to_alluvia_form` takes a data frame with axis and axis value variables
-#' to be used in an alluvial diagram, and reshape the data frame so that the
+#' to be used in an alluvial plot, and reshape the data frame so that the
 #' axes constitute separate variables whose values are given by the value
 #' variable. This function invokes [tidyr::spread()].
 #'

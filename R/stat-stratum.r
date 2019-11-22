@@ -30,10 +30,12 @@
 #'   alluvia format.
 #' @param negate.strata A vector of values of the `stratum` aesthetic to be
 #'   treated as negative (will ignore missing values with a warning).
-#' @param overlay.label Logical; whether to assign the values of the axis
-#'   variables to the strata. Defaults to FALSE, and requires that no
-#'   `label` aesthetic is assigned.
-#' @param label.strata Deprecated; alias for `overlay.label`.
+#' @param infer.label Logical; whether to assign the `stratum` or `alluvium`
+#'   variable to the `label` aesthetic. Defaults to `FALSE`, and requires that
+#'   no `label` aesthetic is assigned. This parameter is intended only for uses
+#'   in which the data are in alluva form and are therefore converted to lode
+#'   form before the statistical transformation.
+#' @param label.strata Deprecated; alias for `infer.label`.
 #' @param min.y,max.y Numeric; bounds on the heights (weights) of the
 #'   strata to be rendered. Use these bounds to exclude strata outside a certain
 #'   range, for example when labeling strata using [ggplot2::geom_text()].
@@ -47,7 +49,7 @@ stat_stratum <- function(mapping = NULL,
                          decreasing = NA, reverse = TRUE, absolute = TRUE,
                          discern = FALSE,
                          negate.strata = NULL,
-                         overlay.label = FALSE, label.strata = NULL,
+                         infer.label = FALSE, label.strata = NULL,
                          min.y = NULL, max.y = NULL,
                          min.height = NULL, max.height = NULL,
                          na.rm = FALSE,
@@ -66,7 +68,7 @@ stat_stratum <- function(mapping = NULL,
       decreasing = decreasing, reverse = reverse, absolute = absolute,
       discern = discern,
       negate.strata = negate.strata,
-      overlay.label = overlay.label, label.strata = label.strata,
+      infer.label = infer.label, label.strata = label.strata,
       min.y = min.y, max.y = max.y,
       min.height = min.height, max.height = max.height,
       na.rm = na.rm,
@@ -155,21 +157,21 @@ StatStratum <- ggproto(
                            decreasing = NA, reverse = TRUE, absolute = TRUE,
                            discern = FALSE,
                            negate.strata = NULL,
-                           overlay.label = FALSE, label.strata = NULL,
+                           infer.label = FALSE, label.strata = NULL,
                            min.y = NULL, max.y = NULL,
                            min.height = NULL, max.height = NULL) {
     
     # introduce label
     if (! is.null(label.strata)) {
-      deprecate_parameter("label.strata", "overlay.label")
-      overlay.label <- label.strata
+      deprecate_parameter("label.strata", "infer.label")
+      infer.label <- label.strata
     }
-    if (overlay.label) {
+    if (infer.label) {
       if (is.null(data$label)) {
         data$label <- data$stratum
       } else {
         warning("Aesthetic `label` is specified, ",
-                "so parameter `overlay.label` will be ignored.")
+                "so parameter `infer.label` will be ignored.")
       }
     }
     

@@ -1,7 +1,27 @@
 
 # next version (v1.0.0?)
 
-The `min.height` and `max.height` parameters of `stat_stratum()` are deprecated in favor of `min.y` and `max.y` (which better adhere to **ggplot2** conventions) and extended to the other `stat_*()` layers.
+# ggalluvial 0.11.0
+
+## Parameter renamings, deprecations, and additions
+
+- The `min.height` and `max.height` parameters of `stat_stratum()` are deprecated in favor of `min.y` and `max.y` (which better adhere to **ggplot2** conventions) and extended to the other `stat_*()` layers.
+- The `label.strata` parameter of `stat_stratum()` is deprecated in favor of `infer.label`, which is extended to the other `stat_*()` layers and sets `label` to `alluvium` in those cases rather than to `stratum`.
+- The `aggregate.y` parameter of `stat_alluvium()` is deprecated in favor of `cement.alluvia`, and the underlying procedure is debugged.
+- The `aes.bind` parameter of `stat_flow()` and `stat_alluvium()` now prefers character string options to logical values, described in the lode ordering vignette: `"none"`, `"linked"`, and `"index"`. The default `"none"` produces different behavior than the previous default `FALSE`, in that under this setting the aesthetic variables are _not at all_ prioritized.
+
+## Negative observations
+
+Negative values can now be meaningfully passed to `y`, producing behavior that mimics that of `geom_bar()`. The new logical parameter `absolute` controls whether negative strata, and lodes within them, are ordered vertically in the same way as positive strata and lodes (`FALSE`) or in the opposite way (`TRUE`).
+Additionally, the `negate.strata` parameter can be used to negate the observations associated with specific strata, in order to situate them below rather than above the `x` axis.
+
+## New lode guidance function
+
+The new lode guidance function `lode_zagzig()` mimics the behavior of `lode_zigzag()` except in initially "zagging" toward the farther end rather than "zigging" toward the closer end.
+
+## Stat layer consistency
+
+`stat_*()` internals have been simplified and standardized, in particular the manner in which lodes are ordered within strata.
 
 # ggalluvial 0.10.0
 

@@ -4,8 +4,8 @@ ggplot(as.data.frame(Titanic),
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
   geom_flow() +
   scale_x_discrete(limits = c("Class", "Sex", "Age")) +
-  geom_stratum() + geom_text(stat = "stratum", overlay.label = TRUE) +
-  ggtitle("Alluvial diagram of Titanic passenger demographic data")
+  geom_stratum() + geom_text(stat = "stratum", infer.label = TRUE) +
+  ggtitle("Alluvial plot of Titanic passenger demographic data")
 
 # use of facets
 ggplot(as.data.frame(Titanic),
@@ -13,7 +13,7 @@ ggplot(as.data.frame(Titanic),
            axis1 = Class, axis2 = Sex)) +
   geom_flow(aes(fill = Age), width = .4) +
   geom_stratum(width = .4) +
-  geom_text(stat = "stratum", overlay.label = TRUE, size = 3) +
+  geom_text(stat = "stratum", infer.label = TRUE, size = 3) +
   scale_x_discrete(limits = c("Class", "Sex")) +
   facet_wrap(~ Survived, scales = "fixed")
 

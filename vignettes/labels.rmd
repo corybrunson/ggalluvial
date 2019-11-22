@@ -25,7 +25,7 @@ levels(vaccinations$response) <- rev(levels(vaccinations$response))
 
 The issue on the table: Strata are most helpful when they're overlaid with text labels. Yet the strata often vary in height, and the labels in length, to such a degree that fitting the text inside the strata at a uniform size renders them illegible. In principle, the user could treat `size` as a variable aesthetic and manually fit text to strata, but this is cumbersome, and doesn't help anyway in cases where large text is needed.
 
-To illustrate the problem, check out the diagram below. It's by no means an egregious case, but it'll do. (For a more practical example, see [this question on StackOverflow](https://stackoverflow.com/questions/50720718/labelling-and-theme-of-ggalluvial-plot-in-r), which prompted this vignette.)
+To illustrate the problem, check out the plot below. It's by no means an egregious case, but it'll do. (For a more practical example, see [this question on StackOverflow](https://stackoverflow.com/questions/50720718/labelling-and-theme-of-ggalluvial-plot-in-r), which prompted this vignette.)
 
 ```{r raw}
 ggplot(vaccinations,

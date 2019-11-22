@@ -2,7 +2,7 @@
 #'
 #' `geom_alluvium` receives a dataset of the horizontal (`x`) and
 #' vertical (`y`, `ymin`, `ymax`) positions of the **lodes**
-#' of an alluvial diagram, the intersections of the alluvia with the strata.
+#' of an alluvial plot, the intersections of the alluvia with the strata.
 #' It plots both the lodes themselves, using [geom_lode()], and the
 #' flows between them, using [geom_flow()].
 #' @template geom-aesthetics

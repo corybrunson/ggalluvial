@@ -6,7 +6,7 @@ ggplot(as.data.frame(Titanic),
   stat_stratum(geom = "errorbar") +
   geom_line(stat = "flow") +
   stat_flow(geom = "pointrange") +
-  geom_text(stat = "stratum", overlay.label = TRUE) +
+  geom_text(stat = "stratum", infer.label = TRUE) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 
 # use of lode controls
@@ -15,7 +15,7 @@ ggplot(as.data.frame(Titanic),
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
   geom_flow(aes(fill = Survived), aes.bind = TRUE, reverse = FALSE) +
   geom_stratum(reverse = FALSE) +
-  geom_text(stat = "stratum", overlay.label = TRUE, reverse = FALSE) +
+  geom_text(stat = "stratum", infer.label = TRUE, reverse = FALSE) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 
 data(vaccinations)

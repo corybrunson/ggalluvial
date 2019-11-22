@@ -6,13 +6,13 @@ ggplot(as.data.frame(Titanic),
   stat_stratum(geom = "errorbar") +
   geom_line(stat = "alluvium") +
   stat_alluvium(geom = "pointrange") +
-  geom_text(stat = "stratum", overlay.label = TRUE) +
+  geom_text(stat = "stratum", infer.label = TRUE) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 
 gg <- ggplot(as.data.frame(Titanic),
              aes(y = Freq,
                  axis1 = Class, axis2 = Sex, axis3 = Age)) +
-  geom_stratum() + geom_text(stat = "stratum", overlay.label = TRUE) +
+  geom_stratum() + geom_text(stat = "stratum", infer.label = TRUE) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 # use of lode controls
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",

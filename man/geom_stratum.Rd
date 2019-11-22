@@ -58,7 +58,7 @@ plotted in grey (regardless of the color scheme).}
 }
 \description{
 \code{geom_stratum} receives a dataset of the horizontal (\code{x}) and vertical (\code{y},
-\code{ymin}, \code{ymax}) positions of the strata of an alluvial diagram. It plots
+\code{ymin}, \code{ymax}) positions of the strata of an alluvial plot. It plots
 rectangles for these strata of a provided \code{width}.
 }
 \section{Aesthetics}{
@@ -92,7 +92,7 @@ defunct. Use \code{width} and \code{knot.pos} instead.
 ggplot(as.data.frame(Titanic),
        aes(y = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age, axis4 = Survived)) +
-  geom_stratum(width = 1) + geom_text(stat = "stratum", overlay.label = TRUE) +
+  geom_stratum(width = 1) + geom_text(stat = "stratum", infer.label = TRUE) +
   scale_x_discrete(limits = c("Class", "Sex", "Age", "Survived"))
   
 # use of facets
@@ -100,7 +100,7 @@ ggplot(as.data.frame(Titanic),
        aes(y = Freq,
            axis1 = Class, axis2 = Sex)) +
   geom_flow(aes(fill = Survived)) +
-  geom_stratum() + geom_text(stat = "stratum", overlay.label = TRUE) +
+  geom_stratum() + geom_text(stat = "stratum", infer.label = TRUE) +
   scale_x_discrete(limits = c("Class", "Sex")) +
   facet_wrap(~ Age, scales = "free_y")
 }

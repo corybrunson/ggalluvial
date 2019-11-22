@@ -58,7 +58,7 @@ the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
 }
 \description{
 \code{geom_alluvium} receives a dataset of the horizontal (\code{x}) and vertical (\code{y},
-\code{ymin}, \code{ymax}) positions of the \strong{lodes} of an alluvial diagram, the
+\code{ymin}, \code{ymax}) positions of the \strong{lodes} of an alluvial plot, the
 intersections of the alluvia with the strata. It plots rectangles for these
 lodes of a provided \code{width}.
 }
