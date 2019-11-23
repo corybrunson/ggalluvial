@@ -6,6 +6,7 @@
 #' `ymin` and `ymax`). It leverages the `group` aesthetic for
 #' plotting purposes (for now).
 #' @template stat-aesthetics
+#' @template order-options
 #'
 
 #' @import ggplot2
@@ -36,13 +37,16 @@ stat_alluvium <- function(mapping = NULL,
                           data = NULL,
                           geom = "alluvium",
                           position = "identity",
-                          decreasing = NA, reverse = TRUE, absolute = TRUE,
+                          decreasing = ggalluvial_opt("decreasing"),
+                          reverse = ggalluvial_opt("reverse"),
+                          absolute = ggalluvial_opt("absolute"),
                           discern = FALSE,
                           negate.strata = NULL,
-                          aggregate.y = NULL, cement.alluvia = FALSE,
-                          lode.guidance = "zigzag",
-                          lode.ordering = NULL,
-                          aes.bind = "none",
+                          aggregate.y = NULL,
+                          cement.alluvia = ggalluvial_opt("cement.alluvia"),
+                          lode.guidance = ggalluvial_opt("lode.guidance"),
+                          lode.ordering = ggalluvial_opt("lode.ordering"),
+                          aes.bind = ggalluvial_opt("aes.bind"),
                           infer.label = FALSE,
                           min.y = NULL, max.y = NULL,
                           na.rm = FALSE,
@@ -58,10 +62,13 @@ stat_alluvium <- function(mapping = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
-      decreasing = decreasing, reverse = reverse, absolute = absolute,
+      decreasing = decreasing,
+      reverse = reverse,
+      absolute = absolute,
       discern = discern,
       negate.strata = negate.strata,
-      aggregate.y = aggregate.y, cement.alluvia = cement.alluvia,
+      aggregate.y = aggregate.y,
+      cement.alluvia = cement.alluvia,
       lode.guidance = lode.guidance,
       lode.ordering = lode.ordering,
       aes.bind = aes.bind,
@@ -158,15 +165,18 @@ StatAlluvium <- ggproto(
   },
   
   compute_panel = function(data, scales,
-                           decreasing = NA, reverse = TRUE, absolute = TRUE,
+                           decreasing = ggalluvial_opt("decreasing"),
+                           reverse = ggalluvial_opt("reverse"),
+                           absolute = ggalluvial_opt("absolute"),
                            discern = FALSE,
                            negate.strata = NULL,
-                           aggregate.y = NULL, cement.alluvia = FALSE,
-                           lode.guidance = "zigzag",
-                           aes.bind = "none",
+                           aggregate.y = NULL,
+                           cement.alluvia = ggalluvial_opt("cement.alluvia"),
+                           lode.guidance = ggalluvial_opt("lode.guidance"),
+                           lode.ordering = ggalluvial_opt("lode.ordering"),
+                           aes.bind = ggalluvial_opt("aes.bind"),
                            infer.label = FALSE,
-                           min.y = NULL, max.y = NULL,
-                           lode.ordering = NULL) {
+                           min.y = NULL, max.y = NULL) {
     
     # introduce label
     if (infer.label) {

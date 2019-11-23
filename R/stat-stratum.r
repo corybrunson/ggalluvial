@@ -3,6 +3,7 @@
 #' Given a dataset with alluvial structure, `stat_stratum` calculates the
 #' centroids of the strata at each axis, together with their weights (heights).
 #' @template stat-aesthetics
+#' @template order-options
 #'
 
 #' @import ggplot2
@@ -46,7 +47,9 @@ stat_stratum <- function(mapping = NULL,
                          data = NULL,
                          geom = "stratum",
                          position = "identity",
-                         decreasing = NA, reverse = TRUE, absolute = TRUE,
+                         decreasing = ggalluvial_opt("decreasing"),
+                         reverse = ggalluvial_opt("reverse"),
+                         absolute = ggalluvial_opt("absolute"),
                          discern = FALSE,
                          negate.strata = NULL,
                          infer.label = FALSE, label.strata = NULL,
@@ -65,7 +68,9 @@ stat_stratum <- function(mapping = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
-      decreasing = decreasing, reverse = reverse, absolute = absolute,
+      decreasing = decreasing,
+      reverse = reverse,
+      absolute = absolute,
       discern = discern,
       negate.strata = negate.strata,
       infer.label = infer.label, label.strata = label.strata,
@@ -154,7 +159,9 @@ StatStratum <- ggproto(
   },
   
   compute_panel = function(self, data, scales,
-                           decreasing = NA, reverse = TRUE, absolute = TRUE,
+                           decreasing = ggalluvial_opt("decreasing"),
+                           reverse = ggalluvial_opt("reverse"),
+                           absolute = ggalluvial_opt("absolute"),
                            discern = FALSE,
                            negate.strata = NULL,
                            infer.label = FALSE, label.strata = NULL,

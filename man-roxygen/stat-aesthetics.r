@@ -8,24 +8,24 @@
 #' Use `x`, `alluvium`, and/or `stratum` for data in lodes format
 #' and `axis[0-9]*` for data in alluvia format (see [`alluvial-data`]).
 #' Arguments to parameters inconsistent with the format will be ignored.
-#' Additionally, each `stat_*` layer accepts the following optional
+#' Additionally, each `stat_*()` accepts the following optional
 #' aesthetics:
 #'
 #' - `y`
 #' - `group`
+#' - `label`
 #'
 #' `y` controls the heights of the alluvia
 #' and may be aggregated across equivalent observations.
 #' `group` is used internally; arguments are ignored.
-#' Finally, `stat_stratum` accepts the following optional aesthetic:
-#'
-#' - `label`
-#'
-#' `label` is used to label the strata and must take a unique value across
-#' the observations within each stratum.
+#' `label` is used to label the strata or lodes and must take a unique value
+#' across the observations within each stratum or lode.
+#' Often the same variable will be passed to `label` as to the corresponding
+#' alluvial aesthetic (`stratum` or `alluvium`).
+#' 
 #' These and any other aesthetics are aggregated as follows:
 #' Numeric aesthetics, including `y`, are summed.
 #' Character and factor aesthetics, including `label`,
-#' are assigned to strata provided they take unique values across the
-#' observations within each stratum (otherwise `NA` is assigned).
+#' are assigned to strata or lodes provided they take unique values across the
+#' observations within each (and are otherwise assigned `NA`).
 #'

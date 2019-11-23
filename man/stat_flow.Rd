@@ -5,11 +5,12 @@
 \title{Flow positions}
 \usage{
 stat_flow(mapping = NULL, data = NULL, geom = "flow",
-  position = "identity", decreasing = NA, reverse = TRUE,
-  absolute = TRUE, discern = FALSE, negate.strata = NULL,
-  aes.bind = "none", infer.label = FALSE, min.y = NULL,
-  max.y = NULL, na.rm = FALSE, show.legend = NA,
-  inherit.aes = TRUE, ...)
+  position = "identity", decreasing = ggalluvial_opt("decreasing"),
+  reverse = ggalluvial_opt("reverse"),
+  absolute = ggalluvial_opt("absolute"), discern = FALSE,
+  negate.strata = NULL, aes.bind = ggalluvial_opt("aes.bind"),
+  infer.label = FALSE, min.y = NULL, max.y = NULL, na.rm = FALSE,
+  show.legend = NA, inherit.aes = TRUE, ...)
 }
 \arguments{
 \item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
@@ -122,28 +123,48 @@ of two sets of aesthetics:
 Use \code{x}, \code{alluvium}, and/or \code{stratum} for data in lodes format
 and \code{axis[0-9]*} for data in alluvia format (see \code{\link{alluvial-data}}).
 Arguments to parameters inconsistent with the format will be ignored.
-Additionally, each \code{stat_*} layer accepts the following optional
+Additionally, each \code{stat_*()} accepts the following optional
 aesthetics:
 \itemize{
 \item \code{y}
 \item \code{group}
+\item \code{label}
 }
 
 \code{y} controls the heights of the alluvia
 and may be aggregated across equivalent observations.
 \code{group} is used internally; arguments are ignored.
-Finally, \code{stat_stratum} accepts the following optional aesthetic:
-\itemize{
-\item \code{label}
-}
+\code{label} is used to label the strata or lodes and must take a unique value
+across the observations within each stratum or lode.
+Often the same variable will be passed to \code{label} as to the corresponding
+alluvial aesthetic (\code{stratum} or \code{alluvium}).
 
-\code{label} is used to label the strata and must take a unique value across
-the observations within each stratum.
 These and any other aesthetics are aggregated as follows:
 Numeric aesthetics, including \code{y}, are summed.
 Character and factor aesthetics, including \code{label},
-are assigned to strata provided they take unique values across the
-observations within each stratum (otherwise \code{NA} is assigned).
+are assigned to strata or lodes provided they take unique values across the
+observations within each (and are otherwise assigned \code{NA}).
+}
+
+\section{Package options}{
+
+\code{stat_stratum}, \code{stat_alluvium}, and \code{stat_flow} order strata and lodes
+according to the values of several parameters, which must be held fixed
+across every layer in an alluvial plot. These package-specific options set
+global values for these parameters that will be defaulted to when not
+manually set:
+\itemize{
+\item \code{ggalluvial.decreasing} (each \code{stat_*}): defaults to \code{NA}.
+\item \code{ggalluvial.reverse} (each \code{stat_*}): defaults to \code{TRUE}.
+\item \code{ggalluvial.absolute} (each \code{stat_*}): defaults to \code{TRUE}.
+\item \code{ggalluvial.cement.alluvia} (\code{stat_alluvium}): defaults to \code{FALSE}.
+\item \code{ggalluvial.lode.guidance} (\code{stat_alluvium}): defaults to \code{"zigzag"}.
+\item \code{ggalluvial.lode.ordering} (\code{stat_alluvium}): defaults to \code{NULL}.
+\item \code{ggalluvial.aes.bind} (\code{stat_alluvium} and \code{stat_flow}): defaults to
+\code{"none"}.
+}
+
+See \code{\link[base:options]{base::options()}} for how to use options.
 }
 
 \examples{

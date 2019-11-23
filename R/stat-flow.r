@@ -4,6 +4,7 @@
 #' (`x` and `y`) and weights (heights; `ymin` and `ymax`) of alluvial flows
 #' between each pair of adjacent axes.
 #' @template stat-aesthetics
+#' @template order-options
 #'
 
 #' @import ggplot2
@@ -30,10 +31,12 @@ stat_flow <- function(mapping = NULL,
                       data = NULL,
                       geom = "flow",
                       position = "identity",
-                      decreasing = NA, reverse = TRUE, absolute = TRUE,
+                      decreasing = ggalluvial_opt("decreasing"),
+                      reverse = ggalluvial_opt("reverse"),
+                      absolute = ggalluvial_opt("absolute"),
                       discern = FALSE,
                       negate.strata = NULL,
-                      aes.bind = "none",
+                      aes.bind = ggalluvial_opt("aes.bind"),
                       infer.label = FALSE,
                       min.y = NULL, max.y = NULL,
                       na.rm = FALSE,
@@ -49,7 +52,9 @@ stat_flow <- function(mapping = NULL,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
     params = list(
-      decreasing = decreasing, reverse = reverse, absolute = absolute,
+      decreasing = decreasing,
+      reverse = reverse,
+      absolute = absolute,
       discern = discern,
       negate.strata = negate.strata,
       aes.bind = aes.bind,
@@ -129,10 +134,12 @@ StatFlow <- ggproto(
   },
   
   compute_panel = function(self, data, scales,
-                           decreasing = NA, reverse = TRUE, absolute = TRUE,
+                           decreasing = ggalluvial_opt("decreasing"),
+                           reverse = ggalluvial_opt("reverse"),
+                           absolute = ggalluvial_opt("absolute"),
                            discern = FALSE,
                            negate.strata = NULL,
-                           aes.bind = "none",
+                           aes.bind = ggalluvial_opt("aes.bind"),
                            infer.label = FALSE,
                            min.y = NULL, max.y = NULL) {
     
