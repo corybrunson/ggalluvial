@@ -29,27 +29,27 @@ test_that("`stat_alluvium` orders alluvia correctly according to `aes.bind`", {
   data$stratum <- LETTERS[1:2][c(1, 1, 2, 2, 2, 2, 2, 1)]
   data$y <- 1
   data$fill <- c("red", "blue", "blue", "blue")
-  # order by index strata, linked strata, and alluvium
+  # order by index strata, linked strata (flows), and alluvia
   #ggplot(data, aes(x = x, stratum = stratum, alluvium = alluvium, y = y)) +
   #  geom_alluvium(aes(fill = fill)) +
   #  geom_text(stat = "alluvium", aes(fill = fill, label = alluvium))
   comp <- StatAlluvium$compute_panel(data)
   expect_identical(comp[with(comp, order(x, alluvium)), ]$y,
                    c(3.5, 2.5, 0.5, 1.5, 2.5, 1.5, 0.5, 3.5))
-  # order by index strata, linked strata, aesthetics, and alluvium
+  # order by index strata, linked strata (flows), aesthetics, and alluvia
   #ggplot(data, aes(x = x, stratum = stratum, alluvium = alluvium, y = y)) +
-  #  geom_alluvium(aes(fill = fill), aes.bind = "linked") +
+  #  geom_alluvium(aes(fill = fill), aes.bind = "flows") +
   #  geom_text(stat = "alluvium", aes(fill = fill, label = alluvium),
-  #            aes.bind = "linked")
-  comp <- StatAlluvium$compute_panel(data, aes.bind = "linked")
+  #            aes.bind = "flows")
+  comp <- StatAlluvium$compute_panel(data, aes.bind = "flows")
   expect_identical(comp[with(comp, order(x, alluvium)), ]$y,
                    c(2.5, 3.5, 0.5, 1.5, 1.5, 2.5, 0.5, 3.5))
-  # order by index strata, aesthetics, linked strata, and alluvium
+  # order by index strata, aesthetics, linked strata (flows), and alluvia
   #ggplot(data, aes(x = x, stratum = stratum, alluvium = alluvium, y = y)) +
-  #  geom_alluvium(aes(fill = fill), aes.bind = "index") +
+  #  geom_alluvium(aes(fill = fill), aes.bind = "alluvia") +
   #  geom_text(stat = "alluvium", aes(fill = fill, label = alluvium),
-  #            aes.bind = "index")
-  comp <- StatAlluvium$compute_panel(data, aes.bind = "index")
+  #            aes.bind = "alluvia")
+  comp <- StatAlluvium$compute_panel(data, aes.bind = "alluvia")
   expect_identical(comp[with(comp, order(x, alluvium)), ]$y,
                    c(2.5, 3.5, 0.5, 1.5, 0.5, 2.5, 1.5, 3.5))
 })

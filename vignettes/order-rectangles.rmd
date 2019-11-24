@@ -222,44 +222,44 @@ The effect of `"backward"` guidance is to keep the right part of the plot as tid
 
 It often makes sense to bundle together the cases and cohorts that fall into common groups used to assign differentiation aesthetics: most commonly `fill`, but also `alpha`, which controls the opacity of the `fill` colors, and `colour`, `linetype`, and `size`, which control the borders of the alluvia, flows, and lodes.
 
-The `aes.bind` parameter defaults to `"none"`, in which case aesthetics play no role in the order of the lodes. Setting the parameter to `"linked"` prioritizes any such aesthetics _after_ the strata of any other axes but _before_ the alluvia of the index axis, while setting it to `"index"` prioritizes aesthetics _before_ the strata of any other axes.
+The `aes.bind` parameter defaults to `"none"`, in which case aesthetics play no role in the order of the lodes. Setting the parameter to `"flows"` prioritizes any such aesthetics _after_ the strata of any other axes but _before_ the alluvia of the index axis (effectively ordering the flows at each axis by aesthetic), while setting it to `"alluvia"` prioritizes aesthetics _before_ the strata of any other axes (effectively ordering the alluvia).
 In the toy example, the stronger option results in the lodes within each stratum being sorted first by class:
 
 ```{r alluvia plot w/ strong aesthetic binding}
 ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
-  stat_alluvium(aes(fill = class), aes.bind = "index") +
+  stat_alluvium(aes(fill = class), aes.bind = "alluvia") +
   stat_stratum() +
   stat_alluvium(geom = "text", aes(fill = class, label = subject),
-                aes.bind = "index")
+                aes.bind = "alluvia")
 ```
 
 The more flexible option groups the lodes by class only after they've been ordered according to the strata at the remaining axes:
 
 ```{r alluvia plot w/ weak aesthetic binding}
 ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
-  stat_alluvium(aes(fill = class), aes.bind = "linked") +
+  stat_alluvium(aes(fill = class), aes.bind = "flows") +
   stat_stratum() +
   stat_alluvium(geom = "text", aes(fill = class, label = subject),
-                aes.bind = "linked")
+                aes.bind = "flows")
 ```
 
 **Warning:** In addition to parameters like `reverse`, _when aesthetic variables are prioritized at all, overlaid alluvial layers must include the same aesthetics in the same order_. (This can produce warnings when the aesthetics are not recognized by the geom.) Try removing `fill = class` from the text geom above to see the risk posed by neglecting this check.
 
 Rather than ordering lodes _within_, the `flow` stat separately orders the flows _into_ and _out from_, each stratum.
 By default, the flows are ordered with respect first to the orders of the strata at the present axis and second to those at the adjacent axis.
-Setting `aes.bind` to a non-default option tells `stat_flow()` to prioritize flow aesthetics after the index axis, before the alluvium variable, and either after (`"linked"`) or before (`"index"`) the strata of the adjacent axis:
+Setting `aes.bind` to a non-default option tells `stat_flow()` to prioritize flow aesthetics after the index axis, before the alluvium variable, and either after (`"flows"`) or before (`"alluvia"`) the strata of the adjacent axis:
 
 ```{r flows plots w/ aesthetic binding}
 ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
-  stat_flow(aes(fill = class), aes.bind = "linked") +
+  stat_flow(aes(fill = class), aes.bind = "flows") +
   stat_stratum() +
   stat_flow(geom = "text", aes(fill = class, label = subject),
-            aes.bind = "linked")
+            aes.bind = "flows")
 ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
-  stat_flow(aes(fill = class), aes.bind = "index") +
+  stat_flow(aes(fill = class), aes.bind = "alluvia") +
   stat_stratum() +
   stat_flow(geom = "text", aes(fill = class, label = subject),
-            aes.bind = "index")
+            aes.bind = "alluvia")
 ```
 
 Note: The `aes.flow` parameter tells `geom_flow()` how flows should inherit differentiation aesthetics from adjacent axes---`"forward"` or `"backward"`. It does _not_ influence their positions.

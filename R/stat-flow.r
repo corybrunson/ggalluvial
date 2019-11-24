@@ -15,16 +15,17 @@
 #' @inheritParams stat_stratum
 #' @param aes.bind At what grouping level, if any, to prioritize differentiation
 #'   aesthetics when ordering the lodes within each stratum. Defaults to
-#'   `"none"` (no aesthetic binding) with intermediate option `"linked"` to bind
+#'   `"none"` (no aesthetic binding) with intermediate option `"flows"` to bind
 #'   aesthetics after stratifying by axes linked to the index axis (the one
 #'   adjacent axis in `stat_flow()`; all remaining axes in `stat_alluvium()`)
-#'   and strongest option `"index"` to bind aesthetics after stratifying by the
-#'   index axis but before stratifying by linked axes. Stratification by any
-#'   axis is done with respect to the strata at that axis, after separating
-#'   positive and negative strata, consistent with the values of `decreasing`,
-#'   `reverse`, and `absolute`. Thus, if `"none"`, then lode orderings will not
-#'   depend on aesthetic variables. All aesthetic variables are used, in the
-#'   order in which they are specified in `aes()`.
+#'   and strongest option `"alluvia"` to bind aesthetics after stratifying by
+#'   the index axis but before stratifying by linked axes (only available for
+#'   `stat_alluvium()`). Stratification by any axis is done with respect to the
+#'   strata at that axis, after separating positive and negative strata,
+#'   consistent with the values of `decreasing`, `reverse`, and `absolute`.
+#'   Thus, if `"none"`, then lode orderings will not depend on aesthetic
+#'   variables. All aesthetic variables are used, in the order in which they are
+#'   specified in `aes()`.
 #' @example inst/examples/ex-stat-flow.r
 #' @export
 stat_flow <- function(mapping = NULL,
@@ -158,12 +159,16 @@ StatFlow <- ggproto(
     # match arguments for `aes.bind`
     if (! is.null(aes.bind)) {
       if (is.logical(aes.bind)) {
-        aes.bind.rep <- if (aes.bind) "index" else "linked"
+        aes.bind.rep <- if (aes.bind) "flow" else "none"
         warning("Logical values of `aes.bind` are deprecated; ",
                 "replacing ", aes.bind, " with '", aes.bind.rep, "'.")
         aes.bind <- aes.bind.rep
       }
-      aes.bind <- match.arg(aes.bind, c("none", "linked", "index"))
+      aes.bind <- match.arg(aes.bind, c("none", "flows", "alluvia"))
+      if (aes.bind == "alluvia") {
+        warning("`aes.bind = 'alluvia'` only available for `geom_alluvium()`; ",
+                "changing to 'flows'.")
+      }
     }
     
     # sign variable (sorts positives before negatives)
@@ -229,9 +234,8 @@ StatFlow <- ggproto(
     sort_fields <- c(
       "link", "x",
       "deposit",
-      if (aes.bind == "index") "adj_fissure",
+      if (aes.bind == "flows") "adj_fissure",
       "adj_deposit",
-      if (aes.bind == "linked") "adj_fissure",
       "alluvium", "contact"
     )
     data <- data[do.call(order, data[, sort_fields]), , drop = FALSE]

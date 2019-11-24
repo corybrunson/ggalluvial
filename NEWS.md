@@ -8,7 +8,7 @@
 - The `min.height` and `max.height` parameters of `stat_stratum()` are deprecated in favor of `min.y` and `max.y` (which better adhere to **ggplot2** conventions) and extended to the other `stat_*()` layers.
 - The `label.strata` parameter of `stat_stratum()` is deprecated in favor of `infer.label`, which is extended to the other `stat_*()` layers and sets `label` to `alluvium` in those cases rather than to `stratum`.
 - The `aggregate.y` parameter of `stat_alluvium()` is deprecated in favor of `cement.alluvia`, and the underlying procedure is debugged.
-- The `aes.bind` parameter of `stat_flow()` and `stat_alluvium()` now prefers character string options to logical values, described in the lode ordering vignette: `"none"`, `"linked"`, and `"index"`. The default `"none"` produces different behavior than the previous default `FALSE`, in that under this setting the aesthetic variables are _not at all_ prioritized.
+- The `aes.bind` parameter of `stat_flow()` and `stat_alluvium()` now prefers character string options to logical values, described in the lode ordering vignette: `"none"`, `"flows"`, and `"alluvia"`. The default `"none"` produces different behavior than the previous default `FALSE`, in that under this setting the aesthetic variables are _not at all_ prioritized.
 
 ## Negative observations
 

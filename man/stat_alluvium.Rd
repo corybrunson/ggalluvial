@@ -88,16 +88,17 @@ and then by the provided vectors.}
 
 \item{aes.bind}{At what grouping level, if any, to prioritize differentiation
 aesthetics when ordering the lodes within each stratum. Defaults to
-\code{"none"} (no aesthetic binding) with intermediate option \code{"linked"} to bind
+\code{"none"} (no aesthetic binding) with intermediate option \code{"flows"} to bind
 aesthetics after stratifying by axes linked to the index axis (the one
 adjacent axis in \code{stat_flow()}; all remaining axes in \code{stat_alluvium()})
-and strongest option \code{"index"} to bind aesthetics after stratifying by the
-index axis but before stratifying by linked axes. Stratification by any
-axis is done with respect to the strata at that axis, after separating
-positive and negative strata, consistent with the values of \code{decreasing},
-\code{reverse}, and \code{absolute}. Thus, if \code{"none"}, then lode orderings will not
-depend on aesthetic variables. All aesthetic variables are used, in the
-order in which they are specified in \code{aes()}.}
+and strongest option \code{"alluvia"} to bind aesthetics after stratifying by
+the index axis but before stratifying by linked axes (only available for
+\code{stat_alluvium()}). Stratification by any axis is done with respect to the
+strata at that axis, after separating positive and negative strata,
+consistent with the values of \code{decreasing}, \code{reverse}, and \code{absolute}.
+Thus, if \code{"none"}, then lode orderings will not depend on aesthetic
+variables. All aesthetic variables are used, in the order in which they are
+specified in \code{aes()}.}
 
 \item{infer.label}{Logical; whether to assign the \code{stratum} or \code{alluvium}
 variable to the \code{label} aesthetic. Defaults to \code{FALSE}, and requires that

@@ -193,12 +193,12 @@ StatAlluvium <- ggproto(
     # match arguments for `aes.bind`
     if (! is.null(aes.bind)) {
       if (is.logical(aes.bind)) {
-        aes.bind.rep <- if (aes.bind) "index" else "linked"
+        aes.bind.rep <- if (aes.bind) "flow" else "none"
         warning("Logical values of `aes.bind` are deprecated; ",
                 "replacing ", aes.bind, " with '", aes.bind.rep, "'.")
         aes.bind <- aes.bind.rep
       }
-      aes.bind <- match.arg(aes.bind, c("none", "linked", "index"))
+      aes.bind <- match.arg(aes.bind, c("none", "flows", "alluvia"))
     }
     
     # sign variable (sorts positives before negatives)
@@ -298,9 +298,9 @@ StatAlluvium <- ggproto(
     sort_fields <- c(
       "x",
       "deposit",
-      if (aes.bind == "index") "fissure",
+      if (aes.bind == "alluvia") "fissure",
       "rem_deposit",
-      if (aes.bind == "linked") "fissure",
+      if (aes.bind == "flows") "fissure",
       "fan"
     )
     data <- data[do.call(order, data[, sort_fields]), , drop = FALSE]

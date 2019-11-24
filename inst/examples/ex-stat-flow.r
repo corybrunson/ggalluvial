@@ -13,7 +13,7 @@ ggplot(as.data.frame(Titanic),
 ggplot(as.data.frame(Titanic),
        aes(y = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age)) +
-  geom_flow(aes(fill = Survived), aes.bind = TRUE, reverse = FALSE) +
+  geom_flow(aes(fill = Survived), aes.bind = "alluvia", reverse = FALSE) +
   geom_stratum(reverse = FALSE) +
   geom_text(stat = "stratum", infer.label = TRUE, reverse = FALSE) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
@@ -62,7 +62,7 @@ ggplot(vaccinations,
 ggplot(vaccinations,
        aes(x = survey, stratum = response, alluvium = subject,
            y = freq, label = response)) +
-  geom_flow(aes(fill = interaction(response, subgroup)), aes.bind = TRUE) +
+  geom_flow(aes(fill = interaction(response, subgroup)), aes.bind = "alluvia") +
   scale_alpha_discrete(range = c(1/3, 2/3)) +
   geom_stratum(alpha = .5) +
   geom_text(stat = "stratum")
