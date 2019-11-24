@@ -289,6 +289,11 @@ StatAlluvium <- ggproto(
         (-1) ^ (data$yneg * absolute + reverse)
     }
     
+    # reverse alluvium order among negative observations
+    data <- transform(data,
+                      fan = xtfrm(alluvium) *
+                        (-1) ^ (yneg * absolute + reverse))
+    
     # sort data in preparation for 'y' sums
     sort_fields <- c(
       "x",
@@ -296,7 +301,7 @@ StatAlluvium <- ggproto(
       if (aes.bind == "index") "fissure",
       "rem_deposit",
       if (aes.bind == "linked") "fissure",
-      "alluvium"
+      "fan"
     )
     data <- data[do.call(order, data[, sort_fields]), , drop = FALSE]
     # calculate 'y' sums

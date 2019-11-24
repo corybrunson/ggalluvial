@@ -23,6 +23,11 @@ The new lode guidance function `lode_zagzig()` mimics the behavior of `lode_zigz
 
 `stat_*()` internals have been simplified and standardized, in particular the manner in which lodes are ordered within strata.
 
+## Layer tests
+
+Tests have been added for the statistical transformations.
+Visual regression tests using **vdiffr** have been added for the geoms.
+
 # ggalluvial 0.10.0
 
 ## Lode guidance and ordering

@@ -6,7 +6,7 @@ ggplot(vaccinations,
            fill = response)) +
   stat_stratum(width = .5)
 
-# lode data: positioning with weight labels
+# lode data: positioning with y labels
 ggplot(vaccinations,
        aes(y = freq,
            x = survey, stratum = response, alluvium = subject,
@@ -21,7 +21,7 @@ ggplot(vaccinations,
   stat_stratum(geom = "errorbar") +
   geom_text(stat = "stratum")
 
-# alluvium data: positioning with weight labels
+# alluvium data: positioning with y labels
 ggplot(as.data.frame(Titanic),
        aes(y = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age, axis4 = Survived,
@@ -37,7 +37,7 @@ ggplot(as.data.frame(Titanic),
   stat_stratum(geom = "errorbar") +
   scale_x_discrete(limits = c("Class", "Sex", "Age", "Survived"))
 
-# omit labels for strata outside a weight range
+# omit labels for strata outside a y range
 ggplot(vaccinations,
        aes(y = freq,
            x = survey, stratum = response,
