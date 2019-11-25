@@ -2,7 +2,7 @@ Package: ggalluvial
 Type: Package
 Title: Alluvial Plots in 'ggplot2'
 Version: 0.11.0
-Date: 2019-09-02
+Date: 2019-11-25
 Authors@R: person('Jason Cory', 'Brunson', email = 'cornelioid@gmail.com',
     role = c('aut', 'cre'))
 Maintainer: Jason Cory Brunson <cornelioid@gmail.com>
@@ -37,5 +37,5 @@ License: GPL-3
 URL: http://corybrunson.github.io/ggalluvial/
 BugReports: https://github.com/corybrunson/ggalluvial/issues
 VignetteBuilder: knitr
-RoxygenNote: 6.1.1
+RoxygenNote: 7.0.1
 Roxygen: list(markdown = TRUE)

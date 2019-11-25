@@ -8,14 +8,35 @@
 \alias{to_alluvia_form}
 \title{Check for alluvial structure and convert between alluvial formats}
 \usage{
-is_lodes_form(data, key, value, id, weight = NULL, logical = TRUE,
-  silent = FALSE)
+is_lodes_form(
+  data,
+  key,
+  value,
+  id,
+  weight = NULL,
+  logical = TRUE,
+  silent = FALSE
+)
 
-is_alluvia_form(data, ..., axes = NULL, weight = NULL,
-  logical = TRUE, silent = FALSE)
+is_alluvia_form(
+  data,
+  ...,
+  axes = NULL,
+  weight = NULL,
+  logical = TRUE,
+  silent = FALSE
+)
 
-to_lodes_form(data, ..., axes = NULL, key = "x", value = "stratum",
-  id = "alluvium", diffuse = FALSE, discern = FALSE)
+to_lodes_form(
+  data,
+  ...,
+  axes = NULL,
+  key = "x",
+  value = "stratum",
+  id = "alluvium",
+  diffuse = FALSE,
+  discern = FALSE
+)
 
 to_alluvia_form(data, key, value, id, distill = FALSE)
 }
@@ -43,7 +64,7 @@ string indicating the type of alluvial structure ("none", "lodes", or
 \code{\link[dplyr:select]{dplyr::select()}} to determine axis variables, as an alternative
 to \code{axes}. Ignored when \code{axes} is provided.}
 
-\item{axes}{In \code{*_alluvia_form}, handled as in
+\item{axes}{In \verb{*_alluvia_form}, handled as in
 \code{\link[dplyr:select]{dplyr::select()}} and used to identify the field(s) of
 \code{data} to be used as axes.}
 
@@ -165,6 +186,7 @@ ggplot(majors[majors$semester \%in\% paste0("CURR", c(1, 7, 13)), ],
   geom_text(stat = "stratum", discern = TRUE)
 }
 \seealso{
-Other alluvial data manipulation: \code{\link{self-adjoin}}
+Other alluvial data manipulation: 
+\code{\link{self-adjoin}}
 }
 \concept{alluvial data manipulation}

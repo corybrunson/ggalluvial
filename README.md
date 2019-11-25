@@ -95,7 +95,7 @@ ggplot(data = titanic_wide,
   ggtitle("passengers on the maiden voyage of the Titanic",
           "stratified by demographics and survival")
 #> Warning: The parameter `label.strata` is deprecated.
-#> Pass arguments to `overlay.label` instead.
+#> Pass arguments to `infer.label` instead.
 ```
 
 ![](man/figures/README-unnamed-chunk-6-1.png)<!-- -->
