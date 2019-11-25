@@ -68,10 +68,10 @@ contiguate <- function(x) {
 deposit_data <- function(data, decreasing, reverse, absolute) {
   if (is.na(decreasing)) {
     deposits <- unique(data[, c("x", "yneg", "stratum")])
-    deposits <- transform(deposits, deposit = order(order(
-      x, -yneg,
-      xtfrm(stratum) * (-1) ^ (yneg * absolute + reverse)
-    )))
+    deposits$deposit <- order(order(
+      deposits$x, -deposits$yneg,
+      xtfrm(deposits$stratum) * (-1) ^ (deposits$yneg * absolute + reverse)
+    ))
   } else {
     deposits <- stats::aggregate(
       x = data$y,
@@ -79,37 +79,11 @@ deposit_data <- function(data, decreasing, reverse, absolute) {
       FUN = sum
     )
     names(deposits)[ncol(deposits)] <- "y"
-    deposits <- transform(deposits, deposit = order(order(
-      x, -yneg,
-      xtfrm(y) * (-1) ^ (yneg * absolute + decreasing),
-      xtfrm(stratum) * (-1) ^ (yneg * absolute + reverse)
-    )))
-    deposits$y <- NULL
-  }
-  merge(data, deposits, all.x = TRUE, all.y = FALSE)
-}
-
-# define 'deposit' variable to rank strata outward from zero (pos then neg)
-# -+- originally used to simplify 'ycum' calculation; deprecated -+-
-deposit_data_abs <- function(data, decreasing, reverse, absolute) {
-  if (is.na(decreasing)) {
-    deposits <- unique(data[, c("x", "yneg", "stratum")])
-    deposits <- transform(deposits, deposit = order(order(
-      x, yneg,
-      xtfrm(stratum) * (-1) ^ (reverse + yneg * ! absolute)
-    )))
-  } else {
-    deposits <- stats::aggregate(
-      x = data$y,
-      by = data[, c("x", "yneg", "stratum"), drop = FALSE],
-      FUN = sum
-    )
-    names(deposits)[ncol(deposits)] <- "y"
-    deposits <- transform(deposits, deposit = order(order(
-      x, yneg,
-      xtfrm(y) * (-1) ^ (decreasing + yneg * ! absolute),
-      xtfrm(stratum) * (-1) ^ (reverse + yneg * ! absolute)
-    )))
+    deposits$deposit <- order(order(
+      deposits$x, -deposits$yneg,
+      xtfrm(deposits$y) * (-1) ^ (deposits$yneg * absolute + decreasing),
+      xtfrm(deposits$stratum) * (-1) ^ (deposits$yneg * absolute + reverse)
+    ))
     deposits$y <- NULL
   }
   merge(data, deposits, all.x = TRUE, all.y = FALSE)

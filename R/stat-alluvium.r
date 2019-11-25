@@ -10,6 +10,7 @@
 #'
 
 #' @import ggplot2
+#' @importFrom rlang .data
 #' @family alluvial stat layers
 #' @seealso [ggplot2::layer()] for additional arguments and [geom_alluvium()],
 #'   [geom_lode()], and [geom_flow()] for the corresponding geoms.
@@ -380,9 +381,11 @@ cement_data <- function(data, key, id, fun) {
   by_vars <- c(key, id, "binding")
   data_agg <- dplyr::group_by(data[, c(by_vars, agg_vars)], .dots = by_vars)
   data_agg <- if ("label" %in% agg_vars) {
-    dplyr::summarize(data_agg, y = sum(y, na.rm = TRUE), label = fun(label))
+    dplyr::summarize(data_agg,
+                     y = sum(.data$y, na.rm = TRUE), label = fun(.data$label))
   } else {
-    dplyr::summarize(data_agg, y = sum(y, na.rm = TRUE))
+    #dplyr::summarize(data_agg, y = sum(.data$y, na.rm = TRUE))
+    dplyr::summarize_at(data_agg, "y", sum, na.rm = TRUE)
   }
   data_agg <- dplyr::ungroup(data_agg)
   # merge into `data`, ensuring that no `key`-`id` pairs are duplicated
