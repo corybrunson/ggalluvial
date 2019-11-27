@@ -1,9 +1,11 @@
 #' Stratum positions
 #'
 #' Given a dataset with alluvial structure, `stat_stratum` calculates the
-#' centroids of the strata at each axis, together with their weights (heights).
+#' centroids (`x` and `y`) and heights (`ymin` and `ymax`) of the strata at each
+#' axis.
 #' @template stat-aesthetics
 #' @template order-options
+#' @template defunct-stat-params
 #'
 
 #' @import ggplot2
@@ -16,8 +18,8 @@
 #'    override the default.
 #' @param decreasing Logical; whether to arrange the strata at each axis
 #'   in the order of the variable values (`NA`, the default),
-#'   in ascending order of total weight (largest on top, `FALSE`), or
-#'   in descending order of total weight (largest on bottom, `TRUE`).
+#'   in ascending order of totals (largest on top, `FALSE`), or
+#'   in descending order of totals (largest on bottom, `TRUE`).
 #' @param reverse Logical; if `decreasing` is `NA`,
 #'   whether to arrange the strata at each axis
 #'   in the reverse order of the variable values,
@@ -37,9 +39,9 @@
 #'   in which the data are in alluva form and are therefore converted to lode
 #'   form before the statistical transformation.
 #' @param label.strata Deprecated; alias for `infer.label`.
-#' @param min.y,max.y Numeric; bounds on the heights (weights) of the
-#'   strata to be rendered. Use these bounds to exclude strata outside a certain
-#'   range, for example when labeling strata using [ggplot2::geom_text()].
+#' @param min.y,max.y Numeric; bounds on the heights of the strata to be
+#'   rendered. Use these bounds to exclude strata outside a certain range, for
+#'   example when labeling strata using [ggplot2::geom_text()].
 #' @param min.height,max.height Deprecated aliases for `min.y` and `max.y`.
 #' @example inst/examples/ex-stat-stratum.r
 #' @export
@@ -101,15 +103,9 @@ StatStratum <- ggproto(
       }
     }
     
-    # assign uniform weight if not provided
+    # assign unit amounts if not provided
     if (is.null(data$y)) {
-      if (is.null(data$weight)) {
-        data$y <- rep(1, nrow(data))
-      } else {
-        defunct_parameter("weight", "y", type = "aesthetic")
-        data$y <- data$weight
-        data$weight <- NULL
-      }
+      data$y <- rep(1, nrow(data))
     } else if (any(is.na(data$y))) {
       stop("Data contains missing `y` values.")
     }
@@ -188,8 +184,8 @@ StatStratum <- ggproto(
     # sign variable (sorts positives before negatives)
     data$yneg <- data$y < 0
     
-    # aggregate variables over 'x', 'yneg', and 'stratum':
-    # take sums of 'y' and, if numeric, of 'label'
+    # aggregate variables over `x`, `yneg`, and `stratum`:
+    # take sums of `y` and, if numeric, of `label`
     # require others hold constant (or else be lost)
     agg_dat <- unique(data[, c("x", "yneg", "stratum")])
     for (var in setdiff(names(data), c("x", "yneg", "stratum"))) {
@@ -214,10 +210,10 @@ StatStratum <- ggproto(
     # define 'deposit' variable to rank strata vertically
     data <- deposit_data(data, decreasing, reverse, absolute)
     
-    # sort data in preparation for 'y' sums
+    # sort data in preparation for `y` sums
     data <- data[with(data, order(deposit)), , drop = FALSE]
     
-    # calculate 'y' sums
+    # calculate `y` sums
     data$ycum <- NA
     for (xx in unique(data$x)) {
       for (yn in c(FALSE, TRUE)) {

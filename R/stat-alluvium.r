@@ -1,12 +1,12 @@
 #' Alluvial positions
 #'
 #' Given a dataset with alluvial structure, `stat_alluvium` calculates the
-#' centroids (`x` and `y`) of the **lodes**, the intersections of
-#' the alluvia with the strata, together with their weights (heights;
-#' `ymin` and `ymax`). It leverages the `group` aesthetic for
-#' plotting purposes (for now).
+#' centroids (`x` and `y`) and heights (`ymin` and `ymax`) of the lodes, the
+#' intersections of the alluvia with the strata. It leverages the `group`
+#' aesthetic for plotting purposes (for now).
 #' @template stat-aesthetics
 #' @template order-options
+#' @template defunct-stat-params
 #'
 
 #' @import ggplot2
@@ -113,15 +113,9 @@ StatAlluvium <- ggproto(
       data <- transform(data, stratum = alluvium)
     }
     
-    # assign uniform weight if not provided
+    # assign unit amounts if not provided
     if (is.null(data$y)) {
-      if (is.null(data$weight)) {
-        data$y <- rep(1, nrow(data))
-      } else {
-        defunct_parameter("weight", "y", type = "aesthetic")
-        data$y <- data$weight
-        data$weight <- NULL
-      }
+      data$y <- rep(1, nrow(data))
     } else if (any(is.na(data$y))) {
       stop("Data contains missing `y` values.")
     }
@@ -205,7 +199,7 @@ StatAlluvium <- ggproto(
     # sign variable (sorts positives before negatives)
     data$yneg <- data$y < 0
     
-    # aggregate weights over otherwise equivalent alluvia
+    # cement (aggregate) `y` over otherwise equivalent alluvia
     if (! is.null(aggregate.y)) {
       deprecate_parameter("aggregate.y", "cement.alluvia")
       cement.alluvia <- aggregate.y
@@ -295,7 +289,7 @@ StatAlluvium <- ggproto(
                       fan = xtfrm(alluvium) *
                         (-1) ^ (yneg * absolute + reverse))
     
-    # sort data in preparation for 'y' sums
+    # sort data in preparation for `y` sums
     sort_fields <- c(
       "x",
       "deposit",
@@ -305,7 +299,7 @@ StatAlluvium <- ggproto(
       "fan"
     )
     data <- data[do.call(order, data[, sort_fields]), , drop = FALSE]
-    # calculate 'y' sums
+    # calculate `y` sums
     data$ycum <- NA
     for (xx in unique(data$x)) {
       for (yn in c(FALSE, TRUE)) {
@@ -351,7 +345,7 @@ StatAlluvium <- ggproto(
   }
 )
 
-# aggregate 'y' and 'label' over equivalent alluvia (omitting missing values)
+# aggregate `y` and `label` over equivalent alluvia (omitting missing values)
 cement_data <- function(data, key, id, fun) {
   
   agg_vars <- intersect(c("y", "label"), names(data))
@@ -377,7 +371,7 @@ cement_data <- function(data, key, id, fun) {
   # transform `id` in `data` accordingly
   data[[id]] <- alluv_agg[match(data[[id]], alluv_orig)]
   
-  # aggregate 'y' and 'label' by all other variables
+  # aggregate `y` and `label` by all other variables
   by_vars <- c(key, id, "binding")
   data_agg <- dplyr::group_by(data[, c(by_vars, agg_vars)], .dots = by_vars)
   data_agg <- if ("label" %in% agg_vars) {
@@ -421,7 +415,7 @@ cement_data_alt <- function(data, key, id) {
   alluv_data <- merge(alluv_data, alluv_agg, all.x = TRUE, all.y = FALSE)
   data[[id]] <- alluv_data$.id[match(data[[id]], alluv_data[[id]])]
   
-  # aggregate 'y' by `key`, `id`, and .binding
+  # aggregate `y` by `key`, `id`, and .binding
   data_agg <- stats::aggregate(
     formula = y ~ .,
     data = data[, c(key, id, ".binding", "y")],

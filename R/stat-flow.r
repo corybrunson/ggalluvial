@@ -1,10 +1,11 @@
 #' Flow positions
 #'
 #' Given a dataset with alluvial structure, `stat_flow` calculates the centroids
-#' (`x` and `y`) and weights (heights; `ymin` and `ymax`) of alluvial flows
-#' between each pair of adjacent axes.
+#' (`x` and `y`) and heights (`ymin` and `ymax`) of the flows between each pair
+#' of adjacent axes.
 #' @template stat-aesthetics
 #' @template order-options
+#' @template defunct-stat-params
 #'
 
 #' @import ggplot2
@@ -82,15 +83,9 @@ StatFlow <- ggproto(
       data <- transform(data, stratum = alluvium)
     }
     
-    # assign uniform weight if not provided
+    # assign unit amounts if not provided
     if (is.null(data$y)) {
-      if (is.null(data$weight)) {
-        data$y <- rep(1, nrow(data))
-      } else {
-        defunct_parameter("weight", "y", type = "aesthetic")
-        data$y <- data$weight
-        data$weight <- NULL
-      }
+      data$y <- rep(1, nrow(data))
     } else if (any(is.na(data$y))) {
       stop("Data contains missing `y` values.")
     }
@@ -219,18 +214,18 @@ StatFlow <- ggproto(
     # designate these flow pairings the alluvia
     data$alluvium <- as.integer(interaction(data[, adj_vars], drop = TRUE))
     
-    # sum 'y' and, if numeric, 'label' over 'x', 'yneg', and 'stratum'
+    # sum `y` and, if numeric, `label` over `x`, `yneg`, and `stratum`
     sum_vars <- c("y", if (is.numeric(data$label)) "label")
-    # exclude 'group' because it will be redefined below
+    # exclude `group` because it will be redefined below
     data$group <- NULL
     by_vars <- setdiff(names(data), c("group", sum_vars))
     # keep NAs in order to correctly position flows
     data <- dplyr::summarize_at(dplyr::group_by(data, .dots = by_vars),
                                 sum_vars, sum, na.rm = TRUE)
-    # redefine 'group' to be used to control grobs in the geom step
+    # redefine `group` to be used to control grobs in the geom step
     data <- transform(data, group = alluvium)
     
-    # sort data in preparation for 'y' sums
+    # sort data in preparation for `y` sums
     sort_fields <- c(
       "link", "x",
       "deposit",
@@ -239,7 +234,7 @@ StatFlow <- ggproto(
       "alluvium", "contact"
     )
     data <- data[do.call(order, data[, sort_fields]), , drop = FALSE]
-    # calculate 'y' sums
+    # calculate `y` sums
     data$ycum <- NA
     for (ll in unique(data$link)) {
       for (ss in unique(data$contact)) {

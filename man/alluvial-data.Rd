@@ -54,7 +54,7 @@ of \code{data} to be used as the axis (key), stratum (value), and alluvium
 \code{\link[rlang:enquo]{rlang::enquo()}}, to be used as heights or depths of the alluvia
 or lodes.}
 
-\item{logical}{Deprecated. Whether to return a logical value or a character
+\item{logical}{Defunct. Whether to return a logical value or a character
 string indicating the type of alluvial structure ("none", "lodes", or
 "alluvia").}
 

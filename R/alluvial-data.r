@@ -35,7 +35,7 @@
 #' @import tidyselect
 #' @family alluvial data manipulation
 #' @param data A data frame.
-#' @param logical Deprecated. Whether to return a logical value or a character
+#' @param logical Defunct. Whether to return a logical value or a character
 #'   string indicating the type of alluvial structure ("none", "lodes", or
 #'   "alluvia").
 #' @param silent Whether to print messages.
@@ -100,10 +100,6 @@ is_lodes_form <- function(data,
     if (! is.numeric(data[[weight_var]])) {
       if (! silent) message("Lode weights are non-numeric.")
       return(if (logical) FALSE else "none")
-    } else if (any(data[[weight_var]] < 0)) {
-      if (! silent) message("Some lode weights are negative.")
-      #return(if (logical) FALSE else "none")
-      return(if (logical) TRUE else "lodes")
     }
   }
   
@@ -124,9 +120,6 @@ is_alluvia_form <- function(data,
     weight_var <- vars_select(names(data), !! rlang::enquo(weight))
     if (! is.numeric(data[[weight_var]])) {
       if (! silent) message("Alluvium weights are non-numeric.")
-      return(if (logical) FALSE else "none")
-    } else if (any(data[[weight_var]] < 0)) {
-      if (! silent) message("Some alluvium weights are negative.")
       return(if (logical) FALSE else "none")
     }
   }

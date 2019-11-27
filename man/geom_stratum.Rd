@@ -91,8 +91,8 @@ following aesthetics (required aesthetics are in bold):
 
 \section{Defunct parameters}{
 
-The previously deprecated parameters \code{axis_width} and \code{ribbon_bend} are now
-defunct. Use \code{width} and \code{knot.pos} instead.
+The previously defunct parameters \code{axis_width} and \code{ribbon_bend} have been
+discontinued. Use \code{width} and \code{knot.pos} instead.
 }
 
 \examples{

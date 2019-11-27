@@ -112,3 +112,14 @@ ggplot(data = bn2,
                 decreasing = TRUE, show.legend = FALSE) +
   scale_color_manual(values = c("#00000000", "#000000"))
 }
+
+# use negative y values to encode deaths versus survivals
+titanic <- as.data.frame(Titanic)
+titanic <- transform(titanic, Lives = Freq * (-1) ^ (Survived == "No"))
+ggplot(subset(titanic, Class != "Crew"),
+       aes(axis1 = Class, axis2 = Sex, axis3 = Age, y = Lives)) +
+  geom_alluvium(aes(alpha = Survived, fill = Class), absolute = FALSE) +
+  geom_stratum(absolute = FALSE) +
+  geom_text(stat = "stratum", infer.label = TRUE, absolute = FALSE) +
+  scale_x_discrete(limits = c("Class", "Sex", "Age"), expand = c(.1, .05)) +
+  scale_alpha_discrete(range = c(.25, .75), guide = FALSE)

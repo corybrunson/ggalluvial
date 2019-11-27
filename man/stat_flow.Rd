@@ -53,8 +53,8 @@ a call to a position adjustment function.}
 
 \item{decreasing}{Logical; whether to arrange the strata at each axis
 in the order of the variable values (\code{NA}, the default),
-in ascending order of total weight (largest on top, \code{FALSE}), or
-in descending order of total weight (largest on bottom, \code{TRUE}).}
+in ascending order of totals (largest on top, \code{FALSE}), or
+in descending order of totals (largest on bottom, \code{TRUE}).}
 
 \item{reverse}{Logical; if \code{decreasing} is \code{NA},
 whether to arrange the strata at each axis
@@ -93,13 +93,13 @@ no \code{label} aesthetic is assigned. This parameter is intended only for uses
 in which the data are in alluva form and are therefore converted to lode
 form before the statistical transformation.}
 
-\item{min.y}{Numeric; bounds on the heights (weights) of the
-strata to be rendered. Use these bounds to exclude strata outside a certain
-range, for example when labeling strata using \code{\link[ggplot2:geom_text]{ggplot2::geom_text()}}.}
+\item{min.y}{Numeric; bounds on the heights of the strata to be
+rendered. Use these bounds to exclude strata outside a certain range, for
+example when labeling strata using \code{\link[ggplot2:geom_text]{ggplot2::geom_text()}}.}
 
-\item{max.y}{Numeric; bounds on the heights (weights) of the
-strata to be rendered. Use these bounds to exclude strata outside a certain
-range, for example when labeling strata using \code{\link[ggplot2:geom_text]{ggplot2::geom_text()}}.}
+\item{max.y}{Numeric; bounds on the heights of the strata to be
+rendered. Use these bounds to exclude strata outside a certain range, for
+example when labeling strata using \code{\link[ggplot2:geom_text]{ggplot2::geom_text()}}.}
 
 \item{na.rm}{Logical:
 if \code{FALSE}, the default, \code{NA} lodes are not included;
@@ -121,8 +121,8 @@ the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 }
 \description{
 Given a dataset with alluvial structure, \code{stat_flow} calculates the centroids
-(\code{x} and \code{y}) and weights (heights; \code{ymin} and \code{ymax}) of alluvial flows
-between each pair of adjacent axes.
+(\code{x} and \code{y}) and heights (\code{ymin} and \code{ymax}) of the flows between each pair
+of adjacent axes.
 }
 \section{Aesthetics}{
 
@@ -178,6 +178,12 @@ manually set:
 }
 
 See \code{\link[base:options]{base::options()}} for how to use options.
+}
+
+\section{Defunct parameters}{
+
+The previously defunct parameters \code{weight} and \code{aggregate.wts} have been
+discontinued. Use \code{y} and \code{cement.alluvia} instead.
 }
 
 \examples{

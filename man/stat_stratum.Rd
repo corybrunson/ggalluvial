@@ -55,8 +55,8 @@ a call to a position adjustment function.}
 
 \item{decreasing}{Logical; whether to arrange the strata at each axis
 in the order of the variable values (\code{NA}, the default),
-in ascending order of total weight (largest on top, \code{FALSE}), or
-in descending order of total weight (largest on bottom, \code{TRUE}).}
+in ascending order of totals (largest on top, \code{FALSE}), or
+in descending order of totals (largest on bottom, \code{TRUE}).}
 
 \item{reverse}{Logical; if \code{decreasing} is \code{NA},
 whether to arrange the strata at each axis
@@ -83,9 +83,9 @@ form before the statistical transformation.}
 
 \item{label.strata}{Deprecated; alias for \code{infer.label}.}
 
-\item{min.y, max.y}{Numeric; bounds on the heights (weights) of the
-strata to be rendered. Use these bounds to exclude strata outside a certain
-range, for example when labeling strata using \code{\link[ggplot2:geom_text]{ggplot2::geom_text()}}.}
+\item{min.y, max.y}{Numeric; bounds on the heights of the strata to be
+rendered. Use these bounds to exclude strata outside a certain range, for
+example when labeling strata using \code{\link[ggplot2:geom_text]{ggplot2::geom_text()}}.}
 
 \item{min.height, max.height}{Deprecated aliases for \code{min.y} and \code{max.y}.}
 
@@ -109,7 +109,8 @@ the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 }
 \description{
 Given a dataset with alluvial structure, \code{stat_stratum} calculates the
-centroids of the strata at each axis, together with their weights (heights).
+centroids (\code{x} and \code{y}) and heights (\code{ymin} and \code{ymax}) of the strata at each
+axis.
 }
 \section{Aesthetics}{
 
@@ -167,6 +168,12 @@ manually set:
 See \code{\link[base:options]{base::options()}} for how to use options.
 }
 
+\section{Defunct parameters}{
+
+The previously defunct parameters \code{weight} and \code{aggregate.wts} have been
+discontinued. Use \code{y} and \code{cement.alluvia} instead.
+}
+
 \examples{
 # only `stratum` assignment is necessary to generate strata
 data(vaccinations)
@@ -214,6 +221,16 @@ ggplot(vaccinations,
            fill = response, label = response)) +
   stat_stratum(width = .5) +
   geom_text(stat = "stratum", min.y = 100)
+
+# use negative y values to encode rejection versus acceptance
+admissions <- as.data.frame(UCBAdmissions)
+admissions <- transform(admissions, Count = Freq * (-1) ^ (Admit == "Rejected"))
+ggplot(admissions,
+       aes(y = Count, axis1 = Dept, axis2 = Gender)) +
+  geom_alluvium(aes(fill = Dept), width = 1/12) +
+  geom_stratum(width = 1/12, fill = "black", color = "grey") +
+  geom_label(stat = "stratum", infer.label = TRUE, min.y = 200) +
+  scale_x_discrete(limits = c("Department", "Gender"), expand = c(.05, .05))
 }
 \seealso{
 \code{\link[ggplot2:layer]{ggplot2::layer()}} for additional arguments and
