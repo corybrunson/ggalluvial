@@ -1,0 +1,82 @@
+---
+title: "ggalluvial: A Layered Grammar of Alluvial Plots"
+tags:
+  - R
+  - ggplot2
+  - alluvial plots
+  - repeated measures data
+  - categorical data visualization
+authors:
+  - name: Jason Cory Brunson
+    orcid: 0000-0003-3126-9494
+    affiliation: "1"
+affiliations:
+ - name: Center for Quantitative Medicine, UConn Health
+   index: 1
+date: 25 November 2019
+bibliography: paper.bib
+---
+
+# Summary
+
+Alluvial plots use variable-width ribbons and stacked bar plots to represent multi-dimensional or repeated-measures data with categorical or ordinal variables; see @Riehmann2005 and @Rosvall2010. Alluvial plots are statistical graphics in the sense of @Wilkinson2005; they share elements with Sankey diagrams and parallel sets plots but are uniquely determined from the data and a small set of parameters. This package extends @Wickham's layered grammar of graphics to generate alluvial plots from tidy data.
+
+## Functionality
+
+
+
+## Theory
+
+Statistical graphics of multivariate categorical---or otherwise discrete---data tend to take one of two forms: ordinations of continuous-valued transformations (e.g. residual plots from multiple regression; ternary plots from tripartition data; biplots from correspondence analysis and factor analysis) and arrangements of length- or area-encoded shapes (e.g. mosaic and product plots; polar and stacked area charts) [@Friendly].
+In particular, parallel sets plots, adapted from parallel coordinates plots to categorical data, represent cohorts of equivalent cases as parallelograms connecting sets represented as rectangles.
+Meanwhile, visualizations of flow processes have long encoded amounts, such as volumes and counts, as ribbon widths, and these visualizations have come to be called Sankey diagrams.
+A widely-used and -implemented subtype of Sankey diagram encodes longitudinal categorical data as rectangular nodes, representing categories, threaded by curves that encode the trajectories of cases.
+Most recently, "alluvial diagrams" were proposed to visualize changes in cluster membership among cases over successive cross-sections [@Rosvall2010]. They have since been used to represent a wide range of discrete-valued data, over repeated measures or multiple dimensions.
+
+Several R packages, including **ggplot2** extensions, have been developed to generate these types of data visualizations. Here are the most relevant for this discussion:
+- **alluvial** for alluvial diagrams [@Bojanowski2016]
+- **ggforce** for parallel sets plots in **ggplot2** [@Pedersen]
+- **ggparallel** and **ggpcp** for parallel sets and hammock plots in **ggplot2** [@Hofmann]
+- **ggalluvial** for alluvial diagrams in **ggplot2** [@Brunson]
+While Sankey diagrams, parallel sets plots, and alluvial diagrams have accrued their own characteristic use cases, the terms are often used interchangeably, and there is currently no consensus on what features, if any, are distinctive to each type.
+
+The diagrams produced by **ggalluvial** are statistical graphics in the sense that they are uniquely determined from data by a fixed set of plotting rules [@Wilkinson2005]. The package adopts for them the less common term _alluvial plot_.[^plots]
+These plots are distinct from Sankey diagrams (they do not necessarily represent flow) and constitute a subtype of parallel sets plots distinguished by two features: a strict order on the stacked elements at each axis, including both the values of the discrete variables and the ribbons connecting cases or cohorts between them; and a meaningful positional dimension along which these elements are stacked, which precludes inserting gaps between them (as is typical of most alluvial diagrams and of Sankey diagrams of a more limited type). (These features are shared by **ggparallel** and **ggpcp**.)
+
+[^plots]: This has the unfortunate side effect of conflating search results from the geology literature.
+
+## Application
+
+**ggalluvial** has seen widespread use in research and scholarship.
+Many of these uses would be served equally well by other parallel sets plots or Sankey diagrams.
+Instead, i showcase here three settings to which alluvial plots are exceptionally well-suited: repeated ordinal measures data, censored longitudinal data, and _signed membership_ data.
+
+**Repeated ordinal measures data:**
+Parallel sets plots and Sankey diagrams are commonly used to represent repeated categorical measures data, with cases or cohorts encoded as ribbons intersecting stacked bar plots at each time point. Most implementations stack each bar plot in order of nome or of size, and some allow arbitrary orderings guided by the user. In contrast, ordinal variables are more appropriately stacked in their own intrinsic and consistent order.
+
+Cite @Schlotter2019 and @North2019.
+<!--
+A related example is provided by @Kissinger2019, who encode the carbon footprints of 64 intra-city commutes as ribbon widths in an alluvial plot on two axes: origin and destination. The strata at each axis are the eight quarters of Tel Aviv, which are follow a municipal numbering scheme and are ordered accordingly at both axes to improve readability.
+-->
+
+**Censored data:**
+
+Cite @Seekatz2018 and @Sjoding2019.
+
+**Signed membership data:**
+
+Reasons for bar plots with positive and negative measurements overlaid:
+* definitionally negative groups
+  - cases exiting a multi-valued condition
+  - revenues and deficits for different divisions of an organization
+* pyramid plots
+  - age--gender plot of a population
+  - up- and down-regulated genes in several samples
+
+Cite @Edwards2019.
+
+# Acknowledgements
+
+I am grateful to many users for their feedback on earlier versions of this package. Development benefitted from the use of resources at UConn Health, and i have been supported in part by NIH T90 training grant (5T90DE021989-07).
+
+# References

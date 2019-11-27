@@ -6,13 +6,18 @@ Date: 2019-11-25
 Authors@R: person('Jason Cory', 'Brunson', email = 'cornelioid@gmail.com',
     role = c('aut', 'cre'))
 Maintainer: Jason Cory Brunson <cornelioid@gmail.com>
-Description: Alluvial plots use x-splines, sometimes augmented with stacked
-    histograms, to visualize multi-dimensional or repeated-measures data with
-    categorical or ordinal variables. They can be viewed as simplified and
-    standardized Sankey diagrams; see Riehmann, Hanfler, and Froehlich (2005)
+Description: Alluvial plots use
+    variable-width ribbons and stacked bar plots to represent
+    multi-dimensional or repeated-measures data with categorical or ordinal
+    variables;
+    see Riehmann, Hanfler, and Froehlich (2005)
     <doi:10.1109/INFVIS.2005.1532152> and Rosvall and Bergstrom (2010)
-    <doi:10.1371/journal.pone.0008694>. This package provides ggplot2 layers
-    to produce alluvial plots from tidy data.
+    <doi:10.1371/journal.pone.0008694>.
+    Alluvial plots are statistical graphics in the sense of Wilkinson (2005)
+    <doi:>; they share elements with Sankey diagrams and parallel sets plots
+    but are uniquely determined from the data and a small set of parameters.
+    This package extends Wickham's () <doi:> layered grammar of graphics to
+    generate alluvial plots from tidy data.
 Depends:
     R (>= 3.3),
     ggplot2 (>= 2.2)
