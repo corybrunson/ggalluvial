@@ -1,6 +1,10 @@
 
 # next version (v1.0.0?)
 
+# ggalluvial 0.11.1
+
+This patch fixes a bug with including negative observations in alluvia-form data due to outdated code that prohibited negative `y` values. This was discovered while drafting two examples of this usage, which are included in the documentation.
+
 # ggalluvial 0.11.0
 
 ## Parameter renamings, deprecations, and additions

@@ -234,6 +234,17 @@ ggplot(vaccinations,
   stat_stratum(alpha = .5) +
   geom_flow(max.y = 100) +
   geom_text(stat = "stratum")
+# negate missing entries
+ggplot(transform(vaccinations, count = freq * (-1) ^ (response == "Missing")),
+       aes(y = count,
+           x = survey, stratum = response, alluvium = subject,
+           fill = response, label = response,
+           alpha = response != "Missing")) +
+  stat_stratum() +
+  geom_flow() +
+  geom_text(stat = "stratum", alpha = 1) +
+  scale_alpha_discrete(range = c(.2, .6)) +
+  guides(alpha = FALSE)
 
 # aesthetics that vary betwween and within strata
 data(vaccinations)
