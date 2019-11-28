@@ -44,3 +44,13 @@ ggplot(vaccinations,
            fill = response, label = response)) +
   stat_stratum(width = .5) +
   geom_text(stat = "stratum", min.y = 100)
+
+# use negative y values to encode rejection versus acceptance
+admissions <- as.data.frame(UCBAdmissions)
+admissions <- transform(admissions, Count = Freq * (-1) ^ (Admit == "Rejected"))
+ggplot(admissions,
+       aes(y = Count, axis1 = Dept, axis2 = Gender)) +
+  geom_alluvium(aes(fill = Dept), width = 1/12) +
+  geom_stratum(width = 1/12, fill = "black", color = "grey") +
+  geom_label(stat = "stratum", infer.label = TRUE, min.y = 200) +
+  scale_x_discrete(limits = c("Department", "Gender"), expand = c(.05, .05))

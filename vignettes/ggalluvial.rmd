@@ -78,7 +78,7 @@ ggplot(as.data.frame(UCBAdmissions),
        aes(y = Freq, axis1 = Gender, axis2 = Dept)) +
   geom_alluvium(aes(fill = Admit), width = 1/12) +
   geom_stratum(width = 1/12, fill = "black", color = "grey") +
-  geom_label(stat = "stratum", label.strata = TRUE) +
+  geom_label(stat = "stratum", infer.label = TRUE) +
   scale_x_discrete(limits = c("Gender", "Dept"), expand = c(.05, .05)) +
   scale_fill_brewer(type = "qual", palette = "Set1") +
   ggtitle("UC Berkeley admissions and rejections, by sex and department")
@@ -98,7 +98,7 @@ ggplot(as.data.frame(Titanic),
                 width = 0, knot.pos = 0, reverse = FALSE) +
   guides(fill = FALSE) +
   geom_stratum(width = 1/8, reverse = FALSE) +
-  geom_text(stat = "stratum", label.strata = TRUE, reverse = FALSE) +
+  geom_text(stat = "stratum", infer.label = TRUE, reverse = FALSE) +
   scale_x_continuous(breaks = 1:3, labels = c("Survived", "Sex", "Class")) +
   coord_flip() +
   ggtitle("Titanic survival by class and sex")
@@ -108,7 +108,7 @@ This format and functionality are useful for many applications and will be retai
 
 - The `axis[0-9]*` position aesthetics are non-standard: they are not an explicit set of parameters but a family based on a regular expression pattern; and at least one, but no specific one, is required.
 - `stat_alluvium()` ignores any argument to the `group` aesthetic; instead, `StatAlluvium$compute_panel()` uses `group` to link the rows of the internally-transformed dataset that correspond to the same alluvium.
-- The `label.strata` parameter instructs `stat_stratum()` (called by `geom_text()`) to take the values of the axis variables as labels.
+- The `infer.label` parameter instructs `stat_stratum()` (called by `geom_text()`) to take the values of the axis variables as labels.
 - The horizontal axis must be manually corrected (using `scale_x_discrete()` or `scale_x_continuous()`) to reflect the implicit categorical variable identifying the axis.
 
 Furthermore, format aesthetics like `fill` are necessarily fixed for each alluvium; they cannot, for example, change from axis to axis according to the value taken at each. This means that, although they can reproduce the branching-tree structure of parallel sets, this format and functionality cannot produce alluvial plots with the color schemes featured [here](https://epijim.uk/code-snippets/eq5d/) ("Alluvial diagram") and [here](https://developers.google.com/chart/interactive/docs/gallery/sankey) ("Controlling colors"), which are "reset" at each axis.

@@ -57,8 +57,8 @@ a call to a position adjustment function.}
 
 \item{decreasing}{Logical; whether to arrange the strata at each axis
 in the order of the variable values (\code{NA}, the default),
-in ascending order of total weight (largest on top, \code{FALSE}), or
-in descending order of total weight (largest on bottom, \code{TRUE}).}
+in ascending order of totals (largest on top, \code{FALSE}), or
+in descending order of totals (largest on bottom, \code{TRUE}).}
 
 \item{reverse}{Logical; if \code{decreasing} is \code{NA},
 whether to arrange the strata at each axis
@@ -118,13 +118,13 @@ no \code{label} aesthetic is assigned. This parameter is intended only for uses
 in which the data are in alluva form and are therefore converted to lode
 form before the statistical transformation.}
 
-\item{min.y}{Numeric; bounds on the heights (weights) of the
-strata to be rendered. Use these bounds to exclude strata outside a certain
-range, for example when labeling strata using \code{\link[ggplot2:geom_text]{ggplot2::geom_text()}}.}
+\item{min.y}{Numeric; bounds on the heights of the strata to be
+rendered. Use these bounds to exclude strata outside a certain range, for
+example when labeling strata using \code{\link[ggplot2:geom_text]{ggplot2::geom_text()}}.}
 
-\item{max.y}{Numeric; bounds on the heights (weights) of the
-strata to be rendered. Use these bounds to exclude strata outside a certain
-range, for example when labeling strata using \code{\link[ggplot2:geom_text]{ggplot2::geom_text()}}.}
+\item{max.y}{Numeric; bounds on the heights of the strata to be
+rendered. Use these bounds to exclude strata outside a certain range, for
+example when labeling strata using \code{\link[ggplot2:geom_text]{ggplot2::geom_text()}}.}
 
 \item{na.rm}{Logical:
 if \code{FALSE}, the default, \code{NA} lodes are not included;
@@ -146,10 +146,9 @@ the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 }
 \description{
 Given a dataset with alluvial structure, \code{stat_alluvium} calculates the
-centroids (\code{x} and \code{y}) of the \strong{lodes}, the intersections of
-the alluvia with the strata, together with their weights (heights;
-\code{ymin} and \code{ymax}). It leverages the \code{group} aesthetic for
-plotting purposes (for now).
+centroids (\code{x} and \code{y}) and heights (\code{ymin} and \code{ymax}) of the lodes, the
+intersections of the alluvia with the strata. It leverages the \code{group}
+aesthetic for plotting purposes (for now).
 }
 \section{Aesthetics}{
 
@@ -205,6 +204,12 @@ manually set:
 }
 
 See \code{\link[base:options]{base::options()}} for how to use options.
+}
+
+\section{Defunct parameters}{
+
+The previously defunct parameters \code{weight} and \code{aggregate.wts} have been
+discontinued. Use \code{y} and \code{cement.alluvia} instead.
 }
 
 \examples{
@@ -322,6 +327,17 @@ ggplot(data = bn2,
                 decreasing = TRUE, show.legend = FALSE) +
   scale_color_manual(values = c("#00000000", "#000000"))
 }
+
+# use negative y values to encode deaths versus survivals
+titanic <- as.data.frame(Titanic)
+titanic <- transform(titanic, Lives = Freq * (-1) ^ (Survived == "No"))
+ggplot(subset(titanic, Class != "Crew"),
+       aes(axis1 = Class, axis2 = Sex, axis3 = Age, y = Lives)) +
+  geom_alluvium(aes(alpha = Survived, fill = Class), absolute = FALSE) +
+  geom_stratum(absolute = FALSE) +
+  geom_text(stat = "stratum", infer.label = TRUE, absolute = FALSE) +
+  scale_x_discrete(limits = c("Class", "Sex", "Age"), expand = c(.1, .05)) +
+  scale_alpha_discrete(range = c(.25, .75), guide = FALSE)
 }
 \seealso{
 \code{\link[ggplot2:layer]{ggplot2::layer()}} for additional arguments and \code{\link[=geom_alluvium]{geom_alluvium()}},

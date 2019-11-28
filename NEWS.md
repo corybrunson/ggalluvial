@@ -1,6 +1,10 @@
 
 # next version (v1.0.0?)
 
+# ggalluvial 0.11.1
+
+This patch fixes a bug with including negative observations in alluvia-form data due to outdated code that prohibited negative `y` values. This was discovered while drafting two examples of this usage, which are included in the documentation.
+
 # ggalluvial 0.11.0
 
 ## Parameter renamings, deprecations, and additions
@@ -9,6 +13,7 @@
 - The `label.strata` parameter of `stat_stratum()` is deprecated in favor of `infer.label`, which is extended to the other `stat_*()` layers and sets `label` to `alluvium` in those cases rather than to `stratum`.
 - The `aggregate.y` parameter of `stat_alluvium()` is deprecated in favor of `cement.alluvia`, and the underlying procedure is debugged.
 - The `aes.bind` parameter of `stat_flow()` and `stat_alluvium()` now prefers character string options to logical values, described in the lode ordering vignette: `"none"`, `"flows"`, and `"alluvia"`. The default `"none"` produces different behavior than the previous default `FALSE`, in that under this setting the aesthetic variables are _not at all_ prioritized.
+- The previously defunct stat parameters `weight` and `aggregate.wts` are discontinued.
 
 ## Negative observations
 
