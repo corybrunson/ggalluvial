@@ -308,9 +308,7 @@ ggplot(data = refugees_sub,
 \dontrun{
 data(babynames, package = "babynames")
 # a discontiguous alluvium
-bn <- dplyr::filter(babynames,
-                    prop >= .01 & sex == "F" &
-                      year > 1962 & year < 1968)
+bn <- subset(babynames, prop >= .01 & sex == "F" & year > 1962 & year < 1968)
 ggplot(data = bn,
        aes(x = year, alluvium = name, y = prop)) +
   geom_alluvium(aes(fill = name, color = name == "Tammy"),
