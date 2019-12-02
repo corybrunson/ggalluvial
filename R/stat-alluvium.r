@@ -110,7 +110,7 @@ StatAlluvium <- ggproto(
     
     # assign `alluvium` to `stratum` if `stratum` not provided
     if (is.null(data$stratum) && ! is.null(data$alluvium)) {
-      data <- transform(data, stratum = alluvium)
+      data$stratum <- data$alluvium
     }
     
     # assign unit amounts if not provided
@@ -285,9 +285,7 @@ StatAlluvium <- ggproto(
     }
     
     # reverse alluvium order among negative observations
-    data <- transform(data,
-                      fan = xtfrm(alluvium) *
-                        (-1) ^ (yneg * absolute + reverse))
+    data$fan <- xtfrm(data$alluvium) * (-1) ^ (data$yneg * absolute + reverse)
     
     # sort data in preparation for `y` sums
     sort_fields <- c(
@@ -308,13 +306,12 @@ StatAlluvium <- ggproto(
       }
     }
     # calculate y bounds
-    data <- transform(data,
-                      deposit = NULL,
-                      rem_deposit = NULL,
-                      fissure = NULL,
-                      ymin = ycum - abs(y) / 2,
-                      ymax = ycum + abs(y) / 2,
-                      y = ycum)
+    data$deposit <- NULL
+    data$rem_deposit <- NULL
+    data$fissure <- NULL
+    data$ymin <- data$ycum - abs(data$y) / 2
+    data$ymax <- data$ycum + abs(data$y) / 2
+    data$y <- data$ycum
     data$yneg <- NULL
     data$ycum <- NULL
     

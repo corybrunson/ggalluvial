@@ -147,9 +147,8 @@ StatStratum <- ggproto(
     }
     
     # nullify `group` and `alluvium` fields (to avoid confusion with geoms)
-    data <- transform(data,
-                      group = NULL,
-                      alluvium = NULL)
+    data$group <- NULL
+    data$alluvium <- NULL
     
     data
   },
@@ -222,10 +221,9 @@ StatStratum <- ggproto(
       }
     }
     # calculate y bounds
-    data <- transform(data,
-                      ymin = ycum - abs(y) / 2,
-                      ymax = ycum + abs(y) / 2,
-                      y = ycum)
+    data$ymin <- data$ycum - abs(data$y) / 2
+    data$ymax <- data$ycum + abs(data$y) / 2
+    data$y <- data$ycum
     data$yneg <- NULL
     data$ycum <- NULL
     
