@@ -37,7 +37,8 @@
 
 <meta property="og:title" content="Stratum positions — stat_stratum" />
 <meta property="og:description" content="Given a dataset with alluvial structure, stat_stratum calculates the
-centroids of the strata at each axis, together with their weights (heights)." />
+centroids (x and y) and heights (ymin and ymax) of the strata at each
+axis." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -70,7 +71,7 @@ centroids of the strata at each axis, together with their weights (heights)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.1</span>
       </span>
     </div>
 
@@ -129,7 +130,8 @@ centroids of the strata at each axis, together with their weights (heights)." />
 
     <div class="ref-description">
     <p>Given a dataset with alluvial structure, <code>stat_stratum</code> calculates the
-centroids of the strata at each axis, together with their weights (heights).</p>
+centroids (<code>x</code> and <code>y</code>) and heights (<code>ymin</code> and <code>ymax</code>) of the strata at each
+axis.</p>
     </div>
 
     <pre class="usage"><span class='fu'>stat_stratum</span>(
@@ -192,8 +194,8 @@ a call to a position adjustment function.</p></td>
       <th>decreasing</th>
       <td><p>Logical; whether to arrange the strata at each axis
 in the order of the variable values (<code>NA</code>, the default),
-in ascending order of total weight (largest on top, <code>FALSE</code>), or
-in descending order of total weight (largest on bottom, <code>TRUE</code>).</p></td>
+in ascending order of totals (largest on top, <code>FALSE</code>), or
+in descending order of totals (largest on bottom, <code>TRUE</code>).</p></td>
     </tr>
     <tr>
       <th>reverse</th>
@@ -234,9 +236,9 @@ form before the statistical transformation.</p></td>
     </tr>
     <tr>
       <th>min.y, max.y</th>
-      <td><p>Numeric; bounds on the heights (weights) of the
-strata to be rendered. Use these bounds to exclude strata outside a certain
-range, for example when labeling strata using <code><a href='https://ggplot2.tidyverse.org/reference/geom_text.html'>ggplot2::geom_text()</a></code>.</p></td>
+      <td><p>Numeric; bounds on the heights of the strata to be
+rendered. Use these bounds to exclude strata outside a certain range, for
+example when labeling strata using <code><a href='https://ggplot2.tidyverse.org/reference/geom_text.html'>ggplot2::geom_text()</a></code>.</p></td>
     </tr>
     <tr>
       <th>min.height, max.height</th>
@@ -322,6 +324,12 @@ manually set:</p><ul>
 </ul>
 
 <p>See <code><a href='https://rdrr.io/r/base/options.html'>base::options()</a></code> for how to use options.</p>
+    <h2 class="hasAnchor" id="defunct-parameters"><a class="anchor" href="#defunct-parameters"></a>Defunct parameters</h2>
+
+    
+
+<p>The previously defunct parameters <code>weight</code> and <code>aggregate.wts</code> have been
+discontinued. Use <code>y</code> and <code>cement.alluvia</code> instead.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='https://ggplot2.tidyverse.org/reference/layer.html'>ggplot2::layer()</a></code> for additional arguments and
@@ -371,7 +379,16 @@ manually set:</p><ul>
            <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>response</span>,
            <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>response</span>)) +
   <span class='fu'>stat_stratum</span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>.5</span>) +
-  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>min.y</span> <span class='kw'>=</span> <span class='fl'>100</span>)</div><div class='img'><img src='stat_stratum-6.png' alt='' width='700' height='433' /></div></pre>
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>min.y</span> <span class='kw'>=</span> <span class='fl'>100</span>)</div><div class='img'><img src='stat_stratum-6.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='co'># use negative y values to encode rejection versus acceptance</span>
+<span class='no'>admissions</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='no'>UCBAdmissions</span>)
+<span class='no'>admissions</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/transform.html'>transform</a></span>(<span class='no'>admissions</span>, <span class='kw'>Count</span> <span class='kw'>=</span> <span class='no'>Freq</span> * (-<span class='fl'>1</span>) ^ (<span class='no'>Admit</span> <span class='kw'>==</span> <span class='st'>"Rejected"</span>))
+<span class='fu'>ggplot</span>(<span class='no'>admissions</span>,
+       <span class='fu'>aes</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>Count</span>, <span class='kw'>axis1</span> <span class='kw'>=</span> <span class='no'>Dept</span>, <span class='kw'>axis2</span> <span class='kw'>=</span> <span class='no'>Gender</span>)) +
+  <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Dept</span>), <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>12</span>) +
+  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>12</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>"black"</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"grey"</span>) +
+  <span class='fu'>geom_label</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>infer.label</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>min.y</span> <span class='kw'>=</span> <span class='fl'>200</span>) +
+  <span class='fu'>scale_x_discrete</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Department"</span>, <span class='st'>"Gender"</span>), <span class='kw'>expand</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.05</span>, <span class='fl'>.05</span>))</div><div class='img'><img src='stat_stratum-7.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -379,6 +396,7 @@ manually set:</p><ul>
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#aesthetics">Aesthetics</a></li>
       <li><a href="#package-options">Package options</a></li>
+      <li><a href="#defunct-parameters">Defunct parameters</a></li>
       <li><a href="#see-also">See also</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>

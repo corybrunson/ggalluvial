@@ -67,7 +67,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.1</span>
       </span>
     </div>
 
@@ -123,6 +123,12 @@
       
     </div>
 
+    <div id="ggalluvial-0111" class="section level1">
+<h1 class="page-header">
+<a href="#ggalluvial-0111" class="anchor"></a>ggalluvial 0.11.1<small> Unreleased </small>
+</h1>
+<p>This patch fixes a bug with including negative observations in alluvia-form data due to outdated code that prohibited negative <code>y</code> values. This was discovered while drafting two examples of this usage, which are included in the documentation.</p>
+</div>
     <div id="ggalluvial-0110" class="section level1">
 <h1 class="page-header">
 <a href="#ggalluvial-0110" class="anchor"></a>ggalluvial 0.11.0<small> Unreleased </small>
@@ -135,6 +141,7 @@
 <li>The <code>label.strata</code> parameter of <code><a href="../reference/stat_stratum.html">stat_stratum()</a></code> is deprecated in favor of <code>infer.label</code>, which is extended to the other <code>stat_*()</code> layers and sets <code>label</code> to <code>alluvium</code> in those cases rather than to <code>stratum</code>.</li>
 <li>The <code>aggregate.y</code> parameter of <code><a href="../reference/stat_alluvium.html">stat_alluvium()</a></code> is deprecated in favor of <code>cement.alluvia</code>, and the underlying procedure is debugged.</li>
 <li>The <code>aes.bind</code> parameter of <code><a href="../reference/stat_flow.html">stat_flow()</a></code> and <code><a href="../reference/stat_alluvium.html">stat_alluvium()</a></code> now prefers character string options to logical values, described in the lode ordering vignette: <code>"none"</code>, <code>"flows"</code>, and <code>"alluvia"</code>. The default <code>"none"</code> produces different behavior than the previous default <code>FALSE</code>, in that under this setting the aesthetic variables are <em>not at all</em> prioritized.</li>
+<li>The previously defunct stat parameters <code>weight</code> and <code>aggregate.wts</code> are discontinued.</li>
 </ul>
 </div>
 <div id="negative-observations" class="section level2">
@@ -374,6 +381,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#ggalluvial-0111">0.11.1</a></li>
         <li><a href="#ggalluvial-0110">0.11.0</a></li>
         <li><a href="#ggalluvial-0100">0.10.0</a></li>
         <li><a href="#ggalluvial-092">0.9.2</a></li>

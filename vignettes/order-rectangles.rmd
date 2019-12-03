@@ -47,13 +47,13 @@ ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
 
 ## Motivations
 
-The amount of control the stat layers `stat_alluvial()` and `stat_flow()` exert over the [positional aesthetics](https://ggplot2.tidyverse.org/reference/aes_position.html) of graphical objects (grobs) is unusual, by the standards of **ggplot2** and many of its extensions. In [the layered grammar of graphics framework](https://www.tandfonline.com/doi/abs/10.1198/jcgs.2009.07098), the role of a statistical transformation is usually to summarize the original data, for example by binning (`stat_bin()`) or by calculating quantiles (`stat_qq()`). These transformed data are _then_ sent to geom layers for positioning. The positions of grobs may be adjusted after the statistical transformation, for example when points are jittered (`geom_jitter()`), but the numerical data communicated by the plot are still the product of the stat.
+The amount of control the stat layers `stat_alluvial()` and `stat_flow()` exert over the [positional aesthetics](https://ggplot2.tidyverse.org/reference/aes_position.html) of graphical objects (grobs) is unusual, by the standards of **ggplot2** and many of its extensions. In [the layered grammar of graphics framework](https://www.tandfonline.com/doi/abs/10.1198/jcgs.2009.07098), the role of a statistical transformation is usually to summarize the original data, for example by binning (`stat_bin()`) or by calculating quantiles (`stat_qq()`). These transformed data are then sent to geom layers for positioning. The positions of grobs may be adjusted after the statistical transformation, for example when points are jittered (`geom_jitter()`), but the numerical data communicated by the plot are still the product of the stat.
 
 In **ggalluvial**, the stat layers exert slightly more control.
 For one thing, the transformation is more sophisticated than a single value or a fixed-length vector, such as a mean, standard deviation, or five-number summary. Instead, the values of `y` (which default to `1`) within each collection are, after reordering, transformed using `cumsum()` and some additional arithmetic to obtain coordinates for the centers `y` and lower and upper limits `ymin` and `ymax` of the strata representing the categories.
-Additionally, the reordering of cases within each collection relies on a hierarchy of sorting variables, based on the strata at nearby axes as well as the present one and, optionally, on the values of differentiation aesthetics like `fill`, and the behavior depends on the choices of several plotting parameters (`decreasing`, `reverse`, and `absolute`).
-Only once the coordinates are computed do the geom layers use them to position the rectangles and splines that constitute the plot.
-Thus, the results of the statistical transformation are not as intrinsically meaningful as others, but serve to underpin a more interpretable visualization.
+Additionally, the reordering of lodes within each collection relies on a hierarchy of sorting variables, based on the strata at nearby axes as well as the present one and, optionally, on the values of differentiation aesthetics like `fill`. How this hierarchy is invoked depends on the choices of several plotting parameters (`decreasing`, `reverse`, and `absolute`).
+Thus, the results of the statistical transformations are not as intrinsically meaningful as others and are subject to much more intervention by the user.
+Only once the transformations have produced these coordinates do the geom layers use them to position the rectangles and splines that constitute the plot.
 
 There are two key reasons for this division of labor:
 
@@ -245,9 +245,9 @@ ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
 
 **Warning:** In addition to parameters like `reverse`, _when aesthetic variables are prioritized at all, overlaid alluvial layers must include the same aesthetics in the same order_. (This can produce warnings when the aesthetics are not recognized by the geom.) Try removing `fill = class` from the text geom above to see the risk posed by neglecting this check.
 
-Rather than ordering lodes _within_, the `flow` stat separately orders the flows _into_ and _out from_, each stratum.
+Rather than ordering lodes _within_, the `flow` stat separately orders the flows _into_ and _out from_, each stratum. (This precludes a corresponding `"alluvia"` option for `aes.bind`.)
 By default, the flows are ordered with respect first to the orders of the strata at the present axis and second to those at the adjacent axis.
-Setting `aes.bind` to a non-default option tells `stat_flow()` to prioritize flow aesthetics after the index axis, before the alluvium variable, and either after (`"flows"`) or before (`"alluvia"`) the strata of the adjacent axis:
+Setting `aes.bind` to the non-default option `"flows"` tells `stat_flow()` to prioritize flow aesthetics after the strata of the index axis but before the strata of the adjacent axis:
 
 ```{r flows plots w/ aesthetic binding}
 ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
@@ -255,11 +255,6 @@ ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
   stat_stratum() +
   stat_flow(geom = "text", aes(fill = class, label = subject),
             aes.bind = "flows")
-ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
-  stat_flow(aes(fill = class), aes.bind = "alluvia") +
-  stat_stratum() +
-  stat_flow(geom = "text", aes(fill = class, label = subject),
-            aes.bind = "alluvia")
 ```
 
 Note: The `aes.flow` parameter tells `geom_flow()` how flows should inherit differentiation aesthetics from adjacent axes---`"forward"` or `"backward"`. It does _not_ influence their positions.

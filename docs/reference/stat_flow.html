@@ -37,8 +37,8 @@
 
 <meta property="og:title" content="Flow positions — stat_flow" />
 <meta property="og:description" content="Given a dataset with alluvial structure, stat_flow calculates the centroids
-(x and y) and weights (heights; ymin and ymax) of alluvial flows
-between each pair of adjacent axes." />
+(x and y) and heights (ymin and ymax) of the flows between each pair
+of adjacent axes." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -71,7 +71,7 @@ between each pair of adjacent axes." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.1</span>
       </span>
     </div>
 
@@ -130,8 +130,8 @@ between each pair of adjacent axes." />
 
     <div class="ref-description">
     <p>Given a dataset with alluvial structure, <code>stat_flow</code> calculates the centroids
-(<code>x</code> and <code>y</code>) and weights (heights; <code>ymin</code> and <code>ymax</code>) of alluvial flows
-between each pair of adjacent axes.</p>
+(<code>x</code> and <code>y</code>) and heights (<code>ymin</code> and <code>ymax</code>) of the flows between each pair
+of adjacent axes.</p>
     </div>
 
     <pre class="usage"><span class='fu'>stat_flow</span>(
@@ -192,8 +192,8 @@ a call to a position adjustment function.</p></td>
       <th>decreasing</th>
       <td><p>Logical; whether to arrange the strata at each axis
 in the order of the variable values (<code>NA</code>, the default),
-in ascending order of total weight (largest on top, <code>FALSE</code>), or
-in descending order of total weight (largest on bottom, <code>TRUE</code>).</p></td>
+in ascending order of totals (largest on top, <code>FALSE</code>), or
+in descending order of totals (largest on bottom, <code>TRUE</code>).</p></td>
     </tr>
     <tr>
       <th>reverse</th>
@@ -246,15 +246,15 @@ form before the statistical transformation.</p></td>
     </tr>
     <tr>
       <th>min.y</th>
-      <td><p>Numeric; bounds on the heights (weights) of the
-strata to be rendered. Use these bounds to exclude strata outside a certain
-range, for example when labeling strata using <code><a href='https://ggplot2.tidyverse.org/reference/geom_text.html'>ggplot2::geom_text()</a></code>.</p></td>
+      <td><p>Numeric; bounds on the heights of the strata to be
+rendered. Use these bounds to exclude strata outside a certain range, for
+example when labeling strata using <code><a href='https://ggplot2.tidyverse.org/reference/geom_text.html'>ggplot2::geom_text()</a></code>.</p></td>
     </tr>
     <tr>
       <th>max.y</th>
-      <td><p>Numeric; bounds on the heights (weights) of the
-strata to be rendered. Use these bounds to exclude strata outside a certain
-range, for example when labeling strata using <code><a href='https://ggplot2.tidyverse.org/reference/geom_text.html'>ggplot2::geom_text()</a></code>.</p></td>
+      <td><p>Numeric; bounds on the heights of the strata to be
+rendered. Use these bounds to exclude strata outside a certain range, for
+example when labeling strata using <code><a href='https://ggplot2.tidyverse.org/reference/geom_text.html'>ggplot2::geom_text()</a></code>.</p></td>
     </tr>
     <tr>
       <th>na.rm</th>
@@ -336,6 +336,12 @@ manually set:</p><ul>
 </ul>
 
 <p>See <code><a href='https://rdrr.io/r/base/options.html'>base::options()</a></code> for how to use options.</p>
+    <h2 class="hasAnchor" id="defunct-parameters"><a class="anchor" href="#defunct-parameters"></a>Defunct parameters</h2>
+
+    
+
+<p>The previously defunct parameters <code>weight</code> and <code>aggregate.wts</code> have been
+discontinued. Use <code>y</code> and <code>cement.alluvia</code> instead.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='https://ggplot2.tidyverse.org/reference/layer.html'>ggplot2::layer()</a></code> for additional arguments and
@@ -387,7 +393,17 @@ manually set:</p><ul>
            <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>response</span>)) +
   <span class='fu'><a href='stat_stratum.html'>stat_stratum</a></span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.5</span>) +
   <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='kw'>max.y</span> <span class='kw'>=</span> <span class='fl'>100</span>) +
-  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='img'><img src='stat_flow-6.png' alt='' width='700' height='433' /></div><div class='input'>
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='img'><img src='stat_flow-6.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># negate missing entries</span>
+<span class='fu'>ggplot</span>(<span class='no'>vaccinations</span>,
+       <span class='fu'>aes</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>freq</span>,
+           <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>subject</span>,
+           <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>response</span>,
+           <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='no'>response</span> <span class='kw'>!=</span> <span class='st'>"Missing"</span>)) +
+  <span class='fu'><a href='stat_stratum.html'>stat_stratum</a></span>(<span class='kw'>negate.strata</span> <span class='kw'>=</span> <span class='st'>"Missing"</span>) +
+  <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='kw'>negate.strata</span> <span class='kw'>=</span> <span class='st'>"Missing"</span>) +
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>negate.strata</span> <span class='kw'>=</span> <span class='st'>"Missing"</span>) +
+  <span class='fu'>scale_alpha_discrete</span>(<span class='kw'>range</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.2</span>, <span class='fl'>.6</span>)) +
+  <span class='fu'>guides</span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='img'><img src='stat_flow-7.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># aesthetics that vary betwween and within strata</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>vaccinations</span>)
 <span class='no'>vaccinations</span>$<span class='no'>subgroup</span> <span class='kw'>&lt;-</span> <span class='no'>LETTERS</span>[<span class='fl'>1</span>:<span class='fl'>2</span>][<span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span>(
@@ -399,21 +415,21 @@ manually set:</p><ul>
   <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='fu'>aes</span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='no'>subgroup</span>)) +
   <span class='fu'>scale_alpha_discrete</span>(<span class='kw'>range</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>/<span class='fl'>3</span>, <span class='fl'>2</span>/<span class='fl'>3</span>)) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.5</span>) +
-  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='img'><img src='stat_flow-7.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># can even set aesthetics that vary both ways</span>
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='img'><img src='stat_flow-8.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># can even set aesthetics that vary both ways</span>
 <span class='fu'>ggplot</span>(<span class='no'>vaccinations</span>,
        <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>subject</span>,
            <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>freq</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>response</span>)) +
   <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/interaction.html'>interaction</a></span>(<span class='no'>response</span>, <span class='no'>subgroup</span>)), <span class='kw'>aes.bind</span> <span class='kw'>=</span> <span class='st'>"alluvia"</span>) +
   <span class='fu'>scale_alpha_discrete</span>(<span class='kw'>range</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>1</span>/<span class='fl'>3</span>, <span class='fl'>2</span>/<span class='fl'>3</span>)) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.5</span>) +
-  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: `aes.bind = 'alluvia'` only available for `geom_alluvium()`; changing to 'flows'.</span></div><div class='img'><img src='stat_flow-8.png' alt='' width='700' height='433' /></div><div class='input'>
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: `aes.bind = 'alluvia'` only available for `geom_alluvium()`; changing to 'flows'.</span></div><div class='img'><img src='stat_flow-9.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>majors</span>)
 <span class='co'># omit missing lodes and incident flows</span>
 <span class='fu'>ggplot</span>(<span class='no'>majors</span>,
        <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>semester</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>curriculum</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>student</span>)) +
   <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>"darkgrey"</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>curriculum</span>), <span class='kw'>color</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
-  <span class='fu'>theme_bw</span>()</div><div class='output co'>#&gt; <span class='warning'>Warning: Factor `adj_deposit` contains implicit NA, consider using `forcats::fct_explicit_na`</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Factor `adj_fissure` contains implicit NA, consider using `forcats::fct_explicit_na`</span></div><div class='img'><img src='stat_flow-9.png' alt='' width='700' height='433' /></div></pre>
+  <span class='fu'>theme_bw</span>()</div><div class='output co'>#&gt; <span class='warning'>Warning: Factor `adj_deposit` contains implicit NA, consider using `forcats::fct_explicit_na`</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Factor `adj_fissure` contains implicit NA, consider using `forcats::fct_explicit_na`</span></div><div class='img'><img src='stat_flow-10.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -421,6 +437,7 @@ manually set:</p><ul>
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#aesthetics">Aesthetics</a></li>
       <li><a href="#package-options">Package options</a></li>
+      <li><a href="#defunct-parameters">Defunct parameters</a></li>
       <li><a href="#see-also">See also</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
