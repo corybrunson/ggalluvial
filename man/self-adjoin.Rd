@@ -5,15 +5,8 @@
 \alias{self_adjoin}
 \title{Adjoin a dataset to itself}
 \usage{
-self_adjoin(
-  data,
-  key,
-  by = NULL,
-  link = NULL,
-  keep.x = NULL,
-  keep.y = NULL,
-  suffix = c(".x", ".y")
-)
+self_adjoin(data, key, by = NULL, link = NULL, keep.x = NULL,
+  keep.y = NULL, suffix = c(".x", ".y"))
 }
 \arguments{
 \item{data}{A data frame in lodes form (repeated measures data; see
@@ -67,7 +60,6 @@ vaccination_steps <- self_adjoin(vaccinations, key = survey, by = "subject",
 head(vaccination_steps)
 }
 \seealso{
-Other alluvial data manipulation: 
-\code{\link{alluvial-data}}
+Other alluvial data manipulation: \code{\link{alluvial-data}}
 }
 \concept{alluvial data manipulation}
