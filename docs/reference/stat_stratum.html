@@ -331,40 +331,26 @@ discontinued. Use <code>y</code> and <code>cement.alluvia</code> instead.</p>
            <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>response</span>,
            <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>response</span>)) +
   <span class='fu'>stat_stratum</span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>.5</span>)</div><div class='img'><img src='stat_stratum-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># lode data: positioning with y labels</span>
+<span class='co'># lode data, positioning with y labels</span>
 <span class='fu'>ggplot</span>(<span class='no'>vaccinations</span>,
        <span class='fu'>aes</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>freq</span>,
            <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>subject</span>,
            <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>freq</span>)) +
   <span class='fu'>stat_stratum</span>(<span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"errorbar"</span>) +
-  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='img'><img src='stat_stratum-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># lode data: positioning with stratum labels</span>
-<span class='fu'>ggplot</span>(<span class='no'>vaccinations</span>,
-       <span class='fu'>aes</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>freq</span>,
-           <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>subject</span>,
-           <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>response</span>)) +
-  <span class='fu'>stat_stratum</span>(<span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"errorbar"</span>) +
-  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='img'><img src='stat_stratum-3.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># alluvium data: positioning with y labels</span>
-<span class='fu'>ggplot</span>(<span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='no'>Titanic</span>),
-       <span class='fu'>aes</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>Freq</span>,
-           <span class='kw'>axis1</span> <span class='kw'>=</span> <span class='no'>Class</span>, <span class='kw'>axis2</span> <span class='kw'>=</span> <span class='no'>Sex</span>, <span class='kw'>axis3</span> <span class='kw'>=</span> <span class='no'>Age</span>, <span class='kw'>axis4</span> <span class='kw'>=</span> <span class='no'>Survived</span>,
-           <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>Freq</span>)) +
-  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>) +
-  <span class='fu'>stat_stratum</span>(<span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"errorbar"</span>) +
-  <span class='fu'>scale_x_discrete</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>, <span class='st'>"Survived"</span>))</div><div class='img'><img src='stat_stratum-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># alluvium data: positioning with stratum labels</span>
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='img'><img src='stat_stratum-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># alluvium data, positioning with stratum labels</span>
 <span class='fu'>ggplot</span>(<span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='no'>Titanic</span>),
        <span class='fu'>aes</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>Freq</span>,
            <span class='kw'>axis1</span> <span class='kw'>=</span> <span class='no'>Class</span>, <span class='kw'>axis2</span> <span class='kw'>=</span> <span class='no'>Sex</span>, <span class='kw'>axis3</span> <span class='kw'>=</span> <span class='no'>Age</span>, <span class='kw'>axis4</span> <span class='kw'>=</span> <span class='no'>Survived</span>)) +
   <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>infer.label</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
   <span class='fu'>stat_stratum</span>(<span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"errorbar"</span>) +
-  <span class='fu'>scale_x_discrete</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>, <span class='st'>"Survived"</span>))</div><div class='img'><img src='stat_stratum-5.png' alt='' width='700' height='433' /></div><div class='input'>
+  <span class='fu'>scale_x_discrete</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>, <span class='st'>"Survived"</span>))</div><div class='img'><img src='stat_stratum-3.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># omit labels for strata outside a y range</span>
 <span class='fu'>ggplot</span>(<span class='no'>vaccinations</span>,
        <span class='fu'>aes</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>freq</span>,
            <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>response</span>,
            <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>response</span>)) +
   <span class='fu'>stat_stratum</span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>.5</span>) +
-  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>min.y</span> <span class='kw'>=</span> <span class='fl'>100</span>)</div><div class='img'><img src='stat_stratum-6.png' alt='' width='700' height='433' /></div><div class='input'>
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>min.y</span> <span class='kw'>=</span> <span class='fl'>100</span>)</div><div class='img'><img src='stat_stratum-4.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># use negative y values to encode rejection versus acceptance</span>
 <span class='no'>admissions</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='no'>UCBAdmissions</span>)
 <span class='no'>admissions</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/transform.html'>transform</a></span>(<span class='no'>admissions</span>, <span class='kw'>Count</span> <span class='kw'>=</span> <span class='no'>Freq</span> * (-<span class='fl'>1</span>) ^ (<span class='no'>Admit</span> <span class='kw'>==</span> <span class='st'>"Rejected"</span>))
@@ -373,7 +359,7 @@ discontinued. Use <code>y</code> and <code>cement.alluvia</code> instead.</p>
   <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Dept</span>), <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>12</span>) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>12</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>"black"</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"grey"</span>) +
   <span class='fu'>geom_label</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>infer.label</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>min.y</span> <span class='kw'>=</span> <span class='fl'>200</span>) +
-  <span class='fu'>scale_x_discrete</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Department"</span>, <span class='st'>"Gender"</span>), <span class='kw'>expand</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.05</span>, <span class='fl'>.05</span>))</div><div class='img'><img src='stat_stratum-7.png' alt='' width='700' height='433' /></div></pre>
+  <span class='fu'>scale_x_discrete</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Department"</span>, <span class='st'>"Gender"</span>), <span class='kw'>expand</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.05</span>, <span class='fl'>.05</span>))</div><div class='img'><img src='stat_stratum-5.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
