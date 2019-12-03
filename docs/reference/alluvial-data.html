@@ -142,35 +142,14 @@ corresponding variables. This function checks a data frame for either of two
 types of alluvial structure:</p>
     </div>
 
-    <pre class="usage"><span class='fu'>is_lodes_form</span>(
-  <span class='no'>data</span>,
-  <span class='no'>key</span>,
-  <span class='no'>value</span>,
-  <span class='no'>id</span>,
-  <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
+    <pre class="usage"><span class='fu'>is_lodes_form</span>(<span class='no'>data</span>, <span class='no'>key</span>, <span class='no'>value</span>, <span class='no'>id</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>is_alluvia_form</span>(
-  <span class='no'>data</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>axes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
+<span class='fu'>is_alluvia_form</span>(<span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
-<span class='fu'>to_lodes_form</span>(
-  <span class='no'>data</span>,
-  <span class='no'>...</span>,
-  <span class='kw'>axes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"x"</span>,
-  <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>,
-  <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
-  <span class='kw'>diffuse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
-)
+<span class='fu'>to_lodes_form</span>(<span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"x"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>,
+  <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>, <span class='kw'>diffuse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>to_alluvia_form</span>(<span class='no'>data</span>, <span class='no'>key</span>, <span class='no'>value</span>, <span class='no'>id</span>, <span class='kw'>distill</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
@@ -272,8 +251,7 @@ axes constitute separate variables whose values are given by the value
 variable. This function invokes <code><a href='https://tidyr.tidyverse.org/reference/spread.html'>tidyr::spread()</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other alluvial data manipulation: 
-<code><a href='self-adjoin.html'>self-adjoin</a></code></p></div>
+    <div class='dont-index'><p>Other alluvial data manipulation: <code><a href='self-adjoin.html'>self-adjoin</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Titanic data in alluvia format</span>
