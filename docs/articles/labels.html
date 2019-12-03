@@ -252,8 +252,9 @@
 ##             data$ycum[ww] &lt;- cumulate(data$y[ww])
 ##         }
 ##     }
-##     data &lt;- transform(data, ymin = ycum - abs(y)/2, ymax = ycum + 
-##         abs(y)/2, y = ycum)
+##     data$ymin &lt;- data$ycum - abs(data$y)/2
+##     data$ymax &lt;- data$ycum + abs(data$y)/2
+##     data$y &lt;- data$ycum
 ##     data$yneg &lt;- NULL
 ##     data$ycum &lt;- NULL
 ##     if (!is.null(min.height)) {
@@ -384,7 +385,7 @@
 ##  yaml          2.2.0    2018-07-25 [2] CRAN (R 3.5.0)
 ##  zeallot       0.1.0    2018-01-28 [2] CRAN (R 3.5.0)
 ## 
-## [1] /private/var/folders/gf/zt09cmj52pn18v2vlp_2d3w80000gp/T/RtmpF02FR2/temp_libpath71626516bb5
+## [1] /private/var/folders/gf/zt09cmj52pn18v2vlp_2d3w80000gp/T/RtmpS3YMyJ/temp_libpath1716641ce21a
 ## [2] /Library/Frameworks/R.framework/Versions/3.5/Resources/library</code></pre>
 </div>
   </div>
