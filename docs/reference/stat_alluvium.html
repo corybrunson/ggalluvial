@@ -37,10 +37,9 @@
 
 <meta property="og:title" content="Alluvial positions — stat_alluvium" />
 <meta property="og:description" content="Given a dataset with alluvial structure, stat_alluvium calculates the
-centroids (x and y) of the lodes, the intersections of
-the alluvia with the strata, together with their weights (heights;
-ymin and ymax). It leverages the group aesthetic for
-plotting purposes (for now)." />
+centroids (x and y) and heights (ymin and ymax) of the lodes, the
+intersections of the alluvia with the strata. It leverages the group
+aesthetic for plotting purposes (for now)." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -73,7 +72,7 @@ plotting purposes (for now)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.1</span>
       </span>
     </div>
 
@@ -132,10 +131,9 @@ plotting purposes (for now)." />
 
     <div class="ref-description">
     <p>Given a dataset with alluvial structure, <code>stat_alluvium</code> calculates the
-centroids (<code>x</code> and <code>y</code>) of the <strong>lodes</strong>, the intersections of
-the alluvia with the strata, together with their weights (heights;
-<code>ymin</code> and <code>ymax</code>). It leverages the <code>group</code> aesthetic for
-plotting purposes (for now).</p>
+centroids (<code>x</code> and <code>y</code>) and heights (<code>ymin</code> and <code>ymax</code>) of the lodes, the
+intersections of the alluvia with the strata. It leverages the <code>group</code>
+aesthetic for plotting purposes (for now).</p>
     </div>
 
     <pre class="usage"><span class='fu'>stat_alluvium</span>(
@@ -200,8 +198,8 @@ a call to a position adjustment function.</p></td>
       <th>decreasing</th>
       <td><p>Logical; whether to arrange the strata at each axis
 in the order of the variable values (<code>NA</code>, the default),
-in ascending order of total weight (largest on top, <code>FALSE</code>), or
-in descending order of total weight (largest on bottom, <code>TRUE</code>).</p></td>
+in ascending order of totals (largest on top, <code>FALSE</code>), or
+in descending order of totals (largest on bottom, <code>TRUE</code>).</p></td>
     </tr>
     <tr>
       <th>reverse</th>
@@ -283,15 +281,15 @@ form before the statistical transformation.</p></td>
     </tr>
     <tr>
       <th>min.y</th>
-      <td><p>Numeric; bounds on the heights (weights) of the
-strata to be rendered. Use these bounds to exclude strata outside a certain
-range, for example when labeling strata using <code><a href='https://ggplot2.tidyverse.org/reference/geom_text.html'>ggplot2::geom_text()</a></code>.</p></td>
+      <td><p>Numeric; bounds on the heights of the strata to be
+rendered. Use these bounds to exclude strata outside a certain range, for
+example when labeling strata using <code><a href='https://ggplot2.tidyverse.org/reference/geom_text.html'>ggplot2::geom_text()</a></code>.</p></td>
     </tr>
     <tr>
       <th>max.y</th>
-      <td><p>Numeric; bounds on the heights (weights) of the
-strata to be rendered. Use these bounds to exclude strata outside a certain
-range, for example when labeling strata using <code><a href='https://ggplot2.tidyverse.org/reference/geom_text.html'>ggplot2::geom_text()</a></code>.</p></td>
+      <td><p>Numeric; bounds on the heights of the strata to be
+rendered. Use these bounds to exclude strata outside a certain range, for
+example when labeling strata using <code><a href='https://ggplot2.tidyverse.org/reference/geom_text.html'>ggplot2::geom_text()</a></code>.</p></td>
     </tr>
     <tr>
       <th>na.rm</th>
@@ -373,6 +371,12 @@ manually set:</p><ul>
 </ul>
 
 <p>See <code><a href='https://rdrr.io/r/base/options.html'>base::options()</a></code> for how to use options.</p>
+    <h2 class="hasAnchor" id="defunct-parameters"><a class="anchor" href="#defunct-parameters"></a>Defunct parameters</h2>
+
+    
+
+<p>The previously defunct parameters <code>weight</code> and <code>aggregate.wts</code> have been
+discontinued. Use <code>y</code> and <code>cement.alluvia</code> instead.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='https://ggplot2.tidyverse.org/reference/layer.html'>ggplot2::layer()</a></code> for additional arguments and <code><a href='geom_alluvium.html'>geom_alluvium()</a></code>,
@@ -404,16 +408,16 @@ manually set:</p><ul>
                <span class='kw'>aes.bind</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>lode.guidance</span> <span class='kw'>=</span> <span class='st'>"forward"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Logical values of `aes.bind` are deprecated; replacing TRUE with 'flow'.</span></div><div class='img'><img src='stat_alluvium-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># use of lode ordering</span>
 <span class='no'>lode_ord</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>expr</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>32</span>), <span class='kw'>simplify</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>lode_ord</span>)</div><div class='output co'>#&gt; [[1]]
-#&gt;  [1] 26 15 32 29 24 10 16 21 12  7 25  8  1 19  3 11 20 13 14  6 31  4  9  5 27
-#&gt; [26] 28 30 18  2 22 23 17
+#&gt;  [1] 14 23 12 10 22  6 19  4 27 25 24  2 13 17 15 32  8  7 30 16 20 31  3  9 28
+#&gt; [26] 21  1 29 11 18  5 26
 #&gt; 
 #&gt; [[2]]
-#&gt;  [1]  3 19 12 17  9 18 24 22 29 27 15  7 25 31 16  4  2  1 30 21 28 10 11 23 14
-#&gt; [26] 32 20  8 13 26  6  5
+#&gt;  [1] 12 14  5  1 21  3 32 17 24 26 11  4 16  9 10 28 25 19 15  2 29  8 18  6 30
+#&gt; [26] 20 31 27 22 13 23  7
 #&gt; 
 #&gt; [[3]]
-#&gt;  [1] 14 19 13 11 16  8  9 18 24 10 15 20  5 21  7 31 30 12 32 22  6  4  2  1 27
-#&gt; [26]  3 26 28 29 25 17 23
+#&gt;  [1] 24 15  6 22  3 32 16 14  8 11 12  4 23  2  5 21 18 25  7 20 13 26  1 17 30
+#&gt; [26] 28  9 29 27 19 10 31
 #&gt; </div><div class='input'><span class='no'>gg</span> + <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Survived</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='no'>Sex</span>), <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
                <span class='kw'>lode.ordering</span> <span class='kw'>=</span> <span class='no'>lode_ord</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='img'><img src='stat_alluvium-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># fixed lode ordering across axes</span>
 <span class='no'>gg</span> + <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Survived</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='no'>Sex</span>), <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
@@ -474,9 +478,7 @@ manually set:</p><ul>
 <span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>babynames</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"babynames"</span>)
 <span class='co'># a discontiguous alluvium</span>
-<span class='no'>bn</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>dplyr</span><span class='kw ns'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span>(<span class='no'>babynames</span>,
-                    <span class='no'>prop</span> <span class='kw'>&gt;=</span> <span class='fl'>.01</span> <span class='kw'>&amp;</span> <span class='no'>sex</span> <span class='kw'>==</span> <span class='st'>"F"</span> <span class='kw'>&amp;</span>
-                      <span class='no'>year</span> <span class='kw'>&gt;</span> <span class='fl'>1962</span> <span class='kw'>&amp;</span> <span class='no'>year</span> <span class='kw'>&lt;</span> <span class='fl'>1968</span>)
+<span class='no'>bn</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='no'>babynames</span>, <span class='no'>prop</span> <span class='kw'>&gt;=</span> <span class='fl'>.01</span> <span class='kw'>&amp;</span> <span class='no'>sex</span> <span class='kw'>==</span> <span class='st'>"F"</span> <span class='kw'>&amp;</span> <span class='no'>year</span> <span class='kw'>&gt;</span> <span class='fl'>1962</span> <span class='kw'>&amp;</span> <span class='no'>year</span> <span class='kw'>&lt;</span> <span class='fl'>1968</span>)
 <span class='fu'>ggplot</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>bn</span>,
        <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>year</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>name</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>prop</span>)) +
   <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>name</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>name</span> <span class='kw'>==</span> <span class='st'>"Tammy"</span>),
@@ -492,7 +494,18 @@ manually set:</p><ul>
   <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>name</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='no'>name</span> <span class='kw'>==</span> <span class='st'>"Tammy"</span>),
                 <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>) +
   <span class='fu'>scale_color_manual</span>(<span class='kw'>values</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"#00000000"</span>, <span class='st'>"#000000"</span>))
-}</div></pre>
+}
+
+<span class='co'># use negative y values to encode deaths versus survivals</span>
+<span class='no'>titanic</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='no'>Titanic</span>)
+<span class='no'>titanic</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/transform.html'>transform</a></span>(<span class='no'>titanic</span>, <span class='kw'>Lives</span> <span class='kw'>=</span> <span class='no'>Freq</span> * (-<span class='fl'>1</span>) ^ (<span class='no'>Survived</span> <span class='kw'>==</span> <span class='st'>"No"</span>))
+<span class='fu'>ggplot</span>(<span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='no'>titanic</span>, <span class='no'>Class</span> <span class='kw'>!=</span> <span class='st'>"Crew"</span>),
+       <span class='fu'>aes</span>(<span class='kw'>axis1</span> <span class='kw'>=</span> <span class='no'>Class</span>, <span class='kw'>axis2</span> <span class='kw'>=</span> <span class='no'>Sex</span>, <span class='kw'>axis3</span> <span class='kw'>=</span> <span class='no'>Age</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>Lives</span>)) +
+  <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>(<span class='fu'>aes</span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='no'>Survived</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Class</span>), <span class='kw'>absolute</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>) +
+  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>absolute</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>) +
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>infer.label</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>absolute</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>) +
+  <span class='fu'>scale_x_discrete</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>), <span class='kw'>expand</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.1</span>, <span class='fl'>.05</span>)) +
+  <span class='fu'>scale_alpha_discrete</span>(<span class='kw'>range</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.25</span>, <span class='fl'>.75</span>), <span class='kw'>guide</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='img'><img src='stat_alluvium-15.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -500,6 +513,7 @@ manually set:</p><ul>
       <li><a href="#arguments">Arguments</a></li>
       <li><a href="#aesthetics">Aesthetics</a></li>
       <li><a href="#package-options">Package options</a></li>
+      <li><a href="#defunct-parameters">Defunct parameters</a></li>
       <li><a href="#see-also">See also</a></li>
       <li><a href="#examples">Examples</a></li>
     </ul>
