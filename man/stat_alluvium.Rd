@@ -212,6 +212,7 @@ ggplot(as.data.frame(Titanic),
   geom_text(stat = "stratum", infer.label = TRUE) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 
+# lode ordering examples
 gg <- ggplot(as.data.frame(Titanic),
              aes(y = Freq,
                  axis1 = Class, axis2 = Sex, axis3 = Age)) +
@@ -243,17 +244,9 @@ lode_custom <- function(n, i) {
 }
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
                aes.bind = TRUE, lode.guidance = lode_custom)
-gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
-               aes.bind = TRUE, lode.guidance = "custom")
 
 data(majors)
-# omit missing lodes and incident flows
-ggplot(majors,
-       aes(x = semester, stratum = curriculum, alluvium = student)) +
-  geom_alluvium(fill = "darkgrey", na.rm = TRUE) +
-  geom_stratum(aes(fill = curriculum), color = NA, na.rm = TRUE) +
-  theme_bw()
-# reverse the vertical axis (requires an explicit `y` aesthetic)
+# omit missing elements & reverse the `y` axis
 ggplot(majors,
        aes(x = semester, stratum = curriculum, alluvium = student, y = 1)) +
   geom_alluvium(fill = "darkgrey", na.rm = TRUE) +
@@ -261,16 +254,14 @@ ggplot(majors,
   theme_bw() +
   scale_y_reverse()
 
+# alluvium cementation examples
 gg <- ggplot(majors,
              aes(x = semester, stratum = curriculum, alluvium = student,
                  fill = curriculum)) +
   geom_stratum()
-# diagram with outlined alluvia and forward-colored flows
-gg + geom_flow(stat = "alluvium", lode.guidance = "frontback",
-               color = "black")
-# same diagram with students are cemented into cohorts
-gg + geom_flow(stat = "alluvium", lode.guidance = "frontback",
-               color = "black", cement.alluvia = TRUE)
+# diagram with outlined alluvia and labels
+gg + geom_flow(stat = "alluvium", color = "black") +
+  geom_text(aes(label = as.integer(student)), stat = "alluvium")
 # cemented diagram with default label cementation
 gg +
   geom_flow(stat = "alluvium", color = "black", cement.alluvia = TRUE) +

@@ -9,15 +9,7 @@ ggplot(as.data.frame(Titanic),
   geom_text(stat = "stratum", infer.label = TRUE) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 
-# use of lode controls
-ggplot(as.data.frame(Titanic),
-       aes(y = Freq,
-           axis1 = Class, axis2 = Sex, axis3 = Age)) +
-  geom_flow(aes(fill = Survived), aes.bind = "alluvia", reverse = FALSE) +
-  geom_stratum(reverse = FALSE) +
-  geom_text(stat = "stratum", infer.label = TRUE, reverse = FALSE) +
-  scale_x_discrete(limits = c("Class", "Sex", "Age"))
-
+# alluvium--flow comparison
 data(vaccinations)
 gg <- ggplot(vaccinations,
              aes(x = survey, stratum = response, alluvium = subject,
@@ -29,22 +21,18 @@ gg + geom_flow(stat = "alluvium", lode.guidance = "forward")
 # memoryless flows for vaccine survey data
 gg + geom_flow()
 
+# size filter examples
+gg <- ggplot(vaccinations,
+       aes(y = freq,
+           x = survey, stratum = response, alluvium = subject,
+           fill = response, label = response)) +
+  stat_stratum(alpha = .5) +
+  geom_text(stat = "stratum")
 # omit small flows
-ggplot(vaccinations,
-       aes(y = freq,
-           x = survey, stratum = response, alluvium = subject,
-           fill = response, label = response)) +
-  stat_stratum(alpha = .5) +
-  geom_flow(min.y = 50) +
-  geom_text(stat = "stratum")
+gg + geom_flow(min.y = 50)
 # omit large flows
-ggplot(vaccinations,
-       aes(y = freq,
-           x = survey, stratum = response, alluvium = subject,
-           fill = response, label = response)) +
-  stat_stratum(alpha = .5) +
-  geom_flow(max.y = 100) +
-  geom_text(stat = "stratum")
+gg + geom_flow(max.y = 100)
+
 # negate missing entries
 ggplot(vaccinations,
        aes(y = freq,
@@ -77,11 +65,3 @@ ggplot(vaccinations,
   scale_alpha_discrete(range = c(1/3, 2/3)) +
   geom_stratum(alpha = .5) +
   geom_text(stat = "stratum")
-
-data(majors)
-# omit missing lodes and incident flows
-ggplot(majors,
-       aes(x = semester, stratum = curriculum, alluvium = student)) +
-  geom_flow(fill = "darkgrey", na.rm = TRUE) +
-  geom_stratum(aes(fill = curriculum), color = NA, na.rm = TRUE) +
-  theme_bw()

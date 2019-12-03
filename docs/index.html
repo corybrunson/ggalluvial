@@ -111,8 +111,9 @@
 <p>The latest stable release can be installed from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"ggalluvial"</span>)</a></code></pre></div>
 <p>The <a href="https://github.com/corybrunson/ggalluvial/tree/cran">cran branch</a> will contain the version most recently submitted to <a href="https://cran.r-project.org/package=ggalluvial">CRAN</a>.</p>
-<p>Development versions can be installed from GitHub:</p>
+<p>The development version can be installed from GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">remotes<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/remotes/man/install_github.html">install_github</a></span>(<span class="st">"corybrunson/ggalluvial"</span>, <span class="dt">build_vignettes =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p>Note that, in order to build the vignettes, the imported packages <strong>alluvial</strong>, <strong>ggfittext</strong>, and <strong>ggrepel</strong> must be installed. To skip this step, leave <code>build_vignettes</code> unspecified or set it to <code>FALSE</code>.</p>
 <p>The <a href="https://github.com/corybrunson/ggalluvial/tree/optimization">optimization branch</a> contains a development version with experimental functions to reduce the number or area of alluvial overlaps (see issue <a href="https://github.com/corybrunson/ggalluvial/issues/6">#6</a>). Install it as follows:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">remotes<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/remotes/man/install_github.html">install_github</a></span>(<span class="st">"corybrunson/ggalluvial"</span>, <span class="dt">ref =</span> <span class="st">"optimization"</span>)</a></code></pre></div>
 <p>Note, however, that this branch has not kept pace with the <code>master</code> branch or with recent upgrades on CRAN.</p>
@@ -176,9 +177,9 @@
 <p>The documentation contains several examples; use <code><a href="https://rdrr.io/r/utils/help.html">help()</a></code> to call forth examples of any layer (<code>stat_*</code> or <code>geom_*</code>) or of the conversion functions (<code>to_*_form</code>).</p>
 </div>
 </div>
-<div id="acknowledgment" class="section level2">
+<div id="acknowledgments" class="section level2">
 <h2 class="hasAnchor">
-<a href="#acknowledgment" class="anchor"></a>Acknowledgment</h2>
+<a href="#acknowledgments" class="anchor"></a>Acknowledgments</h2>
 <div id="resources" class="section level3">
 <h3 class="hasAnchor">
 <a href="#resources" class="anchor"></a>Resources</h3>

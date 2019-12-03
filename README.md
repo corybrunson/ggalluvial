@@ -47,11 +47,15 @@ The [cran branch](https://github.com/corybrunson/ggalluvial/tree/cran)
 will contain the version most recently submitted to
 [CRAN](https://cran.r-project.org/package=ggalluvial).
 
-Development versions can be installed from GitHub:
+The development version can be installed from GitHub:
 
 ``` r
 remotes::install_github("corybrunson/ggalluvial", build_vignettes = TRUE)
 ```
+
+Note that, in order to build the vignettes, the imported packages
+**alluvial**, **ggfittext**, and **ggrepel** must be installed. To skip
+this step, leave `build_vignettes` unspecified or set it to `FALSE`.
 
 The [optimization
 branch](https://github.com/corybrunson/ggalluvial/tree/optimization)
@@ -141,7 +145,7 @@ The documentation contains several examples; use `help()` to call forth
 examples of any layer (`stat_*` or `geom_*`) or of the conversion
 functions (`to_*_form`).
 
-## Acknowledgment
+## Acknowledgments
 
 ### Resources
 
