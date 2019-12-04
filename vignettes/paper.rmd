@@ -41,6 +41,8 @@ Since alluvial diagrams were introduced, implementations and applications have b
 
 The following alluvial plot depicts several meaningful stat--geom combinations that appear in the documentation, distinguishing stat and geom defaults, other within-package pairings, and pairings with geoms from **ggplot2**:
 
+_Explain how stats and geoms interact in **ggplot2**._
+
 ```{r echo=FALSE, message=FALSE, warning=FALSE, fig.height=3, fig.width=6}
 library(ggalluvial)
 combos <- data.frame(
@@ -117,6 +119,8 @@ These plots are distinct from Sankey diagrams (they do not necessarily represent
 **ggalluvial** has seen widespread use in research and scholarship.
 Many of these uses would be served equally well by other parallel sets plots or Sankey diagrams.
 Instead, i showcase here three settings to which alluvial plots seem exceptionally well-suited, with the caveat that this subjective assessment could be refuted by visualization effectiveness research: repeated ordinal measures data, incomplete longitudinal data, and signed categorical data.
+
+_Make the caveat a separate sentence._
 
 **Repeated ordinal measures data:**
 Parallel sets plots and Sankey diagrams are commonly used to represent repeated categorical measures data. Most implementations stack each bar plot in order of name or of size, and some allow arbitrary orderings guided by the user, often with vertical space between category for easy visual discrimination. In contrast, ordinal variables are more appropriately stacked in their own intrinsic and consistent order, and, when the number of categories changes from time to time, vertical separations can obscure whether the cases and cohorts changed in number as well. A use case by @Schlotter2019, to represent changes (or not) in patients' physical limitations following an investigational right heart valve repair technique, illustrates the use of an ordinal stratum variable (a heart failure functional classification). Another, by @North2019, to represent ranked preferences among several definitions of veganism by survey respondents, illustrates the importance of consistency in order across axes (in this case preference ranks rather than time points). In both cases, the fixed heights of the bar plots conveyed that no individuals were lost to follow-up. In the next setting, the changing heights of the bar plots are an important part of the data encoded in the plot.
