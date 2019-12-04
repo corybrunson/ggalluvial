@@ -19,7 +19,16 @@ bibliography: paper.bib
 
 # Summary
 
-Alluvial plots use variable-width ribbons and stacked bar plots to represent multi-dimensional or repeated-measures data with categorical or ordinal variables [@Rosvall2010;@Bojanowski2016]. This package extends the layered grammar of graphics [@Wickham2016] to generate alluvial plots from tidy data [@Wickham2014].
+Alluvial plots use variable-width ribbons and stacked bar plots to represent multi-dimensional or repeated-measures data with categorical or ordinal variables [@Rosvall2010;@Bojanowski2016]. The **ggalluvial** package extends the layered grammar of graphics [@Wickham2016] to generate alluvial plots from tidy data [@Wickham2014].
+The package makes two key contributions to the R ecosystem, which are summarized here and discussed in more detail below.
+
+First, **ggalluvial** anchors the somewhat amorphous notion of an alluvial diagram to the rigid grammar of graphics [@Wilkinson2005], which imbues the resulting plots with greater meaning, most notably a cumulative axis, and imparts many combinatorial possibilities, e.g. with the text and point--line geoms of **ggplot2**. Moreover, the package gives users a high degree of control over the underlying statistical transformation, whereas other extensions are not so flexible.[^easy] As an extention of **ggplot2**, the package also introduces alluvial plots to a **tidyverse** workflow [@Wickham2019] by recognizing two common tidy data formats and exporting data transformation functions that follow **tidyr** and **dplyr** conventions.
+
+Second, **ggalluvial** adopts a set of conventions meant to cement some of the concepts and terms that are inconsistently applied by developers and users of Sankey diagrams, parallel sets plots, and alluvial diagrams or plots.[^startup]
+Since alluvial diagrams were introduced, implementations and applications have borrowed terminology from both previous diagram types. Instead, **ggalluvial** anchors its graphical elements to a distinctive, geological nomenclature. While this risks exacerbating confusion, the "alluvial plots" described here are, i think, distinctive enough from Sankey diagrams and parallel sets plots to warrant it. I hope that both the conventions and the terms can serve as useful points of reference as these visualization tools converge toward common standards.
+
+[^easy]: Indeed, the dependency package **easyalluvial** [@Koneswarakantha2019] was built on top of **ggalluvial** to exchange much of this flexibility for expedited data exploration using alluvial plots.
+[^startup]: Indeed, the diagrams that came to be known as parallel sets plots [@Kosara2006], consisting of parallel sequences of rectangles connected by parallelogramic ribbons, were anticipated by the "start-up state" of an interactive generator of Sankey diagrams [@Riehmann2005].
 
 ## Functionality
 
@@ -30,14 +39,14 @@ Alluvial plots use variable-width ribbons and stacked bar plots to represent mul
 * _lodes_, subdivisions of strata by their intersections with alluvia
 * _flows_, segments of alluvia between adjacent axes (excluding lodes)
 
-The following alluvial plot depicts several meaningful stat--geom combinations that appear in the documentation:
+The following alluvial plot depicts several meaningful stat--geom combinations that appear in the documentation, distinguishing stat and geom defaults, other within-package pairings, and pairings with geoms from **ggplot2**:
 
-```{r alluvial stats and geoms, echo=FALSE, message=FALSE, warning=FALSE}
+```{r echo=FALSE, message=FALSE, warning=FALSE, fig.height=3, fig.width=6}
 library(ggalluvial)
 combos <- data.frame(
   stat = c(
     rep("stratum", 2),
-    rep("alluvium", 3),
+    rep("alluvium", 4),
     "flow",
     # text geom
     c("stratum", "alluvium", "flow"),
@@ -45,21 +54,33 @@ combos <- data.frame(
     "stratum", "alluvium", "flow"
   ),
   geom = c(
-    c("stratum", "alluvium"),
-    c("stratum", "alluvium", "flow"),
+    c("stratum", "lode"),
+    c("stratum", "alluvium", "lode", "flow"),
     "flow",
     rep("text", 3),
     "errorbar", "pointrange", "pointrange"
+  ),
+  pairing = c(
+    c("default", "alluvial"),
+    c("alluvial", "default", "default", "alluvial"),
+    "default",
+    rep("external", 6)
   )
 )
-alluvials <- c("stratum", "alluvium", "flow", "lode")
-ggplot(transform(combos,
-                 both_alluvial = stat %in% alluvials & geom %in% alluvials),
-       aes(axis1 = stat, axis2 = geom)) +
-  geom_alluvium(aes(fill = both_alluvial)) +
+levs <- c("stratum", "alluvium", "lode", "flow",
+          "text", "errorbar", "pointrange")
+combos <- transform(
+  combos,
+  stat = factor(stat, levs),
+  geom = factor(geom, levs),
+  pairing = factor(pairing, c("default", "alluvial", "external"))
+)
+ggplot(combos, aes(axis1 = stat, axis2 = geom)) +
+  scale_x_discrete(limits = c("stat", "geom"), expand = c(.1, .05)) +
+  geom_alluvium(aes(fill = pairing)) +
+  scale_fill_brewer(type = "qual") +
   geom_stratum() +
   geom_text(stat = "stratum", infer.label = TRUE) +
-  scale_x_discrete(limits = c("stat", "geom"), expand = c(.1, .05)) +
   theme_minimal()
 ```
 
@@ -67,10 +88,10 @@ Note that the alluvial geoms are only paired with alluvial stats. This is becaus
 
 Most of the stat parameters control how the strata at each axis, and the lodes within each stratum, are ordered vertically. By default, these orderings are independent of differentiation aesthetics, so that layers are consistent within and across plots unless otherwise specified. [An auxiliary vignette](http://corybrunson.github.io/ggalluvial/articles/order-rectangles.html) details the effects of each of these parameters. For convenience, they can also be set as global options.
 
-## Background and definitions
+## Concepts
 
-Statistical graphics of multivariate categorical---or otherwise discrete---data tend to take one of two forms: ordinations of continuous-valued transformations (e.g. residual plots from multiple regression; ternary plots from tripartition data; biplots from correspondence analysis and factor analysis) and arrangements of length- or area-encoded shapes (e.g. mosaic plots [@Friendly2001]; product plots [@Wickham2011]; stacked area charts).
-In particular, parallel sets plots, adapted from parallel coordinates plots [@Inselberg1987;@Wegman1990] to categorical data, represent cohorts of equivalent cases as parallelograms connecting sets represented as rectangles [@Hofmann2013].
+Statistical graphics of multivariate categorical---or otherwise discrete---data tend to take one of two forms: ordinations of continuous-valued transformations (e.g. residual plots from multiple regression; ternary plots from tripartition data; biplots from correspondence analysis and factor analysis) and arrangements of length- or area-encoded shapes (e.g. mosaic plots [@Friendly2002]; product plots [@Wickham2011]; stacked area charts).
+In particular, parallel sets plots, adapted from parallel coordinates plots [@Inselberg1987;@Wegman1990] to categorical data, represent cohorts of equivalent cases as ribbons connecting sets represented as boxes [@Kosara2006].
 
 Meanwhile, visualizations of flow processes have long encoded magnitudes, such as volumes and counts, as ribbon widths, and this broad genre have come to be called Sankey diagrams [@Schmidt2008]; see <http://www.sankey-diagrams.com/> for many examples.
 A widely-used and -implemented subtype of Sankey diagram encodes longitudinal categorical data as rectangular nodes, representing categories, threaded by curved ribbons that encode the trajectories and magnitudes of cases [@Riehmann2005].
@@ -86,19 +107,19 @@ Several R packages, including **ggplot2** extensions, have been developed to gen
 
 While Sankey diagrams, parallel sets plots, and alluvial diagrams have accrued their own characteristic use cases, the terms are often used interchangeably, and there is currently no consensus on what features, if any, are distinctive to each type. Moreover, these visualization techniques in practice vary widely in their flexibility or rigidity---some rely on non-deterministic layout algorithms and can even be interactively manipulated, others are wholly determined by the data; most give the user limited control through parameter settings.
 
-The diagrams produced by **ggalluvial** are statistical graphics in the sense that they communicate statistical information using graphical methids [@Friendly2005] and, more narrowly, are uniquely determined from data by a fixed set of plotting rules [@Wilkinson2005]. The package adopts for them the less common term _alluvial plot_.[^plots]
+The diagrams produced by **ggalluvial** are statistical graphics in the sense that they communicate statistical information using graphical methods [@Friendly2005] and, more narrowly, are uniquely determined from data by a fixed set of plotting rules [@Wilkinson2005]. The package adopts for them the less common term _alluvial plot_.[^plots]
 These plots are distinct from Sankey diagrams (they do not necessarily represent flow) and constitute a subtype of parallel sets plots distinguished by two features: a strict order on the stacked elements at each axis, including both the values of the discrete variables and the ribbons connecting cases or cohorts between them; and a meaningful positional dimension along which these elements are stacked, which precludes inserting gaps between them (as is typical of most alluvial diagrams and of Sankey diagrams of a more limited type). (These features are shared by **ggparallel** and **ggpcp**.) They are also unique, to my knowledge, in rendering different plot components (usually strata and either alluvia or flows) separately, following the lower-level syntax of **ggplot2**.
 
 [^plots]: This has the unfortunate side effect of conflating search results from the geology literature.
 
-## Application
+## Applications
 
 **ggalluvial** has seen widespread use in research and scholarship.
 Many of these uses would be served equally well by other parallel sets plots or Sankey diagrams.
 Instead, i showcase here three settings to which alluvial plots seem exceptionally well-suited, with the caveat that this subjective assessment could be refuted by visualization effectiveness research: repeated ordinal measures data, incomplete longitudinal data, and signed categorical data.
 
 **Repeated ordinal measures data:**
-Parallel sets plots and Sankey diagrams are commonly used to represent repeated categorical measures data. Most implementations stack each bar plot in order of nome or of size, and some allow arbitrary orderings guided by the user, often with vertical space between category for easy visual discrimination. In contrast, ordinal variables are more appropriately stacked in their own intrinsic and consistent order, and, when the number of categories changes from time to time, vertical separations can obscure whether the cases and cohorts changed in number as well. A use case by @Schlotter2019, to represent changes (or not) in patients' physical limitations following an investigational right heart valve repair technique, illustrates the use of an ordinal stratum variable (a heart failure functional classification). Another, by @North2019, to represent ranked preferences among several definitions of veganism by survey respondents, illustrates the importance of consistency in order across axes (in this case preference ranks rather than time points). In both cases, the fixed heights of the bar plots conveyed that no individuals were lost to follow-up. In the next setting, the changing heights of the bar plots are an important part of the data encoded in the plot.
+Parallel sets plots and Sankey diagrams are commonly used to represent repeated categorical measures data. Most implementations stack each bar plot in order of name or of size, and some allow arbitrary orderings guided by the user, often with vertical space between category for easy visual discrimination. In contrast, ordinal variables are more appropriately stacked in their own intrinsic and consistent order, and, when the number of categories changes from time to time, vertical separations can obscure whether the cases and cohorts changed in number as well. A use case by @Schlotter2019, to represent changes (or not) in patients' physical limitations following an investigational right heart valve repair technique, illustrates the use of an ordinal stratum variable (a heart failure functional classification). Another, by @North2019, to represent ranked preferences among several definitions of veganism by survey respondents, illustrates the importance of consistency in order across axes (in this case preference ranks rather than time points). In both cases, the fixed heights of the bar plots conveyed that no individuals were lost to follow-up. In the next setting, the changing heights of the bar plots are an important part of the data encoded in the plot.
 <!--
 A related example is provided by @Kissinger2019, who encode the carbon footprints of 64 intra-city commutes as ribbon widths in an alluvial plot on two axes: origin and destination. The strata at each axis are the eight quarters of Tel Aviv, which are follow a municipal numbering scheme and are ordered accordingly at both axes to improve readability.
 -->
@@ -116,6 +137,6 @@ Even in cases of intermediate missingness, when a case is lost, or its value dim
 
 # Acknowledgements
 
-I am grateful to many users for their feedback on earlier versions of this package. Development benefitted from the use of resources at UConn Health, and i have been supported in part by NIH T90 training grant (5T90DE021989-07).
+I am grateful to many users for their feedback on earlier versions of this package. Development benefitted from the use of resources at UConn Health, and i have been supported in part by T90 training grant from the National Institute of Dental and Craniofacial Research (5T90DE021989-07).
 
 # References
