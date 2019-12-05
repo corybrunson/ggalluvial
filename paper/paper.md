@@ -30,32 +30,32 @@ knitr::knit("paper/paper.rmd", "paper/paper.md")
 
 # Summary
 
-Alluvial plots use variable-width ribbons and stacked bar plots to represent multi-dimensional or repeated-measures data with categorical or ordinal variables [@Rosvall2010;@Bojanowski2016]. The **ggalluvial** package extends the layered grammar of graphics [@Wickham2016] to generate alluvial plots from tidy data [@Wickham2014].
+Alluvial plots use variable-width ribbons and stacked bar plots to represent multi-dimensional or repeated-measures data with categorical or ordinal variables [@Rosvall2010;@Bojanowski2016]. The ggalluvial package extends the layered grammar of graphics [@Wickham2016] to generate alluvial plots from tidy data [@Wickham2014].
 The package makes two key contributions to the R ecosystem, which are summarized here and discussed in more detail below.
 
-First, **ggalluvial** anchors the somewhat amorphous notion of an alluvial diagram to the rigid grammar of graphics [@Wilkinson2005], which imbues the resulting plots with greater meaning, most notably a cumulative axis, and imparts many combinatorial possibilities, e.g. with the text and point--line geoms of **ggplot2**. Moreover, the package gives users a high degree of control over the underlying statistical transformation, whereas other extensions are not so flexible.[^easy] As an extention of **ggplot2**, the package also introduces alluvial plots to a **tidyverse** workflow [@Wickham2019] by recognizing two common tidy data formats and exporting data transformation functions that follow **tidyr** and **dplyr** conventions.
+First, ggalluvial anchors the somewhat amorphous notion of an alluvial diagram to the rigid grammar of graphics [@Wilkinson2005], which imbues the resulting plots with greater meaning, most notably a cumulative axis, and imparts many combinatorial possibilities, e.g. with the text and point--line geoms of ggplot2. Moreover, the package gives users a high degree of control over the underlying statistical transformation, whereas other extensions are not so flexible.[^easy] As an extention of ggplot2, the package also introduces alluvial plots to a tidyverse workflow [@Wickham2019] by recognizing two common tidy data formats and exporting data transformation functions that follow tidyr and dplyr conventions.
 
-Second, **ggalluvial** adopts a set of conventions meant to cement some of the concepts and terms that are inconsistently applied by developers and users of Sankey diagrams, parallel sets plots, and alluvial diagrams or plots.[^startup]
-Since alluvial diagrams were introduced, implementations and applications have borrowed terminology from both previous diagram types. Instead, **ggalluvial** anchors its graphical elements to a distinctive, geological nomenclature. While this risks exacerbating confusion, the "alluvial plots" described here are, i think, distinctive enough from Sankey diagrams and parallel sets plots to warrant it. I hope that both the conventions and the terms can serve as useful points of reference as these visualization tools converge toward common standards.
+Second, ggalluvial adopts a set of conventions meant to cement some of the concepts and terms that are inconsistently applied by developers and users of Sankey diagrams, parallel sets plots, and alluvial diagrams or plots.[^startup]
+Since alluvial diagrams were introduced, implementations and applications have borrowed terminology from both previous diagram types. Instead, ggalluvial anchors its graphical elements to a distinctive, geological nomenclature. While this risks exacerbating confusion, the "alluvial plots" described here are, i think, distinctive enough from Sankey diagrams and parallel sets plots to warrant it. I hope that both the conventions and the terms can serve as useful points of reference as these visualization tools converge toward common standards.
 
-[^easy]: Indeed, the dependency package **easyalluvial** [@Koneswarakantha2019] was built on top of **ggalluvial** to exchange much of this flexibility for expedited data exploration using alluvial plots.
+[^easy]: Indeed, the dependency package easyalluvial [@Koneswarakantha2019] was built on top of ggalluvial to exchange much of this flexibility for expedited data exploration using alluvial plots.
 [^startup]: Indeed, the diagrams that came to be known as parallel sets plots [@Kosara2006], consisting of parallel sequences of rectangles connected by parallelogramic ribbons, were anticipated by the "start-up state" of an interactive generator of Sankey diagrams [@Riehmann2005].
 
 ## Functionality
 
-[The titular vignette](http://corybrunson.github.io/ggalluvial/articles/ggalluvial.html) thoroughly describes and illustrates the functionality of **ggalluvial**, and the reader is encouraged to browse [the documentation](http://corybrunson.github.io/ggalluvial/reference/index.html) for more thorough illustrations. In brief, the package contains stat and geom functions to add the following layers to a **ggplot2** object:
+[The titular vignette](http://corybrunson.github.io/ggalluvial/articles/ggalluvial.html) thoroughly describes and illustrates the functionality of ggalluvial, and the reader is encouraged to browse [the documentation](http://corybrunson.github.io/ggalluvial/reference/index.html) for more thorough illustrations. In brief, the package contains stat and geom functions to add the following layers to a ggplot2 object:
 
 * _strata_, or stacked bar plots, located at each of multiple horizontal positions (_axes_ or _dimensions_)
 * _alluvia_, ribbons through strata at different axes that encode individual cases or cohorts measured along each axis
 * _lodes_, subdivisions of strata by their intersections with alluvia
 * _flows_, segments of alluvia between adjacent axes (excluding lodes)
 
-The layers of a **ggplot2** graphic are formed by pairing stats (statistical transformations of the input data) with geoms (geometric mappings from the transformed data); while every stat and geom has a conventional default, alternative pairings are the primary source of combinatorial richness for this layered grammar.
+The layers of a ggplot2 graphic are formed by pairing stats (statistical transformations of the input data) with geoms (geometric mappings from the transformed data); while every stat and geom has a conventional default, alternative pairings are the primary source of combinatorial richness for this layered grammar.
 The following alluvial plot depicts several meaningful stat--geom combinations that appear in the documentation. Default pairings, other within-package pairings, and pairings of alluvial stats with other geoms are differentiated by fill color:
 
 ![plot of chunk documented pairings with alluvial stats and geoms](paper/figures/documented pairings with alluvial stats and geoms-1.png)
 
-Note that the alluvial geoms are only paired with alluvial stats. This is because these geoms require custom aesthetics---either `stratum` and/or `alluvium` in combination with `x`, if the data are in long format, or some number of axis specifications (`axis1`, `axis2`, etc.), if the data are in wide format. Because these aesthetics are not recognized by **ggplot2**, they produce warnings under some conditions. The long (one row per lode) and wide (one row per alluvium) formats are also detailed in the vignette, and are related to each other by the pivot operations of **tidyr**.
+Note that the alluvial geoms are only paired with alluvial stats. This is because these geoms require custom aesthetics---either `stratum` and/or `alluvium` in combination with `x`, if the data are in long format, or some number of axis specifications (`axis1`, `axis2`, etc.), if the data are in wide format. Because these aesthetics are not recognized by ggplot2, they produce warnings under some conditions. The long (one row per lode) and wide (one row per alluvium) formats are also detailed in the vignette, and are related to each other by the pivot operations of tidyr.
 
 Most of the stat parameters control how the strata at each axis, and the lodes within each stratum, are ordered vertically. By default, these orderings are independent of differentiation aesthetics, so that layers are consistent within and across plots unless otherwise specified. [An auxiliary vignette](http://corybrunson.github.io/ggalluvial/articles/order-rectangles.html) details the effects of each of these parameters. For convenience, they can also be set as global options.
 
@@ -69,23 +69,23 @@ A widely-used and -implemented subtype of Sankey diagram encodes longitudinal ca
 
 Most recently, @Rosvall2010 proposed "alluvial diagrams" to visualize changes in cluster membership among cases over successive cross-sections, with cases (or cohorts) encoded as ribbons intersecting stacked bar plots at each time point. These diagrams have since been used to represent a wide range of discrete-valued data, over repeated measures or multiple dimensions (with bar plots at each categorical variable axis, arranged as in parallel sets plots).
 
-Several R packages, including **ggplot2** extensions, have been developed to generate these types of data visualizations. Here are the most relevant for this discussion:
+Several R packages, including ggplot2 extensions, have been developed to generate these types of data visualizations. Here are the most relevant for this discussion:
 
-- **alluvial** for alluvial diagrams in base R [@Bojanowski2016]
-- **ggforce** for parallel sets plots in **ggplot2** [@Pedersen2019]
-- **ggparallel** and **ggpcp** for parallel sets, hammock, and common angle plots in **ggplot2** [@Hofmann2013;@Ge2019]
-- **ggalluvial** for alluvial diagrams in **ggplot2** [@Brunson2019]
+- alluvial for alluvial diagrams in base R [@Bojanowski2016]
+- ggforce for parallel sets plots in ggplot2 [@Pedersen2019]
+- ggparallel and ggpcp for parallel sets, hammock, and common angle plots in ggplot2 [@Hofmann2013;@Ge2019]
+- ggalluvial for alluvial diagrams in ggplot2 [@Brunson2019]
 
 While Sankey diagrams, parallel sets plots, and alluvial diagrams have accrued their own characteristic use cases, the terms are often used interchangeably, and there is currently no consensus on what features, if any, are distinctive to each type. Moreover, these visualization techniques in practice vary widely in their flexibility or rigidity---some rely on non-deterministic layout algorithms and can even be interactively manipulated, others are wholly determined by the data; most give the user limited control through parameter settings.
 
-The diagrams produced by **ggalluvial** are statistical graphics in the sense that they communicate statistical information using graphical methods [@Friendly2005] and, more narrowly, are uniquely determined from data by a fixed set of plotting rules [@Wilkinson2005]. The package adopts for them the less common term _alluvial plot_.[^plots]
-These plots are distinct from Sankey diagrams (they do not necessarily represent flow) and constitute a subtype of parallel sets plots distinguished by two features: a strict order on the stacked elements at each axis, including both the values of the discrete variables and the ribbons connecting cases or cohorts between them; and a meaningful positional dimension along which these elements are stacked, which precludes inserting gaps between them (as is typical of most alluvial diagrams and of Sankey diagrams of a more limited type), features shared by **ggparallel**. The plot elements (strata, either alluvia or flows, and optionally lodes or others as discussed above) are rendered a separate layers, following the `+` syntax of **ggplot2**, a feature shared by **ggpcp**.
+The diagrams produced by ggalluvial are statistical graphics in the sense that they communicate statistical information using graphical methods [@Friendly2005] and, more narrowly, are uniquely determined from data by a fixed set of plotting rules [@Wilkinson2005]. The package adopts for them the less common term _alluvial plot_.[^plots]
+These plots are distinct from Sankey diagrams (they do not necessarily represent flow) and constitute a subtype of parallel sets plots distinguished by two features: a strict order on the stacked elements at each axis, including both the values of the discrete variables and the ribbons connecting cases or cohorts between them; and a meaningful positional dimension along which these elements are stacked, which precludes inserting gaps between them (as is typical of most alluvial diagrams and of Sankey diagrams of a more limited type), features shared by ggparallel. The plot elements (strata, either alluvia or flows, and optionally lodes or others as discussed above) are rendered a separate layers, following the `+` syntax of ggplot2, a feature shared by ggpcp.
 
 [^plots]: This has the unfortunate side effect of conflating search results from the geology literature.
 
 ## Applications
 
-**ggalluvial** has seen widespread use in research and scholarship.
+ggalluvial has seen widespread use in research and scholarship.
 While many of these uses would be served equally well by other parallel sets plots or Sankey diagrams, i showcase here three settings to which alluvial plots seem exceptionally well-suited: repeated ordinal measures data, incomplete longitudinal data, and signed categorical data.
 To be sure, this is a subjective assessment that may be refuted by visualization effectiveness research.
 
@@ -100,7 +100,7 @@ Alluvial plots very clearly delineate times at which longitudinal data are censo
 @Seekatz2018 use this feature to include in one alluvial plot a sample of _Clostridium difficile_--infected (CDI) patients who had their infections ribotyped at multiple times. Patients were classified by dominant ribotype, and the alluvial plot showcased variability in this dominant type. While all 32 patients had at least two samples taken, only 3 had four, so that the bar plots shortened with each time point.
 @Sjoding2019 use a similar plot to trace patient groups receiving mechanical ventilation based on discretized tidal volumes, including a grey stratum for patients discontinued from intubation rather than omitting them entirely from the plot.
 <!--
-Even in cases of intermediate missingness, when a case is lost, or its value diminished to zero, between two time points at which it is positively measured, alluvial diagrams can preserve the continuity of such cases by shrinking their ribbon widths to zero at the intermediate point. (See the **babynames** example in the `stat_alluvium()` examples.)
+Even in cases of intermediate missingness, when a case is lost, or its value diminished to zero, between two time points at which it is positively measured, alluvial diagrams can preserve the continuity of such cases by shrinking their ribbon widths to zero at the intermediate point. (See the example in the `stat_alluvium()` examples using the babynames package.)
 -->
 
 **Signed categorical data:**
