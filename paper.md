@@ -53,7 +53,7 @@ Since alluvial diagrams were introduced, implementations and applications have b
 The layers of a ggplot2 graphic are formed by pairing stats (statistical transformations of the input data) with geoms (geometric mappings from the transformed data); while every stat and geom has a conventional default, alternative pairings are the primary source of combinatorial richness for this layered grammar.
 The following alluvial plot depicts several meaningful stat--geom combinations that appear in the documentation. Default pairings, other within-package ("alluvial") pairings, and pairings of alluvial stats with other geoms are differentiated by `fill` color:
 
-![NA](paper/figure-1.png)
+![](paper/figure-1.png)
 
 The alluvial stats require custom aesthetics---either `stratum` and/or `alluvium` in combination with `x`, if the data are in long format, or some number of axis specifications (`axis1`, `axis2`, etc.), if the data are in wide format. Because these aesthetics are not recognized by ggplot2, they produce warnings under some conditions. The long (one row per lode) and wide (one row per alluvium) formats are also detailed in the vignette, and are related to each other by the pivot operations of tidyr. Because the alluvial geoms are highly specialized to these stats, no pairings with outside stats are currently supported.
 

@@ -59,7 +59,7 @@ Since alluvial diagrams were introduced, implementations and applications have b
 The layers of a ggplot2 graphic are formed by pairing stats (statistical transformations of the input data) with geoms (geometric mappings from the transformed data); while every stat and geom has a conventional default, alternative pairings are the primary source of combinatorial richness for this layered grammar.
 The following alluvial plot depicts several meaningful stat--geom combinations that appear in the documentation. Default pairings, other within-package ("alluvial") pairings, and pairings of alluvial stats with other geoms are differentiated by `fill` color:
 
-```{r figure, echo=FALSE, message=FALSE, warning=FALSE, fig.height=3, fig.width=6, fig.cap=NA}
+```{r figure, echo=FALSE, message=FALSE, warning=FALSE, fig.height=3, fig.width=6, fig.cap=""}
 library(ggalluvial)
 combos <- data.frame(
   stat = c(
