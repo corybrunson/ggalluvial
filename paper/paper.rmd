@@ -20,13 +20,6 @@ bibliography: paper.bib
 output: md_document
 ---
 
-<!--
-To generate `paper.md`, execute this from the console:
-```r
-knitr::knit("paper/paper.rmd", "paper/paper.md")
-```
--->
-
 ```{r, echo=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
