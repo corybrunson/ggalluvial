@@ -15,6 +15,10 @@ README.Rmd
 ^.*\.Rproj$
 ^\.Rproj\.user$
 
+# JOSS paper
+^paper$
+paper.*
+
 # hosting infrastructure
 .github
 ^_pkgdown\.yml$

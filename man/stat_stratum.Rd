@@ -4,17 +4,31 @@
 \alias{stat_stratum}
 \title{Stratum positions}
 \usage{
-stat_stratum(mapping = NULL, data = NULL, geom = "stratum",
-  position = "identity", decreasing = ggalluvial_opt("decreasing"),
+stat_stratum(
+  mapping = NULL,
+  data = NULL,
+  geom = "stratum",
+  position = "identity",
+  decreasing = ggalluvial_opt("decreasing"),
   reverse = ggalluvial_opt("reverse"),
-  absolute = ggalluvial_opt("absolute"), discern = FALSE,
-  negate.strata = NULL, infer.label = FALSE, label.strata = NULL,
-  min.y = NULL, max.y = NULL, min.height = NULL, max.height = NULL,
-  na.rm = FALSE, show.legend = NA, inherit.aes = TRUE, ...)
+  absolute = ggalluvial_opt("absolute"),
+  discern = FALSE,
+  negate.strata = NULL,
+  infer.label = FALSE,
+  label.strata = NULL,
+  min.y = NULL,
+  max.y = NULL,
+  min.height = NULL,
+  max.height = NULL,
+  na.rm = FALSE,
+  show.legend = NA,
+  inherit.aes = TRUE,
+  ...
+)
 }
 \arguments{
-\item{mapping}{Set of aesthetic mappings created by \code{\link[=aes]{aes()}} or
-\code{\link[=aes_]{aes_()}}. If specified and \code{inherit.aes = TRUE} (the
+\item{mapping}{Set of aesthetic mappings created by \code{\link[ggplot2:aes]{aes()}} or
+\code{\link[ggplot2:aes_]{aes_()}}. If specified and \code{inherit.aes = TRUE} (the
 default), it is combined with the default mapping at the top level of the
 plot. You must supply \code{mapping} if there is no plot mapping.}
 
@@ -22,11 +36,11 @@ plot. You must supply \code{mapping} if there is no plot mapping.}
 options:
 
 If \code{NULL}, the default, the data is inherited from the plot
-data as specified in the call to \code{\link[=ggplot]{ggplot()}}.
+data as specified in the call to \code{\link[ggplot2:ggplot]{ggplot()}}.
 
 A \code{data.frame}, or other object, will override the plot
 data. All objects will be fortified to produce a data frame. See
-\code{\link[=fortify]{fortify()}} for which variables will be created.
+\code{\link[ggplot2:fortify]{fortify()}} for which variables will be created.
 
 A \code{function} will be called with a single argument,
 the plot data. The return value must be a \code{data.frame}, and
@@ -89,7 +103,7 @@ display.}
 \item{inherit.aes}{If \code{FALSE}, overrides the default aesthetics,
 rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
-the default plot specification, e.g. \code{\link[=borders]{borders()}}.}
+the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 
 \item{...}{Additional arguments passed to \code{\link[ggplot2:layer]{ggplot2::layer()}}.}
 }
@@ -104,13 +118,13 @@ axis.
 of two sets of aesthetics:
 \itemize{
 \item \strong{\code{x}} and at least one of \strong{\code{alluvium}} and \strong{\code{stratum}}
-\item any number of \strong{\code{axis[0-9]*}} (\code{axis1}, \code{axis2}, etc.)
+\item any number of \strong{\verb{axis[0-9]*}} (\code{axis1}, \code{axis2}, etc.)
 }
 
 Use \code{x}, \code{alluvium}, and/or \code{stratum} for data in lodes format
-and \code{axis[0-9]*} for data in alluvia format (see \code{\link{alluvial-data}}).
+and \verb{axis[0-9]*} for data in alluvia format (see \code{\link{alluvial-data}}).
 Arguments to parameters inconsistent with the format will be ignored.
-Additionally, each \code{stat_*()} accepts the following optional
+Additionally, each \verb{stat_*()} accepts the following optional
 aesthetics:
 \itemize{
 \item \code{y}
@@ -141,9 +155,9 @@ across every layer in an alluvial plot. These package-specific options set
 global values for these parameters that will be defaulted to when not
 manually set:
 \itemize{
-\item \code{ggalluvial.decreasing} (each \code{stat_*}): defaults to \code{NA}.
-\item \code{ggalluvial.reverse} (each \code{stat_*}): defaults to \code{TRUE}.
-\item \code{ggalluvial.absolute} (each \code{stat_*}): defaults to \code{TRUE}.
+\item \code{ggalluvial.decreasing} (each \verb{stat_*}): defaults to \code{NA}.
+\item \code{ggalluvial.reverse} (each \verb{stat_*}): defaults to \code{TRUE}.
+\item \code{ggalluvial.absolute} (each \verb{stat_*}): defaults to \code{TRUE}.
 \item \code{ggalluvial.cement.alluvia} (\code{stat_alluvium}): defaults to \code{FALSE}.
 \item \code{ggalluvial.lode.guidance} (\code{stat_alluvium}): defaults to \code{"zigzag"}.
 \item \code{ggalluvial.lode.ordering} (\code{stat_alluvium}): defaults to \code{NULL}.
@@ -206,7 +220,8 @@ ggplot(admissions,
 \code{\link[ggplot2:layer]{ggplot2::layer()}} for additional arguments and
 \code{\link[=geom_stratum]{geom_stratum()}} for the corresponding geom.
 
-Other alluvial stat layers: \code{\link{stat_alluvium}},
-  \code{\link{stat_flow}}
+Other alluvial stat layers: 
+\code{\link{stat_alluvium}()},
+\code{\link{stat_flow}()}
 }
 \concept{alluvial stat layers}
