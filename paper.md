@@ -17,7 +17,6 @@ affiliations:
    index: 1
 date: 2019-12-05
 bibliography: paper.bib
-output: md_document
 ---
 
 <!--
@@ -54,7 +53,7 @@ Since alluvial diagrams were introduced, implementations and applications have b
 The layers of a ggplot2 graphic are formed by pairing stats (statistical transformations of the input data) with geoms (geometric mappings from the transformed data); while every stat and geom has a conventional default, alternative pairings are the primary source of combinatorial richness for this layered grammar.
 The following alluvial plot depicts several meaningful stat--geom combinations that appear in the documentation. Default pairings, other within-package ("alluvial") pairings, and pairings of alluvial stats with other geoms are differentiated by `fill` color:
 
-![plot of chunk figure](paper/figure-1.png)
+![NA](paper/figure-1.png)
 
 The alluvial stats require custom aesthetics---either `stratum` and/or `alluvium` in combination with `x`, if the data are in long format, or some number of axis specifications (`axis1`, `axis2`, etc.), if the data are in wide format. Because these aesthetics are not recognized by ggplot2, they produce warnings under some conditions. The long (one row per lode) and wide (one row per alluvium) formats are also detailed in the vignette, and are related to each other by the pivot operations of tidyr. Because the alluvial geoms are highly specialized to these stats, no pairings with outside stats are currently supported.
 
@@ -99,9 +98,6 @@ Parallel sets plots and Sankey diagrams are commonly used to represent repeated 
 Alluvial plots very clearly delineate times at which longitudinal data are censored, discontinued, or otherwise missing: Certain strata, or the alluvia or flows connecting them, are present at one time point but absent at a previous or future one.
 @Seekatz2018 use this feature to include in one alluvial plot a sample of _Clostridium difficile_--infected (CDI) patients who had their infections ribotyped at multiple times. Patients were classified by dominant ribotype, and the alluvial plot showcased variability in this dominant type. While all 32 patients had at least two samples taken, only 3 had four, so that the bar plots shortened with each time point.
 @Sjoding2019 use a similar plot to trace patient groups receiving mechanical ventilation based on discretized tidal volumes, including a grey stratum for patients discontinued from intubation rather than omitting them entirely from the plot.
-<!--
-Even in cases of intermediate missingness, when a case is lost, or its value diminished to zero, between two time points at which it is positively measured, alluvial diagrams can preserve the continuity of such cases by shrinking their ribbon widths to zero at the intermediate point. (See the example in the `stat_alluvium()` examples using the babynames package.)
--->
 
 **Signed categorical data:**
 @Edwards2019 recently produced a novel alluvial plot to represent changes in ownership category (owner-operated, corporate, etc.) of owners in a halibut fishery. Not only the categorical distribution but the total number of owners changed from year to year as exeters were not exactly matched by new entrants. In order to depict an accurate total but include both new entrants and exeters at each year, the authors affixed a negative stratum for the exeter category to each bar plot, below the horizontal axis. Such a feature has no analogue in Sankey diagrams or parallel sets plots (which do not commonly employ a cumulative axis) but potentially wide-ranging applications: Bar plots may include both "positive" and "negative" bars to represent definitionally negative groups, such as revenues versus deficits, or to contrast the bars divided along a binary variable such as gender across age groups in a population (so-called "pyramid plots"). Alluvial plots provide a way to track cases and cohorts across such bar plots, even when cases may change sign. Future use cases may demonstrate the practical utility of this functionality.
