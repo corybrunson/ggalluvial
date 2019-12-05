@@ -65,7 +65,7 @@ documentation. Default pairings, other within-package (“alluvial”)
 pairings, and pairings of alluvial stats with other geoms are
 differentiated by `fill` color:
 
-![](paper/figures/figure-1.png)
+![](paper/figure-1.png)
 
 The alluvial stats require custom aesthetics—either `stratum` and/or
 `alluvium` in combination with `x`, if the data are in long format, or
