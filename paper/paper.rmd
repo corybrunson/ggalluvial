@@ -1,11 +1,13 @@
 ---
-title: "ggalluvial: A Layered Grammar of Alluvial Plots"
+title: "ggalluvial: A Layered Grammar for Alluvial Plots"
 tags:
   - R
   - ggplot2
   - alluvial plots
+  - statistical graphics
+  - data visualization
   - repeated measures data
-  - categorical data visualization
+  - categorical data
 authors:
   - name: Jason Cory Brunson
     orcid: 0000-0003-3126-9494
@@ -13,9 +15,24 @@ authors:
 affiliations:
  - name: Center for Quantitative Medicine, UConn Health
    index: 1
-date: 25 November 2019
+date: 2019-12-05
 bibliography: paper.bib
 ---
+
+<!--
+To generate `paper.md`, execute this from the console:
+```r
+knitr::knit("paper/paper.rmd", "paper/paper.md")
+```
+-->
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "paper/figures/"
+)
+```
 
 # Summary
 
@@ -34,7 +51,7 @@ Since alluvial diagrams were introduced, implementations and applications have b
 
 [The titular vignette](http://corybrunson.github.io/ggalluvial/articles/ggalluvial.html) thoroughly describes and illustrates the functionality of **ggalluvial**, and the reader is encouraged to browse [the documentation](http://corybrunson.github.io/ggalluvial/reference/index.html) for more thorough illustrations. In brief, the package contains stat and geom functions to add the following layers to a **ggplot2** object:
 
-* _strata_, or stacked bar plots, located at each of multiple horizontal positions (_axes_)
+* _strata_, or stacked bar plots, located at each of multiple horizontal positions (_axes_ or _dimensions_)
 * _alluvia_, ribbons through strata at different axes that encode individual cases or cohorts measured along each axis
 * _lodes_, subdivisions of strata by their intersections with alluvia
 * _flows_, segments of alluvia between adjacent axes (excluding lodes)
@@ -42,7 +59,7 @@ Since alluvial diagrams were introduced, implementations and applications have b
 The layers of a **ggplot2** graphic are formed by pairing stats (statistical transformations of the input data) with geoms (geometric mappings from the transformed data); while every stat and geom has a conventional default, alternative pairings are the primary source of combinatorial richness for this layered grammar.
 The following alluvial plot depicts several meaningful stat--geom combinations that appear in the documentation. Default pairings, other within-package pairings, and pairings of alluvial stats with other geoms are differentiated by fill color:
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, fig.height=3, fig.width=6}
+```{r documented pairings with alluvial stats and geoms, echo=FALSE, message=FALSE, warning=FALSE, fig.height=3, fig.width=6}
 library(ggalluvial)
 combos <- data.frame(
   stat = c(
@@ -109,7 +126,7 @@ Several R packages, including **ggplot2** extensions, have been developed to gen
 While Sankey diagrams, parallel sets plots, and alluvial diagrams have accrued their own characteristic use cases, the terms are often used interchangeably, and there is currently no consensus on what features, if any, are distinctive to each type. Moreover, these visualization techniques in practice vary widely in their flexibility or rigidity---some rely on non-deterministic layout algorithms and can even be interactively manipulated, others are wholly determined by the data; most give the user limited control through parameter settings.
 
 The diagrams produced by **ggalluvial** are statistical graphics in the sense that they communicate statistical information using graphical methods [@Friendly2005] and, more narrowly, are uniquely determined from data by a fixed set of plotting rules [@Wilkinson2005]. The package adopts for them the less common term _alluvial plot_.[^plots]
-These plots are distinct from Sankey diagrams (they do not necessarily represent flow) and constitute a subtype of parallel sets plots distinguished by two features: a strict order on the stacked elements at each axis, including both the values of the discrete variables and the ribbons connecting cases or cohorts between them; and a meaningful positional dimension along which these elements are stacked, which precludes inserting gaps between them (as is typical of most alluvial diagrams and of Sankey diagrams of a more limited type). (These features are shared by **ggparallel** and **ggpcp**.) They are also unique, to my knowledge, in rendering different plot components (usually strata and either alluvia or flows) separately, following the lower-level syntax of **ggplot2**.
+These plots are distinct from Sankey diagrams (they do not necessarily represent flow) and constitute a subtype of parallel sets plots distinguished by two features: a strict order on the stacked elements at each axis, including both the values of the discrete variables and the ribbons connecting cases or cohorts between them; and a meaningful positional dimension along which these elements are stacked, which precludes inserting gaps between them (as is typical of most alluvial diagrams and of Sankey diagrams of a more limited type), features shared by **ggparallel**. The plot elements (strata, either alluvia or flows, and optionally lodes or others as discussed above) are rendered a separate layers, following the `+` syntax of **ggplot2**, a feature shared by **ggpcp**.
 
 [^plots]: This has the unfortunate side effect of conflating search results from the geology literature.
 
@@ -138,6 +155,6 @@ Even in cases of intermediate missingness, when a case is lost, or its value dim
 
 # Acknowledgments
 
-I am grateful to many users for their feedback on earlier versions of this package. Development benefitted from the use of resources at UConn Health, and i have been supported in part by T90 training grant from the National Institute of Dental and Craniofacial Research (5T90DE021989-07).
+I am grateful to many users for their feedback on every version of this package. Development benefitted from the use of resources and support of colleagues at UConn Health, and i have been supported in part by T90 training grant from the National Institute of Dental and Craniofacial Research (5T90DE021989-07).
 
 # References
