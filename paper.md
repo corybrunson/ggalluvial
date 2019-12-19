@@ -1,5 +1,5 @@
 ---
-title: "ggalluvial: Layered Grammar for Alluvial Plots"
+title: "Layered Grammar for Alluvial Plots"
 tags:
   - R
   - ggplot2

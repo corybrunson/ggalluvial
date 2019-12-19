@@ -1,5 +1,5 @@
 ---
-title: "ggalluvial: Layered Grammar for Alluvial Plots"
+title: "Layered Grammar for Alluvial Plots"
 tags:
   - R
   - ggplot2
@@ -54,7 +54,7 @@ Second, ggalluvial adopts a distinctive geological nomenclature to distinguish "
 Plot layers are formed by pairing stats (statistical transformations) with geoms (mappings to graphical elements and properties); while every stat and geom has a conventional default, alternative grammatical pairings provide combinatorial richness to plotting possibilities.
 The following alluvial plot depicts several meaningful stat--geom combinations from the documentation. Default pairings, other within-package ("alluvial") pairings, and pairings of alluvial stats with other geoms are differentiated by color:
 
-```{r figure, echo=FALSE, message=FALSE, warning=FALSE, fig.height=3, fig.width=6, fig.cap=""}
+```{r figure, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8, fig.cap=""}
 library(ggalluvial)
 combos <- data.frame(
   stat = c(
