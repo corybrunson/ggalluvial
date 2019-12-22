@@ -255,31 +255,17 @@ agg_fun <- function(x) {
 }
 
 # single unique value, or else NA
-only <- function(x) UseMethod("only")
-
-only.numeric <- function(x) {
+only <- function(x) {
   uniq <- unique(x)
   if (length(uniq) == 1L) {
     uniq
   } else {
-    if (is.integer(x)) NA_integer_ else NA_real_
-  }
-}
-
-only.character <- function(x) {
-  uniq <- unique(x)
-  if (length(uniq) == 1L) {
-    uniq
-  } else {
-    NA_character_
-  }
-}
-
-only.factor <- function(x) {
-  uniq <- unique(x)
-  if (length(uniq) == 1L) {
-    uniq
-  } else {
-    factor(NA_character_, levels = levels(x))
+    switch(
+      class(x),
+      integer = NA_integer_,
+      numeric = NA_real_,
+      character = NA_character_,
+      factor = factor(NA_character_, levels = levels(x))
+    )
   }
 }
