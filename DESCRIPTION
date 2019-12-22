@@ -38,7 +38,7 @@ Suggests:
     ggrepel,
     ggfittext (>= 0.6),
     vdiffr (>= 0.2)
-License: GPL-3
+License: GPL-3 + file LICENSE
 URL: http://corybrunson.github.io/ggalluvial/
 BugReports: https://github.com/corybrunson/ggalluvial/issues
 VignetteBuilder: knitr
