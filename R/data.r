@@ -1,7 +1,8 @@
 #' Influenza vaccination rates
 #'
-#' This is a sample from the RAND ALP surveys on influenza vaccination,
-#' kindly contributed by Raffaele Vardavas.
+#' This data set is aggregated from a longitudinal sample from three RAND
+#' American Life Panel surveys that included questions on influenza vaccination.
+#' The data were kindly contributed by Raffaele Vardavas.
 #'
 #' @format An alluvial data frame in lodes form.
 #' @source RAND American Life Panel <https://alpdata.rand.org/>
@@ -10,8 +11,8 @@ NULL
 
 #' Student curricula across semesters
 #'
-#' This dataset, kindly contributed by Dario Bonaretti, follows the curricula of
-#' 10 students across 8 academic semesters.
+#' This data set follows the major curricula of 10 students across 8 academic
+#' semesters. The data were kindly contributed by Dario Bonaretti.
 #'
 #' @format An alluvial data frame in lodes form.
 #' @name majors
