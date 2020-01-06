@@ -104,7 +104,7 @@ The alluvial stats require custom aesthetics---either `stratum` and/or `alluvium
 
 Most of the stat parameters control how the strata at each axis, and the lodes within each stratum, are ordered vertically. By default, these orderings are independent of differentiation aesthetics, so that layers are consistent within and across plots unless otherwise specified. [An auxiliary vignette](http://corybrunson.github.io/ggalluvial/articles/order-rectangles.html) details the effects of these parameters. They can also be set as global options.
 
-While questions and requests by users have prompted many improvements, the current version is feature complete with one exception: Alternative flow elements will be implemented and controlled by a new parameter. The current splines will remain the default.
+While questions and requests by users have prompted many improvements, the current version is feature complete with one exception: improvements and alternatives to the flow elements connecting lodes. The current splines will remain the default.
 
 ## Concepts
 
