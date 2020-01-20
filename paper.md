@@ -79,7 +79,7 @@ Arguably, the extensions are better understood as producing a different type of 
 
 [^exceptions]: There are exceptions. For example, the jitter geom in ggplot2 introduces randomness to symbol positions, and the repel geoms of ggrepel [@Slowikowski2019] use heuristic algorithms to position text.
 
-Parallel sets plots might be viewed as a special subtype of Sankey diagram with the following features: Ribbons proceed monotonically along one dimension, and e very ribbon encounters a box at every axis. These graphical constraints correspond to combinatorial constraints on the data, which amount to a id--key--value structure in which every id--key pair takes exactly one value (possibly 0 or `NA`).
+Parallel sets plots might be viewed as a special subtype of Sankey diagram with the following features: Ribbons proceed monotonically along one dimension, and every ribbon encounters a box at every axis. These graphical constraints correspond to combinatorial constraints on the data, which amount to a id--key--value structure in which every id--key pair takes exactly one value (possibly 0 or `NA`).
 In this sense, the plots produced by the ggplot2 extensions (and by the alluvial package) are parallel sets plots: Cohorts are partitioned into categories at each axis and connected by ribbons whose widths encode their magnitudes.[^hammock]
 
 The plots produced still vary---in the shapes of ribbons, the arrangements of boxes, and the presence of gaps between boxes at the same axis.
