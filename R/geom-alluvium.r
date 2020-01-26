@@ -18,6 +18,9 @@
 #' @param knot.pos The horizontal distance between a stratum (`width/2`
 #'   from its axis) and the knot of the x-spline, as a proportion of the
 #'   separation between strata. Defaults to 1/6.
+#' @param knot.fix Logical; whether to interpret `knot.pos` as a fixed value,
+#'   rather than (the default) as a proportion of the separation between
+#'   adjacent axes.
 #' @example inst/examples/ex-geom-alluvium.r
 #' @export
 geom_alluvium <- function(mapping = NULL,
@@ -25,7 +28,7 @@ geom_alluvium <- function(mapping = NULL,
                           stat = "alluvium",
                           position = "identity",
                           width = 1/3,
-                          knot.pos = 1/6,
+                          knot.pos = 1/6, knot.fix = FALSE,
                           na.rm = FALSE,
                           show.legend = NA,
                           inherit.aes = TRUE,
@@ -41,6 +44,7 @@ geom_alluvium <- function(mapping = NULL,
     params = list(
       width = width,
       knot.pos = knot.pos,
+      knot.fix = knot.fix,
       na.rm = na.rm,
       ...
     )
@@ -85,7 +89,8 @@ GeomAlluvium <- ggproto(
   },
   
   draw_group = function(self, data, panel_scales, coord,
-                        width = 1/3, knot.pos = 1/6) {
+                        width = 1/3,
+                        knot.pos = 1/6, knot.fix = FALSE) {
     
     # add width to data
     data <- transform(data, width = width)
@@ -105,7 +110,7 @@ GeomAlluvium <- ggproto(
       ))
     } else {
       # spline coordinates (more than one axis)
-      spline_data <- data_to_xspl(data)
+      spline_data <- data_to_xspl(data, knot.fix)
     }
     data <- data.frame(first_row, spline_data)
     
@@ -127,9 +132,11 @@ GeomAlluvium <- ggproto(
 )
 
 # x-spline coordinates from data
-data_to_xspl <- function(data) {
+data_to_xspl <- function(data, knot.fix) {
   w_oneway <- rep(data$width, c(3, rep(4, nrow(data) - 2), 3))
   k_oneway <- rep(data$knot.pos, c(3, rep(4, nrow(data) - 2), 3))
+  if (! knot.fix)
+    k_oneway <- k_oneway * rep(diff(data$x), c(5, rep(4, nrow(data) - 3), 5))
   x_oneway <- rep(data$x, c(3, rep(4, nrow(data) - 2), 3)) +
     w_oneway / 2 * c(-1, rep(c(1, 1, -1, -1), nrow(data) - 1), 1) +
     k_oneway * (1 - w_oneway) * c(0, rep(c(0, 1, -1, 0), nrow(data) - 1), 0)

@@ -23,6 +23,11 @@ names(wph) <- c("Year", "Region", "Telephones")
 ggplot(wph,
        aes(x = Year, alluvium = Region, y = Telephones)) +
   geom_flow(aes(fill = Region, colour = Region), width = 0)
+# treat 'Year' as a number rather than as a factor
+wph$Year <- as.integer(as.character(wph$Year))
+ggplot(wph,
+       aes(x = Year, alluvium = Region, y = Telephones)) +
+  geom_flow(aes(fill = Region, colour = Region), width = 0)
 
 # rightward flow aesthetics for vaccine survey data
 data(vaccinations)

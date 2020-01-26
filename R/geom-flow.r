@@ -26,7 +26,7 @@ geom_flow <- function(mapping = NULL,
                       stat = "flow",
                       position = "identity",
                       width = 1/3,
-                      knot.pos = 1/6,
+                      knot.pos = 1/6, knot.fix = FALSE,
                       aes.flow = "forward",
                       na.rm = FALSE,
                       show.legend = NA,
@@ -46,6 +46,7 @@ geom_flow <- function(mapping = NULL,
     params = list(
       width = width,
       knot.pos = knot.pos,
+      knot.fix = knot.fix,
       aes.flow = aes.flow,
       na.rm = na.rm,
       ...
@@ -82,7 +83,8 @@ GeomFlow <- ggproto(
   },
   
   draw_panel = function(self, data, panel_params, coord,
-                        width = 1/3, aes.flow = "forward", knot.pos = 1/6) {
+                        width = 1/3, aes.flow = "forward",
+                        knot.pos = 1/6, knot.fix = FALSE) {
     
     # exclude one-sided flows
     data <- data[complete.cases(data), ]
