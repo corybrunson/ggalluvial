@@ -117,7 +117,8 @@ GeomFlow <- ggproto(
       # spline paths and aesthetics
       xspl <- knots_to_xspl(row$xmax.0, row$xmin.1,
                             row$ymin.0, row$ymax.0, row$ymin.1, row$ymax.1,
-                            row$knot.pos.0, row$knot.pos.1)
+                            row$knot.pos.0, row$knot.pos.1,
+                            knot.fix = knot.fix)
       aes <- as.data.frame(row[flow_aes],
                            stringsAsFactors = FALSE)[rep(1, 8), ]
       f_data <- cbind(xspl, aes)
@@ -144,3 +145,19 @@ GeomFlow <- ggproto(
   
   draw_key = draw_key_polygon
 )
+
+# x-spline coordinates from 2 x bounds, 4 y bounds, and knot position
+knots_to_xspl <- function(
+  x0, x1, ymin0, ymax0, ymin1, ymax1, kp0, kp1,
+  knot.fix
+) {
+  k_oneway <- c(0, kp0, -kp1, 0)
+  if (knot.fix) k_oneway <- k_oneway * (x1 - x0)
+  x_oneway <- rep(c(x0, x1), each = 2) + k_oneway
+  #x_oneway <- c(x0, x0 + kp0, x1 - kp1, x1)
+  data.frame(
+    x = c(x_oneway, rev(x_oneway)),
+    y = c(ymin0, ymin0, ymin1, ymin1, ymax1, ymax1, ymax0, ymax0),
+    shape = rep(c(0, 1, 1, 0), times = 2)
+  )
+}
