@@ -1,6 +1,10 @@
 
 # next version (v1.0.0?)
 
+# ggalluvial 0.11.2
+
+The function `self_adjoin()` is debugged for use with a continuous-valued `x` variable. An example, taking `x` to be the date of each vaccination survey in `vaccinations`, is documented with `stat_stratum()`.
+
 # ggalluvial 0.11.1
 
 This patch fixes a bug with including negative observations in alluvia-form data due to outdated code that prohibited negative `y` values. This was discovered while drafting two examples of this usage, which are included in the documentation.

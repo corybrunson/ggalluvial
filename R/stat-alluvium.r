@@ -265,9 +265,14 @@ StatAlluvium <- ggproto(
     } else {
       rownames(lode.ordering)
     }
+    # match `lode_ord$x` back to `data$x`
+    uniq_x <- sort(unique(data$x))
     lode_ord <- tidyr::gather(lode_ord,
                               key = "x", value = "rem_deposit",
-                              as.character(sort(unique(data$x))))
+                              as.character(uniq_x))
+    match_x <- match(lode_ord$x, as.character(uniq_x))
+    lode_ord$x <- uniq_x[match_x]
+    # merge `lode_ord` back into `data`
     data <- merge(data, lode_ord, by = c("x", "alluvium"),
                   all.x = TRUE, all.y = FALSE)
     

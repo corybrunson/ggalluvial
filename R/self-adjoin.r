@@ -34,20 +34,27 @@ self_adjoin <- function(
   keep.x = NULL, keep.y = NULL,
   suffix = c(".x", ".y")
 ) {
-  # ensure that `key` is coercible to numeric
   key_var <- tidyselect::vars_pull(names(data), !! rlang::enquo(key))
-  key_num <- data[[key_var]]
-  if (is.character(key_num)) key_num <- as.factor(key_num)
-  key_num <- as.numeric(key_num)
+  
+  # ensure that `key` is coercible to numeric
+  #key_num <- data[[key_var]]
+  #if (is.character(key_num)) key_num <- as.factor(key_num)
+  #key_num <- as.numeric(key_num)
+  
+  # identify unique values of `key` in order
+  uniq_key <- sort(unique(data[[key_var]]))
+  key_num <- match(data[[key_var]], uniq_key)
   
   # select datasets `x` and `y`
   x <- transform(data, step = key_num)[, c("step", by, link, keep.x)]
   y <- transform(data, step = key_num - 1)[, c("step", by, link, keep.y)]
   
   # return inner join of `x` and `y`
-  dplyr::inner_join(
+  adj <- dplyr::inner_join(
     x, y,
     by = c("step", by),
     suffix = suffix
   )
+  adj$step <- uniq_key[adj$step]
+  adj
 }

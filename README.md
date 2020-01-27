@@ -94,12 +94,10 @@ ggplot(data = titanic_wide,
   scale_x_discrete(limits = c("Class", "Sex", "Age"), expand = c(.1, .05)) +
   xlab("Demographic") +
   geom_alluvium(aes(fill = Survived)) +
-  geom_stratum() + geom_text(stat = "stratum", label.strata = TRUE) +
+  geom_stratum() + geom_text(stat = "stratum", infer.label = TRUE) +
   theme_minimal() +
   ggtitle("passengers on the maiden voyage of the Titanic",
           "stratified by demographics and survival")
-#> Warning: The parameter `label.strata` is deprecated.
-#> Pass arguments to `infer.label` instead.
 ```
 
 ![](man/figures/README-unnamed-chunk-6-1.png)<!-- -->

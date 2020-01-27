@@ -85,6 +85,10 @@ GeomFlow <- ggproto(
   draw_panel = function(self, data, panel_params, coord,
                         width = 1/3, aes.flow = "forward",
                         knot.pos = 1/6, knot.fix = FALSE) {
+    save(data, panel_params, coord,
+         width, aes.flow, knot.pos, knot.fix,
+         file = "draw-panel.rda")
+    load("draw-panel.rda")
     
     # exclude one-sided flows
     data <- data[complete.cases(data), ]
@@ -152,7 +156,7 @@ knots_to_xspl <- function(
   knot.fix
 ) {
   k_oneway <- c(0, kp0, -kp1, 0)
-  if (knot.fix) k_oneway <- k_oneway * (x1 - x0)
+  if (! knot.fix) k_oneway <- k_oneway * (x1 - x0)
   x_oneway <- rep(c(x0, x1), each = 2) + k_oneway
   #x_oneway <- c(x0, x0 + kp0, x1 - kp1, x1)
   data.frame(
