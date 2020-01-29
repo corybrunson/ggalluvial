@@ -27,6 +27,7 @@ geom_flow <- function(mapping = NULL,
                       position = "identity",
                       width = 1/3,
                       knot.pos = 1/6, knot.fix = FALSE,
+                      curve = "xspline", reach = NULL, segments = 24,
                       aes.flow = "forward",
                       na.rm = FALSE,
                       show.legend = NA,
@@ -47,6 +48,9 @@ geom_flow <- function(mapping = NULL,
       width = width,
       knot.pos = knot.pos,
       knot.fix = knot.fix,
+      curve = curve,
+      reach = reach,
+      segments = segments,
       aes.flow = aes.flow,
       na.rm = na.rm,
       ...
@@ -84,11 +88,8 @@ GeomFlow <- ggproto(
   
   draw_panel = function(self, data, panel_params, coord,
                         width = 1/3, aes.flow = "forward",
-                        knot.pos = 1/6, knot.fix = FALSE) {
-    save(data, panel_params, coord,
-         width, aes.flow, knot.pos, knot.fix,
-         file = "draw-panel.rda")
-    load("draw-panel.rda")
+                        knot.pos = 1/6, knot.fix = FALSE,
+                        curve = "xspline", reach = NULL, segments = 24) {
     
     # exclude one-sided flows
     data <- data[complete.cases(data), ]
@@ -115,17 +116,19 @@ GeomFlow <- ggproto(
       function(x) factor(x, levels = unique(x))
     )), ]
     
-    # construct spline grobs
-    xspls <- plyr::alply(data, 1, function(row) {
+    # construct x-spline grobs
+    grobs <- plyr::alply(data, 1, function(row) {
       
-      # spline paths and aesthetics
-      xspl <- knots_to_xspl(row$xmax.0, row$xmin.1,
-                            row$ymin.0, row$ymax.0, row$ymin.1, row$ymax.1,
-                            row$knot.pos.0, row$knot.pos.1,
-                            knot.fix = knot.fix)
-      aes <- as.data.frame(row[flow_aes],
-                           stringsAsFactors = FALSE)[rep(1, 8), ]
-      f_data <- cbind(xspl, aes)
+      # path of spline or unit curve
+      f_path <- row_to_curve(row$xmax.0, row$xmin.1,
+                             row$ymin.0, row$ymax.0, row$ymin.1, row$ymax.1,
+                             row$knot.pos.0, row$knot.pos.1,
+                             curve = curve, reach = reach, segments = segments,
+                             knot.fix = knot.fix)
+      # aesthetics
+      aes <- as.data.frame(row[flow_aes], stringsAsFactors = FALSE)
+      # join aesthetics to path
+      f_data <- cbind(f_path, aes[rep(1, nrow(f_path)), ])
       
       # transform (after calculating spline paths)
       f_coords <- coord$transform(f_data, panel_params)
@@ -142,7 +145,7 @@ GeomFlow <- ggproto(
     })
     
     # combine spline grobs
-    grob <- do.call(grid::grobTree, xspls)
+    grob <- do.call(grid::grobTree, grobs)
     grob$name <- grid::grobName(grob, "xspline")
     grob
   },
@@ -150,18 +153,48 @@ GeomFlow <- ggproto(
   draw_key = draw_key_polygon
 )
 
-# x-spline coordinates from 2 x bounds, 4 y bounds, and knot position
-knots_to_xspl <- function(
+# send to spline or unit curve depending on parameters
+row_to_curve <- function(
   x0, x1, ymin0, ymax0, ymin1, ymax1, kp0, kp1,
-  knot.fix
+  curve, reach, segments, knot.fix
+) {
+  if (curve %in% c("spline", "xspline")) {
+    # x-spline path
+    row_to_xspline(x0, x1, ymin0, ymax0, ymin1, ymax1,
+                   kp0, kp1, knot.fix)
+  } else {
+    # unit curve path
+    row_to_unit_curve(x0, x1, ymin0, ymax0, ymin1, ymax1,
+                      curve, reach, segments)
+  }
+}
+
+row_to_xspline <- function(
+  x0, x1, ymin0, ymax0, ymin1, ymax1,
+  kp0, kp1, knot.fix
 ) {
   k_oneway <- c(0, kp0, -kp1, 0)
   if (! knot.fix) k_oneway <- k_oneway * (x1 - x0)
   x_oneway <- rep(c(x0, x1), each = 2) + k_oneway
-  #x_oneway <- c(x0, x0 + kp0, x1 - kp1, x1)
   data.frame(
     x = c(x_oneway, rev(x_oneway)),
     y = c(ymin0, ymin0, ymin1, ymin1, ymax1, ymax1, ymax0, ymax0),
     shape = rep(c(0, 1, 1, 0), times = 2)
+  )
+}
+
+row_to_unit_curve <- function(
+  x0, x1, ymin0, ymax0, ymin1, ymax1,
+  curve, reach, segments
+) {
+  curve_fun <- make_curve_fun(curve, reach)
+  i_oneway <- seq(0, 1, length.out = segments + 1)
+  f_oneway <- curve_fun(i_oneway)
+  x_oneway <- x0 + (x1 - x0) * i_oneway
+  data.frame(
+    x = c(x_oneway, rev(x_oneway)),
+    y = c(ymin0 + (ymin1 - ymin0) * f_oneway,
+          ymax1 + (ymax0 - ymax1) * f_oneway),
+    shape = 0
   )
 }

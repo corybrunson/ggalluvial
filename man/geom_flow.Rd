@@ -11,6 +11,10 @@ geom_flow(
   position = "identity",
   width = 1/3,
   knot.pos = 1/6,
+  knot.fix = FALSE,
+  curve = "xspline",
+  reach = NULL,
+  segments = 24,
   aes.flow = "forward",
   na.rm = FALSE,
   show.legend = NA,
@@ -51,6 +55,26 @@ distance between axes. Defaults to 1/3.}
 \item{knot.pos}{The horizontal distance between a stratum (\code{width/2}
 from its axis) and the knot of the x-spline, as a proportion of the
 separation between strata. Defaults to 1/6.}
+
+\item{knot.fix}{Logical; whether to interpret \code{knot.pos} as a fixed value,
+rather than (the default) as a proportion of the separation between
+adjacent axes.}
+
+\item{curve}{Character; the type of curve used to produce flows. Defaults to
+\code{"xspline"} and can be alternatively set to one of \code{"linear"}, \code{"cubic"},
+\code{"quintic"}, \code{"sine"}, \code{"arctangent"}, and \code{"sigmoid"}. Only the
+\code{"xspline"} option uses the \verb{knot.*} parameters, while only the alternative
+curves use the \code{segments} parameter, and only \code{"arctangent"} and
+\code{"sigmoid"} use the \code{reach} parameter.}
+
+\item{reach}{For alternative \code{curve}s based on asymptotic functions, the
+value along the asymptote at which to truncate the function to obtain the
+shape that will be scaled to fit between strata. Larger values result in
+greater compression and steeper slopes. The \code{NULL} default will be changed
+to \code{sqrt(3)} for \code{"arctangent"} and to \code{3} for \code{"sigmoid"}.}
+
+\item{segments}{The number of segments to be used in drawing each alternative
+curve (each curved boundary of each flow).}
 
 \item{aes.flow}{Character; how inter-lode flows assume aesthetics from lodes.
 Options are "forward" and "backward".}
@@ -131,6 +155,12 @@ ggplot(as.data.frame(Titanic),
 # time series alluvia of WorldPhones data
 wph <- as.data.frame(as.table(WorldPhones))
 names(wph) <- c("Year", "Region", "Telephones")
+ggplot(wph,
+       aes(x = Year, alluvium = Region, y = Telephones)) +
+  geom_flow(aes(fill = Region, colour = Region), width = 0)
+# treat 'Year' as a number rather than as a factor
+# -+- debug this example -+-
+wph$Year <- as.integer(as.character(wph$Year))
 ggplot(wph,
        aes(x = Year, alluvium = Region, y = Telephones)) +
   geom_flow(aes(fill = Region, colour = Region), width = 0)

@@ -11,6 +11,10 @@ geom_alluvium(
   position = "identity",
   width = 1/3,
   knot.pos = 1/6,
+  knot.fix = FALSE,
+  curve = "xspline",
+  reach = NULL,
+  segments = 24,
   na.rm = FALSE,
   show.legend = NA,
   inherit.aes = TRUE,
@@ -50,6 +54,26 @@ distance between axes. Defaults to 1/3.}
 \item{knot.pos}{The horizontal distance between a stratum (\code{width/2}
 from its axis) and the knot of the x-spline, as a proportion of the
 separation between strata. Defaults to 1/6.}
+
+\item{knot.fix}{Logical; whether to interpret \code{knot.pos} as a fixed value,
+rather than (the default) as a proportion of the separation between
+adjacent axes.}
+
+\item{curve}{Character; the type of curve used to produce flows. Defaults to
+\code{"xspline"} and can be alternatively set to one of \code{"linear"}, \code{"cubic"},
+\code{"quintic"}, \code{"sine"}, \code{"arctangent"}, and \code{"sigmoid"}. Only the
+\code{"xspline"} option uses the \verb{knot.*} parameters, while only the alternative
+curves use the \code{segments} parameter, and only \code{"arctangent"} and
+\code{"sigmoid"} use the \code{reach} parameter.}
+
+\item{reach}{For alternative \code{curve}s based on asymptotic functions, the
+value along the asymptote at which to truncate the function to obtain the
+shape that will be scaled to fit between strata. Larger values result in
+greater compression and steeper slopes. The \code{NULL} default will be changed
+to \code{sqrt(3)} for \code{"arctangent"} and to \code{3} for \code{"sigmoid"}.}
+
+\item{segments}{The number of segments to be used in drawing each alternative
+curve (each curved boundary of each flow).}
 
 \item{na.rm}{Logical:
 if \code{FALSE}, the default, \code{NA} lodes are not included;
@@ -119,6 +143,25 @@ gg + geom_alluvium(aes(fill = country, colour = country),
 # time series line plot of refugees data, sorted by country
 gg + geom_alluvium(aes(fill = country, colour = country),
                    decreasing = NA, width = 0, knot.pos = 0)
+
+# irregular spacing between axes of a continuous variable
+data(Refugees, package = "alluvial")
+refugees_sub <- subset(Refugees, year \%in\% c(2003, 2005, 2010, 2013))
+gg <- ggplot(data = refugees_sub,
+             aes(x = year, y = refugees, alluvium = country)) +
+  theme_bw() +
+  scale_fill_brewer(type = "qual", palette = "Set3")
+# proportional knot positioning (default)
+gg +
+  geom_alluvium(aes(fill = country),
+                alpha = .75, decreasing = FALSE) +
+  geom_stratum(aes(stratum = country), decreasing = FALSE, width = 1/2)
+# fixed knot positioning
+gg +
+  geom_alluvium(aes(fill = country),
+                alpha = .75, decreasing = FALSE,
+                knot.pos = 1, knot.fix = TRUE) +
+  geom_stratum(aes(stratum = country), decreasing = FALSE, width = 1/2)
 }
 \seealso{
 \code{\link[ggplot2:layer]{ggplot2::layer()}} for additional arguments and

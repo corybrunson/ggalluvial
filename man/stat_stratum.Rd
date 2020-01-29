@@ -216,7 +216,7 @@ ggplot(merge(vaccinations, survey_dates, by = "survey"),
        aes(x = end, y = freq, stratum = response, alluvium = subject,
            fill = response)) +
   stat_alluvium(geom = "flow", lode.guidance = "forward",
-                width = 30, knot.pos = 0) +
+                width = 30) +
   stat_stratum(width = 30) +
   labs(x = "Survey date", y = "Number of respondents")
 

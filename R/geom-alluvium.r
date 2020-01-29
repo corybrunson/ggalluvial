@@ -21,6 +21,19 @@
 #' @param knot.fix Logical; whether to interpret `knot.pos` as a fixed value,
 #'   rather than (the default) as a proportion of the separation between
 #'   adjacent axes.
+#' @param curve Character; the type of curve used to produce flows. Defaults to
+#'   `"xspline"` and can be alternatively set to one of `"linear"`, `"cubic"`,
+#'   `"quintic"`, `"sine"`, `"arctangent"`, and `"sigmoid"`. Only the
+#'   `"xspline"` option uses the `knot.*` parameters, while only the alternative
+#'   curves use the `segments` parameter, and only `"arctangent"` and
+#'   `"sigmoid"` use the `reach` parameter.
+#' @param reach For alternative `curve`s based on asymptotic functions, the
+#'   value along the asymptote at which to truncate the function to obtain the
+#'   shape that will be scaled to fit between strata. Larger values result in
+#'   greater compression and steeper slopes. The `NULL` default will be changed
+#'   to `sqrt(3)` for `"arctangent"` and to `3` for `"sigmoid"`.
+#' @param segments The number of segments to be used in drawing each alternative
+#'   curve (each curved boundary of each flow).
 #' @example inst/examples/ex-geom-alluvium.r
 #' @export
 geom_alluvium <- function(mapping = NULL,
@@ -29,6 +42,7 @@ geom_alluvium <- function(mapping = NULL,
                           position = "identity",
                           width = 1/3,
                           knot.pos = 1/6, knot.fix = FALSE,
+                          curve = "xspline", reach = NULL, segments = 24,
                           na.rm = FALSE,
                           show.legend = NA,
                           inherit.aes = TRUE,
@@ -45,6 +59,9 @@ geom_alluvium <- function(mapping = NULL,
       width = width,
       knot.pos = knot.pos,
       knot.fix = knot.fix,
+      curve = curve,
+      reach = reach,
+      segments = segments,
       na.rm = na.rm,
       ...
     )
@@ -90,7 +107,8 @@ GeomAlluvium <- ggproto(
   
   draw_group = function(self, data, panel_scales, coord,
                         width = 1/3,
-                        knot.pos = 1/6, knot.fix = FALSE) {
+                        knot.pos = 1/6, knot.fix = FALSE,
+                        curve = "xspline", reach = NULL, segments = 24) {
     
     # add width to data
     data <- transform(data, width = width)
@@ -103,16 +121,19 @@ GeomAlluvium <- ggproto(
     
     if (nrow(data) == 1) {
       # spline coordinates (one axis)
-      spline_data <- with(data, data.frame(
+      curve_data <- with(data, data.frame(
         x = x + width / 2 * c(-1, 1, 1, -1),
         y = ymin + (ymax - ymin) * c(0, 0, 1, 1),
         shape = rep(0, 4)
       ))
-    } else {
+    } else if (curve %in% c("spline", "xspline")) {
       # spline coordinates (more than one axis)
-      spline_data <- data_to_xspl(data, knot.fix)
+      curve_data <- data_to_xspline(data, knot.fix)
+    } else {
+      # unit curve coordinates (more than one axis)
+      curve_data <- data_to_unit_curve(data, curve, reach, segments)
     }
-    data <- data.frame(first_row, spline_data)
+    data <- data.frame(first_row, curve_data)
     
     # transform (after calculating spline paths)
     coords <- coord$transform(data, panel_scales)
@@ -131,21 +152,55 @@ GeomAlluvium <- ggproto(
   draw_key = draw_key_polygon
 )
 
-# x-spline coordinates from data
-data_to_xspl <- function(data, knot.fix) {
-  w_oneway <- rep(data$width, c(3, rep(4, nrow(data) - 2), 3))
-  k_oneway <- rep(data$knot.pos, c(3, rep(4, nrow(data) - 2), 3))
-  if (! knot.fix)
-    k_oneway <- k_oneway * rep(diff(data$x), c(5, rep(4, nrow(data) - 3), 5))
-  x_oneway <- rep(data$x, c(3, rep(4, nrow(data) - 2), 3)) +
-    w_oneway / 2 * c(-1, rep(c(1, 1, -1, -1), nrow(data) - 1), 1) +
-    k_oneway * (1 - w_oneway) * c(0, rep(c(0, 1, -1, 0), nrow(data) - 1), 0)
-  ymin_oneway <- rep(data$ymin, c(3, rep(4, nrow(data) - 2), 3))
-  ymax_oneway <- rep(data$ymax, c(3, rep(4, nrow(data) - 2), 3))
-  shape_oneway <- c(0, rep(c(0, 1, 1, 0), nrow(data) - 1), 0)
+data_to_xspline <- function(data, knot.fix) {
+  w_fore <- rep(data$width, c(3, rep(4, nrow(data) - 2), 3))
+  k_fore <- rep(data$knot.pos, c(3, rep(4, nrow(data) - 2), 3))
+  if (! knot.fix) {
+    if (nrow(data) > 2) {
+      k_fore <- k_fore * rep(diff(data$x), c(5, rep(4, nrow(data) - 3), 5))
+    } else {
+      k_fore <- k_fore * diff(data$x)
+    }
+  }
+  x_fore <- rep(data$x, c(3, rep(4, nrow(data) - 2), 3)) +
+    w_fore / 2 * c(-1, rep(c(1, 1, -1, -1), nrow(data) - 1), 1) +
+    k_fore * (1 - w_fore) * c(0, rep(c(0, 1, -1, 0), nrow(data) - 1), 0)
+  ymin_fore <- rep(data$ymin, c(3, rep(4, nrow(data) - 2), 3))
+  ymax_fore <- rep(data$ymax, c(3, rep(4, nrow(data) - 2), 3))
+  shape_fore <- c(0, rep(c(0, 1, 1, 0), nrow(data) - 1), 0)
   data.frame(
-    x = c(x_oneway, rev(x_oneway)),
-    y = c(ymin_oneway, rev(ymax_oneway)),
-    shape = rep(shape_oneway, 2)
+    x = c(x_fore, rev(x_fore)),
+    y = c(ymin_fore, rev(ymax_fore)),
+    shape = rep(shape_fore, 2)
+  )
+}
+
+data_to_unit_curve <- function(data, curve, reach, segments) {
+  # specs for a single flow curve
+  curve_fun <- make_curve_fun(curve, reach)
+  i_once <- seq(0, 1, length.out = segments + 1)
+  f_once <- curve_fun(i_once)
+  # coordinates for a full curve
+  b_fore <- as.vector(rbind(data$x - data$w / 2, data$x + data$w / 2))
+  x_fore <- c(
+    b_fore[1],
+    t(b_fore[seq(nrow(data) - 1) * 2] +
+        outer(diff(b_fore)[seq(nrow(data) - 1) * 2], i_once, "*")),
+    b_fore[nrow(data) * 2]
+  )
+  ymin_fore <- c(
+    data$ymin[1],
+    t(data$ymin[-nrow(data)] + outer(diff(data$ymin), f_once, "*")),
+    data$ymin[nrow(data)]
+  )
+  ymax_fore <- c(
+    data$ymax[1],
+    t(data$ymax[-nrow(data)] + outer(diff(data$ymax), f_once, "*")),
+    data$ymax[nrow(data)]
+  )
+  data.frame(
+    x = c(x_fore, rev(x_fore)),
+    y = c(ymin_fore, rev(ymax_fore)),
+    shape = 0
   )
 }
