@@ -137,9 +137,10 @@ ggplot(as.data.frame(Titanic),
 
 gg <- ggplot(alluvial::Refugees,
              aes(y = refugees, x = year, alluvium = country))
-# time series bump chart
+# time series bump chart (quintic flows)
 gg + geom_alluvium(aes(fill = country, colour = country),
-                   width = 1/4, alpha = 2/3, decreasing = FALSE)
+                   width = 1/4, alpha = 2/3, decreasing = FALSE,
+                   curve = "quintic")
 # time series line plot of refugees data, sorted by country
 gg + geom_alluvium(aes(fill = country, colour = country),
                    decreasing = NA, width = 0, knot.pos = 0)

@@ -32,6 +32,8 @@ test_that("`geom_alluvium` draws correctly", {
 })
 
 test_that("`geom_alluvium()` recognizes alternative curves", {
+  data(vaccinations)
+  
   vdiffr::expect_doppelganger(
     "`geom_alluvium`: 'identity' curve",
     ggplot(vaccinations,
