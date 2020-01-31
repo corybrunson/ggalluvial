@@ -14,7 +14,7 @@ geom_flow(
   knot.fix = FALSE,
   curve = "xspline",
   reach = NULL,
-  segments = 24,
+  segments = 6,
   aes.flow = "forward",
   na.rm = FALSE,
   show.legend = NA,
@@ -62,10 +62,12 @@ adjacent axes.}
 
 \item{curve}{Character; the type of curve used to produce flows. Defaults to
 \code{"xspline"} and can be alternatively set to one of \code{"linear"}, \code{"cubic"},
-\code{"quintic"}, \code{"sine"}, \code{"arctangent"}, and \code{"sigmoid"}. Only the
-\code{"xspline"} option uses the \verb{knot.*} parameters, while only the alternative
-curves use the \code{segments} parameter, and only \code{"arctangent"} and
-\code{"sigmoid"} use the \code{reach} parameter.}
+\code{"quintic"}, \code{"sine"}, \code{"arctangent"}, and \code{"sigmoid"}. \code{"xspline"}
+produces approximation splines using 4 points per curve; the alternatives
+produce interpolation splines between points along the graphs of functions
+of the associated type. Only the \code{"xspline"} option uses the \verb{knot.*}
+parameters, while only the alternative curves use the \code{segments} parameter,
+and only \code{"arctangent"} and \code{"sigmoid"} use the \code{reach} parameter.}
 
 \item{reach}{For alternative \code{curve}s based on asymptotic functions, the
 value along the asymptote at which to truncate the function to obtain the
@@ -74,7 +76,8 @@ greater compression and steeper slopes. The \code{NULL} default will be changed
 to \code{sqrt(3)} for \code{"arctangent"} and to \code{3} for \code{"sigmoid"}.}
 
 \item{segments}{The number of segments to be used in drawing each alternative
-curve (each curved boundary of each flow).}
+curve (each curved boundary of each flow). If less than 3, will be silently
+changed to 3.}
 
 \item{aes.flow}{Character; how inter-lode flows assume aesthetics from lodes.
 Options are "forward" and "backward".}

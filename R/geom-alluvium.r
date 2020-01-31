@@ -23,17 +23,20 @@
 #'   adjacent axes.
 #' @param curve Character; the type of curve used to produce flows. Defaults to
 #'   `"xspline"` and can be alternatively set to one of `"linear"`, `"cubic"`,
-#'   `"quintic"`, `"sine"`, `"arctangent"`, and `"sigmoid"`. Only the
-#'   `"xspline"` option uses the `knot.*` parameters, while only the alternative
-#'   curves use the `segments` parameter, and only `"arctangent"` and
-#'   `"sigmoid"` use the `reach` parameter.
+#'   `"quintic"`, `"sine"`, `"arctangent"`, and `"sigmoid"`. `"xspline"`
+#'   produces approximation splines using 4 points per curve; the alternatives
+#'   produce interpolation splines between points along the graphs of functions
+#'   of the associated type. Only the `"xspline"` option uses the `knot.*`
+#'   parameters, while only the alternative curves use the `segments` parameter,
+#'   and only `"arctangent"` and `"sigmoid"` use the `reach` parameter.
 #' @param reach For alternative `curve`s based on asymptotic functions, the
 #'   value along the asymptote at which to truncate the function to obtain the
 #'   shape that will be scaled to fit between strata. Larger values result in
 #'   greater compression and steeper slopes. The `NULL` default will be changed
 #'   to `sqrt(3)` for `"arctangent"` and to `3` for `"sigmoid"`.
 #' @param segments The number of segments to be used in drawing each alternative
-#'   curve (each curved boundary of each flow).
+#'   curve (each curved boundary of each flow). If less than 3, will be silently
+#'   changed to 3.
 #' @example inst/examples/ex-geom-alluvium.r
 #' @export
 geom_alluvium <- function(mapping = NULL,
@@ -42,7 +45,7 @@ geom_alluvium <- function(mapping = NULL,
                           position = "identity",
                           width = 1/3,
                           knot.pos = 1/6, knot.fix = FALSE,
-                          curve = "xspline", reach = NULL, segments = 24,
+                          curve = "xspline", reach = NULL, segments = 6,
                           na.rm = FALSE,
                           show.legend = NA,
                           inherit.aes = TRUE,
@@ -108,7 +111,7 @@ GeomAlluvium <- ggproto(
   draw_group = function(self, data, panel_scales, coord,
                         width = 1/3,
                         knot.pos = 1/6, knot.fix = FALSE,
-                        curve = "xspline", reach = NULL, segments = 24) {
+                        curve = "xspline", reach = NULL, segments = 6) {
     
     # add width to data
     data <- transform(data, width = width)
@@ -130,6 +133,11 @@ GeomAlluvium <- ggproto(
       # spline coordinates (more than one axis)
       curve_data <- data_to_xspline(data, knot.fix)
     } else {
+      # ensure the minimum number of segments
+      if (segments < 3) {
+        #warning("Must use at least 3 segments; substituting `segments = 3`.")
+        segments <- 3
+      }
       # unit curve coordinates (more than one axis)
       curve_data <- data_to_unit_curve(data, curve, reach, segments)
     }
@@ -198,9 +206,13 @@ data_to_unit_curve <- function(data, curve, reach, segments) {
     t(data$ymax[-nrow(data)] + outer(diff(data$ymax), f_once, "*")),
     data$ymax[nrow(data)]
   )
+  # -+- need to justify choice of shape parameter near spline ends -+-
+  shape_once <- c(0, -.5, rep(-1, segments - 3), -.5, 0)
+  shape_fore <- c(0, rep(shape_once, nrow(data) - 1), 0)
   data.frame(
     x = c(x_fore, rev(x_fore)),
     y = c(ymin_fore, rev(ymax_fore)),
-    shape = 0
+    shape = rep(shape_fore, 2)
+    #shape = 0
   )
 }

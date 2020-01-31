@@ -27,7 +27,7 @@ geom_flow <- function(mapping = NULL,
                       position = "identity",
                       width = 1/3,
                       knot.pos = 1/6, knot.fix = FALSE,
-                      curve = "xspline", reach = NULL, segments = 24,
+                      curve = "xspline", reach = NULL, segments = 6,
                       aes.flow = "forward",
                       na.rm = FALSE,
                       show.legend = NA,
@@ -89,7 +89,7 @@ GeomFlow <- ggproto(
   draw_panel = function(self, data, panel_params, coord,
                         width = 1/3, aes.flow = "forward",
                         knot.pos = 1/6, knot.fix = FALSE,
-                        curve = "xspline", reach = NULL, segments = 24) {
+                        curve = "xspline", reach = NULL, segments = 6) {
     
     # exclude one-sided flows
     data <- data[complete.cases(data), ]
@@ -163,6 +163,11 @@ row_to_curve <- function(
     row_to_xspline(x0, x1, ymin0, ymax0, ymin1, ymax1,
                    kp0, kp1, knot.fix)
   } else {
+    # ensure the minimum number of segments
+    if (segments < 3) {
+      #warning("Must use at least 3 segments; substituting `segments = 3`.")
+      segments <- 3
+    }
     # unit curve path
     row_to_unit_curve(x0, x1, ymin0, ymax0, ymin1, ymax1,
                       curve, reach, segments)
@@ -173,11 +178,11 @@ row_to_xspline <- function(
   x0, x1, ymin0, ymax0, ymin1, ymax1,
   kp0, kp1, knot.fix
 ) {
-  k_oneway <- c(0, kp0, -kp1, 0)
-  if (! knot.fix) k_oneway <- k_oneway * (x1 - x0)
-  x_oneway <- rep(c(x0, x1), each = 2) + k_oneway
+  k_fore <- c(0, kp0, -kp1, 0)
+  if (! knot.fix) k_fore <- k_fore * (x1 - x0)
+  x_fore <- rep(c(x0, x1), each = 2) + k_fore
   data.frame(
-    x = c(x_oneway, rev(x_oneway)),
+    x = c(x_fore, rev(x_fore)),
     y = c(ymin0, ymin0, ymin1, ymin1, ymax1, ymax1, ymax0, ymax0),
     shape = rep(c(0, 1, 1, 0), times = 2)
   )
@@ -188,13 +193,15 @@ row_to_unit_curve <- function(
   curve, reach, segments
 ) {
   curve_fun <- make_curve_fun(curve, reach)
-  i_oneway <- seq(0, 1, length.out = segments + 1)
-  f_oneway <- curve_fun(i_oneway)
-  x_oneway <- x0 + (x1 - x0) * i_oneway
+  i_fore <- seq(0, 1, length.out = segments + 1)
+  f_fore <- curve_fun(i_fore)
+  x_fore <- x0 + (x1 - x0) * i_fore
+  # -+- need to justify choice of shape parameter near spline ends -+-
+  shape_fore <- c(0, -.5, rep(-1, segments - 3), -.5, 0)
   data.frame(
-    x = c(x_oneway, rev(x_oneway)),
-    y = c(ymin0 + (ymin1 - ymin0) * f_oneway,
-          ymax1 + (ymax0 - ymax1) * f_oneway),
-    shape = 0
+    x = c(x_fore, rev(x_fore)),
+    y = c(ymin0 + (ymin1 - ymin0) * f_fore,
+          ymax1 + (ymax0 - ymax1) * f_fore),
+    shape = rep(shape_fore, 2)
   )
 }
