@@ -14,7 +14,7 @@ geom_alluvium(
   knot.fix = FALSE,
   curve = "xspline",
   reach = NULL,
-  segments = 6,
+  segments = 12,
   na.rm = FALSE,
   show.legend = NA,
   inherit.aes = TRUE,

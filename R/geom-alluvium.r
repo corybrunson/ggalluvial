@@ -45,7 +45,7 @@ geom_alluvium <- function(mapping = NULL,
                           position = "identity",
                           width = 1/3,
                           knot.pos = 1/6, knot.fix = FALSE,
-                          curve = "xspline", reach = NULL, segments = 6,
+                          curve = "xspline", reach = NULL, segments = 12,
                           na.rm = FALSE,
                           show.legend = NA,
                           inherit.aes = TRUE,
@@ -111,7 +111,7 @@ GeomAlluvium <- ggproto(
   draw_group = function(self, data, panel_scales, coord,
                         width = 1/3,
                         knot.pos = 1/6, knot.fix = FALSE,
-                        curve = "xspline", reach = NULL, segments = 6) {
+                        curve = "xspline", reach = NULL, segments = 12) {
     
     # add width to data
     data <- transform(data, width = width)
@@ -206,13 +206,12 @@ data_to_unit_curve <- function(data, curve, reach, segments) {
     t(data$ymax[-nrow(data)] + outer(diff(data$ymax), f_once, "*")),
     data$ymax[nrow(data)]
   )
-  # -+- need to justify choice of shape parameter near spline ends -+-
-  shape_once <- c(0, -.5, rep(-1, segments - 3), -.5, 0)
+  # -+- need to prove behavior of shape parameter near spline ends -+-
+  shape_once <- c(0, rep(-.5, segments - 1), 0)
   shape_fore <- c(0, rep(shape_once, nrow(data) - 1), 0)
   data.frame(
     x = c(x_fore, rev(x_fore)),
     y = c(ymin_fore, rev(ymax_fore)),
     shape = rep(shape_fore, 2)
-    #shape = 0
   )
 }

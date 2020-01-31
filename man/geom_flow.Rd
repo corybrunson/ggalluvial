@@ -14,7 +14,7 @@ geom_flow(
   knot.fix = FALSE,
   curve = "xspline",
   reach = NULL,
-  segments = 6,
+  segments = 12,
   aes.flow = "forward",
   na.rm = FALSE,
   show.legend = NA,
