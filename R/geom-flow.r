@@ -27,7 +27,7 @@ geom_flow <- function(mapping = NULL,
                       position = "identity",
                       width = 1/3,
                       knot.pos = 1/6, knot.fix = FALSE,
-                      curve = "xspline", reach = NULL, segments = 12,
+                      curve = "xspline", reach = NULL, segments = 48,
                       aes.flow = "forward",
                       na.rm = FALSE,
                       show.legend = NA,
@@ -89,7 +89,7 @@ GeomFlow <- ggproto(
   draw_panel = function(self, data, panel_params, coord,
                         width = 1/3, aes.flow = "forward",
                         knot.pos = 1/6, knot.fix = FALSE,
-                        curve = "xspline", reach = NULL, segments = 12) {
+                        curve = "xspline", reach = NULL, segments = 48) {
     
     # exclude one-sided flows
     data <- data[complete.cases(data), ]
@@ -196,12 +196,10 @@ row_to_unit_curve <- function(
   i_fore <- seq(0, 1, length.out = segments + 1)
   f_fore <- curve_fun(i_fore)
   x_fore <- x0 + (x1 - x0) * i_fore
-  # -+- need to prove behavior of shape parameter near spline ends -+-
-  shape_fore <- c(0, rep(-.5, segments - 1), 0)
   data.frame(
     x = c(x_fore, rev(x_fore)),
     y = c(ymin0 + (ymin1 - ymin0) * f_fore,
           ymax1 + (ymax0 - ymax1) * f_fore),
-    shape = rep(shape_fore, 2)
+    shape = 0
   )
 }
