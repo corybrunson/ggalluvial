@@ -44,7 +44,7 @@ geom_alluvium <- function(mapping = NULL,
                           stat = "alluvium",
                           position = "identity",
                           width = 1/3,
-                          knot.pos = 1/6, knot.fix = FALSE,
+                          knot.pos = 1/4, knot.fix = FALSE,
                           curve = "xspline", reach = NULL, segments = 48,
                           na.rm = FALSE,
                           show.legend = NA,
@@ -110,7 +110,7 @@ GeomAlluvium <- ggproto(
   
   draw_group = function(self, data, panel_scales, coord,
                         width = 1/3,
-                        knot.pos = 1/6, knot.fix = FALSE,
+                        knot.pos = 1/4, knot.fix = FALSE,
                         curve = "xspline", reach = NULL, segments = 48) {
     
     # add width to data
