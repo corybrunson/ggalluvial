@@ -33,7 +33,7 @@
 #'   value along the asymptote at which to truncate the function to obtain the
 #'   shape that will be scaled to fit between strata. Larger values result in
 #'   greater compression and steeper slopes. The `NULL` default will be changed
-#'   to `sqrt(3)` for `"arctangent"` and to `3` for `"sigmoid"`.
+#'   to `2+sqrt(3)` for `"arctangent"` and to `6` for `"sigmoid"`.
 #' @param segments The number of segments to be used in drawing each alternative
 #'   curve (each curved boundary of each flow). If less than 3, will be silently
 #'   changed to 3.

@@ -10,7 +10,7 @@ geom_flow(
   stat = "flow",
   position = "identity",
   width = 1/3,
-  knot.pos = 1/6,
+  knot.pos = 1/4,
   knot.fix = FALSE,
   curve = "xspline",
   reach = NULL,
@@ -149,7 +149,7 @@ ggplot(as.data.frame(Titanic),
 ggplot(as.data.frame(Titanic),
        aes(y = Freq,
            axis1 = Class, axis2 = Sex)) +
-  geom_flow(aes(fill = Age), width = .4, curve = "sigmoid", reach = 6, segments = 48) +
+  geom_flow(aes(fill = Age), width = .4, curve = "sigmoid", reach = 6) +
   geom_stratum(width = .4) +
   geom_text(stat = "stratum", infer.label = TRUE, size = 3) +
   scale_x_discrete(limits = c("Class", "Sex")) +

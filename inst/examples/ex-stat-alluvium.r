@@ -40,7 +40,7 @@ lode_custom <- function(n, i) {
   )
 }
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
-               aes.bind = TRUE, lode.guidance = lode_custom)
+               aes.bind = "flow", lode.guidance = lode_custom)
 
 data(majors)
 # omit missing elements & reverse the `y` axis
@@ -69,25 +69,6 @@ gg +
   geom_flow(stat = "alluvium", color = "black", cement.alluvia = TRUE) +
   geom_text(aes(label = as.integer(student)), stat = "alluvium",
             cement.alluvia = function(x) paste(x, collapse = "; "))
-
-# irregular spacing between axes of a continuous variable
-data(Refugees, package = "alluvial")
-refugees_sub <- subset(Refugees, year %in% c(2003, 2005, 2010, 2013))
-gg <- ggplot(data = refugees_sub,
-       aes(x = year, y = refugees, alluvium = country)) +
-  theme_bw() +
-  scale_fill_brewer(type = "qual", palette = "Set3")
-# proportional knot positioning (default)
-gg +
-  geom_alluvium(aes(fill = country),
-                alpha = .75, decreasing = FALSE) +
-  geom_stratum(aes(stratum = country), decreasing = FALSE, width = 1/2)
-# fixed knot positioning
-gg +
-  geom_alluvium(aes(fill = country),
-                alpha = .75, decreasing = FALSE,
-                knot.pos = 1, knot.fix = TRUE) +
-  geom_stratum(aes(stratum = country), decreasing = FALSE, width = 1/2)
 
 \dontrun{
 data(babynames, package = "babynames")

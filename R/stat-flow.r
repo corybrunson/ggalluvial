@@ -163,6 +163,7 @@ StatFlow <- ggproto(
       if (aes.bind == "alluvia") {
         warning("`aes.bind = 'alluvia'` only available for `geom_alluvium()`; ",
                 "changing to 'flows'.")
+        aes.bind <- "flows"
       }
     }
     

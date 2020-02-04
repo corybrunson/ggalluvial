@@ -10,7 +10,7 @@ geom_alluvium(
   stat = "alluvium",
   position = "identity",
   width = 1/3,
-  knot.pos = 1/6,
+  knot.pos = 1/4,
   knot.fix = FALSE,
   curve = "xspline",
   reach = NULL,

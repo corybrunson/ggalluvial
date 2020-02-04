@@ -16,12 +16,12 @@ unit_sine <- function(x) {
   sin(t) / 2 + .5
 }
 unit_arctangent <- function(x, reach) {
-  if (is.null(reach)) reach <- sqrt(3)
+  if (is.null(reach)) reach <- 2 + sqrt(3)
   t <- (x - .5) * 2 * reach
   atan(t) / 2 / atan(reach) + .5
 }
 unit_sigmoid <- function(x, reach) {
-  if (is.null(reach)) reach <- 3
+  if (is.null(reach)) reach <- 6
   t <- (x - .5) * 2 * reach
   (stats::plogis(t) - stats::plogis(-reach)) /
     diff(stats::plogis(c(-1, 1) * reach))

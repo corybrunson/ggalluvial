@@ -61,7 +61,7 @@ ggplot(vaccinations,
 ggplot(vaccinations,
        aes(x = survey, stratum = response, alluvium = subject,
            y = freq, label = response)) +
-  geom_flow(aes(fill = interaction(response, subgroup)), aes.bind = "alluvia") +
+  geom_flow(aes(fill = interaction(response, subgroup)), aes.bind = "flows") +
   scale_alpha_discrete(range = c(1/3, 2/3)) +
   geom_stratum(alpha = .5) +
   geom_text(stat = "stratum")
