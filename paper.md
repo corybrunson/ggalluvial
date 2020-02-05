@@ -83,17 +83,18 @@ Parallel sets plots might be viewed as a subtype of Sankey diagram with the foll
 In this sense, the plots produced by the ggplot2 extensions (and by the alluvial package) are parallel sets plots: Cohorts are partitioned into categories at each axis and connected by ribbons whose widths encode their magnitudes.[^hammock]
 
 The plots produced still vary---in the shapes of ribbons, the arrangements of boxes, and the presence of gaps between boxes at the same axis.
-The exceptional geoms of ggparallel each offer common-angle as well as linear ribbons. Those of alluvial, ggforce, ggalluvial, and ggpcp offer a one-dimensional continuum between straight and x-spline ribbons.
+The exceptional geoms of ggparallel each offer common-angle as well as linear ribbons. Those of alluvial, ggforce, ggalluvial, and ggpcp offer one-parameter families that interpolate between straight and x-spline ribbons.[^curves]
 The stats vertically arrange the elements (boxes and ribbons) at each axis.
 These distinct elements are rendered by separate layers in ggforce, ggalluvial, and ggpcp, following the additive (`+`) syntax of ggplot2.
 ggalluvial provides more levers of control over these statistical transformations, thereby over the messages conveyed by the plot, than the other packages.[^easy]
 
+[^curves]: Several alternative curves, based on @Shaffer2019, are in development.
 [^easy]: Indeed, the dependency package easyalluvial [@Koneswarakantha2019] was built on top of ggalluvial to exchange much of this flexibility for more expedient data exploration.
 
 The ggalluvial package adopts the term _alluvial plot_ for the subtype of parallel sets plots it produces,[^plots] with the geological terminology introduced above.
 These alluvial plots are distinguished by two features: a strict order on the stacked elements at each axis, including both the values of the discrete variables and the ribbons connecting cases or cohorts between them; and a real-valued plotting dimension perpendicular to that of flow, along which these elements are stacked, so that gaps between them are precluded. The first feature is shared by the other packages but is not essential to parallel sets plots; such plots could arrange boxes corresponding to repeated categorical decompositions differently at different axes. While most of the packages separate boxes at each axis with gaps, these can be reduced to zero, so that each package can create alluvial plots. (ggparallel and ggalluvial alone _only_ produce alluvial plots.)
 This feature is particularly important to some applications and, in my view, can fundamentally change the way a plot is interpreted.
-It is for this reason that i believe the typology and terminology are warranted.
+It is for this reason that i believe the new typology and terminology are warranted.
 
 [^hammock]: The possible exceptions are the hammock plots and common angle plots of ggparallel, which are contrasted with a stricter definition of parallel sets plots than i use here, in which ribbons are straight, their widths aggregate to box widths, and they meet without overlap at the sides of boxes, partitioning them [@Hofmann2013].
 [^plots]: This has the unfortunate side effect of conflating search results from the geology literature.
