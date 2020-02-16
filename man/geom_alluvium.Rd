@@ -14,7 +14,7 @@ geom_alluvium(
   knot.fix = FALSE,
   curve = "xspline",
   reach = NULL,
-  segments = 48,
+  segments = NULL,
   na.rm = FALSE,
   show.legend = NA,
   inherit.aes = TRUE,
@@ -72,7 +72,7 @@ and only \code{"arctangent"} and \code{"sigmoid"} use the \code{reach} parameter
 value along the asymptote at which to truncate the function to obtain the
 shape that will be scaled to fit between strata. Larger values result in
 greater compression and steeper slopes. The \code{NULL} default will be changed
-to \code{sqrt(3)} for \code{"arctangent"} and to \code{3} for \code{"sigmoid"}.}
+to \code{2+sqrt(3)} for \code{"arctangent"} and to \code{6} for \code{"sigmoid"}.}
 
 \item{segments}{The number of segments to be used in drawing each alternative
 curve (each curved boundary of each flow). If less than 3, will be silently

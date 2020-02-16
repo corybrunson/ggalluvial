@@ -27,7 +27,7 @@ geom_flow <- function(mapping = NULL,
                       position = "identity",
                       width = 1/3,
                       knot.pos = 1/4, knot.fix = FALSE,
-                      curve = "xspline", reach = NULL, segments = 48,
+                      curve = "xspline", reach = NULL, segments = NULL,
                       aes.flow = "forward",
                       na.rm = FALSE,
                       show.legend = NA,
@@ -89,7 +89,7 @@ GeomFlow <- ggproto(
   draw_panel = function(self, data, panel_params, coord,
                         width = 1/3, aes.flow = "forward",
                         knot.pos = 1/4, knot.fix = FALSE,
-                        curve = "xspline", reach = NULL, segments = 48) {
+                        curve = "xspline", reach = NULL, segments = NULL) {
     
     # exclude one-sided flows
     data <- data[complete.cases(data), ]
@@ -163,8 +163,8 @@ row_to_curve <- function(
     row_to_xspline(x0, x1, ymin0, ymax0, ymin1, ymax1,
                    kp0, kp1, knot.fix)
   } else {
-    # ensure the minimum number of segments
-    if (segments < 3) {
+    # default to 48 segments per curve, ensure the minimum number of segments
+    if (is.null(segments)) segments <- 48 else if (segments < 3) {
       #warning("Must use at least 3 segments; substituting `segments = 3`.")
       segments <- 3
     }

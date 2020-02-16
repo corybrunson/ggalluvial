@@ -45,7 +45,7 @@ geom_alluvium <- function(mapping = NULL,
                           position = "identity",
                           width = 1/3,
                           knot.pos = 1/4, knot.fix = FALSE,
-                          curve = "xspline", reach = NULL, segments = 48,
+                          curve = "xspline", reach = NULL, segments = NULL,
                           na.rm = FALSE,
                           show.legend = NA,
                           inherit.aes = TRUE,
@@ -111,7 +111,7 @@ GeomAlluvium <- ggproto(
   draw_group = function(self, data, panel_scales, coord,
                         width = 1/3,
                         knot.pos = 1/4, knot.fix = FALSE,
-                        curve = "xspline", reach = NULL, segments = 48) {
+                        curve = "xspline", reach = NULL, segments = NULL) {
     
     # add width to data
     data <- transform(data, width = width)
@@ -133,8 +133,8 @@ GeomAlluvium <- ggproto(
       # spline coordinates (more than one axis)
       curve_data <- data_to_xspline(data, knot.fix)
     } else {
-      # ensure the minimum number of segments
-      if (segments < 3) {
+      # default to 48 segments per curve, ensure the minimum number of segments
+      if (is.null(segments)) segments <- 48 else if (segments < 3) {
         #warning("Must use at least 3 segments; substituting `segments = 3`.")
         segments <- 3
       }
