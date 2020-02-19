@@ -73,7 +73,7 @@ and only \code{"arctangent"} and \code{"sigmoid"} use the \code{reach} parameter
 value along the asymptote at which to truncate the function to obtain the
 shape that will be scaled to fit between strata. Larger values result in
 greater compression and steeper slopes. The \code{NULL} default will be changed
-to \code{sqrt(3)} for \code{"arctangent"} and to \code{3} for \code{"sigmoid"}.}
+to \code{2+sqrt(3)} for \code{"arctangent"} and to \code{6} for \code{"sigmoid"}.}
 
 \item{segments}{The number of segments to be used in drawing each alternative
 curve (each curved boundary of each flow). If less than 3, will be silently
@@ -149,7 +149,7 @@ ggplot(as.data.frame(Titanic),
 ggplot(as.data.frame(Titanic),
        aes(y = Freq,
            axis1 = Class, axis2 = Sex)) +
-  geom_flow(aes(fill = Age), width = .4, curve = "sigmoid", reach = 6) +
+  geom_flow(aes(fill = Age), width = .4, curve = "sigmoid") +
   geom_stratum(width = .4) +
   geom_text(stat = "stratum", infer.label = TRUE, size = 3) +
   scale_x_discrete(limits = c("Class", "Sex")) +
@@ -162,7 +162,6 @@ ggplot(wph,
        aes(x = Year, alluvium = Region, y = Telephones)) +
   geom_flow(aes(fill = Region, colour = Region), width = 0)
 # treat 'Year' as a number rather than as a factor
-# -+- debug this example -+-
 wph$Year <- as.integer(as.character(wph$Year))
 ggplot(wph,
        aes(x = Year, alluvium = Region, y = Telephones)) +

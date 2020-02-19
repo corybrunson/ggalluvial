@@ -49,3 +49,14 @@ test_that("`stat_flow` orders alluvia correctly according to `aes.bind`", {
   # cannot order by aesthetics before by linked strata (flows)
   expect_warning(StatFlow$compute_panel(data, aes.bind = "alluvia"), "flows")
 })
+
+# exceptional data
+
+test_that("`stat_flow` handles exceptional data with out errors", {
+  wph <- as.data.frame(as.table(WorldPhones))
+  names(wph) <- c("Year", "Region", "Telephones")
+  wph$Year <- as.integer(as.character(wph$Year))
+  gg <- ggplot(wph, aes(x = Year, alluvium = Region, y = Telephones)) +
+    geom_flow(aes(fill = Region, colour = Region))
+  expect_silent(print(gg))
+})
