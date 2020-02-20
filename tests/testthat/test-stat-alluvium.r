@@ -53,3 +53,13 @@ test_that("`stat_alluvium` orders alluvia correctly according to `aes.bind`", {
   expect_identical(comp[with(comp, order(x, alluvium)), ]$y,
                    c(2.5, 3.5, 0.5, 1.5, 0.5, 2.5, 1.5, 3.5))
 })
+
+# exceptional data
+
+test_that("`stat_flow` handles exceptional data with out errors", {
+  data(Refugees, package = "alluvial")
+  refugees_sub <- subset(Refugees, year %in% c(2003, 2005, 2010, 2013))
+  gg <- ggplot(refugees_sub, aes(x = year, y = refugees, alluvium = country)) +
+    geom_alluvium(aes(fill = country))
+  expect_silent(print(gg))
+})

@@ -1,5 +1,5 @@
 ---
-title: "Layered Grammar for Alluvial Plots"
+title: "ggalluvial: Layered Grammar for Alluvial Plots"
 tags:
   - R
   - ggplot2
@@ -34,7 +34,7 @@ Alluvial diagrams use stacked bar plots and variable-width ribbons to represent 
 
 The package makes two key contributions to the R ecosystem.
 First, ggalluvial anchors the imprecise notion of an alluvial diagram to the rigid grammar of graphics [@Wilkinson2006], which lends the plots more precise meaning and opens up many combinatorial possibilities.
-Second, ggalluvial adopts a distinctive geological nomenclature to distinguish "alluvial plots" and their graphical elements from Sankey diagrams and parallel sets plots, which i hope prove useful as these visualization tools converge toward common standards.
+Second, ggalluvial adopts a distinctive geological nomenclature to distinguish "alluvial plots" and their graphical elements from Sankey diagrams and parallel sets plots, which I hope prove useful as these visualization tools converge toward common standards.
 
 ## Functionality
 
@@ -83,19 +83,20 @@ Parallel sets plots might be viewed as a subtype of Sankey diagram with the foll
 In this sense, the plots produced by the ggplot2 extensions (and by the alluvial package) are parallel sets plots: Cohorts are partitioned into categories at each axis and connected by ribbons whose widths encode their magnitudes.[^hammock]
 
 The plots produced still vary---in the shapes of ribbons, the arrangements of boxes, and the presence of gaps between boxes at the same axis.
-The exceptional geoms of ggparallel each offer common-angle as well as linear ribbons. Those of alluvial, ggforce, ggalluvial, and ggpcp offer a one-dimensional continuum between straight and x-spline ribbons.
+The exceptional geoms of ggparallel each offer common-angle as well as linear ribbons. Those of alluvial, ggforce, ggalluvial, and ggpcp offer one-parameter families that interpolate between straight and x-spline ribbons.[^curves]
 The stats vertically arrange the elements (boxes and ribbons) at each axis.
 These distinct elements are rendered by separate layers in ggforce, ggalluvial, and ggpcp, following the additive (`+`) syntax of ggplot2.
 ggalluvial provides more levers of control over these statistical transformations, thereby over the messages conveyed by the plot, than the other packages.[^easy]
 
+[^curves]: Several alternative curves, based on @Shaffer2019, are in development.
 [^easy]: Indeed, the dependency package easyalluvial [@Koneswarakantha2019] was built on top of ggalluvial to exchange much of this flexibility for more expedient data exploration.
 
 The ggalluvial package adopts the term _alluvial plot_ for the subtype of parallel sets plots it produces,[^plots] with the geological terminology introduced above.
 These alluvial plots are distinguished by two features: a strict order on the stacked elements at each axis, including both the values of the discrete variables and the ribbons connecting cases or cohorts between them; and a real-valued plotting dimension perpendicular to that of flow, along which these elements are stacked, so that gaps between them are precluded. The first feature is shared by the other packages but is not essential to parallel sets plots; such plots could arrange boxes corresponding to repeated categorical decompositions differently at different axes. While most of the packages separate boxes at each axis with gaps, these can be reduced to zero, so that each package can create alluvial plots. (ggparallel and ggalluvial alone _only_ produce alluvial plots.)
 This feature is particularly important to some applications and, in my view, can fundamentally change the way a plot is interpreted.
-It is for this reason that i believe the typology and terminology are warranted.
+It is for this reason that I believe the new typology and terminology are warranted.
 
-[^hammock]: The possible exceptions are the hammock plots and common angle plots of ggparallel, which are contrasted with a stricter definition of parallel sets plots than i use here, in which ribbons are straight, their widths aggregate to box widths, and they meet without overlap at the sides of boxes, partitioning them [@Hofmann2013].
+[^hammock]: The possible exceptions are the hammock plots and common angle plots of ggparallel, which are contrasted with a stricter definition of parallel sets plots than I use here, in which ribbons are straight, their widths aggregate to box widths, and they meet without overlap at the sides of boxes, partitioning them [@Hofmann2013].
 [^plots]: This has the unfortunate side effect of conflating search results from the geology literature.
 
 ## Applications
@@ -115,10 +116,10 @@ Alluvial plots clearly indicate times at which longitudinal data are censored or
 **Signed categorical data:**
 @Edwards2019 produced a novel alluvial plot to represent changes in ownership category of owners in a halibut fishery. The total number of owners changed from year to year as exiters were not exactly matched by new entrants. In order to depict an accurate total but include both new entrants and exiters at each year, the authors affixed a negative stratum for the exiter category to each bar plot, reflected across the dimensional axis.[^negative] Such a feature has no analogue in Sankey diagrams or parallel sets plots but potentially wide-ranging applications: Bar plots may use "positive" and "negative" bars to represent definitionally signed categories, such as contributors to revenue versus deficit, or to contrast the bars divided along a binary variable such as gender across age groups in a population ("pyramid plots"). Alluvial plots provide a way to track cases and cohorts across such graphics, even if cases change sign. Future use cases may demonstrate additional practical uses for this functionality.
 
-[^negative]: The authors should be credited with this innovation, which i only implemented in ggalluvial after learning about their workaround to create it using a previous version.
+[^negative]: The authors should be credited with this innovation, which I only implemented in ggalluvial after learning about their workaround to create it using a previous version.
 
 # Acknowledgments
 
-I am grateful to many users for their feedback on every version of this package. Development benefitted from the use of resources and support of colleagues at UConn Health, and i have been supported in part by T90 training grant 5T90DE021989-07 from the National Institute of Dental and Craniofacial Research.
+I am grateful to many users for their feedback on every version of this package. Development benefitted from the use of resources and support of colleagues at UConn Health, and I have been supported in part by T90 training grant 5T90DE021989-07 from the National Institute of Dental and Craniofacial Research.
 
 # References

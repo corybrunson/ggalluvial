@@ -162,7 +162,6 @@ ggplot(wph,
        aes(x = Year, alluvium = Region, y = Telephones)) +
   geom_flow(aes(fill = Region, colour = Region), width = 0)
 # treat 'Year' as a number rather than as a factor
-# -+- debug this example -+-
 wph$Year <- as.integer(as.character(wph$Year))
 ggplot(wph,
        aes(x = Year, alluvium = Region, y = Telephones)) +
