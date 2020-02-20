@@ -187,18 +187,24 @@ StatFlow <- ggproto(
     }
     
     # stack contacts of flows to strata, using 'alluvium' to link them
-    # -+- why is 'x' necessarily continuous? -+-
-    x_ran <- range(data$x)
+    # (does not assume that 'x' is continuous or regularly-spaced)
+    ran_x <- range(data$x)
+    uniq_x <- sort(unique(data$x))
+    # ensure that 'alluvium' ranges simply from 1 to max
     data$alluvium <- contiguate(data$alluvium)
     alluvium_max <- max(data$alluvium)
     data <- rbind(
-      transform(data[data$x != x_ran[2], , drop = FALSE],
-                alluvium = alluvium + alluvium_max * (as.numeric(x) - 1),
-                link = as.numeric(x),
+      transform(data[data$x != ran_x[2], , drop = FALSE],
+                alluvium = alluvium +
+                  alluvium_max *
+                  (match(as.character(x), as.character(uniq_x)) - 1),
+                link = match(as.character(x), as.character(uniq_x)),
                 contact = I("back")),
-      transform(data[data$x != x_ran[1], , drop = FALSE],
-                alluvium = alluvium + alluvium_max * (as.numeric(x) - 2),
-                link = as.numeric(x) - 1,
+      transform(data[data$x != ran_x[1], , drop = FALSE],
+                alluvium = alluvium +
+                  alluvium_max *
+                  (match(as.character(x), as.character(uniq_x)) - 2),
+                link = match(as.character(x), as.character(uniq_x)) - 1,
                 contact = I("front"))
     )
     data$contact <- factor(data$contact, levels = c("back", "front"))
