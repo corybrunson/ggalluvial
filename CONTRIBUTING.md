@@ -35,6 +35,6 @@ For more guidance on reproducible examples, see [this vignette](https://reprex.t
 1. Fork the home repository (`corybrunson/ggalluvial`).
 2. Create a new (local) branch on which to make changes. If appropriate, update the documentation on this branch and run functionality checks (e.g. using the **devtools** package).
 3. Push this branch to the fork and open a pull request to the home repository.
-4. With the maintainer(s), discuss and (if necessary) update the pull request until it is accepted or decided against.
+4. With the maintainer(s), discuss and (if necessary) update the pull request until it is accepted or decided against. _In the latter case, a clear and consistent reason should be provided by the maintainer(s)._
 
 For more guidance on the pull request process, see [the contributing guidelines for **ggplot2**](https://github.com/tidyverse/ggplot2/blob/master/CONTRIBUTING.md).
