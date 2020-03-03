@@ -20,9 +20,9 @@ For more guidance on **roxygen2** documentation, see [this chapter](http://r-pkg
 1. Attach all relevant packages at the top of the example.
 2. Use as small a data set as you can conveniently get that illustrates the issue. Once you have such a data set, the best way to include it in the example is to re-create it using `data.frame()` or some other constructor function. Another way is as follows:
 
-    i. Execute `dput(data)` in R, where `data` is the data set.
-    ii. Copy the output.
-    iii. Paste into the example after the package attachments.
+    1. Execute `dput(data)` in R, where `data` is the data set.
+    2. Copy the output.
+    3. Paste into the example after the package attachments.
 
 3. Use as few lines or steps of code as feasible to illustrate the issue. Add comments at key steps.
 
