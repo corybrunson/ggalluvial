@@ -9,7 +9,7 @@ If you have questions about or suggestions for this guide, please feel free to c
 
 ## Editor
 
-**Small edits to comments, documentation, and other non-code files** may be made using [the GitHub file editor](https://help.github.com/en/github/managing-files-in-a-repository/editing-files-in-your-repository). To edit **roxygen2** documentation, make changes to a source file `R/<topic>.r`, on a line that begins with `#'`, rather than to a documentation file `man/<topic.Rd`.
+**Small edits to comments, documentation, and other non-code files** may be made using [the GitHub file editor](https://help.github.com/en/github/managing-files-in-a-repository/editing-files-in-your-repository). To edit **roxygen2** documentation, make changes to a source file `R/<topic>.r`, on a line that begins with `#'`, rather than to a documentation file `man/<topic>.Rd`.
 
 For more guidance on **roxygen2** documentation, see [this chapter](http://r-pkgs.had.co.nz/man.html) in the online book _R packages_.
 
