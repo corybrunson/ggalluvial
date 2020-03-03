@@ -5,9 +5,9 @@ The goal of this guide is to help contributors to **ggalluvial** plan their cont
 Note that **ggalluvial** is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By contributing, you agree to its terms.
 
 This guide is loosely adapted from the contributing guides [for **ggplot2**](https://github.com/tidyverse/ggplot2/blob/master/CONTRIBUTING.md) and [from ropensci](https://github.com/ropensci/dotgithubfiles/blob/master/dotgithub/CONTRIBUTING.md).
-If you have questions about or suggestions for this guide, please feel free to contact a maintainer (currently only @corybrunson).
+If you have questions about or suggestions for this guide, please feel free to contact a package maintainer.
 
-## GitHub file editor
+## Editor
 
 **Small edits to comments, documentation, and other non-code files** may be made using [the GitHub file editor](https://help.github.com/en/github/managing-files-in-a-repository/editing-files-in-your-repository). To edit **roxygen2** documentation, make changes to a source file `R/<topic>.r`, on a line that begins with `#'`, rather than to a documentation file `man/<topic.Rd`.
 
@@ -19,9 +19,11 @@ For more guidance on **roxygen2** documentation, see [this chapter](http://r-pkg
 
 1. Attach all relevant packages at the top of the example.
 2. Use as small a data set as you can conveniently get that illustrates the issue. Once you have such a data set, the best way to include it in the example is to re-create it using `data.frame()` or some other constructor function. Another way is as follows:
+
     i. Execute `dput(data)` in R, where `data` is the data set.
     ii. Copy the output.
     iii. Paste into the example after the package attachments.
+
 3. Use as few lines or steps of code as feasible to illustrate the issue. Add comments at key steps.
 
 For more guidance on reproducible examples, see [this vignette](https://reprex.tidyverse.org/articles/reprex-dos-and-donts.html) for the **reprex** package.
