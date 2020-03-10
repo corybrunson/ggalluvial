@@ -110,7 +110,7 @@ GeomFlow <- ggproto(
     )), ]
     
     # construct spline grobs
-    xspls <- plyr::alply(data, 1, function(row) {
+    xspls <- lapply(split(data, seq_len(nrow(data))), function(row) {
       
       # spline paths and aesthetics
       xspl <- knots_to_xspl(row$xmax.0, row$xmin.1,
