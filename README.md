@@ -152,11 +152,11 @@ support of colleagues at [UConn Health](https://health.uconn.edu/).
 
 ### Contribute
 
-[Issues](https://github.com/corybrunson/ggalluvial/issues) and [pull
-requests](https://github.com/corybrunson/ggalluvial/pulls) are more than
-welcome\! Pretty much every fix and feature of this package derives from
-a problem or question posed by someone with datasets or design goals i
-hadn’t anticipated.
+Contributions in any form are more than welcome\! Pretty much every fix
+and feature of this package derives from a problem or question posed by
+someone with datasets or design goals i hadn’t anticipated. See the
+[CONTRIBUTING](CONTRIBUTING.md) file for guidance, and please respect
+the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ### Cite
 

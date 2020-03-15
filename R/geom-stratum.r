@@ -69,7 +69,7 @@ GeomStratum <- ggproto(
     )
     
     # construct polygon grobs
-    polys <- plyr::alply(data, 1, function(row) {
+    polys <- lapply(split(data, seq_len(nrow(data))), function(row) {
       
       poly <- rect_to_poly(row$xmin, row$xmax, row$ymin, row$ymax)
       aes <- as.data.frame(row[strat_aes],

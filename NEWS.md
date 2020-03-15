@@ -1,6 +1,8 @@
 
 # next version (v1.0.0?)
 
+In response to **ggplot2** v3.2.0, which removes the **plyr** dependency, the dependency has been removed from **ggalluvial** as well.
+
 # ggalluvial 0.11.2
 
 The function `self_adjoin()` is debugged for use with a continuous-valued `x` variable. An example, taking `x` to be the date of each vaccination survey in `vaccinations`, is documented with `stat_stratum()`.

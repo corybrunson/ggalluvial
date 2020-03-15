@@ -33,9 +33,9 @@ geom_flow <- function(mapping = NULL,
                       show.legend = NA,
                       inherit.aes = TRUE,
                       ...) {
-  
+
   aes.flow <- match.arg(aes.flow, c("forward", "backward"))
-  
+
   layer(
     geom = GeomFlow,
     mapping = mapping,
@@ -63,37 +63,37 @@ geom_flow <- function(mapping = NULL,
 #' @export
 GeomFlow <- ggproto(
   "GeomFlow", Geom,
-  
+
   required_aes = c("x", "y", "ymin", "ymax"),
-  
+
   default_aes = aes(size = .5, linetype = 1,
                     colour = 0, fill = "gray", alpha = .5),
-  
+
   setup_data = function(data, params) {
-    
+
     width <- params$width
     if (is.null(width)) {
       width <- 1/3
     }
-    
+
     knot.pos <- params$knot.pos
     if (is.null(knot.pos)) knot.pos <- 1/6
-    
+
     # positioning parameters
     transform(data,
               xmin = x - width / 2,
               xmax = x + width / 2,
               knot.pos = knot.pos)
   },
-  
+
   draw_panel = function(self, data, panel_params, coord,
                         width = 1/3, aes.flow = "forward",
                         knot.pos = 1/4, knot.fix = FALSE,
                         curve = "xspline", reach = NULL, segments = NULL) {
-    
+
     # exclude one-sided flows
     data <- data[complete.cases(data), ]
-    
+
     # adjoin data with itself by alluvia along adjacent axes
     flow_pos <- intersect(names(data), c("x", "xmin", "xmax", "width",
                                          "y", "ymin", "ymax", "knot.pos"))
@@ -107,7 +107,7 @@ GeomFlow <- ggproto(
       keep.x = flow_fore, keep.y = flow_back,
       suffix = c(".0", ".1")
     )
-    
+
     # aesthetics (in prescribed order)
     aesthetics <- intersect(.color_diff_aesthetics, names(data))
     # arrange data by aesthetics for consistent (reverse) z-ordering
@@ -115,10 +115,10 @@ GeomFlow <- ggproto(
       data[, c("step", aesthetics)],
       function(x) factor(x, levels = unique(x))
     )), ]
-    
+
     # construct x-spline grobs
-    grobs <- plyr::alply(data, 1, function(row) {
-      
+    grobs <- lapply(split(data, seq_len(nrow(data))), function(row) {
+
       # path of spline or unit curve
       f_path <- row_to_curve(row$xmax.0, row$xmin.1,
                              row$ymin.0, row$ymax.0, row$ymin.1, row$ymax.1,
@@ -129,10 +129,10 @@ GeomFlow <- ggproto(
       aes <- as.data.frame(row[flow_aes], stringsAsFactors = FALSE)
       # join aesthetics to path
       f_data <- cbind(f_path, aes[rep(1, nrow(f_path)), ])
-      
+
       # transform (after calculating spline paths)
       f_coords <- coord$transform(f_data, panel_params)
-      
+
       # single spline grob
       grid::xsplineGrob(
         x = f_coords$x, y = f_coords$y, shape = f_coords$shape,
@@ -143,13 +143,13 @@ GeomFlow <- ggproto(
         )
       )
     })
-    
+
     # combine spline grobs
     grob <- do.call(grid::grobTree, grobs)
     grob$name <- grid::grobName(grob, "xspline")
     grob
   },
-  
+
   draw_key = draw_key_polygon
 )
 
