@@ -45,12 +45,16 @@ Second, ggalluvial adopts a distinctive geological nomenclature to distinguish "
 * _lodes_, subdivisions of strata by their intersections with alluvia
 * _flows_, segments of alluvia between strata
 
-Plot layers are formed by pairing stats (statistical transformations) with geoms (mappings to graphical elements and properties); while every stat and geom has a conventional default, alternative grammatical pairings provide combinatorial richness to plotting possibilities.
-The following alluvial plot depicts several meaningful stat--geom combinations from the documentation. Default pairings, other within-package ("alluvial") pairings, and pairings of alluvial stats with other geoms are differentiated by color:
+These layers, and other plot elements, are illustrated in the alluvial plot below, which visualizes changes in several students' curricula (based on their declared majors) across several academic terms:
 
 ![](paper/figure-1.png)
 
-Alluvial layers can interpret two forms of tidy data, long (one row per lode) and wide (one row per alluvium), related by the pivot operations of tidyr [@Wickham2019].
+Each axis corresponds to an odd-valued term (1 through 15), at which the students are grouped into strata according to their curricula---Art History, Ceramic, etc. The individual students can be tracked from term to term along their alluvia: for instance, one student started out in Digital Art, encoded by the blue ribbon, but switched to Painting in the 11th term, where the ribbon turns pink. The partially transparent flows are colored according to their originating (not their terminating) terms, and the lodes where they intersect the strata are obscured by the solid-colored strata themselves. When a student's curriculum is unknown, they are grouped into the "missing" (`NA`) stratum, which is weighted negatively in this example.
+
+Plot layers are formed by pairing stats (statistical transformations) with geoms (mappings to graphical elements and properties); while every stat and geom has a conventional default, alternative grammatical pairings provide combinatorial richness to plotting possibilities. In the above example, the alluvium geom was paired with the flow stat, so that the flows of each alluvium could change color across the axes.
+Other meaningful stat--geom combinations can be found in the documentation, including pairings of the three alluvial stats (stratum, alluvium, and flow) with the text, errorbar, and pointrange geoms.
+
+Alluvial layers can interpret tidy data in either of two formats: long (one row per lode) and wide (one row per alluvium). These are related by the pivot operations of tidyr [@Wickham2019] and can be toggled between using the custom functions `to_lodes_form()` and `to_alluvia_form()`.
 The alluvial stats require custom aesthetics---either `stratum` and/or `alluvium` in combination with `x`, if the data are in long format, or some number of axis specifications (`axis1`, `axis2`, etc.), if the data are in wide format.[^warnings] Because the alluvial geoms are specialized to these stats, no pairings with outside stats are currently supported.
 
 [^warnings]: Because these aesthetics are not recognized by ggplot2, they produce warnings under some conditions.
