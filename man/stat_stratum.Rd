@@ -147,6 +147,17 @@ are assigned to strata or lodes provided they take unique values across the
 observations within each (and are otherwise assigned \code{NA}).
 }
 
+\section{Computed variables}{
+
+These can be used with \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}} to \href{https://ggplot2.tidyverse.org/reference/aes_eval.html}{control aesthetic evaluation}.
+\describe{
+\item{n}{number of cases in lode}
+\item{count}{cumulative weight of lode}
+\item{prop}{weighted proportion of lode}
+}
+Each variable is grouped by axis (the value of \code{x}).
+}
+
 \section{Package options}{
 
 \code{stat_stratum}, \code{stat_alluvium}, and \code{stat_flow} order strata and lodes

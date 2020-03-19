@@ -4,6 +4,7 @@
 #' (`x` and `y`) and heights (`ymin` and `ymax`) of the flows between each pair
 #' of adjacent axes.
 #' @template stat-aesthetics
+#' @template computed-variables
 #' @template order-options
 #' @template defunct-stat-params
 #'
@@ -214,8 +215,11 @@ StatFlow <- ggproto(
     # designate these flow pairings the alluvia
     data$alluvium <- as.integer(interaction(data[, adj_vars], drop = TRUE))
     
-    # sum `y` and, if numeric, `label` over `x`, `yneg`, and `stratum`
-    sum_vars <- c("y", if (is.numeric(data$label)) "label")
+    # initiate numbers for `after_stat()`
+    data$n <- 1L
+    
+    # sum 'y', 'n' and, if numeric, 'label' over 'x', 'yneg', and 'stratum'
+    sum_vars <- c("y", "n", if (is.numeric(data$label)) "label")
     # exclude `group` because it will be redefined below
     data$group <- NULL
     by_vars <- setdiff(names(data), c("group", sum_vars))

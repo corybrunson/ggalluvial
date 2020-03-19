@@ -5,6 +5,7 @@
 #' intersections of the alluvia with the strata. It leverages the `group`
 #' aesthetic for plotting purposes (for now).
 #' @template stat-aesthetics
+#' @template computed-variables
 #' @template order-options
 #' @template defunct-stat-params
 #'
@@ -199,6 +200,9 @@ StatAlluvium <- ggproto(
     # sign variable (sorts positives before negatives)
     data$yneg <- data$y < 0
     
+    # initiate numbers for `after_stat()`
+    data$n <- 1L
+    
     # cement (aggregate) `y` over otherwise equivalent alluvia
     if (! is.null(aggregate.y)) {
       deprecate_parameter("aggregate.y", "cement.alluvia")
@@ -352,10 +356,11 @@ StatAlluvium <- ggproto(
   }
 )
 
-# aggregate `y` and `label` over equivalent alluvia (omitting missing values)
+# aggregate 'y', 'n', and 'label' over equivalent alluvia
+# (omitting missing values)
 cement_data <- function(data, key, id, fun) {
   
-  agg_vars <- intersect(c("y", "label"), names(data))
+  agg_vars <- intersect(c("y", "n", "label"), names(data))
   
   # interaction of all variables to aggregate over (without dropping NAs)
   data$binding <- as.numeric(interaction(lapply(
@@ -378,15 +383,16 @@ cement_data <- function(data, key, id, fun) {
   # transform `id` in `data` accordingly
   data[[id]] <- alluv_agg[match(data[[id]], alluv_orig)]
   
-  # aggregate `y` and `label` by all other variables
+  # aggregate 'y', 'n', and 'label' by all other variables
   by_vars <- c(key, id, "binding")
   data_agg <- dplyr::group_by(data[, c(by_vars, agg_vars)], .dots = by_vars)
   data_agg <- if ("label" %in% agg_vars) {
     dplyr::summarize(data_agg,
-                     y = sum(.data$y, na.rm = TRUE), label = fun(.data$label))
+                     y = sum(.data$y, na.rm = TRUE),
+                     n = sum(.data$n, na.rm = TRUE),
+                     label = fun(.data$label))
   } else {
-    #dplyr::summarize(data_agg, y = sum(.data$y, na.rm = TRUE))
-    dplyr::summarize_at(data_agg, "y", sum, na.rm = TRUE)
+    dplyr::summarize_at(data_agg, c("y", "n"), sum, na.rm = TRUE)
   }
   data_agg <- dplyr::ungroup(data_agg)
   # merge into `data`, ensuring that no `key`-`id` pairs are duplicated

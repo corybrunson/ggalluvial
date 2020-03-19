@@ -4,6 +4,7 @@
 #' centroids (`x` and `y`) and heights (`ymin` and `ymax`) of the strata at each
 #' axis.
 #' @template stat-aesthetics
+#' @template computed-variables
 #' @template order-options
 #' @template defunct-stat-params
 #'
@@ -148,7 +149,7 @@ StatStratum <- ggproto(
     
     # nullify `group` and `alluvium` fields (to avoid confusion with geoms)
     data$group <- NULL
-    data$alluvium <- NULL
+    #data$alluvium <- NULL
     
     data
   },
@@ -182,6 +183,9 @@ StatStratum <- ggproto(
     
     # sign variable (sorts positives before negatives)
     data$yneg <- data$y < 0
+    
+    # initiate numbers for `after_stat()`
+    data$n <- 1L
     
     # aggregate variables over `x`, `yneg`, and `stratum`:
     # take sums of `y` and, if numeric, of `label`
