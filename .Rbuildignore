@@ -14,6 +14,8 @@
 README.Rmd
 ^.*\.Rproj$
 ^\.Rproj\.user$
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
 
 # JOSS paper
 ^paper$
