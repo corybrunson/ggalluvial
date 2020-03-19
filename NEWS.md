@@ -1,7 +1,13 @@
 
-# next version (v1.0.0?)
+# next version
+
+## Dependencies
 
 In response to **ggplot2** v3.2.0, which removes the **plyr** dependency, the dependency has been removed from **ggalluvial** as well.
+
+## Computed variables
+
+The alluvial stats now all compute three variables for use with `after_stat()`: `n`, `count`, and `prop`. These can all be weighted using the `weight` aesthetic, which is dropped by the stats during computation (so that it does not confuse the geoms).
 
 # ggalluvial 0.11.2
 
