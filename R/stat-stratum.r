@@ -93,6 +93,8 @@ StatStratum <- ggproto(
   
   required_aes = c("x"),
   
+  default_aes = aes(weight = 1),
+  
   setup_data = function(data, params) {
     
     # if `alluvium` not provided, assign each row its own, grouped by `x`
@@ -184,8 +186,12 @@ StatStratum <- ggproto(
     # sign variable (sorts positives before negatives)
     data$yneg <- data$y < 0
     
-    # initiate numbers for `after_stat()`
-    data$n <- 1L
+    # initiate variables for `after_stat()`
+    weight <- data$weight
+    data$weight <- NULL
+    if (is.null(weight)) weight <- 1
+    data$n <- weight
+    data$count <- data$y * weight
     
     # aggregate variables over `x`, `yneg`, and `stratum`:
     # take sums of `y` and, if numeric, of `label`
@@ -213,10 +219,10 @@ StatStratum <- ggproto(
     # define 'deposit' variable to rank strata vertically
     data <- deposit_data(data, decreasing, reverse, absolute)
     
-    # calculate counts and proportions for `after_stat()`
-    data$count <- data$y
-    x_count <- tapply(abs(data$count), data$x, sum, na.rm = TRUE)
-    data$prop <- data$y / x_count[match(as.character(data$x), names(x_count))]
+    # calculate variables for `after_stat()`
+    x_counts <- tapply(abs(data$count), data$x, sum, na.rm = TRUE)
+    data$prop <-
+      data$count / x_counts[match(as.character(data$x), names(x_counts))]
     
     # sort data in preparation for `y` sums
     data <- data[with(data, order(deposit)), , drop = FALSE]

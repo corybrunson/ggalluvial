@@ -90,6 +90,8 @@ StatAlluvium <- ggproto(
   
   required_aes = c("x"),
   
+  default_aes = aes(weight = 1),
+  
   setup_params = function(data, params) {
     
     if (! is.null(params$lode.ordering)) {
@@ -200,8 +202,12 @@ StatAlluvium <- ggproto(
     # sign variable (sorts positives before negatives)
     data$yneg <- data$y < 0
     
-    # initiate numbers for `after_stat()`
-    data$n <- 1L
+    # initiate variables for `after_stat()`
+    weight <- data$weight
+    data$weight <- NULL
+    if (is.null(weight)) weight <- 1
+    data$n <- weight
+    data$count <- data$y * weight
     
     # cement (aggregate) `y` over otherwise equivalent alluvia
     if (! is.null(aggregate.y)) {
@@ -293,10 +299,10 @@ StatAlluvium <- ggproto(
         (-1) ^ (data$yneg * absolute + reverse)
     }
     
-    # calculate counts and proportions for `after_stat()`
-    data$count <- data$y
-    x_count <- tapply(abs(data$count), data$x, sum, na.rm = TRUE)
-    data$prop <- data$y / x_count[match(as.character(data$x), names(x_count))]
+    # calculate variables for `after_stat()`
+    x_counts <- tapply(abs(data$count), data$x, sum, na.rm = TRUE)
+    data$prop <-
+      data$count / x_counts[match(as.character(data$x), names(x_counts))]
     
     # reverse alluvium order among negative observations
     data$fan <- xtfrm(data$alluvium) * (-1) ^ (data$yneg * absolute + reverse)
@@ -356,11 +362,11 @@ StatAlluvium <- ggproto(
   }
 )
 
-# aggregate 'y', 'n', and 'label' over equivalent alluvia
+# aggregate 'y', 'count', 'n', and 'label' over equivalent alluvia
 # (omitting missing values)
 cement_data <- function(data, key, id, fun) {
   
-  agg_vars <- intersect(c("y", "n", "label"), names(data))
+  agg_vars <- intersect(c("y", "count", "n", "label"), names(data))
   
   # interaction of all variables to aggregate over (without dropping NAs)
   data$binding <- as.numeric(interaction(lapply(
@@ -383,16 +389,17 @@ cement_data <- function(data, key, id, fun) {
   # transform `id` in `data` accordingly
   data[[id]] <- alluv_agg[match(data[[id]], alluv_orig)]
   
-  # aggregate 'y', 'n', and 'label' by all other variables
+  # aggregate 'y', 'count', 'n', and 'label' by all other variables
   by_vars <- c(key, id, "binding")
   data_agg <- dplyr::group_by(data[, c(by_vars, agg_vars)], .dots = by_vars)
   data_agg <- if ("label" %in% agg_vars) {
     dplyr::summarize(data_agg,
                      y = sum(.data$y, na.rm = TRUE),
+                     count = sum(.data$count, na.rm = TRUE),
                      n = sum(.data$n, na.rm = TRUE),
                      label = fun(.data$label))
   } else {
-    dplyr::summarize_at(data_agg, c("y", "n"), sum, na.rm = TRUE)
+    dplyr::summarize_at(data_agg, c("y", "count", "n"), sum, na.rm = TRUE)
   }
   data_agg <- dplyr::ungroup(data_agg)
   # merge into `data`, ensuring that no `key`-`id` pairs are duplicated

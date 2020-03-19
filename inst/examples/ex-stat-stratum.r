@@ -10,7 +10,7 @@ ggplot(vaccinations,
 ggplot(vaccinations,
        aes(y = freq,
            x = survey, stratum = response, alluvium = subject,
-           label = freq)) +
+           label = after_stat(count))) +
   stat_stratum(geom = "errorbar") +
   geom_text(stat = "stratum")
 # alluvium data, positioning with stratum labels

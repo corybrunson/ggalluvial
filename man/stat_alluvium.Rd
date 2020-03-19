@@ -166,12 +166,15 @@ Additionally, each \verb{stat_*()} accepts the following optional
 aesthetics:
 \itemize{
 \item \code{y}
+\item \code{weight}
 \item \code{group}
 \item \code{label}
 }
 
-\code{y} controls the heights of the alluvia
+\code{y} controls the heights of the alluvia,
 and may be aggregated across equivalent observations.
+\code{weight} applies to the computed variables (see that section below)
+but does not affect the positional aesthetics.
 \code{group} is used internally; arguments are ignored.
 \code{label} is used to label the strata or lodes and must take a unique value
 across the observations within each stratum or lode.
@@ -193,7 +196,7 @@ These can be used with \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}} t
 \item{count}{cumulative weight of lode}
 \item{prop}{weighted proportion of lode}
 }
-Each variable is grouped by axis (the value of \code{x}).
+Each variable is grouped by \code{x} and weighted by \code{weight}.
 }
 
 \section{Package options}{

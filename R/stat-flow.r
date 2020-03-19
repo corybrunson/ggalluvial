@@ -77,6 +77,8 @@ StatFlow <- ggproto(
   
   required_aes = c("x"),
   
+  default_aes = aes(weight = 1),
+  
   setup_data = function(data, params) {
     
     # assign `alluvium` to `stratum` if `stratum` not provided
@@ -215,11 +217,15 @@ StatFlow <- ggproto(
     # designate these flow pairings the alluvia
     data$alluvium <- as.integer(interaction(data[, adj_vars], drop = TRUE))
     
-    # initiate numbers for `after_stat()`
-    data$n <- 1L
+    # initiate variables for `after_stat()`
+    weight <- data$weight
+    data$weight <- NULL
+    if (is.null(weight)) weight <- 1
+    data$n <- weight
+    data$count <- data$y * weight
     
     # sum 'y', 'n' and, if numeric, 'label' over 'x', 'yneg', and 'stratum'
-    sum_vars <- c("y", "n", if (is.numeric(data$label)) "label")
+    sum_vars <- c("y", "count", "n", if (is.numeric(data$label)) "label")
     # exclude `group` because it will be redefined below
     data$group <- NULL
     by_vars <- setdiff(names(data), c("group", sum_vars))
@@ -229,10 +235,10 @@ StatFlow <- ggproto(
     # redefine `group` to be used to control grobs in the geom step
     data$group <- data$alluvium
     
-    # calculate counts and proportions for `after_stat()`
-    data$count <- data$y
-    x_count <- tapply(abs(data$count), data$x, sum, na.rm = TRUE)
-    data$prop <- data$y / x_count[match(as.character(data$x), names(x_count))]
+    # calculate variables for `after_stat()`
+    x_counts <- tapply(abs(data$count), data$x, sum, na.rm = TRUE)
+    data$prop <-
+      data$count / x_counts[match(as.character(data$x), names(x_counts))]
     
     # sort data in preparation for `y` sums
     sort_fields <- c(

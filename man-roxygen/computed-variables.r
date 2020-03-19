@@ -6,4 +6,4 @@
 #'   \item{count}{cumulative weight of lode}
 #'   \item{prop}{weighted proportion of lode}
 #' }
-#' Each variable is grouped by axis (the value of `x`).
+#' Each variable is grouped by `x` and weighted by `weight`.

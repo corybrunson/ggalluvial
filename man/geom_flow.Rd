@@ -138,12 +138,20 @@ ggplot(wph,
 # rightward flow aesthetics for vaccine survey data
 data(vaccinations)
 levels(vaccinations$response) <- rev(levels(vaccinations$response))
+# annotate with proportional counts
 ggplot(vaccinations,
        aes(x = survey, stratum = response, alluvium = subject,
-           y = freq, fill = response, label = round(a, 3))) +
+           y = freq, fill = response)) +
   geom_lode() + geom_flow() +
   geom_stratum(alpha = 0) +
-  geom_text(stat = "stratum")
+  geom_text(stat = "stratum", aes(label = round(after_stat(prop), 3)))
+# annotate with survey-weighted proportional counts
+ggplot(vaccinations,
+       aes(x = survey, stratum = response, alluvium = subject,
+           y = freq, fill = response, weight = a)) +
+  geom_lode() + geom_flow() +
+  geom_stratum(alpha = 0) +
+  geom_text(stat = "stratum", aes(label = round(after_stat(prop), 3)))
 }
 \seealso{
 \code{\link[ggplot2:layer]{ggplot2::layer()}} for additional arguments and
