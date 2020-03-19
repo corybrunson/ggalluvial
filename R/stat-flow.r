@@ -225,6 +225,11 @@ StatFlow <- ggproto(
     # redefine `group` to be used to control grobs in the geom step
     data$group <- data$alluvium
     
+    # calculate counts and proportions for `after_stat()`
+    data$count <- data$y
+    x_count <- tapply(abs(data$count), data$x, sum, na.rm = TRUE)
+    data$prop <- data$y / x_count[match(as.character(data$x), names(x_count))]
+    
     # sort data in preparation for `y` sums
     sort_fields <- c(
       "link", "x",

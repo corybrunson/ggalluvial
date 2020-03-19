@@ -209,9 +209,13 @@ StatStratum <- ggproto(
     # define 'deposit' variable to rank strata vertically
     data <- deposit_data(data, decreasing, reverse, absolute)
     
+    # calculate counts and proportions for `after_stat()`
+    data$count <- data$y
+    x_count <- tapply(abs(data$count), data$x, sum, na.rm = TRUE)
+    data$prop <- data$y / x_count[match(as.character(data$x), names(x_count))]
+    
     # sort data in preparation for `y` sums
     data <- data[with(data, order(deposit)), , drop = FALSE]
-    
     # calculate `y` sums
     data$ycum <- NA
     for (xx in unique(data$x)) {

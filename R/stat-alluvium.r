@@ -289,6 +289,11 @@ StatAlluvium <- ggproto(
         (-1) ^ (data$yneg * absolute + reverse)
     }
     
+    # calculate counts and proportions for `after_stat()`
+    data$count <- data$y
+    x_count <- tapply(abs(data$count), data$x, sum, na.rm = TRUE)
+    data$prop <- data$y / x_count[match(as.character(data$x), names(x_count))]
+    
     # reverse alluvium order among negative observations
     data$fan <- xtfrm(data$alluvium) * (-1) ^ (data$yneg * absolute + reverse)
     
