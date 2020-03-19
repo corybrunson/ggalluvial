@@ -5,15 +5,13 @@ context("stat-flow")
 test_that("`stat_flow` weights computed variables but drops weight", {
   data <- expand.grid(alluvium = letters[1:3], x = 1:2)
   data$stratum <- LETTERS[c(1, 1, 2, 1, 2, 2)]
-  data$y <- c(1, 2, 1, 3, 1, 2)
-  data$weight <- c(.5, 1, 2.5, 2, 1.5, 1)
+  data$y <- c(1, 1, 1, 1, 1, 2)
+  data$weight <- c(.5, 1, 1, .5, 1, 1)
   comp <- as.data.frame(StatFlow$compute_panel(data))
-  expect_equivalent(comp[with(comp, order(x, alluvium)), ]$n,
-                    c(2.5, 1, 0.5, 1, 1.5, 2))
-  expect_equivalent(comp[with(comp, order(x, alluvium)), ]$count,
-                    c(2.5, 2, 0.5, 2, 1.5, 6))
-  expect_equivalent(comp[with(comp, order(x, alluvium)), ]$prop,
-                    c(9.5, 7.6, 1.9, 4, 3, 12) / 19)
+  comp <- comp[with(comp, order(x, alluvium)), ]
+  expect_equivalent(comp$n, c(1, 1, 0.5, 1, 1, 0.5))
+  expect_equivalent(comp$count, c(1, 1, 0.5, 2, 1, 0.5))
+  expect_equivalent(comp$prop, c(c(2, 2, 1) / 5, c(4, 2, 1) / 7))
   expect_null(comp$weight)
 })
 
