@@ -6,14 +6,15 @@ ggplot(as.data.frame(Titanic),
   stat_stratum(geom = "errorbar") +
   geom_line(stat = "alluvium") +
   stat_alluvium(geom = "pointrange") +
-  geom_text(stat = "stratum", infer.label = TRUE) +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 
 # lode ordering examples
 gg <- ggplot(as.data.frame(Titanic),
              aes(y = Freq,
                  axis1 = Class, axis2 = Sex, axis3 = Age)) +
-  geom_stratum() + geom_text(stat = "stratum", infer.label = TRUE) +
+  geom_stratum() +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 # use of lode controls
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
@@ -110,6 +111,7 @@ ggplot(subset(titanic, Class != "Crew"),
        aes(axis1 = Class, axis2 = Sex, axis3 = Age, y = Lives)) +
   geom_alluvium(aes(alpha = Survived, fill = Class), absolute = FALSE) +
   geom_stratum(absolute = FALSE) +
-  geom_text(stat = "stratum", infer.label = TRUE, absolute = FALSE) +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum)),
+            absolute = FALSE) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"), expand = c(.1, .05)) +
   scale_alpha_discrete(range = c(.25, .75), guide = FALSE)

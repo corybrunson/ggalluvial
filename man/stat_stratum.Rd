@@ -74,21 +74,22 @@ using negative or absolute values of \code{y}.}
 alluvia format.}
 
 \item{distill}{A function (or its name) to be used to distill alluvium values
-to a single lode label, accessible via \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}}. In addition
-to existing functions, \code{distill} accepts the character values \code{"first"}
-(used if \code{distill} is \code{TRUE}), \code{"last"}, and \code{"most"} (which returns the
-first modal value).}
+to a single lode label, accessible via \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}} (similar to
+its behavior in \code{\link[=to_alluvia_form]{to_alluvia_form()}}). In addition to existing functions,
+accepts the character values \code{"first"} (the default), \code{"last"}, and
+\code{"most"} (which returns the first modal value).}
 
 \item{negate.strata}{A vector of values of the \code{stratum} aesthetic to be
 treated as negative (will ignore missing values with a warning).}
 
 \item{infer.label}{Logical; whether to assign the \code{stratum} or \code{alluvium}
 variable to the \code{label} aesthetic. Defaults to \code{FALSE}, and requires that
-no \code{label} aesthetic is assigned. This parameter is intended only for uses
-in which the data are in alluva form and are therefore converted to lode
-form before the statistical transformation.}
+no \code{label} aesthetic is assigned. This parameter is intended for use only
+with data in alluva form, which are converted to lode form before the
+statistical transformation. Deprecated; use \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}}
+instead.}
 
-\item{label.strata}{Deprecated; alias for \code{infer.label}.}
+\item{label.strata}{Defunct; alias for \code{infer.label}.}
 
 \item{min.y, max.y}{Numeric; bounds on the heights of the strata to be
 rendered. Use these bounds to exclude strata outside a certain range, for
@@ -164,6 +165,8 @@ These can be used with \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}} t
 \item{n}{number of cases in lode}
 \item{count}{cumulative weight of lode}
 \item{prop}{weighted proportion of lode}
+\item{stratum}{stratum value}
+\item{alluvium}{alluvium value}
 \item{lode}{lode label distilled from alluvia}
 }
 The numerical variables are grouped by \code{x} and weighted by \code{weight}. The
@@ -217,7 +220,7 @@ ggplot(vaccinations,
 ggplot(as.data.frame(Titanic),
        aes(y = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age, axis4 = Survived)) +
-  geom_text(stat = "stratum", infer.label = TRUE) +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
   stat_stratum(geom = "errorbar") +
   scale_x_discrete(limits = c("Class", "Sex", "Age", "Survived"))
 
@@ -250,7 +253,7 @@ ggplot(admissions,
        aes(y = Count, axis1 = Dept, axis2 = Gender)) +
   geom_alluvium(aes(fill = Dept), width = 1/12) +
   geom_stratum(width = 1/12, fill = "black", color = "grey") +
-  geom_label(stat = "stratum", infer.label = TRUE, min.y = 200) +
+  geom_label(stat = "stratum", aes(label = after_stat(stratum)), min.y = 200) +
   scale_x_discrete(limits = c("Department", "Gender"), expand = c(.05, .05))
 }
 \seealso{

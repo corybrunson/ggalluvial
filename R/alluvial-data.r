@@ -271,13 +271,6 @@ to_alluvia_form <- function(data,
   res
 }
 
-# distilling functions
-first <- dplyr::first
-last <- dplyr::last
-most <- function(x) {
-  x[which(factor(x) == names(which.max(table(factor(x)))))[1]]
-}
-
 # require different character strings to represent strata at different axes
 discern_data <- function(data, axes, sep = ".") {
   # strata at each axis in order

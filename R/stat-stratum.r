@@ -33,18 +33,19 @@
 #' @param discern Passed to [to_lodes_form()] if `data` is in
 #'   alluvia format.
 #' @param distill A function (or its name) to be used to distill alluvium values
-#'   to a single lode label, accessible via [ggplot2::after_stat()]. In addition
-#'   to existing functions, `distill` accepts the character values `"first"`
-#'   (used if `distill` is `TRUE`), `"last"`, and `"most"` (which returns the
-#'   first modal value).
+#'   to a single lode label, accessible via [ggplot2::after_stat()] (similar to
+#'   its behavior in [to_alluvia_form()]). In addition to existing functions,
+#'   accepts the character values `"first"` (the default), `"last"`, and
+#'   `"most"` (which returns the first modal value).
 #' @param negate.strata A vector of values of the `stratum` aesthetic to be
 #'   treated as negative (will ignore missing values with a warning).
 #' @param infer.label Logical; whether to assign the `stratum` or `alluvium`
 #'   variable to the `label` aesthetic. Defaults to `FALSE`, and requires that
-#'   no `label` aesthetic is assigned. This parameter is intended only for uses
-#'   in which the data are in alluva form and are therefore converted to lode
-#'   form before the statistical transformation.
-#' @param label.strata Deprecated; alias for `infer.label`.
+#'   no `label` aesthetic is assigned. This parameter is intended for use only
+#'   with data in alluva form, which are converted to lode form before the
+#'   statistical transformation. Deprecated; use [ggplot2::after_stat()]
+#'   instead.
+#' @param label.strata Defunct; alias for `infer.label`.
 #' @param min.y,max.y Numeric; bounds on the heights of the strata to be
 #'   rendered. Use these bounds to exclude strata outside a certain range, for
 #'   example when labeling strata using [ggplot2::geom_text()].
@@ -173,10 +174,13 @@ StatStratum <- ggproto(
     
     # introduce label
     if (! is.null(label.strata)) {
-      deprecate_parameter("label.strata", "infer.label")
+      defunct_parameter("label.strata",
+                        msg = "use `aes(label = after_stat(stratum))`.")
       infer.label <- label.strata
     }
     if (infer.label) {
+      deprecate_parameter("infer.label",
+                          msg = "Use `aes(label = after_stat(stratum))`.")
       if (is.null(data$label)) {
         data$label <- data$stratum
       } else {

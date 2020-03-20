@@ -10,3 +10,10 @@
   "vjust", "hjust", "angle",
   "family", "fontface", "lineheight"
 )
+
+# distilling functions
+first <- dplyr::first
+last <- dplyr::last
+most <- function(x) {
+  x[which(factor(x) == names(which.max(table(factor(x)))))[1]]
+}

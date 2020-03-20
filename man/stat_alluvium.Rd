@@ -80,11 +80,7 @@ treated as negative (will ignore missing values with a warning).}
 \item{aggregate.y}{Deprecated alias for \code{cement.alluvia}.}
 
 \item{cement.alluvia}{Logical value indicating whether to aggregate \code{y}
-values over equivalent alluvia before computing lode and flow positions.
-Alternatively, a function (or its name) to combine the labels (if any) of
-equivalent alluvia, similar to the \code{distill} parameter of
-\code{\link[=to_alluvia_form]{to_alluvia_form()}}). If set to \code{TRUE}, defaults to function
-\verb{[dplyr::first()]}.}
+values over equivalent alluvia before computing lode and flow positions.}
 
 \item{lode.guidance}{The function to prioritize the axis variables for
 ordering the lodes within each stratum, or else a character string
@@ -114,9 +110,10 @@ specified in \code{aes()}.}
 
 \item{infer.label}{Logical; whether to assign the \code{stratum} or \code{alluvium}
 variable to the \code{label} aesthetic. Defaults to \code{FALSE}, and requires that
-no \code{label} aesthetic is assigned. This parameter is intended only for uses
-in which the data are in alluva form and are therefore converted to lode
-form before the statistical transformation.}
+no \code{label} aesthetic is assigned. This parameter is intended for use only
+with data in alluva form, which are converted to lode form before the
+statistical transformation. Deprecated; use \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}}
+instead.}
 
 \item{min.y}{Numeric; bounds on the heights of the strata to be
 rendered. Use these bounds to exclude strata outside a certain range, for
@@ -195,6 +192,8 @@ These can be used with \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}} t
 \item{n}{number of cases in lode}
 \item{count}{cumulative weight of lode}
 \item{prop}{weighted proportion of lode}
+\item{stratum}{stratum value}
+\item{alluvium}{alluvium value}
 \item{lode}{lode label distilled from alluvia}
 }
 The numerical variables are grouped by \code{x} and weighted by \code{weight}. The
@@ -237,14 +236,15 @@ ggplot(as.data.frame(Titanic),
   stat_stratum(geom = "errorbar") +
   geom_line(stat = "alluvium") +
   stat_alluvium(geom = "pointrange") +
-  geom_text(stat = "stratum", infer.label = TRUE) +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 
 # lode ordering examples
 gg <- ggplot(as.data.frame(Titanic),
              aes(y = Freq,
                  axis1 = Class, axis2 = Sex, axis3 = Age)) +
-  geom_stratum() + geom_text(stat = "stratum", infer.label = TRUE) +
+  geom_stratum() +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 # use of lode controls
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
@@ -341,7 +341,8 @@ ggplot(subset(titanic, Class != "Crew"),
        aes(axis1 = Class, axis2 = Sex, axis3 = Age, y = Lives)) +
   geom_alluvium(aes(alpha = Survived, fill = Class), absolute = FALSE) +
   geom_stratum(absolute = FALSE) +
-  geom_text(stat = "stratum", infer.label = TRUE, absolute = FALSE) +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum)),
+            absolute = FALSE) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"), expand = c(.1, .05)) +
   scale_alpha_discrete(range = c(.25, .75), guide = FALSE)
 }

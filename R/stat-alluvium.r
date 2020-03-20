@@ -18,10 +18,6 @@
 #' @inheritParams stat_flow
 #' @param cement.alluvia Logical value indicating whether to aggregate `y`
 #'   values over equivalent alluvia before computing lode and flow positions.
-#'   Alternatively, a function (or its name) to combine the labels (if any) of
-#'   equivalent alluvia, similar to the `distill` parameter of
-#'   [to_alluvia_form()]). If set to `TRUE`, defaults to function
-#'   `[dplyr::first()]`.
 #' @param aggregate.y Deprecated alias for `cement.alluvia`.
 #' @param lode.guidance The function to prioritize the axis variables for
 #'   ordering the lodes within each stratum, or else a character string
@@ -178,6 +174,8 @@ StatAlluvium <- ggproto(
     
     # introduce label
     if (infer.label) {
+      deprecate_parameter("infer.label",
+                          msg = "Use `aes(label = after_stat(alluvium))`.")
       if (is.null(data$label)) {
         data$label <- data$alluvium
       } else {

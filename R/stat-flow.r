@@ -144,6 +144,8 @@ StatFlow <- ggproto(
     
     # introduce label
     if (infer.label) {
+      deprecate_parameter("infer.label",
+                          msg = "Use `aes(label = after_stat(alluvium))`.")
       if (is.null(data$label)) {
         data$label <- data$alluvium
       } else {

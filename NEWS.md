@@ -7,7 +7,9 @@ In response to **ggplot2** v3.2.0, which removes the **plyr** dependency, the de
 
 ## Computed variables
 
-The alluvial stats now all compute three variables for use with `after_stat()`: `n`, `count`, and `prop`. These can all be weighted using the `weight` aesthetic, which is dropped by the stats during computation (so that it does not confuse the geoms).
+The alluvial stats now compute four variables for use with `after_stat()`: numeric variables `n`, `count`, and `prop`; and character variable `lode` when the `alluvium` aesthetic is specified. The numerical variables can be weighted using the `weight` aesthetic, which is dropped during computation (so that it does not confuse the geoms), while `lode` is distilled according to a new `distill` parameter.
+
+These new variables complement the already-computed variables `stratum` and (if specified) `alluvium`. This obviates the need for the `infer.label` parameter, which is deprecated. Its alias, `label.strata`, is now defunct.
 
 # ggalluvial 0.11.2
 
