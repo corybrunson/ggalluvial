@@ -32,6 +32,11 @@
 #'   using negative or absolute values of `y`.
 #' @param discern Passed to [to_lodes_form()] if `data` is in
 #'   alluvia format.
+#' @param distill A function (or its name) to be used to distill alluvium values
+#'   to a single lode label, accessible via [ggplot2::after_stat()]. In addition
+#'   to existing functions, `distill` accepts the character values `"first"`
+#'   (used if `distill` is `TRUE`), `"last"`, and `"most"` (which returns the
+#'   first modal value).
 #' @param negate.strata A vector of values of the `stratum` aesthetic to be
 #'   treated as negative (will ignore missing values with a warning).
 #' @param infer.label Logical; whether to assign the `stratum` or `alluvium`
@@ -53,7 +58,7 @@ stat_stratum <- function(mapping = NULL,
                          decreasing = ggalluvial_opt("decreasing"),
                          reverse = ggalluvial_opt("reverse"),
                          absolute = ggalluvial_opt("absolute"),
-                         discern = FALSE,
+                         discern = FALSE, distill = first,
                          negate.strata = NULL,
                          infer.label = FALSE, label.strata = NULL,
                          min.y = NULL, max.y = NULL,
@@ -74,7 +79,7 @@ stat_stratum <- function(mapping = NULL,
       decreasing = decreasing,
       reverse = reverse,
       absolute = absolute,
-      discern = discern,
+      discern = discern, distill = distill,
       negate.strata = negate.strata,
       infer.label = infer.label, label.strata = label.strata,
       min.y = min.y, max.y = max.y,
@@ -160,7 +165,7 @@ StatStratum <- ggproto(
                            decreasing = ggalluvial_opt("decreasing"),
                            reverse = ggalluvial_opt("reverse"),
                            absolute = ggalluvial_opt("absolute"),
-                           discern = FALSE,
+                           discern = FALSE, distill = first,
                            negate.strata = NULL,
                            infer.label = FALSE, label.strata = NULL,
                            min.y = NULL, max.y = NULL,
@@ -181,10 +186,15 @@ StatStratum <- ggproto(
     }
     
     # aesthetics (in prescribed order)
-    aesthetics <- intersect(.color_diff_aesthetics, names(data))
+    aesthetics <- intersect(c(.color_diff_aesthetics, .text_aesthetics),
+                            names(data))
     
     # sign variable (sorts positives before negatives)
     data$yneg <- data$y < 0
+    # lode variable (before co-opting 'alluvium')
+    data$lode <- data$alluvium
+    # specify distillation function from `distill`
+    distill <- distill_fun(distill)
     
     # initiate variables for `after_stat()`
     weight <- data$weight
@@ -193,25 +203,30 @@ StatStratum <- ggproto(
     data$n <- weight
     data$count <- data$y * weight
     
-    # aggregate variables over `x`, `yneg`, and `stratum`:
-    # take sums of `y` and, if numeric, of `label`
-    # require others hold constant (or else be lost)
-    agg_dat <- unique(data[, c("x", "yneg", "stratum")])
-    for (var in setdiff(names(data), c("x", "yneg", "stratum"))) {
-      agg_var <- stats::aggregate(
-        data[[var]],
-        by = data[, c("x", "yneg", "stratum")],
-        FUN = if (var %in% c(aesthetics, "group", "PANEL")) {
-          only
-        } else {
-          agg_fun(data[[var]])
-        }
-      )
-      names(agg_var)[ncol(agg_var)] <- var
-      agg_dat <- merge(agg_dat, agg_var,
-                       by = c("x", "yneg", "stratum"), all = TRUE)
+    # aggregate variables over 'x', 'yneg', and 'stratum':
+    # sum of computed variables and unique-or-bust values of aesthetics
+    by_vars <- c("x", "yneg", "stratum")
+    only_vars <- c(aesthetics)
+    sum_vars <- c("y", "n", "count")
+    if (! is.null(data$lode)) {
+      agg_lode <- stats::aggregate(data[, "lode", drop = FALSE],
+                                   data[, by_vars],
+                                   distill)
     }
-    data <- agg_dat
+    if (length(only_vars) > 0) {
+      agg_only <- stats::aggregate(data[, only_vars, drop = FALSE],
+                                   data[, by_vars],
+                                   only)
+    }
+    data <- stats::aggregate(data[, sum_vars],
+                             data[, by_vars],
+                             sum)
+    if (! is.null(data$lode)) {
+      data <- merge(data, agg_lode)
+    }
+    if (length(only_vars) > 0) {
+      data <- merge(data, agg_only)
+    }
     
     # remove empty lodes (including labels)
     data <- subset(data, y != 0)
@@ -256,17 +271,6 @@ StatStratum <- ggproto(
     data
   }
 )
-
-# select aggregation function based on variable type
-agg_fun <- function(x) {
-  if (is.character(x) | is.factor(x)) {
-    function(y) only(y)
-  } else if (is.numeric(x)) {
-    sum
-  } else {
-    function(y) NA
-  }
-}
 
 # single unique value, or else NA
 only <- function(x) {

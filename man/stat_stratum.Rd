@@ -13,6 +13,7 @@ stat_stratum(
   reverse = ggalluvial_opt("reverse"),
   absolute = ggalluvial_opt("absolute"),
   discern = FALSE,
+  distill = first,
   negate.strata = NULL,
   infer.label = FALSE,
   label.strata = NULL,
@@ -71,6 +72,12 @@ using negative or absolute values of \code{y}.}
 
 \item{discern}{Passed to \code{\link[=to_lodes_form]{to_lodes_form()}} if \code{data} is in
 alluvia format.}
+
+\item{distill}{A function (or its name) to be used to distill alluvium values
+to a single lode label, accessible via \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}}. In addition
+to existing functions, \code{distill} accepts the character values \code{"first"}
+(used if \code{distill} is \code{TRUE}), \code{"last"}, and \code{"most"} (which returns the
+first modal value).}
 
 \item{negate.strata}{A vector of values of the \code{stratum} aesthetic to be
 treated as negative (will ignore missing values with a warning).}
@@ -157,8 +164,10 @@ These can be used with \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}} t
 \item{n}{number of cases in lode}
 \item{count}{cumulative weight of lode}
 \item{prop}{weighted proportion of lode}
+\item{lode}{lode label distilled from alluvia}
 }
-Each variable is grouped by \code{x} and weighted by \code{weight}.
+The numerical variables are grouped by \code{x} and weighted by \code{weight}. The
+character variable \code{lode} is obtained from \code{alluvium} according to \code{distill}.
 }
 
 \section{Package options}{

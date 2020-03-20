@@ -11,6 +11,7 @@ test_that("`stat_stratum` weights computed variables but drops weight", {
   expect_equivalent(comp$n, c(0.5, 1, 0.5, 2.5))
   expect_equivalent(comp$count, c(0.5, 1, 0.5, 4))
   expect_equivalent(comp$prop, c(c(1, 2) / 3, c(1, 8) / 9))
+  expect_null(comp$lode)
   expect_null(comp$weight)
 })
 

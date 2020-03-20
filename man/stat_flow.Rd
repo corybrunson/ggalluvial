@@ -169,8 +169,10 @@ These can be used with \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}} t
 \item{n}{number of cases in lode}
 \item{count}{cumulative weight of lode}
 \item{prop}{weighted proportion of lode}
+\item{lode}{lode label distilled from alluvia}
 }
-Each variable is grouped by \code{x} and weighted by \code{weight}.
+The numerical variables are grouped by \code{x} and weighted by \code{weight}. The
+character variable \code{lode} is obtained from \code{alluvium} according to \code{distill}.
 }
 
 \section{Package options}{

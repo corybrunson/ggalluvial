@@ -13,6 +13,7 @@ test_that("`stat_alluvium` weights computed variables but drops weight", {
   expect_equivalent(comp$n, c(0.5, 1, 1, 0.5, 1, 1))
   expect_equivalent(comp$count, c(0.5, 1, 1, 0.5, 1, 2))
   expect_equivalent(comp$prop, c(c(1, 2, 2) / 5, c(1, 2, 4) / 7))
+  expect_equal(comp$lode, factor(rep(letters[1:3], times = 2)))
   expect_null(comp$weight)
   # cementing alluvia
   data$stratum <- LETTERS[c(1, 1, 2)]
@@ -21,6 +22,7 @@ test_that("`stat_alluvium` weights computed variables but drops weight", {
   expect_equivalent(comp$n, c(1.5, 1, 1.5, 1))
   expect_equivalent(comp$count, c(1.5, 1, 1.5, 2))
   expect_equivalent(comp$prop, c(c(3, 2) / 5, c(3, 4) / 7))
+  expect_equal(comp$lode, rep(factor(letters[1:3])[c(1, 3)], times = 2))
   expect_null(comp$weight)
 })
 

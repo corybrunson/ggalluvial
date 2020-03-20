@@ -85,7 +85,7 @@ of \code{id}. Alternatively, a function (or its name) to be used to distill
 each such variable to a single value. In addition to existing functions,
 \code{distill} accepts the character values \code{"first"} (used if
 \code{distill} is \code{TRUE}), \code{"last"}, and \code{"most"} (which
-returns the modal value).}
+returns the first modal value).}
 }
 \description{
 Alluvial plots consist of multiple horizontally-distributed columns (axes)

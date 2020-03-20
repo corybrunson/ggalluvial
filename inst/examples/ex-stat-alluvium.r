@@ -58,17 +58,18 @@ gg <- ggplot(majors,
   geom_stratum()
 # diagram with outlined alluvia and labels
 gg + geom_flow(stat = "alluvium", color = "black") +
-  geom_text(aes(label = as.integer(student)), stat = "alluvium")
-# cemented diagram with default label cementation
+  geom_text(aes(label = after_stat(lode)), stat = "alluvium")
+# cemented diagram with default distillation (first most common alluvium)
 gg +
   geom_flow(stat = "alluvium", color = "black", cement.alluvia = TRUE) +
-  geom_text(aes(label = as.integer(student)), stat = "alluvium",
+  geom_text(aes(label = after_stat(lode)), stat = "alluvium",
             cement.alluvia = TRUE)
-# cemented diagram with custom label cementation
+# cemented diagram with custom label distillation
 gg +
   geom_flow(stat = "alluvium", color = "black", cement.alluvia = TRUE) +
-  geom_text(aes(label = as.integer(student)), stat = "alluvium",
-            cement.alluvia = function(x) paste(x, collapse = "; "))
+  geom_text(aes(label = after_stat(lode)), stat = "alluvium",
+            cement.alluvia = TRUE,
+            distill = function(x) paste(x, collapse = "; "))
 
 # irregular spacing between axes of a continuous variable
 data(Refugees, package = "alluvial")

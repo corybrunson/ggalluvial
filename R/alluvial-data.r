@@ -65,7 +65,7 @@
 #'   each such variable to a single value. In addition to existing functions,
 #'   `distill` accepts the character values `"first"` (used if
 #'   `distill` is `TRUE`), `"last"`, and `"most"` (which
-#'   returns the modal value).
+#'   returns the first modal value).
 #' @param discern Logical value indicating whether to suffix values of the
 #'   variables used as axes that appear at more than one variable in order to
 #'   distinguish their factor levels. This forces the levels of the combined

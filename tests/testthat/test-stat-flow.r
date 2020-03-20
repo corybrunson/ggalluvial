@@ -12,6 +12,7 @@ test_that("`stat_flow` weights computed variables but drops weight", {
   expect_equivalent(comp$n, c(1, 1, 0.5, 1, 1, 0.5))
   expect_equivalent(comp$count, c(1, 1, 0.5, 2, 1, 0.5))
   expect_equivalent(comp$prop, c(c(2, 2, 1) / 5, c(4, 2, 1) / 7))
+  expect_equal(comp$lode, rep(factor(letters[3:1]), times = 2))
   expect_null(comp$weight)
 })
 

@@ -136,7 +136,7 @@ StatFlow <- ggproto(
                            decreasing = ggalluvial_opt("decreasing"),
                            reverse = ggalluvial_opt("reverse"),
                            absolute = ggalluvial_opt("absolute"),
-                           discern = FALSE,
+                           discern = FALSE, distill = first,
                            negate.strata = NULL,
                            aes.bind = ggalluvial_opt("aes.bind"),
                            infer.label = FALSE,
@@ -153,7 +153,8 @@ StatFlow <- ggproto(
     }
     
     # aesthetics (in prescribed order)
-    aesthetics <- intersect(.color_diff_aesthetics, names(data))
+    aesthetics <- intersect(c(.color_diff_aesthetics, .text_aesthetics),
+                            names(data))
     # match arguments for `aes.bind`
     if (! is.null(aes.bind)) {
       if (is.logical(aes.bind)) {
@@ -171,6 +172,10 @@ StatFlow <- ggproto(
     
     # sign variable (sorts positives before negatives)
     data$yneg <- data$y < 0
+    # lode variable (before co-opting 'alluvium')
+    data$lode <- data$alluvium
+    # specify distillation function from `distill`
+    distill <- distill_fun(distill)
     
     # define 'deposit' variable to rank strata vertically
     data <- deposit_data(data, decreasing, reverse, absolute)
@@ -224,15 +229,30 @@ StatFlow <- ggproto(
     data$n <- weight
     data$count <- data$y * weight
     
-    # sum 'y', 'n' and, if numeric, 'label' over 'x', 'yneg', and 'stratum'
-    sum_vars <- c("y", "count", "n", if (is.numeric(data$label)) "label")
-    # exclude `group` because it will be redefined below
-    data$group <- NULL
-    by_vars <- setdiff(names(data), c("group", sum_vars))
-    # keep NAs in order to correctly position flows
-    data <- dplyr::summarize_at(dplyr::group_by(data, .dots = by_vars),
-                                sum_vars, sum, na.rm = TRUE)
-    # redefine `group` to be used to control grobs in the geom step
+    # aggregate variables over 'alluvium', 'x', 'yneg', and 'stratum':
+    # sum of computed variables and unique-or-bust values of aesthetics
+    by_vars <- c("alluvium", "x", "yneg", "stratum",
+                  "deposit", "fissure", "link", "contact",
+                  "adj_deposit", "adj_fissure")
+    only_vars <- c(aesthetics)
+    sum_vars <- c("y", "n", "count")
+    agg_lode <- stats::aggregate(data[, "lode", drop = FALSE],
+                                 data[, by_vars],
+                                 distill)
+    if (length(only_vars) > 0) {
+      agg_only <- stats::aggregate(data[, only_vars, drop = FALSE],
+                                   data[, by_vars],
+                                   only)
+    }
+    data <- stats::aggregate(data[, sum_vars],
+                             data[, by_vars],
+                             sum)
+    data <- merge(data, agg_lode)
+    if (length(only_vars) > 0) {
+      data <- merge(data, agg_only)
+    }
+    
+    # redefine 'group' to be used to control grobs in the geom step
     data$group <- data$alluvium
     
     # calculate variables for `after_stat()`

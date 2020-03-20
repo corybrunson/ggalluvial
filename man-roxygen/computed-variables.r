@@ -5,5 +5,7 @@
 #'   \item{n}{number of cases in lode}
 #'   \item{count}{cumulative weight of lode}
 #'   \item{prop}{weighted proportion of lode}
+#'   \item{lode}{lode label distilled from alluvia}
 #' }
-#' Each variable is grouped by `x` and weighted by `weight`.
+#' The numerical variables are grouped by `x` and weighted by `weight`. The
+#' character variable `lode` is obtained from `alluvium` according to `distill`.
