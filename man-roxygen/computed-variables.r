@@ -5,8 +5,7 @@
 #'   \item{n}{number of cases in lode}
 #'   \item{count}{cumulative weight of lode}
 #'   \item{prop}{weighted proportion of lode}
-#'   \item{stratum}{stratum value}
-#'   \item{alluvium}{alluvium value}
+#'   \item{stratum}{value of variable used to define strata}
 #'   \item{lode}{lode label distilled from alluvia}
 #' }
 #' The numerical variables are grouped by `x` and weighted by `weight`. The

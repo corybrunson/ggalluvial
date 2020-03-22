@@ -165,8 +165,7 @@ These can be used with \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}} t
 \item{n}{number of cases in lode}
 \item{count}{cumulative weight of lode}
 \item{prop}{weighted proportion of lode}
-\item{stratum}{stratum value}
-\item{alluvium}{alluvium value}
+\item{stratum}{value of variable used to define strata}
 \item{lode}{lode label distilled from alluvia}
 }
 The numerical variables are grouped by \code{x} and weighted by \code{weight}. The
