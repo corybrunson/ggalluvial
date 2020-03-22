@@ -58,6 +58,7 @@ Each axis corresponds to an odd-valued term (1 through 15), at which the student
 library(ggalluvial)
 data(majors)
 majors$curriculum <- as.factor(majors$curriculum)
+arr <- arrow(angle = 15, type = "closed", length = unit(.03, "npc"))
 ggplot(majors,
        aes(x = semester, stratum = curriculum, alluvium = student,
            fill = curriculum)) +
@@ -67,7 +68,32 @@ ggplot(majors,
             color = "darkgray", negate.strata = NA) +
   geom_stratum(negate.strata = NA) +
   theme(legend.position = "right") +
-  labs(x = NULL)
+  labs(x = NULL) +
+  # annotate axes
+  annotate("segment", x = 2.33, y = -1.33, xend = 2, yend = -.33, arrow = arr) +
+  annotate("segment", x = 3, y = -1.33, xend = 3, yend = -.33, arrow = arr) +
+  annotate("segment", x = 3.67, y = -1.33, xend = 4, yend = -.33, arrow = arr) +
+  annotate("text", x = 3, y = -1.67, label = "axes / dimensions", size = 4) +
+  # annotate strata
+  annotate("segment", x = 1.5, xend = 1, y = 3.5, yend = 1.5, arrow = arr) +
+  annotate("segment", x = 1.5, xend = 1, y = 4, yend = 3.5, arrow = arr) +
+  annotate("segment", x = 1.5, xend = 1, y = 4.5, yend = 6, arrow = arr) +
+  annotate("text", x = 1.67, y = 4, label = "strata", angle = 90, size = 4) +
+  # annotate alluvia
+  annotate("segment", x = 4.33, y = 6.5, xend = 1, yend = 8.5, arrow = arr) +
+  annotate("segment", x = 5, y = 6.5, xend = 4.5, yend = 9, arrow = arr) +
+  annotate("segment", x = 5.67, y = 6.5, xend = 7.5, yend = 7, arrow = arr) +
+  annotate("text", x = 5, y = 6.17, label = "one alluvium", size = 4) +
+  # annotate flows
+  annotate("segment", x = 5.33, y = 2.5, xend = 4.25, yend = 0.5, arrow = arr) +
+  annotate("segment", x = 5.33, y = 3, xend = 4.25, yend = 2.5, arrow = arr) +
+  annotate("segment", x = 5.33, y = 3.5, xend = 3.75, yend = 4.5, arrow = arr) +
+  annotate("text", x = 5.5, y = 3, label = "flows", angle = 90, size = 4) +
+  # annotate lodes
+  annotate("segment", x = 7.5, y = 3, xend = 8, yend = 1.5, arrow = arr) +
+  annotate("segment", x = 7.5, y = 3.5, xend = 8, yend = 3.5, arrow = arr) +
+  annotate("segment", x = 7.5, y = 4, xend = 8, yend = 5.5, arrow = arr) +
+  annotate("text", x = 7.33, y = 3.5, label = "lodes", angle = -90, size = 4)
 ```
 
 Plot layers are formed by pairing stats (statistical transformations) with geoms (mappings to graphical elements and properties); while every stat and geom has a conventional default, alternative grammatical pairings provide combinatorial richness to plotting possibilities. In the above example, the alluvium geom was paired with the flow stat, so that the flows of each alluvium could change color across the axes.
