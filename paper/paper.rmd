@@ -22,11 +22,17 @@ bibliography: paper.bib
 <!--
 To generate `paper.md`, execute this from the console:
 ```r
-knitr::knit("paper.rmd", "paper.md")
+knitr::knit("paper/paper.rmd", "paper/paper.md")
 ```
 -->
 
-
+```{r, echo=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "paper/"
+)
+```
 
 # Summary
 
@@ -48,7 +54,48 @@ Second, ggalluvial adopts a distinctive geological nomenclature to distinguish "
 Figure \ref{fig:example} illustrates these and other plot elements by visualizing changes in several students' curricula (based on their declared majors) across several academic terms.
 Each axis corresponds to an odd-valued term (1 through 15), at which the students are grouped into strata according to their curricula---Art History, Ceramic, etc. The individual students can be tracked from term to term along their alluvia: for instance, one student started out in Digital Art, encoded by the blue ribbon, but had switched to Painting by the 11th term, where the ribbon turns pink. The partially transparent flows are colored according to their originating (not their terminating) terms, and the lodes where they intersect the strata are obscured by the solid-colored strata themselves. When a student's curriculum is unknown, they are grouped into the "missing" (`NA`) stratum, which is weighted negatively in this example.
 
-![\label{fig:example}Alluvial plot of changes in curricula by a cohort of art students](paper/figure-1.png)
+```{r figure, echo=FALSE, message=FALSE, warning=FALSE, fig.height=4, fig.width=8, fig.cap="\\label{fig:example}Alluvial plot of changes in curricula by a cohort of art students"}
+library(ggalluvial)
+data(majors)
+majors$curriculum <- as.factor(majors$curriculum)
+levels(majors$semester) <- gsub("CURR", "Term ", levels(majors$semester))
+arr <- arrow(angle = 15, type = "closed", length = unit(.03, "npc"))
+ggplot(majors,
+       aes(x = semester, stratum = curriculum, alluvium = student,
+           fill = curriculum)) +
+  scale_fill_brewer(type = "qual", palette = "Set2", name = "Curriculum") +
+  scale_y_continuous(breaks = seq(-2, 10, 2)) +
+  geom_flow(stat = "alluvium", lode.guidance = "frontback",
+            color = "darkgray", negate.strata = NA) +
+  geom_stratum(negate.strata = NA) +
+  theme(legend.position = "right") +
+  labs(x = NULL, y = "Number of students") +
+  # annotate axes
+  annotate("segment", x = 2.33, y = -1.33, xend = 2, yend = -.33, arrow = arr) +
+  annotate("segment", x = 3, y = -1.33, xend = 3, yend = -.33, arrow = arr) +
+  annotate("segment", x = 3.67, y = -1.33, xend = 4, yend = -.33, arrow = arr) +
+  annotate("text", x = 3, y = -1.67, label = "axes / dimensions", size = 4) +
+  # annotate strata
+  annotate("segment", x = 1.5, xend = 1, y = 3.5, yend = 1.5, arrow = arr) +
+  annotate("segment", x = 1.5, xend = 1, y = 4, yend = 3.5, arrow = arr) +
+  annotate("segment", x = 1.5, xend = 1, y = 4.5, yend = 6, arrow = arr) +
+  annotate("text", x = 1.67, y = 4, label = "strata", angle = 90, size = 4) +
+  # annotate alluvia
+  annotate("segment", x = 4.33, y = 6.5, xend = 1, yend = 8.5, arrow = arr) +
+  annotate("segment", x = 5, y = 6.5, xend = 4.5, yend = 9, arrow = arr) +
+  annotate("segment", x = 5.67, y = 6.5, xend = 7.5, yend = 7, arrow = arr) +
+  annotate("text", x = 5, y = 6.17, label = "one alluvium", size = 4) +
+  # annotate flows
+  annotate("segment", x = 5.33, y = 2.5, xend = 4.25, yend = 0.5, arrow = arr) +
+  annotate("segment", x = 5.33, y = 3, xend = 4.25, yend = 2.5, arrow = arr) +
+  annotate("segment", x = 5.33, y = 3.5, xend = 3.75, yend = 4.5, arrow = arr) +
+  annotate("text", x = 5.5, y = 3, label = "flows", angle = 90, size = 4) +
+  # annotate lodes
+  annotate("segment", x = 7.5, y = 3, xend = 8, yend = 1.5, arrow = arr) +
+  annotate("segment", x = 7.5, y = 3.5, xend = 8, yend = 3.5, arrow = arr) +
+  annotate("segment", x = 7.5, y = 4, xend = 8, yend = 5.5, arrow = arr) +
+  annotate("text", x = 7.33, y = 3.5, label = "lodes", angle = -90, size = 4)
+```
 
 Plot layers are formed by pairing stats (statistical transformations) with geoms (mappings to graphical elements and properties); while every stat and geom has a conventional default, alternative grammatical pairings provide combinatorial richness to plotting possibilities. In the above example, the alluvium geom was paired with the flow stat, so that the flows of each alluvium could change color across the axes.
 Other meaningful stat--geom combinations can be found in the documentation, including pairings of the three alluvial stats (stratum, alluvium, and flow) with the text, errorbar, and pointrange geoms.
