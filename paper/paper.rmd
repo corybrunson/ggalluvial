@@ -22,7 +22,7 @@ bibliography: paper.bib
 <!--
 To generate `paper.md`, execute this from the console:
 ```r
-knitr::knit("paper/paper.rmd", "paper/paper.md")
+knitr::knit("paper.rmd", "paper.md")
 ```
 -->
 
@@ -30,7 +30,7 @@ knitr::knit("paper/paper.rmd", "paper/paper.md")
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "paper/"
+  fig.path = ""
 )
 ```
 
