@@ -10,5 +10,8 @@ doc
 .RData
 .Rproj.user
 
+# version testing
+revdep
+
 # sandbox
 sandbox

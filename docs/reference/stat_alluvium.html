@@ -72,7 +72,7 @@ aesthetic for plotting purposes (for now)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.3</span>
       </span>
     </div>
 
@@ -136,25 +136,37 @@ intersections of the alluvia with the strata. It leverages the <code>group</code
 aesthetic for plotting purposes (for now).</p>
     </div>
 
-    <pre class="usage"><span class='fu'>stat_alluvium</span>(<span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
-  <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"identity"</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"decreasing"</span>),
+    <pre class="usage"><span class='fu'>stat_alluvium</span>(
+  <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
+  <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"identity"</span>,
+  <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"decreasing"</span>),
   <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"reverse"</span>),
-  <span class='kw'>absolute</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"absolute"</span>), <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>negate.strata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>aggregate.y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>absolute</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"absolute"</span>),
+  <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>negate.strata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>aggregate.y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>cement.alluvia</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"cement.alluvia"</span>),
   <span class='kw'>lode.guidance</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"lode.guidance"</span>),
   <span class='kw'>lode.ordering</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"lode.ordering"</span>),
-  <span class='kw'>aes.bind</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"aes.bind"</span>), <span class='kw'>infer.label</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>min.y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>max.y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
-  <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>aes.bind</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"aes.bind"</span>),
+  <span class='kw'>infer.label</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>min.y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>max.y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>mapping</th>
-      <td><p>Set of aesthetic mappings created by <code>aes()</code> or
-<code>aes_()</code>. If specified and <code>inherit.aes = TRUE</code> (the
+      <td><p>Set of aesthetic mappings created by <code><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes()</a></code> or
+<code><a href='https://ggplot2.tidyverse.org/reference/aes_.html'>aes_()</a></code>. If specified and <code>inherit.aes = TRUE</code> (the
 default), it is combined with the default mapping at the top level of the
 plot. You must supply <code>mapping</code> if there is no plot mapping.</p></td>
     </tr>
@@ -163,10 +175,10 @@ plot. You must supply <code>mapping</code> if there is no plot mapping.</p></td>
       <td><p>The data to be displayed in this layer. There are three
 options:</p>
 <p>If <code>NULL</code>, the default, the data is inherited from the plot
-data as specified in the call to <code>ggplot()</code>.</p>
+data as specified in the call to <code><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot()</a></code>.</p>
 <p>A <code>data.frame</code>, or other object, will override the plot
 data. All objects will be fortified to produce a data frame. See
-<code>fortify()</code> for which variables will be created.</p>
+<code><a href='https://ggplot2.tidyverse.org/reference/fortify.html'>fortify()</a></code> for which variables will be created.</p>
 <p>A <code>function</code> will be called with a single argument,
 the plot data. The return value must be a <code>data.frame</code>, and
 will be used as the layer data. A <code>function</code> can be created
@@ -299,7 +311,7 @@ display.</p></td>
       <td><p>If <code>FALSE</code>, overrides the default aesthetics,
 rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
-the default plot specification, e.g. <code>borders()</code>.</p></td>
+the default plot specification, e.g. <code><a href='https://ggplot2.tidyverse.org/reference/borders.html'>borders()</a></code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -369,8 +381,9 @@ discontinued. Use <code>y</code> and <code>cement.alluvia</code> instead.</p>
 
     <div class='dont-index'><p><code><a href='https://ggplot2.tidyverse.org/reference/layer.html'>ggplot2::layer()</a></code> for additional arguments and <code><a href='geom_alluvium.html'>geom_alluvium()</a></code>,
 <code><a href='geom_lode.html'>geom_lode()</a></code>, and <code><a href='geom_flow.html'>geom_flow()</a></code> for the corresponding geoms.</p>
-<p>Other alluvial stat layers: <code><a href='stat_flow.html'>stat_flow</a></code>,
-  <code><a href='stat_stratum.html'>stat_stratum</a></code></p></div>
+<p>Other alluvial stat layers: 
+<code><a href='stat_flow.html'>stat_flow</a>()</code>,
+<code><a href='stat_stratum.html'>stat_stratum</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># illustrate positioning</span>
@@ -396,16 +409,16 @@ discontinued. Use <code>y</code> and <code>cement.alluvia</code> instead.</p>
                <span class='kw'>aes.bind</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>lode.guidance</span> <span class='kw'>=</span> <span class='st'>"forward"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Logical values of `aes.bind` are deprecated; replacing TRUE with 'flow'.</span></div><div class='img'><img src='stat_alluvium-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># use of lode ordering</span>
 <span class='no'>lode_ord</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>expr</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>32</span>), <span class='kw'>simplify</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>lode_ord</span>)</div><div class='output co'>#&gt; [[1]]
-#&gt;  [1]  3 26 19  5  1 13 27  8 18 24 20  4 28  7 25 21 30 22  6 31 17 23 11  2 10
-#&gt; [26] 14 15 32 29 12 16  9
+#&gt;  [1] 26 15 32 29 24 10 16 21 12  7 25  8  1 19  3 11 20 13 14  6 31  4  9  5 27
+#&gt; [26] 28 30 18  2 22 23 17
 #&gt; 
 #&gt; [[2]]
-#&gt;  [1] 10 20 15 13 31 26  5  6 17 12 30 14  2 22 21 24 16 25  7 27  3 19 29  8 28
-#&gt; [26] 32  1  9  4 11 18 23
+#&gt;  [1]  3 19 12 17  9 18 24 22 29 27 15  7 25 31 16  4  2  1 30 21 28 10 11 23 14
+#&gt; [26] 32 20  8 13 26  6  5
 #&gt; 
 #&gt; [[3]]
-#&gt;  [1] 20  6 29 16 30  8 12 10  1 11  9 24 27 23 28  7 22 25  4 14 31 19  5  2 26
-#&gt; [26] 21 32 17  3 13 18 15
+#&gt;  [1] 14 19 13 11 16  8  9 18 24 10 15 20  5 21  7 31 30 12 32 22  6  4  2  1 27
+#&gt; [26]  3 26 28 29 25 17 23
 #&gt; </div><div class='input'><span class='no'>gg</span> + <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Survived</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='no'>Sex</span>), <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
                <span class='kw'>lode.ordering</span> <span class='kw'>=</span> <span class='no'>lode_ord</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='img'><img src='stat_alluvium-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># fixed lode ordering across axes</span>
 <span class='no'>gg</span> + <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Survived</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='no'>Sex</span>), <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
