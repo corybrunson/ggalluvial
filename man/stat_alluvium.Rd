@@ -95,8 +95,10 @@ identifying the function. Character options are "zigzag", "frontback",
 (each of length the number of rows of \code{data}) or NULL entries (indicating
 no imposed ordering), or else a numeric matrix of corresponding dimensions,
 giving the preferred ordering of alluvia at each axis. This will be used to
-order the lodes within each stratum by sorting the lodes first by stratum
-and then by the provided vectors.}
+order the lodes within each stratum by sorting the lodes first by stratum,
+then by the provided vectors, and lastly by remaining factors (if the
+vectors contain duplicate entries and therefore do not completely determine
+the lode orderings).}
 
 \item{aes.bind}{At what grouping level, if any, to prioritize differentiation
 aesthetics when ordering the lodes within each stratum. Defaults to

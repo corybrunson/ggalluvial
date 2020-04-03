@@ -1,6 +1,12 @@
 
 # next version (v1.0.0?)
 
+## behavior of `lode.ordering`
+
+For consistency with the behavior of `aes.bind`, `stat_alluvium()` now invokes `lode.ordering` together with `lode.guidance`: If the vectors of `lode.ordering` include duplicates, i.e. they do not completely determine an order, then the remaining deposits are used to refine the order. Previously, `lode.ordering` was assumed to consist of permutation vectors, so the two parameters were mutually exclusive.
+
+Additionally, for consistency with other influences on the lode order, the vectors of `lode.ordering` are reversed if `reverse = TRUE` (the default). **This will change some plots but will not produce new errors.**
+
 # ggalluvial 0.11.3
 
 In response to **ggplot2** v3.2.0, which removes the **plyr** dependency, the dependency has been removed from **ggalluvial** as well.
