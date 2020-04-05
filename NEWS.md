@@ -1,6 +1,18 @@
 
 # next version (v1.0.0?)
 
+## convenience functions that test for pivot between alluvia and lodes forms
+
+Several changes have been made to the `*_*_form()` functions:
+
+- The defunct `logical` parameter has been removed from the functions `is_*_form()`.
+- The functions `is_*_form()` now use `y` rather than `weight` for consistency with other functions.
+- The functions `is_alluvia_form()` and `to_lodes_form()` no longer accept unparameterized inputs as axes but do now allow **tidyselect** specification of `axes` (similar to the `cols` parameter of `pivot_longer()`).
+- The functions internally use the **tidyr** functions `pivot_longer()` and `pivot_wider()` rather than `gather()` and `spread()`.
+    - This reduces performance on some small examples, though this may be resolved with future **tidyr** releases.
+    - Changes to how factor levels are handled when `discern = FALSE` yield more consistent stratum orders that are nevertheless different from previous behavior.
+
+
 # ggalluvial 0.11.3
 
 In response to **ggplot2** v3.2.0, which removes the **plyr** dependency, the dependency has been removed from **ggalluvial** as well.

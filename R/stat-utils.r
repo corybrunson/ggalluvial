@@ -19,13 +19,13 @@ get_alluvial_type <- function(data) {
     }
     if (is_lodes_form(data,
                       key = "x", value = "stratum", id = "alluvium",
-                      weight = "y",
+                      y = "y",
                       silent = TRUE)) return("lodes")
   } else {
     axis_ind <- get_axes(names(data))
     if (is_alluvia_form(data,
                         axes = axis_ind,
-                        weight = "y",
+                        y = "y",
                         silent = TRUE)) return("alluvia")
   }
   return("none")
