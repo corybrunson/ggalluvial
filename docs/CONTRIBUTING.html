@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Authors • ggalluvial</title>
+<title>Contributing to ggalluvial development • ggalluvial</title>
 
 
 <!-- jquery -->
@@ -35,7 +35,7 @@
 
 
 
-<meta property="og:title" content="Authors" />
+<meta property="og:title" content="Contributing to ggalluvial development" />
 
 
 
@@ -54,7 +54,7 @@
   </head>
 
   <body>
-    <div class="container template-authors">
+    <div class="container template-title-body">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -119,15 +119,52 @@
 <div class="row">
   <div class="contents col-md-9">
     <div class="page-header">
-      <h1>Authors</h1>
+      <h1>Contributing to ggalluvial development</h1>
     </div>
 
-    <ul class="list-unstyled">
-      <li>
-        <p><strong>Jason Cory Brunson</strong>. Author, maintainer. 
-        </p>
-      </li>
-    </ul>
+<div id="contributing-to-ggalluvial-development" class="section level1">
+
+<p>The goal of this guide is to help contributors to <strong>ggalluvial</strong> plan their contributions and navigate the process. The sections below cover different types of contributions, usually with increasing degrees of proposed change.</p>
+<p>Note that <strong>ggalluvial</strong> is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing, you agree to its terms.</p>
+<p>This guide is loosely adapted from the contributing guides <a href="https://github.com/tidyverse/ggplot2/blob/master/CONTRIBUTING.md">for <strong>ggplot2</strong></a> and <a href="https://github.com/ropensci/dotgithubfiles/blob/master/dotgithub/CONTRIBUTING.md">from ropensci</a>. If you have questions about or suggestions for this guide, please feel free to contact a package maintainer.</p>
+<div id="editor" class="section level2">
+<h2 class="hasAnchor">
+<a href="#editor" class="anchor"></a>Editor</h2>
+<p><strong>Small edits to comments, documentation, and other non-code files</strong> may be made using <a href="https://help.github.com/en/github/managing-files-in-a-repository/editing-files-in-your-repository">the GitHub file editor</a>. To edit <strong>roxygen2</strong> documentation, make changes to a source file <code>R/&lt;topic&gt;.r</code>, on a line that begins with <code>#'</code>, rather than to a documentation file <code>man/&lt;topic&gt;.Rd</code>.</p>
+<p>For more guidance on <strong>roxygen2</strong> documentation, see <a href="http://r-pkgs.had.co.nz/man.html">this chapter</a> in the online book <em>R packages</em>.</p>
+</div>
+<div id="issues" class="section level2">
+<h2 class="hasAnchor">
+<a href="#issues" class="anchor"></a>Issues</h2>
+<p><strong>Questions, possible bugs, feature requests, other open-ended issues</strong> may be raised as <a href="https://help.github.com/en/github/managing-your-work-on-github/creating-an-issue">issues on GitHub</a>. In most cases, the issue should consist of two sections: a description of the issue, and a reproducible example of it. A reproducible example should attach packages, include data, and execute code:</p>
+<ol>
+<li><p>Attach all relevant packages at the top of the example.</p></li>
+<li>
+<p>Use as small a data set as you can conveniently get that illustrates the issue. Once you have such a data set, the best way to include it in the example is to re-create it using <code><a href="https://rdrr.io/r/base/data.frame.html">data.frame()</a></code> or some other constructor function. Another way is as follows:</p>
+<ol>
+<li>Execute <code><a href="https://rdrr.io/r/base/dput.html">dput(data)</a></code> in R, where <code>data</code> is the data set.</li>
+<li>Copy the output.</li>
+<li>Paste into the example after the package attachments.</li>
+</ol>
+</li>
+<li><p>Use as few lines or steps of code as feasible to illustrate the issue. Add comments at key steps.</p></li>
+</ol>
+<p>For more guidance on reproducible examples, see <a href="https://reprex.tidyverse.org/articles/reprex-dos-and-donts.html">this vignette</a> for the <strong>reprex</strong> package.</p>
+</div>
+<div id="pull-requests" class="section level2">
+<h2 class="hasAnchor">
+<a href="#pull-requests" class="anchor"></a>Pull requests</h2>
+<p><strong>Bug fixes, feature upgrades, and other substantive, self-contained changes</strong> may be contributed via <a href="https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests">pull request</a>. Unless previously discussed with a maintainer, please follow these steps:</p>
+<ol>
+<li>Fork the home repository (<code>corybrunson/ggalluvial</code>).</li>
+<li>Create a new (local) branch on which to make changes. If appropriate, update the documentation on this branch and run functionality checks (e.g. using the <strong>devtools</strong> package).</li>
+<li>Push this branch to the fork and open a pull request to the home repository.</li>
+<li>With the maintainer(s), discuss and (if necessary) update the pull request until it is accepted or decided against. <em>In the latter case, a clear and consistent reason should be provided by the maintainer(s).</em>
+</li>
+</ol>
+<p>For more guidance on the pull request process, see <a href="https://github.com/tidyverse/ggplot2/blob/master/CONTRIBUTING.md">the contributing guidelines for <strong>ggplot2</strong></a>.</p>
+</div>
+</div>
 
   </div>
 

@@ -9,6 +9,7 @@
 ^man-roxygen$
 ^ggplot2-exts$
 ^docs$
+^revdep$
 
 # project files
 README.Rmd

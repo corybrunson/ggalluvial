@@ -3,6 +3,8 @@
 
 ## Dependencies
 
+# ggalluvial 0.11.3
+
 In response to **ggplot2** v3.2.0, which removes the **plyr** dependency, the dependency has been removed from **ggalluvial** as well.
 
 ## Computed variables
