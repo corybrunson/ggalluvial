@@ -9,11 +9,14 @@
 ^man-roxygen$
 ^ggplot2-exts$
 ^docs$
+^revdep$
 
 # project files
 README.Rmd
 ^.*\.Rproj$
 ^\.Rproj\.user$
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
 
 # JOSS paper
 ^paper$

@@ -71,7 +71,7 @@ axis." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.3</span>
       </span>
     </div>
 
@@ -134,21 +134,35 @@ centroids (<code>x</code> and <code>y</code>) and heights (<code>ymin</code> and
 axis.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>stat_stratum</span>(<span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>,
-  <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"identity"</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"decreasing"</span>),
+    <pre class="usage"><span class='fu'>stat_stratum</span>(
+  <span class='kw'>mapping</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>,
+  <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"identity"</span>,
+  <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"decreasing"</span>),
   <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"reverse"</span>),
-  <span class='kw'>absolute</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"absolute"</span>), <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>negate.strata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>infer.label</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>min.y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>max.y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>min.height</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>max.height</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>absolute</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"absolute"</span>),
+  <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>negate.strata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>infer.label</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>label.strata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>min.y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>max.y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>min.height</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>max.height</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
+  <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='no'>...</span>
+)</pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>mapping</th>
-      <td><p>Set of aesthetic mappings created by <code>aes()</code> or
-<code>aes_()</code>. If specified and <code>inherit.aes = TRUE</code> (the
+      <td><p>Set of aesthetic mappings created by <code><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes()</a></code> or
+<code><a href='https://ggplot2.tidyverse.org/reference/aes_.html'>aes_()</a></code>. If specified and <code>inherit.aes = TRUE</code> (the
 default), it is combined with the default mapping at the top level of the
 plot. You must supply <code>mapping</code> if there is no plot mapping.</p></td>
     </tr>
@@ -157,10 +171,10 @@ plot. You must supply <code>mapping</code> if there is no plot mapping.</p></td>
       <td><p>The data to be displayed in this layer. There are three
 options:</p>
 <p>If <code>NULL</code>, the default, the data is inherited from the plot
-data as specified in the call to <code>ggplot()</code>.</p>
+data as specified in the call to <code><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot()</a></code>.</p>
 <p>A <code>data.frame</code>, or other object, will override the plot
 data. All objects will be fortified to produce a data frame. See
-<code>fortify()</code> for which variables will be created.</p>
+<code><a href='https://ggplot2.tidyverse.org/reference/fortify.html'>fortify()</a></code> for which variables will be created.</p>
 <p>A <code>function</code> will be called with a single argument,
 the plot data. The return value must be a <code>data.frame</code>, and
 will be used as the layer data. A <code>function</code> can be created
@@ -250,7 +264,7 @@ display.</p></td>
       <td><p>If <code>FALSE</code>, overrides the default aesthetics,
 rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
-the default plot specification, e.g. <code>borders()</code>.</p></td>
+the default plot specification, e.g. <code><a href='https://ggplot2.tidyverse.org/reference/borders.html'>borders()</a></code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
@@ -320,8 +334,9 @@ discontinued. Use <code>y</code> and <code>cement.alluvia</code> instead.</p>
 
     <div class='dont-index'><p><code><a href='https://ggplot2.tidyverse.org/reference/layer.html'>ggplot2::layer()</a></code> for additional arguments and
 <code><a href='geom_stratum.html'>geom_stratum()</a></code> for the corresponding geom.</p>
-<p>Other alluvial stat layers: <code><a href='stat_alluvium.html'>stat_alluvium</a></code>,
-  <code><a href='stat_flow.html'>stat_flow</a></code></p></div>
+<p>Other alluvial stat layers: 
+<code><a href='stat_alluvium.html'>stat_alluvium</a>()</code>,
+<code><a href='stat_flow.html'>stat_flow</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># only `stratum` assignment is necessary to generate strata</span>
@@ -351,6 +366,19 @@ discontinued. Use <code>y</code> and <code>cement.alluvia</code> instead.</p>
            <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='no'>response</span>)) +
   <span class='fu'>stat_stratum</span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>.5</span>) +
   <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>min.y</span> <span class='kw'>=</span> <span class='fl'>100</span>)</div><div class='img'><img src='stat_stratum-4.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='co'># date-valued axis variables</span>
+<span class='no'>survey_dates</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
+  <span class='kw'>survey</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='no'>vaccinations</span>$<span class='no'>survey</span>),
+  <span class='kw'>start</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"2010-09-22"</span>, <span class='st'>"2015-06-04"</span>, <span class='st'>"2016-09-27"</span>)),
+  <span class='kw'>end</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/as.Date.html'>as.Date</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"2010-10-25"</span>, <span class='st'>"2015-10-05"</span>, <span class='st'>"2016-10-25"</span>))
+)
+<span class='fu'>ggplot</span>(<span class='fu'><a href='https://rdrr.io/r/base/merge.html'>merge</a></span>(<span class='no'>vaccinations</span>, <span class='no'>survey_dates</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"survey"</span>),
+       <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>end</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>freq</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>subject</span>,
+           <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>response</span>)) +
+  <span class='fu'><a href='stat_alluvium.html'>stat_alluvium</a></span>(<span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"flow"</span>, <span class='kw'>lode.guidance</span> <span class='kw'>=</span> <span class='st'>"forward"</span>,
+                <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>30</span>, <span class='kw'>knot.pos</span> <span class='kw'>=</span> <span class='fl'>0</span>) +
+  <span class='fu'>stat_stratum</span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>30</span>) +
+  <span class='fu'>labs</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>"Survey date"</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='st'>"Number of respondents"</span>)</div><div class='img'><img src='stat_stratum-5.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># use negative y values to encode rejection versus acceptance</span>
 <span class='no'>admissions</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='no'>UCBAdmissions</span>)
 <span class='no'>admissions</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/transform.html'>transform</a></span>(<span class='no'>admissions</span>, <span class='kw'>Count</span> <span class='kw'>=</span> <span class='no'>Freq</span> * (-<span class='fl'>1</span>) ^ (<span class='no'>Admit</span> <span class='kw'>==</span> <span class='st'>"Rejected"</span>))
@@ -359,7 +387,7 @@ discontinued. Use <code>y</code> and <code>cement.alluvia</code> instead.</p>
   <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Dept</span>), <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>12</span>) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>12</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>"black"</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"grey"</span>) +
   <span class='fu'>geom_label</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>infer.label</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>min.y</span> <span class='kw'>=</span> <span class='fl'>200</span>) +
-  <span class='fu'>scale_x_discrete</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Department"</span>, <span class='st'>"Gender"</span>), <span class='kw'>expand</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.05</span>, <span class='fl'>.05</span>))</div><div class='img'><img src='stat_stratum-5.png' alt='' width='700' height='433' /></div></pre>
+  <span class='fu'>scale_x_discrete</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Department"</span>, <span class='st'>"Gender"</span>), <span class='kw'>expand</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.05</span>, <span class='fl'>.05</span>))</div><div class='img'><img src='stat_stratum-6.png' alt='' width='700' height='433' /></div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

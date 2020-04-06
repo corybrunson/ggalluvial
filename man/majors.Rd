@@ -3,7 +3,9 @@
 \name{majors}
 \alias{majors}
 \title{Student curricula across semesters}
-\format{An alluvial data frame in lodes form.}
+\format{
+An alluvial data frame in lodes form.
+}
 \description{
 This data set follows the major curricula of 10 students across 8 academic
 semesters. The data were kindly contributed by Dario Bonaretti.

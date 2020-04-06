@@ -75,7 +75,7 @@ types of alluvial structure:" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.3</span>
       </span>
     </div>
 
@@ -142,14 +142,35 @@ corresponding variables. This function checks a data frame for either of two
 types of alluvial structure:</p>
     </div>
 
-    <pre class="usage"><span class='fu'>is_lodes_form</span>(<span class='no'>data</span>, <span class='no'>key</span>, <span class='no'>value</span>, <span class='no'>id</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+    <pre class="usage"><span class='fu'>is_lodes_form</span>(
+  <span class='no'>data</span>,
+  <span class='no'>key</span>,
+  <span class='no'>value</span>,
+  <span class='no'>id</span>,
+  <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)
 
-<span class='fu'>is_alluvia_form</span>(<span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>is_alluvia_form</span>(
+  <span class='no'>data</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>axes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>weight</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>logical</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>silent</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)
 
-<span class='fu'>to_lodes_form</span>(<span class='no'>data</span>, <span class='no'>...</span>, <span class='kw'>axes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"x"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>,
-  <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>, <span class='kw'>diffuse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>to_lodes_form</span>(
+  <span class='no'>data</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>axes</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"x"</span>,
+  <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>,
+  <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
+  <span class='kw'>diffuse</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)
 
 <span class='fu'>to_alluvia_form</span>(<span class='no'>data</span>, <span class='no'>key</span>, <span class='no'>value</span>, <span class='no'>id</span>, <span class='kw'>distill</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
 
@@ -200,7 +221,7 @@ to <code>axes</code>. Ignored when <code>axes</code> is provided.</p></td>
     <tr>
       <th>diffuse</th>
       <td><p>Fields of <code>data</code>, handled using
-<code><a href='https://rdrr.io/pkg/tidyselect/man/vars_select.html'>tidyselect::vars_select()</a></code>, to merge into the reshapen data by
+<code><a href='https://tidyselect.r-lib.org/reference/vars_select.html'>tidyselect::vars_select()</a></code>, to merge into the reshapen data by
 <code>id</code>. They must be a subset of the axis variables. Alternatively, a
 logical value indicating whether to merge all (<code>TRUE</code>) or none
 (<code>FALSE</code>) of the axis variables.</p></td>
@@ -251,7 +272,8 @@ axes constitute separate variables whose values are given by the value
 variable. This function invokes <code><a href='https://tidyr.tidyverse.org/reference/spread.html'>tidyr::spread()</a></code>.</p>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other alluvial data manipulation: <code><a href='self-adjoin.html'>self-adjoin</a></code></p></div>
+    <div class='dont-index'><p>Other alluvial data manipulation: 
+<code><a href='self-adjoin.html'>self-adjoin</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Titanic data in alluvia format</span>
@@ -315,7 +337,7 @@ variable. This function invokes <code><a href='https://tidyr.tidyverse.org/refer
 #&gt; 3 Painting
 #&gt; 4 Painting
 #&gt; 5 Painting
-#&gt; 6     &lt;NA&gt;</div><div class='input'><span class='fu'>is_alluvia_form</span>(<span class='no'>majors_alluvia</span>, <span class='kw pkg'>tidyselect</span><span class='kw ns'>::</span><span class='fu'><a href='https://rdrr.io/pkg/tidyselect/man/select_helpers.html'>starts_with</a></span>(<span class='st'>"CURR"</span>))</div><div class='output co'>#&gt; <span class='message'>Missing alluvia for some stratum combinations.</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+#&gt; 6     &lt;NA&gt;</div><div class='input'><span class='fu'>is_alluvia_form</span>(<span class='no'>majors_alluvia</span>, <span class='kw pkg'>tidyselect</span><span class='kw ns'>::</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/select_helpers.html'>starts_with</a></span>(<span class='st'>"CURR"</span>))</div><div class='output co'>#&gt; <span class='message'>Missing alluvia for some stratum combinations.</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
 <span class='co'># distill variables that vary within `id` values</span>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span>(<span class='fl'>1</span>)
 <span class='no'>majors</span>$<span class='no'>hypo_grade</span> <span class='kw'>&lt;-</span> <span class='no'>LETTERS</span>[<span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='fl'>5</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span>(<span class='no'>majors</span>), <span class='kw'>replace</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)]
@@ -323,12 +345,12 @@ variable. This function invokes <code><a href='https://tidyr.tidyverse.org/refer
                                    <span class='kw'>key</span> <span class='kw'>=</span> <span class='st'>"semester"</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='st'>"curriculum"</span>,
                                    <span class='kw'>id</span> <span class='kw'>=</span> <span class='st'>"student"</span>,
                                    <span class='kw'>distill</span> <span class='kw'>=</span> <span class='st'>"most"</span>)</div><div class='output co'>#&gt; <span class='message'>Distilled variables: hypo_grade</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>majors_alluvia2</span>)</div><div class='output co'>#&gt;   student hypo_grade    CURR1       CURR3       CURR5    CURR7    CURR9
-#&gt; 1       1          B Painting    Painting    Painting Painting Painting
-#&gt; 2       2          B Painting    Painting    Painting Painting Painting
-#&gt; 3       6          C Sculpure    Sculpure    Painting Painting Painting
+#&gt; 1       1          A Painting    Painting    Painting Painting Painting
+#&gt; 2       2          D Painting    Painting    Painting Painting Painting
+#&gt; 3       6          B Sculpure    Sculpure    Painting Painting Painting
 #&gt; 4       8          B Painting    Painting    Painting Painting     &lt;NA&gt;
-#&gt; 5       9          B Sculpure Art History Art History Painting Painting
-#&gt; 6      10          B Painting    Painting    Painting Painting Painting
+#&gt; 5       9          E Sculpure Art History Art History Painting Painting
+#&gt; 6      10          A Painting    Painting    Painting Painting Painting
 #&gt;     CURR11   CURR13   CURR15
 #&gt; 1 Painting Painting Painting
 #&gt; 2 Painting     &lt;NA&gt;     &lt;NA&gt;

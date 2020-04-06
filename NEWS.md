@@ -1,6 +1,8 @@
 
 # next version (v1.0.0?)
 
+# ggalluvial 0.11.3
+
 In response to **ggplot2** v3.2.0, which removes the **plyr** dependency, the dependency has been removed from **ggalluvial** as well.
 
 # ggalluvial 0.11.2

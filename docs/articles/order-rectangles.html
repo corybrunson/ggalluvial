@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.3</span>
       </span>
     </div>
 
@@ -84,7 +84,7 @@
       <h1>The Order of the Rectangles</h1>
                         <h4 class="author">Jason Cory Brunson</h4>
             
-            <h4 class="date">2019-12-04</h4>
+            <h4 class="date">2020-03-29</h4>
       
       
       <div class="hidden name"><code>order-rectangles.rmd</code></div>
@@ -117,23 +117,23 @@
 ## 1        A          1        Y   one
 ## 2        B          1        X   one
 ## 3        C          1        X   one
-## 4        D          1        X   two
-## 5        E          1        Y   two
-## 6        A          2        Y   one
-## 7        B          2        X   one
-## 8        C          2        X   one
-## 9        D          2        Y   two
-## 10       E          2        Y   two
-## 11       A          3        Y   one
+## 4        D          1        Y   two
+## 5        E          1        X   two
+## 6        A          2        X   one
+## 7        B          2        Y   one
+## 8        C          2        Y   one
+## 9        D          2        X   two
+## 10       E          2        X   two
+## 11       A          3        X   one
 ## 12       B          3        Y   one
 ## 13       C          3        Y   one
-## 14       D          3        X   two
+## 14       D          3        Y   two
 ## 15       E          3        X   two
 ## 16       A          4        X   one
-## 17       B          4        Y   one
-## 18       C          4        Y   one
+## 17       B          4        X   one
+## 18       C          4        X   one
 ## 19       D          4        X   two
-## 20       E          4        Y   two</code></pre>
+## 20       E          4        X   two</code></pre>
 <p>The subjects are classified into categories at each collection point but are also members of fixed classes. Here’s how <strong>ggalluvial</strong> visualizes these data under default settings:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">ggplot</span>(toy, <span class="kw">aes</span>(<span class="dt">x =</span> collection, <span class="dt">stratum =</span> category, <span class="dt">alluvium =</span> subject)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb5-2" title="2"><span class="st">  </span><span class="kw"><a href="../reference/geom_alluvium.html">geom_alluvium</a></span>(<span class="kw">aes</span>(<span class="dt">fill =</span> class)) <span class="op">+</span></a>
@@ -167,12 +167,11 @@
 <pre><code>##   x stratum   y PANEL deposit ymin ymax
 ## 2 1       Y 1.0     1       1    0    2
 ## 1 1       X 3.5     1       2    2    5
-## 4 2       Y 1.5     1       3    0    3
-## 3 2       X 4.0     1       4    3    5
+## 4 2       Y 1.0     1       3    0    2
+## 3 2       X 3.5     1       4    2    5
 ## 6 3       Y 1.5     1       5    0    3
 ## 5 3       X 4.0     1       6    3    5
-## 8 4       Y 1.5     1       7    0    3
-## 7 4       X 4.0     1       8    3    5</code></pre>
+## 7 4       X 2.5     1       7    0    5</code></pre>
 <p>Comparing this output to <code>toy</code>, notice first that the data have been aggregated: Each distinct combination of <code>x</code> and <code>stratum</code> occupies only one row. <code>x</code> encodes the axes and is subject to layers specific to this positional aesthetic, e.g. <code>scale_x_*()</code> transformations. <code>ymin</code> and <code>ymax</code> are the lower and upper bounds of the rectangles, and <code>y</code> is their vertical centers. Each stacked rectangle begins where the one below it ends, and their heights are the numbers of subjects (or the totals of their <code>y</code> values, if <code>y</code> is passed a numerical variable) that take the corresponding category value at the corresponding collection point.</p>
 <p>Here’s the plot this strata-only transformation yields:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">ggplot</span>(toy, <span class="kw">aes</span>(<span class="dt">x =</span> collection, <span class="dt">stratum =</span> category)) <span class="op">+</span></a>
@@ -189,12 +188,11 @@
 <pre><code>##   x stratum   y PANEL deposit ymin ymax
 ## 1 1       X 1.5     1       1    0    3
 ## 2 1       Y 4.0     1       2    3    5
-## 3 2       X 1.0     1       3    0    2
-## 4 2       Y 3.5     1       4    2    5
+## 3 2       X 1.5     1       3    0    3
+## 4 2       Y 4.0     1       4    3    5
 ## 5 3       X 1.0     1       5    0    2
 ## 6 3       Y 3.5     1       6    2    5
-## 7 4       X 1.0     1       7    0    2
-## 8 4       Y 3.5     1       8    2    5</code></pre>
+## 7 4       X 2.5     1       7    0    5</code></pre>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">ggplot</span>(toy, <span class="kw">aes</span>(<span class="dt">x =</span> collection, <span class="dt">stratum =</span> category)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb11-2" title="2"><span class="st">  </span><span class="kw"><a href="../reference/stat_stratum.html">stat_stratum</a></span>(<span class="dt">reverse =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb11-3" title="3"><span class="st">  </span><span class="kw"><a href="../reference/stat_stratum.html">stat_stratum</a></span>(<span class="dt">geom =</span> <span class="st">"text"</span>, <span class="kw">aes</span>(<span class="dt">label =</span> category), <span class="dt">reverse =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
@@ -210,12 +208,11 @@
 <pre><code>##   x stratum   y PANEL deposit ymin ymax
 ## 1 1       X 1.5     1       1    0    3
 ## 2 1       Y 4.0     1       2    3    5
-## 3 2       X 1.0     1       3    0    2
-## 4 2       Y 3.5     1       4    2    5
+## 3 2       X 1.5     1       3    0    3
+## 4 2       Y 4.0     1       4    3    5
 ## 5 3       X 1.0     1       5    0    2
 ## 6 3       Y 3.5     1       6    2    5
-## 7 4       X 1.0     1       7    0    2
-## 8 4       Y 3.5     1       8    2    5</code></pre>
+## 7 4       X 2.5     1       7    0    5</code></pre>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="kw">ggplot</span>(toy, <span class="kw">aes</span>(<span class="dt">x =</span> collection, <span class="dt">stratum =</span> category)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb14-2" title="2"><span class="st">  </span><span class="kw"><a href="../reference/stat_stratum.html">stat_stratum</a></span>(<span class="dt">decreasing =</span> <span class="ot">TRUE</span>) <span class="op">+</span></a>
 <a class="sourceLine" id="cb14-3" title="3"><span class="st">  </span><span class="kw"><a href="../reference/stat_stratum.html">stat_stratum</a></span>(<span class="dt">geom =</span> <span class="st">"text"</span>, <span class="kw">aes</span>(<span class="dt">label =</span> category), <span class="dt">decreasing =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
@@ -238,26 +235,26 @@
 <a class="sourceLine" id="cb15-6" title="6"><span class="co"># alluvium transformation</span></a>
 <a class="sourceLine" id="cb15-7" title="7">StatAlluvium<span class="op">$</span><span class="kw">compute_panel</span>(data)</a></code></pre></div>
 <pre><code>##    x alluvium stratum   y PANEL fan ymin ymax group
-## 1  1        A       Y 0.5     1  -1    0    1     1
-## 2  1        B       X 4.5     1  -2    4    5     2
-## 3  1        C       X 3.5     1  -3    3    4     3
-## 4  1        D       X 2.5     1  -4    2    3     4
-## 5  1        E       Y 1.5     1  -5    1    2     5
-## 6  2        A       Y 0.5     1  -1    0    1     1
-## 7  2        B       X 4.5     1  -2    4    5     2
-## 8  2        C       X 3.5     1  -3    3    4     3
-## 9  2        D       Y 2.5     1  -4    2    3     4
-## 10 2        E       Y 1.5     1  -5    1    2     5
-## 11 3        A       Y 2.5     1  -1    2    3     1
+## 1  1        A       Y 1.5     1  -1    1    2     1
+## 2  1        B       X 3.5     1  -2    3    4     2
+## 3  1        C       X 2.5     1  -3    2    3     3
+## 4  1        D       Y 0.5     1  -4    0    1     4
+## 5  1        E       X 4.5     1  -5    4    5     5
+## 6  2        A       X 3.5     1  -1    3    4     1
+## 7  2        B       Y 1.5     1  -2    1    2     2
+## 8  2        C       Y 0.5     1  -3    0    1     3
+## 9  2        D       X 2.5     1  -4    2    3     4
+## 10 2        E       X 4.5     1  -5    4    5     5
+## 11 3        A       X 3.5     1  -1    3    4     1
 ## 12 3        B       Y 1.5     1  -2    1    2     2
 ## 13 3        C       Y 0.5     1  -3    0    1     3
-## 14 3        D       X 4.5     1  -4    4    5     4
-## 15 3        E       X 3.5     1  -5    3    4     5
+## 14 3        D       Y 2.5     1  -4    2    3     4
+## 15 3        E       X 4.5     1  -5    4    5     5
 ## 16 4        A       X 3.5     1  -1    3    4     1
-## 17 4        B       Y 1.5     1  -2    1    2     2
-## 18 4        C       Y 0.5     1  -3    0    1     3
-## 19 4        D       X 4.5     1  -4    4    5     4
-## 20 4        E       Y 2.5     1  -5    2    3     5</code></pre>
+## 17 4        B       X 1.5     1  -2    1    2     2
+## 18 4        C       X 0.5     1  -3    0    1     3
+## 19 4        D       X 2.5     1  -4    2    3     4
+## 20 4        E       X 4.5     1  -5    4    5     5</code></pre>
 <p>The transformed data now contain <em>one row per cohort</em>—instead of per category—<em>per collection point</em>. The vertical positional aesthetics describe the lodes rather than the strata, and the <code>group</code> variable encodes the <code>alluvia</code> (a convenience for the geom layer, and the reason that <strong>ggalluvial</strong> stat layers ignore variables passed to <code>group</code>).</p>
 <p>Here’s how this transformation translates into the alluvial plot that began the vignette, labeling the subject of each alluvium at each intersection with a stratum:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="kw">ggplot</span>(toy, <span class="kw">aes</span>(<span class="dt">x =</span> collection, <span class="dt">stratum =</span> category, <span class="dt">alluvium =</span> subject)) <span class="op">+</span></a>
@@ -268,31 +265,27 @@
 <p>The <code>flow</code> stat differs from the <code>alluvium</code> stat by allowing the orders of the lodes within strata to differ from one side of an axis to the other. Put differently, the <code>flow</code> stat allows <em>mixing</em> at the axes, rather than requiring that each case or cohort is follows a continuous trajectory from one end of the plot to the other. As a result, flow plots are often much less cluttered, the trade-off being that cases or cohorts cannot be tracked through them.</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1"><span class="co"># flow transformation</span></a>
 <a class="sourceLine" id="cb18-2" title="2">StatFlow<span class="op">$</span><span class="kw">compute_panel</span>(data)</a></code></pre></div>
-<pre><code>## # A tibble: 20 x 9
+<pre><code>## # A tibble: 16 x 9
 ## # Groups:   alluvium, x, stratum, yneg, PANEL, deposit, fissure, link, contact,
-## #   adj_deposit [20]
+## #   adj_deposit [16]
 ##    alluvium     x stratum PANEL contact     y group  ymin  ymax
 ##       &lt;int&gt; &lt;int&gt; &lt;fct&gt;   &lt;dbl&gt; &lt;fct&gt;   &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1        1     1 Y           1 back      1       1     0     2
-##  2        2     1 X           1 back      2.5     2     2     3
-##  3        3     1 X           1 back      4       3     3     5
+##  1        2     1 Y           1 back      1       2     0     2
+##  2        1     1 X           1 back      3       1     2     4
+##  3        3     1 X           1 back      4.5     3     4     5
 ##  4        1     2 Y           1 front     1       1     0     2
-##  5        2     2 Y           1 front     2.5     2     2     3
-##  6        3     2 X           1 front     4       3     3     5
-##  7        4     2 Y           1 back      0.5     4     0     1
-##  8        6     2 Y           1 back      2       6     1     3
-##  9        5     2 X           1 back      4       5     3     5
-## 10        4     3 Y           1 front     0.5     4     0     1
-## 11        5     3 Y           1 front     2       5     1     3
+##  5        2     2 X           1 front     3       2     2     4
+##  6        3     2 X           1 front     4.5     3     4     5
+##  7        4     2 Y           1 back      1       4     0     2
+##  8        5     2 X           1 back      2.5     5     2     3
+##  9        6     2 X           1 back      4       6     3     5
+## 10        4     3 Y           1 front     1       4     0     2
+## 11        5     3 Y           1 front     2.5     5     2     3
 ## 12        6     3 X           1 front     4       6     3     5
-## 13        7     3 Y           1 back      1       7     0     2
-## 14        9     3 Y           1 back      2.5     9     2     3
-## 15        8     3 X           1 back      3.5     8     3     4
-## 16       10     3 X           1 back      4.5    10     4     5
-## 17        7     4 Y           1 front     1       7     0     2
-## 18        8     4 Y           1 front     2.5     8     2     3
-## 19        9     4 X           1 front     3.5     9     3     4
-## 20       10     4 X           1 front     4.5    10     4     5</code></pre>
+## 13        7     3 Y           1 back      1.5     7     0     3
+## 14        8     3 X           1 back      4       8     3     5
+## 15        7     4 X           1 front     1.5     7     0     3
+## 16        8     4 X           1 front     4       8     3     5</code></pre>
 <p>The <code>flow</code> stat transformation yields <em>one row per cohort per side per flow</em>. Each intermediate axis appears twice in the data, once for the incoming flow and once for the outgoing flow. (The starting and ending axes only have rows for outgoing and incoming flows, respectively.) Here is the flow version of the preceding alluvial plot, labeling each side of each flow with the corresponding subject:</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1"><span class="kw">ggplot</span>(toy, <span class="kw">aes</span>(<span class="dt">x =</span> collection, <span class="dt">stratum =</span> category, <span class="dt">alluvium =</span> subject)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb20-2" title="2"><span class="st">  </span><span class="kw"><a href="../reference/stat_stratum.html">stat_stratum</a></span>() <span class="op">+</span></a>
@@ -414,26 +407,26 @@
 <a class="sourceLine" id="cb37-2" title="2">toy<span class="op">$</span>sign &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>), <span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(toy), <span class="dt">replace =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb37-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(toy)</a></code></pre></div>
 <pre><code>##    subject collection category class sign
-## 1        A          1        Y   one    1
+## 1        A          1        Y   one   -1
 ## 2        B          1        X   one    1
 ## 3        C          1        X   one    1
-## 4        D          1        X   two    1
-## 5        E          1        Y   two    1
-## 6        A          2        Y   one   -1
-## 7        B          2        X   one   -1
-## 8        C          2        X   one   -1
-## 9        D          2        Y   two   -1
-## 10       E          2        Y   two   -1
-## 11       A          3        Y   one    1
-## 12       B          3        Y   one    1
+## 4        D          1        Y   two   -1
+## 5        E          1        X   two    1
+## 6        A          2        X   one    1
+## 7        B          2        Y   one    1
+## 8        C          2        Y   one    1
+## 9        D          2        X   two   -1
+## 10       E          2        X   two   -1
+## 11       A          3        X   one    1
+## 12       B          3        Y   one   -1
 ## 13       C          3        Y   one   -1
-## 14       D          3        X   two    1
-## 15       E          3        X   two   -1
+## 14       D          3        Y   two    1
+## 15       E          3        X   two    1
 ## 16       A          4        X   one    1
-## 17       B          4        Y   one   -1
-## 18       C          4        Y   one    1
+## 17       B          4        X   one    1
+## 18       C          4        X   one   -1
 ## 19       D          4        X   two   -1
-## 20       E          4        Y   two   -1</code></pre>
+## 20       E          4        X   two    1</code></pre>
 <div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1"><span class="kw">ggplot</span>(toy, <span class="kw">aes</span>(<span class="dt">x =</span> collection, <span class="dt">y =</span> sign)) <span class="op">+</span></a>
 <a class="sourceLine" id="cb39-2" title="2"><span class="st">  </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> class), <span class="dt">stat =</span> <span class="st">"identity"</span>)</a></code></pre></div>
 <p><img src="order-rectangles_files/figure-html/bar%20plot%20with%20negative%20observations-1.png" width="576" style="display: block; margin: auto;"></p>
@@ -464,7 +457,7 @@
 <div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1">sessioninfo<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/sessioninfo/man/session_info.html">session_info</a></span>()</a></code></pre></div>
 <pre><code>## ─ Session info ───────────────────────────────────────────────────────────────
 ##  setting  value                       
-##  version  R version 3.5.2 (2018-12-20)
+##  version  R version 3.6.1 (2019-07-05)
 ##  os       macOS High Sierra 10.13.6   
 ##  system   x86_64, darwin15.6.0        
 ##  ui       X11                         
@@ -472,62 +465,60 @@
 ##  collate  en_US.UTF-8                 
 ##  ctype    en_US.UTF-8                 
 ##  tz       America/New_York            
-##  date     2019-12-04                  
+##  date     2020-03-29                  
 ## 
 ## ─ Packages ───────────────────────────────────────────────────────────────────
-##  package     * version  date       lib source                                 
-##  assertthat    0.2.1    2019-03-21 [1] CRAN (R 3.5.2)                         
-##  backports     1.1.5    2019-10-02 [1] CRAN (R 3.5.2)                         
-##  cli           1.1.0    2019-03-19 [1] CRAN (R 3.5.2)                         
-##  colorspace    1.4-1    2019-03-18 [1] CRAN (R 3.5.2)                         
-##  crayon        1.3.4    2017-09-16 [1] CRAN (R 3.5.0)                         
-##  desc          1.2.0    2018-05-01 [1] CRAN (R 3.5.0)                         
-##  digest        0.6.23   2019-11-23 [1] CRAN (R 3.5.2)                         
-##  dplyr         0.8.3    2019-07-04 [1] CRAN (R 3.5.2)                         
-##  ellipsis      0.3.0    2019-09-20 [1] CRAN (R 3.5.2)                         
-##  evaluate      0.14     2019-05-28 [1] CRAN (R 3.5.2)                         
-##  fansi         0.4.0    2018-10-05 [1] CRAN (R 3.5.0)                         
-##  farver        2.0.1    2019-11-13 [1] CRAN (R 3.5.2)                         
-##  fs            1.3.1    2019-05-06 [1] CRAN (R 3.5.2)                         
-##  ggalluvial  * 0.11.1   2019-12-03 [1] Github (corybrunson/ggalluvial@b56afd0)
-##  ggplot2     * 3.2.1    2019-08-10 [1] CRAN (R 3.5.2)                         
-##  glue          1.3.1    2019-03-12 [1] CRAN (R 3.5.2)                         
-##  gtable        0.3.0    2019-03-25 [1] CRAN (R 3.5.2)                         
-##  htmltools     0.4.0    2019-10-04 [1] CRAN (R 3.5.2)                         
-##  knitr         1.26     2019-11-12 [1] CRAN (R 3.5.2)                         
-##  labeling      0.3      2014-08-23 [1] CRAN (R 3.5.0)                         
-##  lazyeval      0.2.2    2019-03-15 [1] CRAN (R 3.5.2)                         
-##  lifecycle     0.1.0    2019-08-01 [1] CRAN (R 3.5.2)                         
-##  magrittr      1.5      2014-11-22 [1] CRAN (R 3.5.0)                         
-##  MASS          7.3-51.4 2019-03-31 [1] CRAN (R 3.5.2)                         
-##  memoise       1.1.0    2017-04-21 [1] CRAN (R 3.5.0)                         
-##  munsell       0.5.0    2018-06-12 [1] CRAN (R 3.5.0)                         
-##  pillar        1.4.2    2019-06-29 [1] CRAN (R 3.5.2)                         
-##  pkgconfig     2.0.3    2019-09-22 [1] CRAN (R 3.5.2)                         
-##  pkgdown       1.4.1    2019-09-15 [1] CRAN (R 3.5.2)                         
-##  plyr          1.8.4    2016-06-08 [1] CRAN (R 3.5.0)                         
-##  purrr         0.3.3    2019-10-18 [1] CRAN (R 3.5.2)                         
-##  R6            2.4.1    2019-11-12 [1] CRAN (R 3.5.2)                         
-##  Rcpp          1.0.3    2019-11-08 [1] CRAN (R 3.5.2)                         
-##  rlang         0.4.2    2019-11-23 [1] CRAN (R 3.5.2)                         
-##  rmarkdown     1.18     2019-11-27 [1] CRAN (R 3.5.2)                         
-##  rprojroot     1.3-2    2018-01-03 [1] CRAN (R 3.5.0)                         
-##  rstudioapi    0.10     2019-03-19 [1] CRAN (R 3.5.2)                         
-##  scales        1.1.0    2019-11-18 [1] CRAN (R 3.5.2)                         
-##  sessioninfo   1.1.1    2018-11-05 [1] CRAN (R 3.5.0)                         
-##  stringi       1.4.3    2019-03-12 [1] CRAN (R 3.5.2)                         
-##  stringr       1.4.0    2019-02-10 [1] CRAN (R 3.5.2)                         
-##  tibble        2.1.3    2019-06-06 [1] CRAN (R 3.5.2)                         
-##  tidyr         1.0.0    2019-09-11 [1] CRAN (R 3.5.2)                         
-##  tidyselect    0.2.5    2018-10-11 [1] CRAN (R 3.5.0)                         
-##  utf8          1.1.4    2018-05-24 [1] CRAN (R 3.5.0)                         
-##  vctrs         0.2.0    2019-07-05 [1] CRAN (R 3.5.2)                         
-##  withr         2.1.2    2018-03-15 [1] CRAN (R 3.5.0)                         
-##  xfun          0.11     2019-11-12 [1] CRAN (R 3.5.2)                         
-##  yaml          2.2.0    2018-07-25 [1] CRAN (R 3.5.0)                         
-##  zeallot       0.1.0    2018-01-28 [1] CRAN (R 3.5.0)                         
+##  package     * version  date       lib source        
+##  assertthat    0.2.1    2019-03-21 [2] CRAN (R 3.6.0)
+##  backports     1.1.5    2019-10-02 [2] CRAN (R 3.6.0)
+##  cli           2.0.2    2020-02-28 [2] CRAN (R 3.6.0)
+##  colorspace    1.4-1    2019-03-18 [2] CRAN (R 3.6.0)
+##  crayon        1.3.4    2017-09-16 [2] CRAN (R 3.6.0)
+##  desc          1.2.0    2018-05-01 [2] CRAN (R 3.6.0)
+##  digest        0.6.25   2020-02-23 [2] CRAN (R 3.6.0)
+##  dplyr         0.8.5    2020-03-07 [2] CRAN (R 3.6.0)
+##  ellipsis      0.3.0    2019-09-20 [2] CRAN (R 3.6.0)
+##  evaluate      0.14     2019-05-28 [2] CRAN (R 3.6.0)
+##  fansi         0.4.1    2020-01-08 [2] CRAN (R 3.6.0)
+##  farver        2.0.3    2020-01-16 [2] CRAN (R 3.6.0)
+##  fs            1.3.2    2020-03-05 [2] CRAN (R 3.6.0)
+##  ggalluvial  * 0.11.3   2020-03-29 [1] local         
+##  ggplot2     * 3.3.0    2020-03-05 [2] CRAN (R 3.6.0)
+##  glue          1.3.2    2020-03-12 [2] CRAN (R 3.6.0)
+##  gtable        0.3.0    2019-03-25 [2] CRAN (R 3.6.0)
+##  htmltools     0.4.0    2019-10-04 [2] CRAN (R 3.6.0)
+##  knitr         1.28     2020-02-06 [2] CRAN (R 3.6.0)
+##  labeling      0.3      2014-08-23 [2] CRAN (R 3.6.0)
+##  lifecycle     0.2.0    2020-03-06 [2] CRAN (R 3.6.0)
+##  magrittr      1.5      2014-11-22 [2] CRAN (R 3.6.0)
+##  MASS          7.3-51.4 2019-03-31 [2] CRAN (R 3.6.1)
+##  memoise       1.1.0    2017-04-21 [2] CRAN (R 3.6.0)
+##  munsell       0.5.0    2018-06-12 [2] CRAN (R 3.6.0)
+##  pillar        1.4.3    2019-12-20 [2] CRAN (R 3.6.0)
+##  pkgconfig     2.0.3    2019-09-22 [2] CRAN (R 3.6.0)
+##  pkgdown       1.4.1    2019-09-15 [2] CRAN (R 3.6.0)
+##  purrr         0.3.3    2019-10-18 [2] CRAN (R 3.6.0)
+##  R6            2.4.1    2019-11-12 [2] CRAN (R 3.6.0)
+##  Rcpp          1.0.4    2020-03-17 [2] CRAN (R 3.6.0)
+##  rlang         0.4.5    2020-03-01 [2] CRAN (R 3.6.0)
+##  rmarkdown     2.1      2020-01-20 [2] CRAN (R 3.6.0)
+##  rprojroot     1.3-2    2018-01-03 [2] CRAN (R 3.6.0)
+##  rstudioapi    0.11     2020-02-07 [2] CRAN (R 3.6.0)
+##  scales        1.1.0    2019-11-18 [2] CRAN (R 3.6.0)
+##  sessioninfo   1.1.1    2018-11-05 [2] CRAN (R 3.6.0)
+##  stringi       1.4.6    2020-02-17 [2] CRAN (R 3.6.0)
+##  stringr       1.4.0    2019-02-10 [2] CRAN (R 3.6.0)
+##  tibble        2.1.3    2019-06-06 [2] CRAN (R 3.6.0)
+##  tidyr         1.0.2    2020-01-24 [2] CRAN (R 3.6.1)
+##  tidyselect    1.0.0    2020-01-27 [2] CRAN (R 3.6.1)
+##  utf8          1.1.4    2018-05-24 [2] CRAN (R 3.6.0)
+##  vctrs         0.2.4    2020-03-10 [2] CRAN (R 3.6.0)
+##  withr         2.1.2    2018-03-15 [2] CRAN (R 3.6.0)
+##  xfun          0.12     2020-01-13 [2] CRAN (R 3.6.0)
+##  yaml          2.2.1    2020-02-01 [2] CRAN (R 3.6.0)
 ## 
-## [1] /Library/Frameworks/R.framework/Versions/3.5/Resources/library</code></pre>
+## [1] /private/var/folders/pg/fjg8r4fj5v33zqmwptf9mfg80000gn/T/RtmpZeN5S8/temp_libpath11caf65c430c8
+## [2] /Library/Frameworks/R.framework/Versions/3.6/Resources/library</code></pre>
 </div>
 <div class="footnotes">
 <hr>
