@@ -34,3 +34,9 @@ gg +
                 alpha = .75, decreasing = FALSE,
                 knot.pos = 1, knot.fix = TRUE) +
   geom_stratum(aes(stratum = country), decreasing = FALSE, width = 1/2)
+# coarsely-segmented curves
+gg +
+  geom_alluvium(aes(fill = country),
+                alpha = .75, decreasing = FALSE,
+                curve = "arctan", segments = 6) +
+  geom_stratum(aes(stratum = country), decreasing = FALSE, width = 1/2)

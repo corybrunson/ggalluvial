@@ -65,15 +65,12 @@ adjacent axes.}
 \code{"quintic"}, \code{"sine"}, \code{"arctangent"}, and \code{"sigmoid"}. \code{"xspline"}
 produces approximation splines using 4 points per curve; the alternatives
 produce interpolation splines between points along the graphs of functions
-of the associated type. Only the \code{"xspline"} option uses the \verb{knot.*}
-parameters, while only the alternative curves use the \code{segments} parameter,
-and only \code{"arctangent"} and \code{"sigmoid"} use the \code{reach} parameter.}
+of the associated type. See the \strong{Curves} section.}
 
 \item{reach}{For alternative \code{curve}s based on asymptotic functions, the
 value along the asymptote at which to truncate the function to obtain the
-shape that will be scaled to fit between strata. Larger values result in
-greater compression and steeper slopes. The \code{NULL} default will be changed
-to \code{2+sqrt(3)} for \code{"arctangent"} and to \code{6} for \code{"sigmoid"}.}
+shape that will be scaled to fit between strata. See the \strong{Curves}
+section.}
 
 \item{segments}{The number of segments to be used in drawing each alternative
 curve (each curved boundary of each flow). If less than 3, will be silently
@@ -127,6 +124,45 @@ following aesthetics (required aesthetics are in bold):
 }
 
 \code{group} is used internally; arguments are ignored.
+}
+
+\section{Curves}{
+
+By default, \code{geom_alluvium()} and \code{geom_flow()} render flows between lodes as
+splines about quartets of control points using \code{\link[grid:xsplineGrob]{grid::xsplineGrob()}}. These
+curves are parameterized by the relative location of the knot (\code{knot.pos})
+that governs the bending of each end toward their meeting at the point of
+inflection. They are quick to render and clear to read. Nevertheless, for any
+number of reasons, users may prefer plots that use differently-shaped curves.
+
+A variety of such options are illustrated in \href{https://www.dataplusscience.com/Sigmoid.html}{this blog post by Jeffrey Shaffer}. A subset of these,
+some with added flexibility, are implemented here. Each is encoded as a
+continuous, increasing, bijective function from the unit interval \eqn{[0,1]}
+to itself, and each is rescaled, if necessary, so that its endpoints meet the
+corresponding lodes. They are rendered piecewise-linearly, by default using
+\code{segments = 48}. Summon each curve type by passing one of the following
+strings to \code{curve}:
+\itemize{
+\item \code{"linear"}:     \eqn{f(x)=x}, the unique degree-1 polynomial that takes
+0 to 0 and 1 to 1
+\item \code{"cubic"}:      \eqn{f(x)=3x^{2}-2x^{3}}{f(x)=3x^2-2x^3}, the unique
+degree-3 polynomial that also is flat at both endpoints
+\item \code{"quintic"}:    \eqn{f(x)=10x^{3}-15x^{4}+6x^{5}}{f(x)=10x^3-15x^4+6x^5},
+the unique degree-5 polynomial that also is flat at both
+endpoints
+\item \code{"sine"}:       the unique sinusoidal function that is flat at both
+endpoints
+\item \code{"arctangent"}: the inverse tangent function, scaled and re-centered to the
+unit interval from a symmetric domain with radius \code{reach}
+\item \code{"sigmoid"}:    the sigmoid function, scaled and re-centered to the unit
+interval from a symmetric domain with radius \code{reach}
+}
+
+Only the (default) \code{"xspline"} option uses the \verb{knot.*} parameters, while
+only the alternative curves use the \code{segments} parameter, and only
+\code{"arctangent"} and \code{"sigmoid"} use the \code{reach} parameter. Larger values of
+\code{reach} result in greater compression and steeper slopes. The \code{NULL} default
+will be changed to \code{2+sqrt(3)} for \code{"arctangent"} and to \code{6} for \code{"sigmoid"}.
 }
 
 \section{Defunct parameters}{

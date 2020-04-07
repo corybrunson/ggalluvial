@@ -8,6 +8,7 @@
 #' each such pair, using a provided knot position parameter `knot.pos`, and
 #' filled rectangles at either end, using a provided `width`.
 #' @template geom-aesthetics
+#' @template geom-curves
 #' @template defunct-geom-params
 #'
 

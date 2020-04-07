@@ -6,6 +6,7 @@
 #' It plots both the lodes themselves, using [geom_lode()], and the
 #' flows between them, using [geom_flow()].
 #' @template geom-aesthetics
+#' @template geom-curves
 #' @template defunct-geom-params
 #'
 
@@ -26,14 +27,11 @@
 #'   `"quintic"`, `"sine"`, `"arctangent"`, and `"sigmoid"`. `"xspline"`
 #'   produces approximation splines using 4 points per curve; the alternatives
 #'   produce interpolation splines between points along the graphs of functions
-#'   of the associated type. Only the `"xspline"` option uses the `knot.*`
-#'   parameters, while only the alternative curves use the `segments` parameter,
-#'   and only `"arctangent"` and `"sigmoid"` use the `reach` parameter.
+#'   of the associated type. See the **Curves** section.
 #' @param reach For alternative `curve`s based on asymptotic functions, the
 #'   value along the asymptote at which to truncate the function to obtain the
-#'   shape that will be scaled to fit between strata. Larger values result in
-#'   greater compression and steeper slopes. The `NULL` default will be changed
-#'   to `2+sqrt(3)` for `"arctangent"` and to `6` for `"sigmoid"`.
+#'   shape that will be scaled to fit between strata. See the **Curves**
+#'   section.
 #' @param segments The number of segments to be used in drawing each alternative
 #'   curve (each curved boundary of each flow). If less than 3, will be silently
 #'   changed to 3.

@@ -9,17 +9,22 @@ rect_to_poly <- function(xmin, xmax, ymin, ymax) {
 
 # alternative curve options
 # each is a function that takes [0,1] to [0,1]
+# degree-3 polynomial with degree-1 critical endpoints
 unit_cubic <- function(x) 3*x^2 - 2*x^3
+# degree-5 polynomial with degree-2 critical endpoints
 unit_quintic <- function(x) 10*x^3 - 15*x^4 + 6*x^5
+# sinusoidal function with crests at endpoints
 unit_sine <- function(x) {
   t <- (x - .5) * pi
   sin(t) / 2 + .5
 }
+# inverse tangent function compressed from a specified symmetric domain
 unit_arctangent <- function(x, reach) {
   if (is.null(reach)) reach <- 2 + sqrt(3)
   t <- (x - .5) * 2 * reach
   atan(t) / 2 / atan(reach) + .5
 }
+# sigmoid function compressed from a specified symmetric domain
 unit_sigmoid <- function(x, reach) {
   if (is.null(reach)) reach <- 6
   t <- (x - .5) * 2 * reach
