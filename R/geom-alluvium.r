@@ -16,12 +16,12 @@
 #'   [stat_alluvium()] and
 #'   [stat_flow()] for the corresponding stats.
 #' @inheritParams geom_lode
-#' @param knot.pos The horizontal distance between a stratum (`width/2`
-#'   from its axis) and the knot of the x-spline, as a proportion of the
-#'   separation between strata. Defaults to 1/4.
-#' @param knot.fix Logical; whether to interpret `knot.pos` as a fixed value,
-#'   rather than (the default) as a proportion of the separation between
-#'   adjacent axes.
+#' @param knot.pos The horizontal distance of x-spline knots from each stratum
+#'   (`width/2` from its axis), either (if `knot.prop = TRUE`, the default) as a
+#'   proportion of the length of the x-spline, i.e. of the gap between adjacent
+#'   strata, or (if `knot.prop = FALSE`) on the scale of the `x` direction.
+#' @param knot.prop Logical; whether to interpret `knot.pos` as a proportion of
+#'   the length of each flow (the default), rather than on the `x` scale.
 #' @param curve Character; the type of curve used to produce flows. Defaults to
 #'   `"xspline"` and can be alternatively set to one of `"linear"`, `"cubic"`,
 #'   `"quintic"`, `"sine"`, `"arctangent"`, and `"sigmoid"`. `"xspline"`
@@ -42,7 +42,7 @@ geom_alluvium <- function(mapping = NULL,
                           stat = "alluvium",
                           position = "identity",
                           width = 1/3,
-                          knot.pos = 1/4, knot.fix = FALSE,
+                          knot.pos = 1/4, knot.prop = TRUE,
                           curve = "xspline", reach = NULL, segments = NULL,
                           na.rm = FALSE,
                           show.legend = NA,
@@ -59,7 +59,7 @@ geom_alluvium <- function(mapping = NULL,
     params = list(
       width = width,
       knot.pos = knot.pos,
-      knot.fix = knot.fix,
+      knot.prop = knot.prop,
       curve = curve,
       reach = reach,
       segments = segments,
@@ -108,7 +108,7 @@ GeomAlluvium <- ggproto(
   
   draw_group = function(self, data, panel_scales, coord,
                         width = 1/3,
-                        knot.pos = 1/4, knot.fix = FALSE,
+                        knot.pos = 1/4, knot.prop = TRUE,
                         curve = "xspline", reach = NULL, segments = NULL) {
     
     # add width to data
@@ -130,7 +130,7 @@ GeomAlluvium <- ggproto(
       ))
     } else if (curve %in% c("spline", "xspline")) {
       # spline coordinates (more than one axis)
-      curve_data <- data_to_xspline(data, knot.fix)
+      curve_data <- data_to_xspline(data, knot.prop)
     } else {
       # default to 48 segments per curve, ensure the minimum number of segments
       if (is.null(segments)) segments <- 48 else if (segments < 3) {
@@ -160,11 +160,11 @@ GeomAlluvium <- ggproto(
 )
 
 # calculate control point coordinates for x-splines
-data_to_xspline <- function(data, knot.fix) {
+data_to_xspline <- function(data, knot.prop) {
   # left side, right side, forebound knot, backbound knot, left side, right side
   w_fore <- rep(data$width, c(3, rep(4, nrow(data) - 2), 3))
   k_fore <- rep(data$knot.pos, c(3, rep(4, nrow(data) - 2), 3))
-  if (! knot.fix) {
+  if (knot.prop) {
     # distances between strata
     b_fore <- rep(data$x, c(1, rep(2, nrow(data) - 2), 1)) +
       c(1, -1) * rep(data$width / 2, c(1, rep(2, nrow(data) - 2), 1))

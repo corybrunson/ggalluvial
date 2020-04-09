@@ -27,7 +27,7 @@ geom_flow <- function(mapping = NULL,
                       stat = "flow",
                       position = "identity",
                       width = 1/3,
-                      knot.pos = 1/4, knot.fix = FALSE,
+                      knot.pos = 1/4, knot.prop = TRUE,
                       curve = "xspline", reach = NULL, segments = NULL,
                       aes.flow = "forward",
                       na.rm = FALSE,
@@ -48,7 +48,7 @@ geom_flow <- function(mapping = NULL,
     params = list(
       width = width,
       knot.pos = knot.pos,
-      knot.fix = knot.fix,
+      knot.prop = knot.prop,
       curve = curve,
       reach = reach,
       segments = segments,
@@ -89,7 +89,7 @@ GeomFlow <- ggproto(
 
   draw_panel = function(self, data, panel_params, coord,
                         width = 1/3, aes.flow = "forward",
-                        knot.pos = 1/4, knot.fix = FALSE,
+                        knot.pos = 1/4, knot.prop = TRUE,
                         curve = "xspline", reach = NULL, segments = NULL) {
 
     # exclude one-sided flows
@@ -126,7 +126,7 @@ GeomFlow <- ggproto(
                              row$ymin.0, row$ymax.0, row$ymin.1, row$ymax.1,
                              row$knot.pos.0, row$knot.pos.1,
                              curve = curve, reach = reach, segments = segments,
-                             knot.fix = knot.fix)
+                             knot.prop = knot.prop)
       # aesthetics
       aes <- as.data.frame(row[flow_aes], stringsAsFactors = FALSE)
       # join aesthetics to path
@@ -158,12 +158,12 @@ GeomFlow <- ggproto(
 # send to spline or unit curve depending on parameters
 row_to_curve <- function(
   x0, x1, ymin0, ymax0, ymin1, ymax1, kp0, kp1,
-  curve, reach, segments, knot.fix
+  curve, reach, segments, knot.prop
 ) {
   if (curve %in% c("spline", "xspline")) {
     # x-spline path
     row_to_xspline(x0, x1, ymin0, ymax0, ymin1, ymax1,
-                   kp0, kp1, knot.fix)
+                   kp0, kp1, knot.prop)
   } else {
     # default to 48 segments per curve, ensure the minimum number of segments
     if (is.null(segments)) segments <- 48 else if (segments < 3) {
@@ -178,10 +178,10 @@ row_to_curve <- function(
 
 row_to_xspline <- function(
   x0, x1, ymin0, ymax0, ymin1, ymax1,
-  kp0, kp1, knot.fix
+  kp0, kp1, knot.prop
 ) {
   k_fore <- c(0, kp0, -kp1, 0)
-  if (! knot.fix) k_fore <- k_fore * (x1 - x0)
+  if (knot.prop) k_fore <- k_fore * (x1 - x0)
   x_fore <- rep(c(x0, x1), each = 2) + k_fore
   data.frame(
     x = c(x_fore, rev(x_fore)),

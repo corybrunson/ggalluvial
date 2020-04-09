@@ -35,6 +35,13 @@ test_that("`geom_alluvium()` recognizes alternative curves", {
   data(vaccinations)
   
   vdiffr::expect_doppelganger(
+    "`geom_alluvium`: unscaled knot positions",
+    ggplot(vaccinations,
+           aes(x = survey, stratum = response, alluvium = subject,
+               y = freq, fill = response)) +
+      geom_alluvium(knot.prop = FALSE)
+  )
+  vdiffr::expect_doppelganger(
     "`geom_alluvium`: 'linear' curve",
     ggplot(vaccinations,
            aes(x = survey, stratum = response, alluvium = subject,

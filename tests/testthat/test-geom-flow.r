@@ -44,6 +44,13 @@ test_that("`geom_flow` orients flows correctly", {
 
 test_that("`geom_flow()` recognizes alternative curves", {
   vdiffr::expect_doppelganger(
+    "`geom_flow`: unscaled knot positions",
+    ggplot(vaccinations,
+           aes(x = survey, stratum = response, alluvium = subject,
+               y = freq, fill = response)) +
+      geom_stratum() + geom_flow(knot.prop = FALSE)
+  )
+  vdiffr::expect_doppelganger(
     "`geom_flow`: 'linear' curve",
     ggplot(vaccinations,
            aes(x = survey, stratum = response, alluvium = subject,

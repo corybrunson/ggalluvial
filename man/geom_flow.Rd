@@ -11,7 +11,7 @@ geom_flow(
   position = "identity",
   width = 1/3,
   knot.pos = 1/4,
-  knot.fix = FALSE,
+  knot.prop = TRUE,
   curve = "xspline",
   reach = NULL,
   segments = NULL,
@@ -52,13 +52,13 @@ a call to a position adjustment function.}
 \item{width}{Numeric; the width of each stratum, as a proportion of the
 distance between axes. Defaults to 1/3.}
 
-\item{knot.pos}{The horizontal distance between a stratum (\code{width/2}
-from its axis) and the knot of the x-spline, as a proportion of the
-separation between strata. Defaults to 1/4.}
+\item{knot.pos}{The horizontal distance of x-spline knots from each stratum
+(\code{width/2} from its axis), either (if \code{knot.prop = TRUE}, the default) as a
+proportion of the length of the x-spline, i.e. of the gap between adjacent
+strata, or (if \code{knot.prop = FALSE}) on the scale of the \code{x} direction.}
 
-\item{knot.fix}{Logical; whether to interpret \code{knot.pos} as a fixed value,
-rather than (the default) as a proportion of the separation between
-adjacent axes.}
+\item{knot.prop}{Logical; whether to interpret \code{knot.pos} as a proportion of
+the length of each flow (the default), rather than on the \code{x} scale.}
 
 \item{curve}{Character; the type of curve used to produce flows. Defaults to
 \code{"xspline"} and can be alternatively set to one of \code{"linear"}, \code{"cubic"},
@@ -205,7 +205,7 @@ ggplot(wph,
 # hold the knot positions fixed
 ggplot(wph,
        aes(x = Year, alluvium = Region, y = Telephones)) +
-  geom_flow(aes(fill = Region, colour = Region), width = 0, knot.fix = TRUE)
+  geom_flow(aes(fill = Region, colour = Region), width = 0, knot.prop = FALSE)
 
 # rightward flow aesthetics for vaccine survey data, with cubic flows
 data(vaccinations)

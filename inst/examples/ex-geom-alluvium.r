@@ -31,7 +31,7 @@ gg +
 gg +
   geom_alluvium(aes(fill = country),
                 alpha = .75, decreasing = FALSE, width = 1/2,
-                knot.pos = 1, knot.fix = TRUE) +
+                knot.pos = 1, knot.prop = FALSE) +
   geom_stratum(aes(stratum = country), decreasing = FALSE, width = 1/2)
 # coarsely-segmented curves
 gg +

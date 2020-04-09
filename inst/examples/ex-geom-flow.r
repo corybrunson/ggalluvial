@@ -31,7 +31,7 @@ ggplot(wph,
 # hold the knot positions fixed
 ggplot(wph,
        aes(x = Year, alluvium = Region, y = Telephones)) +
-  geom_flow(aes(fill = Region, colour = Region), width = 0, knot.fix = TRUE)
+  geom_flow(aes(fill = Region, colour = Region), width = 0, knot.prop = FALSE)
 
 # rightward flow aesthetics for vaccine survey data, with cubic flows
 data(vaccinations)
