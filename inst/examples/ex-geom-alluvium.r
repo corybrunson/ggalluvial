@@ -17,8 +17,7 @@ gg + geom_alluvium(aes(fill = country, colour = country),
                    decreasing = NA, width = 0, knot.pos = 0)
 
 # irregular spacing between axes of a continuous variable
-data(Refugees, package = "alluvial")
-refugees_sub <- subset(Refugees, year %in% c(2003, 2005, 2010, 2013))
+refugees_sub <- subset(alluvial::Refugees, year %in% c(2003, 2005, 2010, 2013))
 gg <- ggplot(data = refugees_sub,
              aes(x = year, y = refugees, alluvium = country)) +
   theme_bw() +
@@ -26,17 +25,17 @@ gg <- ggplot(data = refugees_sub,
 # proportional knot positioning (default)
 gg +
   geom_alluvium(aes(fill = country),
-                alpha = .75, decreasing = FALSE) +
+                alpha = .75, decreasing = FALSE, width = 1/2) +
   geom_stratum(aes(stratum = country), decreasing = FALSE, width = 1/2)
-# fixed knot positioning
+# constant knot positioning
 gg +
   geom_alluvium(aes(fill = country),
-                alpha = .75, decreasing = FALSE,
+                alpha = .75, decreasing = FALSE, width = 1/2,
                 knot.pos = 1, knot.fix = TRUE) +
   geom_stratum(aes(stratum = country), decreasing = FALSE, width = 1/2)
 # coarsely-segmented curves
 gg +
   geom_alluvium(aes(fill = country),
-                alpha = .75, decreasing = FALSE,
+                alpha = .75, decreasing = FALSE, width = 1/2,
                 curve = "arctan", segments = 6) +
   geom_stratum(aes(stratum = country), decreasing = FALSE, width = 1/2)

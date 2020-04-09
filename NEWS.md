@@ -1,6 +1,13 @@
 
 # next version (v1.0.0?)
 
+## Flow upgrades and extensions
+
+The `knot.pos` parameter of `geom_alluvium()` and `geom_flow()` is now interpreted as a proportion of the total length of each flow, i.e. of the gap between adjacent strata (_not_ axes). This means that values will vary with axis positions and stratum widths. The new `knot.fix` parameter prevents this by interpreting `knot.pos` as a constant value along the `x` axis.
+
+These flows are rendered using `grid::xsplineGrob()` with four control points each: the endpoints and the two knots.
+To complement them, several other curves are now available: linear (equivalent to `knot.pos = 0`), cubic, quintic, sinusoidal, arctangent, and sigmoid, summoned by the new `curve` parameter (which defaults to the x-spline). (The asymptotic functions, arctangent and sigmoid, are compressed according to the new `reach` parameter.) The new curves are rendered piecewise linearly, with resolution controlled by the new `segments` parameter (similar to `ggplot2::stat_ellipse()`).
+
 # ggalluvial 0.11.3
 
 In response to **ggplot2** v3.2.0, which removes the **plyr** dependency, the dependency has been removed from **ggalluvial** as well.

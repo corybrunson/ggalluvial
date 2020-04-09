@@ -18,7 +18,7 @@
 #' @inheritParams geom_lode
 #' @param knot.pos The horizontal distance between a stratum (`width/2`
 #'   from its axis) and the knot of the x-spline, as a proportion of the
-#'   separation between strata. Defaults to 1/6.
+#'   separation between strata. Defaults to 1/4.
 #' @param knot.fix Logical; whether to interpret `knot.pos` as a fixed value,
 #'   rather than (the default) as a proportion of the separation between
 #'   adjacent axes.
@@ -99,7 +99,7 @@ GeomAlluvium <- ggproto(
     }
     
     knot.pos <- params$knot.pos
-    if (is.null(knot.pos)) knot.pos <- 1/6
+    if (is.null(knot.pos)) knot.pos <- 1/4
     
     # positioning parameters
     transform(data,
@@ -115,8 +115,9 @@ GeomAlluvium <- ggproto(
     data <- transform(data, width = width)
     
     first_row <- data[1, setdiff(names(data),
-                                 c("x", "xmin", "xmax", "width",
-                                   "y", "ymin", "ymax", "knot.pos")),
+                                 c("x", "xmin", "xmax",
+                                   "width", "knot.pos",
+                                   "y", "ymin", "ymax")),
                       drop = FALSE]
     rownames(first_row) <- NULL
     
@@ -158,19 +159,24 @@ GeomAlluvium <- ggproto(
   draw_key = draw_key_polygon
 )
 
+# calculate control point coordinates for x-splines
 data_to_xspline <- function(data, knot.fix) {
+  # left side, right side, forebound knot, backbound knot, left side, right side
   w_fore <- rep(data$width, c(3, rep(4, nrow(data) - 2), 3))
   k_fore <- rep(data$knot.pos, c(3, rep(4, nrow(data) - 2), 3))
   if (! knot.fix) {
-    if (nrow(data) > 2) {
-      k_fore <- k_fore * rep(diff(data$x), c(5, rep(4, nrow(data) - 3), 5))
-    } else {
-      k_fore <- k_fore * diff(data$x)
-    }
+    # distances between strata
+    b_fore <- rep(data$x, c(1, rep(2, nrow(data) - 2), 1)) +
+      c(1, -1) * rep(data$width / 2, c(1, rep(2, nrow(data) - 2), 1))
+    d_fore <- diff(b_fore)[c(TRUE, FALSE)]
+    # scale `k_fore` to these distances
+    k_fore <- k_fore * c(0, rep(d_fore, rep(4, nrow(data) - 1)), 0)
   }
+  # axis position +/- corresponding width +/- relative knot position
   x_fore <- rep(data$x, c(3, rep(4, nrow(data) - 2), 3)) +
     w_fore / 2 * c(-1, rep(c(1, 1, -1, -1), nrow(data) - 1), 1) +
-    k_fore * (1 - w_fore) * c(0, rep(c(0, 1, -1, 0), nrow(data) - 1), 0)
+    k_fore * c(0, rep(c(0, 1, -1, 0), nrow(data) - 1), 0)
+  # vertical positions are those of lodes
   ymin_fore <- rep(data$ymin, c(3, rep(4, nrow(data) - 2), 3))
   ymax_fore <- rep(data$ymax, c(3, rep(4, nrow(data) - 2), 3))
   shape_fore <- c(0, rep(c(0, 1, 1, 0), nrow(data) - 1), 0)

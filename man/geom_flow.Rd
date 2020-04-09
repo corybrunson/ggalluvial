@@ -54,7 +54,7 @@ distance between axes. Defaults to 1/3.}
 
 \item{knot.pos}{The horizontal distance between a stratum (\code{width/2}
 from its axis) and the knot of the x-spline, as a proportion of the
-separation between strata. Defaults to 1/6.}
+separation between strata. Defaults to 1/4.}
 
 \item{knot.fix}{Logical; whether to interpret \code{knot.pos} as a fixed value,
 rather than (the default) as a proportion of the separation between
@@ -202,6 +202,10 @@ wph$Year <- as.integer(as.character(wph$Year))
 ggplot(wph,
        aes(x = Year, alluvium = Region, y = Telephones)) +
   geom_flow(aes(fill = Region, colour = Region), width = 0)
+# hold the knot positions fixed
+ggplot(wph,
+       aes(x = Year, alluvium = Region, y = Telephones)) +
+  geom_flow(aes(fill = Region, colour = Region), width = 0, knot.fix = TRUE)
 
 # rightward flow aesthetics for vaccine survey data, with cubic flows
 data(vaccinations)
