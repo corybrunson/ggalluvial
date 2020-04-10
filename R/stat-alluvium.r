@@ -395,7 +395,7 @@ cement_data <- function(data, key, id, fun) {
   data
 }
 
-# aggregate weights over otherwise equivalent alluvia (omitting missing values)
+# aggregate `y` over otherwise equivalent alluvia (omitting missing values)
 cement_data_alt <- function(data, key, id) {
   
   # interaction of all variables to aggregate over (without dropping NAs)
