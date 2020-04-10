@@ -89,9 +89,10 @@ specified in \code{aes()}.}
 
 \item{infer.label}{Logical; whether to assign the \code{stratum} or \code{alluvium}
 variable to the \code{label} aesthetic. Defaults to \code{FALSE}, and requires that
-no \code{label} aesthetic is assigned. This parameter is intended only for uses
-in which the data are in alluva form and are therefore converted to lode
-form before the statistical transformation.}
+no \code{label} aesthetic is assigned. This parameter is intended for use only
+with data in alluva form, which are converted to lode form before the
+statistical transformation. Deprecated; use \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}}
+instead.}
 
 \item{min.y}{Numeric; bounds on the heights of the strata to be
 rendered. Use these bounds to exclude strata outside a certain range, for
@@ -140,12 +141,15 @@ Additionally, each \verb{stat_*()} accepts the following optional
 aesthetics:
 \itemize{
 \item \code{y}
+\item \code{weight}
 \item \code{group}
 \item \code{label}
 }
 
-\code{y} controls the heights of the alluvia
+\code{y} controls the heights of the alluvia,
 and may be aggregated across equivalent observations.
+\code{weight} applies to the computed variables (see that section below)
+but does not affect the positional aesthetics.
 \code{group} is used internally; arguments are ignored.
 \code{label} is used to label the strata or lodes and must take a unique value
 across the observations within each stratum or lode.
@@ -157,6 +161,20 @@ Numeric aesthetics, including \code{y}, are summed.
 Character and factor aesthetics, including \code{label},
 are assigned to strata or lodes provided they take unique values across the
 observations within each (and are otherwise assigned \code{NA}).
+}
+
+\section{Computed variables}{
+
+These can be used with \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}} to \href{https://ggplot2.tidyverse.org/reference/aes_eval.html}{control aesthetic evaluation}.
+\describe{
+\item{n}{number of cases in lode}
+\item{count}{cumulative weight of lode}
+\item{prop}{weighted proportion of lode}
+\item{stratum}{value of variable used to define strata}
+\item{lode}{lode label distilled from alluvia}
+}
+The numerical variables are grouped by \code{x} and weighted by \code{weight}. The
+character variable \code{lode} is obtained from \code{alluvium} according to \code{distill}.
 }
 
 \section{Package options}{
@@ -195,7 +213,7 @@ ggplot(as.data.frame(Titanic),
   stat_stratum(geom = "errorbar") +
   geom_line(stat = "flow") +
   stat_flow(geom = "pointrange") +
-  geom_text(stat = "stratum", infer.label = TRUE) +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 
 # alluvium--flow comparison

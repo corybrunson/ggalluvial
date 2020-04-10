@@ -1,24 +1,28 @@
 
-deprecate_parameter <- function(old, new = NA, type = "parameter") {
+deprecate_parameter <- function(old, new = NA, type = "parameter", msg = NULL) {
   .Deprecated(msg = paste0(
     "The ", type, " `", old, "` is deprecated.",
     if (is.null(new)) {
       "\nPass unparameterized arguments instead."
     } else if (! is.na(new)) {
       paste0("\nPass arguments to `", new, "` instead.")
+    } else if (! is.null(msg)) {
+      paste0("\n", msg)
     } else {
       ""
     }
   ))
 }
 
-defunct_parameter <- function(old, new = NA, type = "parameter") {
+defunct_parameter <- function(old, new = NA, type = "parameter", msg = NULL) {
   .Defunct(msg = paste0(
     "The ", type, " `", old, "` is defunct.",
     if (is.null(new)) {
       "\nPass unparameterized arguments instead."
     } else if (! is.na(new)) {
       paste0("\nPass arguments to `", new, "` instead.")
+    } else if (! is.null(msg)) {
+      paste0("\n", msg)
     } else {
       ""
     }

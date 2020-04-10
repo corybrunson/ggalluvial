@@ -1,5 +1,21 @@
 context("stat-flow")
 
+# weights are used but not returned
+
+test_that("`stat_flow` weights computed variables but drops weight", {
+  data <- expand.grid(alluvium = letters[1:3], x = 1:2)
+  data$stratum <- LETTERS[c(1, 1, 2, 1, 2, 2)]
+  data$y <- c(1, 1, 1, 1, 1, 2)
+  data$weight <- c(.5, 1, 1, .5, 1, 1)
+  comp <- as.data.frame(StatFlow$compute_panel(data))
+  comp <- comp[with(comp, order(x, alluvium)), ]
+  expect_equivalent(comp$n, c(1, 1, 0.5, 1, 1, 0.5))
+  expect_equivalent(comp$count, c(1, 1, 0.5, 2, 1, 0.5))
+  expect_equivalent(comp$prop, c(c(2, 2, 1) / 5, c(4, 2, 1) / 7))
+  expect_equal(comp$lode, rep(factor(letters[3:1]), times = 2))
+  expect_null(comp$weight)
+})
+
 # reverse and absolute, negative values
 
 test_that("`stat_flow` orders flows correctly with negative values", {

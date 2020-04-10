@@ -1,5 +1,11 @@
 
-# next version (v1.0.0?)
+# next version
+
+## Computed variables
+
+The alluvial stats now compute four variables for use with `after_stat()`: numeric variables `n`, `count`, and `prop`; and character variable `lode` when the `alluvium` aesthetic is specified. The numerical variables can be weighted using the `weight` aesthetic, which is dropped during computation (so that it does not confuse the geoms), while `lode` is distilled according to a new `distill` parameter.
+
+These new variables complement the already-computed variable `stratum`. This obviates the need for the `infer.label` parameter, which is deprecated. Its alias, `label.strata`, is now defunct. (The variable `alluvium` is often computed, but it is manipulated to be used by the geom layers and should not be used as an aesthetic.)
 
 ## Flow upgrades and extensions
 
@@ -9,6 +15,8 @@ These flows are rendered using `grid::xsplineGrob()` with four control points ea
 To complement them, several other curves are now available: linear (equivalent to `knot.pos = 0`), cubic, quintic, sinusoidal, arctangent, and sigmoid, summoned by the new `curve` parameter (which defaults to the x-spline). (The asymptotic functions, arctangent and sigmoid, are compressed according to the new `reach` parameter.) The new curves are rendered piecewise linearly, with resolution controlled by the new `segments` parameter (similar to `ggplot2::stat_ellipse()`).
 
 # ggalluvial 0.11.3
+
+## Dependencies
 
 In response to **ggplot2** v3.2.0, which removes the **plyr** dependency, the dependency has been removed from **ggalluvial** as well.
 

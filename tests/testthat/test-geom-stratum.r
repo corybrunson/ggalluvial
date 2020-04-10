@@ -17,7 +17,8 @@ test_that("`geom_stratum` draws correctly", {
   )
   vdiffr::expect_doppelganger(
     "`geom_stratum`: inferred text labels",
-    ggplot(d, a1) + geom_text(stat = "stratum", infer.label = TRUE)
+    ggplot(d, a1) +
+      geom_text(stat = "stratum", aes(label = after_stat(stratum)))
   )
   vdiffr::expect_doppelganger(
     "`geom_stratum`: axis labels",

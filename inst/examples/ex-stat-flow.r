@@ -6,7 +6,7 @@ ggplot(as.data.frame(Titanic),
   stat_stratum(geom = "errorbar") +
   geom_line(stat = "flow") +
   stat_flow(geom = "pointrange") +
-  geom_text(stat = "stratum", infer.label = TRUE) +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 
 # alluvium--flow comparison
