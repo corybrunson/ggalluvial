@@ -274,7 +274,9 @@ ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
                 lode.ordering = lode_ord)
 ```
 
-Within each stratum at each axis, the cases are now in order from bottom to top.
+Within each stratum at each axis, the cases are now in order from top to bottom.[^reverse]
+
+[^reverse]: As with other influences on the order of the lodes, whether `lode.ordering` is treated as top-to-bottom versus bottom-to-top is determined by the `reverse` parameter.
 
 ## Negative strata
 
