@@ -1,6 +1,18 @@
 
 # next version
 
+## Order of alluvia in negative strata
+
+Alluvia within "deposits" are now consistently ordered in positive and negative strata, rather than according to `absolute`. This avoids the "twisting" of flows between strata of different signs. Whereas the orderings of the deposits matter to the stacked-histogram reading of the plot, the orderings of the alluvia should simply maximize its elegance and readability.
+**This will change some plots but will not produce new errors.**
+
+## Behavior of `lode.ordering`
+
+For consistency with the behavior of `aes.bind`, `stat_alluvium()` now invokes `lode.ordering` together with `lode.guidance`: If the vectors of `lode.ordering` include duplicates, i.e. they do not completely determine an order, then the remaining deposits are used to refine the order. Previously, `lode.ordering` was assumed to consist of permutation vectors, so the two parameters were mutually exclusive.
+
+Additionally, for consistency with other influences on the lode order, the vectors of `lode.ordering` are reversed if `reverse = TRUE` (the default).
+**This will change some plots but will not produce new errors.**
+
 ## Computed variables
 
 The alluvial stats now compute four variables for use with `after_stat()`: numeric variables `n`, `count`, and `prop`; and character variable `lode` when the `alluvium` aesthetic is specified. The numerical variables can be weighted using the `weight` aesthetic, which is dropped during computation (so that it does not confuse the geoms), while `lode` is distilled according to a new `distill` parameter.
@@ -13,12 +25,6 @@ The `knot.pos` parameter of `geom_alluvium()` and `geom_flow()` is now interpret
 
 These flows are rendered using `grid::xsplineGrob()` with four control points each: the endpoints and the two knots.
 To complement them, several other curves are now available: linear (equivalent to `knot.pos = 0`), cubic, quintic, sinusoidal, arctangent, and sigmoid, summoned by the new `curve` parameter (which defaults to the x-spline). (The asymptotic functions, arctangent and sigmoid, are compressed according to the new `reach` parameter.) The new curves are rendered piecewise linearly, with resolution controlled by the new `segments` parameter (similar to `ggplot2::stat_ellipse()`).
-
-## behavior of `lode.ordering`
-
-For consistency with the behavior of `aes.bind`, `stat_alluvium()` now invokes `lode.ordering` together with `lode.guidance`: If the vectors of `lode.ordering` include duplicates, i.e. they do not completely determine an order, then the remaining deposits are used to refine the order. Previously, `lode.ordering` was assumed to consist of permutation vectors, so the two parameters were mutually exclusive.
-
-Additionally, for consistency with other influences on the lode order, the vectors of `lode.ordering` are reversed if `reverse = TRUE` (the default). **This will change some plots but will not produce new errors.**
 
 # ggalluvial 0.11.3
 
