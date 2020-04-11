@@ -270,7 +270,7 @@ lode_custom <- function(n, i) {
   )
 }
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
-               aes.bind = TRUE, lode.guidance = lode_custom)
+               aes.bind = "flow", lode.guidance = lode_custom)
 
 data(majors)
 # omit missing elements & reverse the `y` axis
