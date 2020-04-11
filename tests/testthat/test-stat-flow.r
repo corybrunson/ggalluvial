@@ -74,5 +74,5 @@ test_that("`stat_flow` handles exceptional data with out errors", {
   wph$Year <- as.integer(as.character(wph$Year))
   gg <- ggplot(wph, aes(x = Year, alluvium = Region, y = Telephones)) +
     geom_flow(aes(fill = Region, colour = Region))
-  expect_silent(print(gg))
+  expect_silent(ggplot_build(gg))
 })

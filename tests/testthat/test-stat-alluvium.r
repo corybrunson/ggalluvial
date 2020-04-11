@@ -28,7 +28,7 @@ test_that("`stat_alluvium` weights computed variables but drops weight", {
 
 # negative values
 
-test_that("`stat_alluvium` orders alluvia correctly with negative values", {
+test_that("`stat_alluvium` orders alluvia without regard to negative values", {
   data <- expand.grid(alluvium = letters[1:2], x = 1:2)
   data$stratum <- LETTERS[1]
   data$y <- c(-1, -1)
@@ -38,7 +38,7 @@ test_that("`stat_alluvium` orders alluvia correctly with negative values", {
   #  geom_text(stat = "alluvium", aes(label = alluvium))
   comp <- StatAlluvium$compute_panel(data)
   expect_identical(comp[with(comp, order(x, alluvium)), ]$y,
-                   c(-1.5, -0.5, -1.5, -0.5))
+                   c(-0.5, -1.5, -0.5, -1.5))
   # order by alluvium, `reverse = FALSE`
   #ggplot(data, aes(x = x, stratum = stratum, alluvium = alluvium, y = y)) +
   #  geom_alluvium(absolute = FALSE) +
@@ -87,5 +87,5 @@ test_that("`stat_flow` handles exceptional data with out errors", {
   refugees_sub <- subset(Refugees, year %in% c(2003, 2005, 2010, 2013))
   gg <- ggplot(refugees_sub, aes(x = year, y = refugees, alluvium = country)) +
     geom_alluvium(aes(fill = country))
-  expect_silent(print(gg))
+  expect_silent(ggplot_build(gg))
 })
