@@ -68,21 +68,21 @@
 #' @param y_to A string specifying the name of the column to create from the
 #'   column(s) identified by `y`. If needed for multiple columns but not
 #'   provided, defaults to 'y'.
-#' @param diffuse Fields of `data`, handled using [tidyselect::vars_select()],
-#'   to merge into the reshapen data by `id`. They must be a subset of the axis
-#'   variables. Alternatively, a logical value indicating whether to merge all
-#'   (`TRUE`) or none (`FALSE`) of the axis variables.
-#' @param distill A logical value indicating whether to include variables, other
-#'   than those passed to `key` and `value`, that vary within values
-#'   of `id`. Alternatively, a function (or its name) to be used to distill
-#'   each such variable to a single value. In addition to existing functions,
-#'   `distill` accepts the character values `"first"` (used if
-#'   `distill` is `TRUE`), `"last"`, and `"most"` (which
-#'   returns the first modal value).
+#' @param diffuse Fields of `data` to merge into the lengthened data, joining by
+#'   `alluvia_to`. They must be among the variables passed to `axes`.
+#'   Alternatively, a logical value indicating whether to merge all (`TRUE`) or
+#'   none (`FALSE`) of these variables.
+#' @param distill A logical value indicating whether variables excluded from
+#'   `axes_from` and `strata_from` that vary within values of `alluvia_from`
+#'   should be included in the result. Alternatively, a function (or its name)
+#'   to be used to distill each such variable to a single value. In addition to
+#'   existing functions, `distill` accepts the character values `"first"` (used
+#'   if `distill` is `TRUE`), `"last"`, and `"most"` (which returns the first
+#'   modal value).
 #' @param discern Logical value indicating whether to suffix values of the
-#'   variables used as axes that appear at more than one variable in order to
+#'   variables passed to `axes` that appear at more than one axis, in order to
 #'   distinguish their factor levels. This forces the levels of the combined
-#'   factor variable `value` to be in the order of the axes.
+#'   factor variable `strata_to` to be in the order of the axes.
 #' @example inst/examples/ex-alluvial-data.r
 
 #' @rdname alluvial-data
