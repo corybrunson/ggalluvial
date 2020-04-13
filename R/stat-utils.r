@@ -103,6 +103,15 @@ cumulate <- function(x) {
   }
 }
 
+# choose a function via the `cement` parameter
+distill_fun <- function(distill) {
+  if (is.function(distill)) {
+    return(distill)
+  } else {
+    return(get(distill))
+  }
+}
+
 # arrange data by aesthetics for consistent (reverse) z-ordering
 z_order_aes <- function(data, aesthetics) {
   

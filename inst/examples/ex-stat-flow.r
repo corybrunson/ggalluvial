@@ -6,7 +6,7 @@ ggplot(as.data.frame(Titanic),
   stat_stratum(geom = "errorbar") +
   geom_line(stat = "flow") +
   stat_flow(geom = "pointrange") +
-  geom_text(stat = "stratum", infer.label = TRUE) +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 
 # alluvium--flow comparison
@@ -61,7 +61,7 @@ ggplot(vaccinations,
 ggplot(vaccinations,
        aes(x = survey, stratum = response, alluvium = subject,
            y = freq, label = response)) +
-  geom_flow(aes(fill = interaction(response, subgroup)), aes.bind = "alluvia") +
+  geom_flow(aes(fill = interaction(response, subgroup)), aes.bind = "flows") +
   scale_alpha_discrete(range = c(1/3, 2/3)) +
   geom_stratum(alpha = .5) +
   geom_text(stat = "stratum")

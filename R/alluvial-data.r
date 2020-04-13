@@ -73,11 +73,12 @@
 #'   variables. Alternatively, a logical value indicating whether to merge all
 #'   (`TRUE`) or none (`FALSE`) of the axis variables.
 #' @param distill A logical value indicating whether to include variables, other
-#'   than those passed to `key` and `value`, that vary within values of `id`.
-#'   Alternatively, a function (or its name) to be used to distill each such
-#'   variable to a single value. In addition to existing functions, `distill`
-#'   accepts the character values `"first"` (used if `distill` is `TRUE`),
-#'   `"last"`, and `"most"` (which returns the modal value).
+#'   than those passed to `key` and `value`, that vary within values
+#'   of `id`. Alternatively, a function (or its name) to be used to distill
+#'   each such variable to a single value. In addition to existing functions,
+#'   `distill` accepts the character values `"first"` (used if
+#'   `distill` is `TRUE`), `"last"`, and `"most"` (which
+#'   returns the first modal value).
 #' @param discern Logical value indicating whether to suffix values of the
 #'   variables used as axes that appear at more than one variable in order to
 #'   distinguish their factor levels. This forces the levels of the combined

@@ -12,11 +12,14 @@
 #' aesthetics:
 #'
 #' - `y`
+#' - `weight`
 #' - `group`
 #' - `label`
 #'
-#' `y` controls the heights of the alluvia
+#' `y` controls the heights of the alluvia,
 #' and may be aggregated across equivalent observations.
+#' `weight` applies to the computed variables (see that section below)
+#' but does not affect the positional aesthetics.
 #' `group` is used internally; arguments are ignored.
 #' `label` is used to label the strata or lodes and must take a unique value
 #' across the observations within each stratum or lode.

@@ -23,9 +23,9 @@ test_that("`geom_flow` draws correctly", {
   )
 })
 
+data(vaccinations)
+
 test_that("`geom_flow` orients flows correctly", {
-  data(vaccinations)
-  
   vdiffr::expect_doppelganger(
     "`geom_flow`: forward orientation",
     ggplot(vaccinations,
@@ -39,5 +39,57 @@ test_that("`geom_flow` orients flows correctly", {
            aes(x = survey, stratum = response, alluvium = subject,
                y = freq, fill = response)) +
       geom_lode() + geom_flow(aes.flow = "backward")
+  )
+})
+
+test_that("`geom_flow()` recognizes alternative curves", {
+  vdiffr::expect_doppelganger(
+    "`geom_flow`: unscaled knot positions",
+    ggplot(vaccinations,
+           aes(x = survey, stratum = response, alluvium = subject,
+               y = freq, fill = response)) +
+      geom_stratum() + geom_flow(knot.prop = FALSE)
+  )
+  vdiffr::expect_doppelganger(
+    "`geom_flow`: 'linear' curve",
+    ggplot(vaccinations,
+           aes(x = survey, stratum = response, alluvium = subject,
+               y = freq, fill = response)) +
+      geom_stratum() + geom_flow(curve = "linear")
+  )
+  vdiffr::expect_doppelganger(
+    "`geom_flow`: 'cubic' curve",
+    ggplot(vaccinations,
+           aes(x = survey, stratum = response, alluvium = subject,
+               y = freq, fill = response)) +
+      geom_stratum() + geom_flow(curve = "cubic")
+  )
+  vdiffr::expect_doppelganger(
+    "`geom_flow`: 'quintic' curve",
+    ggplot(vaccinations,
+           aes(x = survey, stratum = response, alluvium = subject,
+               y = freq, fill = response)) +
+      geom_stratum() + geom_flow(curve = "quintic")
+  )
+  vdiffr::expect_doppelganger(
+    "`geom_flow`: 'sine' curve",
+    ggplot(vaccinations,
+           aes(x = survey, stratum = response, alluvium = subject,
+               y = freq, fill = response)) +
+      geom_stratum() + geom_flow(curve = "sine")
+  )
+  vdiffr::expect_doppelganger(
+    "`geom_flow`: 'arctangent' curve",
+    ggplot(vaccinations,
+           aes(x = survey, stratum = response, alluvium = subject,
+               y = freq, fill = response)) +
+      geom_stratum() + geom_flow(curve = "arctan")
+  )
+  vdiffr::expect_doppelganger(
+    "`geom_flow`: 'sigmoid' curve",
+    ggplot(vaccinations,
+           aes(x = survey, stratum = response, alluvium = subject,
+               y = freq, fill = response)) +
+      geom_stratum() + geom_flow(curve = "sigmoid")
   )
 })

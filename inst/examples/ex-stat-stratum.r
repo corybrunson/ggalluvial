@@ -10,14 +10,14 @@ ggplot(vaccinations,
 ggplot(vaccinations,
        aes(y = freq,
            x = survey, stratum = response, alluvium = subject,
-           label = freq)) +
+           label = after_stat(count))) +
   stat_stratum(geom = "errorbar") +
   geom_text(stat = "stratum")
 # alluvium data, positioning with stratum labels
 ggplot(as.data.frame(Titanic),
        aes(y = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age, axis4 = Survived)) +
-  geom_text(stat = "stratum", infer.label = TRUE) +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
   stat_stratum(geom = "errorbar") +
   scale_x_discrete(limits = c("Class", "Sex", "Age", "Survived"))
 
@@ -39,7 +39,7 @@ ggplot(merge(vaccinations, survey_dates, by = "survey"),
        aes(x = end, y = freq, stratum = response, alluvium = subject,
            fill = response)) +
   stat_alluvium(geom = "flow", lode.guidance = "forward",
-                width = 30, knot.pos = 0) +
+                width = 30) +
   stat_stratum(width = 30) +
   labs(x = "Survey date", y = "Number of respondents")
 
@@ -50,5 +50,5 @@ ggplot(admissions,
        aes(y = Count, axis1 = Dept, axis2 = Gender)) +
   geom_alluvium(aes(fill = Dept), width = 1/12) +
   geom_stratum(width = 1/12, fill = "black", color = "grey") +
-  geom_label(stat = "stratum", infer.label = TRUE, min.y = 200) +
+  geom_label(stat = "stratum", aes(label = after_stat(stratum)), min.y = 200) +
   scale_x_discrete(limits = c("Department", "Gender"), expand = c(.05, .05))

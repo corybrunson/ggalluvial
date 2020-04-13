@@ -5,6 +5,7 @@
 #' intersections of the alluvia with the strata. It leverages the `group`
 #' aesthetic for plotting purposes (for now).
 #' @template stat-aesthetics
+#' @template computed-variables
 #' @template order-options
 #' @template defunct-stat-params
 #'
@@ -17,10 +18,6 @@
 #' @inheritParams stat_flow
 #' @param cement.alluvia Logical value indicating whether to aggregate `y`
 #'   values over equivalent alluvia before computing lode and flow positions.
-#'   Alternatively, a function (or its name) to combine the labels (if any) of
-#'   equivalent alluvia, similar to the `distill` parameter of
-#'   [to_alluvia_form()]). If set to `TRUE`, defaults to function
-#'   `[dplyr::first()]`.
 #' @param aggregate.y Deprecated alias for `cement.alluvia`.
 #' @param lode.guidance The function to prioritize the axis variables for
 #'   ordering the lodes within each stratum, or else a character string
@@ -30,8 +27,10 @@
 #'   (each of length the number of rows of `data`) or NULL entries (indicating
 #'   no imposed ordering), or else a numeric matrix of corresponding dimensions,
 #'   giving the preferred ordering of alluvia at each axis. This will be used to
-#'   order the lodes within each stratum by sorting the lodes first by stratum
-#'   and then by the provided vectors.
+#'   order the lodes within each stratum by sorting the lodes first by stratum,
+#'   then by the provided vectors, and lastly by remaining factors (if the
+#'   vectors contain duplicate entries and therefore do not completely determine
+#'   the lode orderings).
 #' @example inst/examples/ex-stat-alluvium.r
 #' @export
 stat_alluvium <- function(mapping = NULL,
@@ -88,6 +87,8 @@ StatAlluvium <- ggproto(
   "StatAlluvium", Stat,
   
   required_aes = c("x"),
+  
+  default_aes = aes(weight = 1),
   
   setup_params = function(data, params) {
     
@@ -164,7 +165,7 @@ StatAlluvium <- ggproto(
                            decreasing = ggalluvial_opt("decreasing"),
                            reverse = ggalluvial_opt("reverse"),
                            absolute = ggalluvial_opt("absolute"),
-                           discern = FALSE,
+                           discern = FALSE, distill = first,
                            negate.strata = NULL,
                            aggregate.y = NULL,
                            cement.alluvia = ggalluvial_opt("cement.alluvia"),
@@ -176,6 +177,8 @@ StatAlluvium <- ggproto(
     
     # introduce label
     if (infer.label) {
+      deprecate_parameter("infer.label",
+                          msg = "Use `aes(label = after_stat(lode))`.")
       if (is.null(data$label)) {
         data$label <- data$alluvium
       } else {
@@ -185,7 +188,8 @@ StatAlluvium <- ggproto(
     }
     
     # aesthetics (in prescribed order)
-    aesthetics <- intersect(.color_diff_aesthetics, names(data))
+    aesthetics <- intersect(c(.color_diff_aesthetics, .text_aesthetics),
+                            names(data))
     # match arguments for `aes.bind`
     if (! is.null(aes.bind)) {
       if (is.logical(aes.bind)) {
@@ -199,63 +203,133 @@ StatAlluvium <- ggproto(
     
     # sign variable (sorts positives before negatives)
     data$yneg <- data$y < 0
+    # lode variable (before co-opting 'alluvium')
+    data$lode <- data$alluvium
+    # specify distillation function from `distill`
+    distill <- distill_fun(distill)
+    
+    # initiate variables for `after_stat()`
+    weight <- data$weight
+    data$weight <- NULL
+    if (is.null(weight)) weight <- 1
+    data$n <- weight
+    data$count <- data$y * weight
     
     # cement (aggregate) `y` over otherwise equivalent alluvia
     if (! is.null(aggregate.y)) {
       deprecate_parameter("aggregate.y", "cement.alluvia")
       cement.alluvia <- aggregate.y
     }
-    if (is.logical(cement.alluvia)) {
-      label_fun <- first
-    } else {
-      if (is.character(cement.alluvia)) label_fun <- get(cement.alluvia)
-      stopifnot(is.function(cement.alluvia))
-      label_fun <- cement.alluvia
-      cement.alluvia <- TRUE
-    }
     if (cement.alluvia) {
-      data <- cement_data(data, "x", "alluvium", label_fun)
+      
+      # -+- need to stop depending on 'group' and 'PANEL' -+-
+      only_vars <- intersect(c(setdiff(aesthetics, "label"),
+                               "group", "PANEL"),
+                             names(data))
+      bind_vars <- intersect(c("yneg", "stratum", only_vars,
+                               "group", "PANEL"),
+                             names(data))
+      sum_vars <- c("y", "n", "count")
+      
+      # interaction of all variables to aggregate over (without dropping NAs)
+      # -+- need to stop depending on 'group' -+-
+      data$binding <- as.numeric(interaction(lapply(
+        data[, bind_vars, drop = FALSE],
+        addNA, ifany = FALSE
+      ), drop = TRUE))
+      # convert to alluvia format with 'binding' entries
+      luv_dat <- alluviate(data, "x", "binding", "alluvium")
+      # sort by all axes (everything except 'alluvium')
+      luv_dat <- luv_dat[do.call(
+        order,
+        luv_dat[, setdiff(names(luv_dat), "alluvium"), drop = FALSE]
+      ), , drop = FALSE]
+      
+      # define map from original to aggregated 'alluvium' column
+      luv_orig <- luv_dat$alluvium
+      luv_agg <- cumsum(! duplicated(interaction(
+        luv_dat[, setdiff(names(luv_dat), "alluvium"), drop = FALSE],
+        drop = TRUE
+      )))
+      # transform 'alluvium' in `data` accordingly
+      data$alluvium <- luv_agg[match(data$alluvium, luv_orig)]
+      
+      # aggregate variables over 'x', 'yneg', and 'stratum':
+      # sum of computed variables and unique-or-bust values of aesthetics
+      by_vars <- c("x", "yneg", "stratum", "alluvium", "binding")
+      agg_lode <- stats::aggregate(data[, "lode", drop = FALSE],
+                                   data[, by_vars],
+                                   distill)
+      if (length(only_vars) > 0) {
+        agg_only <- stats::aggregate(data[, only_vars, drop = FALSE],
+                                     data[, by_vars],
+                                     only)
+      }
+      agg_dat <- stats::aggregate(data[, sum_vars],
+                                  data[, by_vars],
+                                  sum)
+      agg_dat <- merge(agg_dat, agg_lode)
+      if (length(only_vars) > 0) {
+        agg_dat <- merge(agg_dat, agg_only)
+      }
+      
+      # merge into `data`, ensuring that no `key`-`id` pairs are duplicated
+      data <- unique(merge(
+        agg_dat,
+        data[, setdiff(names(data), sum_vars)],
+        all.x = TRUE, all.y = FALSE
+      ))
+      data$binding <- NULL
+      
     }
     
     # define 'deposit' variable to rank strata vertically
     data <- deposit_data(data, decreasing, reverse, absolute)
     
-    # if `lode.ordering` not provided, calculate it (ignoring aesthetics)
-    if (is.null(lode.ordering)) {
-      # invoke surrounding axes in the order prescribed by `lode.guidance`
-      if (is.character(lode.guidance)) {
-        lode.guidance <- get(paste0("lode_", lode.guidance))
-      }
-      stopifnot(is.function(lode.guidance))
-      # summary data of alluvial deposits
-      alluv_dep <- alluviate(data, "alluvium", "x", "deposit")
-      # axis indices
-      alluv_x <- setdiff(names(alluv_dep), "alluvium")
-      # calculate `lode.ordering` from `lode.guidance`
-      lode.ordering <- matrix(NA_integer_,
-                              nrow = nrow(alluv_dep), ncol = length(alluv_x))
-      dimnames(lode.ordering) <- list(alluv_dep$alluvium, alluv_x)
-      for (xx in alluv_x) {
-        ord_x <- lode.guidance(length(alluv_x), match(xx, alluv_x))
-        # order by aesthetics in order
-        lode.ordering[, xx] <- interaction(alluv_dep[, alluv_x[rev(ord_x)]],
-                                           drop = TRUE)
-      }
+    # invoke surrounding axes in the order prescribed by `lode.guidance`
+    if (is.character(lode.guidance)) {
+      lode.guidance <- get(paste0("lode_", lode.guidance))
+    }
+    stopifnot(is.function(lode.guidance))
+    # summary data of alluvial deposits
+    alluv_dep <- alluviate(data, "x", "deposit", "alluvium")
+    # axis indices
+    alluv_x <- setdiff(names(alluv_dep), "alluvium")
+    # ensure that `lode.ordering` is a matrix with column names
+    if (! is.null(lode.ordering)) {
       # bind a vector to itself to create a matrix
-    } else if (is.vector(lode.ordering)) {
-      lode.ordering <- matrix(lode.ordering,
-                              nrow = length(lode.ordering),
-                              ncol = length(unique(data$x)))
+      if (is.vector(lode.ordering)) {
+        lode.ordering <- matrix(lode.ordering,
+                                nrow = length(lode.ordering),
+                                ncol = length(unique(data$x)))
+      }
+      colnames(lode.ordering) <- alluv_x
+    }
+    # calculate `lode_ords` from `lode.guidance` and `lode.ordering`
+    lode_ords <- matrix(NA_integer_,
+                        nrow = nrow(alluv_dep), ncol = length(alluv_x))
+    dimnames(lode_ords) <- list(alluv_dep$alluvium, alluv_x)
+    for (xx in alluv_x) {
+      ii <- match(xx, alluv_x)
+      ord_x <- lode.guidance(length(alluv_x), match(xx, alluv_x))
+      # order by prescribed ordering and by aesthetics in order
+      alluv_ord_dep <- if (is.null(lode.ordering)) {
+        alluv_dep[, alluv_x[rev(ord_x)]]
+      } else {
+        alluv_ord <- xtfrm(lode.ordering[, ii]) * (-1) ^ reverse
+        cbind(alluv_dep[, alluv_x[rev(ord_x)]], alluv_ord)
+      }
+      lode_ords[, xx] <- interaction(alluv_ord_dep, drop = TRUE)
     }
     # check that array has correct dimensions
-    stopifnot(dim(lode.ordering) ==
+    stopifnot(dim(lode_ords) ==
                 c(length(unique(data$alluvium)), length(unique(data$x))))
     
-    # convert `lode.ordering` into a single sorting variable 'rem_deposit'
+    # convert `lode_ords` into a single sorting variable 'rem_deposit'
     # that orders index lodes by remaining / remote deposits
-    lode_ord <- as.data.frame(lode.ordering)
+    lode_ord <- as.data.frame(lode_ords)
     names(lode_ord) <- sort(unique(data$x))
-    lode_ord$alluvium <- if (is.null(rownames(lode.ordering))) {
+    lode_ord$alluvium <- if (is.null(rownames(lode_ords))) {
       if (is.factor(data$alluvium)) {
         levels(data$alluvium)
       } else if (is.numeric(data$alluvium)) {
@@ -264,7 +338,7 @@ StatAlluvium <- ggproto(
         unique(data$alluvium)
       }
     } else {
-      rownames(lode.ordering)
+      rownames(lode_ords)
     }
     # match `lode_ord$x` back to `data$x`
     uniq_x <- sort(unique(data$x))
@@ -290,8 +364,13 @@ StatAlluvium <- ggproto(
         (-1) ^ (data$yneg * absolute + reverse)
     }
     
+    # calculate variables for `after_stat()`
+    x_counts <- tapply(abs(data$count), data$x, sum, na.rm = TRUE)
+    data$prop <-
+      data$count / x_counts[match(as.character(data$x), names(x_counts))]
+    
     # reverse alluvium order among negative observations
-    data$fan <- xtfrm(data$alluvium) * (-1) ^ (data$yneg * absolute + reverse)
+    data$fan <- xtfrm(data$alluvium) * (-1) ^ reverse
     
     # sort data in preparation for `y` sums
     sort_fields <- c(
@@ -315,6 +394,7 @@ StatAlluvium <- ggproto(
     data$deposit <- NULL
     data$rem_deposit <- NULL
     data$fissure <- NULL
+    data$fan <- NULL
     data$ymin <- data$ycum - abs(data$y) / 2
     data$ymax <- data$ycum + abs(data$y) / 2
     data$y <- data$ycum
@@ -330,7 +410,7 @@ StatAlluvium <- ggproto(
     # (data is sorted by `x` and `alluvium`; group_by() does not reorder it)
     data <- dplyr::ungroup(dplyr::mutate(dplyr::group_by(data, alluvium),
                                          flow = axis - cumsum(cont)))
-    # add `group` to group contiguous alluvial subsets
+    # add 'group' to group contiguous alluvial subsets
     data <- transform(data, group = as.numeric(interaction(alluvium, flow)))
     # remove unused fields
     data$cont <- NULL
@@ -347,94 +427,6 @@ StatAlluvium <- ggproto(
     data
   }
 )
-
-# aggregate `y` and `label` over equivalent alluvia (omitting missing values)
-cement_data <- function(data, key, id, fun) {
-  
-  agg_vars <- intersect(c("y", "label"), names(data))
-  
-  # interaction of all variables to aggregate over (without dropping NAs)
-  data$binding <- as.numeric(interaction(lapply(
-    data[, -match(c(key, id, agg_vars), names(data)), drop = FALSE],
-    addNA, ifany = FALSE
-  ), drop = TRUE))
-  # convert to alluvia format with 'binding' entries
-  alluv_data <- alluviate(data, id, key, "binding")
-  # sort by all axes (everything except `id`)
-  alluv_data <- alluv_data[do.call(
-    order,
-    alluv_data[, -match(id, names(alluv_data)), drop = FALSE]
-  ), , drop = FALSE]
-  
-  # define map from original to aggregated `id`s
-  alluv_orig <- alluv_data[[id]]
-  alluv_agg <- cumsum(! duplicated(interaction(
-    alluv_data[, -match(id, names(alluv_data)), drop = FALSE], drop = TRUE
-  )))
-  # transform `id` in `data` accordingly
-  data[[id]] <- alluv_agg[match(data[[id]], alluv_orig)]
-  
-  # aggregate `y` and `label` by all other variables
-  by_vars <- c(key, id, "binding")
-  data_agg <- dplyr::group_by(data[, c(by_vars, agg_vars)], .dots = by_vars)
-  data_agg <- if ("label" %in% agg_vars) {
-    dplyr::summarize(data_agg,
-                     y = sum(.data$y, na.rm = TRUE), label = fun(.data$label))
-  } else {
-    #dplyr::summarize(data_agg, y = sum(.data$y, na.rm = TRUE))
-    dplyr::summarize_at(data_agg, "y", sum, na.rm = TRUE)
-  }
-  data_agg <- dplyr::ungroup(data_agg)
-  # merge into `data`, ensuring that no `key`-`id` pairs are duplicated
-  data <- unique(merge(
-    data_agg,
-    data[, -match(agg_vars, names(data))],
-    all.x = TRUE, all.y = FALSE
-  ))
-  data$binding <- NULL
-  
-  data
-}
-
-# aggregate weights over otherwise equivalent alluvia (omitting missing values)
-cement_data_alt <- function(data, key, id) {
-  
-  # interaction of all variables to aggregate over (without dropping NAs)
-  data$.binding <- as.numeric(interaction(lapply(
-    data[, -match(c(key, id, "y"), names(data)), drop = FALSE],
-    addNA, ifany = FALSE
-  ), drop = TRUE))
-  
-  # convert to alluvia format with '.binding' entries
-  alluv_data <- alluviate(data, id, key, ".binding")
-  
-  # redefine 'alluvium' with only as many distinct values as distinct alluvia
-  alluv_agg <- stats::aggregate(
-    alluv_data[[id]],
-    by = alluv_data[, rev(setdiff(names(alluv_data), id))],
-    FUN = most
-  )
-  names(alluv_agg)[ncol(alluv_agg)] <- ".id"
-  alluv_data <- merge(alluv_data, alluv_agg, all.x = TRUE, all.y = FALSE)
-  data[[id]] <- alluv_data$.id[match(data[[id]], alluv_data[[id]])]
-  
-  # aggregate `y` by `key`, `id`, and .binding
-  data_agg <- stats::aggregate(
-    formula = y ~ .,
-    data = data[, c(key, id, ".binding", "y")],
-    FUN = sum
-  )
-  
-  # merge into `data`, ensuring that no `key`-`id` pairs are duplicated
-  data <- merge(
-    data_agg,
-    data[, -match("y", names(data))],
-    all.x = TRUE, all.y = FALSE
-  )
-  data$.binding <- NULL
-  
-  data
-}
 
 # build alluvial dataset for reference during lode-ordering
 alluviate <- function(data, id, key, value) {
