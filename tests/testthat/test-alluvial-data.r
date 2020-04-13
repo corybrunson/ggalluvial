@@ -38,7 +38,7 @@ test_that("`to_lodes_form` consistently formats Titanic data", {
 # preparation for next tests
 titanic_lodes <- suppressWarnings(to_lodes_form(
   transform(titanic_alluvia, Index = 1:nrow(titanic_alluvia)),
-  key = "Variable", value = "Value", id = "Index", axes = 1:4
+  alluvia_to = "Index", axes_to = "Variable", strata_to = "Value", axes = 1:4
 ))
 titanic_lodes$Value <-
   factor(titanic_lodes$Value,
@@ -49,36 +49,44 @@ titanic_lodes$Value <-
 test_that("`is_lodes_form` recognizes lodes-format Titanic data", {
   expect_error(is_lodes_form(titanic_lodes))
   expect_true(is_lodes_form(titanic_lodes,
-                            key = "Variable", value = "Value", id = "Index"))
+                            alluvia_from = "Index", axes_from = "Variable",
+                            strata_from = "Value"))
   expect_true(is_lodes_form(titanic_lodes,
-                            key = Variable, value = Value, id = Index))
+                            alluvia_from = Index, axes_from = Variable,
+                            strata_from = Value))
   expect_true(is_lodes_form(titanic_lodes,
-                            key = 3, value = 4, id = 2))
+                            alluvia_from = 2, axes_from = 3, strata_from = 4))
   expect_true(is_lodes_form(titanic_lodes,
-                            key = "Variable", value = "Value", id = "Index",
-                            y = "Freq"))
+                            alluvia_from = "Index", axes_from = "Variable",
+                            strata_from = "Value", y = "Freq"))
   expect_true(is_lodes_form(titanic_lodes,
-                            key = 3, value = 4, id = 2,
+                            alluvia_from = 2, axes_from = 3, strata_from = 4,
                             y = 1))
   expect_true(is_lodes_form(titanic_lodes,
-                            key = Variable, value = Value, id = Index,
-                            y = Freq))
+                            alluvia_from = Index, axes_from = Variable,
+                            strata_from = Value, y = Freq))
   expect_true(is_lodes_form(titanic_lodes,
-                            key = Variable, value = Value, id = Index,
-                            y = !! null_wt))
+                            alluvia_from = Index, axes_from = Variable,
+                            strata_from = Value, y = !! null_wt))
 })
 
 # `to_alluvia_form()` tests
 
 test_that("`to_alluvia_form` consistently formats Titanic data", {
   expect_equivalent(to_alluvia_form(titanic_lodes,
-                                    key = "Variable", value = "Value",
-                                    id = "Index"),
+                                    alluvia_from = "Index",
+                                    axes_from = "Variable",
+                                    strata_from = "Value"),
                     to_alluvia_form(titanic_lodes,
-                                    key = 3, value = 4, id = 2))
+                                    alluvia_from = 2,
+                                    axes_from = 3,
+                                    strata_from = 4))
   expect_equivalent(to_alluvia_form(titanic_lodes,
-                                    key = "Variable", value = "Value",
-                                    id = "Index"),
+                                    alluvia_from = "Index",
+                                    axes_from = "Variable",
+                                    strata_from = "Value"),
                     to_alluvia_form(titanic_lodes,
-                                    key = Variable, value = Value, id = Index))
+                                    alluvia_from = Index,
+                                    axes_from = Variable,
+                                    strata_from = Value))
 })

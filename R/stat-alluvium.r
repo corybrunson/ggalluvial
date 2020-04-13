@@ -135,7 +135,8 @@ StatAlluvium <- ggproto(
     # ensure that data is in lode form
     if (type == "alluvia") {
       axis_ind <- get_axes(names(data))
-      data <- to_lodes_form(data = data, axes = axis_ind,
+      data <- to_lodes_form(data = data,
+                            axes = axis_ind,
                             discern = params$discern)
       # positioning requires numeric `x`
       data <- data[with(data, order(x, stratum, alluvium)), , drop = FALSE]
@@ -227,7 +228,7 @@ StatAlluvium <- ggproto(
       }
       stopifnot(is.function(lode.guidance))
       # summary data of alluvial deposits
-      alluv_dep <- alluviate(data, "x", "deposit", "alluvium")
+      alluv_dep <- alluviate(data, "alluvium", "x", "deposit")
       # axis indices
       alluv_x <- setdiff(names(alluv_dep), "alluvium")
       # calculate `lode.ordering` from `lode.guidance`
@@ -358,7 +359,7 @@ cement_data <- function(data, key, id, fun) {
     addNA, ifany = FALSE
   ), drop = TRUE))
   # convert to alluvia format with 'binding' entries
-  alluv_data <- alluviate(data, key, "binding", id)
+  alluv_data <- alluviate(data, id, key, "binding")
   # sort by all axes (everything except `id`)
   alluv_data <- alluv_data[do.call(
     order,
@@ -405,7 +406,7 @@ cement_data_alt <- function(data, key, id) {
   ), drop = TRUE))
   
   # convert to alluvia format with '.binding' entries
-  alluv_data <- alluviate(data, key, ".binding", id)
+  alluv_data <- alluviate(data, id, key, ".binding")
   
   # redefine 'alluvium' with only as many distinct values as distinct alluvia
   alluv_agg <- stats::aggregate(
@@ -436,9 +437,9 @@ cement_data_alt <- function(data, key, id) {
 }
 
 # build alluvial dataset for reference during lode-ordering
-alluviate <- function(data, key, value, id) {
+alluviate <- function(data, id, key, value) {
   to_alluvia_form(
-    data[, c(key, value, id)],
-    key = key, value = value, id = id
+    data[, c(id, key, value)],
+    alluvia_from = id, axes_from = key, strata_from = value
   )
 }

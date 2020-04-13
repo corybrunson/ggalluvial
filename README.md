@@ -107,16 +107,16 @@ The data is in “wide” format, but **ggalluvial** also recognizes data in
 
 ``` r
 titanic_long <- to_lodes_form(data.frame(Titanic),
-                              key = "Demographic",
-                              axes = 1:3)
+                              axes = 1:3,
+                              axes_to = "Demographic")
 head(titanic_long)
 #>   Survived Freq alluvium Demographic stratum
 #> 1       No    0        1       Class     1st
-#> 2       No    0        2       Class     2nd
-#> 3       No   35        3       Class     3rd
-#> 4       No    0        4       Class    Crew
-#> 5       No    0        5       Class     1st
-#> 6       No    0        6       Class     2nd
+#> 2       No    0        1         Sex    Male
+#> 3       No    0        1         Age   Child
+#> 4       No    0        2       Class     2nd
+#> 5       No    0        2         Sex    Male
+#> 6       No    0        2         Age   Child
 ggplot(data = titanic_long,
        aes(x = Demographic, stratum = stratum, alluvium = alluvium,
            y = Freq, label = stratum)) +

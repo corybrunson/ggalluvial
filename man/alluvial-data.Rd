@@ -6,9 +6,19 @@
 \alias{is_alluvia_form}
 \alias{to_lodes_form}
 \alias{to_alluvia_form}
-\title{Check for alluvial structure and convert between alluvial formats}
+\title{Test for alluvial structure and convert between alluvial formats}
 \usage{
-is_lodes_form(data, key, value, id, y = NULL, silent = FALSE)
+is_lodes_form(
+  data,
+  alluvia_from,
+  axes_from,
+  strata_from,
+  key,
+  value,
+  id,
+  y = NULL,
+  silent = FALSE
+)
 
 is_alluvia_form(data, axes = NULL, y = NULL, silent = FALSE)
 
@@ -16,34 +26,50 @@ to_lodes_form(
   data,
   axes = NULL,
   y = NULL,
-  key = "x",
-  value = "stratum",
-  id = "alluvium",
+  alluvia_to = "alluvium",
+  axes_to = "x",
+  strata_to = "stratum",
+  key = NULL,
+  value = NULL,
+  id = NULL,
   y_to = NULL,
   diffuse = FALSE,
   discern = FALSE
 )
 
-to_alluvia_form(data, key, value, id, y = NULL, distill = FALSE)
+to_alluvia_form(
+  data,
+  alluvia_from,
+  axes_from,
+  strata_from,
+  key,
+  value,
+  id,
+  y = NULL,
+  distill = FALSE
+)
 }
 \arguments{
 \item{data}{A data frame.}
 
-\item{key, value, id}{In \code{to_lodes_form}, handled as in
-\code{\link[tidyr:gather]{tidyr::gather()}} and used to name the new axis (key), stratum
-(value), and alluvium (identifying) variables. In \code{to_alluvia_form},
-handled as in \code{\link[tidyr:spread]{tidyr::spread()}} and used to identify the fields
-of \code{data} to be used as the axis (key), stratum (value), and alluvium
-(identifying) variables.}
+\item{alluvia_from, axes_from, strata_from}{Columns---one each---containing the
+alluvium (identifier), axis (key), and stratum (value) of each row,
+analogous to \verb{id_cols,names_from,values_from} in \code{\link[tidyr:pivot_wider]{tidyr::pivot_wider()}}.}
 
-\item{y}{Optional field(s) of \code{data}, handled using \code{\link[=enquo]{enquo()}}, to be used as
-heights or depths of the alluvia or lodes.}
+\item{id, key, value}{Deprecated aliases for \verb{alluvia_*,axes_*,strata_*}. While
+they still accept unquoted names, note that their \verb{*_to} replacements only
+accept strings.}
 
-\item{silent}{Whether to print messages.}
+\item{y}{Optional column containing alluvium heights (subject magnitudes).}
 
-\item{axes}{In \verb{*_alluvia_form}, handled as in
-\code{\link[dplyr:select]{dplyr::select()}} and used to identify the field(s) of
-\code{data} to be used as axes.}
+\item{silent}{Whether to print explanatory messages.}
+
+\item{axes}{Columns containing the stratum (entry) of each alluvium (row) at
+each axis (column), analogous to \code{cols} in \code{\link[tidyr:pivot_longer]{tidyr::pivot_longer()}}.}
+
+\item{alluvia_to, axes_to, strata_to}{Strings---one each---specifying the names
+of the columns to contain alluvia (identifiers), axes (keys), and strata
+(values).}
 
 \item{y_to}{A string specifying the name of the column to create from the
 column(s) identified by \code{y}. If needed for multiple columns but not
@@ -60,50 +86,53 @@ distinguish their factor levels. This forces the levels of the combined
 factor variable \code{value} to be in the order of the axes.}
 
 \item{distill}{A logical value indicating whether to include variables, other
-than those passed to \code{key} and \code{value}, that vary within values
-of \code{id}. Alternatively, a function (or its name) to be used to distill
-each such variable to a single value. In addition to existing functions,
-\code{distill} accepts the character values \code{"first"} (used if
-\code{distill} is \code{TRUE}), \code{"last"}, and \code{"most"} (which
-returns the modal value).}
-
-\item{...}{Used in \code{is_alluvia_form} and \code{to_lodes_form} as in
-\code{\link[dplyr:select]{dplyr::select()}} to determine axis variables, as an alternative
-to \code{axes}. Ignored when \code{axes} is provided.}
+than those passed to \code{key} and \code{value}, that vary within values of \code{id}.
+Alternatively, a function (or its name) to be used to distill each such
+variable to a single value. In addition to existing functions, \code{distill}
+accepts the character values \code{"first"} (used if \code{distill} is \code{TRUE}),
+\code{"last"}, and \code{"most"} (which returns the modal value).}
 }
 \description{
-Alluvial plots consist of multiple horizontally-distributed columns (axes)
-representing factor variables, vertical divisions (strata) of these axes
-representing these variables' values; and splines (alluvial flows) connecting
-vertical subdivisions (lodes) within strata of adjacent axes representing
-subsets or amounts of observations that take the corresponding values of the
-corresponding variables. This function checks a data frame for either of two
-types of alluvial structure:
+The functions \verb{is_*_form()} determine whether a data frame is alluvial---that
+it has either the id--key--value structure of lodes format or the tidy
+properties of alluvia format. The functions \verb{to_*_form()} convert data from
+one format to the other.
 }
 \details{
+Alluvial plots consist of multiple horizontally-distributed columns (axes)
+representing categorical variables, vertical divisions (strata) of these axes
+representing these variables' values; and ribbons (alluvial flows) connecting
+vertical subdivisions (lodes) within strata of adjacent axes, representing
+subsets or amounts of observations that take the corresponding values of the
+corresponding variables. \strong{ggalluvial} can generate an alluvial plot from
+data in either of two recognized formats:
 \itemize{
-\item One row per \strong{lode}, wherein each row encodes a subset or amount of
-observations having a specific profile of axis values, a \code{key} field
-encodes the axis, a \code{value} field encodes the value within each axis, and a
-\code{id} column identifies multiple lodes corresponding to the same subset or
-amount of observations. \code{is_lodes_form} tests for this structure.
-\item One row per \strong{alluvium}, wherein each row encodes a subset or amount of
-observations having a specific profile of axis values and a set \code{axes} of
-fields encodes its values at each axis variable. \code{is_alluvia_form} tests
-for this structure.
+\item \strong{Lodes format} encodes \emph{one row per measurement} or \emph{one row per lode},
+using an \code{id}--\code{key}--\code{value} structure: Each row contains the recorded
+\code{value} of one measurement (the \code{key}) for one subject or cohort (the \code{id}).
+Visually, the lode is the unique intersection of one alluvium (the \code{id}) and
+one axis (the \code{key}) and belongs to a unique stratum (the \code{value}).
+Additional columns may contain lode-level variables, including magnitudes and
+weights.
+\item \strong{Alluvia format} encodes \emph{one row per subject} or \emph{one row per alluvium},
+using a \href{https://tidyr.tidyverse.org/}{tidy} structure: Each subject (or
+cohort) has a row, each measurement has a column, and each measured value is
+an entry. Additional columns may contain subject-level variables, including
+magnitudes and weights; but lode-level magnitudes and weights may also be
+encoded as column ranges having the same cardinality as those of the
+measurements.
 }
 
-\code{to_lodes_form} takes a data frame with several designated variables to
-be used as axes in an alluvial plot, and reshapes the data frame so that
-the axis variable names constitute a new factor variable and their values
-comprise another. Other variables' values will be repeated, and a
-row-grouping variable can be introduced. This function invokes
-\code{\link[tidyr:gather]{tidyr::gather()}}.
+The functions \verb{is_*_form()} test for these structures. Both formats may
+include missing values, by omission (lodes format) or as \code{NA}s (both). See
+the primary vignette for several illustrations: \verb{vignette("ggalluvial)}.
 
-\code{to_alluvia_form} takes a data frame with axis and axis value variables
-to be used in an alluvial plot, and reshape the data frame so that the
-axes constitute separate variables whose values are given by the value
-variable. This function invokes \code{\link[tidyr:spread]{tidyr::spread()}}.
+The two formats are related by a specialized pair of pivot operations.
+\code{to_lodes_form()} tests a data frame for alluvia format and then converts it
+to lodes format; \code{to_alluvia_form()} does the reverse. Some information may
+be lost under either operation, and the parameters \code{diffuse}, \code{discern}, and
+\code{distill} give the user some control over how additional variables are
+handled.
 }
 \examples{
 # Titanic data in alluvia format
@@ -113,40 +142,52 @@ is_alluvia_form(titanic_alluvia,
                 y = "Freq")
 # Titanic data in lodes format
 titanic_lodes <- to_lodes_form(titanic_alluvia,
-                               key = "x", value = "stratum", id = "alluvium",
+                               alluvia_to = "alluvium",
+                               axes_to = "x",
+                               strata_to = "stratum",
                                axes = c(Class, Age, Sex, Survived))
 head(titanic_lodes)
 is_lodes_form(titanic_lodes,
-              key = "x", value = "stratum", id = "alluvium",
+              alluvia_from = "alluvium",
+              axes_from = "x",
+              strata_from = "stratum",
               y = "Freq")
 # again in lodes format, this time diffusing the `Class` variable
 titanic_lodes2 <- to_lodes_form(titanic_alluvia,
-                                key = variable, value = value,
-                                id = passenger,
+                                alluvia_to = "passenger",
+                                axes_to = "variable",
+                                strata_to = "value",
                                 axes = 1:3, diffuse = 1)
 head(titanic_lodes2)
 is_lodes_form(titanic_lodes2,
-              key = variable, value = value, id = passenger,
+              alluvia_from = passenger,
+              axes_from = variable,
+              strata_from = value,
               y = Freq)
 # once more in lodes format, this time specifying a `y` variable
 titanic_lodes3 <- to_lodes_form(titanic_alluvia,
                                 axes = 1:4,
-                                key = demographic, value = value,
-                                id = passenger, y = Freq,
+                                alluvia_to = "passenger",
+                                axes_to = "demographic",
+                                strata_to = "value",
+                                y = Freq,
                                 y_to = "count")
 head(titanic_lodes3)
 is_lodes_form(titanic_lodes3,
-              id = passenger, key = demographic, value = value, y = count)
+              alluvia_from = passenger, axes_from = demographic,
+              strata_from = value, y = count)
 
 # curriculum data in lodes format
 data(majors)
 head(majors)
 is_lodes_form(majors,
-              key = "semester", value = "curriculum", id = "student")
+              alluvia_from = "student", axes_from = "semester",
+              strata_from = "curriculum")
 # curriculum data in alluvia format
 majors_alluvia <- to_alluvia_form(majors,
-                                  key = "semester", value = "curriculum",
-                                  id = "student")
+                                  alluvia_from = "student",
+                                  axes_from = "semester",
+                                  strata_from = "curriculum")
 head(majors_alluvia)
 is_alluvia_form(majors_alluvia, tidyselect::starts_with("CURR"))
 
@@ -154,8 +195,9 @@ is_alluvia_form(majors_alluvia, tidyselect::starts_with("CURR"))
 set.seed(1)
 majors$hypo_grade <- LETTERS[sample(5, size = nrow(majors), replace = TRUE)]
 majors_alluvia2 <- to_alluvia_form(majors,
-                                   key = "semester", value = "curriculum",
-                                   id = "student",
+                                   alluvia_from = "student",
+                                   axes_from = "semester",
+                                   strata_from = "curriculum",
                                    distill = "most")
 head(majors_alluvia2)
 
@@ -182,42 +224,47 @@ ggplot(majors[majors$semester \%in\% paste0("CURR", c(1, 7, 13)), ],
 data(vaccinations)
 head(vaccinations)
 is_lodes_form(vaccinations,
-              id = subject, key = survey, value = response, y = freq)
+              alluvia_from = subject, axes_from = survey,
+              strata_from = response, y = freq)
 # vaccination data in alluvia format, with fixed `y`
 head(to_alluvia_form(vaccinations,
-                     id = subject, key = survey, value = response,
-                     y = freq))
+                     alluvia_from = subject, axes_from = survey,
+                     strata_from = response, y = freq))
 # vaccination data in alluvial format, with variable `y`
 set.seed(1)
 vaccinations$perm <- sample(vaccinations$freq)
 head(vaccinations)
 head(to_alluvia_form(vaccinations,
-                     id = subject, key = survey, value = response,
-                     y = perm))
+                     alluvia_from = subject, axes_from = survey,
+                     strata_from = response, y = perm))
 
 \dontrun{
 # refugee data in lodes format
 refugees <- alluvial::Refugees
 head(refugees)
 is_lodes_form(refugees,
-              id = country, key = year, value = country, y = refugees)
+              alluvia_from = country, axes_from = year, strata_from = country,
+              y = refugees)
 # refugee data in alluvial format, without `y` values
 to_alluvia_form(refugees,
-                key = year, id = country, value = country)
+                axes_from = year, alluvia_from = country, strata_from = country)
 # refugee data in alluvial format, with variable `y` values
 to_alluvia_form(refugees,
-                key = year, id = country, value = country, y = refugees) ->
+                axes_from = year,
+                alluvia_from = country,
+                strata_from = country,
+                y = refugees) ->
   refugees_alluvia
 print(refugees_alluvia)
 # back to lodes format
 head(to_lodes_form(refugees_alluvia,
                    axes = `2003`:`2013`, y = starts_with("refugees_"),
-                   id = "id", key = "year", value = "origin",
+                   alluvia_to = "id", axes_to = "year", strata_to = "origin",
                    y_to = "count"), n = 12)
 }
 }
 \seealso{
-Other alluvial data manipulation: 
+Other alluvial data operations: 
 \code{\link{self-adjoin}}
 }
-\concept{alluvial data manipulation}
+\concept{alluvial data operations}

@@ -18,7 +18,9 @@ get_alluvial_type <- function(data) {
            "for data in lode form.")
     }
     if (is_lodes_form(data,
-                      key = "x", value = "stratum", id = "alluvium",
+                      alluvia_from = "alluvium",
+                      axes_from = "x",
+                      strata_from = "stratum",
                       y = "y",
                       silent = TRUE)) return("lodes")
   } else {

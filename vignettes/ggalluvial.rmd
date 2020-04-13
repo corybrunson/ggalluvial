@@ -34,7 +34,7 @@ Here's a quintessential alluvial plot:
 
 ```{r example alluvial plot using Titanic dataset, echo=FALSE}
 ggplot(data = to_lodes_form(as.data.frame(Titanic),
-                            key = "Demographic",
+                            axes_to = "Demographic",
                             axes = 1:3),
        aes(x = Demographic, stratum = stratum, alluvium = alluvium,
            y = Freq, label = stratum)) +
@@ -120,9 +120,11 @@ The long format recognized by **ggalluvial** contains _one row per lode_, and ca
 ```{r lodes format of Berkeley admissions dataset}
 UCB_lodes <- to_lodes_form(as.data.frame(UCBAdmissions),
                            axes = 1:3,
-                           id = "Cohort")
+                           alluvia_to = "Cohort")
 head(UCB_lodes, n = 12)
-is_lodes_form(UCB_lodes, key = x, value = stratum, id = Cohort, silent = TRUE)
+is_lodes_form(UCB_lodes,
+              axes_from = x, strata_from = stratum, alluvia_from = Cohort,
+              silent = TRUE)
 ```
 
 The functions that convert data between wide (alluvia) and long (lodes) format include several parameters that help preserve ancillary information. See `help("alluvial-data")` for examples.

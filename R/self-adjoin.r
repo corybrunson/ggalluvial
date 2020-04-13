@@ -11,7 +11,7 @@
 #' adjacent values of `key`.
 #' @name self-adjoin
 #' @import tidyselect
-#' @family alluvial data manipulation
+#' @family alluvial data operations
 #' @param data A data frame in lodes form (repeated measures data; see
 #'   [`alluvial-data`]).
 #' @param key Column of `data` indicating sequential collection; handled as in

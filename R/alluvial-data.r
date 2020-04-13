@@ -1,55 +1,70 @@
-#' Check for alluvial structure and convert between alluvial formats
+#' @title Test for alluvial structure and convert between alluvial formats
+#'
+#' @description
+#'
+#' The functions `is_*_form()` determine whether a data frame is alluvial---that
+#' it has either the id--key--value structure of lodes format or the tidy
+#' properties of alluvia format. The functions `to_*_form()` convert data from
+#' one format to the other.
+#' 
+
+#' @details
 #'
 #' Alluvial plots consist of multiple horizontally-distributed columns (axes)
-#' representing factor variables, vertical divisions (strata) of these axes
-#' representing these variables' values; and splines (alluvial flows) connecting
-#' vertical subdivisions (lodes) within strata of adjacent axes representing
+#' representing categorical variables, vertical divisions (strata) of these axes
+#' representing these variables' values; and ribbons (alluvial flows) connecting
+#' vertical subdivisions (lodes) within strata of adjacent axes, representing
 #' subsets or amounts of observations that take the corresponding values of the
-#' corresponding variables. This function checks a data frame for either of two
-#' types of alluvial structure:
+#' corresponding variables. **ggalluvial** can generate an alluvial plot from
+#' data in either of two recognized formats:
+#' 
+
+#' - **Lodes format** encodes _one row per measurement_ or _one row per lode_,
+#' using an `id`--`key`--`value` structure: Each row contains the recorded
+#' `value` of one measurement (the `key`) for one subject or cohort (the `id`).
+#' Visually, the lode is the unique intersection of one alluvium (the `id`) and
+#' one axis (the `key`) and belongs to a unique stratum (the `value`).
+#' Additional columns may contain lode-level variables, including magnitudes and
+#' weights.
+
+#' - **Alluvia format** encodes _one row per subject_ or _one row per alluvium_,
+#' using a [tidy](https://tidyr.tidyverse.org/) structure: Each subject (or
+#' cohort) has a row, each measurement has a column, and each measured value is
+#' an entry. Additional columns may contain subject-level variables, including
+#' magnitudes and weights; but lode-level magnitudes and weights may also be
+#' encoded as column ranges having the same cardinality as those of the
+#' measurements.
+
 #'
-#' - One row per **lode**, wherein each row encodes a subset or amount of
-#'   observations having a specific profile of axis values, a `key` field
-#'   encodes the axis, a `value` field encodes the value within each axis, and a
-#'   `id` column identifies multiple lodes corresponding to the same subset or
-#'   amount of observations. `is_lodes_form` tests for this structure.
-#' - One row per **alluvium**, wherein each row encodes a subset or amount of
-#'   observations having a specific profile of axis values and a set `axes` of
-#'   fields encodes its values at each axis variable. `is_alluvia_form` tests
-#'   for this structure.
+#' The functions `is_*_form()` test for these structures. Both formats may
+#' include missing values, by omission (lodes format) or as `NA`s (both). See
+#' the primary vignette for several illustrations: `vignette("ggalluvial)`.
 #'
-#' `to_lodes_form` takes a data frame with several designated variables to
-#' be used as axes in an alluvial plot, and reshapes the data frame so that
-#' the axis variable names constitute a new factor variable and their values
-#' comprise another. Other variables' values will be repeated, and a
-#' row-grouping variable can be introduced. This function invokes
-#' [tidyr::gather()].
-#'
-#' `to_alluvia_form` takes a data frame with axis and axis value variables
-#' to be used in an alluvial plot, and reshape the data frame so that the
-#' axes constitute separate variables whose values are given by the value
-#' variable. This function invokes [tidyr::spread()].
+#' The two formats are related by a specialized pair of pivot operations.
+#' `to_lodes_form()` tests a data frame for alluvia format and then converts it
+#' to lodes format; `to_alluvia_form()` does the reverse. Some information may
+#' be lost under either operation, and the parameters `diffuse`, `discern`, and
+#' `distill` give the user some control over how additional variables are
+#' handled.
 #'
 
 #' @name alluvial-data
 #' @import tidyselect
-#' @family alluvial data manipulation
+#' @family alluvial data operations
 #' @param data A data frame.
-#' @param silent Whether to print messages.
-#' @param key,value,id In `to_lodes_form`, handled as in
-#'   [tidyr::gather()] and used to name the new axis (key), stratum
-#'   (value), and alluvium (identifying) variables. In `to_alluvia_form`,
-#'   handled as in [tidyr::spread()] and used to identify the fields
-#'   of `data` to be used as the axis (key), stratum (value), and alluvium
-#'   (identifying) variables.
-#' @param axes In `*_alluvia_form`, handled as in
-#'   [dplyr::select()] and used to identify the field(s) of
-#'   `data` to be used as axes.
-#' @param ... Used in `is_alluvia_form` and `to_lodes_form` as in
-#'   [dplyr::select()] to determine axis variables, as an alternative
-#'   to `axes`. Ignored when `axes` is provided.
-#' @param y Optional field(s) of `data`, handled using [enquo()], to be used as
-#'   heights or depths of the alluvia or lodes.
+#' @param silent Whether to print explanatory messages.
+#' @param alluvia_from,axes_from,strata_from Columns---one each---containing the
+#'   alluvium (identifier), axis (key), and stratum (value) of each row,
+#'   analogous to `id_cols,names_from,values_from` in [tidyr::pivot_wider()].
+#' @param axes Columns containing the stratum (entry) of each alluvium (row) at
+#'   each axis (column), analogous to `cols` in [tidyr::pivot_longer()].
+#' @param alluvia_to,axes_to,strata_to Strings---one each---specifying the names
+#'   of the columns to contain alluvia (identifiers), axes (keys), and strata
+#'   (values).
+#' @param id,key,value Deprecated aliases for `alluvia_*,axes_*,strata_*`. While
+#'   they still accept unquoted names, note that their `*_to` replacements only
+#'   accept strings.
+#' @param y Optional column containing alluvium heights (subject magnitudes).
 #' @param y_to A string specifying the name of the column to create from the
 #'   column(s) identified by `y`. If needed for multiple columns but not
 #'   provided, defaults to 'y'.
@@ -58,12 +73,11 @@
 #'   variables. Alternatively, a logical value indicating whether to merge all
 #'   (`TRUE`) or none (`FALSE`) of the axis variables.
 #' @param distill A logical value indicating whether to include variables, other
-#'   than those passed to `key` and `value`, that vary within values
-#'   of `id`. Alternatively, a function (or its name) to be used to distill
-#'   each such variable to a single value. In addition to existing functions,
-#'   `distill` accepts the character values `"first"` (used if
-#'   `distill` is `TRUE`), `"last"`, and `"most"` (which
-#'   returns the modal value).
+#'   than those passed to `key` and `value`, that vary within values of `id`.
+#'   Alternatively, a function (or its name) to be used to distill each such
+#'   variable to a single value. In addition to existing functions, `distill`
+#'   accepts the character values `"first"` (used if `distill` is `TRUE`),
+#'   `"last"`, and `"most"` (which returns the modal value).
 #' @param discern Logical value indicating whether to suffix values of the
 #'   variables used as axes that appear at more than one variable in order to
 #'   distinguish their factor levels. This forces the levels of the combined
@@ -73,22 +87,43 @@
 #' @rdname alluvial-data
 #' @export
 is_lodes_form <- function(data,
+                          alluvia_from, axes_from, strata_from,
                           key, value, id,
                           y = NULL,
                           silent = FALSE) {
   
-  key_var <- vars_pull(names(data), !! enquo(key))
-  value_var <- vars_pull(names(data), !! enquo(value))
-  id_var <- vars_pull(names(data), !! enquo(id))
-  if (key_var %in% c(value_var, id_var)) {
-    stop("`key` must be distinct from `id` and `value` variables.")
+  if (! missing(id)) {
+    deprecate_parameter("id", "alluvia_from")
+    if (missing(alluvia_from)) {
+      alluvia_from <- rlang::quo_name(rlang::enexpr(id))
+    }
+  }
+  if (! missing(key)) {
+    deprecate_parameter("key", "axes_from")
+    if (missing(axes_from)) {
+      axes_from <- rlang::quo_name(rlang::enexpr(key))
+    }
+  }
+  if (! missing(value)) {
+    deprecate_parameter("value", "strata_from")
+    if (missing(strata_from)) {
+      strata_from <- rlang::quo_name(rlang::enexpr(value))
+    }
   }
   
-  if (any(duplicated(cbind(data[c(id_var, key_var)])))) {
+  alluv_var <- vars_pull(names(data), !! enquo(alluvia_from))
+  axis_var <- vars_pull(names(data), !! enquo(axes_from))
+  strat_var <- vars_pull(names(data), !! enquo(strata_from))
+  if (axis_var %in% c(strat_var, alluv_var)) {
+    stop("`axes_from` must be distinct from `alluvia_from` and `strata_from`.")
+  }
+  
+  if (any(duplicated(cbind(data[c(alluv_var, axis_var)])))) {
     if (! silent) warning("Some id-key (alluvium-axis) pairs are duplicated.")
   }
   
-  n_pairs <- dplyr::n_distinct(data[key_var]) * dplyr::n_distinct(data[id_var])
+  n_pairs <-
+    dplyr::n_distinct(data[axis_var]) * dplyr::n_distinct(data[alluv_var])
   if (nrow(data) < n_pairs) {
     if (! silent) warning("Some id-key (alluvium-axis) pairs are missing.")
   }
@@ -98,7 +133,7 @@ is_lodes_form <- function(data,
     y_var <- vars_select(unique(names(data)), !! enquo(y))
     if (length(y_var) > 0) {
       if (length(y_var) > 1) stop("`y` must be a single variable.")
-      if (y_var %in% c(key_var, value_var, id_var)) {
+      if (y_var %in% c(axis_var, strat_var, alluv_var)) {
         stop("`y` must be distinct from id-key-value variables.")
       }
       if (! is.numeric(data[[y_var]])) {
@@ -109,38 +144,6 @@ is_lodes_form <- function(data,
   }
   
   TRUE
-}
-
-is_lodes_form_old <- function(data,
-                              key, value, id,
-                              weight = NULL,
-                              logical = TRUE, silent = FALSE) {
-  if (! isTRUE(logical)) defunct_parameter("logical")
-  
-  key_var <- vars_pull(names(data), !! enquo(key))
-  value_var <- vars_pull(names(data), !! enquo(value))
-  id_var <- vars_pull(names(data), !! enquo(id))
-  
-  if (any(duplicated(cbind(data[c(key_var, id_var)])))) {
-    if (! silent) warning("Duplicated id-axis pairings.")
-  }
-  
-  n_pairs <-
-    dplyr::n_distinct(data[key_var]) * dplyr::n_distinct(data[id_var])
-  if (nrow(data) < n_pairs) {
-    if (! silent) warning("Missing id-axis pairings.")
-  }
-  
-  # if `weight` is not `NULL`, use NSE to identify `weight_var`
-  if (! is.null(rlang::enexpr(weight))) {
-    weight_var <- vars_select(names(data), !! enquo(weight))
-    if (! is.numeric(data[[weight_var]])) {
-      if (! silent) message("Lode weights are non-numeric.")
-      return(if (logical) FALSE else "none")
-    }
-  }
-  
-  if (logical) TRUE else "lodes"
 }
 
 #' @rdname alluvial-data
@@ -181,49 +184,29 @@ is_alluvia_form <- function(data,
   TRUE
 }
 
-is_alluvia_form_old <- function(data,
-                                ..., axes = NULL,
-                                weight = NULL,
-                                logical = TRUE, silent = FALSE) {
-  if (! isTRUE(logical)) defunct_parameter("logical")
-  
-  if (is.null(rlang::enexpr(weight))) {
-    weight_var <- NULL
-  } else {
-    weight_var <- vars_select(names(data), !! enquo(weight))
-    if (! is.numeric(data[[weight_var]])) {
-      if (! silent) message("Alluvium weights are non-numeric.")
-      return(if (logical) FALSE else "none")
-    }
-  }
-  
-  if (! is.null(rlang::enexpr(axes))) {
-    axes <- data_at_vars(data, axes)
-  } else {
-    quos <- rlang::quos(...)
-    if (rlang::is_empty(quos)) {
-      axes <- setdiff(names(data), c(weight_var))
-    } else {
-      axes <- unname(vars_select(names(data), !!! quos))
-    }
-  }
-  
-  n_alluvia <- nrow(dplyr::distinct(data[axes]))
-  n_combns <- do.call(prod, lapply(data[axes], dplyr::n_distinct))
-  if (n_alluvia < n_combns) {
-    if (! silent) message("Missing alluvia for some stratum combinations.")
-  }
-  
-  if (logical) TRUE else "alluvia"
-}
-
 #' @rdname alluvial-data
 #' @export
 to_lodes_form <- function(data,
                           axes = NULL, y = NULL,
-                          key = "x", value = "stratum", id = "alluvium",
+                          alluvia_to = "alluvium",
+                          axes_to = "x",
+                          strata_to = "stratum",
+                          key = NULL, value = NULL, id = NULL,
                           y_to = NULL,
                           diffuse = FALSE, discern = FALSE) {
+  
+  if (! is.null(id)) {
+    deprecate_parameter("id", "alluvia_to")
+    alluvia_to <- rlang::quo_name(rlang::enexpr(id))
+  }
+  if (! is.null(key)) {
+    deprecate_parameter("key", "axes_to")
+    axes_to <- rlang::quo_name(rlang::enexpr(key))
+  }
+  if (! is.null(value)) {
+    deprecate_parameter("value", "strata_to")
+    strata_to <- rlang::quo_name(rlang::enexpr(value))
+  }
   
   # note: specifying `y` is optional
   if (is.null(rlang::enexpr(y))) {
@@ -251,10 +234,6 @@ to_lodes_form <- function(data,
                             axes = all_of(axes), y = all_of(y_var),
                             silent = TRUE))
   
-  key_var <- rlang::quo_name(rlang::enexpr(key))
-  value_var <- rlang::quo_name(rlang::enexpr(value))
-  id_var <- rlang::quo_name(rlang::enexpr(id))
-  
   if (! is.data.frame(data)) data <- as.data.frame(data)
   
   if (is.logical(rlang::enexpr(diffuse))) {
@@ -268,8 +247,8 @@ to_lodes_form <- function(data,
   
   # combine factor levels
   cat_levels <- unname(unlist(lapply(lapply(data[axes], as.factor), levels)))
-  if (any(duplicated(cat_levels)) & is.null(discern)) {
-    #warning("Some strata appear at multiple axes.")
+  if (any(duplicated(cat_levels)) && is.null(discern)) {
+    message("Some strata appear at multiple axes.")
   }
   if (isTRUE(discern)) {
     data <- discern_data(data, axes)
@@ -280,116 +259,50 @@ to_lodes_form <- function(data,
   }
   
   # format data in preparation for `pivot_longer()`
-  data[[id_var]] <- seq(nrow(data))
+  data[[alluvia_to]] <- seq(nrow(data))
   if (! is.null(diffuse)) {
-    diffuse_data <- data[, c(id_var, diffuse), drop = FALSE]
+    diffuse_data <- data[, c(alluvia_to, diffuse), drop = FALSE]
   }
   for (i in axes) data[[i]] <- as.character(data[[i]])
   
   key_ptype <- list(factor())
-  names(key_ptype) <- key_var
+  names(key_ptype) <- axes_to
   # `pivot_longer()` by `axes` (and possibly `y`)
   res <- if (length(y_var) == 0 ) {
     tidyr::pivot_longer(data,
                         cols = all_of(axes),
-                        names_to = all_of(key_var),
+                        names_to = all_of(axes_to),
                         names_ptypes = key_ptype,
-                        values_to = all_of(value_var))
+                        values_to = all_of(strata_to))
   } else if (length(y_var) == 1) {
     if (! is.null(y_to)) names(data)[match(y_var, names(data))] <- y_to
     tidyr::pivot_longer(data,
                         cols = all_of(axes),
-                        names_to = all_of(key_var),
+                        names_to = all_of(axes_to),
                         names_ptypes = key_ptype,
-                        values_to = all_of(value_var))
+                        values_to = all_of(strata_to))
   } else {
     if (is.null(y_to)) {
       message("Pivoting multiple `y` columns, y_to = 'y'.")
       y_to <- "y"
     }
-    axes_to <- paste(value_var, axes, sep = "___")
+    axes_var_to <- paste(strata_to, axes, sep = "___")
     y_var_to <- paste(y_to, axes, sep = "___")
-    names(data)[match(axes, names(data))] <- axes_to
+    names(data)[match(axes, names(data))] <- axes_var_to
     names(data)[match(y_var, names(data))] <- y_var_to
     tidyr::pivot_longer(data,
-                        cols = c(all_of(axes_to), all_of(y_var_to)),
-                        names_to = c(".value", key_var),
+                        cols = c(all_of(axes_var_to), all_of(y_var_to)),
+                        names_to = c(".value", axes_to),
                         names_sep = "___")
   }
-  res[[value_var]] <- factor(res[[value_var]], levels = strata)
+  res[[strata_to]] <- factor(res[[strata_to]], levels = strata)
   
   # merge in `diffuse_data`
   if (is.null(diffuse)) {
     res <- as.data.frame(res)
   } else {
-    res <- merge(diffuse_data, res, by = id_var, all.x = FALSE, all.y = TRUE)
-  }
-  
-  res
-}
-
-to_lodes_form_old <- function(data,
-                              ..., axes = NULL,
-                              key = "x", value = "stratum", id = "alluvium",
-                              diffuse = FALSE, discern = FALSE) {
-  
-  key_var <- rlang::quo_name(rlang::enexpr(key))
-  value_var <- rlang::quo_name(rlang::enexpr(value))
-  id_var <- rlang::quo_name(rlang::enexpr(id))
-  
-  if (! is.null(rlang::enexpr(axes))) {
-    axes <- data_at_vars(data, axes)
-  } else {
-    quos <- rlang::quos(...)
-    if (rlang::is_empty(quos)) {
-      axes <- names(data)
-    } else {
-      axes <- unname(vars_select(names(data), !!! quos))
-    }
-  }
-  
-  stopifnot(is_alluvia_form(data, axes, silent = TRUE))
-  
-  if (! is.data.frame(data)) data <- as.data.frame(data)
-  
-  if (is.logical(rlang::enexpr(diffuse))) {
-    diffuse <- if (diffuse) axes else NULL
-  } else {
-    diffuse <- unname(vars_select(names(data), !! enquo(diffuse)))
-    if (! all(diffuse %in% axes)) {
-      stop("All `diffuse` variables must be `axes` variables.")
-    }
-  }
-  
-  # combine factor levels
-  cat_levels <- unname(unlist(lapply(lapply(data[axes], as.factor), levels)))
-  if (any(duplicated(cat_levels)) & is.null(discern)) {
-    warning("Some strata appear at multiple axes.")
-  }
-  if (isTRUE(discern)) {
-    data <- discern_data(data, axes)
-    # uniquify strata separately from `discern_data` as a validation step
-    strata <- make.unique(unname(cat_levels))
-  } else {
-    strata <- unique(unname(cat_levels))
-  }
-  
-  # format data in preparation for `gather()`
-  data[[id_var]] <- 1:nrow(data)
-  if (! is.null(diffuse)) {
-    diffuse_data <- data[, c(id_var, diffuse), drop = FALSE]
-  }
-  for (i in axes) data[[i]] <- as.character(data[[i]])
-  
-  # `gather()` by `axes`
-  res <- tidyr::gather(data,
-                       key = !! key_var, value = !! value_var,
-                       axes,
-                       factor_key = TRUE)
-  res[[value_var]] <- factor(res[[value_var]], levels = strata)
-  # recombine with `diffuse_data`
-  if (! is.null(diffuse)) {
-    res <- merge(diffuse_data, res, by = id_var, all.x = FALSE, all.y = TRUE)
+    res <- merge(diffuse_data, res, by = alluvia_to,
+                 all.x = FALSE, all.y = TRUE)
   }
   
   res
@@ -398,45 +311,71 @@ to_lodes_form_old <- function(data,
 #' @rdname alluvial-data
 #' @export
 to_alluvia_form <- function(data,
+                            alluvia_from, axes_from, strata_from,
                             key, value, id,
                             y = NULL,
                             distill = FALSE) {
   
-  key_var <- vars_pull(names(data), !! enquo(key))
-  value_var <- vars_pull(names(data), !! enquo(value))
-  id_var <- vars_pull(names(data), !! enquo(id))
-  if (key_var %in% c(value_var, id_var)) {
-    stop("`key` must be distinct from `id` and `value` variables.")
+  if (! missing(id)) {
+    deprecate_parameter("id", "alluvia_from")
+    if (missing(alluvia_from)) {
+      alluvia_from <- rlang::quo_name(rlang::enexpr(id))
+    }
   }
-  if (value_var == id_var) {
-    message("Duplicating column '", value_var, "' used as `id` and `value`.")
-    value_var <- paste0(value_var, "___")
-    data[[value_var]] <- data[[id_var]]
+  if (! missing(key)) {
+    deprecate_parameter("key", "axes_from")
+    if (missing(axes_from)) {
+      axes_from <- rlang::quo_name(rlang::enexpr(key))
+    }
+  }
+  if (! missing(value)) {
+    deprecate_parameter("value", "strata_from")
+    if (missing(strata_from)) {
+      strata_from <- rlang::quo_name(rlang::enexpr(value))
+    }
+  }
+  
+  alluv_var <- vars_pull(names(data), !! enquo(alluvia_from))
+  axis_var <- vars_pull(names(data), !! enquo(axes_from))
+  strat_var <- vars_pull(names(data), !! enquo(strata_from))
+  if (axis_var %in% c(strat_var, alluv_var)) {
+    stop("`axes_from` must be distinct from `alluvia_from` and `strata_from`.")
+  }
+  if (strat_var == alluv_var) {
+    message("Duplicating column '", strat_var,
+            "' passed to `alluvia_from` and `strata_from`.")
+    # use nonsense prefix (not suffix, to avoid conflict with `sep = "_"`)
+    strat_var <- paste0("___", strat_var)
+    data[[strat_var]] <- data[[alluv_var]]
   }
   
   y_var <- if (is.null(rlang::enexpr(y))) NULL else {
     vars_pull(names(data), !! enquo(y))
   }
   stopifnot(is_lodes_form(data,
-                          key = key_var, value = value_var, id = id_var,
+                          alluvia_from = alluv_var,
+                          axes_from = axis_var,
+                          strata_from = strat_var,
                           y = y_var,
                           silent = TRUE))
   
   # whether any variables vary within `id`s
-  uniq_id <- dplyr::n_distinct(data[[id_var]])
-  uniq_data <- unique(data[setdiff(names(data), c(key_var, value_var, y_var))])
+  uniq_id <- dplyr::n_distinct(data[[alluv_var]])
+  uniq_data <- unique(data[setdiff(names(data), c(axis_var, strat_var, y_var))])
   if (! uniq_id == nrow(uniq_data)) {
     # which variables vary within `id`s
     distill_vars <- names(which(sapply(
-      setdiff(names(uniq_data), c(id_var, y_var)),
-      function(x) nrow(unique(uniq_data[c(id_var, x)]))
+      setdiff(names(uniq_data), c(alluv_var, y_var)),
+      function(x) nrow(unique(uniq_data[c(alluv_var, x)]))
     ) > uniq_id))
     # how these variables will be handled
     if (is.logical(distill)) {
       if (distill) {
+        message("Variables that vary within alluvia ",
+                "will be distilled using `most()`.")
         distill <- most
       } else {
-        warning("The following variables vary within `id`s ",
+        warning("The following variables vary within alluvia ",
                 "and will be dropped: ",
                 paste(distill_vars, collapse = ", "))
         distill <- NULL
@@ -451,7 +390,7 @@ to_alluvia_form <- function(data,
               paste(distill_vars, collapse = ", "))
       distill_data <- stats::aggregate(
         data[distill_vars],
-        data[id_var],
+        data[alluv_var],
         distill
       )
       #if (length(distill_vars) == 1) names(distill_data)[-1] <- distill_vars
@@ -462,84 +401,28 @@ to_alluvia_form <- function(data,
   }
   
   const_vars <- setdiff(names(data),
-                        c(key_var, value_var, id_var, y_var, distill_vars))
+                        c(axis_var, strat_var, alluv_var, y_var, distill_vars))
   if (! is.null(distill) && ! is.null(y_var)) distill_data[[y_var]] <- NULL
-  # `pivot_wider()` by designated `key` and `value` (and possibly `y`)
-  y_const <- nrow(unique(data[c(id_var, y_var)])) == uniq_id
-  id_vars <- c(id_var, const_vars, if (y_const) y_var)
-  values_vars <- c(value_var, if (! y_const) y_var)
+  # `pivot_wider()` by `axes_from` and `strata_from` (and possibly `y`)
+  y_const <- nrow(unique(data[c(alluv_var, y_var)])) == uniq_id
+  ids_vars <- c(alluv_var, const_vars, if (y_const) y_var)
+  values_vars <- c(strat_var, if (! y_const) y_var)
   res <- tidyr::pivot_wider(data,
-                            id_cols = all_of(id_vars),
-                            names_from = all_of(key_var),
+                            id_cols = all_of(ids_vars),
+                            names_from = all_of(axis_var),
                             names_sep = "_",
                             values_from = all_of(values_vars))
-  if (! y_const && value_var != id_var) {
-    axes <- match(paste(value_var, unique(data[[key_var]]), sep = "_"),
+  if (! y_const && strat_var != alluv_var) {
+    axes <- match(paste(strat_var, unique(data[[axis_var]]), sep = "_"),
                   names(res))
-    names(res)[axes] <- as.character(unique(data[[key_var]]))
+    names(res)[axes] <- as.character(unique(data[[axis_var]]))
   }
   
   # merge in `distill_data`
   if (is.null(distill)) {
     res <- as.data.frame(res)
   } else {
-    res <- merge(distill_data, res, by = id_var, all.x = FALSE, all.y = TRUE)
-  }
-  
-  res
-}
-
-to_alluvia_form_old <- function(data,
-                                key, value, id,
-                                distill = FALSE) {
-  
-  key_var <- vars_pull(names(data), !! enquo(key))
-  value_var <- vars_pull(names(data), !! enquo(value))
-  id_var <- vars_pull(names(data), !! enquo(id))
-  
-  stopifnot(is_lodes_form(data, key_var, value_var, id_var, silent = TRUE))
-  
-  # handle any variables that vary within `id`s
-  uniq_id <- dplyr::n_distinct(data[[id_var]])
-  uniq_data <- unique(data[setdiff(names(data), c(key_var, value_var))])
-  if (! uniq_id == nrow(uniq_data)) {
-    distill_vars <- names(which(sapply(
-      setdiff(names(uniq_data), id_var),
-      function(x) nrow(unique(uniq_data[c(id_var, x)]))
-    ) > uniq_id))
-    if (is.logical(distill)) {
-      if (distill) {
-        distill <- most
-      } else {
-        warning("The following variables vary within `id`s ",
-                "and will be dropped: ",
-                paste(distill_vars, collapse = ", "))
-        distill <- NULL
-      }
-    } else if (is.character(distill)) {
-      distill <- get(distill)
-    }
-    if (! is.null(distill)) {
-      stopifnot(is.function(distill))
-      message("Distilled variables: ",
-              paste(distill_vars, collapse = ", "))
-      distill_data <- stats::aggregate(
-        data[distill_vars],
-        data[id_var],
-        distill
-      )
-      if (length(distill_vars) == 1) names(distill_data)[-1] <- distill_vars
-    }
-    data <- data[setdiff(names(data), distill_vars)]
-  } else {
-    distill <- NULL
-  }
-  
-  # `spread()` by designated `key` and `value`
-  res <- tidyr::spread(data, key = !! key_var, value = !! value_var)
-  # recombine with `distill_data`
-  if (! is.null(distill)) {
-    res <- merge(distill_data, res, by = id_var, all.x = FALSE, all.y = TRUE)
+    res <- merge(distill_data, res, by = alluv_var, all.x = FALSE, all.y = TRUE)
   }
   
   res
@@ -569,24 +452,4 @@ discern_data <- function(data, axes, sep = ".") {
     data[[axes[i]]] <- new_levels[level_inds][axis_levels]
   }
   data
-}
-
-# mimic the behavior of `tbl_at_vars()` in `select_at()`
-data_at_vars <- function(data, vars) {
-  data_vars <- names(data)
-  if (rlang::is_character(vars)) {
-    vars
-  } else if (rlang::is_integerish(vars)) {
-    data_vars[vars]
-  } else if (rlang::is_quosures(vars)) {
-    out <- dplyr::select_vars(data_vars, !!! vars)
-    if (! any(rlang::have_name(vars))) {
-      names(out) <- NULL
-    }
-    out
-  } else {
-    stop("Either a character or numeric vector ",
-         "or a `vars()` object ",
-         "is required.")
-  }
 }

@@ -125,7 +125,8 @@ StatStratum <- ggproto(
     # ensure that data is in lode form
     if (type == "alluvia") {
       axis_ind <- get_axes(names(data))
-      data <- to_lodes_form(data = data, axes = axis_ind,
+      data <- to_lodes_form(data = data,
+                            axes = axis_ind,
                             discern = params$discern)
       # positioning requires numeric `x`
       data <- data[with(data, order(x, stratum, alluvium)), , drop = FALSE]
