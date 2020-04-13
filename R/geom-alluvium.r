@@ -6,6 +6,7 @@
 #' It plots both the lodes themselves, using [geom_lode()], and the
 #' flows between them, using [geom_flow()].
 #' @template geom-aesthetics
+#' @template geom-curves
 #' @template defunct-geom-params
 #'
 
@@ -15,9 +16,25 @@
 #'   [stat_alluvium()] and
 #'   [stat_flow()] for the corresponding stats.
 #' @inheritParams geom_lode
-#' @param knot.pos The horizontal distance between a stratum (`width/2`
-#'   from its axis) and the knot of the x-spline, as a proportion of the
-#'   separation between strata. Defaults to 1/6.
+#' @param knot.pos The horizontal distance of x-spline knots from each stratum
+#'   (`width/2` from its axis), either (if `knot.prop = TRUE`, the default) as a
+#'   proportion of the length of the x-spline, i.e. of the gap between adjacent
+#'   strata, or (if `knot.prop = FALSE`) on the scale of the `x` direction.
+#' @param knot.prop Logical; whether to interpret `knot.pos` as a proportion of
+#'   the length of each flow (the default), rather than on the `x` scale.
+#' @param curve Character; the type of curve used to produce flows. Defaults to
+#'   `"xspline"` and can be alternatively set to one of `"linear"`, `"cubic"`,
+#'   `"quintic"`, `"sine"`, `"arctangent"`, and `"sigmoid"`. `"xspline"`
+#'   produces approximation splines using 4 points per curve; the alternatives
+#'   produce interpolation splines between points along the graphs of functions
+#'   of the associated type. See the **Curves** section.
+#' @param reach For alternative `curve`s based on asymptotic functions, the
+#'   value along the asymptote at which to truncate the function to obtain the
+#'   shape that will be scaled to fit between strata. See the **Curves**
+#'   section.
+#' @param segments The number of segments to be used in drawing each alternative
+#'   curve (each curved boundary of each flow). If less than 3, will be silently
+#'   changed to 3.
 #' @example inst/examples/ex-geom-alluvium.r
 #' @export
 geom_alluvium <- function(mapping = NULL,
@@ -25,7 +42,8 @@ geom_alluvium <- function(mapping = NULL,
                           stat = "alluvium",
                           position = "identity",
                           width = 1/3,
-                          knot.pos = 1/6,
+                          knot.pos = 1/4, knot.prop = TRUE,
+                          curve = "xspline", reach = NULL, segments = NULL,
                           na.rm = FALSE,
                           show.legend = NA,
                           inherit.aes = TRUE,
@@ -41,6 +59,10 @@ geom_alluvium <- function(mapping = NULL,
     params = list(
       width = width,
       knot.pos = knot.pos,
+      knot.prop = knot.prop,
+      curve = curve,
+      reach = reach,
+      segments = segments,
       na.rm = na.rm,
       ...
     )
@@ -77,7 +99,7 @@ GeomAlluvium <- ggproto(
     }
     
     knot.pos <- params$knot.pos
-    if (is.null(knot.pos)) knot.pos <- 1/6
+    if (is.null(knot.pos)) knot.pos <- 1/4
     
     # positioning parameters
     transform(data,
@@ -85,29 +107,40 @@ GeomAlluvium <- ggproto(
   },
   
   draw_group = function(self, data, panel_scales, coord,
-                        width = 1/3, knot.pos = 1/6) {
+                        width = 1/3,
+                        knot.pos = 1/4, knot.prop = TRUE,
+                        curve = "xspline", reach = NULL, segments = NULL) {
     
     # add width to data
     data <- transform(data, width = width)
     
     first_row <- data[1, setdiff(names(data),
-                                 c("x", "xmin", "xmax", "width",
-                                   "y", "ymin", "ymax", "knot.pos")),
+                                 c("x", "xmin", "xmax",
+                                   "width", "knot.pos",
+                                   "y", "ymin", "ymax")),
                       drop = FALSE]
     rownames(first_row) <- NULL
     
     if (nrow(data) == 1) {
       # spline coordinates (one axis)
-      spline_data <- with(data, data.frame(
+      curve_data <- with(data, data.frame(
         x = x + width / 2 * c(-1, 1, 1, -1),
         y = ymin + (ymax - ymin) * c(0, 0, 1, 1),
         shape = rep(0, 4)
       ))
-    } else {
+    } else if (curve %in% c("spline", "xspline")) {
       # spline coordinates (more than one axis)
-      spline_data <- data_to_xspl(data)
+      curve_data <- data_to_xspline(data, knot.prop)
+    } else {
+      # default to 48 segments per curve, ensure the minimum number of segments
+      if (is.null(segments)) segments <- 48 else if (segments < 3) {
+        #warning("Must use at least 3 segments; substituting `segments = 3`.")
+        segments <- 3
+      }
+      # unit curve coordinates (more than one axis)
+      curve_data <- data_to_unit_curve(data, curve, reach, segments)
     }
-    data <- data.frame(first_row, spline_data)
+    data <- data.frame(first_row, curve_data)
     
     # transform (after calculating spline paths)
     coords <- coord$transform(data, panel_scales)
@@ -126,19 +159,60 @@ GeomAlluvium <- ggproto(
   draw_key = draw_key_polygon
 )
 
-# x-spline coordinates from data
-data_to_xspl <- function(data) {
-  w_oneway <- rep(data$width, c(3, rep(4, nrow(data) - 2), 3))
-  k_oneway <- rep(data$knot.pos, c(3, rep(4, nrow(data) - 2), 3))
-  x_oneway <- rep(data$x, c(3, rep(4, nrow(data) - 2), 3)) +
-    w_oneway / 2 * c(-1, rep(c(1, 1, -1, -1), nrow(data) - 1), 1) +
-    k_oneway * (1 - w_oneway) * c(0, rep(c(0, 1, -1, 0), nrow(data) - 1), 0)
-  ymin_oneway <- rep(data$ymin, c(3, rep(4, nrow(data) - 2), 3))
-  ymax_oneway <- rep(data$ymax, c(3, rep(4, nrow(data) - 2), 3))
-  shape_oneway <- c(0, rep(c(0, 1, 1, 0), nrow(data) - 1), 0)
+# calculate control point coordinates for x-splines
+data_to_xspline <- function(data, knot.prop) {
+  # left side, right side, forebound knot, backbound knot, left side, right side
+  w_fore <- rep(data$width, c(3, rep(4, nrow(data) - 2), 3))
+  k_fore <- rep(data$knot.pos, c(3, rep(4, nrow(data) - 2), 3))
+  if (knot.prop) {
+    # distances between strata
+    b_fore <- rep(data$x, c(1, rep(2, nrow(data) - 2), 1)) +
+      c(1, -1) * rep(data$width / 2, c(1, rep(2, nrow(data) - 2), 1))
+    d_fore <- diff(b_fore)[c(TRUE, FALSE)]
+    # scale `k_fore` to these distances
+    k_fore <- k_fore * c(0, rep(d_fore, rep(4, nrow(data) - 1)), 0)
+  }
+  # axis position +/- corresponding width +/- relative knot position
+  x_fore <- rep(data$x, c(3, rep(4, nrow(data) - 2), 3)) +
+    w_fore / 2 * c(-1, rep(c(1, 1, -1, -1), nrow(data) - 1), 1) +
+    k_fore * c(0, rep(c(0, 1, -1, 0), nrow(data) - 1), 0)
+  # vertical positions are those of lodes
+  ymin_fore <- rep(data$ymin, c(3, rep(4, nrow(data) - 2), 3))
+  ymax_fore <- rep(data$ymax, c(3, rep(4, nrow(data) - 2), 3))
+  shape_fore <- c(0, rep(c(0, 1, 1, 0), nrow(data) - 1), 0)
   data.frame(
-    x = c(x_oneway, rev(x_oneway)),
-    y = c(ymin_oneway, rev(ymax_oneway)),
-    shape = rep(shape_oneway, 2)
+    x = c(x_fore, rev(x_fore)),
+    y = c(ymin_fore, rev(ymax_fore)),
+    shape = rep(shape_fore, 2)
+  )
+}
+
+data_to_unit_curve <- function(data, curve, reach, segments) {
+  # specs for a single flow curve
+  curve_fun <- make_curve_fun(curve, reach)
+  i_once <- seq(0, 1, length.out = segments + 1)
+  f_once <- curve_fun(i_once)
+  # coordinates for a full curve
+  b_fore <- as.vector(rbind(data$x - data$w / 2, data$x + data$w / 2))
+  x_fore <- c(
+    b_fore[1],
+    t(b_fore[seq(nrow(data) - 1) * 2] +
+        outer(diff(b_fore)[seq(nrow(data) - 1) * 2], i_once, "*")),
+    b_fore[nrow(data) * 2]
+  )
+  ymin_fore <- c(
+    data$ymin[1],
+    t(data$ymin[-nrow(data)] + outer(diff(data$ymin), f_once, "*")),
+    data$ymin[nrow(data)]
+  )
+  ymax_fore <- c(
+    data$ymax[1],
+    t(data$ymax[-nrow(data)] + outer(diff(data$ymax), f_once, "*")),
+    data$ymax[nrow(data)]
+  )
+  data.frame(
+    x = c(x_fore, rev(x_fore)),
+    y = c(ymin_fore, rev(ymax_fore)),
+    shape = 0
   )
 }

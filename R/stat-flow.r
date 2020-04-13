@@ -4,6 +4,7 @@
 #' (`x` and `y`) and heights (`ymin` and `ymax`) of the flows between each pair
 #' of adjacent axes.
 #' @template stat-aesthetics
+#' @template computed-variables
 #' @template order-options
 #' @template defunct-stat-params
 #'
@@ -76,6 +77,8 @@ StatFlow <- ggproto(
   
   required_aes = c("x"),
   
+  default_aes = aes(weight = 1),
+  
   setup_data = function(data, params) {
     
     # assign `alluvium` to `stratum` if `stratum` not provided
@@ -133,7 +136,7 @@ StatFlow <- ggproto(
                            decreasing = ggalluvial_opt("decreasing"),
                            reverse = ggalluvial_opt("reverse"),
                            absolute = ggalluvial_opt("absolute"),
-                           discern = FALSE,
+                           discern = FALSE, distill = first,
                            negate.strata = NULL,
                            aes.bind = ggalluvial_opt("aes.bind"),
                            infer.label = FALSE,
@@ -141,6 +144,8 @@ StatFlow <- ggproto(
     
     # introduce label
     if (infer.label) {
+      deprecate_parameter("infer.label",
+                          msg = "Use `aes(label = after_stat(lode))`.")
       if (is.null(data$label)) {
         data$label <- data$alluvium
       } else {
@@ -150,7 +155,8 @@ StatFlow <- ggproto(
     }
     
     # aesthetics (in prescribed order)
-    aesthetics <- intersect(.color_diff_aesthetics, names(data))
+    aesthetics <- intersect(c(.color_diff_aesthetics, .text_aesthetics),
+                            names(data))
     # match arguments for `aes.bind`
     if (! is.null(aes.bind)) {
       if (is.logical(aes.bind)) {
@@ -163,11 +169,16 @@ StatFlow <- ggproto(
       if (aes.bind == "alluvia") {
         warning("`aes.bind = 'alluvia'` only available for `geom_alluvium()`; ",
                 "changing to 'flows'.")
+        aes.bind <- "flows"
       }
     }
     
     # sign variable (sorts positives before negatives)
     data$yneg <- data$y < 0
+    # lode variable (before co-opting 'alluvium')
+    data$lode <- data$alluvium
+    # specify distillation function from `distill`
+    distill <- distill_fun(distill)
     
     # define 'deposit' variable to rank strata vertically
     data <- deposit_data(data, decreasing, reverse, absolute)
@@ -186,18 +197,24 @@ StatFlow <- ggproto(
     }
     
     # stack contacts of flows to strata, using 'alluvium' to link them
-    # -+- why is 'x' necessarily continuous? -+-
-    x_ran <- range(data$x)
+    # (does not assume that 'x' is continuous or regularly-spaced)
+    ran_x <- range(data$x)
+    uniq_x <- sort(unique(data$x))
+    # ensure that 'alluvium' ranges simply from 1 to max
     data$alluvium <- contiguate(data$alluvium)
     alluvium_max <- max(data$alluvium)
     data <- rbind(
-      transform(data[data$x != x_ran[2], , drop = FALSE],
-                alluvium = alluvium + alluvium_max * (as.numeric(x) - 1),
-                link = as.numeric(x),
+      transform(data[data$x != ran_x[2], , drop = FALSE],
+                alluvium = alluvium +
+                  alluvium_max *
+                  (match(as.character(x), as.character(uniq_x)) - 1),
+                link = match(as.character(x), as.character(uniq_x)),
                 contact = I("back")),
-      transform(data[data$x != x_ran[1], , drop = FALSE],
-                alluvium = alluvium + alluvium_max * (as.numeric(x) - 2),
-                link = as.numeric(x) - 1,
+      transform(data[data$x != ran_x[1], , drop = FALSE],
+                alluvium = alluvium +
+                  alluvium_max *
+                  (match(as.character(x), as.character(uniq_x)) - 2),
+                link = match(as.character(x), as.character(uniq_x)) - 1,
                 contact = I("front"))
     )
     data$contact <- factor(data$contact, levels = c("back", "front"))
@@ -214,16 +231,43 @@ StatFlow <- ggproto(
     # designate these flow pairings the alluvia
     data$alluvium <- as.integer(interaction(data[, adj_vars], drop = TRUE))
     
-    # sum `y` and, if numeric, `label` over `x`, `yneg`, and `stratum`
-    sum_vars <- c("y", if (is.numeric(data$label)) "label")
-    # exclude `group` because it will be redefined below
-    data$group <- NULL
-    by_vars <- setdiff(names(data), c("group", sum_vars))
-    # keep NAs in order to correctly position flows
-    data <- dplyr::summarize_at(dplyr::group_by(data, .dots = by_vars),
-                                sum_vars, sum, na.rm = TRUE)
-    # redefine `group` to be used to control grobs in the geom step
+    # initiate variables for `after_stat()`
+    weight <- data$weight
+    data$weight <- NULL
+    if (is.null(weight)) weight <- 1
+    data$n <- weight
+    data$count <- data$y * weight
+    
+    # aggregate variables over 'alluvium', 'x', 'yneg', and 'stratum':
+    # sum of computed variables and unique-or-bust values of aesthetics
+    by_vars <- c("alluvium", "x", "yneg", "stratum",
+                  "deposit", "fissure", "link", "contact",
+                  "adj_deposit", "adj_fissure")
+    only_vars <- c(aesthetics)
+    sum_vars <- c("y", "n", "count")
+    agg_lode <- stats::aggregate(data[, "lode", drop = FALSE],
+                                 data[, by_vars],
+                                 distill)
+    if (length(only_vars) > 0) {
+      agg_only <- stats::aggregate(data[, only_vars, drop = FALSE],
+                                   data[, by_vars],
+                                   only)
+    }
+    data <- stats::aggregate(data[, sum_vars],
+                             data[, by_vars],
+                             sum)
+    data <- merge(data, agg_lode)
+    if (length(only_vars) > 0) {
+      data <- merge(data, agg_only)
+    }
+    
+    # redefine 'group' to be used to control grobs in the geom step
     data$group <- data$alluvium
+    
+    # calculate variables for `after_stat()`
+    x_counts <- tapply(abs(data$count), data$x, sum, na.rm = TRUE)
+    data$prop <-
+      data$count / x_counts[match(as.character(data$x), names(x_counts))]
     
     # sort data in preparation for `y` sums
     sort_fields <- c(

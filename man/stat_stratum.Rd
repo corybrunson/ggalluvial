@@ -13,6 +13,7 @@ stat_stratum(
   reverse = ggalluvial_opt("reverse"),
   absolute = ggalluvial_opt("absolute"),
   discern = FALSE,
+  distill = first,
   negate.strata = NULL,
   infer.label = FALSE,
   label.strata = NULL,
@@ -72,16 +73,23 @@ using negative or absolute values of \code{y}.}
 \item{discern}{Passed to \code{\link[=to_lodes_form]{to_lodes_form()}} if \code{data} is in
 alluvia format.}
 
+\item{distill}{A function (or its name) to be used to distill alluvium values
+to a single lode label, accessible via \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}} (similar to
+its behavior in \code{\link[=to_alluvia_form]{to_alluvia_form()}}). In addition to existing functions,
+accepts the character values \code{"first"} (the default), \code{"last"}, and
+\code{"most"} (which returns the first modal value).}
+
 \item{negate.strata}{A vector of values of the \code{stratum} aesthetic to be
 treated as negative (will ignore missing values with a warning).}
 
 \item{infer.label}{Logical; whether to assign the \code{stratum} or \code{alluvium}
 variable to the \code{label} aesthetic. Defaults to \code{FALSE}, and requires that
-no \code{label} aesthetic is assigned. This parameter is intended only for uses
-in which the data are in alluva form and are therefore converted to lode
-form before the statistical transformation.}
+no \code{label} aesthetic is assigned. This parameter is intended for use only
+with data in alluva form, which are converted to lode form before the
+statistical transformation. Deprecated; use \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}}
+instead.}
 
-\item{label.strata}{Deprecated; alias for \code{infer.label}.}
+\item{label.strata}{Defunct; alias for \code{infer.label}.}
 
 \item{min.y, max.y}{Numeric; bounds on the heights of the strata to be
 rendered. Use these bounds to exclude strata outside a certain range, for
@@ -128,12 +136,15 @@ Additionally, each \verb{stat_*()} accepts the following optional
 aesthetics:
 \itemize{
 \item \code{y}
+\item \code{weight}
 \item \code{group}
 \item \code{label}
 }
 
-\code{y} controls the heights of the alluvia
+\code{y} controls the heights of the alluvia,
 and may be aggregated across equivalent observations.
+\code{weight} applies to the computed variables (see that section below)
+but does not affect the positional aesthetics.
 \code{group} is used internally; arguments are ignored.
 \code{label} is used to label the strata or lodes and must take a unique value
 across the observations within each stratum or lode.
@@ -145,6 +156,20 @@ Numeric aesthetics, including \code{y}, are summed.
 Character and factor aesthetics, including \code{label},
 are assigned to strata or lodes provided they take unique values across the
 observations within each (and are otherwise assigned \code{NA}).
+}
+
+\section{Computed variables}{
+
+These can be used with \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}} to \href{https://ggplot2.tidyverse.org/reference/aes_eval.html}{control aesthetic evaluation}.
+\describe{
+\item{n}{number of cases in lode}
+\item{count}{cumulative weight of lode}
+\item{prop}{weighted proportion of lode}
+\item{stratum}{value of variable used to define strata}
+\item{lode}{lode label distilled from alluvia}
+}
+The numerical variables are grouped by \code{x} and weighted by \code{weight}. The
+character variable \code{lode} is obtained from \code{alluvium} according to \code{distill}.
 }
 
 \section{Package options}{
@@ -187,14 +212,14 @@ ggplot(vaccinations,
 ggplot(vaccinations,
        aes(y = freq,
            x = survey, stratum = response, alluvium = subject,
-           label = freq)) +
+           label = after_stat(count))) +
   stat_stratum(geom = "errorbar") +
   geom_text(stat = "stratum")
 # alluvium data, positioning with stratum labels
 ggplot(as.data.frame(Titanic),
        aes(y = Freq,
            axis1 = Class, axis2 = Sex, axis3 = Age, axis4 = Survived)) +
-  geom_text(stat = "stratum", infer.label = TRUE) +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
   stat_stratum(geom = "errorbar") +
   scale_x_discrete(limits = c("Class", "Sex", "Age", "Survived"))
 
@@ -216,7 +241,7 @@ ggplot(merge(vaccinations, survey_dates, by = "survey"),
        aes(x = end, y = freq, stratum = response, alluvium = subject,
            fill = response)) +
   stat_alluvium(geom = "flow", lode.guidance = "forward",
-                width = 30, knot.pos = 0) +
+                width = 30) +
   stat_stratum(width = 30) +
   labs(x = "Survey date", y = "Number of respondents")
 
@@ -227,7 +252,7 @@ ggplot(admissions,
        aes(y = Count, axis1 = Dept, axis2 = Gender)) +
   geom_alluvium(aes(fill = Dept), width = 1/12) +
   geom_stratum(width = 1/12, fill = "black", color = "grey") +
-  geom_label(stat = "stratum", infer.label = TRUE, min.y = 200) +
+  geom_label(stat = "stratum", aes(label = after_stat(stratum)), min.y = 200) +
   scale_x_discrete(limits = c("Department", "Gender"), expand = c(.05, .05))
 }
 \seealso{

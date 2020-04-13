@@ -1,5 +1,21 @@
 context("stat-flow")
 
+# weights are used but not returned
+
+test_that("`stat_flow` weights computed variables but drops weight", {
+  data <- expand.grid(alluvium = letters[1:3], x = 1:2)
+  data$stratum <- LETTERS[c(1, 1, 2, 1, 2, 2)]
+  data$y <- c(1, 1, 1, 1, 1, 2)
+  data$weight <- c(.5, 1, 1, .5, 1, 1)
+  comp <- as.data.frame(StatFlow$compute_panel(data))
+  comp <- comp[with(comp, order(x, alluvium)), ]
+  expect_equivalent(comp$n, c(1, 1, 0.5, 1, 1, 0.5))
+  expect_equivalent(comp$count, c(1, 1, 0.5, 2, 1, 0.5))
+  expect_equivalent(comp$prop, c(c(2, 2, 1) / 5, c(4, 2, 1) / 7))
+  expect_equal(comp$lode, rep(factor(letters[3:1]), times = 2))
+  expect_null(comp$weight)
+})
+
 # reverse and absolute, negative values
 
 test_that("`stat_flow` orders flows correctly with negative values", {
@@ -48,4 +64,15 @@ test_that("`stat_flow` orders alluvia correctly according to `aes.bind`", {
                    c(1.5, 2.5, 0.5, 3.5, 1.5, 0.5, 2.5, 3.5))
   # cannot order by aesthetics before by linked strata (flows)
   expect_warning(StatFlow$compute_panel(data, aes.bind = "alluvia"), "flows")
+})
+
+# exceptional data
+
+test_that("`stat_flow` handles exceptional data with out errors", {
+  wph <- as.data.frame(as.table(WorldPhones))
+  names(wph) <- c("Year", "Region", "Telephones")
+  wph$Year <- as.integer(as.character(wph$Year))
+  gg <- ggplot(wph, aes(x = Year, alluvium = Region, y = Telephones)) +
+    geom_flow(aes(fill = Region, colour = Region))
+  expect_silent(ggplot_build(gg))
 })
