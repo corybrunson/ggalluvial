@@ -8,15 +8,7 @@
 \alias{to_alluvia_form}
 \title{Check for alluvial structure and convert between alluvial formats}
 \usage{
-is_lodes_form(
-  data,
-  key,
-  value,
-  id,
-  weight = NULL,
-  logical = TRUE,
-  silent = FALSE
-)
+is_lodes_form(data, key, value, id, y = NULL, silent = FALSE)
 
 is_alluvia_form(data, axes = NULL, y = NULL, silent = FALSE)
 
@@ -74,6 +66,10 @@ each such variable to a single value. In addition to existing functions,
 \code{distill} accepts the character values \code{"first"} (used if
 \code{distill} is \code{TRUE}), \code{"last"}, and \code{"most"} (which
 returns the first modal value).}
+
+\item{...}{Used in \code{is_alluvia_form} and \code{to_lodes_form} as in
+\code{\link[dplyr:select]{dplyr::select()}} to determine axis variables, as an alternative
+to \code{axes}. Ignored when \code{axes} is provided.}
 }
 \description{
 Alluvial plots consist of multiple horizontally-distributed columns (axes)
