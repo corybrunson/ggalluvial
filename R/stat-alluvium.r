@@ -368,7 +368,7 @@ StatAlluvium <- ggproto(
     data$prop <-
       data$count / x_counts[match(as.character(data$x), names(x_counts))]
     
-    # reverse alluvium order among negative observations
+    # reverse alluvium order
     data$fan <- xtfrm(data$alluvium) * (-1) ^ reverse
     
     # sort data in preparation for `y` sums
