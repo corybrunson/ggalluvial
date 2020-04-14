@@ -166,7 +166,10 @@ These can be used with \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}} t
 \item{count}{cumulative weight of lode}
 \item{prop}{weighted proportion of lode}
 \item{stratum}{value of variable used to define strata}
-\item{lode}{lode label distilled from alluvia}
+\item{lode}{lode label distilled from alluvia
+(\code{stat_alluvium()} and \code{stat_flow()} only)}
+\item{position}{\code{"front"} or \code{"back"} of each flow
+(\code{stat_flow()} only)}
 }
 The numerical variables are grouped by \code{x} and weighted by \code{weight}. The
 character variable \code{lode} is obtained from \code{alluvium} according to \code{distill}.
