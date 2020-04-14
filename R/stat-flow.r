@@ -197,7 +197,7 @@ StatFlow <- ggproto(
         (-1) ^ (data$yneg * absolute + reverse)
     }
     
-    # stack contacts of flows to strata, using 'alluvium' to link them
+    # stack positions of flows to strata, using 'alluvium' to link them
     # (does not assume that 'x' is continuous or regularly-spaced)
     ran_x <- range(data$x)
     uniq_x <- sort(unique(data$x))
@@ -210,15 +210,15 @@ StatFlow <- ggproto(
                   alluvium_max *
                   (match(as.character(x), as.character(uniq_x)) - 1),
                 link = match(as.character(x), as.character(uniq_x)),
-                contact = I("back")),
+                position = I("back")),
       transform(data[data$x != ran_x[1], , drop = FALSE],
                 alluvium = alluvium +
                   alluvium_max *
                   (match(as.character(x), as.character(uniq_x)) - 2),
                 link = match(as.character(x), as.character(uniq_x)) - 1,
-                contact = I("front"))
+                position = I("front"))
     )
-    data$contact <- factor(data$contact, levels = c("back", "front"))
+    data$position <- factor(data$position, levels = c("back", "front"))
     
     # flag flows between common pairs of strata and of aesthetics
     # (induces NAs for one-sided flows)
@@ -226,7 +226,7 @@ StatFlow <- ggproto(
     adj_vars <- paste0("adj_", vars)
     # interactions of link:back:front
     for (i in seq(vars)) {
-      data <- match_contacts(data, vars[i], adj_vars[i])
+      data <- match_positions(data, vars[i], adj_vars[i])
       #data[[adj_vars[i]]] <- xtfrm(data[[adj_vars[i]]])
     }
     # designate these flow pairings the alluvia
@@ -242,7 +242,7 @@ StatFlow <- ggproto(
     # aggregate variables over 'alluvium', 'x', 'yneg', and 'stratum':
     # sum of computed variables and unique-or-bust values of aesthetics
     by_vars <- c("alluvium", "x", "yneg", "stratum",
-                  "deposit", "fissure", "link", "contact",
+                  "deposit", "fissure", "link", "position",
                   "adj_deposit", "adj_fissure")
     only_vars <- c(aesthetics)
     sum_vars <- c("y", "n", "count")
@@ -276,15 +276,15 @@ StatFlow <- ggproto(
       "deposit",
       if (aes.bind == "flows") "adj_fissure",
       "adj_deposit",
-      "alluvium", "contact"
+      "alluvium", "position"
     )
     data <- data[do.call(order, data[, sort_fields]), , drop = FALSE]
     # calculate `y` sums
     data$ycum <- NA
     for (ll in unique(data$link)) {
-      for (ss in unique(data$contact)) {
+      for (ss in unique(data$position)) {
         for (yn in c(FALSE, TRUE)) {
-          ww <- which(data$link == ll & data$contact == ss & data$yneg == yn)
+          ww <- which(data$link == ll & data$position == ss & data$yneg == yn)
           data$ycum[ww] <- cumulate(data$y[ww])
         }
       }
@@ -312,9 +312,9 @@ StatFlow <- ggproto(
   }
 )
 
-match_contacts <- function(data, var, var_col) {
-  adj <- tidyr::spread_(data[, c("alluvium", "link", "contact", var)],
-                        key = "contact", value = var)
+match_positions <- function(data, var, var_col) {
+  adj <- tidyr::spread_(data[, c("alluvium", "link", "position", var)],
+                        key = "position", value = var)
   adj[[var_col]] <- interaction(adj$link, adj$back, adj$front, drop = TRUE)
   merge(data,
         adj[, c("alluvium", var_col)],
