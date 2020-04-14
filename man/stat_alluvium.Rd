@@ -197,7 +197,7 @@ These can be used with \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}} t
 \item{stratum}{value of variable used to define strata}
 \item{lode}{lode label distilled from alluvia
 (\code{stat_alluvium()} and \code{stat_flow()} only)}
-\item{position}{\code{"front"} or \code{"back"} of each flow
+\item{flow}{direction of flow \code{"to"} or \code{"from"} from its axis
 (\code{stat_flow()} only)}
 }
 The numerical variables are grouped by \code{x} and weighted by \code{weight}. The

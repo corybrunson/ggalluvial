@@ -8,8 +8,8 @@
 #'   \item{stratum}{value of variable used to define strata}
 #'   \item{lode}{lode label distilled from alluvia
 #'               (`stat_alluvium()` and `stat_flow()` only)}
-#'   \item{position}{`"front"` or `"back"` of each flow
-#'                   (`stat_flow()` only)}
+#'   \item{flow}{direction of flow `"to"` or `"from"` from its axis
+#'               (`stat_flow()` only)}
 #' }
 #' The numerical variables are grouped by `x` and weighted by `weight`. The
 #' character variable `lode` is obtained from `alluvium` according to `distill`.
