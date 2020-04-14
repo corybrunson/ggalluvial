@@ -238,7 +238,7 @@ StatAlluvium <- ggproto(
         addNA, ifany = FALSE
       ), drop = TRUE))
       # convert to alluvia format with 'binding' entries
-      luv_dat <- alluviate(data, "x", "binding", "alluvium")
+      luv_dat <- alluviate(data, "alluvium", "x", "binding")
       # sort by all axes (everything except 'alluvium')
       luv_dat <- luv_dat[do.call(
         order,
@@ -292,7 +292,7 @@ StatAlluvium <- ggproto(
     }
     stopifnot(is.function(lode.guidance))
     # summary data of alluvial deposits
-    alluv_dep <- alluviate(data, "x", "deposit", "alluvium")
+    alluv_dep <- alluviate(data, "alluvium", "x", "deposit")
     # axis indices
     alluv_x <- setdiff(names(alluv_dep), "alluvium")
     # ensure that `lode.ordering` is a matrix with column names
