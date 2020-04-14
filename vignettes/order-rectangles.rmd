@@ -149,8 +149,8 @@ Here's how this transformation translates into the alluvial plot that began the 
 ```{r alluvia plot}
 ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
   stat_alluvium(aes(fill = class)) +
-  stat_alluvium(geom = "text", aes(label = subject)) +
-  stat_stratum(alpha = .25)
+  stat_stratum(alpha = .25) +
+  stat_alluvium(geom = "text", aes(label = subject))
 ```
 
 The `flow` stat differs from the `alluvium` stat by allowing the orders of the lodes within strata to differ from one side of an axis to the other. Put differently, the `flow` stat allows _mixing_ at the axes, rather than requiring that each case or cohort is follows a continuous trajectory from one end of the plot to the other. As a result, flow plots are often much less cluttered, the trade-off being that cases or cohorts cannot be tracked through them.
@@ -167,10 +167,11 @@ Here is the flow version of the preceding alluvial plot, labeling each side of e
 ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
   stat_stratum() +
   stat_flow(aes(fill = class)) +
-  stat_flow(geom = "text", aes(label = subject))
+  stat_flow(geom = "text",
+            aes(label = subject, hjust = after_stat(position) == "front"))
 ```
 
-(There's no good way at this point to nudge these labels toward the flow to which they correspond, but that's a potential future feature.)
+The [computed variable](https://ggplot2.tidyverse.org/reference/stat.html) `position` indicates whether each row of the `compute_panel()` output corresponds to the front or back of a flow, and is used to nudge the labels toward their respective flows (to avoid overlap). Mismatches between adjacent labels indicate where lodes are ordered differently on either side of a stratum.
 
 ### Lode guidance
 
@@ -227,7 +228,7 @@ In the toy example, the stronger option results in the lodes within each stratum
 
 ```{r alluvia plot w/ strong aesthetic binding}
 ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
-  stat_alluvium(aes(fill = class), aes.bind = "alluvia") +
+  stat_alluvium(aes(fill = class, label = subject), aes.bind = "alluvia") +
   stat_stratum() +
   stat_alluvium(geom = "text", aes(fill = class, label = subject),
                 aes.bind = "alluvia")
@@ -237,7 +238,7 @@ The more flexible option groups the lodes by class only after they've been order
 
 ```{r alluvia plot w/ weak aesthetic binding}
 ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
-  stat_alluvium(aes(fill = class), aes.bind = "flows") +
+  stat_alluvium(aes(fill = class, label = subject), aes.bind = "flows") +
   stat_stratum() +
   stat_alluvium(geom = "text", aes(fill = class, label = subject),
                 aes.bind = "flows")
@@ -251,9 +252,11 @@ Setting `aes.bind` to the non-default option `"flows"` tells `stat_flow()` to pr
 
 ```{r flows plots w/ aesthetic binding}
 ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
-  stat_flow(aes(fill = class), aes.bind = "flows") +
+  stat_flow(aes(fill = class, label = subject), aes.bind = "flows") +
   stat_stratum() +
-  stat_flow(geom = "text", aes(fill = class, label = subject),
+  stat_flow(geom = "text",
+            aes(fill = class, label = subject,
+                hjust = after_stat(position) == "front"),
             aes.bind = "flows")
 ```
 
