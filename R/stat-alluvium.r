@@ -233,7 +233,7 @@ StatAlluvium <- ggproto(
     if (is.null(weight)) weight <- 1
     data$n <- weight
     data$count <- data$y * weight
-    
+    # transform 'order' according to `absolute` and `reverse` params
     if (! is.null(data$order)) data$order <- xtfrm(data$order) *
       (-1) ^ (data$yneg * absolute + reverse)
     
@@ -305,35 +305,18 @@ StatAlluvium <- ggproto(
     # define 'deposit' variable to rank strata vertically
     data <- deposit_data(data, decreasing, reverse, absolute)
     
-    # invoke surrounding axes in the order prescribed by `lode.guidance`
+    # ensure that `lode.guidance` is a function
     if (is.character(lode.guidance)) {
       lode.guidance <- get(paste0("lode_", lode.guidance))
     }
     stopifnot(is.function(lode.guidance))
-    # summary data of alluvial deposits
-    alluv_dep <- alluviate(data, "x", "deposit", "alluvium")
-    # axis indices
-    alluv_x <- setdiff(names(alluv_dep), "alluvium")
-    # calculate `lode_ords` from `lode.guidance`
-    lode_ords <- matrix(NA_integer_,
-                        nrow = nrow(alluv_dep), ncol = length(alluv_x))
-    dimnames(lode_ords) <- list(alluv_dep$alluvium, alluv_x)
-    for (xx in alluv_x) {
-      ii <- match(xx, alluv_x)
-      ord_x <- lode.guidance(length(alluv_x), match(xx, alluv_x))
-      # order by prescribed ordering and by aesthetics in order
-      alluv_ord_dep <- alluv_dep[, alluv_x[rev(ord_x)]]
-      lode_ords[, xx] <- interaction(alluv_ord_dep, drop = TRUE)
-    }
-    # check that array has correct dimensions
-    stopifnot(dim(lode_ords) ==
-                c(length(unique(data$alluvium)), length(unique(data$x))))
+    # invoke surrounding axes in the order prescribed by `lode.guidance`
+    lode_ord <- guide_lodes(data, lode.guidance)
     
-    # convert `lode_ords` into a single sorting variable 'rem_deposit'
+    # convert `lode_ord` into a single sorting variable 'rem_deposit'
     # that orders index lodes by remaining / remote deposits
-    lode_ord <- as.data.frame(lode_ords)
     names(lode_ord) <- sort(unique(data$x))
-    lode_ord$alluvium <- if (is.null(rownames(lode_ords))) {
+    lode_ord$alluvium <- if (is.null(rownames(lode_ord))) {
       if (is.factor(data$alluvium)) {
         levels(data$alluvium)
       } else if (is.numeric(data$alluvium)) {
@@ -342,7 +325,7 @@ StatAlluvium <- ggproto(
         unique(data$alluvium)
       }
     } else {
-      rownames(lode_ords)
+      rownames(lode_ord)
     }
     # match `lode_ord$x` back to `data$x`
     uniq_x <- sort(unique(data$x))
@@ -432,6 +415,36 @@ StatAlluvium <- ggproto(
     data
   }
 )
+
+# apply lode guidance function to produce ordering matrix
+guide_lodes <- function(data, guidance_fun) {
+  
+  # summary data of alluvial deposits
+  alluv_dep <- alluviate(data, "x", "deposit", "alluvium")
+  # axis indices
+  alluv_x <- setdiff(names(alluv_dep), "alluvium")
+  
+  # initialize ordering matrix
+  ord_mat <- matrix(NA_integer_,
+                    nrow = nrow(alluv_dep), ncol = length(alluv_x))
+  dimnames(ord_mat) <- list(alluv_dep$alluvium, alluv_x)
+  
+  # calculate orderings from `guidance_fun`
+  for (xx in alluv_x) {
+    ii <- match(xx, alluv_x)
+    ord_x <- guidance_fun(length(alluv_x), match(xx, alluv_x))
+    # order by prescribed ordering and by aesthetics in order
+    ord_mat[, xx] <- interaction(alluv_dep[, alluv_x[rev(ord_x)]],
+                                   drop = TRUE)
+  }
+  
+  # check that array has correct dimensions
+  stopifnot(dim(ord_mat) ==
+              c(length(unique(data$alluvium)), length(unique(data$x))))
+  
+  # return ordering matrix as a data aframe
+  as.data.frame(ord_mat)
+}
 
 # build alluvial dataset for reference during lode-ordering
 alluviate <- function(data, key, value, id) {

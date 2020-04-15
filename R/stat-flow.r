@@ -179,7 +179,7 @@ StatFlow <- ggproto(
     data$lode <- data$alluvium
     # specify distillation function from `distill`
     distill <- distill_fun(distill)
-    
+    # transform 'order' according to `absolute` and `reverse` params
     if (! is.null(data$order)) data$order <- xtfrm(data$order) *
       (-1) ^ (data$yneg * absolute + reverse)
     
