@@ -137,6 +137,7 @@ aesthetics:
 \itemize{
 \item \code{y}
 \item \code{weight}
+\item \code{order}
 \item \code{group}
 \item \code{label}
 }
@@ -145,11 +146,14 @@ aesthetics:
 and may be aggregated across equivalent observations.
 \code{weight} applies to the computed variables (see that section below)
 but does not affect the positional aesthetics.
+\code{order}, recognized by \code{stat_alluvium()} and \code{stat_flow()}, is used to
+arrange the lodes within each stratum. It tolerates duplicates and takes
+precedence over the differentiation aesthetics (when \code{aes.bind} is not
+\code{"none"}) and lode guidance with respect to the remaining axes. (It replaces
+the deprecated parameter \code{lode.ordering}.)
 \code{group} is used internally; arguments are ignored.
 \code{label} is used to label the strata or lodes and must take a unique value
 across the observations within each stratum or lode.
-Often the same variable will be passed to \code{label} as to the corresponding
-alluvial aesthetic (\code{stratum} or \code{alluvium}).
 
 These and any other aesthetics are aggregated as follows:
 Numeric aesthetics, including \code{y}, are summed.
@@ -188,7 +192,6 @@ manually set:
 \item \code{ggalluvial.absolute} (each \verb{stat_*}): defaults to \code{TRUE}.
 \item \code{ggalluvial.cement.alluvia} (\code{stat_alluvium}): defaults to \code{FALSE}.
 \item \code{ggalluvial.lode.guidance} (\code{stat_alluvium}): defaults to \code{"zigzag"}.
-\item \code{ggalluvial.lode.ordering} (\code{stat_alluvium}): defaults to \code{NULL}.
 \item \code{ggalluvial.aes.bind} (\code{stat_alluvium} and \code{stat_flow}): defaults to
 \code{"none"}.
 }

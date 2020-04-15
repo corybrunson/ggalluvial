@@ -1,6 +1,10 @@
 
 # next version
 
+## Controlling the order of lodes within strata
+
+The `lode.ordering` parameter of `stat_alluvium()` has been deprecated. Instead, the new `order` aesthetic gives priority to its argument over the differentiation aesthetics in arranging the lodes within each stratum, without producing graphical artifacts. This aesthetic can also be used in `stat_flow()`.
+
 ## Order of alluvia in negative strata
 
 Alluvia within "deposits" are now consistently ordered in positive and negative strata, rather than according to `absolute`. This avoids the "twisting" of flows between strata of different signs. Whereas the orderings of the deposits matter to the stacked-histogram reading of the plot, the orderings of the alluvia should simply maximize its elegance and readability.

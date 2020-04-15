@@ -154,9 +154,9 @@ StatFlow <- ggproto(
       }
     }
     
-    # aesthetics (in prescribed order)
-    aesthetics <- intersect(c(.color_diff_aesthetics, .text_aesthetics),
-                            names(data))
+    # differentiation and text aesthetics (in prescribed order)
+    diff_aes <- intersect(c(.color_diff_aesthetics, .text_aesthetics),
+                          names(data))
     # match arguments for `aes.bind`
     if (! is.null(aes.bind)) {
       if (is.logical(aes.bind)) {
@@ -180,12 +180,15 @@ StatFlow <- ggproto(
     # specify distillation function from `distill`
     distill <- distill_fun(distill)
     
+    if (! is.null(data$order)) data$order <- xtfrm(data$order) *
+      (-1) ^ (data$yneg * absolute + reverse)
+    
     # define 'deposit' variable to rank strata vertically
     data <- deposit_data(data, decreasing, reverse, absolute)
     
     # identify fissures at aesthetics that vary within strata
     n_lodes <- nrow(unique(data[, c("x", "stratum")]))
-    fissure_aes <- aesthetics[which(sapply(aesthetics, function(x) {
+    fissure_aes <- diff_aes[which(sapply(diff_aes, function(x) {
       nrow(unique(data[, c("x", "stratum", x)]))
     }) > n_lodes)]
     data$fissure <- if (length(fissure_aes) == 0) {
@@ -209,19 +212,18 @@ StatFlow <- ggproto(
                   alluvium_max *
                   (match(as.character(x), as.character(uniq_x)) - 1),
                 link = match(as.character(x), as.character(uniq_x)),
-                flow = I("from")),
+                flow = factor("from", levels = c("from", "to"))),
       transform(data[data$x != ran_x[1], , drop = FALSE],
                 alluvium = alluvium +
                   alluvium_max *
                   (match(as.character(x), as.character(uniq_x)) - 2),
                 link = match(as.character(x), as.character(uniq_x)) - 1,
-                flow = I("to"))
+                flow = factor("to", levels = c("from", "to")))
     )
-    data$flow <- factor(data$flow, levels = c("from", "to"))
     
     # flag flows between common pairs of strata and of aesthetics
     # (induces NAs for one-sided flows)
-    vars <- c("deposit", "fissure")
+    vars <- intersect(c("deposit", "order", "fissure"), names(data))
     adj_vars <- paste0("adj_", vars)
     # interactions of link:from:to
     for (i in seq(vars)) {
@@ -240,10 +242,11 @@ StatFlow <- ggproto(
     
     # aggregate variables over 'alluvium', 'x', 'yneg', and 'stratum':
     # sum of computed variables and unique-or-bust values of aesthetics
-    by_vars <- c("alluvium", "x", "yneg", "stratum",
-                  "deposit", "fissure", "link", "flow",
-                  "adj_deposit", "adj_fissure")
-    only_vars <- c(aesthetics)
+    by_vars <- intersect(c("alluvium", "x", "yneg", "stratum",
+                           "deposit", "order", "fissure", "link", "flow",
+                           "adj_deposit", "adj_order", "adj_fissure"),
+                         names(data))
+    only_vars <- c(diff_aes)
     sum_vars <- c("y", "n", "count")
     agg_lode <- stats::aggregate(data[, "lode", drop = FALSE],
                                  data[, by_vars],
@@ -273,6 +276,8 @@ StatFlow <- ggproto(
     sort_fields <- c(
       "link", "x",
       "deposit",
+      if (! is.null(data$order)) "order",
+      #if (aes.bind != "none") "fissure",
       if (aes.bind == "flows") "adj_fissure",
       "adj_deposit",
       "alluvium", "flow"
@@ -305,7 +310,7 @@ StatFlow <- ggproto(
     if (! is.null(max.y)) data <- subset(data, ymax - ymin <= max.y)
     
     # arrange data by aesthetics for consistent (reverse) z-ordering
-    data <- z_order_aes(data, aesthetics)
+    data <- z_order_aes(data, diff_aes)
     
     data
   }

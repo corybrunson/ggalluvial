@@ -23,14 +23,15 @@
 #'   ordering the lodes within each stratum, or else a character string
 #'   identifying the function. Character options are "zigzag", "frontback",
 #'   "backfront", "forward", and "backward" (see [`lode-guidance-functions`]).
-#' @param lode.ordering A list (of length the number of axes) of integer vectors
-#'   (each of length the number of rows of `data`) or NULL entries (indicating
-#'   no imposed ordering), or else a numeric matrix of corresponding dimensions,
-#'   giving the preferred ordering of alluvia at each axis. This will be used to
-#'   order the lodes within each stratum by sorting the lodes first by stratum,
-#'   then by the provided vectors, and lastly by remaining factors (if the
-#'   vectors contain duplicate entries and therefore do not completely determine
-#'   the lode orderings).
+#' @param lode.ordering **Deprecated in favor of the `order` aesthetic.** A list
+#'   (of length the number of axes) of integer vectors (each of length the
+#'   number of rows of `data`) or NULL entries (indicating no imposed ordering),
+#'   or else a numeric matrix of corresponding dimensions, giving the preferred
+#'   ordering of alluvia at each axis. This will be used to order the lodes
+#'   within each stratum by sorting the lodes first by stratum, then by the
+#'   provided vectors, and lastly by remaining factors (if the vectors contain
+#'   duplicate entries and therefore do not completely determine the lode
+#'   orderings).
 #' @example inst/examples/ex-stat-alluvium.r
 #' @export
 stat_alluvium <- function(mapping = NULL,
@@ -45,7 +46,7 @@ stat_alluvium <- function(mapping = NULL,
                           aggregate.y = NULL,
                           cement.alluvia = ggalluvial_opt("cement.alluvia"),
                           lode.guidance = ggalluvial_opt("lode.guidance"),
-                          lode.ordering = ggalluvial_opt("lode.ordering"),
+                          lode.ordering = NULL,
                           aes.bind = ggalluvial_opt("aes.bind"),
                           infer.label = FALSE,
                           min.y = NULL, max.y = NULL,
@@ -169,7 +170,7 @@ StatAlluvium <- ggproto(
                            aggregate.y = NULL,
                            cement.alluvia = ggalluvial_opt("cement.alluvia"),
                            lode.guidance = ggalluvial_opt("lode.guidance"),
-                           lode.ordering = ggalluvial_opt("lode.ordering"),
+                           lode.ordering = NULL,
                            aes.bind = ggalluvial_opt("aes.bind"),
                            infer.label = FALSE,
                            min.y = NULL, max.y = NULL) {
@@ -186,13 +187,32 @@ StatAlluvium <- ggproto(
       }
     }
     
-    # aesthetics (in prescribed order)
-    aesthetics <- intersect(c(.color_diff_aesthetics, .text_aesthetics),
-                            names(data))
+    # ensure that `lode.ordering` is a matrix with column names
+    if (! is.null(lode.ordering)) {
+      deprecate_parameter("lode.ordering",
+                          msg = "Use the `order` aesthetic instead.")
+      if (is.null(data$order)) {
+        # bind a vector to itself to create a matrix
+        if (is.vector(lode.ordering)) {
+          lode.ordering <- matrix(lode.ordering,
+                                  nrow = length(lode.ordering),
+                                  ncol = length(unique(data$x)))
+        }
+        # flatten `lode.ordering` into an 'order' column
+        data$order <- as.vector(lode.ordering)
+      } else {
+        warning("Aesthetic `order` is specified, ",
+                "so parameter `lode.ordering` will be ignored.")
+      }
+    }
+    
+    # differentiation aesthetics (in prescribed order)
+    diff_aes <- intersect(c(.color_diff_aesthetics, .text_aesthetics),
+                          names(data))
     # match arguments for `aes.bind`
     if (! is.null(aes.bind)) {
       if (is.logical(aes.bind)) {
-        aes.bind.rep <- if (aes.bind) "flow" else "none"
+        aes.bind.rep <- if (aes.bind) "flows" else "none"
         warning("Logical values of `aes.bind` are deprecated; ",
                 "replacing ", aes.bind, " with '", aes.bind.rep, "'.")
         aes.bind <- aes.bind.rep
@@ -214,6 +234,9 @@ StatAlluvium <- ggproto(
     data$n <- weight
     data$count <- data$y * weight
     
+    if (! is.null(data$order)) data$order <- xtfrm(data$order) *
+      (-1) ^ (data$yneg * absolute + reverse)
+    
     # cement (aggregate) `y` over otherwise equivalent alluvia
     if (! is.null(aggregate.y)) {
       deprecate_parameter("aggregate.y", "cement.alluvia")
@@ -222,11 +245,8 @@ StatAlluvium <- ggproto(
     if (cement.alluvia) {
       
       # -+- need to stop depending on 'group' and 'PANEL' -+-
-      only_vars <- intersect(c(setdiff(aesthetics, "label"),
-                               "group", "PANEL"),
-                             names(data))
-      bind_vars <- intersect(c("yneg", "stratum", only_vars,
-                               "group", "PANEL"),
+      only_vars <- intersect(c(diff_aes, "group", "PANEL"), names(data))
+      bind_vars <- intersect(c("yneg", "stratum", only_vars, "group", "PANEL"),
                              names(data))
       sum_vars <- c("y", "n", "count")
       
@@ -294,17 +314,7 @@ StatAlluvium <- ggproto(
     alluv_dep <- alluviate(data, "x", "deposit", "alluvium")
     # axis indices
     alluv_x <- setdiff(names(alluv_dep), "alluvium")
-    # ensure that `lode.ordering` is a matrix with column names
-    if (! is.null(lode.ordering)) {
-      # bind a vector to itself to create a matrix
-      if (is.vector(lode.ordering)) {
-        lode.ordering <- matrix(lode.ordering,
-                                nrow = length(lode.ordering),
-                                ncol = length(unique(data$x)))
-      }
-      colnames(lode.ordering) <- alluv_x
-    }
-    # calculate `lode_ords` from `lode.guidance` and `lode.ordering`
+    # calculate `lode_ords` from `lode.guidance`
     lode_ords <- matrix(NA_integer_,
                         nrow = nrow(alluv_dep), ncol = length(alluv_x))
     dimnames(lode_ords) <- list(alluv_dep$alluvium, alluv_x)
@@ -312,12 +322,7 @@ StatAlluvium <- ggproto(
       ii <- match(xx, alluv_x)
       ord_x <- lode.guidance(length(alluv_x), match(xx, alluv_x))
       # order by prescribed ordering and by aesthetics in order
-      alluv_ord_dep <- if (is.null(lode.ordering)) {
-        alluv_dep[, alluv_x[rev(ord_x)]]
-      } else {
-        alluv_ord <- xtfrm(lode.ordering[, ii]) * (-1) ^ reverse
-        cbind(alluv_dep[, alluv_x[rev(ord_x)]], alluv_ord)
-      }
+      alluv_ord_dep <- alluv_dep[, alluv_x[rev(ord_x)]]
       lode_ords[, xx] <- interaction(alluv_ord_dep, drop = TRUE)
     }
     # check that array has correct dimensions
@@ -352,7 +357,7 @@ StatAlluvium <- ggproto(
     
     # identify fissures at aesthetics that vary within strata
     n_lodes <- nrow(unique(data[, c("x", "stratum")]))
-    fissure_aes <- aesthetics[which(sapply(aesthetics, function(x) {
+    fissure_aes <- diff_aes[which(sapply(diff_aes, function(x) {
       nrow(unique(data[, c("x", "stratum", x)]))
     }) > n_lodes)]
     data$fissure <- if (length(fissure_aes) == 0) {
@@ -375,6 +380,7 @@ StatAlluvium <- ggproto(
     sort_fields <- c(
       "x",
       "deposit",
+      if (! is.null(data$order)) "order",
       if (aes.bind == "alluvia") "fissure",
       "rem_deposit",
       if (aes.bind == "flows") "fissure",
@@ -392,6 +398,7 @@ StatAlluvium <- ggproto(
     # calculate y bounds
     data$deposit <- NULL
     data$rem_deposit <- NULL
+    data$order <- NULL
     data$fissure <- NULL
     data$fan <- NULL
     data$ymin <- data$ycum - abs(data$y) / 2
@@ -421,7 +428,7 @@ StatAlluvium <- ggproto(
     if (! is.null(max.y)) data <- subset(data, ymax - ymin <= max.y)
     
     # arrange data by aesthetics for consistent (reverse) z-ordering
-    data <- z_order_aes(data, aesthetics)
+    data <- z_order_aes(data, diff_aes)
     
     data
   }
