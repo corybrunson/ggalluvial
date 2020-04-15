@@ -396,7 +396,6 @@ StatAlluvium <- ggproto(
       }
     }
     # calculate y bounds
-    data$deposit <- NULL
     data$rem_deposit <- NULL
     data$order <- NULL
     data$fissure <- NULL

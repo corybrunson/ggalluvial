@@ -294,7 +294,6 @@ StatFlow <- ggproto(
       }
     }
     # calculate y bounds
-    data$deposit <- NULL
     data$fissure <- NULL
     data$adj_deposit <- NULL
     data$adj_fissure <- NULL

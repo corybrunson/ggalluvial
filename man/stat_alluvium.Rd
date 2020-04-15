@@ -200,13 +200,17 @@ These can be used with \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}} t
 \item{count}{cumulative weight of lode}
 \item{prop}{weighted proportion of lode}
 \item{stratum}{value of variable used to define strata}
+\item{deposit}{order in which (signed) strata are deposited}
 \item{lode}{lode label distilled from alluvia
 (\code{stat_alluvium()} and \code{stat_flow()} only)}
 \item{flow}{direction of flow \code{"to"} or \code{"from"} from its axis
 (\code{stat_flow()} only)}
 }
-The numerical variables are grouped by \code{x} and weighted by \code{weight}. The
-character variable \code{lode} is obtained from \code{alluvium} according to \code{distill}.
+The numerical variables \code{n}, \code{count}, and \code{prop} are calculated after the
+data are grouped by \code{x} and weighted by \code{weight} (in addition to \code{y}).
+The integer variable \code{deposit} is used internally to sort the data before
+calculating heights. The character variable \code{lode} is obtained from
+\code{alluvium} according to \code{distill}.
 }
 
 \section{Package options}{

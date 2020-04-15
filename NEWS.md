@@ -10,6 +10,8 @@ The `lode.ordering` parameter of `stat_alluvium()` has been deprecated. Instead,
 Alluvia within "deposits" are now consistently ordered in positive and negative strata, rather than according to `absolute`. This avoids the "twisting" of flows between strata of different signs. Whereas the orderings of the deposits matter to the stacked-histogram reading of the plot, the orderings of the alluvia should simply maximize its elegance and readability.
 **This will change some plots but will not produce new errors.**
 
+For convenience, the computed variable `deposit`, heretofore internally, is now retained for use with `after_stat()`.
+
 ## Behavior of `lode.ordering`
 
 For consistency with the behavior of `aes.bind`, `stat_alluvium()` now invokes `lode.ordering` together with `lode.guidance`: If the vectors of `lode.ordering` include duplicates, i.e. they do not completely determine an order, then the remaining deposits are used to refine the order. Previously, `lode.ordering` was assumed to consist of permutation vectors, so the two parameters were mutually exclusive.
@@ -19,9 +21,9 @@ Additionally, for consistency with other influences on the lode order, the vecto
 
 ## Computed variables
 
-The alluvial stats now compute four variables for use with `after_stat()`: numeric variables `n`, `count`, and `prop`; and character variable `lode` when the `alluvium` aesthetic is specified. The numerical variables can be weighted using the `weight` aesthetic, which is dropped during computation (so that it does not confuse the geoms), while `lode` is distilled according to a new `distill` parameter.
+The alluvial stats now compute four variables for use with `after_stat()`: numeric variables `n`, `count`, and `prop`; and character variables `lode` (when the `alluvium` aesthetic is specified) and `flow` (when using the flow stat). The numerical variables can be weighted using the `weight` aesthetic, which is dropped during computation (so that it does not confuse the geoms), while `lode` is distilled according to a new `distill` parameter.
 
-These new variables complement the already-computed variable `stratum`. This obviates the need for the `infer.label` parameter, which is deprecated. Its alias, `label.strata`, is now defunct. (The variable `alluvium` is often computed, but it is manipulated to be used by the geom layers and should not be used as an aesthetic.)
+These new variables complement the already-computed variables `stratum` and `deposit`. This obviates the need for the `infer.label` parameter, which is deprecated. Its alias, `label.strata`, is now defunct. (The variable `alluvium` is often computed, but it is manipulated to be used by the geom layers and should not be passed to an aesthetic.)
 
 ## Flow upgrades and extensions
 
