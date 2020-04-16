@@ -7,8 +7,8 @@
 status](https://travis-ci.org/corybrunson/ggalluvial.svg?branch=master)](https://travis-ci.org/corybrunson/ggalluvial)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/ggalluvial)](https://cran.r-project.org/package=ggalluvial)
 
-This is a [**ggplot2** extension](http://www.ggplot2-exts.org/) for
-alluvial plots.
+This is a [**ggplot2** extension](https://exts.ggplot2.tidyverse.org/)
+for alluvial plots.
 
 ## Design
 
@@ -91,7 +91,7 @@ head(titanic_wide)
 ggplot(data = titanic_wide,
        aes(axis1 = Class, axis2 = Sex, axis3 = Age,
            y = Freq)) +
-  scale_x_discrete(limits = c("Class", "Sex", "Age"), expand = c(.1, .05)) +
+  scale_x_discrete(limits = c("Class", "Sex", "Age"), expand = c(.2, .05)) +
   xlab("Demographic") +
   geom_alluvium(aes(fill = Survived)) +
   geom_stratum() +
@@ -156,8 +156,9 @@ support of colleagues at [UConn Health](https://health.uconn.edu/).
 Contributions in any form are more than welcome\! Pretty much every fix
 and feature of this package derives from a problem or question posed by
 someone with datasets or design goals i hadn’t anticipated. See the
-[CONTRIBUTING](CONTRIBUTING.md) file for guidance, and please respect
-the [Code of Conduct](CODE_OF_CONDUCT.md).
+[CONTRIBUTING](https://github.com/corybrunson/ggalluvial/blob/master/CONTRIBUTING.md)
+file for guidance, and please respect the [Code of
+Conduct](https://github.com/corybrunson/ggalluvial/blob/master/CODE_OF_CONDUCT.md).
 
 ### Cite
 

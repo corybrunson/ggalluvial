@@ -166,10 +166,17 @@ These can be used with \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}} t
 \item{count}{cumulative weight of lode}
 \item{prop}{weighted proportion of lode}
 \item{stratum}{value of variable used to define strata}
-\item{lode}{lode label distilled from alluvia}
+\item{deposit}{order in which (signed) strata are deposited}
+\item{lode}{lode label distilled from alluvia
+(\code{stat_alluvium()} and \code{stat_flow()} only)}
+\item{flow}{direction of flow \code{"to"} or \code{"from"} from its axis
+(\code{stat_flow()} only)}
 }
-The numerical variables are grouped by \code{x} and weighted by \code{weight}. The
-character variable \code{lode} is obtained from \code{alluvium} according to \code{distill}.
+The numerical variables \code{n}, \code{count}, and \code{prop} are calculated after the
+data are grouped by \code{x} and weighted by \code{weight} (in addition to \code{y}).
+The integer variable \code{deposit} is used internally to sort the data before
+calculating heights. The character variable \code{lode} is obtained from
+\code{alluvium} according to \code{distill}.
 }
 
 \section{Package options}{
@@ -200,8 +207,8 @@ discontinued. Use \code{y} and \code{cement.alluvia} instead.
 }
 
 \examples{
-# only `stratum` assignment is necessary to generate strata
 data(vaccinations)
+# only `stratum` assignment is necessary to generate strata
 ggplot(vaccinations,
        aes(y = freq,
            x = survey, stratum = response,
@@ -245,14 +252,22 @@ ggplot(merge(vaccinations, survey_dates, by = "survey"),
   stat_stratum(width = 30) +
   labs(x = "Survey date", y = "Number of respondents")
 
-# use negative y values to encode rejection versus acceptance
 admissions <- as.data.frame(UCBAdmissions)
 admissions <- transform(admissions, Count = Freq * (-1) ^ (Admit == "Rejected"))
+# use negative y values to encode rejection versus acceptance
 ggplot(admissions,
        aes(y = Count, axis1 = Dept, axis2 = Gender)) +
   geom_alluvium(aes(fill = Dept), width = 1/12) +
   geom_stratum(width = 1/12, fill = "black", color = "grey") +
   geom_label(stat = "stratum", aes(label = after_stat(stratum)), min.y = 200) +
+  scale_x_discrete(limits = c("Department", "Gender"), expand = c(.05, .05))
+# computed variable 'deposit' indicates order of each signed stratum
+ggplot(admissions,
+       aes(y = Count, axis1 = Dept, axis2 = Gender)) +
+  geom_alluvium(aes(fill = Dept), width = 1/12) +
+  geom_stratum(width = 1/12, fill = "black", color = "grey") +
+  geom_text(stat = "stratum", aes(label = after_stat(deposit)),
+            color = "white") +
   scale_x_discrete(limits = c("Department", "Gender"), expand = c(.05, .05))
 }
 \seealso{
