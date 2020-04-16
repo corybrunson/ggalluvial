@@ -168,10 +168,10 @@ ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
   stat_stratum() +
   stat_flow(aes(fill = class)) +
   stat_flow(geom = "text",
-            aes(label = subject, hjust = after_stat(position) == "front"))
+            aes(label = subject, hjust = after_stat(flow) == "to"))
 ```
 
-The [computed variable](https://ggplot2.tidyverse.org/reference/stat.html) `position` indicates whether each row of the `compute_panel()` output corresponds to the front or back of a flow, and is used to nudge the labels toward their respective flows (to avoid overlap). Mismatches between adjacent labels indicate where lodes are ordered differently on either side of a stratum.
+The [computed variable](https://ggplot2.tidyverse.org/reference/stat.html) `flow` indicates whether each row of the `compute_panel()` output corresponds to a flow _to_ or _from_ its axis; the values are used to nudge the labels toward their respective flows (to avoid overlap). Mismatches between adjacent labels indicate where lodes are ordered differently on either side of a stratum.
 
 ### Lode guidance
 
@@ -256,7 +256,7 @@ ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
   stat_stratum() +
   stat_flow(geom = "text",
             aes(fill = class, label = subject,
-                hjust = after_stat(position) == "front"),
+                hjust = after_stat(flow) == "to"),
             aes.bind = "flows")
 ```
 

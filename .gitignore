@@ -10,8 +10,9 @@ doc
 .RData
 .Rproj.user
 
-# version testing
+# versioning
 revdep
+CRAN-RELEASE
 
 # sandbox
 sandbox

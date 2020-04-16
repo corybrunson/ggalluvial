@@ -209,23 +209,23 @@ StatFlow <- ggproto(
                   alluvium_max *
                   (match(as.character(x), as.character(uniq_x)) - 1),
                 link = match(as.character(x), as.character(uniq_x)),
-                position = I("back")),
+                flow = I("from")),
       transform(data[data$x != ran_x[1], , drop = FALSE],
                 alluvium = alluvium +
                   alluvium_max *
                   (match(as.character(x), as.character(uniq_x)) - 2),
                 link = match(as.character(x), as.character(uniq_x)) - 1,
-                position = I("front"))
+                flow = I("to"))
     )
-    data$position <- factor(data$position, levels = c("back", "front"))
+    data$flow <- factor(data$flow, levels = c("from", "to"))
     
     # flag flows between common pairs of strata and of aesthetics
     # (induces NAs for one-sided flows)
     vars <- c("deposit", "fissure")
     adj_vars <- paste0("adj_", vars)
-    # interactions of link:back:front
+    # interactions of link:from:to
     for (i in seq(vars)) {
-      data <- match_positions(data, vars[i], adj_vars[i])
+      data <- match_flows(data, vars[i], adj_vars[i])
       #data[[adj_vars[i]]] <- xtfrm(data[[adj_vars[i]]])
     }
     # designate these flow pairings the alluvia
@@ -241,7 +241,7 @@ StatFlow <- ggproto(
     # aggregate variables over 'alluvium', 'x', 'yneg', and 'stratum':
     # sum of computed variables and unique-or-bust values of aesthetics
     by_vars <- c("alluvium", "x", "yneg", "stratum",
-                  "deposit", "fissure", "link", "position",
+                  "deposit", "fissure", "link", "flow",
                   "adj_deposit", "adj_fissure")
     only_vars <- c(aesthetics)
     sum_vars <- c("y", "n", "count")
@@ -275,21 +275,20 @@ StatFlow <- ggproto(
       "deposit",
       if (aes.bind == "flows") "adj_fissure",
       "adj_deposit",
-      "alluvium", "position"
+      "alluvium", "flow"
     )
     data <- data[do.call(order, data[, sort_fields]), , drop = FALSE]
     # calculate `y` sums
     data$ycum <- NA
     for (ll in unique(data$link)) {
-      for (ss in unique(data$position)) {
+      for (ss in unique(data$flow)) {
         for (yn in c(FALSE, TRUE)) {
-          ww <- which(data$link == ll & data$position == ss & data$yneg == yn)
+          ww <- which(data$link == ll & data$flow == ss & data$yneg == yn)
           data$ycum[ww] <- cumulate(data$y[ww])
         }
       }
     }
     # calculate y bounds
-    data$deposit <- NULL
     data$fissure <- NULL
     data$adj_deposit <- NULL
     data$adj_fissure <- NULL
@@ -311,10 +310,10 @@ StatFlow <- ggproto(
   }
 )
 
-match_positions <- function(data, var, var_col) {
-  adj <- tidyr::spread_(data[, c("alluvium", "link", "position", var)],
-                        key = "position", value = var)
-  adj[[var_col]] <- interaction(adj$link, adj$back, adj$front, drop = TRUE)
+match_flows <- function(data, var, var_col) {
+  adj <- tidyr::spread_(data[, c("alluvium", "link", "flow", var)],
+                        key = "flow", value = var)
+  adj[[var_col]] <- interaction(adj$link, adj$from, adj$to, drop = TRUE)
   merge(data,
         adj[, c("alluvium", var_col)],
         by = "alluvium", all.x = TRUE, all.y = FALSE)

@@ -1,5 +1,5 @@
-# only `stratum` assignment is necessary to generate strata
 data(vaccinations)
+# only `stratum` assignment is necessary to generate strata
 ggplot(vaccinations,
        aes(y = freq,
            x = survey, stratum = response,
@@ -43,12 +43,20 @@ ggplot(merge(vaccinations, survey_dates, by = "survey"),
   stat_stratum(width = 30) +
   labs(x = "Survey date", y = "Number of respondents")
 
-# use negative y values to encode rejection versus acceptance
 admissions <- as.data.frame(UCBAdmissions)
 admissions <- transform(admissions, Count = Freq * (-1) ^ (Admit == "Rejected"))
+# use negative y values to encode rejection versus acceptance
 ggplot(admissions,
        aes(y = Count, axis1 = Dept, axis2 = Gender)) +
   geom_alluvium(aes(fill = Dept), width = 1/12) +
   geom_stratum(width = 1/12, fill = "black", color = "grey") +
   geom_label(stat = "stratum", aes(label = after_stat(stratum)), min.y = 200) +
+  scale_x_discrete(limits = c("Department", "Gender"), expand = c(.05, .05))
+# computed variable 'deposit' indicates order of each signed stratum
+ggplot(admissions,
+       aes(y = Count, axis1 = Dept, axis2 = Gender)) +
+  geom_alluvium(aes(fill = Dept), width = 1/12) +
+  geom_stratum(width = 1/12, fill = "black", color = "grey") +
+  geom_text(stat = "stratum", aes(label = after_stat(deposit)),
+            color = "white") +
   scale_x_discrete(limits = c("Department", "Gender"), expand = c(.05, .05))
