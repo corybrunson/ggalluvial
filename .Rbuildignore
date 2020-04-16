@@ -15,6 +15,7 @@
 README.Rmd
 ^.*\.Rproj$
 ^\.Rproj\.user$
+LICENSE
 CONTRIBUTING.md
 CODE_OF_CONDUCT.md
 
