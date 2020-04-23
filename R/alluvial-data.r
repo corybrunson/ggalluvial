@@ -85,7 +85,8 @@ is_lodes_form <- function(data,
   id_var <- vars_pull(names(data), !! rlang::enquo(id))
   
   if (any(duplicated(cbind(data[c(key_var, id_var)])))) {
-    if (! silent) warning("Duplicated id-axis pairings.")
+    if (! silent) message("Duplicated id-axis pairings.")
+    return(if (logical) FALSE else "none")
   }
   
   n_pairs <-
