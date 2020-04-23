@@ -86,6 +86,7 @@ is_lodes_form <- function(data,
   
   if (any(duplicated(cbind(data[c(id_var, key_var)])))) {
     if (! silent) warning("Some id-key (alluvium-axis) pairs are duplicated.")
+    return(FALSE)
   }
   
   n_pairs <- dplyr::n_distinct(data[key_var]) * dplyr::n_distinct(data[id_var])
@@ -122,7 +123,8 @@ is_lodes_form_old <- function(data,
   id_var <- vars_pull(names(data), !! enquo(id))
   
   if (any(duplicated(cbind(data[c(key_var, id_var)])))) {
-    if (! silent) warning("Duplicated id-axis pairings.")
+    if (! silent) message("Duplicated id-axis pairings.")
+    return(if (logical) FALSE else "none")
   }
   
   n_pairs <-
