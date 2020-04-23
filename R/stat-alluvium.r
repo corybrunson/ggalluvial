@@ -246,8 +246,7 @@ StatAlluvium <- ggproto(
       
       # -+- need to stop depending on 'group' and 'PANEL' -+-
       only_vars <- intersect(c(diff_aes, "group", "PANEL"), names(data))
-      bind_vars <- intersect(c("yneg", "stratum", only_vars, "group", "PANEL"),
-                             names(data))
+      bind_vars <- intersect(c("yneg", "stratum", only_vars), names(data))
       sum_vars <- c("y", "n", "count")
       
       # interaction of all variables to aggregate over (without dropping NAs)
