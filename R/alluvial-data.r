@@ -121,6 +121,7 @@ is_lodes_form <- function(data,
   
   if (any(duplicated(cbind(data[c(alluv_var, axis_var)])))) {
     if (! silent) warning("Some id-key (alluvium-axis) pairs are duplicated.")
+    return(FALSE)
   }
   
   n_pairs <-
