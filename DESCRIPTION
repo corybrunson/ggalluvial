@@ -38,6 +38,7 @@ Suggests:
     ggfittext (>= 0.6),
     vdiffr (>= 0.2)
 License: GPL-3
+LazyData: true
 URL: http://corybrunson.github.io/ggalluvial/
 BugReports: https://github.com/corybrunson/ggalluvial/issues
 VignetteBuilder: knitr
