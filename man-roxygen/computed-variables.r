@@ -2,14 +2,14 @@
 #' These can be used with [ggplot2::after_stat()] to [control aesthetic
 #' evaluation](https://ggplot2.tidyverse.org/reference/aes_eval.html).
 #' \describe{
-#'   \item{`n``}{number of cases in lode}
-#'   \item{`count``}{cumulative weight of lode}
-#'   \item{`prop``}{weighted proportion of lode}
-#'   \item{`stratum``}{value of variable used to define strata}
-#'   \item{`deposit``}{order in which (signed) strata are deposited}
-#'   \item{`lode``}{lode label distilled from alluvia
+#'   \item{`n`}{number of cases in lode}
+#'   \item{`count`}{cumulative weight of lode}
+#'   \item{`prop`}{weighted proportion of lode}
+#'   \item{`stratum`}{value of variable used to define strata}
+#'   \item{`deposit`}{order in which (signed) strata are deposited}
+#'   \item{`lode`}{lode label distilled from alluvia
 #'                 (`stat_alluvium()` and `stat_flow()` only)}
-#'   \item{`flow``}{direction of flow `"to"` or `"from"` from its axis
+#'   \item{`flow`}{direction of flow `"to"` or `"from"` from its axis
 #'                 (`stat_flow()` only)}
 #' }
 
