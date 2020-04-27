@@ -162,21 +162,10 @@ observations within each (and are otherwise assigned \code{NA}).
 
 These can be used with \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}} to \href{https://ggplot2.tidyverse.org/reference/aes_eval.html}{control aesthetic evaluation}.
 \describe{
-\item{n}{number of cases in lode}
-\item{count}{cumulative weight of lode}
-\item{prop}{weighted proportion of lode}
-\item{stratum}{value of variable used to define strata}
-\item{deposit}{order in which (signed) strata are deposited}
-\item{lode}{lode label distilled from alluvia
+\item{\verb{n``\}\{number of cases in lode\} \\item\{}count\verb{\}\{cumulative weight of lode\} \\item\{`prop}}{weighted proportion of lode}
+\item{\verb{stratum``\}\{value of variable used to define strata\} \\item\{}deposit\verb{\}\{order in which (signed) strata are deposited\} \\item\{`lode}}{lode label distilled from alluvia
 (\code{stat_alluvium()} and \code{stat_flow()} only)}
-\item{flow}{direction of flow \code{"to"} or \code{"from"} from its axis
-(\code{stat_flow()} only)}
-}
-The numerical variables \code{n}, \code{count}, and \code{prop} are calculated after the
-data are grouped by \code{x} and weighted by \code{weight} (in addition to \code{y}).
-The integer variable \code{deposit} is used internally to sort the data before
-calculating heights. The character variable \code{lode} is obtained from
-\code{alluvium} according to \code{distill}.
+\item{\verb{flow``\}\{direction of flow }"to"\code{or}"from"\verb{ from its axis (}stat_flow()\verb{only)\} \} The numerical variables}n\verb{, }count\verb{, and }prop\verb{are calculated after the data are grouped by}x\verb{and weighted by}weight\verb{(in addition to}y\verb{). The integer variable }deposit\verb{is used internally to sort the data before calculating heights. The character variable}lode\verb{is obtained from}alluvium\verb{according to}distill`.
 }
 
 \section{Package options}{
