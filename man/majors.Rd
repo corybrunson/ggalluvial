@@ -2,11 +2,18 @@
 % Please edit documentation in R/data.r
 \name{majors}
 \alias{majors}
-\title{Student curricula across semesters}
+\title{Students' declared majors across several semesters}
 \format{
-An alluvial data frame in lodes form.
+A data frame with 80 rows and 3 variables:
+\describe{
+\item{\code{student}}{student identifier}
+\item{\code{semester}}{character tag for odd-numbered semesters}
+\item{\code{curriculum}}{declared major program}
+}
 }
 \description{
 This data set follows the major curricula of 10 students across 8 academic
-semesters. The data were kindly contributed by Dario Bonaretti.
+semesters. Missing values indicate undeclared majors. The data were kindly
+contributed by Dario Bonaretti.
 }
+\keyword{datasets}

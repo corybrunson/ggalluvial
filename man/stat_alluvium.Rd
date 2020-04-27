@@ -257,9 +257,8 @@ lode_custom <- function(n, i) {
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
                aes.bind = TRUE, lode.guidance = lode_custom)
 
-data(majors)
 # omit missing elements & reverse the `y` axis
-ggplot(majors,
+ggplot(ggalluvial::majors,
        aes(x = semester, stratum = curriculum, alluvium = student, y = 1)) +
   geom_alluvium(fill = "darkgrey", na.rm = TRUE) +
   geom_stratum(aes(fill = curriculum), color = NA, na.rm = TRUE) +
@@ -267,7 +266,7 @@ ggplot(majors,
   scale_y_reverse()
 
 # alluvium cementation examples
-gg <- ggplot(majors,
+gg <- ggplot(ggalluvial::majors,
              aes(x = semester, stratum = curriculum, alluvium = student,
                  fill = curriculum)) +
   geom_stratum()
