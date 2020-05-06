@@ -6,6 +6,7 @@
 [![Travis build
 status](https://travis-ci.org/corybrunson/ggalluvial.svg?branch=master)](https://travis-ci.org/corybrunson/ggalluvial)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/ggalluvial)](https://cran.r-project.org/package=ggalluvial)
+[![JOSS](https://joss.theoj.org/papers/2a38fbb08d94994145d01c370f243723/status.svg)](https://joss.theoj.org/papers/2a38fbb08d94994145d01c370f243723)
 
 This is a [**ggplot2** extension](https://exts.ggplot2.tidyverse.org/)
 for alluvial plots.
@@ -47,7 +48,8 @@ The [cran branch](https://github.com/corybrunson/ggalluvial/tree/cran)
 will contain the version most recently submitted to
 [CRAN](https://cran.r-project.org/package=ggalluvial).
 
-The development version can be installed from GitHub:
+The development version can be installed from
+GitHub:
 
 ``` r
 remotes::install_github("corybrunson/ggalluvial", build_vignettes = TRUE)
