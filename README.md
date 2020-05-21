@@ -3,8 +3,9 @@
 
 # ggalluvial
 
-[![Travis](https://travis-ci.org/corybrunson/ggalluvial.svg?branch=master)](https://travis-ci.org/corybrunson/ggalluvial)
-[![CRAN](http://www.r-pkg.org/badges/version/ggalluvial)](https://cran.r-project.org/package=ggalluvial)
+[![Travis build
+status](https://travis-ci.org/corybrunson/ggalluvial.svg?branch=master)](https://travis-ci.org/corybrunson/ggalluvial)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/ggalluvial)](https://cran.r-project.org/package=ggalluvial)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3836748.svg)](https://doi.org/10.5281/zenodo.3836748)
 [![JOSS](https://joss.theoj.org/papers/2a38fbb08d94994145d01c370f243723/status.svg)](https://joss.theoj.org/papers/2a38fbb08d94994145d01c370f243723)
 
