@@ -239,9 +239,8 @@ StatStratum <- ggproto(
     data <- deposit_data(data, decreasing, reverse, absolute)
     
     # calculate variables for `after_stat()`
-    x_counts <- tapply(abs(data$count), data$x, sum, na.rm = TRUE)
-    data$prop <-
-      data$count / x_counts[match(as.character(data$x), names(x_counts))]
+    x_sums <- tapply(abs(data$count), data$x, sum, na.rm = TRUE)
+    data$prop <- data$count / x_sums[match(as.character(data$x), names(x_sums))]
     
     # sort data in preparation for `y` sums
     data <- data[with(data, order(deposit)), , drop = FALSE]

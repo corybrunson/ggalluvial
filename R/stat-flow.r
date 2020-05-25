@@ -265,9 +265,8 @@ StatFlow <- ggproto(
     data$group <- data$alluvium
     
     # calculate variables for `after_stat()`
-    x_counts <- tapply(abs(data$count), data$x, sum, na.rm = TRUE)
-    data$prop <-
-      data$count / x_counts[match(as.character(data$x), names(x_counts))]
+    x_sums <- tapply(abs(data$count), data$x, sum, na.rm = TRUE)
+    data$prop <- data$count / x_sums[match(as.character(data$x), names(x_sums))]
     
     # sort data in preparation for `y` sums
     sort_fields <- c(
