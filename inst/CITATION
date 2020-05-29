@@ -1,8 +1,8 @@
-citation("ggalluvial", auto = TRUE)
-
 citEntry(
+  header = gettextf("To cite package %s in publications, use:",
+                    sQuote("ggalluvial")),
   entry = "Article",
-  title = "ggalluvial: Layered Grammar for Alluvial Plots",
+  title = "{ggalluvial}: Layered Grammar for Alluvial Plots",
   author = "Jason Cory Brunson",
   year = "2020",
   journal = "Journal of Open Source Software",
@@ -15,6 +15,5 @@ citEntry(
     "ggalluvial: Layered Grammar for Alluvial Plots.",
     "Journal of Open Source Software, 5(49), 2017,",
     "https://doi.org/10.21105/joss.02017"
-  ),
-  header = "To cite alluvial plots as implemented in 'ggalluvial':"
+  )
 )
