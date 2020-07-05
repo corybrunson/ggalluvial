@@ -30,13 +30,8 @@ ggplot(vaccinations,
   geom_text(stat = "stratum", min.y = 100)
 
 # date-valued axis variables
-survey_dates <- data.frame(
-  survey = levels(vaccinations$survey),
-  start = as.Date(c("2010-09-22", "2015-06-04", "2016-09-27")),
-  end = as.Date(c("2010-10-25", "2015-10-05", "2016-10-25"))
-)
-ggplot(merge(vaccinations, survey_dates, by = "survey"),
-       aes(x = end, y = freq, stratum = response, alluvium = subject,
+ggplot(vaccinations,
+       aes(x = end_date, y = freq, stratum = response, alluvium = subject,
            fill = response)) +
   stat_alluvium(geom = "flow", lode.guidance = "forward",
                 width = 30) +

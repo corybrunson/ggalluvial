@@ -1,6 +1,12 @@
 
 # next version
 
+## Data sets
+
+Both installed data sets, `vaccinations` and `majors`, are better documented.
+
+The `a` field of `vaccinations` (the within-survey fraction of respondents, which can be computed from the other fields) has been removed, and the new `start_date` and `end_date` fields (`Date`s, obtained from the ALP website) has been added.
+
 ## Warning and error messages
 
 The following changes broke no examples or tests but could change behavior in rare cases:
@@ -28,7 +34,7 @@ Alluvia within "deposits" are now consistently ordered in positive and negative 
 
 ## Computed variables
 
-The alluvial stats now compute four variables for use with `after_stat()`: numeric variables `n`, `count`, and `prop`; and character variables `lode` (when the `alluvium` aesthetic is specified) and `flow` (when using the flow stat). The numerical variables can be weighted using the `weight` aesthetic, which is dropped during computation (so that it does not confuse the geoms), while `lode` is distilled according to a new `distill` parameter.
+The alluvial stats now compute four variables for use with `after_stat()`: numeric variables `n`, `count`, and `prop`; and character variables `lode` (when the `alluvium` aesthetic is specified) and `flow` (when using the flow stat). The numerical variables can be weighted using the `weight` aesthetic, which is dropped during computation (so that it does not confuse the geoms), while `lode` is distilled according to a new `distill` parameter. This use of `weight` may cause confusion with its use by the `is_*_form()` functions until they are upgraded in the next version.
 
 These new variables complement the already-computed but heretofore undocumented variables `stratum` and `deposit`. `stratum` obviates the need for the `infer.label` parameter, which is deprecated. Its alias, `label.strata`, is now defunct. (The variable `alluvium` is often computed, but it is manipulated to be used by the geom layers and should not be passed to an aesthetic.) `deposit` takes contiguous integer values forward along the axes and upward along the (signed) strata at each axis.
 
