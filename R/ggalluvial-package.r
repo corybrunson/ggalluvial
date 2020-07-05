@@ -19,7 +19,6 @@ op.ggalluvial <- list(
   ggalluvial.absolute = TRUE,
   ggalluvial.cement.alluvia = FALSE,
   ggalluvial.lode.guidance = "zigzag",
-  ggalluvial.lode.ordering = NULL,
   ggalluvial.aes.bind = "none"
 )
 

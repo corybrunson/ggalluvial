@@ -85,7 +85,7 @@ of \code{id}. Alternatively, a function (or its name) to be used to distill
 each such variable to a single value. In addition to existing functions,
 \code{distill} accepts the character values \code{"first"} (used if
 \code{distill} is \code{TRUE}), \code{"last"}, and \code{"most"} (which
-returns the modal value).}
+returns the first modal value).}
 }
 \description{
 Alluvial plots consist of multiple horizontally-distributed columns (axes)
@@ -172,11 +172,11 @@ gg <- ggplot(majors_alluvia,
 gg +
   geom_alluvium(aes(fill = as.factor(student)), width = 2/5, discern = TRUE) +
   geom_stratum(width = 2/5, discern = TRUE) +
-  geom_text(stat = "stratum", discern = TRUE, infer.label = TRUE)
+  geom_text(stat = "stratum", discern = TRUE, aes(label = after_stat(stratum)))
 gg +
   geom_alluvium(aes(fill = as.factor(student)), width = 2/5, discern = FALSE) +
   geom_stratum(width = 2/5, discern = FALSE) +
-  geom_text(stat = "stratum", discern = FALSE, infer.label = TRUE)
+  geom_text(stat = "stratum", discern = FALSE, aes(label = after_stat(stratum)))
 # warning when inappropriate
 ggplot(majors[majors$semester \%in\% paste0("CURR", c(1, 7, 13)), ],
        aes(x = semester, stratum = curriculum, alluvium = student,

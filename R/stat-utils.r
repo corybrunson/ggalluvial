@@ -15,7 +15,7 @@ get_alluvial_type <- function(data) {
   if (!is.null(data$x) | !is.null(data$stratum) | !is.null(data$alluvium)) {
     if (is.null(data$x) | is.null(data$stratum) | is.null(data$alluvium)) {
       stop("Parameters `x`, `stratum`, and `alluvium` are required ",
-           "for data in lode form.")
+           "for data in lodes form.")
     }
     if (is_lodes_form(data,
                       key = "x", value = "stratum", id = "alluvium",
@@ -98,6 +98,15 @@ cumulate <- function(x) {
     cumsum(x) - x / 2
   } else {
     rev(cumsum(rev(x)) - rev(x) / 2)
+  }
+}
+
+# choose a function via the `cement` parameter
+distill_fun <- function(distill) {
+  if (is.function(distill)) {
+    return(distill)
+  } else {
+    return(get(distill))
   }
 }
 

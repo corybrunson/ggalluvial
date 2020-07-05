@@ -6,29 +6,25 @@ ggplot(as.data.frame(Titanic),
   stat_stratum(geom = "errorbar") +
   geom_line(stat = "alluvium") +
   stat_alluvium(geom = "pointrange") +
-  geom_text(stat = "stratum", infer.label = TRUE) +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 
 # lode ordering examples
 gg <- ggplot(as.data.frame(Titanic),
              aes(y = Freq,
                  axis1 = Class, axis2 = Sex, axis3 = Age)) +
-  geom_stratum() + geom_text(stat = "stratum", infer.label = TRUE) +
+  geom_stratum() +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 # use of lode controls
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
                lode.guidance = "forward")
 # prioritize aesthetic binding
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
-               aes.bind = TRUE, lode.guidance = "forward")
-# use of lode ordering
-lode_ord <- replicate(n = 3, expr = sample(x = 32), simplify = FALSE)
-print(lode_ord)
-gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
-               lode.ordering = lode_ord)
-# fixed lode ordering across axes
-gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
-               lode.ordering = lode_ord[[1]])
+               aes.bind = "alluvia", lode.guidance = "forward")
+# use of custom lode order
+gg + geom_flow(aes(fill = Survived, alpha = Sex, order = sample(x = 32)),
+               stat = "alluvium")
 # use of custom luide guidance function
 lode_custom <- function(n, i) {
   stopifnot(n == 3)
@@ -40,11 +36,10 @@ lode_custom <- function(n, i) {
   )
 }
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
-               aes.bind = TRUE, lode.guidance = lode_custom)
+               aes.bind = "flow", lode.guidance = lode_custom)
 
-data(majors)
 # omit missing elements & reverse the `y` axis
-ggplot(majors,
+ggplot(ggalluvial::majors,
        aes(x = semester, stratum = curriculum, alluvium = student, y = 1)) +
   geom_alluvium(fill = "darkgrey", na.rm = TRUE) +
   geom_stratum(aes(fill = curriculum), color = NA, na.rm = TRUE) +
@@ -52,34 +47,24 @@ ggplot(majors,
   scale_y_reverse()
 
 # alluvium cementation examples
-gg <- ggplot(majors,
+gg <- ggplot(ggalluvial::majors,
              aes(x = semester, stratum = curriculum, alluvium = student,
                  fill = curriculum)) +
   geom_stratum()
 # diagram with outlined alluvia and labels
 gg + geom_flow(stat = "alluvium", color = "black") +
-  geom_text(aes(label = as.integer(student)), stat = "alluvium")
-# cemented diagram with default label cementation
+  geom_text(aes(label = after_stat(lode)), stat = "alluvium")
+# cemented diagram with default distillation (first most common alluvium)
 gg +
   geom_flow(stat = "alluvium", color = "black", cement.alluvia = TRUE) +
-  geom_text(aes(label = as.integer(student)), stat = "alluvium",
+  geom_text(aes(label = after_stat(lode)), stat = "alluvium",
             cement.alluvia = TRUE)
-# cemented diagram with custom label cementation
+# cemented diagram with custom label distillation
 gg +
   geom_flow(stat = "alluvium", color = "black", cement.alluvia = TRUE) +
-  geom_text(aes(label = as.integer(student)), stat = "alluvium",
-            cement.alluvia = function(x) paste(x, collapse = "; "))
-
-# irregular spacing between axes of a continuous variable
-data(Refugees, package = "alluvial")
-refugees_sub <- subset(Refugees, year %in% c(2003, 2005, 2010, 2013))
-ggplot(data = refugees_sub,
-       aes(x = year, y = refugees, alluvium = country)) +
-  geom_alluvium(aes(fill = country),
-                alpha = .75, decreasing = FALSE, knot.pos = 1) +
-  geom_stratum(aes(stratum = country), decreasing = FALSE, width = 1/2) +
-  theme_bw() +
-  scale_fill_brewer(type = "qual", palette = "Set3")
+  geom_text(aes(label = after_stat(lode)), stat = "alluvium",
+            cement.alluvia = TRUE,
+            distill = function(x) paste(x, collapse = "; "))
 
 \dontrun{
 data(babynames, package = "babynames")
@@ -109,6 +94,7 @@ ggplot(subset(titanic, Class != "Crew"),
        aes(axis1 = Class, axis2 = Sex, axis3 = Age, y = Lives)) +
   geom_alluvium(aes(alpha = Survived, fill = Class), absolute = FALSE) +
   geom_stratum(absolute = FALSE) +
-  geom_text(stat = "stratum", infer.label = TRUE, absolute = FALSE) +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum)),
+            absolute = FALSE) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"), expand = c(.1, .05)) +
   scale_alpha_discrete(range = c(.25, .75), guide = FALSE)

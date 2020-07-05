@@ -1,7 +1,53 @@
 
-# next version (v1.0.0?)
+# ggalluvial 0.12.0
+
+## Data sets
+
+Both installed data sets, `vaccinations` and `majors`, are better documented.
+
+The `a` field of `vaccinations` (the within-survey fraction of respondents, which can be computed from the other fields) has been removed, and the `start_date` and `end_date` fields (`Date`s, obtained from the ALP website) have been added.
+
+## Warning and error messages
+
+The following changes broke no examples or tests but could change behavior in rare cases:
+
+* `is_lodes_form()` now returns `FALSE` if any axis-alluvium pairs are duplicated, and throws the previous warning as a message. This should be more helpful than the previous behavior of suppressing the warning and leaving `tidyr::gather()` to throw an error referring to rows of the already-transformed internal data.
+* Default aesthetic specifications `stratum = NULL` and `alluvium = NULL` have been added to the stats. This prevents the "unknown aesthetics" warnings that print when these aesthetics are passed to layers rather than to the plot initialization.
+
+## Ordering of lodes/alluvia
+
+### Behavior of `lode.ordering`
+
+For consistency with the behavior of `aes.bind`, `stat_alluvium()` now invokes `lode.ordering` together with `lode.guidance`: If the vectors of `lode.ordering` include duplicates, i.e. they do not completely determine an order, then the remaining deposits are used to refine the order. Previously, `lode.ordering` was assumed to consist of permutation vectors, so the two parameters were mutually exclusive.
+
+Additionally, for consistency with other influences on the lode order, the vectors of `lode.ordering` are reversed if `reverse = TRUE` (the default).
+**This will change some plots but will not produce new errors.**
+
+### Controlling lode order before guidance and aesthetics
+
+The `lode.ordering` parameter of `stat_alluvium()` has been deprecated. Instead, the new `order` aesthetic gives priority to its argument over the differentiation aesthetics in arranging the lodes within each stratum, without producing graphical artifacts. This aesthetic can also be used in `stat_flow()`.
+
+### Order of alluvia in negative strata
+
+Alluvia within "deposits" are now consistently ordered in positive and negative strata, rather than according to `absolute`. This avoids the "twisting" of flows between strata of different signs. Whereas the orderings of the deposits matter to the stacked-histogram reading of the plot, the orderings of the alluvia should simply maximize its elegance and readability.
+**This will change some plots but will not produce new errors.**
+
+## Computed variables
+
+The alluvial stats now compute four variables for use with `after_stat()`: numeric variables `n`, `count`, and `prop`; and character variables `lode` (when the `alluvium` aesthetic is specified) and `flow` (when using the flow stat). The numerical variables can be weighted using the `weight` aesthetic, which is dropped during computation (so that it does not confuse the geoms), while `lode` is distilled according to a new `distill` parameter. This use of `weight` may cause confusion with its use by the `is_*_form()` functions until they are upgraded in the next version.
+
+These new variables complement the already-computed but heretofore undocumented variables `stratum` and `deposit`. `stratum` obviates the need for the `infer.label` parameter, which is deprecated. Its alias, `label.strata`, is now defunct. (The variable `alluvium` is often computed, but it is manipulated to be used by the geom layers and should not be passed to an aesthetic.) `deposit` takes contiguous integer values forward along the axes and upward along the (signed) strata at each axis.
+
+## Flow upgrades and extensions
+
+The `knot.pos` parameter of `geom_alluvium()` and `geom_flow()` is now interpreted as a proportion of the total length of each flow, i.e. of the gap between adjacent strata (_not_ axes). This means that values will vary with axis positions and stratum widths. Setting the new `knot.prop` parameter to `FALSE` prevents this by interpreting `knot.pos` as a constant value in the `x` direction.
+
+These flows are rendered using `grid::xsplineGrob()` with four control points each: the endpoints and the two knots.
+To complement them, several other curves are now available: linear (equivalent to `knot.pos = 0`), cubic, quintic, sinusoidal, arctangent, and sigmoid, summoned by the new `curve` parameter (which defaults to the x-spline). (The asymptotic functions, arctangent and sigmoid, are compressed according to the new `reach` parameter.) The new curves are rendered piecewise linearly, with resolution controlled by the new `segments` parameter (similar to `ggplot2::stat_ellipse()`).
 
 # ggalluvial 0.11.3
+
+## Dependencies
 
 In response to **ggplot2** v3.2.0, which removes the **plyr** dependency, the dependency has been removed from **ggalluvial** as well.
 

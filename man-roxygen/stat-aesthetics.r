@@ -12,16 +12,29 @@
 #' aesthetics:
 #'
 #' - `y`
+#' - `weight`
+#' - `order`
 #' - `group`
 #' - `label`
 #'
-#' `y` controls the heights of the alluvia
+
+#' `y` controls the heights of the alluvia,
 #' and may be aggregated across equivalent observations.
+
+#' `weight` applies to the computed variables (see that section below)
+#' but does not affect the positional aesthetics.
+
+#' `order`, recognized by `stat_alluvium()` and `stat_flow()`, is used to
+#' arrange the lodes within each stratum. It tolerates duplicates and takes
+#' precedence over the differentiation aesthetics (when `aes.bind` is not
+#' `"none"`) and lode guidance with respect to the remaining axes. (It replaces
+#' the deprecated parameter `lode.ordering`.)
+
 #' `group` is used internally; arguments are ignored.
+
 #' `label` is used to label the strata or lodes and must take a unique value
 #' across the observations within each stratum or lode.
-#' Often the same variable will be passed to `label` as to the corresponding
-#' alluvial aesthetic (`stratum` or `alluvium`).
+
 #' 
 #' These and any other aesthetics are aggregated as follows:
 #' Numeric aesthetics, including `y`, are summed.

@@ -64,7 +64,7 @@ As the examples in the next section will demonstrate, which of these elements ar
 
 ### Alluvia (wide) format
 
-The wide format reflects the visual arrangement of an alluvial plot, but "untwisted": Each row corresponds to a cohort of observations that take a specific value at each variable, and each variable has its own column. An additional column contains the weight of each row, e.g. the number of observational units in the cohort, which may be used to control the heights of the strata.[^weight-y] Basically, the wide format consists of _one row per alluvium_. This is the format into which the base function `as.data.frame()` transforms a frequency table, for instance the 3-dimensional `UCBAdmissions` dataset:
+The wide format reflects the visual arrangement of an alluvial plot, but "untwisted": Each row corresponds to a cohort of observations that take a specific value at each variable, and each variable has its own column. An additional column contains the quantity of each row, e.g. the number of observational units in the cohort, which may be used to control the heights of the strata.[^weight-y] Basically, the wide format consists of _one row per alluvium_. This is the format into which the base function `as.data.frame()` transforms a frequency table, for instance the 3-dimensional `UCBAdmissions` dataset:
 
 ```{r alluvia format of Berkeley admissions dataset}
 head(as.data.frame(UCBAdmissions), n = 12)
@@ -78,13 +78,13 @@ ggplot(as.data.frame(UCBAdmissions),
        aes(y = Freq, axis1 = Gender, axis2 = Dept)) +
   geom_alluvium(aes(fill = Admit), width = 1/12) +
   geom_stratum(width = 1/12, fill = "black", color = "grey") +
-  geom_label(stat = "stratum", infer.label = TRUE) +
+  geom_label(stat = "stratum", aes(label = after_stat(stratum))) +
   scale_x_discrete(limits = c("Gender", "Dept"), expand = c(.05, .05)) +
   scale_fill_brewer(type = "qual", palette = "Set1") +
   ggtitle("UC Berkeley admissions and rejections, by sex and department")
 ```
 
-An important feature of these plots is the meaningfulness of the vertical axis: No gaps are inserted between the strata, so the total height of the plot reflects the cumulative weight of the observations. The plots produced by **ggalluvial** conform (somewhat; keep reading) to the "grammar of graphics" principles of **ggplot2**, and this prevents users from producing "free-floating" visualizations like the Sankey diagrams showcased [here](https://developers.google.com/chart/interactive/docs/gallery/sankey).[^ggforce]
+An important feature of these plots is the meaningfulness of the vertical axis: No gaps are inserted between the strata, so the total height of the plot reflects the cumulative quantity of the observations. The plots produced by **ggalluvial** conform (somewhat; keep reading) to the "grammar of graphics" principles of **ggplot2**, and this prevents users from producing "free-floating" visualizations like the Sankey diagrams showcased [here](https://developers.google.com/chart/interactive/docs/gallery/sankey).[^ggforce]
 **ggalluvial** parameters and existing **ggplot2** functionality can also produce [parallel sets](https://eagereyes.org/parallel-sets) plots, illustrated here using the `Titanic` dataset:[^ggparallel]
 
 [^ggforce]: [The **ggforce** package](https://github.com/thomasp85/ggforce) includes parallel set geom and stat layers to produce similar diagrams that can be allowed to free-float.
@@ -98,7 +98,8 @@ ggplot(as.data.frame(Titanic),
                 width = 0, knot.pos = 0, reverse = FALSE) +
   guides(fill = FALSE) +
   geom_stratum(width = 1/8, reverse = FALSE) +
-  geom_text(stat = "stratum", infer.label = TRUE, reverse = FALSE) +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum)),
+            reverse = FALSE) +
   scale_x_continuous(breaks = 1:3, labels = c("Survived", "Sex", "Class")) +
   coord_flip() +
   ggtitle("Titanic survival by class and sex")
@@ -108,7 +109,7 @@ This format and functionality are useful for many applications and will be retai
 
 - The `axis[0-9]*` position aesthetics are non-standard: they are not an explicit set of parameters but a family based on a regular expression pattern; and at least one, but no specific one, is required.
 - `stat_alluvium()` ignores any argument to the `group` aesthetic; instead, `StatAlluvium$compute_panel()` uses `group` to link the rows of the internally-transformed dataset that correspond to the same alluvium.
-- The `infer.label` parameter instructs `stat_stratum()` (called by `geom_text()`) to take the values of the axis variables as labels.
+- The `stratum` variable produced by `stat_stratum()` (called by `geom_text()`) is not available before the statistical transformation is performed and must be recovered using `after_stat()`.
 - The horizontal axis must be manually corrected (using `scale_x_discrete()` or `scale_x_continuous()`) to reflect the implicit categorical variable identifying the axis.
 
 Furthermore, format aesthetics like `fill` are necessarily fixed for each alluvium; they cannot, for example, change from axis to axis according to the value taken at each. This means that, although they can reproduce the branching-tree structure of parallel sets, this format and functionality cannot produce alluvial plots with the color schemes featured [here](https://epijim.uk/code-snippets/eq5d/) ("Alluvial diagram") and [here](https://developers.google.com/chart/interactive/docs/gallery/sankey) ("Controlling colors"), which are "reset" at each axis.
@@ -215,4 +216,4 @@ This plot ignores any continuity between the flows between axes. This "memoryles
 sessioninfo::session_info()
 ```
 
-[^weight-y]: Previously, weights were passed to the `weight` aesthetic rather than to `y`. This prevented `scale_y_continuous()` from correctly transforming scales, and anyway it was inconsistent with the behavior of `geom_bar()`.
+[^weight-y]: Previously, quantities were passed to the `weight` aesthetic rather than to `y`. This prevented `scale_y_continuous()` from correctly transforming scales, and anyway it was inconsistent with the behavior of `geom_bar()`. As of version 0.12.0, `weight` is an optional parameter used only by computed variables intended for labeling, not by polygonal graphical elements.

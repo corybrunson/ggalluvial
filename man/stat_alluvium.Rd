@@ -17,7 +17,7 @@ stat_alluvium(
   aggregate.y = NULL,
   cement.alluvia = ggalluvial_opt("cement.alluvia"),
   lode.guidance = ggalluvial_opt("lode.guidance"),
-  lode.ordering = ggalluvial_opt("lode.ordering"),
+  lode.ordering = NULL,
   aes.bind = ggalluvial_opt("aes.bind"),
   infer.label = FALSE,
   min.y = NULL,
@@ -80,23 +80,22 @@ treated as negative (will ignore missing values with a warning).}
 \item{aggregate.y}{Deprecated alias for \code{cement.alluvia}.}
 
 \item{cement.alluvia}{Logical value indicating whether to aggregate \code{y}
-values over equivalent alluvia before computing lode and flow positions.
-Alternatively, a function (or its name) to combine the labels (if any) of
-equivalent alluvia, similar to the \code{distill} parameter of
-\code{\link[=to_alluvia_form]{to_alluvia_form()}}). If set to \code{TRUE}, defaults to function
-\verb{[dplyr::first()]}.}
+values over equivalent alluvia before computing lode and flow positions.}
 
 \item{lode.guidance}{The function to prioritize the axis variables for
 ordering the lodes within each stratum, or else a character string
 identifying the function. Character options are "zigzag", "frontback",
 "backfront", "forward", and "backward" (see \code{\link{lode-guidance-functions}}).}
 
-\item{lode.ordering}{A list (of length the number of axes) of integer vectors
-(each of length the number of rows of \code{data}) or NULL entries (indicating
-no imposed ordering), or else a numeric matrix of corresponding dimensions,
-giving the preferred ordering of alluvia at each axis. This will be used to
-order the lodes within each stratum by sorting the lodes first by stratum
-and then by the provided vectors.}
+\item{lode.ordering}{\strong{Deprecated in favor of the \code{order} aesthetic.} A list
+(of length the number of axes) of integer vectors (each of length the
+number of rows of \code{data}) or NULL entries (indicating no imposed ordering),
+or else a numeric matrix of corresponding dimensions, giving the preferred
+ordering of alluvia at each axis. This will be used to order the lodes
+within each stratum by sorting the lodes first by stratum, then by the
+provided vectors, and lastly by remaining factors (if the vectors contain
+duplicate entries and therefore do not completely determine the lode
+orderings).}
 
 \item{aes.bind}{At what grouping level, if any, to prioritize differentiation
 aesthetics when ordering the lodes within each stratum. Defaults to
@@ -114,9 +113,10 @@ specified in \code{aes()}.}
 
 \item{infer.label}{Logical; whether to assign the \code{stratum} or \code{alluvium}
 variable to the \code{label} aesthetic. Defaults to \code{FALSE}, and requires that
-no \code{label} aesthetic is assigned. This parameter is intended only for uses
-in which the data are in alluva form and are therefore converted to lode
-form before the statistical transformation.}
+no \code{label} aesthetic is assigned. This parameter is intended for use only
+with data in alluva form, which are converted to lode form before the
+statistical transformation. Deprecated; use \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}}
+instead.}
 
 \item{min.y}{Numeric; bounds on the heights of the strata to be
 rendered. Use these bounds to exclude strata outside a certain range, for
@@ -166,23 +166,51 @@ Additionally, each \verb{stat_*()} accepts the following optional
 aesthetics:
 \itemize{
 \item \code{y}
+\item \code{weight}
+\item \code{order}
 \item \code{group}
 \item \code{label}
 }
 
-\code{y} controls the heights of the alluvia
+\code{y} controls the heights of the alluvia,
 and may be aggregated across equivalent observations.
+\code{weight} applies to the computed variables (see that section below)
+but does not affect the positional aesthetics.
+\code{order}, recognized by \code{stat_alluvium()} and \code{stat_flow()}, is used to
+arrange the lodes within each stratum. It tolerates duplicates and takes
+precedence over the differentiation aesthetics (when \code{aes.bind} is not
+\code{"none"}) and lode guidance with respect to the remaining axes. (It replaces
+the deprecated parameter \code{lode.ordering}.)
 \code{group} is used internally; arguments are ignored.
 \code{label} is used to label the strata or lodes and must take a unique value
 across the observations within each stratum or lode.
-Often the same variable will be passed to \code{label} as to the corresponding
-alluvial aesthetic (\code{stratum} or \code{alluvium}).
 
 These and any other aesthetics are aggregated as follows:
 Numeric aesthetics, including \code{y}, are summed.
 Character and factor aesthetics, including \code{label},
 are assigned to strata or lodes provided they take unique values across the
 observations within each (and are otherwise assigned \code{NA}).
+}
+
+\section{Computed variables}{
+
+These can be used with \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}} to \href{https://ggplot2.tidyverse.org/reference/aes_eval.html}{control aesthetic evaluation}.
+\describe{
+\item{\code{n}}{number of cases in lode}
+\item{\code{count}}{cumulative weight of lode}
+\item{\code{prop}}{weighted proportion of lode}
+\item{\code{stratum}}{value of variable used to define strata}
+\item{\code{deposit}}{order in which (signed) strata are deposited}
+\item{\code{lode}}{lode label distilled from alluvia
+(\code{stat_alluvium()} and \code{stat_flow()} only)}
+\item{\code{flow}}{direction of flow \code{"to"} or \code{"from"} from its axis
+(\code{stat_flow()} only)}
+}
+The numerical variables \code{n}, \code{count}, and \code{prop} are calculated after the
+data are grouped by \code{x} and weighted by \code{weight} (in addition to \code{y}).
+The integer variable \code{deposit} is used internally to sort the data before
+calculating heights. The character variable \code{lode} is obtained from
+\code{alluvium} according to \code{distill}.
 }
 
 \section{Package options}{
@@ -198,7 +226,6 @@ manually set:
 \item \code{ggalluvial.absolute} (each \verb{stat_*}): defaults to \code{TRUE}.
 \item \code{ggalluvial.cement.alluvia} (\code{stat_alluvium}): defaults to \code{FALSE}.
 \item \code{ggalluvial.lode.guidance} (\code{stat_alluvium}): defaults to \code{"zigzag"}.
-\item \code{ggalluvial.lode.ordering} (\code{stat_alluvium}): defaults to \code{NULL}.
 \item \code{ggalluvial.aes.bind} (\code{stat_alluvium} and \code{stat_flow}): defaults to
 \code{"none"}.
 }
@@ -221,29 +248,25 @@ ggplot(as.data.frame(Titanic),
   stat_stratum(geom = "errorbar") +
   geom_line(stat = "alluvium") +
   stat_alluvium(geom = "pointrange") +
-  geom_text(stat = "stratum", infer.label = TRUE) +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 
 # lode ordering examples
 gg <- ggplot(as.data.frame(Titanic),
              aes(y = Freq,
                  axis1 = Class, axis2 = Sex, axis3 = Age)) +
-  geom_stratum() + geom_text(stat = "stratum", infer.label = TRUE) +
+  geom_stratum() +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 # use of lode controls
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
                lode.guidance = "forward")
 # prioritize aesthetic binding
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
-               aes.bind = TRUE, lode.guidance = "forward")
-# use of lode ordering
-lode_ord <- replicate(n = 3, expr = sample(x = 32), simplify = FALSE)
-print(lode_ord)
-gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
-               lode.ordering = lode_ord)
-# fixed lode ordering across axes
-gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
-               lode.ordering = lode_ord[[1]])
+               aes.bind = "alluvia", lode.guidance = "forward")
+# use of custom lode order
+gg + geom_flow(aes(fill = Survived, alpha = Sex, order = sample(x = 32)),
+               stat = "alluvium")
 # use of custom luide guidance function
 lode_custom <- function(n, i) {
   stopifnot(n == 3)
@@ -255,11 +278,10 @@ lode_custom <- function(n, i) {
   )
 }
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
-               aes.bind = TRUE, lode.guidance = lode_custom)
+               aes.bind = "flow", lode.guidance = lode_custom)
 
-data(majors)
 # omit missing elements & reverse the `y` axis
-ggplot(majors,
+ggplot(ggalluvial::majors,
        aes(x = semester, stratum = curriculum, alluvium = student, y = 1)) +
   geom_alluvium(fill = "darkgrey", na.rm = TRUE) +
   geom_stratum(aes(fill = curriculum), color = NA, na.rm = TRUE) +
@@ -267,34 +289,24 @@ ggplot(majors,
   scale_y_reverse()
 
 # alluvium cementation examples
-gg <- ggplot(majors,
+gg <- ggplot(ggalluvial::majors,
              aes(x = semester, stratum = curriculum, alluvium = student,
                  fill = curriculum)) +
   geom_stratum()
 # diagram with outlined alluvia and labels
 gg + geom_flow(stat = "alluvium", color = "black") +
-  geom_text(aes(label = as.integer(student)), stat = "alluvium")
-# cemented diagram with default label cementation
+  geom_text(aes(label = after_stat(lode)), stat = "alluvium")
+# cemented diagram with default distillation (first most common alluvium)
 gg +
   geom_flow(stat = "alluvium", color = "black", cement.alluvia = TRUE) +
-  geom_text(aes(label = as.integer(student)), stat = "alluvium",
+  geom_text(aes(label = after_stat(lode)), stat = "alluvium",
             cement.alluvia = TRUE)
-# cemented diagram with custom label cementation
+# cemented diagram with custom label distillation
 gg +
   geom_flow(stat = "alluvium", color = "black", cement.alluvia = TRUE) +
-  geom_text(aes(label = as.integer(student)), stat = "alluvium",
-            cement.alluvia = function(x) paste(x, collapse = "; "))
-
-# irregular spacing between axes of a continuous variable
-data(Refugees, package = "alluvial")
-refugees_sub <- subset(Refugees, year \%in\% c(2003, 2005, 2010, 2013))
-ggplot(data = refugees_sub,
-       aes(x = year, y = refugees, alluvium = country)) +
-  geom_alluvium(aes(fill = country),
-                alpha = .75, decreasing = FALSE, knot.pos = 1) +
-  geom_stratum(aes(stratum = country), decreasing = FALSE, width = 1/2) +
-  theme_bw() +
-  scale_fill_brewer(type = "qual", palette = "Set3")
+  geom_text(aes(label = after_stat(lode)), stat = "alluvium",
+            cement.alluvia = TRUE,
+            distill = function(x) paste(x, collapse = "; "))
 
 \dontrun{
 data(babynames, package = "babynames")
@@ -324,7 +336,8 @@ ggplot(subset(titanic, Class != "Crew"),
        aes(axis1 = Class, axis2 = Sex, axis3 = Age, y = Lives)) +
   geom_alluvium(aes(alpha = Survived, fill = Class), absolute = FALSE) +
   geom_stratum(absolute = FALSE) +
-  geom_text(stat = "stratum", infer.label = TRUE, absolute = FALSE) +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum)),
+            absolute = FALSE) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"), expand = c(.1, .05)) +
   scale_alpha_discrete(range = c(.25, .75), guide = FALSE)
 }
