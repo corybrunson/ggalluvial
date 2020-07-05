@@ -17,7 +17,7 @@ stat_alluvium(
   aggregate.y = NULL,
   cement.alluvia = ggalluvial_opt("cement.alluvia"),
   lode.guidance = ggalluvial_opt("lode.guidance"),
-  lode.ordering = ggalluvial_opt("lode.ordering"),
+  lode.ordering = NULL,
   aes.bind = ggalluvial_opt("aes.bind"),
   infer.label = FALSE,
   min.y = NULL,
@@ -87,14 +87,15 @@ ordering the lodes within each stratum, or else a character string
 identifying the function. Character options are "zigzag", "frontback",
 "backfront", "forward", and "backward" (see \code{\link{lode-guidance-functions}}).}
 
-\item{lode.ordering}{A list (of length the number of axes) of integer vectors
-(each of length the number of rows of \code{data}) or NULL entries (indicating
-no imposed ordering), or else a numeric matrix of corresponding dimensions,
-giving the preferred ordering of alluvia at each axis. This will be used to
-order the lodes within each stratum by sorting the lodes first by stratum,
-then by the provided vectors, and lastly by remaining factors (if the
-vectors contain duplicate entries and therefore do not completely determine
-the lode orderings).}
+\item{lode.ordering}{\strong{Deprecated in favor of the \code{order} aesthetic.} A list
+(of length the number of axes) of integer vectors (each of length the
+number of rows of \code{data}) or NULL entries (indicating no imposed ordering),
+or else a numeric matrix of corresponding dimensions, giving the preferred
+ordering of alluvia at each axis. This will be used to order the lodes
+within each stratum by sorting the lodes first by stratum, then by the
+provided vectors, and lastly by remaining factors (if the vectors contain
+duplicate entries and therefore do not completely determine the lode
+orderings).}
 
 \item{aes.bind}{At what grouping level, if any, to prioritize differentiation
 aesthetics when ordering the lodes within each stratum. Defaults to
@@ -166,6 +167,7 @@ aesthetics:
 \itemize{
 \item \code{y}
 \item \code{weight}
+\item \code{order}
 \item \code{group}
 \item \code{label}
 }
@@ -174,11 +176,14 @@ aesthetics:
 and may be aggregated across equivalent observations.
 \code{weight} applies to the computed variables (see that section below)
 but does not affect the positional aesthetics.
+\code{order}, recognized by \code{stat_alluvium()} and \code{stat_flow()}, is used to
+arrange the lodes within each stratum. It tolerates duplicates and takes
+precedence over the differentiation aesthetics (when \code{aes.bind} is not
+\code{"none"}) and lode guidance with respect to the remaining axes. (It replaces
+the deprecated parameter \code{lode.ordering}.)
 \code{group} is used internally; arguments are ignored.
 \code{label} is used to label the strata or lodes and must take a unique value
 across the observations within each stratum or lode.
-Often the same variable will be passed to \code{label} as to the corresponding
-alluvial aesthetic (\code{stratum} or \code{alluvium}).
 
 These and any other aesthetics are aggregated as follows:
 Numeric aesthetics, including \code{y}, are summed.
@@ -221,7 +226,6 @@ manually set:
 \item \code{ggalluvial.absolute} (each \verb{stat_*}): defaults to \code{TRUE}.
 \item \code{ggalluvial.cement.alluvia} (\code{stat_alluvium}): defaults to \code{FALSE}.
 \item \code{ggalluvial.lode.guidance} (\code{stat_alluvium}): defaults to \code{"zigzag"}.
-\item \code{ggalluvial.lode.ordering} (\code{stat_alluvium}): defaults to \code{NULL}.
 \item \code{ggalluvial.aes.bind} (\code{stat_alluvium} and \code{stat_flow}): defaults to
 \code{"none"}.
 }
@@ -259,15 +263,10 @@ gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
                lode.guidance = "forward")
 # prioritize aesthetic binding
 gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
-               aes.bind = TRUE, lode.guidance = "forward")
-# use of lode ordering
-lode_ord <- replicate(n = 3, expr = sample(x = 32), simplify = FALSE)
-print(lode_ord)
-gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
-               lode.ordering = lode_ord)
-# fixed lode ordering across axes
-gg + geom_flow(aes(fill = Survived, alpha = Sex), stat = "alluvium",
-               lode.ordering = lode_ord[[1]])
+               aes.bind = "alluvia", lode.guidance = "forward")
+# use of custom lode order
+gg + geom_flow(aes(fill = Survived, alpha = Sex, order = sample(x = 32)),
+               stat = "alluvium")
 # use of custom luide guidance function
 lode_custom <- function(n, i) {
   stopifnot(n == 3)

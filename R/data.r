@@ -12,9 +12,10 @@
 #' @format A data frame with 117 rows and 5 variables:
 #' \describe{
 #'   \item{`freq`}{number of respondents represented in each row}
-#'   \item{`a`}{normalized proportion of `freq`}
 #'   \item{`subject`}{identifier linking respondents across surveys}
 #'   \item{`survey`}{survey designation from the ALP website}
+#'   \item{`start_date`}{start date of survey}
+#'   \item{`end_date`}{end date of survey}
 #'   \item{`response`}{discretized probability of vaccinating for influenza}
 #' }
 #' @source \url{https://alpdata.rand.org/}

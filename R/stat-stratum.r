@@ -99,7 +99,8 @@ StatStratum <- ggproto(
   
   required_aes = c("x"),
   
-  default_aes = aes(weight = 1),
+  # `<new-aes> = NULL` prevents "unknown aesthetics" warnings
+  default_aes = aes(weight = 1, stratum = NULL, alluvium = NULL),
   
   setup_data = function(data, params) {
     
@@ -189,9 +190,9 @@ StatStratum <- ggproto(
       }
     }
     
-    # aesthetics (in prescribed order)
-    aesthetics <- intersect(c(.color_diff_aesthetics, .text_aesthetics),
-                            names(data))
+    # differentiation aesthetics (in prescribed order)
+    diff_aes <- intersect(c(.color_diff_aesthetics, .text_aesthetics),
+                          names(data))
     
     # sign variable (sorts positives before negatives)
     data$yneg <- data$y < 0
@@ -210,7 +211,7 @@ StatStratum <- ggproto(
     # aggregate variables over 'x', 'yneg', and 'stratum':
     # sum of computed variables and unique-or-bust values of aesthetics
     by_vars <- c("x", "yneg", "stratum")
-    only_vars <- c(aesthetics)
+    only_vars <- c(diff_aes)
     sum_vars <- c("y", "n", "count")
     if (! is.null(data$lode)) {
       agg_lode <- stats::aggregate(data[, "lode", drop = FALSE],

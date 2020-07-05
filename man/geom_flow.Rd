@@ -218,13 +218,15 @@ ggplot(vaccinations,
   geom_lode() + geom_flow(curve = "cubic") +
   geom_stratum(alpha = 0) +
   geom_text(stat = "stratum", aes(label = round(after_stat(prop), 3)))
-# annotate with survey-weighted proportional counts
+# annotate fixed-width ribbons with counts
 ggplot(vaccinations,
        aes(x = survey, stratum = response, alluvium = subject,
-           y = freq, fill = response, weight = a)) +
-  geom_lode() + geom_flow() +
+           weight = freq, fill = response)) +
+  geom_lode() + geom_flow(curve = "cubic") +
   geom_stratum(alpha = 0) +
-  geom_text(stat = "stratum", aes(label = round(after_stat(prop), 3)))
+  geom_text(stat = "flow",
+            aes(label = after_stat(n),
+                hjust = (after_stat(flow) == "to")))
 }
 \seealso{
 \code{\link[ggplot2:layer]{ggplot2::layer()}} for additional arguments and

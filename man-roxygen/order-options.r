@@ -10,7 +10,6 @@
 #' - `ggalluvial.absolute` (each `stat_*`): defaults to `TRUE`.
 #' - `ggalluvial.cement.alluvia` (`stat_alluvium`): defaults to `FALSE`.
 #' - `ggalluvial.lode.guidance` (`stat_alluvium`): defaults to `"zigzag"`.
-#' - `ggalluvial.lode.ordering` (`stat_alluvium`): defaults to `NULL`.
 #' - `ggalluvial.aes.bind` (`stat_alluvium` and `stat_flow`): defaults to
 #'   `"none"`.
 #' 

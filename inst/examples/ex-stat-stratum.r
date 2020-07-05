@@ -30,13 +30,8 @@ ggplot(vaccinations,
   geom_text(stat = "stratum", min.y = 100)
 
 # date-valued axis variables
-survey_dates <- data.frame(
-  survey = levels(vaccinations$survey),
-  start = as.Date(c("2010-09-22", "2015-06-04", "2016-09-27")),
-  end = as.Date(c("2010-10-25", "2015-10-05", "2016-10-25"))
-)
-ggplot(merge(vaccinations, survey_dates, by = "survey"),
-       aes(x = end, y = freq, stratum = response, alluvium = subject,
+ggplot(vaccinations,
+       aes(x = end_date, y = freq, stratum = response, alluvium = subject,
            fill = response)) +
   stat_alluvium(geom = "flow", lode.guidance = "forward",
                 width = 30) +
@@ -59,4 +54,16 @@ ggplot(admissions,
   geom_stratum(width = 1/12, fill = "black", color = "grey") +
   geom_text(stat = "stratum", aes(label = after_stat(deposit)),
             color = "white") +
+  scale_x_discrete(limits = c("Department", "Gender"), expand = c(.05, .05))
+# fixed-width strata with acceptance and rejection totals
+ggplot(admissions,
+       aes(y = sign(Count), weight = Count, axis1 = Dept, axis2 = Gender)) +
+  geom_alluvium(aes(fill = Dept), width = 1/8) +
+  geom_stratum(width = 1/8, fill = "black", color = "grey") +
+  geom_text(stat = "stratum",
+            aes(label = paste0(stratum,
+                               ifelse(nchar(as.character(stratum)) == 1L,
+                                      ": ", "\n"),
+                               after_stat(n))),
+            color = "white", size = 3) +
   scale_x_discrete(limits = c("Department", "Gender"), expand = c(.05, .05))
