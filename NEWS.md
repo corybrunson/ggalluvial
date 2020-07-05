@@ -1,11 +1,11 @@
 
-# next version
+# ggalluvial 0.12.0
 
 ## Data sets
 
 Both installed data sets, `vaccinations` and `majors`, are better documented.
 
-The `a` field of `vaccinations` (the within-survey fraction of respondents, which can be computed from the other fields) has been removed, and the new `start_date` and `end_date` fields (`Date`s, obtained from the ALP website) has been added.
+The `a` field of `vaccinations` (the within-survey fraction of respondents, which can be computed from the other fields) has been removed, and the `start_date` and `end_date` fields (`Date`s, obtained from the ALP website) have been added.
 
 ## Warning and error messages
 

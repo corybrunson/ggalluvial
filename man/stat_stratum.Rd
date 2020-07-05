@@ -267,6 +267,18 @@ ggplot(admissions,
   geom_text(stat = "stratum", aes(label = after_stat(deposit)),
             color = "white") +
   scale_x_discrete(limits = c("Department", "Gender"), expand = c(.05, .05))
+# fixed-width strata with acceptance and rejection totals
+ggplot(admissions,
+       aes(y = sign(Count), weight = Count, axis1 = Dept, axis2 = Gender)) +
+  geom_alluvium(aes(fill = Dept), width = 1/8) +
+  geom_stratum(width = 1/8, fill = "black", color = "grey") +
+  geom_text(stat = "stratum",
+            aes(label = paste0(stratum,
+                               ifelse(nchar(as.character(stratum)) == 1L,
+                                      ": ", "\n"),
+                               after_stat(n))),
+            color = "white", size = 3) +
+  scale_x_discrete(limits = c("Department", "Gender"), expand = c(.05, .05))
 }
 \seealso{
 \code{\link[ggplot2:layer]{ggplot2::layer()}} for additional arguments and

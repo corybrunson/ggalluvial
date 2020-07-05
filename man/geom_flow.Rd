@@ -225,7 +225,7 @@ ggplot(vaccinations,
   geom_lode() + geom_flow(curve = "cubic") +
   geom_stratum(alpha = 0) +
   geom_text(stat = "flow",
-            aes(label = after_stat(count),
+            aes(label = after_stat(n),
                 hjust = (after_stat(flow) == "to")))
 }
 \seealso{
