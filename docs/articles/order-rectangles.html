@@ -6,19 +6,19 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>The Order of the Rectangles • ggalluvial</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><meta property="og:title" content="The Order of the Rectangles">
-<meta property="og:description" content="">
-<meta name="twitter:card" content="summary">
+<meta property="og:description" content="ggalluvial">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.0</span>
       </span>
     </div>
 
@@ -68,7 +68,14 @@
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/corybrunson/ggalluvial/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -81,12 +88,12 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>The Order of the Rectangles</h1>
+      <h1 data-toc-skip>The Order of the Rectangles</h1>
                         <h4 class="author">Jason Cory Brunson</h4>
             
-            <h4 class="date">2020-03-29</h4>
+            <h4 class="date">2020-07-05</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/corybrunson/ggalluvial/blob/master/vignettes/order-rectangles.rmd"><code>vignettes/order-rectangles.rmd</code></a></small>
       <div class="hidden name"><code>order-rectangles.rmd</code></div>
 
     </div>
@@ -97,22 +104,22 @@
 <div id="setup" class="section level2">
 <h2 class="hasAnchor">
 <a href="#setup" class="anchor"></a>Setup</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">knitr<span class="op">::</span>opts_chunk<span class="op">$</span><span class="kw">set</span>(<span class="dt">fig.width =</span> <span class="dv">6</span>, <span class="dt">fig.height =</span> <span class="dv">3</span>, <span class="dt">fig.align =</span> <span class="st">"center"</span>)</a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(ggalluvial)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="no"><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html">opts_chunk</a></span>$<span class="fu">set</span>(<span class="kw">fig.width</span> <span class="kw">=</span> <span class="fl">6</span>, <span class="kw">fig.height</span> <span class="kw">=</span> <span class="fl">3</span>, <span class="kw">fig.align</span> <span class="kw">=</span> <span class="st">"center"</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggalluvial</span>)</pre></body></html></div>
 <pre><code>## Loading required package: ggplot2</code></pre>
 <p>All of the functionality discussed in this vignette is exported by <strong>ggalluvial</strong>. We’ll also need a toy data set to play with. I conjured the data frame <code>toy</code> to be nearly as small as possible while complex enough to illustrate the positional controls:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># toy data set</span></a>
-<a class="sourceLine" id="cb3-2" title="2"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">0</span>)</a>
-<a class="sourceLine" id="cb3-3" title="3">toy &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(</a>
-<a class="sourceLine" id="cb3-4" title="4">  <span class="dt">subject =</span> <span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(LETTERS[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>], <span class="dt">times =</span> <span class="dv">4</span>),</a>
-<a class="sourceLine" id="cb3-5" title="5">  <span class="dt">collection =</span> <span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">each  =</span> <span class="dv">5</span>),</a>
-<a class="sourceLine" id="cb3-6" title="6">  <span class="dt">category =</span> <span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(</a>
-<a class="sourceLine" id="cb3-7" title="7">    <span class="kw"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"X"</span>, <span class="st">"Y"</span>), <span class="dv">16</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>),</a>
-<a class="sourceLine" id="cb3-8" title="8">    <span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>), <span class="dt">times =</span> <span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb3-9" title="9">  ),</a>
-<a class="sourceLine" id="cb3-10" title="10">  <span class="dt">class =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"one"</span>, <span class="st">"one"</span>, <span class="st">"one"</span>, <span class="st">"two"</span>, <span class="st">"two"</span>)</a>
-<a class="sourceLine" id="cb3-11" title="11">)</a>
-<a class="sourceLine" id="cb3-12" title="12"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(toy)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="co"># toy data set</span>
+<span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">0</span>)
+<span class="no">toy</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(
+  <span class="kw">subject</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="no">LETTERS</span>[<span class="fl">1</span>:<span class="fl">5</span>], <span class="kw">times</span> <span class="kw">=</span> <span class="fl">4</span>),
+  <span class="kw">collection</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fl">1</span>:<span class="fl">4</span>, <span class="kw">each</span>  <span class="kw">=</span> <span class="fl">5</span>),
+  <span class="kw">category</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(
+    <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"X"</span>, <span class="st">"Y"</span>), <span class="fl">16</span>, <span class="kw">replace</span> <span class="kw">=</span> <span class="fl">TRUE</span>),
+    <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">1</span>), <span class="kw">times</span> <span class="kw">=</span> <span class="fl">4</span>)
+  ),
+  <span class="kw">class</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"one"</span>, <span class="st">"one"</span>, <span class="st">"one"</span>, <span class="st">"two"</span>, <span class="st">"two"</span>)
+)
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">toy</span>)</pre></body></html></div>
 <pre><code>##    subject collection category class
 ## 1        A          1        Y   one
 ## 2        B          1        X   one
@@ -135,9 +142,9 @@
 ## 19       D          4        X   two
 ## 20       E          4        X   two</code></pre>
 <p>The subjects are classified into categories at each collection point but are also members of fixed classes. Here’s how <strong>ggalluvial</strong> visualizes these data under default settings:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw">ggplot</span>(toy, <span class="kw">aes</span>(<span class="dt">x =</span> collection, <span class="dt">stratum =</span> category, <span class="dt">alluvium =</span> subject)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-2" title="2"><span class="st">  </span><span class="kw"><a href="../reference/geom_alluvium.html">geom_alluvium</a></span>(<span class="kw">aes</span>(<span class="dt">fill =</span> class)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb5-3" title="3"><span class="st">  </span><span class="kw"><a href="../reference/geom_stratum.html">geom_stratum</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu">ggplot</span>(<span class="no">toy</span>, <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">collection</span>, <span class="kw">stratum</span> <span class="kw">=</span> <span class="no">category</span>, <span class="kw">alluvium</span> <span class="kw">=</span> <span class="no">subject</span>)) +
+  <span class="fu"><a href="../reference/geom_alluvium.html">geom_alluvium</a></span>(<span class="fu">aes</span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="no">class</span>)) +
+  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span>()</pre></body></html></div>
 <p><img src="order-rectangles_files/figure-html/plot-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
 <div id="motivations" class="section level2">
@@ -148,7 +155,7 @@
 <p>There are two key reasons for this division of labor:</p>
 <ol style="list-style-type: decimal">
 <li>The coordinates returned by some stat layers can be coupled with multiple geom layers. For example, all four geoms can couple with the <code>alluvium</code> stat. Moreover, as showcased in <a href="http://corybrunson.github.io/ggalluvial/reference/index.html">the examples</a>, the stats can also meaningfully couple with exogenous geoms like <code>text</code>, <code>pointrange</code>, and <code>errorbar</code>. (In principle, the geoms could also couple with exogenous stats, but i haven’t done this or seen it done in the wild.)</li>
-<li>Different parameters control the calculations of the coordinates (e.g. <code>aes.bind</code> and <code>cement.alluvia</code>) and the rendering of the graphical elements (<code>width</code>, <code>knot.pos</code>, and <code>aes.flow</code>), and it makes intuitive sense to handle these separately. For example, the heights of the strata and lodes convey information about the underlying data, whereas their widths are arbitrary.</li>
+<li>Different parameters control the calculations of the coordinates (e.g. <code>aes.bind</code> and <code>cement.alluvia</code>) and the rendering of the graphical elements (<code>width</code>, <code>knot.pos</code>, and <code>aes.flow</code>), and it makes intuitive sense to handle these separately. For example, the heights of the strata and lodes convey information about the underlying data, whereas their widths are arbitrary.</li>
 </ol>
 <p>(If the data are provided in alluvia format, then <code>Stat*$setup_data()</code> converts them to lodes format in preparation for the main transformation. This can be done manually using <a href="http://corybrunson.github.io/ggalluvial/reference/alluvial-data.html">the exported conversion functions</a>, and this vignette will assume the data are already in lodes format.)</p>
 </div>
@@ -157,45 +164,45 @@
 <a href="#positioning-strata" class="anchor"></a>Positioning strata</h2>
 <p>Each stat layer demarcates one stack for each data collection point and one rectangle within each stack for each (non-empty) category.<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a> In <a href="http://corybrunson.github.io/ggalluvial/articles/ggalluvial.html"><strong>ggalluvial</strong> terms</a>, the collection points are axes and the rectangles are strata or lodes.</p>
 <p>To generate a sequence of stacked bar plots with no connecting flows, only the aesthetics <code>x</code> (standard) and <code>stratum</code> (custom) are required:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="co"># collection point and category variables only</span></a>
-<a class="sourceLine" id="cb6-2" title="2">data &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/structure.html">structure</a></span>(toy[, <span class="dv">2</span><span class="op">:</span><span class="dv">3</span>], <span class="dt">names =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"x"</span>, <span class="st">"stratum"</span>))</a>
-<a class="sourceLine" id="cb6-3" title="3"><span class="co"># required fields for stat transformations</span></a>
-<a class="sourceLine" id="cb6-4" title="4">data<span class="op">$</span>y &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb6-5" title="5">data<span class="op">$</span>PANEL &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb6-6" title="6"><span class="co"># stratum transformation</span></a>
-<a class="sourceLine" id="cb6-7" title="7">StatStratum<span class="op">$</span><span class="kw">compute_panel</span>(data)</a></code></pre></div>
-<pre><code>##   x stratum   y PANEL deposit ymin ymax
-## 2 1       Y 1.0     1       1    0    2
-## 1 1       X 3.5     1       2    2    5
-## 4 2       Y 1.0     1       3    0    2
-## 3 2       X 3.5     1       4    2    5
-## 6 3       Y 1.5     1       5    0    3
-## 5 3       X 4.0     1       6    3    5
-## 7 4       X 2.5     1       7    0    5</code></pre>
-<p>Comparing this output to <code>toy</code>, notice first that the data have been aggregated: Each distinct combination of <code>x</code> and <code>stratum</code> occupies only one row. <code>x</code> encodes the axes and is subject to layers specific to this positional aesthetic, e.g. <code>scale_x_*()</code> transformations. <code>ymin</code> and <code>ymax</code> are the lower and upper bounds of the rectangles, and <code>y</code> is their vertical centers. Each stacked rectangle begins where the one below it ends, and their heights are the numbers of subjects (or the totals of their <code>y</code> values, if <code>y</code> is passed a numerical variable) that take the corresponding category value at the corresponding collection point.</p>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="co"># collection point and category variables only</span>
+<span class="no">data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/structure.html">structure</a></span>(<span class="no">toy</span>[, <span class="fl">2</span>:<span class="fl">3</span>], <span class="kw">names</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"x"</span>, <span class="st">"stratum"</span>))
+<span class="co"># required fields for stat transformations</span>
+<span class="no">data</span>$<span class="no">y</span> <span class="kw">&lt;-</span> <span class="fl">1</span>
+<span class="no">data</span>$<span class="no">PANEL</span> <span class="kw">&lt;-</span> <span class="fl">1</span>
+<span class="co"># stratum transformation</span>
+<span class="no">StatStratum</span>$<span class="fu">compute_panel</span>(<span class="no">data</span>)</pre></body></html></div>
+<pre><code>##   x stratum   y n count deposit prop ymin ymax
+## 2 1       Y 1.0 2     2       1  0.4    0    2
+## 1 1       X 3.5 3     3       2  0.6    2    5
+## 4 2       Y 1.0 2     2       3  0.4    0    2
+## 3 2       X 3.5 3     3       4  0.6    2    5
+## 6 3       Y 1.5 3     3       5  0.6    0    3
+## 5 3       X 4.0 2     2       6  0.4    3    5
+## 7 4       X 2.5 5     5       7  1.0    0    5</code></pre>
+<p>Comparing this output to <code>toy</code>, notice first that the data have been aggregated: Each distinct combination of <code>x</code> and <code>stratum</code> occupies only one row. <code>x</code> encodes the axes and is subject to layers specific to this positional aesthetic, e.g. <code>scale_x_*()</code> transformations. <code>ymin</code> and <code>ymax</code> are the lower and upper bounds of the rectangles, and <code>y</code> is their vertical centers. Each stacked rectangle begins where the one below it ends, and their heights are the numbers of subjects (or the totals of their <code>y</code> values, if <code>y</code> is passed a numerical variable) that take the corresponding category value at the corresponding collection point.</p>
 <p>Here’s the plot this strata-only transformation yields:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="kw">ggplot</span>(toy, <span class="kw">aes</span>(<span class="dt">x =</span> collection, <span class="dt">stratum =</span> category)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-2" title="2"><span class="st">  </span><span class="kw"><a href="../reference/stat_stratum.html">stat_stratum</a></span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb8-3" title="3"><span class="st">  </span><span class="kw"><a href="../reference/stat_stratum.html">stat_stratum</a></span>(<span class="dt">geom =</span> <span class="st">"text"</span>, <span class="kw">aes</span>(<span class="dt">label =</span> category))</a></code></pre></div>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu">ggplot</span>(<span class="no">toy</span>, <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">collection</span>, <span class="kw">stratum</span> <span class="kw">=</span> <span class="no">category</span>)) +
+  <span class="fu"><a href="../reference/stat_stratum.html">stat_stratum</a></span>() +
+  <span class="fu"><a href="../reference/stat_stratum.html">stat_stratum</a></span>(<span class="kw">geom</span> <span class="kw">=</span> <span class="st">"text"</span>, <span class="fu">aes</span>(<span class="kw">label</span> <span class="kw">=</span> <span class="no">category</span>))</pre></body></html></div>
 <p><img src="order-rectangles_files/figure-html/strata%20plot-1.png" width="576" style="display: block; margin: auto;"></p>
 <p>In this vignette, i’ll use the <code>stat_*()</code> functions to add layers, so that the parameters that control their behavior are accessible via tab-completion.</p>
 <div id="reversing-the-strata" class="section level3">
 <h3 class="hasAnchor">
 <a href="#reversing-the-strata" class="anchor"></a>Reversing the strata</h3>
 <p>Within each axis, <code>stratum</code> defaults to reverse order so that the bars proceed in the original order from top to bottom. This can be overridden by setting <code>reverse = FALSE</code> in <code><a href="../reference/stat_stratum.html">stat_stratum()</a></code>:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="co"># stratum transformation with strata in original order</span></a>
-<a class="sourceLine" id="cb9-2" title="2">StatStratum<span class="op">$</span><span class="kw">compute_panel</span>(data, <span class="dt">reverse =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
-<pre><code>##   x stratum   y PANEL deposit ymin ymax
-## 1 1       X 1.5     1       1    0    3
-## 2 1       Y 4.0     1       2    3    5
-## 3 2       X 1.5     1       3    0    3
-## 4 2       Y 4.0     1       4    3    5
-## 5 3       X 1.0     1       5    0    2
-## 6 3       Y 3.5     1       6    2    5
-## 7 4       X 2.5     1       7    0    5</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="kw">ggplot</span>(toy, <span class="kw">aes</span>(<span class="dt">x =</span> collection, <span class="dt">stratum =</span> category)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb11-2" title="2"><span class="st">  </span><span class="kw"><a href="../reference/stat_stratum.html">stat_stratum</a></span>(<span class="dt">reverse =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb11-3" title="3"><span class="st">  </span><span class="kw"><a href="../reference/stat_stratum.html">stat_stratum</a></span>(<span class="dt">geom =</span> <span class="st">"text"</span>, <span class="kw">aes</span>(<span class="dt">label =</span> category), <span class="dt">reverse =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="co"># stratum transformation with strata in original order</span>
+<span class="no">StatStratum</span>$<span class="fu">compute_panel</span>(<span class="no">data</span>, <span class="kw">reverse</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
+<pre><code>##   x stratum   y n count deposit prop ymin ymax
+## 1 1       X 1.5 3     3       1  0.6    0    3
+## 2 1       Y 4.0 2     2       2  0.4    3    5
+## 3 2       X 1.5 3     3       3  0.6    0    3
+## 4 2       Y 4.0 2     2       4  0.4    3    5
+## 5 3       X 1.0 2     2       5  0.4    0    2
+## 6 3       Y 3.5 3     3       6  0.6    2    5
+## 7 4       X 2.5 5     5       7  1.0    0    5</code></pre>
+<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu">ggplot</span>(<span class="no">toy</span>, <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">collection</span>, <span class="kw">stratum</span> <span class="kw">=</span> <span class="no">category</span>)) +
+  <span class="fu"><a href="../reference/stat_stratum.html">stat_stratum</a></span>(<span class="kw">reverse</span> <span class="kw">=</span> <span class="fl">FALSE</span>) +
+  <span class="fu"><a href="../reference/stat_stratum.html">stat_stratum</a></span>(<span class="kw">geom</span> <span class="kw">=</span> <span class="st">"text"</span>, <span class="fu">aes</span>(<span class="kw">label</span> <span class="kw">=</span> <span class="no">category</span>), <span class="kw">reverse</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
 <p><img src="order-rectangles_files/figure-html/strata%20reverse-1.png" width="576" style="display: block; margin: auto;"></p>
 <p><strong>Warning:</strong> The caveat to this is that, <em>if <code>reverse</code> is declared in any layer, then it must be declared in every layer</em>, lest the layers be misaligned. This includes any <code>alluvium</code>, <code>flow</code>, and <code>lode</code> layers, since their graphical elements are organized within the bounds of the strata.</p>
 </div>
@@ -203,19 +210,19 @@
 <h3 class="hasAnchor">
 <a href="#sorting-the-strata-by-size" class="anchor"></a>Sorting the strata by size</h3>
 <p>When the strata are defined by a character or factor variable, they default to the order of the variable (lexicographic in the former case). This can be overridden by the <code>decreasing</code> parameter, which defaults to <code>NA</code> but can be set to <code>TRUE</code> or <code>FALSE</code> to arrange the strata in decreasing or increasing order in the <code>y</code> direction:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="co"># stratum transformation with strata in original order</span></a>
-<a class="sourceLine" id="cb12-2" title="2">StatStratum<span class="op">$</span><span class="kw">compute_panel</span>(data, <span class="dt">reverse =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
-<pre><code>##   x stratum   y PANEL deposit ymin ymax
-## 1 1       X 1.5     1       1    0    3
-## 2 1       Y 4.0     1       2    3    5
-## 3 2       X 1.5     1       3    0    3
-## 4 2       Y 4.0     1       4    3    5
-## 5 3       X 1.0     1       5    0    2
-## 6 3       Y 3.5     1       6    2    5
-## 7 4       X 2.5     1       7    0    5</code></pre>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="kw">ggplot</span>(toy, <span class="kw">aes</span>(<span class="dt">x =</span> collection, <span class="dt">stratum =</span> category)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb14-2" title="2"><span class="st">  </span><span class="kw"><a href="../reference/stat_stratum.html">stat_stratum</a></span>(<span class="dt">decreasing =</span> <span class="ot">TRUE</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb14-3" title="3"><span class="st">  </span><span class="kw"><a href="../reference/stat_stratum.html">stat_stratum</a></span>(<span class="dt">geom =</span> <span class="st">"text"</span>, <span class="kw">aes</span>(<span class="dt">label =</span> category), <span class="dt">decreasing =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="co"># stratum transformation with strata in original order</span>
+<span class="no">StatStratum</span>$<span class="fu">compute_panel</span>(<span class="no">data</span>, <span class="kw">reverse</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
+<pre><code>##   x stratum   y n count deposit prop ymin ymax
+## 1 1       X 1.5 3     3       1  0.6    0    3
+## 2 1       Y 4.0 2     2       2  0.4    3    5
+## 3 2       X 1.5 3     3       3  0.6    0    3
+## 4 2       Y 4.0 2     2       4  0.4    3    5
+## 5 3       X 1.0 2     2       5  0.4    0    2
+## 6 3       Y 3.5 3     3       6  0.6    2    5
+## 7 4       X 2.5 5     5       7  1.0    0    5</code></pre>
+<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu">ggplot</span>(<span class="no">toy</span>, <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">collection</span>, <span class="kw">stratum</span> <span class="kw">=</span> <span class="no">category</span>)) +
+  <span class="fu"><a href="../reference/stat_stratum.html">stat_stratum</a></span>(<span class="kw">decreasing</span> <span class="kw">=</span> <span class="fl">TRUE</span>) +
+  <span class="fu"><a href="../reference/stat_stratum.html">stat_stratum</a></span>(<span class="kw">geom</span> <span class="kw">=</span> <span class="st">"text"</span>, <span class="fu">aes</span>(<span class="kw">label</span> <span class="kw">=</span> <span class="no">category</span>), <span class="kw">decreasing</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
 <p><img src="order-rectangles_files/figure-html/strata%20decreasing-1.png" width="576" style="display: block; margin: auto;"></p>
 <p><strong>Warning:</strong> The same caveat applies to <code>decreasing</code> as to <code>reverse</code>: Make sure that all layers using alluvial stats are passed the same values! Henceforth, we’ll use the default (reverse and categorical) ordering of the strata themselves.</p>
 </div>
@@ -227,72 +234,69 @@
 <h3 class="hasAnchor">
 <a href="#alluvia-and-flows" class="anchor"></a>Alluvia and flows</h3>
 <p>In the strata-only plot, each subject is represented once at each axis. <em>Alluvia</em> are x-splines that connect these multiple representations of the same subjects across the axes. In order to avoid having these splines overlap at the axes, the <code>alluvium</code> stat must stack the alluvial cohorts—subsets of subjects who have a common profile across all axes—within each stratum. These smaller cohort-specific rectangles are the <em>lodes</em>. This calculation requires the additional custom <code>alluvium</code> aesthetic, which identifies common subjects across the axes:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="co"># collection point, category, and subject variables</span></a>
-<a class="sourceLine" id="cb15-2" title="2">data &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/structure.html">structure</a></span>(toy[, <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>], <span class="dt">names =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"alluvium"</span>, <span class="st">"x"</span>, <span class="st">"stratum"</span>))</a>
-<a class="sourceLine" id="cb15-3" title="3"><span class="co"># required fields for stat transformations</span></a>
-<a class="sourceLine" id="cb15-4" title="4">data<span class="op">$</span>y &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb15-5" title="5">data<span class="op">$</span>PANEL &lt;-<span class="st"> </span><span class="dv">1</span></a>
-<a class="sourceLine" id="cb15-6" title="6"><span class="co"># alluvium transformation</span></a>
-<a class="sourceLine" id="cb15-7" title="7">StatAlluvium<span class="op">$</span><span class="kw">compute_panel</span>(data)</a></code></pre></div>
-<pre><code>##    x alluvium stratum   y PANEL fan ymin ymax group
-## 1  1        A       Y 1.5     1  -1    1    2     1
-## 2  1        B       X 3.5     1  -2    3    4     2
-## 3  1        C       X 2.5     1  -3    2    3     3
-## 4  1        D       Y 0.5     1  -4    0    1     4
-## 5  1        E       X 4.5     1  -5    4    5     5
-## 6  2        A       X 3.5     1  -1    3    4     1
-## 7  2        B       Y 1.5     1  -2    1    2     2
-## 8  2        C       Y 0.5     1  -3    0    1     3
-## 9  2        D       X 2.5     1  -4    2    3     4
-## 10 2        E       X 4.5     1  -5    4    5     5
-## 11 3        A       X 3.5     1  -1    3    4     1
-## 12 3        B       Y 1.5     1  -2    1    2     2
-## 13 3        C       Y 0.5     1  -3    0    1     3
-## 14 3        D       Y 2.5     1  -4    2    3     4
-## 15 3        E       X 4.5     1  -5    4    5     5
-## 16 4        A       X 3.5     1  -1    3    4     1
-## 17 4        B       X 1.5     1  -2    1    2     2
-## 18 4        C       X 0.5     1  -3    0    1     3
-## 19 4        D       X 2.5     1  -4    2    3     4
-## 20 4        E       X 4.5     1  -5    4    5     5</code></pre>
+<div class="sourceCode" id="cb15"><html><body><pre class="r"><span class="co"># collection point, category, and subject variables</span>
+<span class="no">data</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/structure.html">structure</a></span>(<span class="no">toy</span>[, <span class="fl">1</span>:<span class="fl">3</span>], <span class="kw">names</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"alluvium"</span>, <span class="st">"x"</span>, <span class="st">"stratum"</span>))
+<span class="co"># required fields for stat transformations</span>
+<span class="no">data</span>$<span class="no">y</span> <span class="kw">&lt;-</span> <span class="fl">1</span>
+<span class="no">data</span>$<span class="no">PANEL</span> <span class="kw">&lt;-</span> <span class="fl">1</span>
+<span class="co"># alluvium transformation</span>
+<span class="no">StatAlluvium</span>$<span class="fu">compute_panel</span>(<span class="no">data</span>)</pre></body></html></div>
+<pre><code>##    x alluvium stratum   y PANEL lode n count deposit prop ymin ymax group
+## 1  1        A       Y 1.5     1    A 1     1       1  0.2    1    2     1
+## 2  1        B       X 3.5     1    B 1     1       2  0.2    3    4     2
+## 3  1        C       X 2.5     1    C 1     1       2  0.2    2    3     3
+## 4  1        D       Y 0.5     1    D 1     1       1  0.2    0    1     4
+## 5  1        E       X 4.5     1    E 1     1       2  0.2    4    5     5
+## 6  2        A       X 3.5     1    A 1     1       4  0.2    3    4     1
+## 7  2        B       Y 1.5     1    B 1     1       3  0.2    1    2     2
+## 8  2        C       Y 0.5     1    C 1     1       3  0.2    0    1     3
+## 9  2        D       X 2.5     1    D 1     1       4  0.2    2    3     4
+## 10 2        E       X 4.5     1    E 1     1       4  0.2    4    5     5
+## 11 3        A       X 3.5     1    A 1     1       6  0.2    3    4     1
+## 12 3        B       Y 1.5     1    B 1     1       5  0.2    1    2     2
+## 13 3        C       Y 0.5     1    C 1     1       5  0.2    0    1     3
+## 14 3        D       Y 2.5     1    D 1     1       5  0.2    2    3     4
+## 15 3        E       X 4.5     1    E 1     1       6  0.2    4    5     5
+## 16 4        A       X 3.5     1    A 1     1       7  0.2    3    4     1
+## 17 4        B       X 1.5     1    B 1     1       7  0.2    1    2     2
+## 18 4        C       X 0.5     1    C 1     1       7  0.2    0    1     3
+## 19 4        D       X 2.5     1    D 1     1       7  0.2    2    3     4
+## 20 4        E       X 4.5     1    E 1     1       7  0.2    4    5     5</code></pre>
 <p>The transformed data now contain <em>one row per cohort</em>—instead of per category—<em>per collection point</em>. The vertical positional aesthetics describe the lodes rather than the strata, and the <code>group</code> variable encodes the <code>alluvia</code> (a convenience for the geom layer, and the reason that <strong>ggalluvial</strong> stat layers ignore variables passed to <code>group</code>).</p>
 <p>Here’s how this transformation translates into the alluvial plot that began the vignette, labeling the subject of each alluvium at each intersection with a stratum:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="kw">ggplot</span>(toy, <span class="kw">aes</span>(<span class="dt">x =</span> collection, <span class="dt">stratum =</span> category, <span class="dt">alluvium =</span> subject)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb17-2" title="2"><span class="st">  </span><span class="kw"><a href="../reference/stat_alluvium.html">stat_alluvium</a></span>(<span class="kw">aes</span>(<span class="dt">fill =</span> class)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb17-3" title="3"><span class="st">  </span><span class="kw"><a href="../reference/stat_alluvium.html">stat_alluvium</a></span>(<span class="dt">geom =</span> <span class="st">"text"</span>, <span class="kw">aes</span>(<span class="dt">label =</span> subject)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb17-4" title="4"><span class="st">  </span><span class="kw"><a href="../reference/stat_stratum.html">stat_stratum</a></span>(<span class="dt">alpha =</span> <span class="fl">.25</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="fu">ggplot</span>(<span class="no">toy</span>, <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">collection</span>, <span class="kw">stratum</span> <span class="kw">=</span> <span class="no">category</span>, <span class="kw">alluvium</span> <span class="kw">=</span> <span class="no">subject</span>)) +
+  <span class="fu"><a href="../reference/stat_alluvium.html">stat_alluvium</a></span>(<span class="fu">aes</span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="no">class</span>)) +
+  <span class="fu"><a href="../reference/stat_stratum.html">stat_stratum</a></span>(<span class="kw">alpha</span> <span class="kw">=</span> <span class="fl">.25</span>) +
+  <span class="fu"><a href="../reference/stat_alluvium.html">stat_alluvium</a></span>(<span class="kw">geom</span> <span class="kw">=</span> <span class="st">"text"</span>, <span class="fu">aes</span>(<span class="kw">label</span> <span class="kw">=</span> <span class="no">subject</span>))</pre></body></html></div>
 <p><img src="order-rectangles_files/figure-html/alluvia%20plot-1.png" width="576" style="display: block; margin: auto;"></p>
 <p>The <code>flow</code> stat differs from the <code>alluvium</code> stat by allowing the orders of the lodes within strata to differ from one side of an axis to the other. Put differently, the <code>flow</code> stat allows <em>mixing</em> at the axes, rather than requiring that each case or cohort is follows a continuous trajectory from one end of the plot to the other. As a result, flow plots are often much less cluttered, the trade-off being that cases or cohorts cannot be tracked through them.</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1"><span class="co"># flow transformation</span></a>
-<a class="sourceLine" id="cb18-2" title="2">StatFlow<span class="op">$</span><span class="kw">compute_panel</span>(data)</a></code></pre></div>
-<pre><code>## # A tibble: 16 x 9
-## # Groups:   alluvium, x, stratum, yneg, PANEL, deposit, fissure, link, contact,
-## #   adj_deposit [16]
-##    alluvium     x stratum PANEL contact     y group  ymin  ymax
-##       &lt;int&gt; &lt;int&gt; &lt;fct&gt;   &lt;dbl&gt; &lt;fct&gt;   &lt;dbl&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
-##  1        2     1 Y           1 back      1       2     0     2
-##  2        1     1 X           1 back      3       1     2     4
-##  3        3     1 X           1 back      4.5     3     4     5
-##  4        1     2 Y           1 front     1       1     0     2
-##  5        2     2 X           1 front     3       2     2     4
-##  6        3     2 X           1 front     4.5     3     4     5
-##  7        4     2 Y           1 back      1       4     0     2
-##  8        5     2 X           1 back      2.5     5     2     3
-##  9        6     2 X           1 back      4       6     3     5
-## 10        4     3 Y           1 front     1       4     0     2
-## 11        5     3 Y           1 front     2.5     5     2     3
-## 12        6     3 X           1 front     4       6     3     5
-## 13        7     3 Y           1 back      1.5     7     0     3
-## 14        8     3 X           1 back      4       8     3     5
-## 15        7     4 X           1 front     1.5     7     0     3
-## 16        8     4 X           1 front     4       8     3     5</code></pre>
+<div class="sourceCode" id="cb18"><html><body><pre class="r"><span class="co"># flow transformation</span>
+<span class="no">StatFlow</span>$<span class="fu">compute_panel</span>(<span class="no">data</span>)</pre></body></html></div>
+<pre><code>##    alluvium x stratum deposit flow   y n count lode group prop ymin ymax
+## 3         2 1       Y       1 from 1.0 2     2    A     2  0.4    0    2
+## 1         1 1       X       2 from 3.0 2     2    B     1  0.4    2    4
+## 5         3 1       X       2 from 4.5 1     1    E     3  0.2    4    5
+## 2         1 2       Y       3   to 1.0 2     2    B     1  0.2    0    2
+## 4         2 2       X       4   to 3.0 2     2    A     2  0.2    2    4
+## 6         3 2       X       4   to 4.5 1     1    E     3  0.1    4    5
+## 7         4 2       Y       3 from 1.0 2     2    B     4  0.2    0    2
+## 9         5 2       X       4 from 2.5 1     1    D     5  0.1    2    3
+## 11        6 2       X       4 from 4.0 2     2    A     6  0.2    3    5
+## 8         4 3       Y       5   to 1.0 2     2    B     4  0.2    0    2
+## 10        5 3       Y       5   to 2.5 1     1    D     5  0.1    2    3
+## 12        6 3       X       6   to 4.0 2     2    A     6  0.2    3    5
+## 13        7 3       Y       5 from 1.5 3     3    B     7  0.3    0    3
+## 15        8 3       X       6 from 4.0 2     2    A     8  0.2    3    5
+## 14        7 4       X       7   to 1.5 3     3    B     7  0.6    0    3
+## 16        8 4       X       7   to 4.0 2     2    A     8  0.4    3    5</code></pre>
 <p>The <code>flow</code> stat transformation yields <em>one row per cohort per side per flow</em>. Each intermediate axis appears twice in the data, once for the incoming flow and once for the outgoing flow. (The starting and ending axes only have rows for outgoing and incoming flows, respectively.) Here is the flow version of the preceding alluvial plot, labeling each side of each flow with the corresponding subject:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1"><span class="kw">ggplot</span>(toy, <span class="kw">aes</span>(<span class="dt">x =</span> collection, <span class="dt">stratum =</span> category, <span class="dt">alluvium =</span> subject)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb20-2" title="2"><span class="st">  </span><span class="kw"><a href="../reference/stat_stratum.html">stat_stratum</a></span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb20-3" title="3"><span class="st">  </span><span class="kw"><a href="../reference/stat_flow.html">stat_flow</a></span>(<span class="kw">aes</span>(<span class="dt">fill =</span> class)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb20-4" title="4"><span class="st">  </span><span class="kw"><a href="../reference/stat_flow.html">stat_flow</a></span>(<span class="dt">geom =</span> <span class="st">"text"</span>, <span class="kw">aes</span>(<span class="dt">label =</span> subject))</a></code></pre></div>
+<div class="sourceCode" id="cb20"><html><body><pre class="r"><span class="fu">ggplot</span>(<span class="no">toy</span>, <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">collection</span>, <span class="kw">stratum</span> <span class="kw">=</span> <span class="no">category</span>, <span class="kw">alluvium</span> <span class="kw">=</span> <span class="no">subject</span>)) +
+  <span class="fu"><a href="../reference/stat_stratum.html">stat_stratum</a></span>() +
+  <span class="fu"><a href="../reference/stat_flow.html">stat_flow</a></span>(<span class="fu">aes</span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="no">class</span>)) +
+  <span class="fu"><a href="../reference/stat_flow.html">stat_flow</a></span>(<span class="kw">geom</span> <span class="kw">=</span> <span class="st">"text"</span>,
+            <span class="fu">aes</span>(<span class="kw">label</span> <span class="kw">=</span> <span class="no">subject</span>, <span class="kw">hjust</span> <span class="kw">=</span> <span class="fu">after_stat</span>(<span class="no">flow</span>) <span class="kw">==</span> <span class="st">"to"</span>))</pre></body></html></div>
 <p><img src="order-rectangles_files/figure-html/flows%20plot-1.png" width="576" style="display: block; margin: auto;"></p>
-<p>(There’s no good way at this point to nudge these labels toward the flow to which they correspond, but that’s a potential future feature.)</p>
+<p>The <a href="https://ggplot2.tidyverse.org/reference/stat.html">computed variable</a> <code>flow</code> indicates whether each row of the <code>compute_panel()</code> output corresponds to a flow <em>to</em> or <em>from</em> its axis; the values are used to nudge the labels toward their respective flows (to avoid overlap). Mismatches between adjacent labels indicate where lodes are ordered differently on either side of a stratum.</p>
 </div>
 <div id="lode-guidance" class="section level3">
 <h3 class="hasAnchor">
@@ -305,7 +309,7 @@
 </li>
 </ol>
 <p>In the alluvium case, the prioritization of the remaining axes is determined by a <em>lode guidance function</em>. A lode guidance function can be passed to the <code>lode.guidance</code> parameter, which defaults to <code>"zigzag"</code>. This function puts the nearest (adjacent) axes first, then zigzags outward from there, initially (the “zig”) in the direction of the closer extreme:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) <span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw"><a href="../reference/lode-guidance-functions.html">lode_zigzag</a></span>(<span class="dv">4</span>, i))</a></code></pre></div>
+<div class="sourceCode" id="cb21"><html><body><pre class="r"><span class="kw">for</span> (<span class="no">i</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="fl">4</span>) <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="fu"><a href="../reference/lode-guidance-functions.html">lode_zigzag</a></span>(<span class="fl">4</span>, <span class="no">i</span>))</pre></body></html></div>
 <pre><code>## [1] 1 2 3 4
 ## [1] 2 1 3 4
 ## [1] 3 4 2 1
@@ -320,28 +324,28 @@
 <code>"forward"</code> and <code>"backward"</code> put the remaining axes in increasing and decreasing order, regardless of the relative position of the index axis.</li>
 </ul>
 <p>Two alternatives are illustrated below:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) <span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw"><a href="../reference/lode-guidance-functions.html">lode_backfront</a></span>(<span class="dv">4</span>, i))</a></code></pre></div>
+<div class="sourceCode" id="cb23"><html><body><pre class="r"><span class="kw">for</span> (<span class="no">i</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="fl">4</span>) <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="fu"><a href="../reference/lode-guidance-functions.html">lode_backfront</a></span>(<span class="fl">4</span>, <span class="no">i</span>))</pre></body></html></div>
 <pre><code>## [1] 1 2 3 4
 ## [1] 2 1 3 4
 ## [1] 3 2 1 4
 ## [1] 4 3 2 1</code></pre>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1"><span class="kw">ggplot</span>(toy, <span class="kw">aes</span>(<span class="dt">x =</span> collection, <span class="dt">stratum =</span> category, <span class="dt">alluvium =</span> subject)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb25-2" title="2"><span class="st">  </span><span class="kw"><a href="../reference/stat_alluvium.html">stat_alluvium</a></span>(<span class="kw">aes</span>(<span class="dt">fill =</span> class), <span class="dt">lode.guidance =</span> <span class="st">"backfront"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb25-3" title="3"><span class="st">  </span><span class="kw"><a href="../reference/stat_stratum.html">stat_stratum</a></span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb25-4" title="4"><span class="st">  </span><span class="kw"><a href="../reference/stat_alluvium.html">stat_alluvium</a></span>(<span class="dt">geom =</span> <span class="st">"text"</span>, <span class="kw">aes</span>(<span class="dt">label =</span> subject),</a>
-<a class="sourceLine" id="cb25-5" title="5">                <span class="dt">lode.guidance =</span> <span class="st">"backfront"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb25"><html><body><pre class="r"><span class="fu">ggplot</span>(<span class="no">toy</span>, <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">collection</span>, <span class="kw">stratum</span> <span class="kw">=</span> <span class="no">category</span>, <span class="kw">alluvium</span> <span class="kw">=</span> <span class="no">subject</span>)) +
+  <span class="fu"><a href="../reference/stat_alluvium.html">stat_alluvium</a></span>(<span class="fu">aes</span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="no">class</span>), <span class="kw">lode.guidance</span> <span class="kw">=</span> <span class="st">"backfront"</span>) +
+  <span class="fu"><a href="../reference/stat_stratum.html">stat_stratum</a></span>() +
+  <span class="fu"><a href="../reference/stat_alluvium.html">stat_alluvium</a></span>(<span class="kw">geom</span> <span class="kw">=</span> <span class="st">"text"</span>, <span class="fu">aes</span>(<span class="kw">label</span> <span class="kw">=</span> <span class="no">subject</span>),
+                <span class="kw">lode.guidance</span> <span class="kw">=</span> <span class="st">"backfront"</span>)</pre></body></html></div>
 <p><img src="order-rectangles_files/figure-html/alluvia%20plot%20w/%20backfront%20guidance-1.png" width="576" style="display: block; margin: auto;"></p>
 <p>The difference between <code>"backfront"</code> guidance and <code>"zigzag"</code> guidance can be seen in the order of the lodes of the <code>"Y"</code> stratum at axis <code>3</code>: Whereas <code>"zigzag"</code> minimized the crossings between axes <code>3</code> and <code>4</code>, locating the distinctive class-<code>"one"</code> case above the others, <code>"backfront"</code> minimized the crossings between axes <code>2</code> and <code>3</code> (axis <code>2</code> being immediately before axis <code>3</code>), locating this case below the others.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" title="1"><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>) <span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw"><a href="../reference/lode-guidance-functions.html">lode_backward</a></span>(<span class="dv">4</span>, i))</a></code></pre></div>
+<div class="sourceCode" id="cb26"><html><body><pre class="r"><span class="kw">for</span> (<span class="no">i</span> <span class="kw">in</span> <span class="fl">1</span>:<span class="fl">4</span>) <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="fu"><a href="../reference/lode-guidance-functions.html">lode_backward</a></span>(<span class="fl">4</span>, <span class="no">i</span>))</pre></body></html></div>
 <pre><code>## [1] 1 4 3 2
 ## [1] 2 4 3 1
 ## [1] 3 4 2 1
 ## [1] 4 3 2 1</code></pre>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1"><span class="kw">ggplot</span>(toy, <span class="kw">aes</span>(<span class="dt">x =</span> collection, <span class="dt">stratum =</span> category, <span class="dt">alluvium =</span> subject)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb28-2" title="2"><span class="st">  </span><span class="kw"><a href="../reference/stat_alluvium.html">stat_alluvium</a></span>(<span class="kw">aes</span>(<span class="dt">fill =</span> class), <span class="dt">lode.guidance =</span> <span class="st">"backward"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb28-3" title="3"><span class="st">  </span><span class="kw"><a href="../reference/stat_stratum.html">stat_stratum</a></span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb28-4" title="4"><span class="st">  </span><span class="kw"><a href="../reference/stat_alluvium.html">stat_alluvium</a></span>(<span class="dt">geom =</span> <span class="st">"text"</span>, <span class="kw">aes</span>(<span class="dt">label =</span> subject),</a>
-<a class="sourceLine" id="cb28-5" title="5">                <span class="dt">lode.guidance =</span> <span class="st">"backward"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><html><body><pre class="r"><span class="fu">ggplot</span>(<span class="no">toy</span>, <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">collection</span>, <span class="kw">stratum</span> <span class="kw">=</span> <span class="no">category</span>, <span class="kw">alluvium</span> <span class="kw">=</span> <span class="no">subject</span>)) +
+  <span class="fu"><a href="../reference/stat_alluvium.html">stat_alluvium</a></span>(<span class="fu">aes</span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="no">class</span>), <span class="kw">lode.guidance</span> <span class="kw">=</span> <span class="st">"backward"</span>) +
+  <span class="fu"><a href="../reference/stat_stratum.html">stat_stratum</a></span>() +
+  <span class="fu"><a href="../reference/stat_alluvium.html">stat_alluvium</a></span>(<span class="kw">geom</span> <span class="kw">=</span> <span class="st">"text"</span>, <span class="fu">aes</span>(<span class="kw">label</span> <span class="kw">=</span> <span class="no">subject</span>),
+                <span class="kw">lode.guidance</span> <span class="kw">=</span> <span class="st">"backward"</span>)</pre></body></html></div>
 <p><img src="order-rectangles_files/figure-html/alluvia%20plot%20w/%20backward%20guidance-1.png" width="576" style="display: block; margin: auto;"></p>
 <p>The effect of <code>"backward"</code> guidance is to keep the right part of the plot as tidy as possible while allowing the left part to become as messy as necessary. (<code>"forward"</code> has the opposite effect.)</p>
 </div>
@@ -350,28 +354,33 @@
 <a href="#aesthetic-binding" class="anchor"></a>Aesthetic binding</h3>
 <p>It often makes sense to bundle together the cases and cohorts that fall into common groups used to assign differentiation aesthetics: most commonly <code>fill</code>, but also <code>alpha</code>, which controls the opacity of the <code>fill</code> colors, and <code>colour</code>, <code>linetype</code>, and <code>size</code>, which control the borders of the alluvia, flows, and lodes.</p>
 <p>The <code>aes.bind</code> parameter defaults to <code>"none"</code>, in which case aesthetics play no role in the order of the lodes. Setting the parameter to <code>"flows"</code> prioritizes any such aesthetics <em>after</em> the strata of any other axes but <em>before</em> the alluvia of the index axis (effectively ordering the flows at each axis by aesthetic), while setting it to <code>"alluvia"</code> prioritizes aesthetics <em>before</em> the strata of any other axes (effectively ordering the alluvia). In the toy example, the stronger option results in the lodes within each stratum being sorted first by class:</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1"><span class="kw">ggplot</span>(toy, <span class="kw">aes</span>(<span class="dt">x =</span> collection, <span class="dt">stratum =</span> category, <span class="dt">alluvium =</span> subject)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb29-2" title="2"><span class="st">  </span><span class="kw"><a href="../reference/stat_alluvium.html">stat_alluvium</a></span>(<span class="kw">aes</span>(<span class="dt">fill =</span> class), <span class="dt">aes.bind =</span> <span class="st">"alluvia"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb29-3" title="3"><span class="st">  </span><span class="kw"><a href="../reference/stat_stratum.html">stat_stratum</a></span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb29-4" title="4"><span class="st">  </span><span class="kw"><a href="../reference/stat_alluvium.html">stat_alluvium</a></span>(<span class="dt">geom =</span> <span class="st">"text"</span>, <span class="kw">aes</span>(<span class="dt">fill =</span> class, <span class="dt">label =</span> subject),</a>
-<a class="sourceLine" id="cb29-5" title="5">                <span class="dt">aes.bind =</span> <span class="st">"alluvia"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb29"><html><body><pre class="r"><span class="fu">ggplot</span>(<span class="no">toy</span>, <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">collection</span>, <span class="kw">stratum</span> <span class="kw">=</span> <span class="no">category</span>, <span class="kw">alluvium</span> <span class="kw">=</span> <span class="no">subject</span>)) +
+  <span class="fu"><a href="../reference/stat_alluvium.html">stat_alluvium</a></span>(<span class="fu">aes</span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="no">class</span>, <span class="kw">label</span> <span class="kw">=</span> <span class="no">subject</span>), <span class="kw">aes.bind</span> <span class="kw">=</span> <span class="st">"alluvia"</span>) +
+  <span class="fu"><a href="../reference/stat_stratum.html">stat_stratum</a></span>() +
+  <span class="fu"><a href="../reference/stat_alluvium.html">stat_alluvium</a></span>(<span class="kw">geom</span> <span class="kw">=</span> <span class="st">"text"</span>, <span class="fu">aes</span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="no">class</span>, <span class="kw">label</span> <span class="kw">=</span> <span class="no">subject</span>),
+                <span class="kw">aes.bind</span> <span class="kw">=</span> <span class="st">"alluvia"</span>)</pre></body></html></div>
+<pre><code>## Warning: Ignoring unknown aesthetics: label</code></pre>
 <pre><code>## Warning: Ignoring unknown aesthetics: fill</code></pre>
 <p><img src="order-rectangles_files/figure-html/alluvia%20plot%20w/%20strong%20aesthetic%20binding-1.png" width="576" style="display: block; margin: auto;"></p>
 <p>The more flexible option groups the lodes by class only after they’ve been ordered according to the strata at the remaining axes:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1"><span class="kw">ggplot</span>(toy, <span class="kw">aes</span>(<span class="dt">x =</span> collection, <span class="dt">stratum =</span> category, <span class="dt">alluvium =</span> subject)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb31-2" title="2"><span class="st">  </span><span class="kw"><a href="../reference/stat_alluvium.html">stat_alluvium</a></span>(<span class="kw">aes</span>(<span class="dt">fill =</span> class), <span class="dt">aes.bind =</span> <span class="st">"flows"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb31-3" title="3"><span class="st">  </span><span class="kw"><a href="../reference/stat_stratum.html">stat_stratum</a></span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb31-4" title="4"><span class="st">  </span><span class="kw"><a href="../reference/stat_alluvium.html">stat_alluvium</a></span>(<span class="dt">geom =</span> <span class="st">"text"</span>, <span class="kw">aes</span>(<span class="dt">fill =</span> class, <span class="dt">label =</span> subject),</a>
-<a class="sourceLine" id="cb31-5" title="5">                <span class="dt">aes.bind =</span> <span class="st">"flows"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb32"><html><body><pre class="r"><span class="fu">ggplot</span>(<span class="no">toy</span>, <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">collection</span>, <span class="kw">stratum</span> <span class="kw">=</span> <span class="no">category</span>, <span class="kw">alluvium</span> <span class="kw">=</span> <span class="no">subject</span>)) +
+  <span class="fu"><a href="../reference/stat_alluvium.html">stat_alluvium</a></span>(<span class="fu">aes</span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="no">class</span>, <span class="kw">label</span> <span class="kw">=</span> <span class="no">subject</span>), <span class="kw">aes.bind</span> <span class="kw">=</span> <span class="st">"flows"</span>) +
+  <span class="fu"><a href="../reference/stat_stratum.html">stat_stratum</a></span>() +
+  <span class="fu"><a href="../reference/stat_alluvium.html">stat_alluvium</a></span>(<span class="kw">geom</span> <span class="kw">=</span> <span class="st">"text"</span>, <span class="fu">aes</span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="no">class</span>, <span class="kw">label</span> <span class="kw">=</span> <span class="no">subject</span>),
+                <span class="kw">aes.bind</span> <span class="kw">=</span> <span class="st">"flows"</span>)</pre></body></html></div>
+<pre><code>## Warning: Ignoring unknown aesthetics: label</code></pre>
 <pre><code>## Warning: Ignoring unknown aesthetics: fill</code></pre>
 <p><img src="order-rectangles_files/figure-html/alluvia%20plot%20w/%20weak%20aesthetic%20binding-1.png" width="576" style="display: block; margin: auto;"></p>
 <p><strong>Warning:</strong> In addition to parameters like <code>reverse</code>, <em>when aesthetic variables are prioritized at all, overlaid alluvial layers must include the same aesthetics in the same order</em>. (This can produce warnings when the aesthetics are not recognized by the geom.) Try removing <code>fill = class</code> from the text geom above to see the risk posed by neglecting this check.</p>
 <p>Rather than ordering lodes <em>within</em>, the <code>flow</code> stat separately orders the flows <em>into</em> and <em>out from</em>, each stratum. (This precludes a corresponding <code>"alluvia"</code> option for <code>aes.bind</code>.) By default, the flows are ordered with respect first to the orders of the strata at the present axis and second to those at the adjacent axis. Setting <code>aes.bind</code> to the non-default option <code>"flows"</code> tells <code><a href="../reference/stat_flow.html">stat_flow()</a></code> to prioritize flow aesthetics after the strata of the index axis but before the strata of the adjacent axis:</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" title="1"><span class="kw">ggplot</span>(toy, <span class="kw">aes</span>(<span class="dt">x =</span> collection, <span class="dt">stratum =</span> category, <span class="dt">alluvium =</span> subject)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb33-2" title="2"><span class="st">  </span><span class="kw"><a href="../reference/stat_flow.html">stat_flow</a></span>(<span class="kw">aes</span>(<span class="dt">fill =</span> class), <span class="dt">aes.bind =</span> <span class="st">"flows"</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb33-3" title="3"><span class="st">  </span><span class="kw"><a href="../reference/stat_stratum.html">stat_stratum</a></span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb33-4" title="4"><span class="st">  </span><span class="kw"><a href="../reference/stat_flow.html">stat_flow</a></span>(<span class="dt">geom =</span> <span class="st">"text"</span>, <span class="kw">aes</span>(<span class="dt">fill =</span> class, <span class="dt">label =</span> subject),</a>
-<a class="sourceLine" id="cb33-5" title="5">            <span class="dt">aes.bind =</span> <span class="st">"flows"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb35"><html><body><pre class="r"><span class="fu">ggplot</span>(<span class="no">toy</span>, <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">collection</span>, <span class="kw">stratum</span> <span class="kw">=</span> <span class="no">category</span>, <span class="kw">alluvium</span> <span class="kw">=</span> <span class="no">subject</span>)) +
+  <span class="fu"><a href="../reference/stat_flow.html">stat_flow</a></span>(<span class="fu">aes</span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="no">class</span>, <span class="kw">label</span> <span class="kw">=</span> <span class="no">subject</span>), <span class="kw">aes.bind</span> <span class="kw">=</span> <span class="st">"flows"</span>) +
+  <span class="fu"><a href="../reference/stat_stratum.html">stat_stratum</a></span>() +
+  <span class="fu"><a href="../reference/stat_flow.html">stat_flow</a></span>(<span class="kw">geom</span> <span class="kw">=</span> <span class="st">"text"</span>,
+            <span class="fu">aes</span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="no">class</span>, <span class="kw">label</span> <span class="kw">=</span> <span class="no">subject</span>,
+                <span class="kw">hjust</span> <span class="kw">=</span> <span class="fu">after_stat</span>(<span class="no">flow</span>) <span class="kw">==</span> <span class="st">"to"</span>),
+            <span class="kw">aes.bind</span> <span class="kw">=</span> <span class="st">"flows"</span>)</pre></body></html></div>
+<pre><code>## Warning: Ignoring unknown aesthetics: label</code></pre>
 <pre><code>## Warning: Ignoring unknown aesthetics: fill</code></pre>
 <p><img src="order-rectangles_files/figure-html/flows%20plots%20w/%20aesthetic%20binding-1.png" width="576" style="display: block; margin: auto;"></p>
 <p>Note: The <code>aes.flow</code> parameter tells <code><a href="../reference/geom_flow.html">geom_flow()</a></code> how flows should inherit differentiation aesthetics from adjacent axes—<code>"forward"</code> or <code>"backward"</code>. It does <em>not</em> influence their positions.</p>
@@ -379,16 +388,26 @@
 <div id="manual-lode-ordering" class="section level3">
 <h3 class="hasAnchor">
 <a href="#manual-lode-ordering" class="anchor"></a>Manual lode ordering</h3>
-<p>Finally, one may wish to put the lodes at each axis in a predefined order, subject to their being located in the correct strata. This can be done by passing an integer matrix or a list of integer vectors to <code>lode.ordering</code>, which takes the columns or vectors to prescribe the order of the cases at the axes. (Internally, lode guidance functions are used to produce a lode ordering matrix that is then used in the same way.) For the toy example, we can use a shortcut—a single vector—to put the cases in the order of their IDs in the data at every axis:</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" title="1">lode_ord &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">nrow =</span> <span class="dv">5</span>, <span class="dt">ncol =</span> <span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb35-2" title="2"><span class="kw">ggplot</span>(toy, <span class="kw">aes</span>(<span class="dt">x =</span> collection, <span class="dt">stratum =</span> category, <span class="dt">alluvium =</span> subject)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb35-3" title="3"><span class="st">  </span><span class="kw"><a href="../reference/stat_alluvium.html">stat_alluvium</a></span>(<span class="kw">aes</span>(<span class="dt">fill =</span> class), <span class="dt">lode.ordering =</span> lode_ord) <span class="op">+</span></a>
-<a class="sourceLine" id="cb35-4" title="4"><span class="st">  </span><span class="kw"><a href="../reference/stat_stratum.html">stat_stratum</a></span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb35-5" title="5"><span class="st">  </span><span class="kw"><a href="../reference/stat_alluvium.html">stat_alluvium</a></span>(<span class="dt">geom =</span> <span class="st">"text"</span>, <span class="kw">aes</span>(<span class="dt">fill =</span> class, <span class="dt">label =</span> subject),</a>
-<a class="sourceLine" id="cb35-6" title="6">                <span class="dt">lode.ordering =</span> lode_ord)</a></code></pre></div>
-<pre><code>## Warning: Ignoring unknown aesthetics: fill</code></pre>
+<p>Finally, one may wish to put the lodes at each axis in a predefined order, subject to their being located in the correct strata. This can be done by passing a data column to the <code>order</code> aesthetic. For the toy example, we can pass a vector that puts the cases in the order of their IDs in the data at every axis:</p>
+<div class="sourceCode" id="cb38"><html><body><pre class="r"><span class="no">lode_ord</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">5</span>), <span class="kw">times</span> <span class="kw">=</span> <span class="fl">4</span>)
+<span class="fu">ggplot</span>(<span class="no">toy</span>, <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">collection</span>, <span class="kw">stratum</span> <span class="kw">=</span> <span class="no">category</span>, <span class="kw">alluvium</span> <span class="kw">=</span> <span class="no">subject</span>)) +
+  <span class="fu"><a href="../reference/stat_alluvium.html">stat_alluvium</a></span>(<span class="fu">aes</span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="no">class</span>, <span class="kw">order</span> <span class="kw">=</span> <span class="no">lode_ord</span>)) +
+  <span class="fu"><a href="../reference/stat_stratum.html">stat_stratum</a></span>() +
+  <span class="fu"><a href="../reference/stat_alluvium.html">stat_alluvium</a></span>(<span class="kw">geom</span> <span class="kw">=</span> <span class="st">"text"</span>,
+                <span class="fu">aes</span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="no">class</span>, <span class="kw">order</span> <span class="kw">=</span> <span class="no">lode_ord</span>, <span class="kw">label</span> <span class="kw">=</span> <span class="no">subject</span>))</pre></body></html></div>
+<pre><code>## Warning: Ignoring unknown aesthetics: order</code></pre>
+<pre><code>## Warning: Ignoring unknown aesthetics: fill, order</code></pre>
 <p><img src="order-rectangles_files/figure-html/alluvia%20plot%20w/%20manual%20lode%20ordering-1.png" width="576" style="display: block; margin: auto;"></p>
-<p>Within each stratum at each axis, the cases are now in order from bottom to top.</p>
+<div class="sourceCode" id="cb41"><html><body><pre class="r"><span class="fu">ggplot</span>(<span class="no">toy</span>, <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">collection</span>, <span class="kw">stratum</span> <span class="kw">=</span> <span class="no">category</span>, <span class="kw">alluvium</span> <span class="kw">=</span> <span class="no">subject</span>)) +
+  <span class="fu"><a href="../reference/stat_flow.html">stat_flow</a></span>(<span class="fu">aes</span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="no">class</span>, <span class="kw">order</span> <span class="kw">=</span> <span class="no">lode_ord</span>)) +
+  <span class="fu"><a href="../reference/stat_stratum.html">stat_stratum</a></span>() +
+  <span class="fu"><a href="../reference/stat_flow.html">stat_flow</a></span>(<span class="kw">geom</span> <span class="kw">=</span> <span class="st">"text"</span>,
+            <span class="fu">aes</span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="no">class</span>, <span class="kw">order</span> <span class="kw">=</span> <span class="no">lode_ord</span>, <span class="kw">label</span> <span class="kw">=</span> <span class="no">subject</span>,
+                <span class="kw">hjust</span> <span class="kw">=</span> <span class="fu">after_stat</span>(<span class="no">flow</span>) <span class="kw">==</span> <span class="st">"to"</span>))</pre></body></html></div>
+<pre><code>## Warning: Ignoring unknown aesthetics: order</code></pre>
+<pre><code>## Warning: Ignoring unknown aesthetics: fill, order</code></pre>
+<p><img src="order-rectangles_files/figure-html/flows%20plot%20w/%20manual%20lode%20ordering-1.png" width="576" style="display: block; margin: auto;"></p>
+<p>Within each stratum at each axis, the cases are now in order from top to bottom.</p>
 </div>
 </div>
 <div id="negative-strata" class="section level2">
@@ -403,9 +422,9 @@
 </ol>
 <p>The first issue is binary: Once <code>decreasing</code> and <code>reverse</code> are chosen, there are only two options for the negative strata. The choice is made by setting the new <code>absolute</code> parameter to either <code>TRUE</code> (the default), which yields a mirror-image ordering, or <code>FALSE</code>, which adopts the same vertical ordering. This setting also influences the ordering of lodes within strata at the same nexus as <code>reverse</code>, namely at the level of the alluvium variable. The second issue is then handled by creating a <code>deposit</code> variable with unique values corresponding to each <em>signed</em> stratum variable value, in the order prescribed by <code>decreasing</code>, <code>reverse</code>, and <code>absolute</code>. The <code>deposit</code> variable is then used in place of <code>stratum</code> for all of the lode-ordering tasks above.</p>
 <p>As a point of reference, here is a bar plot of the toy data, with a randomized sign variable used to indicate negative-valued observations:</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="dv">78</span>)</a>
-<a class="sourceLine" id="cb37-2" title="2">toy<span class="op">$</span>sign &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="op">-</span><span class="dv">1</span>, <span class="dv">1</span>), <span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(toy), <span class="dt">replace =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb37-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(toy)</a></code></pre></div>
+<div class="sourceCode" id="cb44"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span>(<span class="fl">78</span>)
+<span class="no">toy</span>$<span class="no">sign</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(-<span class="fl">1</span>, <span class="fl">1</span>), <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(<span class="no">toy</span>), <span class="kw">replace</span> <span class="kw">=</span> <span class="fl">TRUE</span>)
+<span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">toy</span>)</pre></body></html></div>
 <pre><code>##    subject collection category class sign
 ## 1        A          1        Y   one   -1
 ## 2        B          1        X   one    1
@@ -427,22 +446,22 @@
 ## 18       C          4        X   one   -1
 ## 19       D          4        X   two   -1
 ## 20       E          4        X   two    1</code></pre>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" title="1"><span class="kw">ggplot</span>(toy, <span class="kw">aes</span>(<span class="dt">x =</span> collection, <span class="dt">y =</span> sign)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb39-2" title="2"><span class="st">  </span><span class="kw">geom_bar</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> class), <span class="dt">stat =</span> <span class="st">"identity"</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb46"><html><body><pre class="r"><span class="fu">ggplot</span>(<span class="no">toy</span>, <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">collection</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">sign</span>)) +
+  <span class="fu">geom_bar</span>(<span class="fu">aes</span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="no">class</span>), <span class="kw">stat</span> <span class="kw">=</span> <span class="st">"identity"</span>)</pre></body></html></div>
 <p><img src="order-rectangles_files/figure-html/bar%20plot%20with%20negative%20observations-1.png" width="576" style="display: block; margin: auto;"></p>
 <p>The default behavior, illustrated here with flows, is for the positive strata to proceed downward and the negative strata to proceed upward, in both cases from larger absolute values to zero:</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb40-1" title="1"><span class="kw">ggplot</span>(toy, <span class="kw">aes</span>(<span class="dt">x =</span> collection, <span class="dt">stratum =</span> category, <span class="dt">alluvium =</span> subject,</a>
-<a class="sourceLine" id="cb40-2" title="2">                <span class="dt">y =</span> sign)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb40-3" title="3"><span class="st">  </span><span class="kw"><a href="../reference/geom_flow.html">geom_flow</a></span>(<span class="kw">aes</span>(<span class="dt">fill =</span> class)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb40-4" title="4"><span class="st">  </span><span class="kw"><a href="../reference/geom_stratum.html">geom_stratum</a></span>() <span class="op">+</span></a>
-<a class="sourceLine" id="cb40-5" title="5"><span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">stat =</span> <span class="st">"stratum"</span>, <span class="kw">aes</span>(<span class="dt">label =</span> category))</a></code></pre></div>
+<div class="sourceCode" id="cb47"><html><body><pre class="r"><span class="fu">ggplot</span>(<span class="no">toy</span>, <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">collection</span>, <span class="kw">stratum</span> <span class="kw">=</span> <span class="no">category</span>, <span class="kw">alluvium</span> <span class="kw">=</span> <span class="no">subject</span>,
+                <span class="kw">y</span> <span class="kw">=</span> <span class="no">sign</span>)) +
+  <span class="fu"><a href="../reference/geom_flow.html">geom_flow</a></span>(<span class="fu">aes</span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="no">class</span>)) +
+  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span>() +
+  <span class="fu">geom_text</span>(<span class="kw">stat</span> <span class="kw">=</span> <span class="st">"stratum"</span>, <span class="fu">aes</span>(<span class="kw">label</span> <span class="kw">=</span> <span class="no">category</span>))</pre></body></html></div>
 <p><img src="order-rectangles_files/figure-html/flows%20plot%20w/%20negative%20strata-1.png" width="576" style="display: block; margin: auto;"></p>
 <p>To instead have the strata proceed downward at each axis, and the lodes downward within each stratum, set <code>absolute = FALSE</code> (now plotting alluvia):</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" title="1"><span class="kw">ggplot</span>(toy, <span class="kw">aes</span>(<span class="dt">x =</span> collection, <span class="dt">stratum =</span> category, <span class="dt">alluvium =</span> subject,</a>
-<a class="sourceLine" id="cb41-2" title="2">                <span class="dt">y =</span> sign)) <span class="op">+</span></a>
-<a class="sourceLine" id="cb41-3" title="3"><span class="st">  </span><span class="kw"><a href="../reference/geom_alluvium.html">geom_alluvium</a></span>(<span class="kw">aes</span>(<span class="dt">fill =</span> class), <span class="dt">absolute =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb41-4" title="4"><span class="st">  </span><span class="kw"><a href="../reference/geom_stratum.html">geom_stratum</a></span>(<span class="dt">absolute =</span> <span class="ot">FALSE</span>) <span class="op">+</span></a>
-<a class="sourceLine" id="cb41-5" title="5"><span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">stat =</span> <span class="st">"alluvium"</span>, <span class="kw">aes</span>(<span class="dt">label =</span> subject), <span class="dt">absolute =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb48"><html><body><pre class="r"><span class="fu">ggplot</span>(<span class="no">toy</span>, <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">collection</span>, <span class="kw">stratum</span> <span class="kw">=</span> <span class="no">category</span>, <span class="kw">alluvium</span> <span class="kw">=</span> <span class="no">subject</span>,
+                <span class="kw">y</span> <span class="kw">=</span> <span class="no">sign</span>)) +
+  <span class="fu"><a href="../reference/geom_alluvium.html">geom_alluvium</a></span>(<span class="fu">aes</span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="no">class</span>), <span class="kw">absolute</span> <span class="kw">=</span> <span class="fl">FALSE</span>) +
+  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span>(<span class="kw">absolute</span> <span class="kw">=</span> <span class="fl">FALSE</span>) +
+  <span class="fu">geom_text</span>(<span class="kw">stat</span> <span class="kw">=</span> <span class="st">"alluvium"</span>, <span class="fu">aes</span>(<span class="kw">label</span> <span class="kw">=</span> <span class="no">subject</span>), <span class="kw">absolute</span> <span class="kw">=</span> <span class="fl">FALSE</span>)</pre></body></html></div>
 <p><img src="order-rectangles_files/figure-html/alluvia%20plot%20w/%20negative%20strata-1.png" width="576" style="display: block; margin: auto;"></p>
 <p>Note again that the labels are consistent with the alluvia and flows, despite the omission of the <code>fill</code> aesthetic from the text geom, because the aesthetic variables are not prioritized in the ordering of the lodes.</p>
 </div>
@@ -454,71 +473,70 @@
 <div id="appendix" class="section level2">
 <h2 class="hasAnchor">
 <a href="#appendix" class="anchor"></a>Appendix</h2>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb42-1" title="1">sessioninfo<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/sessioninfo/man/session_info.html">session_info</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb49"><html><body><pre class="r"><span class="kw pkg">sessioninfo</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/sessioninfo/man/session_info.html">session_info</a></span>()</pre></body></html></div>
 <pre><code>## ─ Session info ───────────────────────────────────────────────────────────────
 ##  setting  value                       
-##  version  R version 3.6.1 (2019-07-05)
+##  version  R version 4.0.0 (2020-04-24)
 ##  os       macOS High Sierra 10.13.6   
-##  system   x86_64, darwin15.6.0        
+##  system   x86_64, darwin17.0          
 ##  ui       X11                         
 ##  language (EN)                        
 ##  collate  en_US.UTF-8                 
 ##  ctype    en_US.UTF-8                 
 ##  tz       America/New_York            
-##  date     2020-03-29                  
+##  date     2020-07-05                  
 ## 
 ## ─ Packages ───────────────────────────────────────────────────────────────────
 ##  package     * version  date       lib source        
-##  assertthat    0.2.1    2019-03-21 [2] CRAN (R 3.6.0)
-##  backports     1.1.5    2019-10-02 [2] CRAN (R 3.6.0)
-##  cli           2.0.2    2020-02-28 [2] CRAN (R 3.6.0)
-##  colorspace    1.4-1    2019-03-18 [2] CRAN (R 3.6.0)
-##  crayon        1.3.4    2017-09-16 [2] CRAN (R 3.6.0)
-##  desc          1.2.0    2018-05-01 [2] CRAN (R 3.6.0)
-##  digest        0.6.25   2020-02-23 [2] CRAN (R 3.6.0)
-##  dplyr         0.8.5    2020-03-07 [2] CRAN (R 3.6.0)
-##  ellipsis      0.3.0    2019-09-20 [2] CRAN (R 3.6.0)
-##  evaluate      0.14     2019-05-28 [2] CRAN (R 3.6.0)
-##  fansi         0.4.1    2020-01-08 [2] CRAN (R 3.6.0)
-##  farver        2.0.3    2020-01-16 [2] CRAN (R 3.6.0)
-##  fs            1.3.2    2020-03-05 [2] CRAN (R 3.6.0)
-##  ggalluvial  * 0.11.3   2020-03-29 [1] local         
-##  ggplot2     * 3.3.0    2020-03-05 [2] CRAN (R 3.6.0)
-##  glue          1.3.2    2020-03-12 [2] CRAN (R 3.6.0)
-##  gtable        0.3.0    2019-03-25 [2] CRAN (R 3.6.0)
-##  htmltools     0.4.0    2019-10-04 [2] CRAN (R 3.6.0)
-##  knitr         1.28     2020-02-06 [2] CRAN (R 3.6.0)
-##  labeling      0.3      2014-08-23 [2] CRAN (R 3.6.0)
-##  lifecycle     0.2.0    2020-03-06 [2] CRAN (R 3.6.0)
-##  magrittr      1.5      2014-11-22 [2] CRAN (R 3.6.0)
-##  MASS          7.3-51.4 2019-03-31 [2] CRAN (R 3.6.1)
-##  memoise       1.1.0    2017-04-21 [2] CRAN (R 3.6.0)
-##  munsell       0.5.0    2018-06-12 [2] CRAN (R 3.6.0)
-##  pillar        1.4.3    2019-12-20 [2] CRAN (R 3.6.0)
-##  pkgconfig     2.0.3    2019-09-22 [2] CRAN (R 3.6.0)
-##  pkgdown       1.4.1    2019-09-15 [2] CRAN (R 3.6.0)
-##  purrr         0.3.3    2019-10-18 [2] CRAN (R 3.6.0)
-##  R6            2.4.1    2019-11-12 [2] CRAN (R 3.6.0)
-##  Rcpp          1.0.4    2020-03-17 [2] CRAN (R 3.6.0)
-##  rlang         0.4.5    2020-03-01 [2] CRAN (R 3.6.0)
-##  rmarkdown     2.1      2020-01-20 [2] CRAN (R 3.6.0)
-##  rprojroot     1.3-2    2018-01-03 [2] CRAN (R 3.6.0)
-##  rstudioapi    0.11     2020-02-07 [2] CRAN (R 3.6.0)
-##  scales        1.1.0    2019-11-18 [2] CRAN (R 3.6.0)
-##  sessioninfo   1.1.1    2018-11-05 [2] CRAN (R 3.6.0)
-##  stringi       1.4.6    2020-02-17 [2] CRAN (R 3.6.0)
-##  stringr       1.4.0    2019-02-10 [2] CRAN (R 3.6.0)
-##  tibble        2.1.3    2019-06-06 [2] CRAN (R 3.6.0)
-##  tidyr         1.0.2    2020-01-24 [2] CRAN (R 3.6.1)
-##  tidyselect    1.0.0    2020-01-27 [2] CRAN (R 3.6.1)
-##  utf8          1.1.4    2018-05-24 [2] CRAN (R 3.6.0)
-##  vctrs         0.2.4    2020-03-10 [2] CRAN (R 3.6.0)
-##  withr         2.1.2    2018-03-15 [2] CRAN (R 3.6.0)
-##  xfun          0.12     2020-01-13 [2] CRAN (R 3.6.0)
-##  yaml          2.2.1    2020-02-01 [2] CRAN (R 3.6.0)
+##  assertthat    0.2.1    2019-03-21 [2] CRAN (R 4.0.0)
+##  backports     1.1.8    2020-06-17 [2] CRAN (R 4.0.0)
+##  cli           2.0.2    2020-02-28 [2] CRAN (R 4.0.0)
+##  colorspace    1.4-1    2019-03-18 [2] CRAN (R 4.0.0)
+##  crayon        1.3.4    2017-09-16 [2] CRAN (R 4.0.0)
+##  desc          1.2.0    2018-05-01 [2] CRAN (R 4.0.0)
+##  digest        0.6.25   2020-02-23 [2] CRAN (R 4.0.0)
+##  dplyr         1.0.0    2020-05-29 [2] CRAN (R 4.0.0)
+##  ellipsis      0.3.1    2020-05-15 [2] CRAN (R 4.0.0)
+##  evaluate      0.14     2019-05-28 [2] CRAN (R 4.0.0)
+##  fansi         0.4.1    2020-01-08 [2] CRAN (R 4.0.0)
+##  farver        2.0.3    2020-01-16 [2] CRAN (R 4.0.0)
+##  fs            1.4.1    2020-04-04 [2] CRAN (R 4.0.0)
+##  generics      0.0.2    2018-11-29 [2] CRAN (R 4.0.0)
+##  ggalluvial  * 0.12.0   2020-07-05 [1] local         
+##  ggplot2     * 3.3.2    2020-06-19 [2] CRAN (R 4.0.0)
+##  glue          1.4.1    2020-05-13 [2] CRAN (R 4.0.0)
+##  gtable        0.3.0    2019-03-25 [2] CRAN (R 4.0.0)
+##  htmltools     0.5.0    2020-06-16 [2] CRAN (R 4.0.0)
+##  knitr         1.29     2020-06-23 [2] CRAN (R 4.0.0)
+##  labeling      0.3      2014-08-23 [2] CRAN (R 4.0.0)
+##  lifecycle     0.2.0    2020-03-06 [2] CRAN (R 4.0.0)
+##  magrittr      1.5      2014-11-22 [2] CRAN (R 4.0.0)
+##  MASS          7.3-51.5 2019-12-20 [2] CRAN (R 4.0.0)
+##  memoise       1.1.0    2017-04-21 [2] CRAN (R 4.0.0)
+##  munsell       0.5.0    2018-06-12 [2] CRAN (R 4.0.0)
+##  pillar        1.4.4    2020-05-05 [2] CRAN (R 4.0.0)
+##  pkgconfig     2.0.3    2019-09-22 [2] CRAN (R 4.0.0)
+##  pkgdown       1.5.1    2020-04-09 [2] CRAN (R 4.0.0)
+##  purrr         0.3.4    2020-04-17 [2] CRAN (R 4.0.0)
+##  R6            2.4.1    2019-11-12 [2] CRAN (R 4.0.0)
+##  Rcpp          1.0.4.6  2020-04-09 [2] CRAN (R 4.0.0)
+##  rlang         0.4.6    2020-05-02 [2] CRAN (R 4.0.0)
+##  rmarkdown     2.3      2020-06-18 [2] CRAN (R 4.0.0)
+##  rprojroot     1.3-2    2018-01-03 [2] CRAN (R 4.0.0)
+##  scales        1.1.1    2020-05-11 [2] CRAN (R 4.0.0)
+##  sessioninfo   1.1.1    2018-11-05 [2] CRAN (R 4.0.0)
+##  stringi       1.4.6    2020-02-17 [2] CRAN (R 4.0.0)
+##  stringr       1.4.0    2019-02-10 [2] CRAN (R 4.0.0)
+##  tibble        3.0.1    2020-04-20 [2] CRAN (R 4.0.0)
+##  tidyr         1.1.0    2020-05-20 [2] CRAN (R 4.0.0)
+##  tidyselect    1.1.0    2020-05-11 [2] CRAN (R 4.0.0)
+##  vctrs         0.3.1    2020-06-05 [2] CRAN (R 4.0.0)
+##  withr         2.2.0    2020-04-20 [2] CRAN (R 4.0.0)
+##  xfun          0.15     2020-06-21 [2] CRAN (R 4.0.0)
+##  yaml          2.2.1    2020-02-01 [2] CRAN (R 4.0.0)
 ## 
-## [1] /private/var/folders/pg/fjg8r4fj5v33zqmwptf9mfg80000gn/T/RtmpZeN5S8/temp_libpath11caf65c430c8
-## [2] /Library/Frameworks/R.framework/Versions/3.6/Resources/library</code></pre>
+## [1] /private/var/folders/pg/fjg8r4fj5v33zqmwptf9mfg80000gn/T/RtmppYMemk/temp_libpath96d813c91061
+## [2] /Library/Frameworks/R.framework/Versions/4.0/Resources/library</code></pre>
 </div>
 <div class="footnotes">
 <hr>
@@ -528,22 +546,11 @@
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
 
-        <div id="tocnav">
-      <h2 class="hasAnchor">
-<a href="#tocnav" class="anchor"></a>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-<li><a href="#setup">Setup</a></li>
-      <li><a href="#motivations">Motivations</a></li>
-      <li><a href="#positioning-strata">Positioning strata</a></li>
-      <li><a href="#positioning-lodes-within-strata">Positioning lodes within strata</a></li>
-      <li><a href="#negative-strata">Negative strata</a></li>
-      <li><a href="#more-examples">More examples</a></li>
-      <li><a href="#appendix">Appendix</a></li>
-      </ul>
+        <nav id="toc" data-toggle="toc"><h2 data-toc-skip>Contents</h2>
+    </nav>
 </div>
-      </div>
 
 </div>
 
@@ -554,7 +561,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

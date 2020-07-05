@@ -142,8 +142,8 @@ strings to \code{curve}:
 \item \code{"cubic"}:      \eqn{f(x)=3x^{2}-2x^{3}}{f(x)=3x^2-2x^3}, the unique
 degree-3 polynomial that also is flat at both endpoints
 \item \code{"quintic"}:    \eqn{f(x)=10x^{3}-15x^{4}+6x^{5}}{f(x)=10x^3-15x^4+6x^5},
-the unique degree-5 polynomial that also is flat at both
-endpoints
+the unique degree-5 polynomial that also has zero curvature
+at both endpoints
 \item \code{"sine"}:       the unique sinusoidal function that is flat at both
 endpoints
 \item \code{"arctangent"}: the inverse tangent function, scaled and re-centered to the

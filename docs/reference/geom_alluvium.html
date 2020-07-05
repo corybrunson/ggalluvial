@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -41,7 +45,6 @@ vertical (y, ymin, ymax) positions of the lodes
 of an alluvial plot, the intersections of the alluvia with the strata.
 It plots both the lodes themselves, using geom_lode(), and the
 flows between them, using geom_flow()." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -59,7 +62,7 @@ flows between them, using geom_flow()." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -73,7 +76,7 @@ flows between them, using geom_flow()." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.0</span>
       </span>
     </div>
 
@@ -111,7 +114,12 @@ flows between them, using geom_flow()." />
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/corybrunson/ggalluvial/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -126,7 +134,7 @@ flows between them, using geom_flow()." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Alluvia across strata</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/corybrunson/ggalluvial/blob/master/R/geom-alluvium.r'><code>R/geom-alluvium.r</code></a></small>
     <div class="hidden name"><code>geom_alluvium.Rd</code></div>
     </div>
 
@@ -144,7 +152,11 @@ flows between them, using <code><a href='geom_flow.html'>geom_flow()</a></code>.
   <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
   <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"identity"</span>,
   <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>3</span>,
-  <span class='kw'>knot.pos</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>6</span>,
+  <span class='kw'>knot.pos</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>4</span>,
+  <span class='kw'>knot.prop</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>curve</span> <span class='kw'>=</span> <span class='st'>"xspline"</span>,
+  <span class='kw'>reach</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>segments</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
   <span class='kw'>inherit.aes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
@@ -192,9 +204,37 @@ distance between axes. Defaults to 1/3.</p></td>
     </tr>
     <tr>
       <th>knot.pos</th>
-      <td><p>The horizontal distance between a stratum (<code>width/2</code>
-from its axis) and the knot of the x-spline, as a proportion of the
-separation between strata. Defaults to 1/6.</p></td>
+      <td><p>The horizontal distance of x-spline knots from each stratum
+(<code>width/2</code> from its axis), either (if <code>knot.prop = TRUE</code>, the default) as a
+proportion of the length of the x-spline, i.e. of the gap between adjacent
+strata, or (if <code>knot.prop = FALSE</code>) on the scale of the <code>x</code> direction.</p></td>
+    </tr>
+    <tr>
+      <th>knot.prop</th>
+      <td><p>Logical; whether to interpret <code>knot.pos</code> as a proportion of
+the length of each flow (the default), rather than on the <code>x</code> scale.</p></td>
+    </tr>
+    <tr>
+      <th>curve</th>
+      <td><p>Character; the type of curve used to produce flows. Defaults to
+<code>"xspline"</code> and can be alternatively set to one of <code>"linear"</code>, <code>"cubic"</code>,
+<code>"quintic"</code>, <code>"sine"</code>, <code>"arctangent"</code>, and <code>"sigmoid"</code>. <code>"xspline"</code>
+produces approximation splines using 4 points per curve; the alternatives
+produce interpolation splines between points along the graphs of functions
+of the associated type. See the <strong>Curves</strong> section.</p></td>
+    </tr>
+    <tr>
+      <th>reach</th>
+      <td><p>For alternative <code>curve</code>s based on asymptotic functions, the
+value along the asymptote at which to truncate the function to obtain the
+shape that will be scaled to fit between strata. See the <strong>Curves</strong>
+section.</p></td>
+    </tr>
+    <tr>
+      <th>segments</th>
+      <td><p>The number of segments to be used in drawing each alternative
+curve (each curved boundary of each flow). If less than 3, will be silently
+changed to 3.</p></td>
     </tr>
     <tr>
       <th>na.rm</th>
@@ -243,6 +283,43 @@ following aesthetics (required aesthetics are in bold):</p><ul>
 </ul>
 
 <p><code>group</code> is used internally; arguments are ignored.</p>
+    <h2 class="hasAnchor" id="curves"><a class="anchor" href="#curves"></a>Curves</h2>
+
+    
+
+<p>By default, <code>geom_alluvium()</code> and <code><a href='geom_flow.html'>geom_flow()</a></code> render flows between lodes as
+splines about quartets of control points using <code><a href='https://rdrr.io/r/grid/grid.xspline.html'>grid::xsplineGrob()</a></code>. These
+curves are parameterized by the relative location of the knot (<code>knot.pos</code>)
+that governs the bending of each end toward their meeting at the point of
+inflection. They are quick to render and clear to read. Nevertheless, for any
+number of reasons, users may prefer plots that use differently-shaped curves.</p>
+<p>A variety of such options are illustrated in <a href='https://www.dataplusscience.com/Sigmoid.html'>this blog post by Jeffrey Shaffer</a>. A subset of these,
+some with added flexibility, are implemented here. Each is encoded as a
+continuous, increasing, bijective function from the unit interval \([0,1]\)
+to itself, and each is rescaled, if necessary, so that its endpoints meet the
+corresponding lodes. They are rendered piecewise-linearly, by default using
+<code>segments = 48</code>. Summon each curve type by passing one of the following
+strings to <code>curve</code>:</p><ul>
+<li><p><code>"linear"</code>:     \(f(x)=x\), the unique degree-1 polynomial that takes
+0 to 0 and 1 to 1</p></li>
+<li><p><code>"cubic"</code>:      \(f(x)=3x^{2}-2x^{3}\), the unique
+degree-3 polynomial that also is flat at both endpoints</p></li>
+<li><p><code>"quintic"</code>:    \(f(x)=10x^{3}-15x^{4}+6x^{5}\),
+the unique degree-5 polynomial that also has zero curvature
+at both endpoints</p></li>
+<li><p><code>"sine"</code>:       the unique sinusoidal function that is flat at both
+endpoints</p></li>
+<li><p><code>"arctangent"</code>: the inverse tangent function, scaled and re-centered to the
+unit interval from a symmetric domain with radius <code>reach</code></p></li>
+<li><p><code>"sigmoid"</code>:    the sigmoid function, scaled and re-centered to the unit
+interval from a symmetric domain with radius <code>reach</code></p></li>
+</ul>
+
+<p>Only the (default) <code>"xspline"</code> option uses the <code>knot.*</code> parameters, while
+only the alternative curves use the <code>segments</code> parameter, and only
+<code>"arctangent"</code> and <code>"sigmoid"</code> use the <code>reach</code> parameter. Larger values of
+<code>reach</code> result in greater compression and steeper slopes. The <code>NULL</code> default
+will be changed to <code>2+sqrt(3)</code> for <code>"arctangent"</code> and to <code>6</code> for <code>"sigmoid"</code>.</p>
     <h2 class="hasAnchor" id="defunct-parameters"><a class="anchor" href="#defunct-parameters"></a>Defunct parameters</h2>
 
     
@@ -269,22 +346,38 @@ discontinued. Use <code>width</code> and <code>knot.pos</code> instead.</p>
   <span class='fu'>scale_x_discrete</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>))</div><div class='img'><img src='geom_alluvium-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='no'>gg</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='kw pkg'>alluvial</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/alluvial/man/Refugees.html'>Refugees</a></span>,
              <span class='fu'>aes</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>refugees</span>, <span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>year</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>country</span>))
-<span class='co'># time series bump chart</span>
+<span class='co'># time series bump chart (quintic flows)</span>
 <span class='no'>gg</span> + <span class='fu'>geom_alluvium</span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>country</span>, <span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>country</span>),
-                   <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>4</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>2</span>/<span class='fl'>3</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='img'><img src='geom_alluvium-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># time series line plot of refugees data, sorted by country</span>
+                   <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>4</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>2</span>/<span class='fl'>3</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+                   <span class='kw'>curve</span> <span class='kw'>=</span> <span class='st'>"quintic"</span>)</div><div class='img'><img src='geom_alluvium-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># time series line plot of refugees data, sorted by country</span>
 <span class='no'>gg</span> + <span class='fu'>geom_alluvium</span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>country</span>, <span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>country</span>),
-                   <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>knot.pos</span> <span class='kw'>=</span> <span class='fl'>0</span>)</div><div class='img'><img src='geom_alluvium-3.png' alt='' width='700' height='433' /></div></pre>
+                   <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>knot.pos</span> <span class='kw'>=</span> <span class='fl'>0</span>)</div><div class='img'><img src='geom_alluvium-3.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='co'># irregular spacing between axes of a continuous variable</span>
+<span class='no'>refugees_sub</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='kw pkg'>alluvial</span><span class='kw ns'>::</span><span class='no'><a href='https://rdrr.io/pkg/alluvial/man/Refugees.html'>Refugees</a></span>, <span class='no'>year</span> <span class='kw'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2003</span>, <span class='fl'>2005</span>, <span class='fl'>2010</span>, <span class='fl'>2013</span>))
+<span class='no'>gg</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>refugees_sub</span>,
+             <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>year</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>refugees</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>country</span>)) +
+  <span class='fu'>theme_bw</span>() +
+  <span class='fu'>scale_fill_brewer</span>(<span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"qual"</span>, <span class='kw'>palette</span> <span class='kw'>=</span> <span class='st'>"Set3"</span>)
+<span class='co'># proportional knot positioning (default)</span>
+<span class='no'>gg</span> +
+  <span class='fu'>geom_alluvium</span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>country</span>),
+                <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.75</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>2</span>) +
+  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='fu'>aes</span>(<span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>country</span>), <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>2</span>)</div><div class='img'><img src='geom_alluvium-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># constant knot positioning</span>
+<span class='no'>gg</span> +
+  <span class='fu'>geom_alluvium</span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>country</span>),
+                <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.75</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>2</span>,
+                <span class='kw'>knot.pos</span> <span class='kw'>=</span> <span class='fl'>1</span>, <span class='kw'>knot.prop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>) +
+  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='fu'>aes</span>(<span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>country</span>), <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>2</span>)</div><div class='img'><img src='geom_alluvium-5.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># coarsely-segmented curves</span>
+<span class='no'>gg</span> +
+  <span class='fu'>geom_alluvium</span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>country</span>),
+                <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.75</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>2</span>,
+                <span class='kw'>curve</span> <span class='kw'>=</span> <span class='st'>"arctan"</span>, <span class='kw'>segments</span> <span class='kw'>=</span> <span class='fl'>6</span>) +
+  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='fu'>aes</span>(<span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>country</span>), <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>2</span>)</div><div class='img'><img src='geom_alluvium-6.png' alt='' width='700' height='433' /></div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#aesthetics">Aesthetics</a></li>
-      <li><a href="#defunct-parameters">Defunct parameters</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -295,7 +388,7 @@ discontinued. Use <code>width</code> and <code>knot.pos</code> instead.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

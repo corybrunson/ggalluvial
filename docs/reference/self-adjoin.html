@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -39,7 +43,6 @@
 <meta property="og:description" content="This function binds a dataset to itself along adjacent pairs of a key
 variable. It is invoked by geom_flow() to convert data in lodes
 form to something similar to alluvia form." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -57,7 +60,7 @@ form to something similar to alluvia form." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -71,7 +74,7 @@ form to something similar to alluvia form." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.0</span>
       </span>
     </div>
 
@@ -109,7 +112,12 @@ form to something similar to alluvia form." />
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/corybrunson/ggalluvial/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -124,7 +132,7 @@ form to something similar to alluvia form." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Adjoin a dataset to itself</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/corybrunson/ggalluvial/blob/master/R/self-adjoin.r'><code>R/self-adjoin.r</code></a></small>
     <div class="hidden name"><code>self-adjoin.Rd</code></div>
     </div>
 
@@ -160,7 +168,7 @@ form to something similar to alluvia form.</p>
     <tr>
       <th>by</th>
       <td><p>Character vector of variables to self-adjoin by; passed to
-<code><a href='https://dplyr.tidyverse.org/reference/join.html'>dplyr::join</a></code> functions.</p></td>
+<code><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>dplyr::join</a></code> functions.</p></td>
     </tr>
     <tr>
       <th>link</th>
@@ -177,13 +185,13 @@ variables can overlap with each other but cannot overlap with <code>by</code> or
     <tr>
       <th>suffix</th>
       <td><p>Suffixes to add to the adjoined <code>link</code> variables; passed to
-<code><a href='https://dplyr.tidyverse.org/reference/join.html'>dplyr::join</a></code> functions.</p></td>
+<code><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>dplyr::join</a></code> functions.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>self_adjoin</code> invokes <code><a href='https://dplyr.tidyverse.org/reference/join.html'>dplyr::join</a></code> functions in order to convert
+    <p><code>self_adjoin</code> invokes <code><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>dplyr::join</a></code> functions in order to convert
 a dataset with measures along a discrete <code>key</code> variable into a dataset
 consisting of column bindings of these measures (by any <code>by</code> variables) along
 adjacent values of <code>key</code>.</p>
@@ -209,40 +217,36 @@ adjacent values of <code>key</code>.</p>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>vaccinations</span>)
 <span class='no'>vaccination_steps</span> <span class='kw'>&lt;-</span> <span class='fu'>self_adjoin</span>(<span class='no'>vaccinations</span>, <span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"subject"</span>,
                                  <span class='kw'>link</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"survey"</span>, <span class='st'>"response"</span>),
-                                 <span class='kw'>keep.x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"freq"</span>, <span class='st'>"a"</span>))
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>vaccination_steps</span>)</div><div class='output co'>#&gt;        step subject  survey.x response.x freq           a  survey.y response.y
-#&gt; 1 ms153_NSA       1 ms153_NSA     Always   48 0.050367261 ms432_NSA     Always
-#&gt; 2 ms153_NSA       2 ms153_NSA     Always    9 0.009443861 ms432_NSA     Always
-#&gt; 3 ms153_NSA       3 ms153_NSA     Always   66 0.069254984 ms432_NSA    Missing
-#&gt; 4 ms153_NSA       4 ms153_NSA     Always    1 0.001049318 ms432_NSA    Missing
-#&gt; 5 ms153_NSA       5 ms153_NSA     Always   11 0.011542497 ms432_NSA    Missing
-#&gt; 6 ms153_NSA       6 ms153_NSA     Always    1 0.001049318 ms432_NSA      Never</div><div class='input'><span class='no'>vaccination_steps</span> <span class='kw'>&lt;-</span> <span class='fu'>self_adjoin</span>(<span class='no'>vaccinations</span>, <span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"subject"</span>,
+                                 <span class='kw'>keep.x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"freq"</span>))
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>vaccination_steps</span>)</div><div class='output co'>#&gt;        step subject  survey.x response.x freq  survey.y response.y
+#&gt; 1 ms153_NSA       1 ms153_NSA     Always   48 ms432_NSA     Always
+#&gt; 2 ms153_NSA       2 ms153_NSA     Always    9 ms432_NSA     Always
+#&gt; 3 ms153_NSA       3 ms153_NSA     Always   66 ms432_NSA    Missing
+#&gt; 4 ms153_NSA       4 ms153_NSA     Always    1 ms432_NSA    Missing
+#&gt; 5 ms153_NSA       5 ms153_NSA     Always   11 ms432_NSA    Missing
+#&gt; 6 ms153_NSA       6 ms153_NSA     Always    1 ms432_NSA      Never</div><div class='input'><span class='no'>vaccination_steps</span> <span class='kw'>&lt;-</span> <span class='fu'>self_adjoin</span>(<span class='no'>vaccinations</span>, <span class='kw'>key</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>by</span> <span class='kw'>=</span> <span class='st'>"subject"</span>,
                                  <span class='kw'>link</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"survey"</span>, <span class='st'>"response"</span>),
-                                 <span class='kw'>keep.x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"freq"</span>, <span class='st'>"a"</span>), <span class='kw'>keep.y</span> <span class='kw'>=</span> <span class='st'>"a"</span>)
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>vaccination_steps</span>)</div><div class='output co'>#&gt;        step subject  survey.x response.x freq         a.x  survey.y response.y
-#&gt; 1 ms153_NSA       1 ms153_NSA     Always   48 0.050367261 ms432_NSA     Always
-#&gt; 2 ms153_NSA       2 ms153_NSA     Always    9 0.009443861 ms432_NSA     Always
-#&gt; 3 ms153_NSA       3 ms153_NSA     Always   66 0.069254984 ms432_NSA    Missing
-#&gt; 4 ms153_NSA       4 ms153_NSA     Always    1 0.001049318 ms432_NSA    Missing
-#&gt; 5 ms153_NSA       5 ms153_NSA     Always   11 0.011542497 ms432_NSA    Missing
-#&gt; 6 ms153_NSA       6 ms153_NSA     Always    1 0.001049318 ms432_NSA      Never
-#&gt;           a.y
-#&gt; 1 0.050367261
-#&gt; 2 0.009443861
-#&gt; 3 0.069254984
-#&gt; 4 0.001049318
-#&gt; 5 0.011542497
-#&gt; 6 0.001049318</div></pre>
+                                 <span class='kw'>keep.x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"freq"</span>),
+                                 <span class='kw'>keep.y</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"start_date"</span>, <span class='st'>"end_date"</span>))
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='no'>vaccination_steps</span>)</div><div class='output co'>#&gt;        step subject  survey.x response.x freq  survey.y response.y start_date
+#&gt; 1 ms153_NSA       1 ms153_NSA     Always   48 ms432_NSA     Always 2015-06-04
+#&gt; 2 ms153_NSA       2 ms153_NSA     Always    9 ms432_NSA     Always 2015-06-04
+#&gt; 3 ms153_NSA       3 ms153_NSA     Always   66 ms432_NSA    Missing 2015-06-04
+#&gt; 4 ms153_NSA       4 ms153_NSA     Always    1 ms432_NSA    Missing 2015-06-04
+#&gt; 5 ms153_NSA       5 ms153_NSA     Always   11 ms432_NSA    Missing 2015-06-04
+#&gt; 6 ms153_NSA       6 ms153_NSA     Always    1 ms432_NSA      Never 2015-06-04
+#&gt;     end_date
+#&gt; 1 2015-10-05
+#&gt; 2 2015-10-05
+#&gt; 3 2015-10-05
+#&gt; 4 2015-10-05
+#&gt; 5 2015-10-05
+#&gt; 6 2015-10-05</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#details">Details</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -253,7 +257,7 @@ adjacent values of <code>key</code>.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>
