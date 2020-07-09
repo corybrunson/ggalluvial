@@ -7,6 +7,7 @@ test_that("`geom_flow` draws correctly", {
   a1 <- aes(y = Freq, axis1 = Class, axis2 = Sex, axis3 = Age)
   a2 <- aes(y = Freq, axis1 = Class, axis2 = Sex)
   
+  skip_on_cran()
   vdiffr::expect_doppelganger(
     "`geom_flow`: basic",
     ggplot(d, a1) + geom_flow()
@@ -26,6 +27,7 @@ test_that("`geom_flow` draws correctly", {
 data(vaccinations)
 
 test_that("`geom_flow` orients flows correctly", {
+  skip_on_cran()
   vdiffr::expect_doppelganger(
     "`geom_flow`: forward orientation",
     ggplot(vaccinations,
@@ -43,6 +45,7 @@ test_that("`geom_flow` orients flows correctly", {
 })
 
 test_that("`geom_flow()` recognizes alternative curves", {
+  skip_on_cran()
   vdiffr::expect_doppelganger(
     "`geom_flow`: unscaled knot positions",
     ggplot(vaccinations,
