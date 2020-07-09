@@ -19,35 +19,35 @@ unit_sine <- function(x) {
   sin(t) / 2 + .5
 }
 # inverse tangent function compressed from a specified symmetric domain
-unit_arctangent <- function(x, reach) {
-  if (is.null(reach)) reach <- 2 + sqrt(3)
-  t <- (x - .5) * 2 * reach
-  atan(t) / 2 / atan(reach) + .5
+unit_arctangent <- function(x, curve_range) {
+  if (is.null(curve_range)) curve_range <- 2 + sqrt(3)
+  t <- (x - .5) * 2 * curve_range
+  atan(t) / 2 / atan(curve_range) + .5
 }
 # sigmoid function compressed from a specified symmetric domain
-unit_sigmoid <- function(x, reach) {
-  if (is.null(reach)) reach <- 6
-  t <- (x - .5) * 2 * reach
-  (stats::plogis(t) - stats::plogis(-reach)) /
-    diff(stats::plogis(c(-1, 1) * reach))
+unit_sigmoid <- function(x, curve_range) {
+  if (is.null(curve_range)) curve_range <- 6
+  t <- (x - .5) * 2 * curve_range
+  (stats::plogis(t) - stats::plogis(-curve_range)) /
+    diff(stats::plogis(c(-1, 1) * curve_range))
 }
 
 # return the desired flow curve function
-make_curve_fun <- function(curve, reach) {
-  curve <- match.arg(
-    curve,
+make_curve_fun <- function(curve_type, curve_range) {
+  curve_type <- match.arg(
+    curve_type,
     c("linear", "cubic", "quintic", "sine", "arctangent", "sigmoid")
   )
   switch(
-    curve,
+    curve_type,
     # polynomial curves
     linear = identity,
     cubic = unit_cubic,
     quintic = unit_quintic,
     # sinusoidal curve
     sine = unit_sine,
-    # asymptotic curves (with specifiable reach)
-    arctangent = function(x) unit_arctangent(x, reach),
-    sigmoid = function(x) unit_sigmoid(x, reach)
+    # asymptotic curves (compressed from a specifiable range)
+    arctangent = function(x) unit_arctangent(x, curve_range),
+    sigmoid = function(x) unit_sigmoid(x, curve_range)
   )
 }

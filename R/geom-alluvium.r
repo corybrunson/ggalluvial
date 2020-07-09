@@ -22,16 +22,16 @@
 #'   strata, or (if `knot.prop = FALSE`) on the scale of the `x` direction.
 #' @param knot.prop Logical; whether to interpret `knot.pos` as a proportion of
 #'   the length of each flow (the default), rather than on the `x` scale.
-#' @param curve Character; the type of curve used to produce flows. Defaults to
-#'   `"xspline"` and can be alternatively set to one of `"linear"`, `"cubic"`,
-#'   `"quintic"`, `"sine"`, `"arctangent"`, and `"sigmoid"`. `"xspline"`
-#'   produces approximation splines using 4 points per curve; the alternatives
-#'   produce interpolation splines between points along the graphs of functions
-#'   of the associated type. See the **Curves** section.
-#' @param reach For alternative `curve`s based on asymptotic functions, the
-#'   value along the asymptote at which to truncate the function to obtain the
-#'   shape that will be scaled to fit between strata. See the **Curves**
-#'   section.
+#' @param curve_type Character; the type of curve used to produce flows.
+#'   Defaults to `"xspline"` and can be alternatively set to one of `"linear"`,
+#'   `"cubic"`, `"quintic"`, `"sine"`, `"arctangent"`, and `"sigmoid"`.
+#'   `"xspline"` produces approximation splines using 4 points per curve; the
+#'   alternatives produce interpolation splines between points along the graphs
+#'   of functions of the associated type. See the **Curves** section.
+#' @param curve_range For alternative `curve_type`s based on asymptotic
+#'   functions, the value along the asymptote at which to truncate the function
+#'   to obtain the shape that will be scaled to fit between strata. See the
+#'   **Curves** section.
 #' @param segments The number of segments to be used in drawing each alternative
 #'   curve (each curved boundary of each flow). If less than 3, will be silently
 #'   changed to 3.
@@ -43,7 +43,8 @@ geom_alluvium <- function(mapping = NULL,
                           position = "identity",
                           width = 1/3,
                           knot.pos = 1/4, knot.prop = TRUE,
-                          curve = "xspline", reach = NULL, segments = NULL,
+                          curve_type = "xspline", curve_range = NULL,
+                          segments = NULL,
                           na.rm = FALSE,
                           show.legend = NA,
                           inherit.aes = TRUE,
@@ -60,8 +61,8 @@ geom_alluvium <- function(mapping = NULL,
       width = width,
       knot.pos = knot.pos,
       knot.prop = knot.prop,
-      curve = curve,
-      reach = reach,
+      curve_type = curve_type,
+      curve_range = curve_range,
       segments = segments,
       na.rm = na.rm,
       ...
@@ -109,7 +110,8 @@ GeomAlluvium <- ggproto(
   draw_group = function(self, data, panel_scales, coord,
                         width = 1/3,
                         knot.pos = 1/4, knot.prop = TRUE,
-                        curve = "xspline", reach = NULL, segments = NULL) {
+                        curve_type = "xspline", curve_range = NULL,
+                        segments = NULL) {
     
     # add width to data
     data <- transform(data, width = width)
@@ -128,7 +130,7 @@ GeomAlluvium <- ggproto(
         y = ymin + (ymax - ymin) * c(0, 0, 1, 1),
         shape = rep(0, 4)
       ))
-    } else if (curve %in% c("spline", "xspline")) {
+    } else if (curve_type %in% c("spline", "xspline")) {
       # spline coordinates (more than one axis)
       curve_data <- data_to_xspline(data, knot.prop)
     } else {
@@ -138,7 +140,7 @@ GeomAlluvium <- ggproto(
         segments <- 3
       }
       # unit curve coordinates (more than one axis)
-      curve_data <- data_to_unit_curve(data, curve, reach, segments)
+      curve_data <- data_to_unit_curve(data, curve_type, curve_range, segments)
     }
     data <- data.frame(first_row, curve_data)
     
@@ -187,9 +189,9 @@ data_to_xspline <- function(data, knot.prop) {
   )
 }
 
-data_to_unit_curve <- function(data, curve, reach, segments) {
+data_to_unit_curve <- function(data, curve_type, curve_range, segments) {
   # specs for a single flow curve
-  curve_fun <- make_curve_fun(curve, reach)
+  curve_fun <- make_curve_fun(curve_type, curve_range)
   i_once <- seq(0, 1, length.out = segments + 1)
   f_once <- curve_fun(i_once)
   # coordinates for a full curve

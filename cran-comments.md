@@ -1,10 +1,11 @@
 ## Test environments
 
-* local OS X install, R 4.0.0
-* Rhub (via `devtools::check_rhub()`)
+* local OS X install, R 4.0.0 (via `devtools::check()`)
+* Rhub (via `rhub::check_for_cran()`)
 * win-builder (devel, current, and previous; via `devtools::check_win_*()`)
 
-Test on Rhub produced several of one type of WARNING: "Non-file package-anchored link(s) in documentation". These concerned cross-references formatted using roxygen2 that were not flagged by other checks.
+There were no ERRORs, WARNINGs, or NOTEs.
+In response to a previous failed submission, **vdiffr** tests are now skipped on CRAN.
 
 ## R CMD check results
 

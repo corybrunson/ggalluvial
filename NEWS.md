@@ -43,7 +43,7 @@ These new variables complement the already-computed but heretofore undocumented 
 The `knot.pos` parameter of `geom_alluvium()` and `geom_flow()` is now interpreted as a proportion of the total length of each flow, i.e. of the gap between adjacent strata (_not_ axes). This means that values will vary with axis positions and stratum widths. Setting the new `knot.prop` parameter to `FALSE` prevents this by interpreting `knot.pos` as a constant value in the `x` direction.
 
 These flows are rendered using `grid::xsplineGrob()` with four control points each: the endpoints and the two knots.
-To complement them, several other curves are now available: linear (equivalent to `knot.pos = 0`), cubic, quintic, sinusoidal, arctangent, and sigmoid, summoned by the new `curve` parameter (which defaults to the x-spline). (The asymptotic functions, arctangent and sigmoid, are compressed according to the new `reach` parameter.) The new curves are rendered piecewise linearly, with resolution controlled by the new `segments` parameter (similar to `ggplot2::stat_ellipse()`).
+To complement them, several other curves are now available: linear (equivalent to `knot.pos = 0`), cubic, quintic, sinusoidal, arctangent, and sigmoid, summoned by the new `curve_type` parameter (which defaults to the x-spline). (The asymptotic functions, arctangent and sigmoid, are compressed according to the new `curve_range` parameter.) The new curves are rendered piecewise linearly, with resolution controlled by the new `segments` parameter (similar to `ggplot2::stat_ellipse()`).
 
 # ggalluvial 0.11.3
 

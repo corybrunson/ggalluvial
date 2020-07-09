@@ -11,7 +11,7 @@ gg <- ggplot(alluvial::Refugees,
 # time series bump chart (quintic flows)
 gg + geom_alluvium(aes(fill = country, colour = country),
                    width = 1/4, alpha = 2/3, decreasing = FALSE,
-                   curve = "quintic")
+                   curve_type = "quintic")
 # time series line plot of refugees data, sorted by country
 gg + geom_alluvium(aes(fill = country, colour = country),
                    decreasing = NA, width = 0, knot.pos = 0)
@@ -37,5 +37,11 @@ gg +
 gg +
   geom_alluvium(aes(fill = country),
                 alpha = .75, decreasing = FALSE, width = 1/2,
-                curve = "arctan", segments = 6) +
+                curve_type = "arctan", segments = 6) +
+  geom_stratum(aes(stratum = country), decreasing = FALSE, width = 1/2)
+# custom-ranged curves
+gg +
+  geom_alluvium(aes(fill = country),
+                alpha = .75, decreasing = FALSE, width = 1/2,
+                curve_type = "arctan", curve_range = 1) +
   geom_stratum(aes(stratum = country), decreasing = FALSE, width = 1/2)
