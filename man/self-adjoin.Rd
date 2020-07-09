@@ -23,7 +23,7 @@ self_adjoin(
 \code{\link[tidyr:spread]{tidyr::spread()}}.}
 
 \item{by}{Character vector of variables to self-adjoin by; passed to
-\code{\link[dplyr:join]{dplyr::join}} functions.}
+\code{\link[dplyr:mutate-joins]{dplyr::mutate-joins}} functions.}
 
 \item{link}{Character vector of variables to adjoin. Will be replaced by
 pairs of variables suffixed by \code{suffix}.}
@@ -34,7 +34,7 @@ variables can overlap with each other but cannot overlap with \code{by} or
 \code{link}.}
 
 \item{suffix}{Suffixes to add to the adjoined \code{link} variables; passed to
-\code{\link[dplyr:join]{dplyr::join}} functions.}
+\code{\link[dplyr:mutate-joins]{dplyr::mutate-joins}} functions.}
 }
 \description{
 This function binds a dataset to itself along adjacent pairs of a \code{key}
@@ -42,7 +42,7 @@ variable. It is invoked by \code{\link[=geom_flow]{geom_flow()}} to convert data
 form to something similar to alluvia form.
 }
 \details{
-\code{self_adjoin} invokes \code{\link[dplyr:join]{dplyr::join}} functions in order to convert
+\code{self_adjoin} invokes \code{\link[dplyr:mutate-joins]{dplyr::mutate-joins}} functions in order to convert
 a dataset with measures along a discrete \code{key} variable into a dataset
 consisting of column bindings of these measures (by any \code{by} variables) along
 adjacent values of \code{key}.

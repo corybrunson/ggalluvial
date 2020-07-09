@@ -129,19 +129,18 @@ following aesthetics (required aesthetics are in bold):
 \section{Curves}{
 
 By default, \code{geom_alluvium()} and \code{geom_flow()} render flows between lodes as
-splines about quartets of control points using \code{\link[grid:xsplineGrob]{grid::xsplineGrob()}}. These
-curves are parameterized by the relative location of the knot (\code{knot.pos})
-that governs the bending of each end toward their meeting at the point of
-inflection. They are quick to render and clear to read. Nevertheless, for any
-number of reasons, users may prefer plots that use differently-shaped curves.
+filled regions between parallel x-splines. These graphical elements,
+generated using \code{\link[grid:grid.xspline]{grid::xsplineGrob()}}, are parameterized by the relative
+location of the knot (\code{knot.pos}). They are quick to render and clear to
+read, but users may prefer plots that use differently-shaped ribbons.
 
-A variety of such options are illustrated in \href{https://www.dataplusscience.com/Sigmoid.html}{this blog post by Jeffrey Shaffer}. A subset of these,
-some with added flexibility, are implemented here. Each is encoded as a
-continuous, increasing, bijective function from the unit interval \eqn{[0,1]}
-to itself, and each is rescaled, if necessary, so that its endpoints meet the
-corresponding lodes. They are rendered piecewise-linearly, by default using
-\code{segments = 48}. Summon each curve type by passing one of the following
-strings to \code{curve}:
+A variety of such options are documented at, e.g., \href{https://easings.net/}{this easing functions cheat sheet} and \href{https://www.dataplusscience.com/Sigmoid.html}{this blog post by Jeffrey Shaffer}. Easing functions are
+not (yet) used in ggalluvial, but several alternative curves  are available.
+Each is encoded as a continuous, increasing, bijective function from the unit
+interval \eqn{[0,1]} to itself, and each is rescaled so that its endpoints
+meet the corresponding lodes. They are rendered piecewise-linearly, by
+default using \code{segments = 48}. Summon each curve type by passing one of the
+following strings to \code{curve}:
 \itemize{
 \item \code{"linear"}:     \eqn{f(x)=x}, the unique degree-1 polynomial that takes
 0 to 0 and 1 to 1

@@ -51,7 +51,7 @@ of \code{data} to be used as the axis (key), stratum (value), and alluvium
 (identifying) variables.}
 
 \item{weight}{Optional field of \code{data}, handled using
-\code{\link[rlang:enquo]{rlang::enquo()}}, to be used as heights or depths of the alluvia
+\code{\link[rlang:nse-defuse]{rlang::enquo()}}, to be used as heights or depths of the alluvia
 or lodes.}
 
 \item{logical}{Defunct. Whether to return a logical value or a character

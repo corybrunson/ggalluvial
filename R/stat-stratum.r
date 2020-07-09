@@ -33,18 +33,19 @@
 #' @param discern Passed to [to_lodes_form()] if `data` is in
 #'   alluvia format.
 #' @param distill A function (or its name) to be used to distill alluvium values
-#'   to a single lode label, accessible via [ggplot2::after_stat()] (similar to
-#'   its behavior in [to_alluvia_form()]). In addition to existing functions,
-#'   accepts the character values `"first"` (the default), `"last"`, and
-#'   `"most"` (which returns the first modal value).
+#'   to a single lode label, accessible via
+#'   [`ggplot2::after_stat()`][ggplot2::aes_eval] (similar to its behavior in
+#'   [to_alluvia_form()]). In addition to existing functions, accepts the
+#'   character values `"first"` (the default), `"last"`, and `"most"` (which
+#'   returns the first modal value).
 #' @param negate.strata A vector of values of the `stratum` aesthetic to be
 #'   treated as negative (will ignore missing values with a warning).
 #' @param infer.label Logical; whether to assign the `stratum` or `alluvium`
 #'   variable to the `label` aesthetic. Defaults to `FALSE`, and requires that
 #'   no `label` aesthetic is assigned. This parameter is intended for use only
 #'   with data in alluva form, which are converted to lode form before the
-#'   statistical transformation. Deprecated; use [ggplot2::after_stat()]
-#'   instead.
+#'   statistical transformation. Deprecated; use
+#'   [`ggplot2::after_stat()`][ggplot2::aes_eval] instead.
 #' @param label.strata Defunct; alias for `infer.label`.
 #' @param min.y,max.y Numeric; bounds on the heights of the strata to be
 #'   rendered. Use these bounds to exclude strata outside a certain range, for

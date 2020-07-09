@@ -115,8 +115,8 @@ specified in \code{aes()}.}
 variable to the \code{label} aesthetic. Defaults to \code{FALSE}, and requires that
 no \code{label} aesthetic is assigned. This parameter is intended for use only
 with data in alluva form, which are converted to lode form before the
-statistical transformation. Deprecated; use \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}}
-instead.}
+statistical transformation. Deprecated; use
+\code{\link[ggplot2:aes_eval]{ggplot2::after_stat()}} instead.}
 
 \item{min.y}{Numeric; bounds on the heights of the strata to be
 rendered. Use these bounds to exclude strata outside a certain range, for
@@ -193,8 +193,8 @@ observations within each (and are otherwise assigned \code{NA}).
 }
 
 \section{Computed variables}{
-
-These can be used with \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}} to \href{https://ggplot2.tidyverse.org/reference/aes_eval.html}{control aesthetic evaluation}.
+ These can be used with
+\code{\link[ggplot2:aes_eval]{ggplot2::after_stat()}} to \href{https://ggplot2.tidyverse.org/reference/aes_eval.html}{control aesthetic evaluation}.
 \describe{
 \item{\code{n}}{number of cases in lode}
 \item{\code{count}}{cumulative weight of lode}

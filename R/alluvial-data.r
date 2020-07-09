@@ -52,7 +52,7 @@
 #'   [dplyr::select()] to determine axis variables, as an alternative
 #'   to `axes`. Ignored when `axes` is provided.
 #' @param weight Optional field of `data`, handled using
-#'   [rlang::enquo()], to be used as heights or depths of the alluvia
+#'   [`rlang::enquo()`][rlang::nse-defuse], to be used as heights or depths of the alluvia
 #'   or lodes.
 #' @param diffuse Fields of `data`, handled using
 #'   [tidyselect::vars_select()], to merge into the reshapen data by
