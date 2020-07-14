@@ -45,6 +45,10 @@ The `knot.pos` parameter of `geom_alluvium()` and `geom_flow()` is now interpret
 These flows are rendered using `grid::xsplineGrob()` with four control points each: the endpoints and the two knots.
 To complement them, several other curves are now available: linear (equivalent to `knot.pos = 0`), cubic, quintic, sinusoidal, arctangent, and sigmoid, summoned by the new `curve_type` parameter (which defaults to the x-spline). (The asymptotic functions, arctangent and sigmoid, are compressed according to the new `curve_range` parameter.) The new curves are rendered piecewise linearly, with resolution controlled by the new `segments` parameter (similar to `ggplot2::stat_ellipse()`).
 
+## Options
+
+The stratum and lode ordering parameters now default to `NULL`, in which case they are reassigned to global options internally. This simplifies their documentation. The new curve parameters `curve_type`, `curve_range`, and `segments` can also be set as options and are documented in the same way.
+
 # ggalluvial 0.11.3
 
 ## Dependencies

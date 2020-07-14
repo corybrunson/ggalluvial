@@ -57,9 +57,9 @@ stat_stratum <- function(mapping = NULL,
                          data = NULL,
                          geom = "stratum",
                          position = "identity",
-                         decreasing = ggalluvial_opt("decreasing"),
-                         reverse = ggalluvial_opt("reverse"),
-                         absolute = ggalluvial_opt("absolute"),
+                         decreasing = NULL,
+                         reverse = NULL,
+                         absolute = NULL,
                          discern = FALSE, distill = first,
                          negate.strata = NULL,
                          infer.label = FALSE, label.strata = NULL,
@@ -165,14 +165,19 @@ StatStratum <- ggproto(
   },
   
   compute_panel = function(self, data, scales,
-                           decreasing = ggalluvial_opt("decreasing"),
-                           reverse = ggalluvial_opt("reverse"),
-                           absolute = ggalluvial_opt("absolute"),
+                           decreasing = NULL,
+                           reverse = NULL,
+                           absolute = NULL,
                            discern = FALSE, distill = first,
                            negate.strata = NULL,
                            infer.label = FALSE, label.strata = NULL,
                            min.y = NULL, max.y = NULL,
                            min.height = NULL, max.height = NULL) {
+    
+    # parameter defaults
+    if (is.null(decreasing)) decreasing <- ggalluvial_opt("decreasing")
+    if (is.null(reverse)) reverse <- ggalluvial_opt("reverse")
+    if (is.null(absolute)) absolute <- ggalluvial_opt("absolute")
     
     # introduce label
     if (! is.null(label.strata)) {

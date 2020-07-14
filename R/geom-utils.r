@@ -20,13 +20,13 @@ unit_sine <- function(x) {
 }
 # inverse tangent function compressed from a specified symmetric domain
 unit_arctangent <- function(x, curve_range) {
-  if (is.null(curve_range)) curve_range <- 2 + sqrt(3)
+  if (is.na(curve_range)) curve_range <- 2 + sqrt(3)
   t <- (x - .5) * 2 * curve_range
   atan(t) / 2 / atan(curve_range) + .5
 }
 # sigmoid function compressed from a specified symmetric domain
 unit_sigmoid <- function(x, curve_range) {
-  if (is.null(curve_range)) curve_range <- 6
+  if (is.na(curve_range)) curve_range <- 6
   t <- (x - .5) * 2 * curve_range
   (stats::plogis(t) - stats::plogis(-curve_range)) /
     diff(stats::plogis(c(-1, 1) * curve_range))

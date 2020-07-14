@@ -1,5 +1,4 @@
 #' @section Curves:
-
 #' By default, `geom_alluvium()` and `geom_flow()` render flows between lodes as
 #' filled regions between parallel x-splines. These graphical elements,
 #' generated using [`grid::xsplineGrob()`][grid::grid.xspline], are
@@ -35,8 +34,20 @@
 #' 
 #' Only the (default) `"xspline"` option uses the `knot.*` parameters, while
 #' only the alternative curves use the `segments` parameter, and only
-#' `"arctangent"` and `"sigmoid"` use the `curve_range` parameter. Larger values
-#' of `curve_range` result in greater compression and steeper slopes. The `NULL`
-#' default will be changed to `2+sqrt(3)` for `"arctangent"` and to `6` for
-#' `"sigmoid"`.
+#' `"arctangent"` and `"sigmoid"` use the `curve_range` parameter. (Both are
+#' ignored if not needed.) Larger values of `curve_range` result in greater
+#' compression and steeper slopes. The `NULL` default will be changed to
+#' `2+sqrt(3)` for `"arctangent"` and to `6` for `"sigmoid"`.
 #' 
+#' These package-specific options set global values for `curve_type`,
+#' `curve_range`, and `segments` that will be defaulted to when not manually
+#' set:
+#' 
+#' - `ggalluvial.curve_type`: defaults to `"xspline"`.
+#' - `ggalluvial.curve_range`: defaults to `NA`, which triggers the
+#'   curve-specific default values.
+#' - `ggalluvial.segments`: defaults to `48L`.
+#' 
+#' See [base::options()] for how to use options.
+#' 
+

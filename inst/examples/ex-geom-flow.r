@@ -12,7 +12,7 @@ ggplot(as.data.frame(Titanic),
 ggplot(as.data.frame(Titanic),
        aes(y = Freq,
            axis1 = Class, axis2 = Sex)) +
-  geom_flow(aes(fill = Age), width = .4, curve_type = "sigmoid") +
+  geom_flow(aes(fill = Age), width = .4, curve_type = "quintic") +
   geom_stratum(width = .4) +
   geom_text(stat = "stratum", aes(label = after_stat(stratum)), size = 3) +
   scale_x_discrete(limits = c("Class", "Sex")) +

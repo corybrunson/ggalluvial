@@ -38,16 +38,16 @@ stat_alluvium <- function(mapping = NULL,
                           data = NULL,
                           geom = "alluvium",
                           position = "identity",
-                          decreasing = ggalluvial_opt("decreasing"),
-                          reverse = ggalluvial_opt("reverse"),
-                          absolute = ggalluvial_opt("absolute"),
+                          decreasing = NULL,
+                          reverse = NULL,
+                          absolute = NULL,
                           discern = FALSE,
                           negate.strata = NULL,
                           aggregate.y = NULL,
-                          cement.alluvia = ggalluvial_opt("cement.alluvia"),
-                          lode.guidance = ggalluvial_opt("lode.guidance"),
+                          cement.alluvia = NULL,
+                          lode.guidance = NULL,
                           lode.ordering = NULL,
-                          aes.bind = ggalluvial_opt("aes.bind"),
+                          aes.bind = NULL,
                           infer.label = FALSE,
                           min.y = NULL, max.y = NULL,
                           na.rm = FALSE,
@@ -163,18 +163,26 @@ StatAlluvium <- ggproto(
   },
   
   compute_panel = function(data, scales,
-                           decreasing = ggalluvial_opt("decreasing"),
-                           reverse = ggalluvial_opt("reverse"),
-                           absolute = ggalluvial_opt("absolute"),
+                           decreasing = NULL,
+                           reverse = NULL,
+                           absolute = NULL,
                            discern = FALSE, distill = first,
                            negate.strata = NULL,
                            aggregate.y = NULL,
-                           cement.alluvia = ggalluvial_opt("cement.alluvia"),
-                           lode.guidance = ggalluvial_opt("lode.guidance"),
+                           cement.alluvia = NULL,
+                           lode.guidance = NULL,
                            lode.ordering = NULL,
-                           aes.bind = ggalluvial_opt("aes.bind"),
+                           aes.bind = NULL,
                            infer.label = FALSE,
                            min.y = NULL, max.y = NULL) {
+    
+    # parameter defaults
+    if (is.null(decreasing)) decreasing <- ggalluvial_opt("decreasing")
+    if (is.null(reverse)) reverse <- ggalluvial_opt("reverse")
+    if (is.null(absolute)) absolute <- ggalluvial_opt("absolute")
+    if (is.null(cement.alluvia)) cement.alluvia <- ggalluvial_opt("cement.alluvia")
+    if (is.null(lode.guidance)) lode.guidance <- ggalluvial_opt("lode.guidance")
+    if (is.null(aes.bind)) aes.bind <- ggalluvial_opt("aes.bind")
     
     # introduce label
     if (infer.label) {

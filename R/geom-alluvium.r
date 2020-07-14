@@ -43,7 +43,7 @@ geom_alluvium <- function(mapping = NULL,
                           position = "identity",
                           width = 1/3,
                           knot.pos = 1/4, knot.prop = TRUE,
-                          curve_type = "xspline", curve_range = NULL,
+                          curve_type = NULL, curve_range = NULL,
                           segments = NULL,
                           na.rm = FALSE,
                           show.legend = NA,
@@ -110,8 +110,13 @@ GeomAlluvium <- ggproto(
   draw_group = function(self, data, panel_scales, coord,
                         width = 1/3,
                         knot.pos = 1/4, knot.prop = TRUE,
-                        curve_type = "xspline", curve_range = NULL,
+                        curve_type = NULL, curve_range = NULL,
                         segments = NULL) {
+    
+    # parameter defaults
+    if (is.null(curve_type)) curve_type <- ggalluvial_opt("curve_type")
+    if (is.null(curve_range)) curve_range <- ggalluvial_opt("curve_range")
+    if (is.null(segments)) segments <- ggalluvial_opt("segments")
     
     # add width to data
     data <- transform(data, width = width)
