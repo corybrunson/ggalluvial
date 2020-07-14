@@ -18,7 +18,7 @@ There were no ERRORs or WARNINGs.
 
 On some platforms, one NOTE flagged the example runtime issue above (with a 5s threshold). On one platform (Fedora Linux, R-devel, clang, gfortran), several NOTEs flagged additional example runtime issues.
 
-On one platform (Ubuntu Linux 16.04 LTS, R-release, GCC), one NOTE was due to **vdiffr** being suggested but not available, and two NOTEs flagged possibly invalid URLs, both of which have been verified.
+On one platform (Ubuntu Linux 16.04 LTS, R-release, GCC), one ERROR was due to **vdiffr** being suggested but not available, and two NOTEs flagged possibly invalid URLs, both of which have been verified.
 
 ### WinBuilder
 
