@@ -168,7 +168,7 @@ form to something similar to alluvia form.</p>
     <tr>
       <th>by</th>
       <td><p>Character vector of variables to self-adjoin by; passed to
-<code><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>dplyr::join</a></code> functions.</p></td>
+<code><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>dplyr::mutate-joins</a></code> functions.</p></td>
     </tr>
     <tr>
       <th>link</th>
@@ -185,13 +185,13 @@ variables can overlap with each other but cannot overlap with <code>by</code> or
     <tr>
       <th>suffix</th>
       <td><p>Suffixes to add to the adjoined <code>link</code> variables; passed to
-<code><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>dplyr::join</a></code> functions.</p></td>
+<code><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>dplyr::mutate-joins</a></code> functions.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>self_adjoin</code> invokes <code><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>dplyr::join</a></code> functions in order to convert
+    <p><code>self_adjoin</code> invokes <code><a href='https://dplyr.tidyverse.org/reference/mutate-joins.html'>dplyr::mutate-joins</a></code> functions in order to convert
 a dataset with measures along a discrete <code>key</code> variable into a dataset
 consisting of column bindings of these measures (by any <code>by</code> variables) along
 adjacent values of <code>key</code>.</p>

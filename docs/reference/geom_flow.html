@@ -158,8 +158,8 @@ filled rectangles at either end, using a provided <code>width</code>.</p>
   <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>3</span>,
   <span class='kw'>knot.pos</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>4</span>,
   <span class='kw'>knot.prop</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>curve</span> <span class='kw'>=</span> <span class='st'>"xspline"</span>,
-  <span class='kw'>reach</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>curve_type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>curve_range</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>segments</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>aes.flow</span> <span class='kw'>=</span> <span class='st'>"forward"</span>,
   <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
@@ -220,20 +220,20 @@ strata, or (if <code>knot.prop = FALSE</code>) on the scale of the <code>x</code
 the length of each flow (the default), rather than on the <code>x</code> scale.</p></td>
     </tr>
     <tr>
-      <th>curve</th>
-      <td><p>Character; the type of curve used to produce flows. Defaults to
-<code>"xspline"</code> and can be alternatively set to one of <code>"linear"</code>, <code>"cubic"</code>,
-<code>"quintic"</code>, <code>"sine"</code>, <code>"arctangent"</code>, and <code>"sigmoid"</code>. <code>"xspline"</code>
-produces approximation splines using 4 points per curve; the alternatives
-produce interpolation splines between points along the graphs of functions
-of the associated type. See the <strong>Curves</strong> section.</p></td>
+      <th>curve_type</th>
+      <td><p>Character; the type of curve used to produce flows.
+Defaults to <code>"xspline"</code> and can be alternatively set to one of <code>"linear"</code>,
+<code>"cubic"</code>, <code>"quintic"</code>, <code>"sine"</code>, <code>"arctangent"</code>, and <code>"sigmoid"</code>.
+<code>"xspline"</code> produces approximation splines using 4 points per curve; the
+alternatives produce interpolation splines between points along the graphs
+of functions of the associated type. See the <strong>Curves</strong> section.</p></td>
     </tr>
     <tr>
-      <th>reach</th>
-      <td><p>For alternative <code>curve</code>s based on asymptotic functions, the
-value along the asymptote at which to truncate the function to obtain the
-shape that will be scaled to fit between strata. See the <strong>Curves</strong>
-section.</p></td>
+      <th>curve_range</th>
+      <td><p>For alternative <code>curve_type</code>s based on asymptotic
+functions, the value along the asymptote at which to truncate the function
+to obtain the shape that will be scaled to fit between strata. See the
+<strong>Curves</strong> section.</p></td>
     </tr>
     <tr>
       <th>segments</th>
@@ -298,18 +298,18 @@ following aesthetics (required aesthetics are in bold):</p><ul>
     
 
 <p>By default, <code><a href='geom_alluvium.html'>geom_alluvium()</a></code> and <code>geom_flow()</code> render flows between lodes as
-splines about quartets of control points using <code><a href='https://rdrr.io/r/grid/grid.xspline.html'>grid::xsplineGrob()</a></code>. These
-curves are parameterized by the relative location of the knot (<code>knot.pos</code>)
-that governs the bending of each end toward their meeting at the point of
-inflection. They are quick to render and clear to read. Nevertheless, for any
-number of reasons, users may prefer plots that use differently-shaped curves.</p>
-<p>A variety of such options are illustrated in <a href='https://www.dataplusscience.com/Sigmoid.html'>this blog post by Jeffrey Shaffer</a>. A subset of these,
-some with added flexibility, are implemented here. Each is encoded as a
-continuous, increasing, bijective function from the unit interval \([0,1]\)
-to itself, and each is rescaled, if necessary, so that its endpoints meet the
-corresponding lodes. They are rendered piecewise-linearly, by default using
-<code>segments = 48</code>. Summon each curve type by passing one of the following
-strings to <code>curve</code>:</p><ul>
+filled regions between parallel x-splines. These graphical elements,
+generated using <code><a href='https://rdrr.io/r/grid/grid.xspline.html'>grid::xsplineGrob()</a></code>, are
+parameterized by the relative location of the knot (<code>knot.pos</code>). They are
+quick to render and clear to read, but users may prefer plots that use
+differently-shaped ribbons.</p>
+<p>A variety of such options are documented at, e.g., <a href='https://easings.net/'>this easing functions cheat sheet</a> and <a href='https://www.dataplusscience.com/Sigmoid.html'>this blog post by Jeffrey Shaffer</a>. Easing functions are
+not (yet) used in ggalluvial, but several alternative curves are available.
+Each is encoded as a continuous, increasing, bijective function from the unit
+interval \([0,1]\) to itself, and each is rescaled so that its endpoints
+meet the corresponding lodes. They are rendered piecewise-linearly, by
+default using <code>segments = 48</code>. Summon each curve type by passing one of the
+following strings to <code>curve_type</code>:</p><ul>
 <li><p><code>"linear"</code>:     \(f(x)=x\), the unique degree-1 polynomial that takes
 0 to 0 and 1 to 1</p></li>
 <li><p><code>"cubic"</code>:      \(f(x)=3x^{2}-2x^{3}\), the unique
@@ -320,16 +320,29 @@ at both endpoints</p></li>
 <li><p><code>"sine"</code>:       the unique sinusoidal function that is flat at both
 endpoints</p></li>
 <li><p><code>"arctangent"</code>: the inverse tangent function, scaled and re-centered to the
-unit interval from a symmetric domain with radius <code>reach</code></p></li>
+unit interval from the interval centered at zero with
+radius <code>curve_range</code></p></li>
 <li><p><code>"sigmoid"</code>:    the sigmoid function, scaled and re-centered to the unit
-interval from a symmetric domain with radius <code>reach</code></p></li>
+interval from the interval centered at zero with radius
+<code>curve_range</code></p></li>
 </ul>
 
 <p>Only the (default) <code>"xspline"</code> option uses the <code>knot.*</code> parameters, while
 only the alternative curves use the <code>segments</code> parameter, and only
-<code>"arctangent"</code> and <code>"sigmoid"</code> use the <code>reach</code> parameter. Larger values of
-<code>reach</code> result in greater compression and steeper slopes. The <code>NULL</code> default
-will be changed to <code>2+sqrt(3)</code> for <code>"arctangent"</code> and to <code>6</code> for <code>"sigmoid"</code>.</p>
+<code>"arctangent"</code> and <code>"sigmoid"</code> use the <code>curve_range</code> parameter. (Both are
+ignored if not needed.) Larger values of <code>curve_range</code> result in greater
+compression and steeper slopes. The <code>NULL</code> default will be changed to
+<code>2+sqrt(3)</code> for <code>"arctangent"</code> and to <code>6</code> for <code>"sigmoid"</code>.</p>
+<p>These package-specific options set global values for <code>curve_type</code>,
+<code>curve_range</code>, and <code>segments</code> that will be defaulted to when not manually
+set:</p><ul>
+<li><p><code>ggalluvial.curve_type</code>: defaults to <code>"xspline"</code>.</p></li>
+<li><p><code>ggalluvial.curve_range</code>: defaults to <code>NA</code>, which triggers the
+curve-specific default values.</p></li>
+<li><p><code>ggalluvial.segments</code>: defaults to <code>48L</code>.</p></li>
+</ul>
+
+<p>See <code><a href='https://rdrr.io/r/base/options.html'>base::options()</a></code> for how to use options.</p>
     <h2 class="hasAnchor" id="defunct-parameters"><a class="anchor" href="#defunct-parameters"></a>Defunct parameters</h2>
 
     
@@ -360,7 +373,7 @@ discontinued. Use <code>width</code> and <code>knot.pos</code> instead.</p>
 <span class='fu'>ggplot</span>(<span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='no'>Titanic</span>),
        <span class='fu'>aes</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>Freq</span>,
            <span class='kw'>axis1</span> <span class='kw'>=</span> <span class='no'>Class</span>, <span class='kw'>axis2</span> <span class='kw'>=</span> <span class='no'>Sex</span>)) +
-  <span class='fu'>geom_flow</span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Age</span>), <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>.4</span>, <span class='kw'>curve</span> <span class='kw'>=</span> <span class='st'>"sigmoid"</span>) +
+  <span class='fu'>geom_flow</span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Age</span>), <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>.4</span>, <span class='kw'>curve_type</span> <span class='kw'>=</span> <span class='st'>"quintic"</span>) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>.4</span>) +
   <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='fu'>aes</span>(<span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'>after_stat</span>(<span class='no'>stratum</span>)), <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>3</span>) +
   <span class='fu'>scale_x_discrete</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>)) +
@@ -385,13 +398,13 @@ discontinued. Use <code>width</code> and <code>knot.pos</code> instead.</p>
 <span class='fu'>ggplot</span>(<span class='no'>vaccinations</span>,
        <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>subject</span>,
            <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>freq</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>response</span>)) +
-  <span class='fu'><a href='geom_lode.html'>geom_lode</a></span>() + <span class='fu'>geom_flow</span>(<span class='kw'>curve</span> <span class='kw'>=</span> <span class='st'>"cubic"</span>) +
+  <span class='fu'><a href='geom_lode.html'>geom_lode</a></span>() + <span class='fu'>geom_flow</span>(<span class='kw'>curve_type</span> <span class='kw'>=</span> <span class='st'>"cubic"</span>) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0</span>) +
   <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='fu'>aes</span>(<span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'>after_stat</span>(<span class='no'>prop</span>), <span class='fl'>3</span>)))</div><div class='img'><img src='geom_flow-6.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># annotate fixed-width ribbons with counts</span>
 <span class='fu'>ggplot</span>(<span class='no'>vaccinations</span>,
        <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>subject</span>,
            <span class='kw'>weight</span> <span class='kw'>=</span> <span class='no'>freq</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>response</span>)) +
-  <span class='fu'><a href='geom_lode.html'>geom_lode</a></span>() + <span class='fu'>geom_flow</span>(<span class='kw'>curve</span> <span class='kw'>=</span> <span class='st'>"cubic"</span>) +
+  <span class='fu'><a href='geom_lode.html'>geom_lode</a></span>() + <span class='fu'>geom_flow</span>(<span class='kw'>curve_type</span> <span class='kw'>=</span> <span class='st'>"cubic"</span>) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0</span>) +
   <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"flow"</span>,
             <span class='fu'>aes</span>(<span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'>after_stat</span>(<span class='no'>n</span>),

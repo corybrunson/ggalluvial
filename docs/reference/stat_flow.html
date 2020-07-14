@@ -147,12 +147,12 @@ of adjacent axes.</p>
   <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"flow"</span>,
   <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"identity"</span>,
-  <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"decreasing"</span>),
-  <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"reverse"</span>),
-  <span class='kw'>absolute</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"absolute"</span>),
+  <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>absolute</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>negate.strata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>aes.bind</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"aes.bind"</span>),
+  <span class='kw'>aes.bind</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>infer.label</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>min.y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>max.y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -250,8 +250,8 @@ specified in <code>aes()</code>.</p></td>
 variable to the <code>label</code> aesthetic. Defaults to <code>FALSE</code>, and requires that
 no <code>label</code> aesthetic is assigned. This parameter is intended for use only
 with data in alluva form, which are converted to lode form before the
-statistical transformation. Deprecated; use <code><a href='https://ggplot2.tidyverse.org/reference/aes_eval.html'>ggplot2::after_stat()</a></code>
-instead.</p></td>
+statistical transformation. Deprecated; use
+<code><a href='https://ggplot2.tidyverse.org/reference/aes_eval.html'>ggplot2::after_stat()</a></code> instead.</p></td>
     </tr>
     <tr>
       <th>min.y</th>
@@ -334,9 +334,8 @@ are assigned to strata or lodes provided they take unique values across the
 observations within each (and are otherwise assigned <code>NA</code>).</p>
     <h2 class="hasAnchor" id="computed-variables"><a class="anchor" href="#computed-variables"></a>Computed variables</h2>
 
-    
-
-<p>These can be used with <code><a href='https://ggplot2.tidyverse.org/reference/aes_eval.html'>ggplot2::after_stat()</a></code> to <a href='https://ggplot2.tidyverse.org/reference/aes_eval.html'>control aesthetic evaluation</a>.</p><dl'>
+    <p>These can be used with
+<code><a href='https://ggplot2.tidyverse.org/reference/aes_eval.html'>ggplot2::after_stat()</a></code> to <a href='https://ggplot2.tidyverse.org/reference/aes_eval.html'>control aesthetic evaluation</a>.</p><dl'>
 <dt><code>n</code></dt><dd><p>number of cases in lode</p></dd>
 <dt><code>count</code></dt><dd><p>cumulative weight of lode</p></dd>
 <dt><code>prop</code></dt><dd><p>weighted proportion of lode</p></dd>

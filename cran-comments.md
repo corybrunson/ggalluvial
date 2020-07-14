@@ -16,13 +16,13 @@ One comment flagged that examples for one reference page (`stat_alluvium`) took 
 
 There were no ERRORs or WARNINGs.
 
-On several platforms, one NOTE flagged the example runtime issue above (with a 5s threshold). On one platform (Fedora Linux, R-devel, clang, gfortran), several NOTEs flagged additional example runtime issues.
+On some platforms, one NOTE flagged the example runtime issue above (with a 5s threshold). On one platform (Fedora Linux, R-devel, clang, gfortran), several NOTEs flagged additional example runtime issues.
 
 On one platform (Ubuntu Linux 16.04 LTS, R-release, GCC), one NOTE was due to **vdiffr** being suggested but not available, and two NOTEs flagged possibly invalid URLs, both of which have been verified.
 
 ### WinBuilder
 
-There were no ERRORs or WARNINGs. On the current release, one NOTE flagged the example runtime issue above.
+There were no ERRORs or WARNINGs. On some runs, one NOTE flagged the example runtime issue above.
 
 ## Downstream dependencies
 
