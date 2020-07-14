@@ -10,6 +10,7 @@ test_that("`geom_alluvium` draws correctly", {
   a3 <- aes(y = refugees, x = year, alluvium = country)
   
   skip_on_cran()
+  skip_if_not_installed("vdiffr")
   vdiffr::expect_doppelganger(
     "`geom_alluvium`: basic",
     ggplot(d1, a1) + geom_alluvium()
@@ -36,6 +37,7 @@ test_that("`geom_alluvium()` recognizes alternative curves", {
   data(vaccinations)
   
   skip_on_cran()
+  skip_if_not_installed("vdiffr")
   vdiffr::expect_doppelganger(
     "`geom_alluvium`: unscaled knot positions",
     ggplot(vaccinations,

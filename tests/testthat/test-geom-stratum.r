@@ -8,6 +8,7 @@ test_that("`geom_stratum` draws correctly", {
   a2 <- aes(y = Freq, axis1 = Class, axis2 = Sex)
 
   skip_on_cran()
+  skip_if_not_installed("vdiffr")
   vdiffr::expect_doppelganger(
     "`geom_stratum`: basic",
     ggplot(d, a1) + geom_stratum()
