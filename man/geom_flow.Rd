@@ -12,7 +12,7 @@ geom_flow(
   width = 1/3,
   knot.pos = 1/4,
   knot.prop = TRUE,
-  curve_type = "xspline",
+  curve_type = NULL,
   curve_range = NULL,
   segments = NULL,
   aes.flow = "forward",
@@ -162,10 +162,22 @@ interval from the interval centered at zero with radius
 
 Only the (default) \code{"xspline"} option uses the \verb{knot.*} parameters, while
 only the alternative curves use the \code{segments} parameter, and only
-\code{"arctangent"} and \code{"sigmoid"} use the \code{curve_range} parameter. Larger values
-of \code{curve_range} result in greater compression and steeper slopes. The \code{NULL}
-default will be changed to \code{2+sqrt(3)} for \code{"arctangent"} and to \code{6} for
-\code{"sigmoid"}.
+\code{"arctangent"} and \code{"sigmoid"} use the \code{curve_range} parameter. (Both are
+ignored if not needed.) Larger values of \code{curve_range} result in greater
+compression and steeper slopes. The \code{NULL} default will be changed to
+\code{2+sqrt(3)} for \code{"arctangent"} and to \code{6} for \code{"sigmoid"}.
+
+These package-specific options set global values for \code{curve_type},
+\code{curve_range}, and \code{segments} that will be defaulted to when not manually
+set:
+\itemize{
+\item \code{ggalluvial.curve_type}: defaults to \code{"xspline"}.
+\item \code{ggalluvial.curve_range}: defaults to \code{NA}, which triggers the
+curve-specific default values.
+\item \code{ggalluvial.segments}: defaults to \code{48L}.
+}
+
+See \code{\link[base:options]{base::options()}} for how to use options.
 }
 
 \section{Defunct parameters}{
@@ -189,7 +201,7 @@ ggplot(as.data.frame(Titanic),
 ggplot(as.data.frame(Titanic),
        aes(y = Freq,
            axis1 = Class, axis2 = Sex)) +
-  geom_flow(aes(fill = Age), width = .4, curve_type = "sigmoid") +
+  geom_flow(aes(fill = Age), width = .4, curve_type = "quintic") +
   geom_stratum(width = .4) +
   geom_text(stat = "stratum", aes(label = after_stat(stratum)), size = 3) +
   scale_x_discrete(limits = c("Class", "Sex")) +

@@ -12,7 +12,7 @@ geom_alluvium(
   width = 1/3,
   knot.pos = 1/4,
   knot.prop = TRUE,
-  curve_type = "xspline",
+  curve_type = NULL,
   curve_range = NULL,
   segments = NULL,
   na.rm = FALSE,
@@ -156,10 +156,22 @@ interval from the interval centered at zero with radius
 
 Only the (default) \code{"xspline"} option uses the \verb{knot.*} parameters, while
 only the alternative curves use the \code{segments} parameter, and only
-\code{"arctangent"} and \code{"sigmoid"} use the \code{curve_range} parameter. Larger values
-of \code{curve_range} result in greater compression and steeper slopes. The \code{NULL}
-default will be changed to \code{2+sqrt(3)} for \code{"arctangent"} and to \code{6} for
-\code{"sigmoid"}.
+\code{"arctangent"} and \code{"sigmoid"} use the \code{curve_range} parameter. (Both are
+ignored if not needed.) Larger values of \code{curve_range} result in greater
+compression and steeper slopes. The \code{NULL} default will be changed to
+\code{2+sqrt(3)} for \code{"arctangent"} and to \code{6} for \code{"sigmoid"}.
+
+These package-specific options set global values for \code{curve_type},
+\code{curve_range}, and \code{segments} that will be defaulted to when not manually
+set:
+\itemize{
+\item \code{ggalluvial.curve_type}: defaults to \code{"xspline"}.
+\item \code{ggalluvial.curve_range}: defaults to \code{NA}, which triggers the
+curve-specific default values.
+\item \code{ggalluvial.segments}: defaults to \code{48L}.
+}
+
+See \code{\link[base:options]{base::options()}} for how to use options.
 }
 
 \section{Defunct parameters}{
@@ -182,7 +194,7 @@ gg <- ggplot(alluvial::Refugees,
 # time series bump chart (quintic flows)
 gg + geom_alluvium(aes(fill = country, colour = country),
                    width = 1/4, alpha = 2/3, decreasing = FALSE,
-                   curve_type = "quintic")
+                   curve_type = "sigmoid")
 # time series line plot of refugees data, sorted by country
 gg + geom_alluvium(aes(fill = country, colour = country),
                    decreasing = NA, width = 0, knot.pos = 0)
