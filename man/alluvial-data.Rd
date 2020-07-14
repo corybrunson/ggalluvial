@@ -36,7 +36,7 @@ handled as in \code{\link[tidyr:spread]{tidyr::spread()}} and used to identify t
 of \code{data} to be used as the axis (key), stratum (value), and alluvium
 (identifying) variables.}
 
-\item{y}{Optional field(s) of \code{data}, handled using \code{\link[=enquo]{enquo()}}, to be used as
+\item{y}{Optional field(s) of \code{data}, handled using \code{\link[rlang:nse-defuse]{rlang::enquo()}}, to be used as
 heights or depths of the alluvia or lodes.}
 
 \item{silent}{Whether to print messages.}

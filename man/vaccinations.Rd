@@ -8,9 +8,10 @@
 A data frame with 117 rows and 5 variables:
 \describe{
 \item{\code{freq}}{number of respondents represented in each row}
-\item{\code{a}}{normalized proportion of \code{freq}}
 \item{\code{subject}}{identifier linking respondents across surveys}
 \item{\code{survey}}{survey designation from the ALP website}
+\item{\code{start_date}}{start date of survey}
+\item{\code{end_date}}{end date of survey}
 \item{\code{response}}{discretized probability of vaccinating for influenza}
 }
 }

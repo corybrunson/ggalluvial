@@ -1,6 +1,6 @@
-#' @section Computed variables:
-#' These can be used with [ggplot2::after_stat()] to [control aesthetic
-#' evaluation](https://ggplot2.tidyverse.org/reference/aes_eval.html).
+#' @section Computed variables: These can be used with
+#'   [`ggplot2::after_stat()`][ggplot2::aes_eval] to [control aesthetic
+#'   evaluation](https://ggplot2.tidyverse.org/reference/aes_eval.html).
 #' \describe{
 #'   \item{`n`}{number of cases in lode}
 #'   \item{`count`}{cumulative weight of lode}

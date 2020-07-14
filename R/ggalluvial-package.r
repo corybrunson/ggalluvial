@@ -13,14 +13,19 @@
 "_PACKAGE"
 
 # stratum and lode ordering options are documented in the `stat_*()` topics
+# curve options are documented in the `geom_*()` topics
 op.ggalluvial <- list(
+  # stratum and lode ordering
   ggalluvial.decreasing = NA,
   ggalluvial.reverse = TRUE,
   ggalluvial.absolute = TRUE,
   ggalluvial.cement.alluvia = FALSE,
   ggalluvial.lode.guidance = "zigzag",
-  ggalluvial.lode.ordering = NULL,
-  ggalluvial.aes.bind = "none"
+  ggalluvial.aes.bind = "none",
+  # curves
+  ggalluvial.curve_type = "xspline",
+  ggalluvial.curve_range = NA_real_,
+  ggalluvial.segments = 48L
 )
 
 ggalluvial_opt <- function(x) {

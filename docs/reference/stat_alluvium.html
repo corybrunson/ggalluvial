@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -40,7 +44,6 @@
 centroids (x and y) and heights (ymin and ymax) of the lodes, the
 intersections of the alluvia with the strata. It leverages the group
 aesthetic for plotting purposes (for now)." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -58,7 +61,7 @@ aesthetic for plotting purposes (for now)." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -72,7 +75,7 @@ aesthetic for plotting purposes (for now)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.0</span>
       </span>
     </div>
 
@@ -110,7 +113,12 @@ aesthetic for plotting purposes (for now)." />
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/corybrunson/ggalluvial/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -125,7 +133,7 @@ aesthetic for plotting purposes (for now)." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Alluvial positions</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/corybrunson/ggalluvial/blob/master/R/stat-alluvium.r'><code>R/stat-alluvium.r</code></a></small>
     <div class="hidden name"><code>stat_alluvium.Rd</code></div>
     </div>
 
@@ -141,16 +149,16 @@ aesthetic for plotting purposes (for now).</p>
   <span class='kw'>data</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
   <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"identity"</span>,
-  <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"decreasing"</span>),
-  <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"reverse"</span>),
-  <span class='kw'>absolute</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"absolute"</span>),
+  <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>reverse</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>absolute</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>discern</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>negate.strata</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>aggregate.y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>cement.alluvia</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"cement.alluvia"</span>),
-  <span class='kw'>lode.guidance</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"lode.guidance"</span>),
-  <span class='kw'>lode.ordering</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"lode.ordering"</span>),
-  <span class='kw'>aes.bind</span> <span class='kw'>=</span> <span class='fu'>ggalluvial_opt</span>(<span class='st'>"aes.bind"</span>),
+  <span class='kw'>cement.alluvia</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>lode.guidance</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>lode.ordering</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>aes.bind</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>infer.label</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>min.y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>max.y</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
@@ -233,11 +241,7 @@ treated as negative (will ignore missing values with a warning).</p></td>
     <tr>
       <th>cement.alluvia</th>
       <td><p>Logical value indicating whether to aggregate <code>y</code>
-values over equivalent alluvia before computing lode and flow positions.
-Alternatively, a function (or its name) to combine the labels (if any) of
-equivalent alluvia, similar to the <code>distill</code> parameter of
-<code><a href='alluvial-data.html'>to_alluvia_form()</a></code>). If set to <code>TRUE</code>, defaults to function
-<code>[dplyr::first()]</code>.</p></td>
+values over equivalent alluvia before computing lode and flow positions.</p></td>
     </tr>
     <tr>
       <th>lode.guidance</th>
@@ -248,12 +252,15 @@ identifying the function. Character options are "zigzag", "frontback",
     </tr>
     <tr>
       <th>lode.ordering</th>
-      <td><p>A list (of length the number of axes) of integer vectors
-(each of length the number of rows of <code>data</code>) or NULL entries (indicating
-no imposed ordering), or else a numeric matrix of corresponding dimensions,
-giving the preferred ordering of alluvia at each axis. This will be used to
-order the lodes within each stratum by sorting the lodes first by stratum
-and then by the provided vectors.</p></td>
+      <td><p><strong>Deprecated in favor of the <code>order</code> aesthetic.</strong> A list
+(of length the number of axes) of integer vectors (each of length the
+number of rows of <code>data</code>) or NULL entries (indicating no imposed ordering),
+or else a numeric matrix of corresponding dimensions, giving the preferred
+ordering of alluvia at each axis. This will be used to order the lodes
+within each stratum by sorting the lodes first by stratum, then by the
+provided vectors, and lastly by remaining factors (if the vectors contain
+duplicate entries and therefore do not completely determine the lode
+orderings).</p></td>
     </tr>
     <tr>
       <th>aes.bind</th>
@@ -275,9 +282,10 @@ specified in <code>aes()</code>.</p></td>
       <th>infer.label</th>
       <td><p>Logical; whether to assign the <code>stratum</code> or <code>alluvium</code>
 variable to the <code>label</code> aesthetic. Defaults to <code>FALSE</code>, and requires that
-no <code>label</code> aesthetic is assigned. This parameter is intended only for uses
-in which the data are in alluva form and are therefore converted to lode
-form before the statistical transformation.</p></td>
+no <code>label</code> aesthetic is assigned. This parameter is intended for use only
+with data in alluva form, which are converted to lode form before the
+statistical transformation. Deprecated; use
+<code><a href='https://ggplot2.tidyverse.org/reference/aes_eval.html'>ggplot2::after_stat()</a></code> instead.</p></td>
     </tr>
     <tr>
       <th>min.y</th>
@@ -335,22 +343,48 @@ Arguments to parameters inconsistent with the format will be ignored.
 Additionally, each <code>stat_*()</code> accepts the following optional
 aesthetics:</p><ul>
 <li><p><code>y</code></p></li>
+<li><p><code>weight</code></p></li>
+<li><p><code>order</code></p></li>
 <li><p><code>group</code></p></li>
 <li><p><code>label</code></p></li>
 </ul>
 
-<p><code>y</code> controls the heights of the alluvia
+<p><code>y</code> controls the heights of the alluvia,
 and may be aggregated across equivalent observations.
+<code>weight</code> applies to the computed variables (see that section below)
+but does not affect the positional aesthetics.
+<code>order</code>, recognized by <code>stat_alluvium()</code> and <code><a href='stat_flow.html'>stat_flow()</a></code>, is used to
+arrange the lodes within each stratum. It tolerates duplicates and takes
+precedence over the differentiation aesthetics (when <code>aes.bind</code> is not
+<code>"none"</code>) and lode guidance with respect to the remaining axes. (It replaces
+the deprecated parameter <code>lode.ordering</code>.)
 <code>group</code> is used internally; arguments are ignored.
 <code>label</code> is used to label the strata or lodes and must take a unique value
-across the observations within each stratum or lode.
-Often the same variable will be passed to <code>label</code> as to the corresponding
-alluvial aesthetic (<code>stratum</code> or <code>alluvium</code>).</p>
+across the observations within each stratum or lode.</p>
 <p>These and any other aesthetics are aggregated as follows:
 Numeric aesthetics, including <code>y</code>, are summed.
 Character and factor aesthetics, including <code>label</code>,
 are assigned to strata or lodes provided they take unique values across the
 observations within each (and are otherwise assigned <code>NA</code>).</p>
+    <h2 class="hasAnchor" id="computed-variables"><a class="anchor" href="#computed-variables"></a>Computed variables</h2>
+
+    <p>These can be used with
+<code><a href='https://ggplot2.tidyverse.org/reference/aes_eval.html'>ggplot2::after_stat()</a></code> to <a href='https://ggplot2.tidyverse.org/reference/aes_eval.html'>control aesthetic evaluation</a>.</p><dl'>
+<dt><code>n</code></dt><dd><p>number of cases in lode</p></dd>
+<dt><code>count</code></dt><dd><p>cumulative weight of lode</p></dd>
+<dt><code>prop</code></dt><dd><p>weighted proportion of lode</p></dd>
+<dt><code>stratum</code></dt><dd><p>value of variable used to define strata</p></dd>
+<dt><code>deposit</code></dt><dd><p>order in which (signed) strata are deposited</p></dd>
+<dt><code>lode</code></dt><dd><p>lode label distilled from alluvia
+(<code>stat_alluvium()</code> and <code><a href='stat_flow.html'>stat_flow()</a></code> only)</p></dd>
+<dt><code>flow</code></dt><dd><p>direction of flow <code>"to"</code> or <code>"from"</code> from its axis
+(<code><a href='stat_flow.html'>stat_flow()</a></code> only)</p></dd>
+
+</dl><p>The numerical variables <code>n</code>, <code>count</code>, and <code>prop</code> are calculated after the
+data are grouped by <code>x</code> and weighted by <code>weight</code> (in addition to <code>y</code>).
+The integer variable <code>deposit</code> is used internally to sort the data before
+calculating heights. The character variable <code>lode</code> is obtained from
+<code>alluvium</code> according to <code>distill</code>.</p>
     <h2 class="hasAnchor" id="package-options"><a class="anchor" href="#package-options"></a>Package options</h2>
 
     
@@ -365,7 +399,6 @@ manually set:</p><ul>
 <li><p><code>ggalluvial.absolute</code> (each <code>stat_*</code>): defaults to <code>TRUE</code>.</p></li>
 <li><p><code>ggalluvial.cement.alluvia</code> (<code>stat_alluvium</code>): defaults to <code>FALSE</code>.</p></li>
 <li><p><code>ggalluvial.lode.guidance</code> (<code>stat_alluvium</code>): defaults to <code>"zigzag"</code>.</p></li>
-<li><p><code>ggalluvial.lode.ordering</code> (<code>stat_alluvium</code>): defaults to <code>NULL</code>.</p></li>
 <li><p><code>ggalluvial.aes.bind</code> (<code>stat_alluvium</code> and <code>stat_flow</code>): defaults to
 <code>"none"</code>.</p></li>
 </ul>
@@ -394,35 +427,22 @@ discontinued. Use <code>y</code> and <code>cement.alluvia</code> instead.</p>
   <span class='fu'><a href='stat_stratum.html'>stat_stratum</a></span>(<span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"errorbar"</span>) +
   <span class='fu'>geom_line</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>) +
   <span class='fu'>stat_alluvium</span>(<span class='kw'>geom</span> <span class='kw'>=</span> <span class='st'>"pointrange"</span>) +
-  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>infer.label</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='fu'>aes</span>(<span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'>after_stat</span>(<span class='no'>stratum</span>))) +
   <span class='fu'>scale_x_discrete</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>))</div><div class='img'><img src='stat_alluvium-1.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># lode ordering examples</span>
 <span class='no'>gg</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='no'>Titanic</span>),
              <span class='fu'>aes</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>Freq</span>,
                  <span class='kw'>axis1</span> <span class='kw'>=</span> <span class='no'>Class</span>, <span class='kw'>axis2</span> <span class='kw'>=</span> <span class='no'>Sex</span>, <span class='kw'>axis3</span> <span class='kw'>=</span> <span class='no'>Age</span>)) +
-  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>() + <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>infer.label</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
+  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>() +
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='fu'>aes</span>(<span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'>after_stat</span>(<span class='no'>stratum</span>))) +
   <span class='fu'>scale_x_discrete</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>))
 <span class='co'># use of lode controls</span>
 <span class='no'>gg</span> + <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Survived</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='no'>Sex</span>), <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
                <span class='kw'>lode.guidance</span> <span class='kw'>=</span> <span class='st'>"forward"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='img'><img src='stat_alluvium-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># prioritize aesthetic binding</span>
 <span class='no'>gg</span> + <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Survived</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='no'>Sex</span>), <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
-               <span class='kw'>aes.bind</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>lode.guidance</span> <span class='kw'>=</span> <span class='st'>"forward"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Logical values of `aes.bind` are deprecated; replacing TRUE with 'flow'.</span></div><div class='img'><img src='stat_alluvium-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># use of lode ordering</span>
-<span class='no'>lode_ord</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>3</span>, <span class='kw'>expr</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>32</span>), <span class='kw'>simplify</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/print.html'>print</a></span>(<span class='no'>lode_ord</span>)</div><div class='output co'>#&gt; [[1]]
-#&gt;  [1] 26 15 32 29 24 10 16 21 12  7 25  8  1 19  3 11 20 13 14  6 31  4  9  5 27
-#&gt; [26] 28 30 18  2 22 23 17
-#&gt; 
-#&gt; [[2]]
-#&gt;  [1]  3 19 12 17  9 18 24 22 29 27 15  7 25 31 16  4  2  1 30 21 28 10 11 23 14
-#&gt; [26] 32 20  8 13 26  6  5
-#&gt; 
-#&gt; [[3]]
-#&gt;  [1] 14 19 13 11 16  8  9 18 24 10 15 20  5 21  7 31 30 12 32 22  6  4  2  1 27
-#&gt; [26]  3 26 28 29 25 17 23
-#&gt; </div><div class='input'><span class='no'>gg</span> + <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Survived</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='no'>Sex</span>), <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
-               <span class='kw'>lode.ordering</span> <span class='kw'>=</span> <span class='no'>lode_ord</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='img'><img src='stat_alluvium-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># fixed lode ordering across axes</span>
-<span class='no'>gg</span> + <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Survived</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='no'>Sex</span>), <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
-               <span class='kw'>lode.ordering</span> <span class='kw'>=</span> <span class='no'>lode_ord</span><span class='kw'>[[</span><span class='fl'>1</span>]])</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='img'><img src='stat_alluvium-5.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># use of custom luide guidance function</span>
+               <span class='kw'>aes.bind</span> <span class='kw'>=</span> <span class='st'>"alluvia"</span>, <span class='kw'>lode.guidance</span> <span class='kw'>=</span> <span class='st'>"forward"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='img'><img src='stat_alluvium-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># use of custom lode order</span>
+<span class='no'>gg</span> + <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Survived</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='no'>Sex</span>, <span class='kw'>order</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fl'>32</span>)),
+               <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Ignoring unknown aesthetics: order</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='img'><img src='stat_alluvium-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># use of custom luide guidance function</span>
 <span class='no'>lode_custom</span> <span class='kw'>&lt;-</span> <span class='kw'>function</span>(<span class='no'>n</span>, <span class='no'>i</span>) {
   <span class='fu'><a href='https://rdrr.io/r/base/stopifnot.html'>stopifnot</a></span>(<span class='no'>n</span> <span class='kw'>==</span> <span class='fl'>3</span>)
   <span class='fu'><a href='https://rdrr.io/r/base/switch.html'>switch</a></span>(
@@ -433,41 +453,31 @@ discontinued. Use <code>y</code> and <code>cement.alluvia</code> instead.</p>
   )
 }
 <span class='no'>gg</span> + <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Survived</span>, <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='no'>Sex</span>), <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
-               <span class='kw'>aes.bind</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>lode.guidance</span> <span class='kw'>=</span> <span class='no'>lode_custom</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Logical values of `aes.bind` are deprecated; replacing TRUE with 'flow'.</span></div><div class='img'><img src='stat_alluvium-6.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>majors</span>)
+               <span class='kw'>aes.bind</span> <span class='kw'>=</span> <span class='st'>"flow"</span>, <span class='kw'>lode.guidance</span> <span class='kw'>=</span> <span class='no'>lode_custom</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='img'><img src='stat_alluvium-5.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># omit missing elements &amp; reverse the `y` axis</span>
-<span class='fu'>ggplot</span>(<span class='no'>majors</span>,
+<span class='fu'>ggplot</span>(<span class='kw pkg'>ggalluvial</span><span class='kw ns'>::</span><span class='no'><a href='majors.html'>majors</a></span>,
        <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>semester</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>curriculum</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>student</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='fl'>1</span>)) +
   <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='st'>"darkgrey"</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>curriculum</span>), <span class='kw'>color</span> <span class='kw'>=</span> <span class='fl'>NA</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
   <span class='fu'>theme_bw</span>() +
-  <span class='fu'>scale_y_reverse</span>()</div><div class='img'><img src='stat_alluvium-7.png' alt='' width='700' height='433' /></div><div class='input'>
+  <span class='fu'>scale_y_reverse</span>()</div><div class='img'><img src='stat_alluvium-6.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># alluvium cementation examples</span>
-<span class='no'>gg</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='no'>majors</span>,
+<span class='no'>gg</span> <span class='kw'>&lt;-</span> <span class='fu'>ggplot</span>(<span class='kw pkg'>ggalluvial</span><span class='kw ns'>::</span><span class='no'><a href='majors.html'>majors</a></span>,
              <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>semester</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>curriculum</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>student</span>,
                  <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>curriculum</span>)) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>()
 <span class='co'># diagram with outlined alluvia and labels</span>
 <span class='no'>gg</span> + <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"black"</span>) +
-  <span class='fu'>geom_text</span>(<span class='fu'>aes</span>(<span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span>(<span class='no'>student</span>)), <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>)</div><div class='img'><img src='stat_alluvium-8.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># cemented diagram with default label cementation</span>
+  <span class='fu'>geom_text</span>(<span class='fu'>aes</span>(<span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'>after_stat</span>(<span class='no'>lode</span>)), <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>)</div><div class='img'><img src='stat_alluvium-7.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># cemented diagram with default distillation (first most common alluvium)</span>
 <span class='no'>gg</span> +
   <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"black"</span>, <span class='kw'>cement.alluvia</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
-  <span class='fu'>geom_text</span>(<span class='fu'>aes</span>(<span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span>(<span class='no'>student</span>)), <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
-            <span class='kw'>cement.alluvia</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='stat_alluvium-9.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># cemented diagram with custom label cementation</span>
+  <span class='fu'>geom_text</span>(<span class='fu'>aes</span>(<span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'>after_stat</span>(<span class='no'>lode</span>)), <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
+            <span class='kw'>cement.alluvia</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='img'><img src='stat_alluvium-8.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># cemented diagram with custom label distillation</span>
 <span class='no'>gg</span> +
   <span class='fu'><a href='geom_flow.html'>geom_flow</a></span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>, <span class='kw'>color</span> <span class='kw'>=</span> <span class='st'>"black"</span>, <span class='kw'>cement.alluvia</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
-  <span class='fu'>geom_text</span>(<span class='fu'>aes</span>(<span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span>(<span class='no'>student</span>)), <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
-            <span class='kw'>cement.alluvia</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>x</span>, <span class='kw'>collapse</span> <span class='kw'>=</span> <span class='st'>"; "</span>))</div><div class='img'><img src='stat_alluvium-10.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># irregular spacing between axes of a continuous variable</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>Refugees</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"alluvial"</span>)
-<span class='no'>refugees_sub</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/subset.html'>subset</a></span>(<span class='no'>Refugees</span>, <span class='no'>year</span> <span class='kw'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>2003</span>, <span class='fl'>2005</span>, <span class='fl'>2010</span>, <span class='fl'>2013</span>))
-<span class='fu'>ggplot</span>(<span class='kw'>data</span> <span class='kw'>=</span> <span class='no'>refugees_sub</span>,
-       <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>year</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>refugees</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>country</span>)) +
-  <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>country</span>),
-                <span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>.75</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>knot.pos</span> <span class='kw'>=</span> <span class='fl'>1</span>) +
-  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='fu'>aes</span>(<span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>country</span>), <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>2</span>) +
-  <span class='fu'>theme_bw</span>() +
-  <span class='fu'>scale_fill_brewer</span>(<span class='kw'>type</span> <span class='kw'>=</span> <span class='st'>"qual"</span>, <span class='kw'>palette</span> <span class='kw'>=</span> <span class='st'>"Set3"</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Ignoring unknown aesthetics: stratum</span></div><div class='img'><img src='stat_alluvium-11.png' alt='' width='700' height='433' /></div><div class='input'>
+  <span class='fu'>geom_text</span>(<span class='fu'>aes</span>(<span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'>after_stat</span>(<span class='no'>lode</span>)), <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"alluvium"</span>,
+            <span class='kw'>cement.alluvia</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+            <span class='kw'>distill</span> <span class='kw'>=</span> <span class='kw'>function</span>(<span class='no'>x</span>) <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span>(<span class='no'>x</span>, <span class='kw'>collapse</span> <span class='kw'>=</span> <span class='st'>"; "</span>))</div><div class='img'><img src='stat_alluvium-9.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>babynames</span>, <span class='kw'>package</span> <span class='kw'>=</span> <span class='st'>"babynames"</span>)
 <span class='co'># a discontiguous alluvium</span>
@@ -496,21 +506,15 @@ discontinued. Use <code>y</code> and <code>cement.alluvia</code> instead.</p>
        <span class='fu'>aes</span>(<span class='kw'>axis1</span> <span class='kw'>=</span> <span class='no'>Class</span>, <span class='kw'>axis2</span> <span class='kw'>=</span> <span class='no'>Sex</span>, <span class='kw'>axis3</span> <span class='kw'>=</span> <span class='no'>Age</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>Lives</span>)) +
   <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span>(<span class='fu'>aes</span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='no'>Survived</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Class</span>), <span class='kw'>absolute</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>absolute</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>) +
-  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>infer.label</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>absolute</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>) +
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='fu'>aes</span>(<span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'>after_stat</span>(<span class='no'>stratum</span>)),
+            <span class='kw'>absolute</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>) +
   <span class='fu'>scale_x_discrete</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>), <span class='kw'>expand</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.1</span>, <span class='fl'>.05</span>)) +
-  <span class='fu'>scale_alpha_discrete</span>(<span class='kw'>range</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.25</span>, <span class='fl'>.75</span>), <span class='kw'>guide</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='img'><img src='stat_alluvium-12.png' alt='' width='700' height='433' /></div></pre>
+  <span class='fu'>scale_alpha_discrete</span>(<span class='kw'>range</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>.25</span>, <span class='fl'>.75</span>), <span class='kw'>guide</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='img'><img src='stat_alluvium-10.png' alt='' width='700' height='433' /></div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#aesthetics">Aesthetics</a></li>
-      <li><a href="#package-options">Package options</a></li>
-      <li><a href="#defunct-parameters">Defunct parameters</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -521,7 +525,7 @@ discontinued. Use <code>y</code> and <code>cement.alluvia</code> instead.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

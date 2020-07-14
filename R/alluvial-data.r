@@ -48,7 +48,7 @@
 #' @param ... Used in `is_alluvia_form` and `to_lodes_form` as in
 #'   [dplyr::select()] to determine axis variables, as an alternative
 #'   to `axes`. Ignored when `axes` is provided.
-#' @param y Optional field(s) of `data`, handled using [enquo()], to be used as
+#' @param y Optional field(s) of `data`, handled using [`rlang::enquo()`][rlang::nse-defuse], to be used as
 #'   heights or depths of the alluvia or lodes.
 #' @param y_to A string specifying the name of the column to create from the
 #'   column(s) identified by `y`. If needed for multiple columns but not
