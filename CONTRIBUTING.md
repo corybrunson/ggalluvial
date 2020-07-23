@@ -4,7 +4,7 @@ The goal of this guide is to help contributors to **ggalluvial** plan their cont
 
 Note that **ggalluvial** is released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md). By contributing, you agree to its terms.
 
-This guide is loosely adapted from the contributing guides [for **ggplot2**](https://github.com/tidyverse/ggplot2/blob/master/CONTRIBUTING.md) and [from ropensci](https://github.com/ropensci/dotgithubfiles/blob/master/dotgithub/CONTRIBUTING.md).
+This guide is loosely adapted from the contributing guides [for **ggplot2**](https://github.com/tidyverse/ggplot2/blob/main/CONTRIBUTING.md) and [from ropensci](https://github.com/ropensci/dotgithubfiles/blob/main/dotgithub/CONTRIBUTING.md).
 If you have questions about or suggestions for this guide, please feel free to contact a package maintainer.
 
 ## Editor
@@ -37,4 +37,4 @@ For more guidance on reproducible examples, see [this vignette](https://reprex.t
 3. Push this branch to the fork and open a pull request to the home repository.
 4. With the maintainer(s), discuss and (if necessary) update the pull request until it is accepted or decided against. _In the latter case, a clear and consistent reason should be provided by the maintainer(s)._
 
-For more guidance on the pull request process, see [the contributing guidelines for **ggplot2**](https://github.com/tidyverse/ggplot2/blob/master/CONTRIBUTING.md).
+For more guidance on the pull request process, see [the contributing guidelines for **ggplot2**](https://github.com/tidyverse/ggplot2/blob/main/CONTRIBUTING.md).
