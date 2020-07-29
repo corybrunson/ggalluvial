@@ -53,21 +53,26 @@
 #' @family alluvial data operations
 #' @param data A data frame.
 #' @param silent Whether to print explanatory messages.
-#' @param alluvia_from,axes_from,strata_from Columns---one each---containing the
-#'   alluvium (identifier), axis (key), and stratum (value) of each row,
-#'   analogous to `id_cols,names_from,values_from` in [tidyr::pivot_wider()].
-#' @param axes Columns containing the stratum (entry) of each alluvium (row) at
-#'   each axis (column), analogous to `cols` in [tidyr::pivot_longer()].
-#' @param alluvia_to,axes_to,strata_to Strings---one each---specifying the names
-#'   of the columns to contain alluvia (identifiers), axes (keys), and strata
-#'   (values).
-#' @param id,key,value Deprecated aliases for `alluvia_*,axes_*,strata_*`. While
-#'   they still accept unquoted names, note that their `*_to` replacements only
-#'   accept strings.
-#' @param y Optional column containing alluvium heights (subject magnitudes).
+#' @param alluvia_from,axes_from,strata_from Three arguments describing which
+#'   columns contain the alluvium (identifier), axis (key), and stratum (value)
+#'   of each row. These are analogous (and eventually passed) to
+#'   `id_cols,names_from,values_from` in [tidyr::pivot_wider()] and, as there,
+#'   handled using [`rlang::enquo()`][rlang::nse-defuse].
+#' @param axes An argument describing which columns contain the stratum (entry)
+#'   of each alluvium (row) at each axis (column). This is analogous (and
+#'   eventually passed) to `cols` in [tidyr::pivot_longer()] and, as there,
+#'   handled using [`rlang::enquo()`][rlang::nse-defuse].
+#' @param alluvia_to,axes_to,strata_to Three strings specifying the names of the
+#'   new columns to create for the alluvia (identifiers), axes (keys), and
+#'   strata (values). The latter two are analogous (and eventually passed) to
+#'   `names_to,values_to` in [tidyr::pivot_longer()].
+#' @param key,value,id Deprecated aliases for `axes_*,strata_*,alluvia_*`,
+#'   respectively. While they still accept unquoted names, note that their
+#'   `*_to` replacements only accept strings.
+#' @param y Optional column(s) containing alluvium heights (subject magnitudes).
 #' @param y_to A string specifying the name of the column to create from the
-#'   column(s) identified by `y`. If needed for multiple columns but not
-#'   provided, defaults to 'y'.
+#'   column(s) identified by `y`. If needed (for multiple columns passed to `y`)
+#'   but not provided, defaults to `'y'`.
 #' @param diffuse Fields of `data` to merge into the lengthened data, joining by
 #'   `alluvia_to`. They must be among the variables passed to `axes`.
 #'   Alternatively, a logical value indicating whether to merge all (`TRUE`) or

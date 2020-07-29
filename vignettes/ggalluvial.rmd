@@ -64,7 +64,7 @@ As the examples in the next section will demonstrate, which of these elements ar
 
 ### Alluvia (wide) format
 
-The wide format reflects the visual arrangement of an alluvial plot, but "untwisted": Each row corresponds to a cohort of observations that take a specific value at each variable, and each variable has its own column. An additional column contains the weight of each row, e.g. the number of observational units in the cohort, which may be used to control the heights of the strata.[^weight-y] Basically, the wide format consists of _one row per alluvium_. This is the format into which the base function `as.data.frame()` transforms a frequency table, for instance the 3-dimensional `UCBAdmissions` dataset:
+The wide format reflects the visual arrangement of an alluvial plot, but "untwisted": Each row corresponds to a cohort of observations that take a specific value at each variable, and each variable has its own column. An additional column contains the quantity of each row, e.g. the number of observational units in the cohort, which may be used to control the heights of the strata.[^weight-y] Basically, the wide format consists of _one row per alluvium_. This is the format into which the base function `as.data.frame()` transforms a frequency table, for instance the 3-dimensional `UCBAdmissions` dataset:
 
 ```{r alluvia format of Berkeley admissions dataset}
 head(as.data.frame(UCBAdmissions), n = 12)
@@ -84,7 +84,7 @@ ggplot(as.data.frame(UCBAdmissions),
   ggtitle("UC Berkeley admissions and rejections, by sex and department")
 ```
 
-An important feature of these plots is the meaningfulness of the vertical axis: No gaps are inserted between the strata, so the total height of the plot reflects the cumulative weight of the observations. The plots produced by **ggalluvial** conform (somewhat; keep reading) to the "grammar of graphics" principles of **ggplot2**, and this prevents users from producing "free-floating" visualizations like the Sankey diagrams showcased [here](https://developers.google.com/chart/interactive/docs/gallery/sankey).[^ggforce]
+An important feature of these plots is the meaningfulness of the vertical axis: No gaps are inserted between the strata, so the total height of the plot reflects the cumulative quantity of the observations. The plots produced by **ggalluvial** conform (somewhat; keep reading) to the "grammar of graphics" principles of **ggplot2**, and this prevents users from producing "free-floating" visualizations like the Sankey diagrams showcased [here](https://developers.google.com/chart/interactive/docs/gallery/sankey).[^ggforce]
 **ggalluvial** parameters and existing **ggplot2** functionality can also produce [parallel sets](https://eagereyes.org/parallel-sets) plots, illustrated here using the `Titanic` dataset:[^ggparallel]
 
 [^ggforce]: [The **ggforce** package](https://github.com/thomasp85/ggforce) includes parallel set geom and stat layers to produce similar diagrams that can be allowed to free-float.
@@ -218,4 +218,4 @@ This plot ignores any continuity between the flows between axes. This "memoryles
 sessioninfo::session_info()
 ```
 
-[^weight-y]: Previously, weights were passed to the `weight` aesthetic rather than to `y`. This prevented `scale_y_continuous()` from correctly transforming scales, and anyway it was inconsistent with the behavior of `geom_bar()`.
+[^weight-y]: Previously, quantities were passed to the `weight` aesthetic rather than to `y`. This prevented `scale_y_continuous()` from correctly transforming scales, and anyway it was inconsistent with the behavior of `geom_bar()`. As of version 0.12.0, `weight` is an optional parameter used only by computed variables intended for labeling, not by polygonal graphical elements.

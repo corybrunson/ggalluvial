@@ -12,7 +12,7 @@ ggplot(as.data.frame(Titanic),
 ggplot(as.data.frame(Titanic),
        aes(y = Freq,
            axis1 = Class, axis2 = Sex)) +
-  geom_flow(aes(fill = Age), width = .4, curve = "sigmoid") +
+  geom_flow(aes(fill = Age), width = .4, curve_type = "quintic") +
   geom_stratum(width = .4) +
   geom_text(stat = "stratum", aes(label = after_stat(stratum)), size = 3) +
   scale_x_discrete(limits = c("Class", "Sex")) +
@@ -41,13 +41,15 @@ levels(vaccinations$response) <- rev(levels(vaccinations$response))
 ggplot(vaccinations,
        aes(x = survey, stratum = response, alluvium = subject,
            y = freq, fill = response)) +
-  geom_lode() + geom_flow(curve = "cubic") +
+  geom_lode() + geom_flow(curve_type = "cubic") +
   geom_stratum(alpha = 0) +
   geom_text(stat = "stratum", aes(label = round(after_stat(prop), 3)))
-# annotate with survey-weighted proportional counts
+# annotate fixed-width ribbons with counts
 ggplot(vaccinations,
        aes(x = survey, stratum = response, alluvium = subject,
-           y = freq, fill = response, weight = a)) +
-  geom_lode() + geom_flow() +
+           weight = freq, fill = response)) +
+  geom_lode() + geom_flow(curve_type = "cubic") +
   geom_stratum(alpha = 0) +
-  geom_text(stat = "stratum", aes(label = round(after_stat(prop), 3)))
+  geom_text(stat = "flow",
+            aes(label = after_stat(n),
+                hjust = (after_stat(flow) == "to")))

@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -53,7 +57,7 @@
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -67,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.0</span>
       </span>
     </div>
 
@@ -105,7 +109,12 @@
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/corybrunson/ggalluvial/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -119,31 +128,94 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
-      
+      <h1 data-toc-skip>Changelog <small></small></h1>
+      <small>Source: <a href='https://github.com/corybrunson/ggalluvial/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="ggalluvial-0113" class="section level1">
-<h1 class="page-header">
-<a href="#ggalluvial-0113" class="anchor"></a>ggalluvial 0.11.3<small> Unreleased </small>
+    <div id="ggalluvial-0-12-0" class="section level1">
+<h1 class="page-header" data-toc-text="0.12.0">
+<a href="#ggalluvial-0-12-0" class="anchor"></a>ggalluvial 0.12.0<small> Unreleased </small>
 </h1>
+<div id="data-sets" class="section level2">
+<h2 class="hasAnchor">
+<a href="#data-sets" class="anchor"></a>Data sets</h2>
+<p>Both installed data sets, <code>vaccinations</code> and <code>majors</code>, are better documented.</p>
+<p>The <code>a</code> field of <code>vaccinations</code> (the within-survey fraction of respondents, which can be computed from the other fields) has been removed, and the <code>start_date</code> and <code>end_date</code> fields (<code>Date</code>s, obtained from the ALP website) have been added.</p>
+</div>
+<div id="warning-and-error-messages" class="section level2">
+<h2 class="hasAnchor">
+<a href="#warning-and-error-messages" class="anchor"></a>Warning and error messages</h2>
+<p>The following changes broke no examples or tests but could change behavior in rare cases:</p>
+<ul>
+<li>
+<code><a href="../reference/alluvial-data.html">is_lodes_form()</a></code> now returns <code>FALSE</code> if any axis-alluvium pairs are duplicated, and throws the previous warning as a message. This should be more helpful than the previous behavior of suppressing the warning and leaving <code><a href="https://tidyr.tidyverse.org/reference/gather.html">tidyr::gather()</a></code> to throw an error referring to rows of the already-transformed internal data.</li>
+<li>Default aesthetic specifications <code>stratum = NULL</code> and <code>alluvium = NULL</code> have been added to the stats. This prevents the “unknown aesthetics” warnings that print when these aesthetics are passed to layers rather than to the plot initialization.</li>
+</ul>
+</div>
+<div id="ordering-of-lodesalluvia" class="section level2">
+<h2 class="hasAnchor">
+<a href="#ordering-of-lodesalluvia" class="anchor"></a>Ordering of lodes/alluvia</h2>
+<div id="behavior-of-lode-ordering" class="section level3">
+<h3 class="hasAnchor">
+<a href="#behavior-of-lode-ordering" class="anchor"></a>Behavior of <code>lode.ordering</code>
+</h3>
+<p>For consistency with the behavior of <code>aes.bind</code>, <code><a href="../reference/stat_alluvium.html">stat_alluvium()</a></code> now invokes <code>lode.ordering</code> together with <code>lode.guidance</code>: If the vectors of <code>lode.ordering</code> include duplicates, i.e. they do not completely determine an order, then the remaining deposits are used to refine the order. Previously, <code>lode.ordering</code> was assumed to consist of permutation vectors, so the two parameters were mutually exclusive.</p>
+<p>Additionally, for consistency with other influences on the lode order, the vectors of <code>lode.ordering</code> are reversed if <code>reverse = TRUE</code> (the default). <strong>This will change some plots but will not produce new errors.</strong></p>
+</div>
+<div id="controlling-lode-order-before-guidance-and-aesthetics" class="section level3">
+<h3 class="hasAnchor">
+<a href="#controlling-lode-order-before-guidance-and-aesthetics" class="anchor"></a>Controlling lode order before guidance and aesthetics</h3>
+<p>The <code>lode.ordering</code> parameter of <code><a href="../reference/stat_alluvium.html">stat_alluvium()</a></code> has been deprecated. Instead, the new <code>order</code> aesthetic gives priority to its argument over the differentiation aesthetics in arranging the lodes within each stratum, without producing graphical artifacts. This aesthetic can also be used in <code><a href="../reference/stat_flow.html">stat_flow()</a></code>.</p>
+</div>
+<div id="order-of-alluvia-in-negative-strata" class="section level3">
+<h3 class="hasAnchor">
+<a href="#order-of-alluvia-in-negative-strata" class="anchor"></a>Order of alluvia in negative strata</h3>
+<p>Alluvia within “deposits” are now consistently ordered in positive and negative strata, rather than according to <code>absolute</code>. This avoids the “twisting” of flows between strata of different signs. Whereas the orderings of the deposits matter to the stacked-histogram reading of the plot, the orderings of the alluvia should simply maximize its elegance and readability. <strong>This will change some plots but will not produce new errors.</strong></p>
+</div>
+</div>
+<div id="computed-variables" class="section level2">
+<h2 class="hasAnchor">
+<a href="#computed-variables" class="anchor"></a>Computed variables</h2>
+<p>The alluvial stats now compute four variables for use with <code>after_stat()</code>: numeric variables <code>n</code>, <code>count</code>, and <code>prop</code>; and character variables <code>lode</code> (when the <code>alluvium</code> aesthetic is specified) and <code>flow</code> (when using the flow stat). The numerical variables can be weighted using the <code>weight</code> aesthetic, which is dropped during computation (so that it does not confuse the geoms), while <code>lode</code> is distilled according to a new <code>distill</code> parameter. This use of <code>weight</code> may cause confusion with its use by the <code>is_*_form()</code> functions until they are upgraded in the next version.</p>
+<p>These new variables complement the already-computed but heretofore undocumented variables <code>stratum</code> and <code>deposit</code>. <code>stratum</code> obviates the need for the <code>infer.label</code> parameter, which is deprecated. Its alias, <code>label.strata</code>, is now defunct. (The variable <code>alluvium</code> is often computed, but it is manipulated to be used by the geom layers and should not be passed to an aesthetic.) <code>deposit</code> takes contiguous integer values forward along the axes and upward along the (signed) strata at each axis.</p>
+</div>
+<div id="flow-upgrades-and-extensions" class="section level2">
+<h2 class="hasAnchor">
+<a href="#flow-upgrades-and-extensions" class="anchor"></a>Flow upgrades and extensions</h2>
+<p>The <code>knot.pos</code> parameter of <code><a href="../reference/geom_alluvium.html">geom_alluvium()</a></code> and <code><a href="../reference/geom_flow.html">geom_flow()</a></code> is now interpreted as a proportion of the total length of each flow, i.e. of the gap between adjacent strata (<em>not</em> axes). This means that values will vary with axis positions and stratum widths. Setting the new <code>knot.prop</code> parameter to <code>FALSE</code> prevents this by interpreting <code>knot.pos</code> as a constant value in the <code>x</code> direction.</p>
+<p>These flows are rendered using <code><a href="https://rdrr.io/r/grid/grid.xspline.html">grid::xsplineGrob()</a></code> with four control points each: the endpoints and the two knots. To complement them, several other curves are now available: linear (equivalent to <code>knot.pos = 0</code>), cubic, quintic, sinusoidal, arctangent, and sigmoid, summoned by the new <code>curve_type</code> parameter (which defaults to the x-spline). (The asymptotic functions, arctangent and sigmoid, are compressed according to the new <code>curve_range</code> parameter.) The new curves are rendered piecewise linearly, with resolution controlled by the new <code>segments</code> parameter (similar to <code><a href="https://ggplot2.tidyverse.org/reference/stat_ellipse.html">ggplot2::stat_ellipse()</a></code>).</p>
+</div>
+<div id="options" class="section level2">
+<h2 class="hasAnchor">
+<a href="#options" class="anchor"></a>Options</h2>
+<p>The stratum and lode ordering parameters now default to <code>NULL</code>, in which case they are reassigned to global options internally. This simplifies their documentation. The new curve parameters <code>curve_type</code>, <code>curve_range</code>, and <code>segments</code> can also be set as options and are documented in the same way.</p>
+</div>
+</div>
+    <div id="ggalluvial-0-11-3" class="section level1">
+<h1 class="page-header" data-toc-text="0.11.3">
+<a href="#ggalluvial-0-11-3" class="anchor"></a>ggalluvial 0.11.3<small> 2020-04-16 </small>
+</h1>
+<div id="dependencies" class="section level2">
+<h2 class="hasAnchor">
+<a href="#dependencies" class="anchor"></a>Dependencies</h2>
 <p>In response to <strong>ggplot2</strong> v3.2.0, which removes the <strong>plyr</strong> dependency, the dependency has been removed from <strong>ggalluvial</strong> as well.</p>
 </div>
-    <div id="ggalluvial-0112" class="section level1">
-<h1 class="page-header">
-<a href="#ggalluvial-0112" class="anchor"></a>ggalluvial 0.11.2<small> Unreleased </small>
+</div>
+    <div id="ggalluvial-0-11-2" class="section level1">
+<h1 class="page-header" data-toc-text="0.11.2">
+<a href="#ggalluvial-0-11-2" class="anchor"></a>ggalluvial 0.11.2<small> Unreleased </small>
 </h1>
 <p>The function <code><a href="../reference/self-adjoin.html">self_adjoin()</a></code> is debugged for use with a continuous-valued <code>x</code> variable. An example, taking <code>x</code> to be the date of each vaccination survey in <code>vaccinations</code>, is documented with <code><a href="../reference/stat_stratum.html">stat_stratum()</a></code>.</p>
 </div>
-    <div id="ggalluvial-0111" class="section level1">
-<h1 class="page-header">
-<a href="#ggalluvial-0111" class="anchor"></a>ggalluvial 0.11.1<small> 2019-12-03 </small>
+    <div id="ggalluvial-0-11-1" class="section level1">
+<h1 class="page-header" data-toc-text="0.11.1">
+<a href="#ggalluvial-0-11-1" class="anchor"></a>ggalluvial 0.11.1<small> 2019-12-03 </small>
 </h1>
 <p>This patch fixes a bug with including negative observations in alluvia-form data due to outdated code that prohibited negative <code>y</code> values. This was discovered while drafting two examples of this usage, which are included in the documentation.</p>
 </div>
-    <div id="ggalluvial-0110" class="section level1">
-<h1 class="page-header">
-<a href="#ggalluvial-0110" class="anchor"></a>ggalluvial 0.11.0<small> Unreleased </small>
+    <div id="ggalluvial-0-11-0" class="section level1">
+<h1 class="page-header" data-toc-text="0.11.0">
+<a href="#ggalluvial-0-11-0" class="anchor"></a>ggalluvial 0.11.0<small> Unreleased </small>
 </h1>
 <div id="parameter-renamings-deprecations-and-additions" class="section level2">
 <h2 class="hasAnchor">
@@ -177,9 +249,9 @@
 <p>Tests have been added for the statistical transformations. Visual regression tests using <strong>vdiffr</strong> have been added for the geoms.</p>
 </div>
 </div>
-    <div id="ggalluvial-0100" class="section level1">
-<h1 class="page-header">
-<a href="#ggalluvial-0100" class="anchor"></a>ggalluvial 0.10.0<small> 2019-09-02 </small>
+    <div id="ggalluvial-0-10-0" class="section level1">
+<h1 class="page-header" data-toc-text="0.10.0">
+<a href="#ggalluvial-0-10-0" class="anchor"></a>ggalluvial 0.10.0<small> 2019-09-02 </small>
 </h1>
 <div id="lode-guidance-and-ordering" class="section level2">
 <h2 class="hasAnchor">
@@ -236,9 +308,9 @@
 <p>The <code>lode.guidance</code> argument of <code>stat_alluvial()</code> now accepts functions as input, making the use of custom functions easier as demonstrated in an example.</p>
 </div>
 </div>
-    <div id="ggalluvial-092" class="section level1">
-<h1 class="page-header">
-<a href="#ggalluvial-092" class="anchor"></a>ggalluvial 0.9.2<small> Unreleased </small>
+    <div id="ggalluvial-0-9-2" class="section level1">
+<h1 class="page-header" data-toc-text="0.9.2">
+<a href="#ggalluvial-0-9-2" class="anchor"></a>ggalluvial 0.9.2<small> Unreleased </small>
 </h1>
 <div id="height-limits-on-strata" class="section level2">
 <h2 class="hasAnchor">
@@ -246,9 +318,9 @@
 <p>Parameters <code>min.height</code> and <code>max.height</code> are introduced to <code><a href="../reference/stat_stratum.html">stat_stratum()</a></code> to allow users to omit strata outside a given height range. This is probably most relevant for stratum labeling, as illustrated in the updated vignette.</p>
 </div>
 </div>
-    <div id="ggalluvial-091" class="section level1">
-<h1 class="page-header">
-<a href="#ggalluvial-091" class="anchor"></a>ggalluvial 0.9.1<small> 2018-10-21 </small>
+    <div id="ggalluvial-0-9-1" class="section level1">
+<h1 class="page-header" data-toc-text="0.9.1">
+<a href="#ggalluvial-0-9-1" class="anchor"></a>ggalluvial 0.9.1<small> 2018-10-21 </small>
 </h1>
 <div id="suggest-sessioninfo-for-session_info" class="section level2">
 <h2 class="hasAnchor">
@@ -267,9 +339,9 @@
 <p>The internal z-ordering function <code>z_order_aes</code> failed to recognize contiguous segments of alluvia, thereby assigning later segments missing values of <code>'group'</code> and preventing them from being rendered. This has been corrected.</p>
 </div>
 </div>
-    <div id="ggalluvial-090" class="section level1">
-<h1 class="page-header">
-<a href="#ggalluvial-090" class="anchor"></a>ggalluvial 0.9.0<small> 2018-07-06 </small>
+    <div id="ggalluvial-0-9-0" class="section level1">
+<h1 class="page-header" data-toc-text="0.9.0">
+<a href="#ggalluvial-0-9-0" class="anchor"></a>ggalluvial 0.9.0<small> 2018-07-06 </small>
 </h1>
 <div id="geom_alluvium-patch" class="section level2">
 <h2 class="hasAnchor">
@@ -297,9 +369,9 @@
 <p>The internal function <code><a href="../reference/self-adjoin.html">self_adjoin()</a></code>, invoked by <code><a href="../reference/geom_flow.html">geom_flow()</a></code>, is revised, exported, documented, and exemplified.</p>
 </div>
 </div>
-    <div id="ggalluvial-080" class="section level1">
-<h1 class="page-header">
-<a href="#ggalluvial-080" class="anchor"></a>ggalluvial 0.8.0<small> Unreleased </small>
+    <div id="ggalluvial-0-8-0" class="section level1">
+<h1 class="page-header" data-toc-text="0.8.0">
+<a href="#ggalluvial-0-8-0" class="anchor"></a>ggalluvial 0.8.0<small> Unreleased </small>
 </h1>
 <div id="stat-layer-functionality" class="section level2">
 <h2 class="hasAnchor">
@@ -317,9 +389,9 @@
 </ul>
 </div>
 </div>
-    <div id="ggalluvial-070" class="section level1">
-<h1 class="page-header">
-<a href="#ggalluvial-070" class="anchor"></a>ggalluvial 0.7.0<small> Unreleased </small>
+    <div id="ggalluvial-0-7-0" class="section level1">
+<h1 class="page-header" data-toc-text="0.7.0">
+<a href="#ggalluvial-0-7-0" class="anchor"></a>ggalluvial 0.7.0<small> Unreleased </small>
 </h1>
 <div id="alluvial-data-functionality-1" class="section level2">
 <h2 class="hasAnchor">
@@ -338,13 +410,13 @@
 </ul>
 </div>
 </div>
-    <div id="ggalluvial-060" class="section level1">
-<h1 class="page-header">
-<a href="#ggalluvial-060" class="anchor"></a>ggalluvial 0.6.0<small> 2018-02-04 </small>
+    <div id="ggalluvial-0-6-0" class="section level1">
+<h1 class="page-header" data-toc-text="0.6.0">
+<a href="#ggalluvial-0-6-0" class="anchor"></a>ggalluvial 0.6.0<small> 2018-02-04 </small>
 </h1>
-<div id="cran-checks-for-v050" class="section level2">
+<div id="cran-checks-for-v0-5-0" class="section level2">
 <h2 class="hasAnchor">
-<a href="#cran-checks-for-v050" class="anchor"></a>CRAN checks for v0.5.0</h2>
+<a href="#cran-checks-for-v0-5-0" class="anchor"></a>CRAN checks for v0.5.0</h2>
 <ul>
 <li>The package now <code>Depends</code> on R <code>v3.3.0</code> (patch number zero) instead of <code>v3.3.1</code>. I’ve been unable to install this version locally, so there is a slight chance of incompatibility that i’ll be watchful for going forward.</li>
 <li>The <strong>grid</strong> and <strong>alluvial</strong> packages are now <code>Suggests</code> rather than <code>Imports</code>.</li>
@@ -354,7 +426,7 @@
 <h2 class="hasAnchor">
 <a href="#alluvial-data-functionality-2" class="anchor"></a>Alluvial data functionality</h2>
 <ul>
-<li>Source files and documentation for <code>is_alluvial_*()</code> and <code>to_*()</code> functions are combined; see <code><a href="https://rdrr.io/r/utils/help.html">help("alluvial-data")</a></code>.</li>
+<li>Source files and documentation for <code>is_alluvial_*()</code> and <code>to_*()</code> functions are combined; see <code><a href="../reference/alluvial-data.html">help("alluvial-data")</a></code>.</li>
 <li>
 <code>is_alluvial_alluvia</code> now prints a message rather than a warning when some combinations of strata are not linked by any alluvia.</li>
 <li>
@@ -377,9 +449,9 @@
 </ul>
 </div>
 </div>
-    <div id="ggalluvial-050" class="section level1">
-<h1 class="page-header">
-<a href="#ggalluvial-050" class="anchor"></a>ggalluvial 0.5.0<small> 2017-11-26 </small>
+    <div id="ggalluvial-0-5-0" class="section level1">
+<h1 class="page-header" data-toc-text="0.5.0">
+<a href="#ggalluvial-0-5-0" class="anchor"></a>ggalluvial 0.5.0<small> 2017-11-26 </small>
 </h1>
 <div id="backward-incompatibilities" class="section level2">
 <h2 class="hasAnchor">
@@ -389,24 +461,10 @@
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#ggalluvial-0113">0.11.3</a></li>
-        <li><a href="#ggalluvial-0112">0.11.2</a></li>
-        <li><a href="#ggalluvial-0111">0.11.1</a></li>
-        <li><a href="#ggalluvial-0110">0.11.0</a></li>
-        <li><a href="#ggalluvial-0100">0.10.0</a></li>
-        <li><a href="#ggalluvial-092">0.9.2</a></li>
-        <li><a href="#ggalluvial-091">0.9.1</a></li>
-        <li><a href="#ggalluvial-090">0.9.0</a></li>
-        <li><a href="#ggalluvial-080">0.8.0</a></li>
-        <li><a href="#ggalluvial-070">0.7.0</a></li>
-        <li><a href="#ggalluvial-060">0.6.0</a></li>
-        <li><a href="#ggalluvial-050">0.5.0</a></li>
-      </ul>
-    </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 
 </div>
@@ -418,7 +476,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

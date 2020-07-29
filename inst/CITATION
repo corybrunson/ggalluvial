@@ -1,0 +1,19 @@
+citEntry(
+  header = gettextf("To cite package %s in publications, use:",
+                    sQuote("ggalluvial")),
+  entry = "Article",
+  title = "{ggalluvial}: Layered Grammar for Alluvial Plots",
+  author = "Jason Cory Brunson",
+  year = "2020",
+  journal = "Journal of Open Source Software",
+  volume = "5",
+  number = "49",
+  pages = "2017",
+  doi = "10.21105/joss.02017",
+  textVersion = paste(
+    "Brunson, J. C., (2020).",
+    "ggalluvial: Layered Grammar for Alluvial Plots.",
+    "Journal of Open Source Software, 5(49), 2017,",
+    "https://doi.org/10.21105/joss.02017"
+  )
+)

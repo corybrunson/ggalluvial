@@ -60,7 +60,9 @@ analogous to \verb{id_cols,names_from,values_from} in \code{\link[tidyr:pivot_wi
 they still accept unquoted names, note that their \verb{*_to} replacements only
 accept strings.}
 
-\item{y}{Optional column containing alluvium heights (subject magnitudes).}
+\item{y}{Optional field(s) of \code{data}, handled using
+\code{\link[rlang:nse-defuse]{rlang::enquo()}}, to be used as heights or depths of
+the alluvia or lodes.}
 
 \item{silent}{Whether to print explanatory messages.}
 
@@ -85,13 +87,13 @@ variables passed to \code{axes} that appear at more than one axis, in order to
 distinguish their factor levels. This forces the levels of the combined
 factor variable \code{strata_to} to be in the order of the axes.}
 
-\item{distill}{A logical value indicating whether variables excluded from
-\code{axes_from} and \code{strata_from} that vary within values of \code{alluvia_from}
-should be included in the result. Alternatively, a function (or its name)
-to be used to distill each such variable to a single value. In addition to
-existing functions, \code{distill} accepts the character values \code{"first"} (used
-if \code{distill} is \code{TRUE}), \code{"last"}, and \code{"most"} (which returns the first
-modal value).}
+\item{distill}{A logical value indicating whether to include variables, other
+than those passed to \code{key} and \code{value}, that vary within values
+of \code{id}. Alternatively, a function (or its name) to be used to distill
+each such variable to a single value. In addition to existing functions,
+\code{distill} accepts the character values \code{"first"} (used if
+\code{distill} is \code{TRUE}), \code{"last"}, and \code{"most"} (which
+returns the first modal value).}
 }
 \description{
 The functions \verb{is_*_form()} determine whether a data frame is alluvial---that

@@ -10,23 +10,27 @@
 
 
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
 <!-- headroom.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/headroom.min.js" integrity="sha256-DJFC1kqIhelURkuza0AvYal5RxMtpzLjFhsnVIeuk+U=" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.9.4/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -43,7 +47,6 @@ It reconfigures these into alluvial segments connecting pairs of
 corresponding lodes in adjacent strata and plots filled x-splines between
 each such pair, using a provided knot position parameter knot.pos, and
 filled rectangles at either end, using a provided width." />
-<meta name="twitter:card" content="summary" />
 
 
 
@@ -61,7 +64,7 @@ filled rectangles at either end, using a provided width." />
 
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -75,7 +78,7 @@ filled rectangles at either end, using a provided width." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.11.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.0</span>
       </span>
     </div>
 
@@ -113,7 +116,12 @@ filled rectangles at either end, using a provided width." />
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/corybrunson/ggalluvial/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
     </div><!--/.nav-collapse -->
@@ -128,7 +136,7 @@ filled rectangles at either end, using a provided width." />
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Flows between lodes or strata</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/corybrunson/ggalluvial/blob/master/R/geom-flow.r'><code>R/geom-flow.r</code></a></small>
     <div class="hidden name"><code>geom_flow.Rd</code></div>
     </div>
 
@@ -148,7 +156,11 @@ filled rectangles at either end, using a provided <code>width</code>.</p>
   <span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"flow"</span>,
   <span class='kw'>position</span> <span class='kw'>=</span> <span class='st'>"identity"</span>,
   <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>3</span>,
-  <span class='kw'>knot.pos</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>6</span>,
+  <span class='kw'>knot.pos</span> <span class='kw'>=</span> <span class='fl'>1</span>/<span class='fl'>4</span>,
+  <span class='kw'>knot.prop</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>curve_type</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>curve_range</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>segments</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>aes.flow</span> <span class='kw'>=</span> <span class='st'>"forward"</span>,
   <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>show.legend</span> <span class='kw'>=</span> <span class='fl'>NA</span>,
@@ -197,9 +209,37 @@ distance between axes. Defaults to 1/3.</p></td>
     </tr>
     <tr>
       <th>knot.pos</th>
-      <td><p>The horizontal distance between a stratum (<code>width/2</code>
-from its axis) and the knot of the x-spline, as a proportion of the
-separation between strata. Defaults to 1/6.</p></td>
+      <td><p>The horizontal distance of x-spline knots from each stratum
+(<code>width/2</code> from its axis), either (if <code>knot.prop = TRUE</code>, the default) as a
+proportion of the length of the x-spline, i.e. of the gap between adjacent
+strata, or (if <code>knot.prop = FALSE</code>) on the scale of the <code>x</code> direction.</p></td>
+    </tr>
+    <tr>
+      <th>knot.prop</th>
+      <td><p>Logical; whether to interpret <code>knot.pos</code> as a proportion of
+the length of each flow (the default), rather than on the <code>x</code> scale.</p></td>
+    </tr>
+    <tr>
+      <th>curve_type</th>
+      <td><p>Character; the type of curve used to produce flows.
+Defaults to <code>"xspline"</code> and can be alternatively set to one of <code>"linear"</code>,
+<code>"cubic"</code>, <code>"quintic"</code>, <code>"sine"</code>, <code>"arctangent"</code>, and <code>"sigmoid"</code>.
+<code>"xspline"</code> produces approximation splines using 4 points per curve; the
+alternatives produce interpolation splines between points along the graphs
+of functions of the associated type. See the <strong>Curves</strong> section.</p></td>
+    </tr>
+    <tr>
+      <th>curve_range</th>
+      <td><p>For alternative <code>curve_type</code>s based on asymptotic
+functions, the value along the asymptote at which to truncate the function
+to obtain the shape that will be scaled to fit between strata. See the
+<strong>Curves</strong> section.</p></td>
+    </tr>
+    <tr>
+      <th>segments</th>
+      <td><p>The number of segments to be used in drawing each alternative
+curve (each curved boundary of each flow). If less than 3, will be silently
+changed to 3.</p></td>
     </tr>
     <tr>
       <th>aes.flow</th>
@@ -253,6 +293,56 @@ following aesthetics (required aesthetics are in bold):</p><ul>
 </ul>
 
 <p><code>group</code> is used internally; arguments are ignored.</p>
+    <h2 class="hasAnchor" id="curves"><a class="anchor" href="#curves"></a>Curves</h2>
+
+    
+
+<p>By default, <code><a href='geom_alluvium.html'>geom_alluvium()</a></code> and <code>geom_flow()</code> render flows between lodes as
+filled regions between parallel x-splines. These graphical elements,
+generated using <code><a href='https://rdrr.io/r/grid/grid.xspline.html'>grid::xsplineGrob()</a></code>, are
+parameterized by the relative location of the knot (<code>knot.pos</code>). They are
+quick to render and clear to read, but users may prefer plots that use
+differently-shaped ribbons.</p>
+<p>A variety of such options are documented at, e.g., <a href='https://easings.net/'>this easing functions cheat sheet</a> and <a href='https://www.dataplusscience.com/Sigmoid.html'>this blog post by Jeffrey Shaffer</a>. Easing functions are
+not (yet) used in ggalluvial, but several alternative curves are available.
+Each is encoded as a continuous, increasing, bijective function from the unit
+interval \([0,1]\) to itself, and each is rescaled so that its endpoints
+meet the corresponding lodes. They are rendered piecewise-linearly, by
+default using <code>segments = 48</code>. Summon each curve type by passing one of the
+following strings to <code>curve_type</code>:</p><ul>
+<li><p><code>"linear"</code>:     \(f(x)=x\), the unique degree-1 polynomial that takes
+0 to 0 and 1 to 1</p></li>
+<li><p><code>"cubic"</code>:      \(f(x)=3x^{2}-2x^{3}\), the unique
+degree-3 polynomial that also is flat at both endpoints</p></li>
+<li><p><code>"quintic"</code>:    \(f(x)=10x^{3}-15x^{4}+6x^{5}\),
+the unique degree-5 polynomial that also has zero curvature
+at both endpoints</p></li>
+<li><p><code>"sine"</code>:       the unique sinusoidal function that is flat at both
+endpoints</p></li>
+<li><p><code>"arctangent"</code>: the inverse tangent function, scaled and re-centered to the
+unit interval from the interval centered at zero with
+radius <code>curve_range</code></p></li>
+<li><p><code>"sigmoid"</code>:    the sigmoid function, scaled and re-centered to the unit
+interval from the interval centered at zero with radius
+<code>curve_range</code></p></li>
+</ul>
+
+<p>Only the (default) <code>"xspline"</code> option uses the <code>knot.*</code> parameters, while
+only the alternative curves use the <code>segments</code> parameter, and only
+<code>"arctangent"</code> and <code>"sigmoid"</code> use the <code>curve_range</code> parameter. (Both are
+ignored if not needed.) Larger values of <code>curve_range</code> result in greater
+compression and steeper slopes. The <code>NULL</code> default will be changed to
+<code>2+sqrt(3)</code> for <code>"arctangent"</code> and to <code>6</code> for <code>"sigmoid"</code>.</p>
+<p>These package-specific options set global values for <code>curve_type</code>,
+<code>curve_range</code>, and <code>segments</code> that will be defaulted to when not manually
+set:</p><ul>
+<li><p><code>ggalluvial.curve_type</code>: defaults to <code>"xspline"</code>.</p></li>
+<li><p><code>ggalluvial.curve_range</code>: defaults to <code>NA</code>, which triggers the
+curve-specific default values.</p></li>
+<li><p><code>ggalluvial.segments</code>: defaults to <code>48L</code>.</p></li>
+</ul>
+
+<p>See <code><a href='https://rdrr.io/r/base/options.html'>base::options()</a></code> for how to use options.</p>
     <h2 class="hasAnchor" id="defunct-parameters"><a class="anchor" href="#defunct-parameters"></a>Defunct parameters</h2>
 
     
@@ -276,15 +366,16 @@ discontinued. Use <code>width</code> and <code>knot.pos</code> instead.</p>
            <span class='kw'>axis1</span> <span class='kw'>=</span> <span class='no'>Class</span>, <span class='kw'>axis2</span> <span class='kw'>=</span> <span class='no'>Sex</span>, <span class='kw'>axis3</span> <span class='kw'>=</span> <span class='no'>Age</span>)) +
   <span class='fu'>geom_flow</span>() +
   <span class='fu'>scale_x_discrete</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span>)) +
-  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>() + <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>infer.label</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) +
+  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>() +
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='fu'>aes</span>(<span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'>after_stat</span>(<span class='no'>stratum</span>))) +
   <span class='fu'>ggtitle</span>(<span class='st'>"Alluvial plot of Titanic passenger demographic data"</span>)</div><div class='img'><img src='geom_flow-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># use of facets</span>
+<span class='co'># use of facets, with sigmoid flows</span>
 <span class='fu'>ggplot</span>(<span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span>(<span class='no'>Titanic</span>),
        <span class='fu'>aes</span>(<span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>Freq</span>,
            <span class='kw'>axis1</span> <span class='kw'>=</span> <span class='no'>Class</span>, <span class='kw'>axis2</span> <span class='kw'>=</span> <span class='no'>Sex</span>)) +
-  <span class='fu'>geom_flow</span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Age</span>), <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>.4</span>) +
+  <span class='fu'>geom_flow</span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Age</span>), <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>.4</span>, <span class='kw'>curve_type</span> <span class='kw'>=</span> <span class='st'>"quintic"</span>) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>.4</span>) +
-  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='kw'>infer.label</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>3</span>) +
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='fu'>aes</span>(<span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'>after_stat</span>(<span class='no'>stratum</span>)), <span class='kw'>size</span> <span class='kw'>=</span> <span class='fl'>3</span>) +
   <span class='fu'>scale_x_discrete</span>(<span class='kw'>limits</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Class"</span>, <span class='st'>"Sex"</span>)) +
   <span class='fu'>facet_wrap</span>(~ <span class='no'>Survived</span>, <span class='kw'>scales</span> <span class='kw'>=</span> <span class='st'>"fixed"</span>)</div><div class='img'><img src='geom_flow-2.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># time series alluvia of WorldPhones data</span>
@@ -292,27 +383,37 @@ discontinued. Use <code>width</code> and <code>knot.pos</code> instead.</p>
 <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span>(<span class='no'>wph</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"Year"</span>, <span class='st'>"Region"</span>, <span class='st'>"Telephones"</span>)
 <span class='fu'>ggplot</span>(<span class='no'>wph</span>,
        <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>Year</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>Region</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>Telephones</span>)) +
-  <span class='fu'>geom_flow</span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Region</span>, <span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>Region</span>), <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>0</span>)</div><div class='img'><img src='geom_flow-3.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># rightward flow aesthetics for vaccine survey data</span>
+  <span class='fu'>geom_flow</span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Region</span>, <span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>Region</span>), <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>0</span>)</div><div class='img'><img src='geom_flow-3.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># treat 'Year' as a number rather than as a factor</span>
+<span class='no'>wph</span>$<span class='no'>Year</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='no'>wph</span>$<span class='no'>Year</span>))
+<span class='fu'>ggplot</span>(<span class='no'>wph</span>,
+       <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>Year</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>Region</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>Telephones</span>)) +
+  <span class='fu'>geom_flow</span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Region</span>, <span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>Region</span>), <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>0</span>)</div><div class='img'><img src='geom_flow-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># hold the knot positions fixed</span>
+<span class='fu'>ggplot</span>(<span class='no'>wph</span>,
+       <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>Year</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>Region</span>, <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>Telephones</span>)) +
+  <span class='fu'>geom_flow</span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Region</span>, <span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>Region</span>), <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>knot.prop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='img'><img src='geom_flow-5.png' alt='' width='700' height='433' /></div><div class='input'>
+<span class='co'># rightward flow aesthetics for vaccine survey data, with cubic flows</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>vaccinations</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='no'>vaccinations</span>$<span class='no'>response</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rev.html'>rev</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='no'>vaccinations</span>$<span class='no'>response</span>))
+<span class='co'># annotate with proportional counts</span>
 <span class='fu'>ggplot</span>(<span class='no'>vaccinations</span>,
        <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>subject</span>,
-           <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>freq</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='no'>a</span>, <span class='fl'>3</span>))) +
-  <span class='fu'><a href='geom_lode.html'>geom_lode</a></span>() + <span class='fu'>geom_flow</span>() +
+           <span class='kw'>y</span> <span class='kw'>=</span> <span class='no'>freq</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>response</span>)) +
+  <span class='fu'><a href='geom_lode.html'>geom_lode</a></span>() + <span class='fu'>geom_flow</span>(<span class='kw'>curve_type</span> <span class='kw'>=</span> <span class='st'>"cubic"</span>) +
   <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0</span>) +
-  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>)</div><div class='img'><img src='geom_flow-4.png' alt='' width='700' height='433' /></div></pre>
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"stratum"</span>, <span class='fu'>aes</span>(<span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span>(<span class='fu'>after_stat</span>(<span class='no'>prop</span>), <span class='fl'>3</span>)))</div><div class='img'><img src='geom_flow-6.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># annotate fixed-width ribbons with counts</span>
+<span class='fu'>ggplot</span>(<span class='no'>vaccinations</span>,
+       <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>subject</span>,
+           <span class='kw'>weight</span> <span class='kw'>=</span> <span class='no'>freq</span>, <span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>response</span>)) +
+  <span class='fu'><a href='geom_lode.html'>geom_lode</a></span>() + <span class='fu'>geom_flow</span>(<span class='kw'>curve_type</span> <span class='kw'>=</span> <span class='st'>"cubic"</span>) +
+  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span>(<span class='kw'>alpha</span> <span class='kw'>=</span> <span class='fl'>0</span>) +
+  <span class='fu'>geom_text</span>(<span class='kw'>stat</span> <span class='kw'>=</span> <span class='st'>"flow"</span>,
+            <span class='fu'>aes</span>(<span class='kw'>label</span> <span class='kw'>=</span> <span class='fu'>after_stat</span>(<span class='no'>n</span>),
+                <span class='kw'>hjust</span> <span class='kw'>=</span> (<span class='fu'>after_stat</span>(<span class='no'>flow</span>) <span class='kw'>==</span> <span class='st'>"to"</span>)))</div><div class='img'><img src='geom_flow-7.png' alt='' width='700' height='433' /></div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#aesthetics">Aesthetics</a></li>
-      <li><a href="#defunct-parameters">Defunct parameters</a></li>
-      <li><a href="#see-also">See also</a></li>
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
@@ -323,7 +424,7 @@ discontinued. Use <code>width</code> and <code>knot.pos</code> instead.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.4.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
 
       </footer>

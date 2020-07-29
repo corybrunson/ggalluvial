@@ -7,6 +7,8 @@ test_that("`geom_lode` draws correctly", {
   a1 <- aes(y = Freq, axis = Class)
   a2 <- aes(y = Freq, axis1 = Class, axis2 = Sex, axis3 = Age, fill = Survived)
   
+  skip_on_cran()
+  skip_if_not_installed("vdiffr")
   vdiffr::expect_doppelganger(
     "`geom_lode`: one axis",
     ggplot(d, a1) + geom_lode(aes(fill = Class, alpha = Survived)) +

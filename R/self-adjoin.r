@@ -5,7 +5,7 @@
 #' form to something similar to alluvia form.
 #'
 
-#' `self_adjoin` invokes [`dplyr::join`] functions in order to convert
+#' `self_adjoin` invokes [`dplyr::mutate-joins`] functions in order to convert
 #' a dataset with measures along a discrete `key` variable into a dataset
 #' consisting of column bindings of these measures (by any `by` variables) along
 #' adjacent values of `key`.
@@ -17,7 +17,7 @@
 #' @param key Column of `data` indicating sequential collection; handled as in
 #'   [tidyr::spread()].
 #' @param by Character vector of variables to self-adjoin by; passed to
-#'   [`dplyr::join`] functions.
+#'   [`dplyr::mutate-joins`] functions.
 #' @param link Character vector of variables to adjoin. Will be replaced by
 #'   pairs of variables suffixed by `suffix`.
 #' @param keep.x,keep.y Character vector of variables to associate with the
@@ -25,7 +25,7 @@
 #'   variables can overlap with each other but cannot overlap with `by` or
 #'   `link`.
 #' @param suffix Suffixes to add to the adjoined `link` variables; passed to
-#'   [`dplyr::join`] functions.
+#'   [`dplyr::mutate-joins`] functions.
 #' @example inst/examples/ex-self-adjoin.r
 #' @export
 self_adjoin <- function(

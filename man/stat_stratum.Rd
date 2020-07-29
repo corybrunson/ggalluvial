@@ -9,9 +9,9 @@ stat_stratum(
   data = NULL,
   geom = "stratum",
   position = "identity",
-  decreasing = ggalluvial_opt("decreasing"),
-  reverse = ggalluvial_opt("reverse"),
-  absolute = ggalluvial_opt("absolute"),
+  decreasing = NULL,
+  reverse = NULL,
+  absolute = NULL,
   discern = FALSE,
   distill = first,
   negate.strata = NULL,
@@ -74,10 +74,11 @@ using negative or absolute values of \code{y}.}
 alluvia format.}
 
 \item{distill}{A function (or its name) to be used to distill alluvium values
-to a single lode label, accessible via \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}} (similar to
-its behavior in \code{\link[=to_alluvia_form]{to_alluvia_form()}}). In addition to existing functions,
-accepts the character values \code{"first"} (the default), \code{"last"}, and
-\code{"most"} (which returns the first modal value).}
+to a single lode label, accessible via
+\code{\link[ggplot2:aes_eval]{ggplot2::after_stat()}} (similar to its behavior in
+\code{\link[=to_alluvia_form]{to_alluvia_form()}}). In addition to existing functions, accepts the
+character values \code{"first"} (the default), \code{"last"}, and \code{"most"} (which
+returns the first modal value).}
 
 \item{negate.strata}{A vector of values of the \code{stratum} aesthetic to be
 treated as negative (will ignore missing values with a warning).}
@@ -86,8 +87,8 @@ treated as negative (will ignore missing values with a warning).}
 variable to the \code{label} aesthetic. Defaults to \code{FALSE}, and requires that
 no \code{label} aesthetic is assigned. This parameter is intended for use only
 with data in alluva form, which are converted to lode form before the
-statistical transformation. Deprecated; use \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}}
-instead.}
+statistical transformation. Deprecated; use
+\code{\link[ggplot2:aes_eval]{ggplot2::after_stat()}} instead.}
 
 \item{label.strata}{Defunct; alias for \code{infer.label}.}
 
@@ -137,6 +138,7 @@ aesthetics:
 \itemize{
 \item \code{y}
 \item \code{weight}
+\item \code{order}
 \item \code{group}
 \item \code{label}
 }
@@ -145,11 +147,14 @@ aesthetics:
 and may be aggregated across equivalent observations.
 \code{weight} applies to the computed variables (see that section below)
 but does not affect the positional aesthetics.
+\code{order}, recognized by \code{stat_alluvium()} and \code{stat_flow()}, is used to
+arrange the lodes within each stratum. It tolerates duplicates and takes
+precedence over the differentiation aesthetics (when \code{aes.bind} is not
+\code{"none"}) and lode guidance with respect to the remaining axes. (It replaces
+the deprecated parameter \code{lode.ordering}.)
 \code{group} is used internally; arguments are ignored.
 \code{label} is used to label the strata or lodes and must take a unique value
 across the observations within each stratum or lode.
-Often the same variable will be passed to \code{label} as to the corresponding
-alluvial aesthetic (\code{stratum} or \code{alluvium}).
 
 These and any other aesthetics are aggregated as follows:
 Numeric aesthetics, including \code{y}, are summed.
@@ -159,8 +164,8 @@ observations within each (and are otherwise assigned \code{NA}).
 }
 
 \section{Computed variables}{
-
-These can be used with \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}} to \href{https://ggplot2.tidyverse.org/reference/aes_eval.html}{control aesthetic evaluation}.
+ These can be used with
+\code{\link[ggplot2:aes_eval]{ggplot2::after_stat()}} to \href{https://ggplot2.tidyverse.org/reference/aes_eval.html}{control aesthetic evaluation}.
 \describe{
 \item{\code{n}}{number of cases in lode}
 \item{\code{count}}{cumulative weight of lode}
@@ -192,7 +197,6 @@ manually set:
 \item \code{ggalluvial.absolute} (each \verb{stat_*}): defaults to \code{TRUE}.
 \item \code{ggalluvial.cement.alluvia} (\code{stat_alluvium}): defaults to \code{FALSE}.
 \item \code{ggalluvial.lode.guidance} (\code{stat_alluvium}): defaults to \code{"zigzag"}.
-\item \code{ggalluvial.lode.ordering} (\code{stat_alluvium}): defaults to \code{NULL}.
 \item \code{ggalluvial.aes.bind} (\code{stat_alluvium} and \code{stat_flow}): defaults to
 \code{"none"}.
 }
@@ -239,13 +243,8 @@ ggplot(vaccinations,
   geom_text(stat = "stratum", min.y = 100)
 
 # date-valued axis variables
-survey_dates <- data.frame(
-  survey = levels(vaccinations$survey),
-  start = as.Date(c("2010-09-22", "2015-06-04", "2016-09-27")),
-  end = as.Date(c("2010-10-25", "2015-10-05", "2016-10-25"))
-)
-ggplot(merge(vaccinations, survey_dates, by = "survey"),
-       aes(x = end, y = freq, stratum = response, alluvium = subject,
+ggplot(vaccinations,
+       aes(x = end_date, y = freq, stratum = response, alluvium = subject,
            fill = response)) +
   stat_alluvium(geom = "flow", lode.guidance = "forward",
                 width = 30) +
@@ -268,6 +267,18 @@ ggplot(admissions,
   geom_stratum(width = 1/12, fill = "black", color = "grey") +
   geom_text(stat = "stratum", aes(label = after_stat(deposit)),
             color = "white") +
+  scale_x_discrete(limits = c("Department", "Gender"), expand = c(.05, .05))
+# fixed-width strata with acceptance and rejection totals
+ggplot(admissions,
+       aes(y = sign(Count), weight = Count, axis1 = Dept, axis2 = Gender)) +
+  geom_alluvium(aes(fill = Dept), width = 1/8) +
+  geom_stratum(width = 1/8, fill = "black", color = "grey") +
+  geom_text(stat = "stratum",
+            aes(label = paste0(stratum,
+                               ifelse(nchar(as.character(stratum)) == 1L,
+                                      ": ", "\n"),
+                               after_stat(n))),
+            color = "white", size = 3) +
   scale_x_discrete(limits = c("Department", "Gender"), expand = c(.05, .05))
 }
 \seealso{

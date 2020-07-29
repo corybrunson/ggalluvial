@@ -9,12 +9,12 @@ stat_flow(
   data = NULL,
   geom = "flow",
   position = "identity",
-  decreasing = ggalluvial_opt("decreasing"),
-  reverse = ggalluvial_opt("reverse"),
-  absolute = ggalluvial_opt("absolute"),
+  decreasing = NULL,
+  reverse = NULL,
+  absolute = NULL,
   discern = FALSE,
   negate.strata = NULL,
-  aes.bind = ggalluvial_opt("aes.bind"),
+  aes.bind = NULL,
   infer.label = FALSE,
   min.y = NULL,
   max.y = NULL,
@@ -91,8 +91,8 @@ specified in \code{aes()}.}
 variable to the \code{label} aesthetic. Defaults to \code{FALSE}, and requires that
 no \code{label} aesthetic is assigned. This parameter is intended for use only
 with data in alluva form, which are converted to lode form before the
-statistical transformation. Deprecated; use \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}}
-instead.}
+statistical transformation. Deprecated; use
+\code{\link[ggplot2:aes_eval]{ggplot2::after_stat()}} instead.}
 
 \item{min.y}{Numeric; bounds on the heights of the strata to be
 rendered. Use these bounds to exclude strata outside a certain range, for
@@ -142,6 +142,7 @@ aesthetics:
 \itemize{
 \item \code{y}
 \item \code{weight}
+\item \code{order}
 \item \code{group}
 \item \code{label}
 }
@@ -150,11 +151,14 @@ aesthetics:
 and may be aggregated across equivalent observations.
 \code{weight} applies to the computed variables (see that section below)
 but does not affect the positional aesthetics.
+\code{order}, recognized by \code{stat_alluvium()} and \code{stat_flow()}, is used to
+arrange the lodes within each stratum. It tolerates duplicates and takes
+precedence over the differentiation aesthetics (when \code{aes.bind} is not
+\code{"none"}) and lode guidance with respect to the remaining axes. (It replaces
+the deprecated parameter \code{lode.ordering}.)
 \code{group} is used internally; arguments are ignored.
 \code{label} is used to label the strata or lodes and must take a unique value
 across the observations within each stratum or lode.
-Often the same variable will be passed to \code{label} as to the corresponding
-alluvial aesthetic (\code{stratum} or \code{alluvium}).
 
 These and any other aesthetics are aggregated as follows:
 Numeric aesthetics, including \code{y}, are summed.
@@ -164,8 +168,8 @@ observations within each (and are otherwise assigned \code{NA}).
 }
 
 \section{Computed variables}{
-
-These can be used with \code{\link[ggplot2:after_stat]{ggplot2::after_stat()}} to \href{https://ggplot2.tidyverse.org/reference/aes_eval.html}{control aesthetic evaluation}.
+ These can be used with
+\code{\link[ggplot2:aes_eval]{ggplot2::after_stat()}} to \href{https://ggplot2.tidyverse.org/reference/aes_eval.html}{control aesthetic evaluation}.
 \describe{
 \item{\code{n}}{number of cases in lode}
 \item{\code{count}}{cumulative weight of lode}
@@ -197,7 +201,6 @@ manually set:
 \item \code{ggalluvial.absolute} (each \verb{stat_*}): defaults to \code{TRUE}.
 \item \code{ggalluvial.cement.alluvia} (\code{stat_alluvium}): defaults to \code{FALSE}.
 \item \code{ggalluvial.lode.guidance} (\code{stat_alluvium}): defaults to \code{"zigzag"}.
-\item \code{ggalluvial.lode.ordering} (\code{stat_alluvium}): defaults to \code{NULL}.
 \item \code{ggalluvial.aes.bind} (\code{stat_alluvium} and \code{stat_flow}): defaults to
 \code{"none"}.
 }

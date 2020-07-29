@@ -28,7 +28,8 @@ geom_flow <- function(mapping = NULL,
                       position = "identity",
                       width = 1/3,
                       knot.pos = 1/4, knot.prop = TRUE,
-                      curve = "xspline", reach = NULL, segments = NULL,
+                      curve_type = NULL, curve_range = NULL,
+                      segments = NULL,
                       aes.flow = "forward",
                       na.rm = FALSE,
                       show.legend = NA,
@@ -49,8 +50,8 @@ geom_flow <- function(mapping = NULL,
       width = width,
       knot.pos = knot.pos,
       knot.prop = knot.prop,
-      curve = curve,
-      reach = reach,
+      curve_type = curve_type,
+      curve_range = curve_range,
       segments = segments,
       aes.flow = aes.flow,
       na.rm = na.rm,
@@ -90,8 +91,14 @@ GeomFlow <- ggproto(
   draw_panel = function(self, data, panel_params, coord,
                         width = 1/3, aes.flow = "forward",
                         knot.pos = 1/4, knot.prop = TRUE,
-                        curve = "xspline", reach = NULL, segments = NULL) {
-
+                        curve_type = NULL, curve_range = NULL,
+                        segments = NULL) {
+    
+    # parameter defaults
+    if (is.null(curve_type)) curve_type <- ggalluvial_opt("curve_type")
+    if (is.null(curve_range)) curve_range <- ggalluvial_opt("curve_range")
+    if (is.null(segments)) segments <- ggalluvial_opt("segments")
+    
     # exclude one-sided flows
     data <- data[complete.cases(data), ]
 
@@ -125,7 +132,8 @@ GeomFlow <- ggproto(
       f_path <- row_to_curve(row$xmax.0, row$xmin.1,
                              row$ymin.0, row$ymax.0, row$ymin.1, row$ymax.1,
                              row$knot.pos.0, row$knot.pos.1,
-                             curve = curve, reach = reach, segments = segments,
+                             curve_type = curve_type, curve_range = curve_range,
+                             segments = segments,
                              knot.prop = knot.prop)
       # aesthetics
       aes <- as.data.frame(row[flow_aes], stringsAsFactors = FALSE)
@@ -158,9 +166,9 @@ GeomFlow <- ggproto(
 # send to spline or unit curve depending on parameters
 row_to_curve <- function(
   x0, x1, ymin0, ymax0, ymin1, ymax1, kp0, kp1,
-  curve, reach, segments, knot.prop
+  curve_type, curve_range, segments, knot.prop
 ) {
-  if (curve %in% c("spline", "xspline")) {
+  if (curve_type %in% c("spline", "xspline")) {
     # x-spline path
     row_to_xspline(x0, x1, ymin0, ymax0, ymin1, ymax1,
                    kp0, kp1, knot.prop)
@@ -172,7 +180,7 @@ row_to_curve <- function(
     }
     # unit curve path
     row_to_unit_curve(x0, x1, ymin0, ymax0, ymin1, ymax1,
-                      curve, reach, segments)
+                      curve_type, curve_range, segments)
   }
 }
 
@@ -192,9 +200,9 @@ row_to_xspline <- function(
 
 row_to_unit_curve <- function(
   x0, x1, ymin0, ymax0, ymin1, ymax1,
-  curve, reach, segments
+  curve_type, curve_range, segments
 ) {
-  curve_fun <- make_curve_fun(curve, reach)
+  curve_fun <- make_curve_fun(curve_type, curve_range)
   i_fore <- seq(0, 1, length.out = segments + 1)
   f_fore <- curve_fun(i_fore)
   x_fore <- x0 + (x1 - x0) * i_fore

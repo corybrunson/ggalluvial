@@ -9,9 +9,10 @@ head(major_changes)
 data(vaccinations)
 vaccination_steps <- self_adjoin(vaccinations, key = survey, by = "subject",
                                  link = c("survey", "response"),
-                                 keep.x = c("freq", "a"))
+                                 keep.x = c("freq"))
 head(vaccination_steps)
 vaccination_steps <- self_adjoin(vaccinations, key = survey, by = "subject",
                                  link = c("survey", "response"),
-                                 keep.x = c("freq", "a"), keep.y = "a")
+                                 keep.x = c("freq"),
+                                 keep.y = c("start_date", "end_date"))
 head(vaccination_steps)

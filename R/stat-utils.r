@@ -15,7 +15,7 @@ get_alluvial_type <- function(data) {
   if (!is.null(data$x) | !is.null(data$stratum) | !is.null(data$alluvium)) {
     if (is.null(data$x) | is.null(data$stratum) | is.null(data$alluvium)) {
       stop("Parameters `x`, `stratum`, and `alluvium` are required ",
-           "for data in lode form.")
+           "for data in lodes form.")
     }
     if (is_lodes_form(data,
                       alluvia_from = "alluvium",

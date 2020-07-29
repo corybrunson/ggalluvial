@@ -1,10 +1,13 @@
 Package: ggalluvial
 Type: Package
 Title: Alluvial Plots in 'ggplot2'
-Version: 0.11.3
-Date: 2020-03-29
-Authors@R: person('Jason Cory', 'Brunson', email = 'cornelioid@gmail.com',
-    role = c('aut', 'cre'))
+Version: 0.12.0.0009
+Date: 2020-07-14
+Authors@R: 
+    person(given = "Jason Cory",
+           family = "Brunson",
+           role = c("aut", "cre"),
+           email = "cornelioid@gmail.com")
 Maintainer: Jason Cory Brunson <cornelioid@gmail.com>
 Description: Alluvial plots use variable-width ribbons and stacked bar plots to
     represent multi-dimensional or repeated-measures data with categorical or
@@ -18,7 +21,7 @@ Description: Alluvial plots use variable-width ribbons and stacked bar plots to
     <doi:10.1198/jcgs.2009.07098> layered grammar of graphics to generate
     alluvial plots from tidy data.
 Depends:
-    R (>= 3.3),
+    R (>= 3.5),
     ggplot2 (>= 2.2)
 Imports:
     stats,
@@ -32,6 +35,7 @@ Suggests:
     alluvial,
     testthat,
     knitr,
+    rmarkdown,
     babynames,
     sessioninfo,
     ggrepel,
@@ -42,5 +46,5 @@ LazyData: true
 URL: http://corybrunson.github.io/ggalluvial/
 BugReports: https://github.com/corybrunson/ggalluvial/issues
 VignetteBuilder: knitr
-RoxygenNote: 7.1.0
+RoxygenNote: 7.1.1
 Roxygen: list(markdown = TRUE)

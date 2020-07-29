@@ -9,6 +9,8 @@ test_that("`geom_alluvium` draws correctly", {
   d2 <- alluvial::Refugees
   a3 <- aes(y = refugees, x = year, alluvium = country)
   
+  skip_on_cran()
+  skip_if_not_installed("vdiffr")
   vdiffr::expect_doppelganger(
     "`geom_alluvium`: basic",
     ggplot(d1, a1) + geom_alluvium()
@@ -34,6 +36,8 @@ test_that("`geom_alluvium` draws correctly", {
 test_that("`geom_alluvium()` recognizes alternative curves", {
   data(vaccinations)
   
+  skip_on_cran()
+  skip_if_not_installed("vdiffr")
   vdiffr::expect_doppelganger(
     "`geom_alluvium`: unscaled knot positions",
     ggplot(vaccinations,
@@ -46,41 +50,55 @@ test_that("`geom_alluvium()` recognizes alternative curves", {
     ggplot(vaccinations,
            aes(x = survey, stratum = response, alluvium = subject,
                y = freq, fill = response)) +
-      geom_alluvium(curve = "linear")
+      geom_alluvium(curve_type = "linear")
   )
   vdiffr::expect_doppelganger(
     "`geom_alluvium`: 'cubic' curve",
     ggplot(vaccinations,
            aes(x = survey, stratum = response, alluvium = subject,
                y = freq, fill = response)) +
-      geom_alluvium(curve = "cubic")
+      geom_alluvium(curve_type = "cubic")
   )
   vdiffr::expect_doppelganger(
     "`geom_alluvium`: 'quintic' curve",
     ggplot(vaccinations,
            aes(x = survey, stratum = response, alluvium = subject,
                y = freq, fill = response)) +
-      geom_alluvium(curve = "quintic")
+      geom_alluvium(curve_type = "quintic")
   )
   vdiffr::expect_doppelganger(
     "`geom_alluvium`: 'sine' curve",
     ggplot(vaccinations,
            aes(x = survey, stratum = response, alluvium = subject,
                y = freq, fill = response)) +
-      geom_alluvium(curve = "sine")
+      geom_alluvium(curve_type = "sine")
   )
   vdiffr::expect_doppelganger(
     "`geom_alluvium`: 'arctangent' curve",
     ggplot(vaccinations,
            aes(x = survey, stratum = response, alluvium = subject,
                y = freq, fill = response)) +
-      geom_alluvium(curve = "arctan")
+      geom_alluvium(curve_type = "arctan")
+  )
+  vdiffr::expect_doppelganger(
+    "`geom_alluvium`: 'arctangent' curve with custom range",
+    ggplot(vaccinations,
+           aes(x = survey, stratum = response, alluvium = subject,
+               y = freq, fill = response)) +
+      geom_alluvium(curve_type = "arctan", curve_range = 1)
   )
   vdiffr::expect_doppelganger(
     "`geom_alluvium`: 'sigmoid' curve",
     ggplot(vaccinations,
            aes(x = survey, stratum = response, alluvium = subject,
                y = freq, fill = response)) +
-      geom_alluvium(curve = "sigmoid")
+      geom_alluvium(curve_type = "sigmoid")
+  )
+  vdiffr::expect_doppelganger(
+    "`geom_alluvium`: 'sigmoid' curve with custom range",
+    ggplot(vaccinations,
+           aes(x = survey, stratum = response, alluvium = subject,
+               y = freq, fill = response)) +
+      geom_alluvium(curve_type = "sigmoid", curve_range = 3)
   )
 })

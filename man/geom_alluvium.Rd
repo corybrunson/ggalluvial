@@ -12,8 +12,8 @@ geom_alluvium(
   width = 1/3,
   knot.pos = 1/4,
   knot.prop = TRUE,
-  curve = "xspline",
-  reach = NULL,
+  curve_type = NULL,
+  curve_range = NULL,
   segments = NULL,
   na.rm = FALSE,
   show.legend = NA,
@@ -59,17 +59,17 @@ strata, or (if \code{knot.prop = FALSE}) on the scale of the \code{x} direction.
 \item{knot.prop}{Logical; whether to interpret \code{knot.pos} as a proportion of
 the length of each flow (the default), rather than on the \code{x} scale.}
 
-\item{curve}{Character; the type of curve used to produce flows. Defaults to
-\code{"xspline"} and can be alternatively set to one of \code{"linear"}, \code{"cubic"},
-\code{"quintic"}, \code{"sine"}, \code{"arctangent"}, and \code{"sigmoid"}. \code{"xspline"}
-produces approximation splines using 4 points per curve; the alternatives
-produce interpolation splines between points along the graphs of functions
-of the associated type. See the \strong{Curves} section.}
+\item{curve_type}{Character; the type of curve used to produce flows.
+Defaults to \code{"xspline"} and can be alternatively set to one of \code{"linear"},
+\code{"cubic"}, \code{"quintic"}, \code{"sine"}, \code{"arctangent"}, and \code{"sigmoid"}.
+\code{"xspline"} produces approximation splines using 4 points per curve; the
+alternatives produce interpolation splines between points along the graphs
+of functions of the associated type. See the \strong{Curves} section.}
 
-\item{reach}{For alternative \code{curve}s based on asymptotic functions, the
-value along the asymptote at which to truncate the function to obtain the
-shape that will be scaled to fit between strata. See the \strong{Curves}
-section.}
+\item{curve_range}{For alternative \code{curve_type}s based on asymptotic
+functions, the value along the asymptote at which to truncate the function
+to obtain the shape that will be scaled to fit between strata. See the
+\strong{Curves} section.}
 
 \item{segments}{The number of segments to be used in drawing each alternative
 curve (each curved boundary of each flow). If less than 3, will be silently
@@ -123,40 +123,55 @@ following aesthetics (required aesthetics are in bold):
 \section{Curves}{
 
 By default, \code{geom_alluvium()} and \code{geom_flow()} render flows between lodes as
-splines about quartets of control points using \code{\link[grid:xsplineGrob]{grid::xsplineGrob()}}. These
-curves are parameterized by the relative location of the knot (\code{knot.pos})
-that governs the bending of each end toward their meeting at the point of
-inflection. They are quick to render and clear to read. Nevertheless, for any
-number of reasons, users may prefer plots that use differently-shaped curves.
+filled regions between parallel x-splines. These graphical elements,
+generated using \code{\link[grid:grid.xspline]{grid::xsplineGrob()}}, are
+parameterized by the relative location of the knot (\code{knot.pos}). They are
+quick to render and clear to read, but users may prefer plots that use
+differently-shaped ribbons.
 
-A variety of such options are illustrated in \href{https://www.dataplusscience.com/Sigmoid.html}{this blog post by Jeffrey Shaffer}. A subset of these,
-some with added flexibility, are implemented here. Each is encoded as a
-continuous, increasing, bijective function from the unit interval \eqn{[0,1]}
-to itself, and each is rescaled, if necessary, so that its endpoints meet the
-corresponding lodes. They are rendered piecewise-linearly, by default using
-\code{segments = 48}. Summon each curve type by passing one of the following
-strings to \code{curve}:
+A variety of such options are documented at, e.g., \href{https://easings.net/}{this easing functions cheat sheet} and \href{https://www.dataplusscience.com/Sigmoid.html}{this blog post by Jeffrey Shaffer}. Easing functions are
+not (yet) used in ggalluvial, but several alternative curves are available.
+Each is encoded as a continuous, increasing, bijective function from the unit
+interval \eqn{[0,1]} to itself, and each is rescaled so that its endpoints
+meet the corresponding lodes. They are rendered piecewise-linearly, by
+default using \code{segments = 48}. Summon each curve type by passing one of the
+following strings to \code{curve_type}:
 \itemize{
 \item \code{"linear"}:     \eqn{f(x)=x}, the unique degree-1 polynomial that takes
 0 to 0 and 1 to 1
 \item \code{"cubic"}:      \eqn{f(x)=3x^{2}-2x^{3}}{f(x)=3x^2-2x^3}, the unique
 degree-3 polynomial that also is flat at both endpoints
 \item \code{"quintic"}:    \eqn{f(x)=10x^{3}-15x^{4}+6x^{5}}{f(x)=10x^3-15x^4+6x^5},
-the unique degree-5 polynomial that also is flat at both
-endpoints
+the unique degree-5 polynomial that also has zero curvature
+at both endpoints
 \item \code{"sine"}:       the unique sinusoidal function that is flat at both
 endpoints
 \item \code{"arctangent"}: the inverse tangent function, scaled and re-centered to the
-unit interval from a symmetric domain with radius \code{reach}
+unit interval from the interval centered at zero with
+radius \code{curve_range}
 \item \code{"sigmoid"}:    the sigmoid function, scaled and re-centered to the unit
-interval from a symmetric domain with radius \code{reach}
+interval from the interval centered at zero with radius
+\code{curve_range}
 }
 
 Only the (default) \code{"xspline"} option uses the \verb{knot.*} parameters, while
 only the alternative curves use the \code{segments} parameter, and only
-\code{"arctangent"} and \code{"sigmoid"} use the \code{reach} parameter. Larger values of
-\code{reach} result in greater compression and steeper slopes. The \code{NULL} default
-will be changed to \code{2+sqrt(3)} for \code{"arctangent"} and to \code{6} for \code{"sigmoid"}.
+\code{"arctangent"} and \code{"sigmoid"} use the \code{curve_range} parameter. (Both are
+ignored if not needed.) Larger values of \code{curve_range} result in greater
+compression and steeper slopes. The \code{NULL} default will be changed to
+\code{2+sqrt(3)} for \code{"arctangent"} and to \code{6} for \code{"sigmoid"}.
+
+These package-specific options set global values for \code{curve_type},
+\code{curve_range}, and \code{segments} that will be defaulted to when not manually
+set:
+\itemize{
+\item \code{ggalluvial.curve_type}: defaults to \code{"xspline"}.
+\item \code{ggalluvial.curve_range}: defaults to \code{NA}, which triggers the
+curve-specific default values.
+\item \code{ggalluvial.segments}: defaults to \code{48L}.
+}
+
+See \code{\link[base:options]{base::options()}} for how to use options.
 }
 
 \section{Defunct parameters}{
@@ -179,7 +194,7 @@ gg <- ggplot(alluvial::Refugees,
 # time series bump chart (quintic flows)
 gg + geom_alluvium(aes(fill = country, colour = country),
                    width = 1/4, alpha = 2/3, decreasing = FALSE,
-                   curve = "quintic")
+                   curve_type = "sigmoid")
 # time series line plot of refugees data, sorted by country
 gg + geom_alluvium(aes(fill = country, colour = country),
                    decreasing = NA, width = 0, knot.pos = 0)
@@ -205,7 +220,13 @@ gg +
 gg +
   geom_alluvium(aes(fill = country),
                 alpha = .75, decreasing = FALSE, width = 1/2,
-                curve = "arctan", segments = 6) +
+                curve_type = "arctan", segments = 6) +
+  geom_stratum(aes(stratum = country), decreasing = FALSE, width = 1/2)
+# custom-ranged curves
+gg +
+  geom_alluvium(aes(fill = country),
+                alpha = .75, decreasing = FALSE, width = 1/2,
+                curve_type = "arctan", curve_range = 1) +
   geom_stratum(aes(stratum = country), decreasing = FALSE, width = 1/2)
 }
 \seealso{
