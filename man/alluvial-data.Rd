@@ -36,8 +36,9 @@ handled as in \code{\link[tidyr:spread]{tidyr::spread()}} and used to identify t
 of \code{data} to be used as the axis (key), stratum (value), and alluvium
 (identifying) variables.}
 
-\item{y}{Optional field(s) of \code{data}, handled using \code{\link[rlang:nse-defuse]{rlang::enquo()}}, to be used as
-heights or depths of the alluvia or lodes.}
+\item{y}{Optional field(s) of \code{data}, handled using
+\code{\link[rlang:nse-defuse]{rlang::enquo()}}, to be used as heights or depths of
+the alluvia or lodes.}
 
 \item{silent}{Whether to print messages.}
 
@@ -66,10 +67,6 @@ each such variable to a single value. In addition to existing functions,
 \code{distill} accepts the character values \code{"first"} (used if
 \code{distill} is \code{TRUE}), \code{"last"}, and \code{"most"} (which
 returns the first modal value).}
-
-\item{...}{Used in \code{is_alluvia_form} and \code{to_lodes_form} as in
-\code{\link[dplyr:select]{dplyr::select()}} to determine axis variables, as an alternative
-to \code{axes}. Ignored when \code{axes} is provided.}
 }
 \description{
 Alluvial plots consist of multiple horizontally-distributed columns (axes)
