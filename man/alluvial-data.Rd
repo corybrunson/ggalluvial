@@ -52,30 +52,33 @@ to_alluvia_form(
 \arguments{
 \item{data}{A data frame.}
 
-\item{alluvia_from, axes_from, strata_from}{Columns---one each---containing the
-alluvium (identifier), axis (key), and stratum (value) of each row,
-analogous to \verb{id_cols,names_from,values_from} in \code{\link[tidyr:pivot_wider]{tidyr::pivot_wider()}}.}
+\item{alluvia_from, axes_from, strata_from}{Three arguments describing which
+columns contain the alluvium (identifier), axis (key), and stratum (value)
+of each row. These are analogous (and eventually passed) to
+\verb{id_cols,names_from,values_from} in \code{\link[tidyr:pivot_wider]{tidyr::pivot_wider()}} and, as there,
+handled using \code{\link[rlang:nse-defuse]{rlang::enquo()}}.}
 
-\item{id, key, value}{Deprecated aliases for \verb{alluvia_*,axes_*,strata_*}. While
-they still accept unquoted names, note that their \verb{*_to} replacements only
-accept strings.}
+\item{key, value, id}{Deprecated aliases for \verb{axes_*,strata_*,alluvia_*},
+respectively. While they still accept unquoted names, note that their
+\verb{*_to} replacements only accept strings.}
 
-\item{y}{Optional field(s) of \code{data}, handled using
-\code{\link[rlang:nse-defuse]{rlang::enquo()}}, to be used as heights or depths of
-the alluvia or lodes.}
+\item{y}{Optional column(s) containing alluvium heights (subject magnitudes).}
 
 \item{silent}{Whether to print explanatory messages.}
 
-\item{axes}{Columns containing the stratum (entry) of each alluvium (row) at
-each axis (column), analogous to \code{cols} in \code{\link[tidyr:pivot_longer]{tidyr::pivot_longer()}}.}
+\item{axes}{An argument describing which columns contain the stratum (entry)
+of each alluvium (row) at each axis (column). This is analogous (and
+eventually passed) to \code{cols} in \code{\link[tidyr:pivot_longer]{tidyr::pivot_longer()}} and, as there,
+handled using \code{\link[rlang:nse-defuse]{rlang::enquo()}}.}
 
-\item{alluvia_to, axes_to, strata_to}{Strings---one each---specifying the names
-of the columns to contain alluvia (identifiers), axes (keys), and strata
-(values).}
+\item{alluvia_to, axes_to, strata_to}{Three strings specifying the names of the
+new columns to create for the alluvia (identifiers), axes (keys), and
+strata (values). The latter two are analogous (and eventually passed) to
+\verb{names_to,values_to} in \code{\link[tidyr:pivot_longer]{tidyr::pivot_longer()}}.}
 
 \item{y_to}{A string specifying the name of the column to create from the
-column(s) identified by \code{y}. If needed for multiple columns but not
-provided, defaults to 'y'.}
+column(s) identified by \code{y}. If needed (for multiple columns passed to \code{y})
+but not provided, defaults to \code{'y'}.}
 
 \item{diffuse}{Fields of \code{data} to merge into the lengthened data, joining by
 \code{alluvia_to}. They must be among the variables passed to \code{axes}.
@@ -87,13 +90,13 @@ variables passed to \code{axes} that appear at more than one axis, in order to
 distinguish their factor levels. This forces the levels of the combined
 factor variable \code{strata_to} to be in the order of the axes.}
 
-\item{distill}{A logical value indicating whether to include variables, other
-than those passed to \code{key} and \code{value}, that vary within values
-of \code{id}. Alternatively, a function (or its name) to be used to distill
-each such variable to a single value. In addition to existing functions,
-\code{distill} accepts the character values \code{"first"} (used if
-\code{distill} is \code{TRUE}), \code{"last"}, and \code{"most"} (which
-returns the first modal value).}
+\item{distill}{A logical value indicating whether variables excluded from
+\code{axes_from} and \code{strata_from} that vary within values of \code{alluvia_from}
+should be included in the result. Alternatively, a function (or its name)
+to be used to distill each such variable to a single value. In addition to
+existing functions, \code{distill} accepts the character values \code{"first"} (used
+if \code{distill} is \code{TRUE}), \code{"last"}, and \code{"most"} (which returns the first
+modal value).}
 }
 \description{
 The functions \verb{is_*_form()} determine whether a data frame is alluvial---that
