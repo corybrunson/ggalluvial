@@ -1,11 +1,18 @@
 
 deprecate_parameter <- function(old, new = NA, type = "parameter", msg = NULL) {
+  plural <- length(old) > 1
+  if (plural) {
+    old <- paste0(old, collapse = "`, `")
+    if (! any(is.na(new))) new <- paste0(new, collapse = "`, `")
+  }
   .Deprecated(msg = paste0(
-    "The ", type, " `", old, "` is deprecated.",
+    if (plural) "Each " else "The ", type, " `", old, "` is deprecated.",
     if (is.null(new)) {
-      "\nPass unparameterized arguments instead."
+      paste0("\nPass unparameterized arguments instead.",
+             if (! is.null(msg)) paste0("\n", msg))
     } else if (! is.na(new)) {
-      paste0("\nPass arguments to `", new, "` instead.")
+      paste0("\nPass arguments to `", new, "` instead.",
+             if (! is.null(msg)) paste0("\n", msg))
     } else if (! is.null(msg)) {
       paste0("\n", msg)
     } else {

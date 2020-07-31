@@ -4,7 +4,7 @@
 #'
 #' The functions `is_*_form()` determine whether a data frame is alluvial---that
 #' it has either the id--key--value structure of lodes format or the tidy
-#' properties of alluvia format. The functions `to_*_form()` convert data from
+#' structure of alluvia format. The functions `to_*_form()` convert data from
 #' one format to the other.
 #' 
 
@@ -20,12 +20,11 @@
 #' 
 
 #' - **Lodes format** encodes _one row per measurement_ or _one row per lode_,
-#' using an `id`--`key`--`value` structure: Each row contains the recorded
-#' `value` of one measurement (the `key`) for one subject or cohort (the `id`).
-#' Visually, the lode is the unique intersection of one alluvium (the `id`) and
-#' one axis (the `key`) and belongs to a unique stratum (the `value`).
-#' Additional columns may contain lode-level variables, including magnitudes and
-#' weights.
+#' using an id--key--value structure: Each row contains the recorded value of
+#' one measurement (the key) for one subject or cohort (the id). Visually, the
+#' lode is the unique intersection of one alluvium (the id) and one axis (the
+#' key) and belongs to a unique stratum (the value). Additional columns may
+#' contain lode-level variables, including magnitudes and weights.
 
 #' - **Alluvia format** encodes _one row per subject_ or _one row per alluvium_,
 #' using a [tidy](https://tidyr.tidyverse.org/) structure: Each subject (or
@@ -66,13 +65,21 @@
 #'   new columns to create for the alluvia (identifiers), axes (keys), and
 #'   strata (values). The latter two are analogous (and eventually passed) to
 #'   `names_to,values_to` in [tidyr::pivot_longer()].
+#' @param axes_prefix Passed to `names_prefix` in [tidyr::pivot_longer()] or
+#'   [tidyr::pivot_wider()].
+#' @param axes_sep Passed to `names_sep` in [tidyr::pivot_wider()].
+#' @param strata_drop_na Passed to `values_drop_na` in [tidyr::pivot_longer()].
+#' @param strata_fill Passed to `values_fill` in [tidyr::pivot_wider()].
 #' @param key,value,id Deprecated aliases for `axes_*,strata_*,alluvia_*`,
 #'   respectively. While they still accept unquoted names, note that their
-#'   `*_to` replacements only accept strings.
-#' @param y Optional column(s) containing alluvium heights (subject magnitudes).
-#' @param y_to A string specifying the name of the column to create from the
-#'   column(s) identified by `y`. If needed (for multiple columns passed to `y`)
-#'   but not provided, defaults to `'y'`.
+#'   `*_to` replacements only accept strings. If values are passed to both, then
+#'   these take precedence.
+#' @param y,weight Optional column(s) containing alluvium heights (subject
+#'   magnitudes) and weights (used in computed variables).
+#' @param y_to,weight_to Single strings specifying the names of the columns to
+#'   create from the column(s) identified by `y` or `weight`. If needed (for
+#'   multiple columns passed to `y` or to `weight`) but not provided, default
+#'   to `'y'` and `'weight'`, respectively.
 #' @param diffuse Fields of `data` to merge into the lengthened data, joining by
 #'   `alluvia_to`. They must be among the variables passed to `axes`.
 #'   Alternatively, a logical value indicating whether to merge all (`TRUE`) or
@@ -94,57 +101,62 @@
 #' @export
 is_lodes_form <- function(data,
                           alluvia_from, axes_from, strata_from,
+                          y = NULL, weight = NULL,
                           key, value, id,
-                          y = NULL,
                           silent = FALSE) {
   
-  if (! missing(id)) {
-    deprecate_parameter("id", "alluvia_from")
-    if (missing(alluvia_from)) {
-      alluvia_from <- rlang::quo_name(rlang::enexpr(id))
-    }
+  # if old parameters are used, override new parameters
+  if (! missing(id) || ! missing(key) || ! missing(value)) {
+    deprecate_parameter(c("id", "key", "value"),
+                        c("alluvia_from", "axes_from", "strata_from"),
+                        msg = "Deprecated parameters will be used this time.")
   }
-  if (! missing(key)) {
-    deprecate_parameter("key", "axes_from")
-    if (missing(axes_from)) {
-      axes_from <- rlang::quo_name(rlang::enexpr(key))
-    }
+  # use tidy selection (when parameters are not null)
+  alluvia_from <- if (missing(id)) {
+    names(tidyselect::eval_select(enquo(alluvia_from), data))
+  } else {
+    names(tidyselect::eval_select(enquo(id), data))
   }
-  if (! missing(value)) {
-    deprecate_parameter("value", "strata_from")
-    if (missing(strata_from)) {
-      strata_from <- rlang::quo_name(rlang::enexpr(value))
-    }
+  axes_from <- if (missing(key)) {
+    names(tidyselect::eval_select(enquo(axes_from), data))
+  } else {
+    names(tidyselect::eval_select(enquo(key), data))
   }
+  strata_from <- if (missing(value)) {
+    names(tidyselect::eval_select(enquo(strata_from), data))
+  } else {
+    names(tidyselect::eval_select(enquo(value), data))
+  }
+  y <- names(tidyselect::eval_select(enquo(y), data))
+  if (length(y) == 0L) y <- NULL
+  weight <- names(tidyselect::eval_select(enquo(weight), data))
+  if (length(weight) == 0L) weight <- NULL
   
-  alluv_var <- vars_pull(names(data), !! enquo(alluvia_from))
-  axis_var <- vars_pull(names(data), !! enquo(axes_from))
-  strat_var <- vars_pull(names(data), !! enquo(strata_from))
-  if (axis_var %in% c(strat_var, alluv_var)) {
+  if (axes_from %in% c(strata_from, alluvia_from)) {
     stop("`axes_from` must be distinct from `alluvia_from` and `strata_from`.")
   }
   
-  if (any(duplicated(cbind(data[c(alluv_var, axis_var)])))) {
+  if (any(duplicated(cbind(data[c(alluvia_from, axes_from)])))) {
     if (! silent) warning("Some id-key (alluvium-axis) pairs are duplicated.")
     return(FALSE)
   }
   
   n_pairs <-
-    dplyr::n_distinct(data[axis_var]) * dplyr::n_distinct(data[alluv_var])
+    dplyr::n_distinct(data[axes_from]) * dplyr::n_distinct(data[alluvia_from])
   if (nrow(data) < n_pairs) {
     if (! silent) warning("Some id-key (alluvium-axis) pairs are missing.")
   }
   
-  # if `y` is not `NULL`, use non-standard evaluation to identify `y_var`
-  if (! is.null(rlang::enexpr(y))) {
-    y_var <- vars_select(unique(names(data)), !! enquo(y))
-    if (length(y_var) > 0) {
-      if (length(y_var) > 1) stop("`y` must be a single variable.")
-      if (y_var %in% c(axis_var, strat_var, alluv_var)) {
-        stop("`y` must be distinct from id-key-value variables.")
-      }
-      if (! is.numeric(data[[y_var]])) {
-        if (! silent) message("Lode y (height) values are non-numeric.")
+  # if `y` or `weight` is not `NULL`, use non-standard evaluation to identify it
+  if (! is.null(y) || ! is.null(weight)) {
+    if (length(y) > 0L || length(weight) > 0L) {
+      if (length(y) > 1L || length(weight) > 1L)
+        stop("`y` and `weight`, if provided, must be single variables.")
+      if (any(c(y, weight)  %in% c(axes_from, strata_from, alluvia_from)))
+        stop("`y` or `weight` must be distinct from id-key-value variables.")
+      if ( (! is.null(y) && ! is.numeric(data[[y]])) ||
+           (! is.null(weight) && ! is.numeric(data[[weight]])) ) {
+        if (! silent) message("Lode `y` or `weight` values are non-numeric.")
         return(FALSE)
       }
     }
@@ -156,29 +168,35 @@ is_lodes_form <- function(data,
 #' @rdname alluvial-data
 #' @export
 is_alluvia_form <- function(data,
-                            axes = NULL, y = NULL,
+                            axes = NULL, y = NULL, weight = NULL,
                             silent = FALSE) {
   
+  # use tidy selection (when parameters are not null)
+  y <- names(tidyselect::eval_select(enquo(y), data))
+  if (length(y) == 0L) y <- NULL
+  weight <- names(tidyselect::eval_select(enquo(weight), data))
+  if (length(weight) == 0L) weight <- NULL
+  axes <- names(tidyselect::eval_select(enquo(axes), data))
+  if (length(axes) == 0L) axes <- setdiff(names(data), c(y, weight))
+  
   # note: specifying `y` is optional
-  if (is.null(rlang::enexpr(y))) {
-    y_var <- NULL
-  } else {
-    y_var <- vars_select(unique(names(data)), !! enquo(y))
-    if (! all(sapply(data[y_var], is.numeric))) {
-      if (! silent) message("Some lode y (height) values are non-numeric.")
+  if (! is.null(y)) {
+    if (! all(sapply(data[y], is.numeric))) {
+      if (! silent) message("Some lode `y` values are non-numeric.")
+      return(FALSE)
+    }
+  }
+  if (! is.null(weight)) {
+    if (! all(sapply(data[weight], is.numeric))) {
+      if (! silent) message("Some lode `weight` values are non-numeric.")
       return(FALSE)
     }
   }
   
-  if (is.null(rlang::enexpr(axes))) {
-    axes <- setdiff(names(data), y_var)
-  } else {
-    axes <- enquo(axes)
-    axes <- unname(vars_select(unique(names(data)), !! enquo(axes)))
-  }
-  if (length(y_var) > 1 && length(y_var) != length(axes)) {
-    if (! silent) message("The number of y (height) columns, if > 1, ",
-                          "must equal the number of axes.")
+  if ((length(y) > 1 && length(y) != length(axes)) ||
+      (length(weight) > 1 && length(weight) != length(axes))) {
+    if (! silent)
+      message("`y` and `weight` must have length either 1 or `length(axes)`.")
     return(FALSE)
   }
   
@@ -194,63 +212,48 @@ is_alluvia_form <- function(data,
 #' @rdname alluvial-data
 #' @export
 to_lodes_form <- function(data,
-                          axes = NULL, y = NULL,
+                          axes = NULL, y = NULL, weight = NULL,
                           alluvia_to = "alluvium",
-                          axes_to = "x",
-                          strata_to = "stratum",
+                          axes_to = "x", axes_prefix = NULL,
+                          strata_to = "stratum", strata_drop_na = TRUE,
+                          y_to = "y", weight_to = "weight",
                           key = NULL, value = NULL, id = NULL,
-                          y_to = NULL,
                           diffuse = FALSE, discern = FALSE) {
   
-  if (! is.null(id)) {
-    deprecate_parameter("id", "alluvia_to")
-    alluvia_to <- rlang::quo_name(rlang::enexpr(id))
-  }
-  if (! is.null(key)) {
-    deprecate_parameter("key", "axes_to")
-    axes_to <- rlang::quo_name(rlang::enexpr(key))
-  }
-  if (! is.null(value)) {
-    deprecate_parameter("value", "strata_to")
-    strata_to <- rlang::quo_name(rlang::enexpr(value))
-  }
-  
-  # note: specifying `y` is optional
-  if (is.null(rlang::enexpr(y))) {
-    y_var <- NULL
+  # use tidy selection (when parameters are not null)
+  y <- names(tidyselect::eval_select(enquo(y), data))
+  if (length(y) == 0L) y <- NULL
+  weight <- names(tidyselect::eval_select(enquo(weight), data))
+  if (length(weight) == 0L) weight <- NULL
+  axes <- names(tidyselect::eval_select(enquo(axes), data))
+  if (length(axes) == 0L) axes <- setdiff(names(data), c(y, weight))
+  diffuse <- if (is.logical(enexpr(diffuse))) {
+    if (diffuse) axes else NULL
   } else {
-    y_var <- unname(vars_select(unique(names(data)), !! enquo(y)))
-    if (! all(sapply(data[y_var], is.numeric))) {
-      message("Some lode `y` (height) values are non-numeric.")
-      return(FALSE)
-    }
+    names(tidyselect::eval_select(enquo(diffuse), data))
   }
+  if (length(diffuse) == 0L) diffuse <- NULL
+  if (! all(diffuse %in% c(axes, y, weight)))
+    stop("All `diffuse` variables must be among `axes`, `y`, or `weight`.")
   
-  if (is.null(rlang::enexpr(axes))) {
-    axes <- setdiff(names(data), y_var)
-  } else {
-    axes <- unname(vars_select(unique(names(data)), !! enquo(axes)))
+  # if old parameters are used, override new parameters
+  if (! is.null(id) || ! is.null(key) || ! is.null(value)) {
+    deprecate_parameter(c("id", "key", "value"),
+                        c("alluvia_to", "axes_to", "strata_to"),
+                        msg = "Deprecated parameters will be used this time.")
   }
-  if (length(y_var) > 1 && length(y_var) != length(axes)) {
-    message("The number of `y` (height) columns, if > 1, ",
-            "must equal the number of `axes`.")
-    return(FALSE)
-  }
+  alluvia_to <- if (is.null(id)) alluvia_to else quo_name(enexpr(id))
+  axes_to <- if (is.null(key)) axes_to else quo_name(enexpr(key))
+  strata_to <- if (is.null(value)) strata_to else quo_name(enexpr(value))
+  if (! is.null(data[[alluvia_to]]))
+    stop("Column '", alluvia_to, "' already exists.")
   
   stopifnot(is_alluvia_form(data,
-                            axes = all_of(axes), y = all_of(y_var),
+                            axes = all_of(axes),
+                            y = all_of(y), weight = all_of(weight),
                             silent = TRUE))
   
   if (! is.data.frame(data)) data <- as.data.frame(data)
-  
-  if (is.logical(rlang::enexpr(diffuse))) {
-    diffuse <- if (diffuse) axes else NULL
-  } else {
-    diffuse <- unname(vars_select(unique(names(data)), !! enquo(diffuse)))
-    if (! all(diffuse %in% c(axes, y_var))) {
-      stop("All `diffuse` variables must be `axes` or `y` variables.")
-    }
-  }
   
   # combine factor levels
   cat_levels <- unname(unlist(lapply(lapply(data[axes], as.factor), levels)))
@@ -272,36 +275,43 @@ to_lodes_form <- function(data,
   }
   for (i in axes) data[[i]] <- as.character(data[[i]])
   
+  # prepare to pivot_longer()` by `axes` (and possibly `y` or `weight`)
   key_ptype <- list(factor())
   names(key_ptype) <- axes_to
-  # `pivot_longer()` by `axes` (and possibly `y`)
-  res <- if (length(y_var) == 0 ) {
-    tidyr::pivot_longer(data,
-                        cols = all_of(axes),
-                        names_to = all_of(axes_to),
-                        names_ptypes = key_ptype,
-                        values_to = all_of(strata_to))
-  } else if (length(y_var) == 1) {
-    if (! is.null(y_to)) names(data)[match(y_var, names(data))] <- y_to
-    tidyr::pivot_longer(data,
-                        cols = all_of(axes),
-                        names_to = all_of(axes_to),
-                        names_ptypes = key_ptype,
-                        values_to = all_of(strata_to))
-  } else {
-    if (is.null(y_to)) {
-      message("Pivoting multiple `y` columns, y_to = 'y'.")
-      y_to <- "y"
-    }
-    axes_var_to <- paste(strata_to, axes, sep = "___")
-    y_var_to <- paste(y_to, axes, sep = "___")
+  multi_pivot <- length(y) > 1L || length(weight) > 1L
+  if (multi_pivot) {
+    axes_suffix <- if (is.null(axes_prefix)) axes else
+      gsub(paste0("^", axes_prefix), "", axes)
+    axes_var_to <- paste(strata_to, axes_suffix, sep = "___")
     names(data)[match(axes, names(data))] <- axes_var_to
-    names(data)[match(y_var, names(data))] <- y_var_to
-    tidyr::pivot_longer(data,
-                        cols = c(all_of(axes_var_to), all_of(y_var_to)),
-                        names_to = c(".value", axes_to),
-                        names_sep = "___")
   }
+  if (length(y) == 1L) {
+    names(data)[match(y, names(data))] <- y_to
+  } else if (length(y) > 1L) {
+    y_var_to <- paste(y_to, axes_suffix, sep = "___")
+    names(data)[match(y, names(data))] <- y_var_to
+  }
+  if (length(weight) == 1L) {
+    names(data)[match(weight, names(data))] <- weight_to
+  } else if (length(weight) > 1L) {
+    weight_var_to <- paste(weight_to, axes_suffix, sep = "___")
+    names(data)[match(weight, names(data))] <- weight_var_to
+  }
+  pivot_cols <- c(if (! multi_pivot) axes else axes_var_to,
+                  if (length(y) > 1L) y_var_to,
+                  if (length(weight) > 1L) weight_var_to)
+  pivot_names_to <- c(if (multi_pivot) ".value", axes_to)
+  pivot_names_sep <- if (multi_pivot) "___"
+  pivot_values_to <- if (! multi_pivot) strata_to
+  # pivot!
+  res <- tidyr::pivot_longer(data,
+                             cols = all_of(pivot_cols),
+                             names_to = pivot_names_to,
+                             names_prefix = axes_prefix,
+                             names_sep = pivot_names_sep,
+                             names_ptypes = key_ptype,
+                             values_to = strata_to,
+                             values_drop_na = strata_drop_na)
   res[[strata_to]] <- factor(res[[strata_to]], levels = strata)
   
   # merge in `diffuse_data`
@@ -318,62 +328,66 @@ to_lodes_form <- function(data,
 #' @rdname alluvial-data
 #' @export
 to_alluvia_form <- function(data,
-                            alluvia_from, axes_from, strata_from,
+                            alluvia_from = "alluvium",
+                            axes_from = "axis",
+                            axes_prefix = "", axes_sep = "_",
+                            strata_from = "stratum",
+                            strata_fill = NULL,
+                            y = NULL, weight = NULL,
                             key, value, id,
-                            y = NULL,
                             distill = FALSE) {
   
-  if (! missing(id)) {
-    deprecate_parameter("id", "alluvia_from")
-    if (missing(alluvia_from)) {
-      alluvia_from <- rlang::quo_name(rlang::enexpr(id))
-    }
+  # if old parameters are used, override new parameters
+  if (! missing(id) || ! missing(key) || ! missing(value)) {
+    deprecate_parameter(c("id", "key", "value"),
+                        c("alluvia_from", "axes_from", "strata_from"),
+                        msg = "Deprecated parameters will be used this time.")
   }
-  if (! missing(key)) {
-    deprecate_parameter("key", "axes_from")
-    if (missing(axes_from)) {
-      axes_from <- rlang::quo_name(rlang::enexpr(key))
-    }
+  # recover names from tidy selection (when parameters are not null)
+  alluvia_from <- if (missing(id)) {
+    names(tidyselect::eval_select(enquo(alluvia_from), data))
+  } else {
+    names(tidyselect::eval_select(enquo(id), data))
   }
-  if (! missing(value)) {
-    deprecate_parameter("value", "strata_from")
-    if (missing(strata_from)) {
-      strata_from <- rlang::quo_name(rlang::enexpr(value))
-    }
+  axes_from <- if (missing(key)) {
+    names(tidyselect::eval_select(enquo(axes_from), data))
+  } else {
+    names(tidyselect::eval_select(enquo(key), data))
   }
+  strata_from <- if (missing(value)) {
+    names(tidyselect::eval_select(enquo(strata_from), data))
+  } else {
+    names(tidyselect::eval_select(enquo(value), data))
+  }
+  y <- names(tidyselect::eval_select(enquo(y), data))
+  if (length(y) == 0L) y <- NULL
+  weight <- names(tidyselect::eval_select(enquo(weight), data))
+  if (length(weight) == 0L) weight <- NULL
   
-  alluv_var <- vars_pull(names(data), !! enquo(alluvia_from))
-  axis_var <- vars_pull(names(data), !! enquo(axes_from))
-  strat_var <- vars_pull(names(data), !! enquo(strata_from))
-  if (axis_var %in% c(strat_var, alluv_var)) {
-    stop("`axes_from` must be distinct from `alluvia_from` and `strata_from`.")
-  }
-  if (strat_var == alluv_var) {
-    message("Duplicating column '", strat_var,
+  if (strata_from == alluvia_from) {
+    message("Duplicating column '", strata_from,
             "' passed to `alluvia_from` and `strata_from`.")
     # use nonsense prefix (not suffix, to avoid conflict with `sep = "_"`)
-    strat_var <- paste0("___", strat_var)
-    data[[strat_var]] <- data[[alluv_var]]
+    strata_from <- paste0("___", strata_from)
+    data[[strata_from]] <- data[[alluvia_from]]
   }
   
-  y_var <- if (is.null(rlang::enexpr(y))) NULL else {
-    vars_pull(names(data), !! enquo(y))
-  }
   stopifnot(is_lodes_form(data,
-                          alluvia_from = alluv_var,
-                          axes_from = axis_var,
-                          strata_from = strat_var,
-                          y = y_var,
+                          alluvia_from = alluvia_from,
+                          axes_from = axes_from,
+                          strata_from = strata_from,
+                          y = y, weight = weight,
                           silent = TRUE))
   
   # whether any variables vary within `id`s
-  uniq_id <- dplyr::n_distinct(data[[alluv_var]])
-  uniq_data <- unique(data[setdiff(names(data), c(axis_var, strat_var, y_var))])
+  uniq_id <- dplyr::n_distinct(data[[alluvia_from]])
+  uniq_data <- unique(data[setdiff(names(data),
+                                   c(axes_from, strata_from, y, weight))])
   if (! uniq_id == nrow(uniq_data)) {
     # which variables vary within `id`s
     distill_vars <- names(which(sapply(
-      setdiff(names(uniq_data), c(alluv_var, y_var)),
-      function(x) nrow(unique(uniq_data[c(alluv_var, x)]))
+      setdiff(names(uniq_data), c(alluvia_from, y, weight)),
+      function(x) nrow(unique(uniq_data[c(alluvia_from, x)]))
     ) > uniq_id))
     # how these variables will be handled
     if (is.logical(distill)) {
@@ -382,7 +396,7 @@ to_alluvia_form <- function(data,
                 "will be distilled using `most()`.")
         distill <- most
       } else {
-        warning("The following variables vary within alluvia ",
+        message("The following variables vary within alluvia ",
                 "and will be dropped: ",
                 paste(distill_vars, collapse = ", "))
         distill <- NULL
@@ -397,7 +411,7 @@ to_alluvia_form <- function(data,
               paste(distill_vars, collapse = ", "))
       distill_data <- stats::aggregate(
         data[distill_vars],
-        data[alluv_var],
+        data[alluvia_from],
         distill
       )
       #if (length(distill_vars) == 1) names(distill_data)[-1] <- distill_vars
@@ -408,28 +422,39 @@ to_alluvia_form <- function(data,
   }
   
   const_vars <- setdiff(names(data),
-                        c(axis_var, strat_var, alluv_var, y_var, distill_vars))
-  if (! is.null(distill) && ! is.null(y_var)) distill_data[[y_var]] <- NULL
+                        c(axes_from, strata_from, alluvia_from,
+                          y, weight, distill_vars))
+  if (! is.null(distill)) {
+    if (! is.null(y)) distill_data[[y]] <- NULL
+    if (! is.null(weight)) distill_data[[weight]] <- NULL
+  }
   # `pivot_wider()` by `axes_from` and `strata_from` (and possibly `y`)
-  y_const <- nrow(unique(data[c(alluv_var, y_var)])) == uniq_id
-  ids_vars <- c(alluv_var, const_vars, if (y_const) y_var)
-  values_vars <- c(strat_var, if (! y_const) y_var)
+  y_const <- nrow(unique(data[c(alluvia_from, y)])) == uniq_id
+  weight_const <- nrow(unique(data[c(alluvia_from, weight)])) == uniq_id
+  ids_vars <- c(alluvia_from, const_vars,
+                if (y_const) y, if (weight_const) weight)
+  values_vars <- c(strata_from, if (! y_const) y, if (! weight_const) weight)
   res <- tidyr::pivot_wider(data,
                             id_cols = all_of(ids_vars),
-                            names_from = all_of(axis_var),
-                            names_sep = "_",
-                            values_from = all_of(values_vars))
-  if (! y_const && strat_var != alluv_var) {
-    axes <- match(paste(strat_var, unique(data[[axis_var]]), sep = "_"),
+                            names_from = all_of(axes_from),
+                            names_prefix = axes_prefix,
+                            names_sep = axes_sep,
+                            values_from = all_of(values_vars),
+                            values_fill = strata_fill)
+  if ((! y_const || ! weight_const) && strata_from != alluvia_from) {
+    axes <- match(paste0(strata_from, axes_sep, axes_prefix,
+                         unique(data[[axes_from]])),
                   names(res))
-    names(res)[axes] <- as.character(unique(data[[axis_var]]))
+    names(res)[axes] <- paste0(axes_prefix,
+                               as.character(unique(data[[axes_from]])))
   }
   
   # merge in `distill_data`
   if (is.null(distill)) {
     res <- as.data.frame(res)
   } else {
-    res <- merge(distill_data, res, by = alluv_var, all.x = FALSE, all.y = TRUE)
+    res <- merge(distill_data, res, by = alluvia_from,
+                 all.x = FALSE, all.y = TRUE)
   }
   
   res

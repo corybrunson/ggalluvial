@@ -36,10 +36,10 @@ test_that("`to_lodes_form` consistently formats Titanic data", {
 })
 
 # preparation for next tests
-titanic_lodes <- suppressWarnings(to_lodes_form(
-  transform(titanic_alluvia, Index = 1:nrow(titanic_alluvia)),
+titanic_lodes <- to_lodes_form(
+  titanic_alluvia,
   alluvia_to = "Index", axes_to = "Variable", strata_to = "Value", axes = 1:4
-))
+)
 titanic_lodes$Value <-
   factor(titanic_lodes$Value,
          levels = do.call(c, lapply(titanic_alluvia[, 1:4], levels)))

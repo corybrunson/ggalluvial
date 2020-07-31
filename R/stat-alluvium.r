@@ -181,7 +181,8 @@ StatAlluvium <- ggproto(
     if (is.null(decreasing)) decreasing <- ggalluvial_opt("decreasing")
     if (is.null(reverse)) reverse <- ggalluvial_opt("reverse")
     if (is.null(absolute)) absolute <- ggalluvial_opt("absolute")
-    if (is.null(cement.alluvia)) cement.alluvia <- ggalluvial_opt("cement.alluvia")
+    if (is.null(cement.alluvia))
+      cement.alluvia <- ggalluvial_opt("cement.alluvia")
     if (is.null(lode.guidance)) lode.guidance <- ggalluvial_opt("lode.guidance")
     if (is.null(aes.bind)) aes.bind <- ggalluvial_opt("aes.bind")
     
@@ -428,7 +429,7 @@ StatAlluvium <- ggproto(
 guide_lodes <- function(data, guidance_fun) {
   
   # summary data of alluvial deposits
-  alluv_dep <- alluviate(data, "x", "deposit", "alluvium")
+  alluv_dep <- alluviate(data, "alluvium", "x", "deposit")
   # axis indices
   alluv_x <- setdiff(names(alluv_dep), "alluvium")
   

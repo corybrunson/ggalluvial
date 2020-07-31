@@ -56,7 +56,7 @@ is_alluvia_form(majors_alluvia, tidyselect::starts_with("CURR"))
 
 # distill variables that vary within `id` values
 set.seed(1)
-majors$hypo_grade <- LETTERS[sample(5, size = nrow(majors), replace = TRUE)]
+majors$hyp_grade <- LETTERS[sample(5, size = nrow(majors), replace = TRUE)]
 majors_alluvia2 <- to_alluvia_form(majors,
                                    alluvia_from = "student",
                                    axes_from = "semester",
@@ -99,7 +99,8 @@ vaccinations$perm <- sample(vaccinations$freq)
 head(vaccinations)
 head(to_alluvia_form(vaccinations,
                      alluvia_from = subject, axes_from = survey,
-                     strata_from = response, y = perm))
+                     strata_from = response, y = perm,
+                     distill = FALSE))
 
 \dontrun{
 # refugee data in lodes format
@@ -125,3 +126,104 @@ head(to_lodes_form(refugees_alluvia,
                    alluvia_to = "id", axes_to = "year", strata_to = "origin",
                    y_to = "count"), n = 12)
 }
+
+# advanced conversion options
+test_alluvia <- data.frame(
+  id = LETTERS[seq(4L)],
+  key1 = letters[sample(4L, replace = TRUE)],
+  key2 = letters[sample(4L, replace = TRUE)],
+  key3 = letters[sample(4L, replace = TRUE)],
+  n1 = sample(6, 4L, replace = TRUE),
+  n2 = sample(6L, 4L, replace = TRUE),
+  n3 = sample(6L, 4L, replace = TRUE),
+  wt1 = runif(4L, 0, 1),
+  wt2 = runif(4L, 0, 1),
+  wt3 = runif(4L, 0, 1)
+)
+# no heights or weights
+to_lodes_form(test_alluvia,
+              axes = starts_with("key"),
+              alluvia_to = "alluv",
+              axes_to = "instance", axes_prefix = "key",
+              strata_to = "value")
+# uniform heights
+to_lodes_form(test_alluvia,
+              axes = starts_with("key"), y = "n1",
+              alluvia_to = "alluv",
+              axes_to = "instance", axes_prefix = "key",
+              strata_to = "value")
+# variable heights
+to_lodes_form(test_alluvia,
+              axes = starts_with("key"), y = starts_with("n"),
+              alluvia_to = "alluv",
+              axes_to = "instance", axes_prefix = "key",
+              strata_to = "value")
+# variable heights with custom name
+to_lodes_form(test_alluvia,
+              axes = starts_with("key"),
+              y = starts_with("n"),
+              alluvia_to = "alluv",
+              axes_to = "instance", axes_prefix = "key",
+              strata_to = "value",
+              y_to = "count")
+# uniform heights and variable weights
+to_lodes_form(test_alluvia,
+              axes = starts_with("key"),
+              y = "n2", weight = starts_with("wt"),
+              alluvia_to = "alluv",
+              axes_to = "instance", axes_prefix = "key",
+              strata_to = "value",
+              y_to = "count")
+# variable heights and weights with custom names
+to_lodes_form(test_alluvia,
+              axes = starts_with("key"),
+              y = starts_with("n"), weight = starts_with("wt"),
+              alluvia_to = "alluv",
+              axes_to = "instance", axes_prefix = "key",
+              strata_to = "value",
+              y_to = "count", weight_to = "contribution")
+test_lodes <- .Last.value
+# no heights or weights
+to_alluvia_form(test_lodes,
+                alluvia_from = id,
+                axes_from = instance,
+                strata_from = value)
+# variable heights
+to_alluvia_form(test_lodes,
+                alluvia_from = id,
+                axes_from = instance,
+                strata_from = value,
+                y = count)
+# variable heights with distilled weights and prefixed axes
+to_alluvia_form(test_lodes,
+                alluvia_from = id,
+                axes_from = instance,
+                axes_prefix = "axis", axes_sep = "_for_",
+                strata_from = value,
+                y = count,
+                distill = "mean")
+# variable heights and weights
+to_alluvia_form(test_lodes,
+                alluvia_from = id,
+                axes_from = instance,
+                strata_from = value,
+                y = count,
+                weight = contribution)
+# variable heights and wights with custom impution
+test_lodes <- test_lodes[-sample(nrow(test_lodes), 2L), , drop = FALSE]
+to_alluvia_form(test_lodes,
+                alluvia_from = id,
+                axes_from = instance,
+                strata_from = value,
+                strata_fill = list(count = 0L, contribution = 0),
+                y = count,
+                weight = contribution)
+# un-factor stratum variable to use custom imputation
+test_lodes$value <- as.character(test_lodes$value)
+to_alluvia_form(test_lodes,
+                alluvia_from = id,
+                axes_from = instance,
+                strata_from = value,
+                strata_fill = list(value = "z", count = 0L, contribution = 0),
+                y = count,
+                weight = contribution)

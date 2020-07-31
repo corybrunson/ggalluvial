@@ -13,39 +13,48 @@ is_lodes_form(
   alluvia_from,
   axes_from,
   strata_from,
+  y = NULL,
+  weight = NULL,
   key,
   value,
   id,
-  y = NULL,
   silent = FALSE
 )
 
-is_alluvia_form(data, axes = NULL, y = NULL, silent = FALSE)
+is_alluvia_form(data, axes = NULL, y = NULL, weight = NULL, silent = FALSE)
 
 to_lodes_form(
   data,
   axes = NULL,
   y = NULL,
+  weight = NULL,
   alluvia_to = "alluvium",
   axes_to = "x",
+  axes_prefix = NULL,
   strata_to = "stratum",
+  strata_drop_na = TRUE,
+  y_to = "y",
+  weight_to = "weight",
   key = NULL,
   value = NULL,
   id = NULL,
-  y_to = NULL,
   diffuse = FALSE,
   discern = FALSE
 )
 
 to_alluvia_form(
   data,
-  alluvia_from,
-  axes_from,
-  strata_from,
+  alluvia_from = "alluvium",
+  axes_from = "axis",
+  axes_prefix = "",
+  axes_sep = "_",
+  strata_from = "stratum",
+  strata_fill = NULL,
+  y = NULL,
+  weight = NULL,
   key,
   value,
   id,
-  y = NULL,
   distill = FALSE
 )
 }
@@ -58,11 +67,13 @@ of each row. These are analogous (and eventually passed) to
 \verb{id_cols,names_from,values_from} in \code{\link[tidyr:pivot_wider]{tidyr::pivot_wider()}} and, as there,
 handled using \code{\link[rlang:nse-defuse]{rlang::enquo()}}.}
 
+\item{y, weight}{Optional column(s) containing alluvium heights (subject
+magnitudes) and weights (used in computed variables).}
+
 \item{key, value, id}{Deprecated aliases for \verb{axes_*,strata_*,alluvia_*},
 respectively. While they still accept unquoted names, note that their
-\verb{*_to} replacements only accept strings.}
-
-\item{y}{Optional column(s) containing alluvium heights (subject magnitudes).}
+\verb{*_to} replacements only accept strings. If values are passed to both, then
+these take precedence.}
 
 \item{silent}{Whether to print explanatory messages.}
 
@@ -76,9 +87,15 @@ new columns to create for the alluvia (identifiers), axes (keys), and
 strata (values). The latter two are analogous (and eventually passed) to
 \verb{names_to,values_to} in \code{\link[tidyr:pivot_longer]{tidyr::pivot_longer()}}.}
 
-\item{y_to}{A string specifying the name of the column to create from the
-column(s) identified by \code{y}. If needed (for multiple columns passed to \code{y})
-but not provided, defaults to \code{'y'}.}
+\item{axes_prefix}{Passed to \code{names_prefix} in \code{\link[tidyr:pivot_longer]{tidyr::pivot_longer()}} or
+\code{\link[tidyr:pivot_wider]{tidyr::pivot_wider()}}.}
+
+\item{strata_drop_na}{Passed to \code{values_drop_na} in \code{\link[tidyr:pivot_longer]{tidyr::pivot_longer()}}.}
+
+\item{y_to, weight_to}{Single strings specifying the names of the columns to
+create from the column(s) identified by \code{y} or \code{weight}. If needed (for
+multiple columns passed to \code{y} or to \code{weight}) but not provided, default
+to \code{'y'} and \code{'weight'}, respectively.}
 
 \item{diffuse}{Fields of \code{data} to merge into the lengthened data, joining by
 \code{alluvia_to}. They must be among the variables passed to \code{axes}.
@@ -89,6 +106,10 @@ none (\code{FALSE}) of these variables.}
 variables passed to \code{axes} that appear at more than one axis, in order to
 distinguish their factor levels. This forces the levels of the combined
 factor variable \code{strata_to} to be in the order of the axes.}
+
+\item{axes_sep}{Passed to \code{names_sep} in \code{\link[tidyr:pivot_wider]{tidyr::pivot_wider()}}.}
+
+\item{strata_fill}{Passed to \code{values_fill} in \code{\link[tidyr:pivot_wider]{tidyr::pivot_wider()}}.}
 
 \item{distill}{A logical value indicating whether variables excluded from
 \code{axes_from} and \code{strata_from} that vary within values of \code{alluvia_from}
@@ -101,7 +122,7 @@ modal value).}
 \description{
 The functions \verb{is_*_form()} determine whether a data frame is alluvial---that
 it has either the id--key--value structure of lodes format or the tidy
-properties of alluvia format. The functions \verb{to_*_form()} convert data from
+structure of alluvia format. The functions \verb{to_*_form()} convert data from
 one format to the other.
 }
 \details{
@@ -114,12 +135,11 @@ corresponding variables. \strong{ggalluvial} can generate an alluvial plot from
 data in either of two recognized formats:
 \itemize{
 \item \strong{Lodes format} encodes \emph{one row per measurement} or \emph{one row per lode},
-using an \code{id}--\code{key}--\code{value} structure: Each row contains the recorded
-\code{value} of one measurement (the \code{key}) for one subject or cohort (the \code{id}).
-Visually, the lode is the unique intersection of one alluvium (the \code{id}) and
-one axis (the \code{key}) and belongs to a unique stratum (the \code{value}).
-Additional columns may contain lode-level variables, including magnitudes and
-weights.
+using an id--key--value structure: Each row contains the recorded value of
+one measurement (the key) for one subject or cohort (the id). Visually, the
+lode is the unique intersection of one alluvium (the id) and one axis (the
+key) and belongs to a unique stratum (the value). Additional columns may
+contain lode-level variables, including magnitudes and weights.
 \item \strong{Alluvia format} encodes \emph{one row per subject} or \emph{one row per alluvium},
 using a \href{https://tidyr.tidyverse.org/}{tidy} structure: Each subject (or
 cohort) has a row, each measurement has a column, and each measured value is
@@ -199,7 +219,7 @@ is_alluvia_form(majors_alluvia, tidyselect::starts_with("CURR"))
 
 # distill variables that vary within `id` values
 set.seed(1)
-majors$hypo_grade <- LETTERS[sample(5, size = nrow(majors), replace = TRUE)]
+majors$hyp_grade <- LETTERS[sample(5, size = nrow(majors), replace = TRUE)]
 majors_alluvia2 <- to_alluvia_form(majors,
                                    alluvia_from = "student",
                                    axes_from = "semester",
@@ -242,7 +262,8 @@ vaccinations$perm <- sample(vaccinations$freq)
 head(vaccinations)
 head(to_alluvia_form(vaccinations,
                      alluvia_from = subject, axes_from = survey,
-                     strata_from = response, y = perm))
+                     strata_from = response, y = perm,
+                     distill = FALSE))
 
 \dontrun{
 # refugee data in lodes format
@@ -268,6 +289,107 @@ head(to_lodes_form(refugees_alluvia,
                    alluvia_to = "id", axes_to = "year", strata_to = "origin",
                    y_to = "count"), n = 12)
 }
+
+# advanced conversion options
+test_alluvia <- data.frame(
+  id = LETTERS[seq(4L)],
+  key1 = letters[sample(4L, replace = TRUE)],
+  key2 = letters[sample(4L, replace = TRUE)],
+  key3 = letters[sample(4L, replace = TRUE)],
+  n1 = sample(6, 4L, replace = TRUE),
+  n2 = sample(6L, 4L, replace = TRUE),
+  n3 = sample(6L, 4L, replace = TRUE),
+  wt1 = runif(4L, 0, 1),
+  wt2 = runif(4L, 0, 1),
+  wt3 = runif(4L, 0, 1)
+)
+# no heights or weights
+to_lodes_form(test_alluvia,
+              axes = starts_with("key"),
+              alluvia_to = "alluv",
+              axes_to = "instance", axes_prefix = "key",
+              strata_to = "value")
+# uniform heights
+to_lodes_form(test_alluvia,
+              axes = starts_with("key"), y = "n1",
+              alluvia_to = "alluv",
+              axes_to = "instance", axes_prefix = "key",
+              strata_to = "value")
+# variable heights
+to_lodes_form(test_alluvia,
+              axes = starts_with("key"), y = starts_with("n"),
+              alluvia_to = "alluv",
+              axes_to = "instance", axes_prefix = "key",
+              strata_to = "value")
+# variable heights with custom name
+to_lodes_form(test_alluvia,
+              axes = starts_with("key"),
+              y = starts_with("n"),
+              alluvia_to = "alluv",
+              axes_to = "instance", axes_prefix = "key",
+              strata_to = "value",
+              y_to = "count")
+# uniform heights and variable weights
+to_lodes_form(test_alluvia,
+              axes = starts_with("key"),
+              y = "n2", weight = starts_with("wt"),
+              alluvia_to = "alluv",
+              axes_to = "instance", axes_prefix = "key",
+              strata_to = "value",
+              y_to = "count")
+# variable heights and weights with custom names
+to_lodes_form(test_alluvia,
+              axes = starts_with("key"),
+              y = starts_with("n"), weight = starts_with("wt"),
+              alluvia_to = "alluv",
+              axes_to = "instance", axes_prefix = "key",
+              strata_to = "value",
+              y_to = "count", weight_to = "contribution")
+test_lodes <- .Last.value
+# no heights or weights
+to_alluvia_form(test_lodes,
+                alluvia_from = id,
+                axes_from = instance,
+                strata_from = value)
+# variable heights
+to_alluvia_form(test_lodes,
+                alluvia_from = id,
+                axes_from = instance,
+                strata_from = value,
+                y = count)
+# variable heights with distilled weights and prefixed axes
+to_alluvia_form(test_lodes,
+                alluvia_from = id,
+                axes_from = instance,
+                axes_prefix = "axis", axes_sep = "_for_",
+                strata_from = value,
+                y = count,
+                distill = "mean")
+# variable heights and weights
+to_alluvia_form(test_lodes,
+                alluvia_from = id,
+                axes_from = instance,
+                strata_from = value,
+                y = count,
+                weight = contribution)
+# variable heights and wights with custom impution
+test_lodes <- test_lodes[-sample(nrow(test_lodes), 2L), , drop = FALSE]
+to_alluvia_form(test_lodes,
+                alluvia_from = id,
+                axes_from = instance,
+                strata_from = value,
+                strata_fill = list(count = 0L, contribution = 0),
+                y = count,
+                weight = contribution)
+# un-factor stratum variable to use custom imputation
+test_lodes$value <- as.character(test_lodes$value)
+to_alluvia_form(test_lodes,
+                alluvia_from = id,
+                axes_from = instance,
+                strata_from = value,
+                strata_fill = list(value = "z", count = 0L, contribution = 0),
+                y = count,
+                weight = contribution)
 }
 \seealso{
 Other alluvial data operations: 
