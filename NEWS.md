@@ -1,4 +1,8 @@
 
+# ggalluvial 0.12.1
+
+This patch corrects a bug introduced in v0.12.0 that dropped missing values used internally by `StatFlow$compute_panel()` to keep track of flowless lodes. The problem was illustrated in issue #64.
+
 # ggalluvial 0.12.0
 
 ## Data sets

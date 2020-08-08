@@ -1,8 +1,8 @@
 Package: ggalluvial
 Type: Package
 Title: Alluvial Plots in 'ggplot2'
-Version: 0.12.0.0009
-Date: 2020-07-14
+Version: 0.12.1
+Date: 2020-08-08
 Authors@R: 
     person(given = "Jason Cory",
            family = "Brunson",
