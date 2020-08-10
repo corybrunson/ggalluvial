@@ -25,7 +25,7 @@ categorical variables. The design is inspired by the
   - **alluvial** uses each variable of these inputs as a dimension of
     the data, whereas **ggalluvial** requires the user to specify the
     dimensions, either as separate aesthetics or as [key-value
-    pairs](http://tidyr.tidyverse.org/);
+    pairs](https://tidyr.tidyverse.org/);
   - **alluvial** produces both the *alluvia*, which link cohorts across
     multiple dimensions, and (what are here called) the *strata*, which
     partition the data along each dimension, in a single function;
