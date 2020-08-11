@@ -66,6 +66,19 @@ test_that("`stat_flow` orders alluvia correctly according to `aes.bind`", {
   expect_warning(StatFlow$compute_panel(data, aes.bind = "alluvia"), "flows")
 })
 
+# missing values
+
+test_that("`stat_flow` preserves missingness to position flows", {
+  data <- data.frame(x = c(1, 2, 2, 3),
+                     stratum = factor(LETTERS[c(1L, 2L, 1L, 2L)]),
+                     alluvium = c(1L, 2L, 1L, 2L),
+                     PANEL = factor(1L),
+                     group = seq(4L),
+                     y = 1)
+  comp <- StatFlow$compute_panel(data)
+  expect_identical(sort(complete.cases(comp)), rep(c(FALSE, TRUE), c(2L, 4L)))
+})
+
 # exceptional data
 
 test_that("`stat_flow` handles exceptional data with out errors", {

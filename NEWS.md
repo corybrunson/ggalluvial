@@ -11,6 +11,10 @@ Several changes have been made to the `*_*_form()` functions:
     - This reduces performance on some small examples, though this may be resolved with future **tidyr** releases.
     - Changes to how factor levels are handled when `discern = FALSE` yield more consistent stratum orders that are nevertheless different from previous behavior.
 
+# ggalluvial 0.12.1
+
+This patch corrects a bug introduced in v0.12.0 that dropped missing values used internally by `StatFlow$compute_panel()` to keep track of flowless lodes. The problem was illustrated in issue #64.
+
 # ggalluvial 0.12.0
 
 ## Data sets

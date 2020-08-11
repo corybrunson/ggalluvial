@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.1</span>
       </span>
     </div>
 
@@ -91,7 +91,7 @@
       <h1 data-toc-skip>Alluvial Plots in ggplot2</h1>
                         <h4 class="author">Jason Cory Brunson</h4>
             
-            <h4 class="date">2020-07-14</h4>
+            <h4 class="date">2020-08-10</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/corybrunson/ggalluvial/blob/master/vignettes/ggalluvial.rmd"><code>vignettes/ggalluvial.rmd</code></a></small>
       <div class="hidden name"><code>ggalluvial.rmd</code></div>
@@ -215,7 +215,7 @@
 <li>
 <code>alluvium</code>, the indexing scheme that links the rows of a single alluvium.</li>
 </ul>
-<p>Heights can vary from axis to axis, allowing users to produce bump charts like those showcased <a href="http://imgur.com/gallery/gI5p7">here</a>.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a> In these cases, the strata contain no more information than the alluvia and often not plotted. For convenience, both <code><a href="../reference/stat_alluvium.html">stat_alluvium()</a></code> and <code><a href="../reference/stat_flow.html">stat_flow()</a></code> will accept arguments for <code>x</code> and <code>alluvium</code> even if none is given for <code>stratum</code>.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a> As an example, we can group countries in the <code>Refugees</code> dataset by region, in order to compare refugee volumes at different scales:</p>
+<p>Heights can vary from axis to axis, allowing users to produce bump charts like those showcased <a href="https://imgur.com/gallery/gI5p7">here</a>.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a> In these cases, the strata contain no more information than the alluvia and often not plotted. For convenience, both <code><a href="../reference/stat_alluvium.html">stat_alluvium()</a></code> and <code><a href="../reference/stat_flow.html">stat_flow()</a></code> will accept arguments for <code>x</code> and <code>alluvium</code> even if none is given for <code>stratum</code>.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a> As an example, we can group countries in the <code>Refugees</code> dataset by region, in order to compare refugee volumes at different scales:</p>
 <div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">Refugees</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"alluvial"</span>)
 <span class="no">country_regions</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(
   <span class="kw">Afghanistan</span> <span class="kw">=</span> <span class="st">"Middle East"</span>,
@@ -287,60 +287,107 @@
 ##  collate  en_US.UTF-8                 
 ##  ctype    en_US.UTF-8                 
 ##  tz       America/New_York            
-##  date     2020-07-14                  
+##  date     2020-08-10                  
 ## 
 ## ─ Packages ───────────────────────────────────────────────────────────────────
-##  package      * version  date       lib source        
-##  assertthat     0.2.1    2019-03-21 [2] CRAN (R 4.0.0)
-##  backports      1.1.8    2020-06-17 [2] CRAN (R 4.0.0)
-##  cli            2.0.2    2020-02-28 [2] CRAN (R 4.0.0)
-##  colorspace     1.4-1    2019-03-18 [2] CRAN (R 4.0.0)
-##  crayon         1.3.4    2017-09-16 [2] CRAN (R 4.0.0)
-##  desc           1.2.0    2018-05-01 [2] CRAN (R 4.0.0)
-##  digest         0.6.25   2020-02-23 [2] CRAN (R 4.0.0)
-##  dplyr          1.0.0    2020-05-29 [2] CRAN (R 4.0.0)
-##  ellipsis       0.3.1    2020-05-15 [2] CRAN (R 4.0.0)
-##  evaluate       0.14     2019-05-28 [2] CRAN (R 4.0.0)
-##  fansi          0.4.1    2020-01-08 [2] CRAN (R 4.0.0)
-##  farver         2.0.3    2020-01-16 [2] CRAN (R 4.0.0)
-##  fs             1.4.2    2020-06-30 [2] CRAN (R 4.0.0)
-##  generics       0.0.2    2018-11-29 [2] CRAN (R 4.0.0)
-##  ggalluvial   * 0.12.0   2020-07-14 [1] local         
-##  ggplot2      * 3.3.2    2020-06-19 [2] CRAN (R 4.0.0)
-##  glue           1.4.1    2020-05-13 [2] CRAN (R 4.0.0)
-##  gtable         0.3.0    2019-03-25 [2] CRAN (R 4.0.0)
-##  htmltools      0.5.0    2020-06-16 [2] CRAN (R 4.0.0)
-##  knitr          1.29     2020-06-23 [2] CRAN (R 4.0.0)
-##  labeling       0.3      2014-08-23 [2] CRAN (R 4.0.0)
-##  lifecycle      0.2.0    2020-03-06 [2] CRAN (R 4.0.0)
-##  magrittr       1.5      2014-11-22 [2] CRAN (R 4.0.0)
-##  MASS           7.3-51.5 2019-12-20 [2] CRAN (R 4.0.0)
-##  memoise        1.1.0    2017-04-21 [2] CRAN (R 4.0.0)
-##  munsell        0.5.0    2018-06-12 [2] CRAN (R 4.0.0)
-##  pillar         1.4.5    2020-07-09 [2] CRAN (R 4.0.0)
-##  pkgconfig      2.0.3    2019-09-22 [2] CRAN (R 4.0.0)
-##  pkgdown        1.5.1    2020-04-09 [2] CRAN (R 4.0.0)
-##  purrr          0.3.4    2020-04-17 [2] CRAN (R 4.0.0)
-##  R6             2.4.1    2019-11-12 [2] CRAN (R 4.0.0)
-##  RColorBrewer   1.1-2    2014-12-07 [2] CRAN (R 4.0.0)
-##  Rcpp           1.0.5    2020-07-06 [2] CRAN (R 4.0.0)
-##  rlang          0.4.6    2020-05-02 [2] CRAN (R 4.0.0)
-##  rmarkdown      2.3      2020-06-18 [2] CRAN (R 4.0.0)
-##  rprojroot      1.3-2    2018-01-03 [2] CRAN (R 4.0.0)
-##  scales         1.1.1    2020-05-11 [2] CRAN (R 4.0.0)
-##  sessioninfo    1.1.1    2018-11-05 [2] CRAN (R 4.0.0)
-##  stringi        1.4.6    2020-02-17 [2] CRAN (R 4.0.0)
-##  stringr        1.4.0    2019-02-10 [2] CRAN (R 4.0.0)
-##  tibble         3.0.2    2020-07-07 [2] CRAN (R 4.0.0)
-##  tidyr          1.1.0    2020-05-20 [2] CRAN (R 4.0.0)
-##  tidyselect     1.1.0    2020-05-11 [2] CRAN (R 4.0.0)
-##  vctrs          0.3.1    2020-06-05 [2] CRAN (R 4.0.0)
-##  withr          2.2.0    2020-04-20 [2] CRAN (R 4.0.0)
-##  xfun           0.15     2020-06-21 [2] CRAN (R 4.0.0)
-##  yaml           2.2.1    2020-02-01 [2] CRAN (R 4.0.0)
+##  package      * version     date       lib
+##  assertthat     0.2.1       2019-03-21 [1]
+##  backports      1.1.8       2020-06-17 [1]
+##  cli            2.0.2       2020-02-28 [1]
+##  colorspace     1.4-1       2019-03-18 [1]
+##  crayon         1.3.4       2017-09-16 [1]
+##  desc           1.2.0       2018-05-01 [1]
+##  digest         0.6.25      2020-02-23 [1]
+##  dplyr          1.0.1       2020-07-31 [1]
+##  ellipsis       0.3.1       2020-05-15 [1]
+##  evaluate       0.14        2019-05-28 [1]
+##  fansi          0.4.1       2020-01-08 [1]
+##  farver         2.0.3       2020-01-16 [1]
+##  fs             1.4.2       2020-06-30 [1]
+##  generics       0.0.2       2018-11-29 [1]
+##  ggalluvial   * 0.12.0.0009 2020-08-08 [1]
+##  ggplot2      * 3.3.2       2020-06-19 [1]
+##  glue           1.4.1       2020-05-13 [1]
+##  gtable         0.3.0       2019-03-25 [1]
+##  htmltools      0.5.0       2020-06-16 [1]
+##  knitr          1.29        2020-06-23 [1]
+##  labeling       0.3         2014-08-23 [1]
+##  lifecycle      0.2.0       2020-03-06 [1]
+##  magrittr       1.5         2014-11-22 [1]
+##  MASS           7.3-51.5    2019-12-20 [1]
+##  memoise        1.1.0       2017-04-21 [1]
+##  munsell        0.5.0       2018-06-12 [1]
+##  pillar         1.4.6       2020-07-10 [1]
+##  pkgconfig      2.0.3       2019-09-22 [1]
+##  pkgdown        1.5.1       2020-04-09 [1]
+##  purrr          0.3.4       2020-04-17 [1]
+##  R6             2.4.1       2019-11-12 [1]
+##  RColorBrewer   1.1-2       2014-12-07 [1]
+##  rlang          0.4.7       2020-07-09 [1]
+##  rmarkdown      2.3         2020-06-18 [1]
+##  rprojroot      1.3-2       2018-01-03 [1]
+##  rstudioapi     0.11        2020-02-07 [1]
+##  scales         1.1.1       2020-05-11 [1]
+##  sessioninfo    1.1.1       2018-11-05 [1]
+##  stringi        1.4.6       2020-02-17 [1]
+##  stringr        1.4.0       2019-02-10 [1]
+##  tibble         3.0.3.9000  2020-07-28 [1]
+##  tidyr          1.1.1       2020-07-31 [1]
+##  tidyselect     1.1.0       2020-05-11 [1]
+##  vctrs          0.3.2       2020-07-15 [1]
+##  withr          2.2.0       2020-04-20 [1]
+##  xfun           0.15        2020-06-21 [1]
+##  yaml           2.2.1       2020-02-01 [1]
+##  source                                 
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  Github (corybrunson/ggalluvial@8963501)
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.2)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  Github (tidyverse/tibble@b4eec19)      
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.2)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
+##  CRAN (R 4.0.0)                         
 ## 
-## [1] /private/var/folders/pg/fjg8r4fj5v33zqmwptf9mfg80000gn/T/RtmpB1mfo4/temp_libpath85925d7eb318
-## [2] /Library/Frameworks/R.framework/Versions/4.0/Resources/library</code></pre>
+## [1] /Library/Frameworks/R.framework/Versions/4.0/Resources/library</code></pre>
 </div>
 <div class="footnotes">
 <hr>

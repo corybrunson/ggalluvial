@@ -230,11 +230,11 @@ StatFlow <- ggproto(
     
     # flag flows between common pairs of strata and of aesthetics
     # (induces NAs for one-sided flows)
-    vars <- intersect(c("deposit", "order", "fissure"), names(data))
-    adj_vars <- paste0("adj_", vars)
+    lnk_vars <- intersect(c("deposit", "order", "fissure"), names(data))
+    adj_vars <- paste0("adj_", lnk_vars)
     # interactions of link:from:to
-    for (i in seq(vars)) {
-      data <- match_flows(data, vars[i], adj_vars[i])
+    for (i in seq(lnk_vars)) {
+      data <- match_flows(data, lnk_vars[i], adj_vars[i])
       #data[[adj_vars[i]]] <- xtfrm(data[[adj_vars[i]]])
     }
     # designate these flow pairings the alluvia
@@ -255,17 +255,16 @@ StatFlow <- ggproto(
                          names(data))
     only_vars <- c(diff_aes)
     sum_vars <- c("y", "n", "count")
-    agg_lode <- stats::aggregate(data[, "lode", drop = FALSE],
-                                 data[, by_vars],
-                                 distill)
+    data <- dplyr::group_by(data, .dots = by_vars)
+    # keep `NA`s in order to correctly position flows:
+    # `distill()`, `only()`, and `sum(na.rm = TRUE)`
+    agg_lode <- dplyr::summarize_at(data, "lode", distill)
     if (length(only_vars) > 0) {
-      agg_only <- stats::aggregate(data[, only_vars, drop = FALSE],
-                                   data[, by_vars],
-                                   only)
+      agg_only <- dplyr::summarize_at(data, only_vars, only)
     }
-    data <- stats::aggregate(data[, sum_vars],
-                             data[, by_vars],
-                             sum)
+    data <- dplyr::summarize_at(data, sum_vars, sum, na.rm = TRUE)
+    data <- dplyr::ungroup(data)
+    # merges forget tibble classes
     data <- merge(data, agg_lode)
     if (length(only_vars) > 0) {
       data <- merge(data, agg_only)

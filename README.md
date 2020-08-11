@@ -3,7 +3,7 @@
 
 # ggalluvial
 
-[![Travis](https://travis-ci.org/corybrunson/ggalluvial.svg?branch=master)](https://travis-ci.org/corybrunson/ggalluvial)
+[![Travis](https://travis-ci.org/corybrunson/ggalluvial.svg?branch=main)](https://travis-ci.org/corybrunson/ggalluvial)
 [![CRAN](http://www.r-pkg.org/badges/version/ggalluvial)](https://cran.r-project.org/package=ggalluvial)
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3836748.svg)](https://doi.org/10.5281/zenodo.3836748)
@@ -25,7 +25,7 @@ categorical variables. The design is inspired by the
   - **alluvial** uses each variable of these inputs as a dimension of
     the data, whereas **ggalluvial** requires the user to specify the
     dimensions, either as separate aesthetics or as [key-value
-    pairs](http://tidyr.tidyverse.org/);
+    pairs](https://tidyr.tidyverse.org/);
   - **alluvial** produces both the *alluvia*, which link cohorts across
     multiple dimensions, and (what are here called) the *strata*, which
     partition the data along each dimension, in a single function;
@@ -45,22 +45,25 @@ The latest stable release can be installed from CRAN:
 install.packages("ggalluvial")
 ```
 
-The [cran branch](https://github.com/corybrunson/ggalluvial/tree/cran)
+The [`cran` branch](https://github.com/corybrunson/ggalluvial/tree/cran)
 will contain the version most recently submitted to
-[CRAN](https://cran.r-project.org/package=ggalluvial).
+[CRAN](https://cran.r-project.org/package=ggalluvial). It is duplicated
+in the `master` branch, from which source the
+[website](https://corybrunson.github.io/ggalluvial/) is built.
 
-The development version can be installed from
+The development version can be installed from the (default) `main`
+branch on
 GitHub:
 
 ``` r
-remotes::install_github("corybrunson/ggalluvial", build_vignettes = TRUE)
+remotes::install_github("corybrunson/ggalluvial@main", build_vignettes = TRUE)
 ```
 
 Note that, in order to build the vignettes, the imported packages
 **alluvial**, **ggfittext**, and **ggrepel** must be installed. To skip
 this step, leave `build_vignettes` unspecified or set it to `FALSE`.
 
-The [optimization
+The [`optimization`
 branch](https://github.com/corybrunson/ggalluvial/tree/optimization)
 contains a development version with experimental functions to reduce the
 number or area of alluvial overlaps (see issue
@@ -71,8 +74,8 @@ as follows:
 remotes::install_github("corybrunson/ggalluvial", ref = "optimization")
 ```
 
-Note, however, that this branch has not kept pace with the `master`
-branch or with recent upgrades on CRAN.
+Note, however, that this branch has not kept pace with the `main` branch
+or with recent upgrades on CRAN.
 
 ## Usage
 
@@ -159,9 +162,9 @@ support of colleagues at [UConn Health](https://health.uconn.edu/).
 Contributions in any form are more than welcome\! Pretty much every fix
 and feature of this package derives from a problem or question posed by
 someone with datasets or design goals i hadn’t anticipated. See the
-[CONTRIBUTING](https://github.com/corybrunson/ggalluvial/blob/master/CONTRIBUTING.md)
+[CONTRIBUTING](https://github.com/corybrunson/ggalluvial/blob/main/CONTRIBUTING.md)
 file for guidance, and please respect the [Code of
-Conduct](https://github.com/corybrunson/ggalluvial/blob/master/CODE_OF_CONDUCT.md).
+Conduct](https://github.com/corybrunson/ggalluvial/blob/main/CODE_OF_CONDUCT.md).
 
 ### Cite
 

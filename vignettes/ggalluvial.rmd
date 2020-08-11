@@ -134,7 +134,7 @@ The same stat and geom can receive data in this format using a different set of 
 - `stratum`, the "value" taken by the axis variable indicated by `x`; and
 - `alluvium`, the indexing scheme that links the rows of a single alluvium.
 
-Heights can vary from axis to axis, allowing users to produce bump charts like those showcased [here](http://imgur.com/gallery/gI5p7).[^geom-area] In these cases, the strata contain no more information than the alluvia and often not plotted. For convenience, both `stat_alluvium()` and `stat_flow()` will accept arguments for `x` and `alluvium` even if none is given for `stratum`.[^arguments] As an example, we can group countries in the `Refugees` dataset by region, in order to compare refugee volumes at different scales:
+Heights can vary from axis to axis, allowing users to produce bump charts like those showcased [here](https://imgur.com/gallery/gI5p7).[^geom-area] In these cases, the strata contain no more information than the alluvia and often not plotted. For convenience, both `stat_alluvium()` and `stat_flow()` will accept arguments for `x` and `alluvium` even if none is given for `stratum`.[^arguments] As an example, we can group countries in the `Refugees` dataset by region, in order to compare refugee volumes at different scales:
 
 [^geom-area]: If bumping is unnecessary, consider using [`geom_area()`](https://www.r-graph-gallery.com/136-stacked-area-chart) instead.
 [^arguments]: `stat_stratum()` will similarly accept arguments for `x` and `stratum` without `alluvium`. If both strata and either alluvia or flows are to be plotted, though, all three parameters need arguments.
