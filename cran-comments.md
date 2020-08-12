@@ -22,7 +22,7 @@ On one platform (Ubuntu Linux 16.04 LTS, R-release, GCC), one ERROR was due to *
 
 ### WinBuilder
 
-There were no ERRORs or WARNINGs. On some runs, one NOTE flagged the example runtime issue above.
+There were no ERRORs or WARNINGs. On some runs, one NOTE flagged several last names in the DESCRIPTION as possibly misspelled words. (These have been checked.)
 
 ## Downstream dependencies
 

@@ -41,7 +41,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">ggalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.1</span>
       </span>
     </div>
 
@@ -122,13 +122,13 @@
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>The latest stable release can be installed from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"ggalluvial"</span>)</pre></div>
-<p>The <a href="https://github.com/corybrunson/ggalluvial/tree/cran">cran branch</a> will contain the version most recently submitted to <a href="https://cran.r-project.org/package=ggalluvial">CRAN</a>.</p>
-<p>The development version can be installed from GitHub:</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"corybrunson/ggalluvial"</span>, <span class="kw">build_vignettes</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></div>
+<p>The <a href="https://github.com/corybrunson/ggalluvial/tree/cran"><code>cran</code> branch</a> will contain the version most recently submitted to <a href="https://cran.r-project.org/package=ggalluvial">CRAN</a>. It is duplicated in the <code>master</code> branch, from which source the <a href="https://corybrunson.github.io/ggalluvial/">website</a> is built.</p>
+<p>The development version can be installed from the (default) <code>main</code> branch on GitHub:</p>
+<div class="sourceCode" id="cb2"><pre class="r"><span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"corybrunson/ggalluvial@main"</span>, <span class="kw">build_vignettes</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></div>
 <p>Note that, in order to build the vignettes, the imported packages <strong>alluvial</strong>, <strong>ggfittext</strong>, and <strong>ggrepel</strong> must be installed. To skip this step, leave <code>build_vignettes</code> unspecified or set it to <code>FALSE</code>.</p>
-<p>The <a href="https://github.com/corybrunson/ggalluvial/tree/optimization">optimization branch</a> contains a development version with experimental functions to reduce the number or area of alluvial overlaps (see issue <a href="https://github.com/corybrunson/ggalluvial/issues/6">#6</a>). Install it as follows:</p>
+<p>The <a href="https://github.com/corybrunson/ggalluvial/tree/optimization"><code>optimization</code> branch</a> contains a development version with experimental functions to reduce the number or area of alluvial overlaps (see issue <a href="https://github.com/corybrunson/ggalluvial/issues/6">#6</a>). Install it as follows:</p>
 <div class="sourceCode" id="cb3"><pre class="r"><span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"corybrunson/ggalluvial"</span>, <span class="kw">ref</span> <span class="kw">=</span> <span class="st">"optimization"</span>)</pre></div>
-<p>Note, however, that this branch has not kept pace with the <code>master</code> branch or with recent upgrades on CRAN.</p>
+<p>Note, however, that this branch has not kept pace with the <code>main</code> branch or with recent upgrades on CRAN.</p>
 </div>
 <div id="usage" class="section level2">
 <h2 class="hasAnchor">
@@ -199,7 +199,7 @@
 <div id="contribute" class="section level3">
 <h3 class="hasAnchor">
 <a href="#contribute" class="anchor"></a>Contribute</h3>
-<p>Contributions in any form are more than welcome! Pretty much every fix and feature of this package derives from a problem or question posed by someone with datasets or design goals i hadn’t anticipated. See the <a href="https://github.com/corybrunson/ggalluvial/blob/master/CONTRIBUTING.md">CONTRIBUTING</a> file for guidance, and please respect the <a href="https://github.com/corybrunson/ggalluvial/blob/master/CODE_OF_CONDUCT.md">Code of Conduct</a>.</p>
+<p>Contributions in any form are more than welcome! Pretty much every fix and feature of this package derives from a problem or question posed by someone with datasets or design goals i hadn’t anticipated. See the <a href="https://github.com/corybrunson/ggalluvial/blob/main/CONTRIBUTING.md">CONTRIBUTING</a> file for guidance, and please respect the <a href="https://github.com/corybrunson/ggalluvial/blob/main/CODE_OF_CONDUCT.md">Code of Conduct</a>.</p>
 </div>
 <div id="cite" class="section level3">
 <h3 class="hasAnchor">
@@ -251,7 +251,7 @@
   <div class="dev-status">
 <h2>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://travis-ci.org/corybrunson/ggalluvial"><img src="https://travis-ci.org/corybrunson/ggalluvial.svg?branch=master" alt="Travis"></a></li>
+<li><a href="https://travis-ci.org/corybrunson/ggalluvial"><img src="https://travis-ci.org/corybrunson/ggalluvial.svg?branch=main" alt="Travis"></a></li>
 <li><a href="https://cran.r-project.org/package=ggalluvial"><img src="http://www.r-pkg.org/badges/version/ggalluvial" alt="CRAN"></a></li>
 </ul>
 </div>
