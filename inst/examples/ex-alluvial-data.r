@@ -14,12 +14,19 @@ is_lodes_form(titanic_lodes,
 # again in lodes format, this time diffusing the `Class` variable
 titanic_lodes2 <- to_lodes_form(titanic_alluvia,
                                 key = variable, value = value,
-                                id = passenger,
+                                id = cohort,
                                 1:3, diffuse = Class)
 head(titanic_lodes2)
 is_lodes_form(titanic_lodes2,
-              key = variable, value = value, id = passenger,
+              key = variable, value = value, id = cohort,
               weight = Freq)
+# use `site` to separate data before lode testing
+is_lodes_form(titanic_lodes2,
+              key = variable, value = value, id = Class,
+              weight = Freq)
+is_lodes_form(titanic_lodes2,
+              key = variable, value = value, id = Class,
+              weight = Freq, site = cohort)
 
 # curriculum data in lodes format
 data(majors)

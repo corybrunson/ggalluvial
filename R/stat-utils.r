@@ -20,6 +20,7 @@ get_alluvial_type <- function(data) {
     if (is_lodes_form(data,
                       key = "x", value = "stratum", id = "alluvium",
                       weight = "y",
+                      site = if ("PANEL" %in% names(data)) "PANEL",
                       silent = TRUE)) return("lodes")
   } else {
     axis_ind <- get_axes(names(data))

@@ -14,6 +14,7 @@ is_lodes_form(
   value,
   id,
   weight = NULL,
+  site = NULL,
   logical = TRUE,
   silent = FALSE
 )
@@ -51,8 +52,13 @@ of \code{data} to be used as the axis (key), stratum (value), and alluvium
 (identifying) variables.}
 
 \item{weight}{Optional field of \code{data}, handled using
-\code{\link[rlang:nse-defuse]{rlang::enquo()}}, to be used as heights or depths of the alluvia
-or lodes.}
+\code{\link[rlang:nse-defuse]{rlang::enquo()}}, to be used as heights or depths of
+the alluvia or lodes.}
+
+\item{site}{Optional vector of fields of \code{data}, handled using
+\code{\link[rlang:nse-defuse]{rlang::enquos()}}, to be used to group rows before
+testing for duplicate and missing id-axis pairings. Variables intended for
+faceting should be passed to \code{site}.}
 
 \item{logical}{Defunct. Whether to return a logical value or a character
 string indicating the type of alluvial structure ("none", "lodes", or
@@ -138,12 +144,19 @@ is_lodes_form(titanic_lodes,
 # again in lodes format, this time diffusing the `Class` variable
 titanic_lodes2 <- to_lodes_form(titanic_alluvia,
                                 key = variable, value = value,
-                                id = passenger,
+                                id = cohort,
                                 1:3, diffuse = Class)
 head(titanic_lodes2)
 is_lodes_form(titanic_lodes2,
-              key = variable, value = value, id = passenger,
+              key = variable, value = value, id = cohort,
               weight = Freq)
+# use `site` to separate data before lode testing
+is_lodes_form(titanic_lodes2,
+              key = variable, value = value, id = Class,
+              weight = Freq)
+is_lodes_form(titanic_lodes2,
+              key = variable, value = value, id = Class,
+              weight = Freq, site = cohort)
 
 # curriculum data in lodes format
 data(majors)

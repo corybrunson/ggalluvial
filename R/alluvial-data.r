@@ -52,8 +52,12 @@
 #'   [dplyr::select()] to determine axis variables, as an alternative
 #'   to `axes`. Ignored when `axes` is provided.
 #' @param weight Optional field of `data`, handled using
-#'   [`rlang::enquo()`][rlang::nse-defuse], to be used as heights or depths of the alluvia
-#'   or lodes.
+#'   [`rlang::enquo()`][rlang::nse-defuse], to be used as heights or depths of
+#'   the alluvia or lodes.
+#' @param site Optional vector of fields of `data`, handled using
+#'   [`rlang::enquos()`][rlang::nse-defuse], to be used to group rows before
+#'   testing for duplicate and missing id-axis pairings. Variables intended for
+#'   faceting should be passed to `site`.
 #' @param diffuse Fields of `data`, handled using
 #'   [tidyselect::vars_select()], to merge into the reshapen data by
 #'   `id`. They must be a subset of the axis variables. Alternatively, a
@@ -76,7 +80,7 @@
 #' @export
 is_lodes_form <- function(data,
                           key, value, id,
-                          weight = NULL,
+                          weight = NULL, site = NULL,
                           logical = TRUE, silent = FALSE) {
   if (! isTRUE(logical)) defunct_parameter("logical")
   
@@ -84,15 +88,23 @@ is_lodes_form <- function(data,
   value_var <- vars_pull(names(data), !! rlang::enquo(value))
   id_var <- vars_pull(names(data), !! rlang::enquo(id))
   
+  # test id-axis pairings within each site (see issue #65)
+  if (! is.null(rlang::enexprs(site))) {
+    site_vars <- vars_select(names(data), !!! rlang::enquos(site))
+    data[[id_var]] <- interaction(data[c(id_var, site_vars)], drop = FALSE)
+  }
+  
   if (any(duplicated(cbind(data[c(key_var, id_var)])))) {
-    if (! silent) message("Duplicated id-axis pairings.")
+    if (! silent) message("Duplicated id-axis pairings",
+                          if (! is.null(rlang::enexprs(site))) "." else
+                            "; should `site` have been specified?")
     return(if (logical) FALSE else "none")
   }
   
   n_pairs <-
     dplyr::n_distinct(data[key_var]) * dplyr::n_distinct(data[id_var])
   if (nrow(data) < n_pairs) {
-    if (! silent) warning("Missing id-axis pairings.")
+    if (! silent) warning("Missing id-axis pairings (at some sites).")
   }
   
   # if `weight` is not `NULL`, use NSE to identify `weight_var`

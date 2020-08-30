@@ -340,6 +340,17 @@ ggplot(subset(titanic, Class != "Crew"),
             absolute = FALSE) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"), expand = c(.1, .05)) +
   scale_alpha_discrete(range = c(.25, .75), guide = FALSE)
+
+# faceting with common alluvia
+ggplot(titanic, aes(y = Freq, axis1 = Class, axis2 = Sex, axis3 = Age)) +
+  facet_wrap(~ Survived) +
+  geom_alluvium() +
+  geom_stratum() +
+  geom_text(stat = "stratum", aes(label = after_stat(stratum)))
+ggplot(transform(alluvial::Refugees, id = 1),
+       aes(y = refugees, x = year, alluvium = id)) +
+  facet_wrap(~ country) +
+  geom_alluvium()
 }
 \seealso{
 \code{\link[ggplot2:layer]{ggplot2::layer()}} for additional arguments and \code{\link[=geom_alluvium]{geom_alluvium()}},
