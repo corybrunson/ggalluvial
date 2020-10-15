@@ -78,7 +78,7 @@ filled rectangles at either end, using a provided width." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.2.0001</span>
       </span>
     </div>
 
@@ -393,7 +393,8 @@ discontinued. Use <code>width</code> and <code>knot.pos</code> instead.</p>
   <span class='fu'>geom_flow</span>(<span class='fu'>aes</span>(<span class='kw'>fill</span> <span class='kw'>=</span> <span class='no'>Region</span>, <span class='kw'>colour</span> <span class='kw'>=</span> <span class='no'>Region</span>), <span class='kw'>width</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>knot.prop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='img'><img src='geom_flow-5.png' alt='' width='700' height='433' /></div><div class='input'>
 <span class='co'># rightward flow aesthetics for vaccine survey data, with cubic flows</span>
 <span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span>(<span class='no'>vaccinations</span>)
-<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='no'>vaccinations</span>$<span class='no'>response</span>) <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/rev.html'>rev</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='no'>vaccinations</span>$<span class='no'>response</span>))
+<span class='no'>vaccinations</span>$<span class='no'>response</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span>(<span class='no'>vaccinations</span>$<span class='no'>response</span>,
+                                <span class='fu'><a href='https://rdrr.io/r/base/rev.html'>rev</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span>(<span class='no'>vaccinations</span>$<span class='no'>response</span>)))
 <span class='co'># annotate with proportional counts</span>
 <span class='fu'>ggplot</span>(<span class='no'>vaccinations</span>,
        <span class='fu'>aes</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>survey</span>, <span class='kw'>stratum</span> <span class='kw'>=</span> <span class='no'>response</span>, <span class='kw'>alluvium</span> <span class='kw'>=</span> <span class='no'>subject</span>,

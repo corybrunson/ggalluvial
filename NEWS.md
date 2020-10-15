@@ -1,4 +1,8 @@
 
+# next release
+
+This patch/release corrects erroneous legacy code, found in one example and two vignettes, to reorder the factor levels of the `"response"` field in the data set `vaccinations` and updates the documentation and website accordingly.
+
 # ggalluvial 0.12.2
 
 This patch addresses a bug introduced in v0.12.0 that had `is_lodes_form()` return an error when a data frame contains duplicate id-axis pairings, which may be appropriate for producing faceted plots. The new `site` parameter can be passed one or more grouping variables for this purpose, and internally it is passed `"PANEL"` to prevent this error from being thrown.

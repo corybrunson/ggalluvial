@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.2.0001</span>
       </span>
     </div>
 
@@ -91,7 +91,7 @@
       <h1 data-toc-skip>Labeling small strata</h1>
                         <h4 class="author">Jason Cory Brunson</h4>
             
-            <h4 class="date">2020-08-30</h4>
+            <h4 class="date">2020-10-15</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/corybrunson/ggalluvial/blob/master/vignettes/labels.rmd"><code>vignettes/labels.rmd</code></a></small>
       <div class="hidden name"><code>labels.rmd</code></div>
@@ -108,7 +108,8 @@
 <span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggalluvial</span>)</pre></body></html></div>
 <pre><code>## Loading required package: ggplot2</code></pre>
 <div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">vaccinations</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span>(<span class="no">vaccinations</span>$<span class="no">response</span>) <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span>(<span class="no">vaccinations</span>$<span class="no">response</span>))</pre></body></html></div>
+<span class="no">vaccinations</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html">transform</a></span>(<span class="no">vaccinations</span>,
+                          <span class="kw">response</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">response</span>, <span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span>(<span class="no">response</span>))))</pre></body></html></div>
 </div>
 <div id="problem" class="section level2">
 <h2 class="hasAnchor">
@@ -360,62 +361,63 @@
 ##  collate  en_US.UTF-8                 
 ##  ctype    en_US.UTF-8                 
 ##  tz       America/New_York            
-##  date     2020-08-30                  
+##  date     2020-10-15                  
 ## 
 ## ─ Packages ───────────────────────────────────────────────────────────────────
-##  package     * version    date       lib source                           
-##  assertthat    0.2.1      2019-03-21 [2] CRAN (R 4.0.0)                   
-##  backports     1.1.9      2020-08-24 [2] CRAN (R 4.0.0)                   
-##  cli           2.0.2      2020-02-28 [2] CRAN (R 4.0.0)                   
-##  colorspace    1.4-1      2019-03-18 [2] CRAN (R 4.0.0)                   
-##  crayon        1.3.4      2017-09-16 [2] CRAN (R 4.0.0)                   
-##  desc          1.2.0      2018-05-01 [2] CRAN (R 4.0.0)                   
-##  digest        0.6.25     2020-02-23 [2] CRAN (R 4.0.0)                   
-##  dplyr         1.0.2      2020-08-18 [2] CRAN (R 4.0.2)                   
-##  ellipsis      0.3.1      2020-05-15 [2] CRAN (R 4.0.0)                   
-##  evaluate      0.14       2019-05-28 [2] CRAN (R 4.0.0)                   
-##  fansi         0.4.1      2020-01-08 [2] CRAN (R 4.0.0)                   
-##  farver        2.0.3      2020-01-16 [2] CRAN (R 4.0.0)                   
-##  fs            1.5.0      2020-07-31 [2] CRAN (R 4.0.2)                   
-##  generics      0.0.2      2018-11-29 [2] CRAN (R 4.0.0)                   
-##  ggalluvial  * 0.12.2     2020-08-30 [1] local                            
-##  ggfittext     0.9.0      2020-06-14 [2] CRAN (R 4.0.0)                   
-##  ggplot2     * 3.3.2      2020-06-19 [2] CRAN (R 4.0.0)                   
-##  ggrepel       0.8.2      2020-03-08 [2] CRAN (R 4.0.0)                   
-##  glue          1.4.2      2020-08-27 [2] CRAN (R 4.0.0)                   
-##  gtable        0.3.0      2019-03-25 [2] CRAN (R 4.0.0)                   
-##  htmltools     0.5.0      2020-06-16 [2] CRAN (R 4.0.0)                   
-##  knitr         1.29       2020-06-23 [2] CRAN (R 4.0.0)                   
-##  labeling      0.3        2014-08-23 [2] CRAN (R 4.0.0)                   
-##  lifecycle     0.2.0      2020-03-06 [2] CRAN (R 4.0.0)                   
-##  magrittr      1.5        2014-11-22 [2] CRAN (R 4.0.0)                   
-##  MASS          7.3-51.5   2019-12-20 [2] CRAN (R 4.0.0)                   
-##  memoise       1.1.0      2017-04-21 [2] CRAN (R 4.0.0)                   
-##  munsell       0.5.0      2018-06-12 [2] CRAN (R 4.0.0)                   
-##  pillar        1.4.6      2020-07-10 [2] CRAN (R 4.0.0)                   
-##  pkgconfig     2.0.3      2019-09-22 [2] CRAN (R 4.0.0)                   
-##  pkgdown       1.5.1      2020-04-09 [2] CRAN (R 4.0.0)                   
-##  purrr         0.3.4      2020-04-17 [2] CRAN (R 4.0.0)                   
-##  R6            2.4.1      2019-11-12 [2] CRAN (R 4.0.0)                   
-##  Rcpp          1.0.5      2020-07-06 [2] CRAN (R 4.0.0)                   
-##  rlang         0.4.7      2020-07-09 [2] CRAN (R 4.0.2)                   
-##  rmarkdown     2.3        2020-06-18 [2] CRAN (R 4.0.0)                   
-##  rprojroot     1.3-2      2018-01-03 [2] CRAN (R 4.0.0)                   
-##  rstudioapi    0.11       2020-02-07 [2] CRAN (R 4.0.0)                   
-##  scales        1.1.1      2020-05-11 [2] CRAN (R 4.0.0)                   
-##  sessioninfo   1.1.1      2018-11-05 [2] CRAN (R 4.0.0)                   
-##  stringi       1.4.6      2020-02-17 [2] CRAN (R 4.0.0)                   
-##  stringr       1.4.0      2019-02-10 [2] CRAN (R 4.0.0)                   
-##  tibble        3.0.3.9000 2020-07-28 [2] Github (tidyverse/tibble@b4eec19)
-##  tidyr         1.1.2      2020-08-27 [2] CRAN (R 4.0.0)                   
-##  tidyselect    1.1.0      2020-05-11 [2] CRAN (R 4.0.0)                   
-##  vctrs         0.3.4      2020-08-29 [2] CRAN (R 4.0.0)                   
-##  withr         2.2.0      2020-04-20 [2] CRAN (R 4.0.0)                   
-##  xfun          0.16       2020-07-24 [2] CRAN (R 4.0.2)                   
-##  yaml          2.2.1      2020-02-01 [2] CRAN (R 4.0.0)                   
+##  package     * version     date       lib source                           
+##  assertthat    0.2.1       2019-03-21 [3] CRAN (R 4.0.0)                   
+##  backports     1.1.10      2020-09-15 [3] CRAN (R 4.0.2)                   
+##  cli           2.1.0       2020-10-12 [3] CRAN (R 4.0.0)                   
+##  colorspace    1.4-1       2019-03-18 [3] CRAN (R 4.0.0)                   
+##  crayon        1.3.4       2017-09-16 [3] CRAN (R 4.0.0)                   
+##  desc          1.2.0       2018-05-01 [3] CRAN (R 4.0.0)                   
+##  digest        0.6.25      2020-02-23 [3] CRAN (R 4.0.0)                   
+##  dplyr         1.0.2       2020-08-18 [3] CRAN (R 4.0.2)                   
+##  ellipsis      0.3.1       2020-05-15 [3] CRAN (R 4.0.0)                   
+##  evaluate      0.14        2019-05-28 [3] CRAN (R 4.0.0)                   
+##  fansi         0.4.1       2020-01-08 [3] CRAN (R 4.0.0)                   
+##  farver        2.0.3       2020-01-16 [3] CRAN (R 4.0.0)                   
+##  fs            1.5.0       2020-07-31 [3] CRAN (R 4.0.2)                   
+##  generics      0.0.2       2018-11-29 [3] CRAN (R 4.0.0)                   
+##  ggalluvial  * 0.12.2.0001 2020-10-15 [1] local                            
+##  ggfittext     0.9.0       2020-06-14 [3] CRAN (R 4.0.0)                   
+##  ggplot2     * 3.3.2       2020-06-19 [3] CRAN (R 4.0.0)                   
+##  ggrepel       0.8.2       2020-03-08 [3] CRAN (R 4.0.0)                   
+##  glue          1.4.2       2020-08-27 [3] CRAN (R 4.0.0)                   
+##  gtable        0.3.0       2019-03-25 [3] CRAN (R 4.0.0)                   
+##  htmltools     0.5.0       2020-06-16 [3] CRAN (R 4.0.0)                   
+##  knitr         1.30        2020-09-22 [3] CRAN (R 4.0.2)                   
+##  labeling      0.3         2014-08-23 [3] CRAN (R 4.0.0)                   
+##  lifecycle     0.2.0       2020-03-06 [3] CRAN (R 4.0.0)                   
+##  magrittr      1.5         2014-11-22 [3] CRAN (R 4.0.2)                   
+##  MASS          7.3-51.5    2019-12-20 [3] CRAN (R 4.0.0)                   
+##  memoise       1.1.0       2017-04-21 [3] CRAN (R 4.0.0)                   
+##  munsell       0.5.0       2018-06-12 [3] CRAN (R 4.0.0)                   
+##  pillar        1.4.6       2020-07-10 [3] CRAN (R 4.0.0)                   
+##  pkgconfig     2.0.3       2019-09-22 [3] CRAN (R 4.0.0)                   
+##  pkgdown       1.5.1       2020-04-09 [3] CRAN (R 4.0.0)                   
+##  purrr         0.3.4       2020-04-17 [3] CRAN (R 4.0.0)                   
+##  R6            2.4.1       2019-11-12 [3] CRAN (R 4.0.0)                   
+##  Rcpp          1.0.5       2020-10-02 [3] Github (RcppCore/Rcpp@a9ca85d)   
+##  rlang         0.4.8       2020-10-08 [3] CRAN (R 4.0.0)                   
+##  rmarkdown     2.3         2020-06-18 [3] CRAN (R 4.0.0)                   
+##  rprojroot     1.3-2       2018-01-03 [3] CRAN (R 4.0.0)                   
+##  rstudioapi    0.11        2020-02-07 [3] CRAN (R 4.0.0)                   
+##  scales        1.1.1       2020-05-11 [3] CRAN (R 4.0.0)                   
+##  sessioninfo   1.1.1       2018-11-05 [3] CRAN (R 4.0.0)                   
+##  stringi       1.5.3       2020-09-09 [3] CRAN (R 4.0.2)                   
+##  stringr       1.4.0       2019-02-10 [3] CRAN (R 4.0.0)                   
+##  tibble        3.0.3.9000  2020-07-28 [3] Github (tidyverse/tibble@b4eec19)
+##  tidyr         1.1.2       2020-08-27 [3] CRAN (R 4.0.0)                   
+##  tidyselect    1.1.0       2020-05-11 [3] CRAN (R 4.0.0)                   
+##  vctrs         0.3.4       2020-08-29 [3] CRAN (R 4.0.0)                   
+##  withr         2.3.0       2020-09-22 [3] CRAN (R 4.0.2)                   
+##  xfun          0.18        2020-09-29 [3] CRAN (R 4.0.2)                   
+##  yaml          2.2.1       2020-02-01 [3] CRAN (R 4.0.0)                   
 ## 
-## [1] /private/var/folders/pg/fjg8r4fj5v33zqmwptf9mfg80000gn/T/RtmpdIKNPl/temp_libpath16357629be8fd
-## [2] /Library/Frameworks/R.framework/Versions/4.0/Resources/library</code></pre>
+## [1] /private/var/folders/pg/fjg8r4fj5v33zqmwptf9mfg80000gn/T/RtmpuCTWyN/temp_libpathc1ea655c6f7b
+## [2] /private/var/folders/pg/fjg8r4fj5v33zqmwptf9mfg80000gn/T/RtmpuCTWyN/temp_libpathc1ea144b13ee
+## [3] /Library/Frameworks/R.framework/Versions/4.0/Resources/library</code></pre>
 </div>
   </div>
 
