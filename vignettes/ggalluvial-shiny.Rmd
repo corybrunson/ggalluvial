@@ -1,0 +1,47 @@
+---
+title: "ggalluvial in Shiny apps"
+author: "Quentin D. Read"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{labeling small strata}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+## Problem
+
+In an interactive visualization that incorporates an alluvial plot, it is visually cleaner and better for interpretation if labels and other information appear as "tooltips" when the user hovers over or clicks on elements of the plot. However, the `ggalluvial` package does not natively include this functionality. It is possible to enable this using functions from several other packages. 
+
+This vignette illustrates how to build a Shiny app including a ggalluvial plot with tooltips that appear when the user hovers over elements of the plot that show a text label and the number of flows included in each group. More information is displayed when the user clicks on the element. This is made relatively straightforward because if the user hovers or clicks somewhere inside a ggplot panel, Shiny automatically returns information about the location of the mouse in plot coordinates. That means the main work we have to do is to extract or manually recalculate the coordinates of the different plot elements. With that information, we can determine which plot element the mouse is hovering over and display the appropriate information in the tooltip or other output method.
+
+N.B.: The following code has quite a few package dependencies; please be aware that all the required packages will need to be installed on the server where your Shiny app is running.
+
+## Data for reproducible example
+
+This dummy dataset is used for 
+
+```{r dummy dataset}
+
+```
+
+Here is a static plot generated using the dummy dataset.
+
+## Hovering over strata
+
+## Hovering over alluvia
+
+
+
+
+## Solutions
+
+
+
+
+## Appendix
+
+```{r session info}
+sessioninfo::session_info()
+```
