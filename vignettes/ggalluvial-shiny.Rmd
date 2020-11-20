@@ -12,35 +12,133 @@ vignette: >
 
 ## Problem
 
-In an interactive visualization that incorporates an alluvial plot, it is visually cleaner and better for interpretation if labels and other information appear as "tooltips" when the user hovers over or clicks on elements of the plot. However, the `ggalluvial` package does not natively include this functionality. It is possible to enable this using functions from several other packages. 
+In an interactive visualization that incorporates an alluvial plot, it is visually cleaner and better for interpretation if labels and other information appear as "tooltips" when the user hovers over or clicks on elements of the plot. However, the `ggalluvial` package does not natively include this functionality. It is possible to enable this using functions from several other packages. This vignette illustrates a Shiny app that displays a ggalluvial plot with tooltips that appear when the user hovers over two different plot elements: strata created with `geom_stratum()` and alluvia created with `geom_alluvium()`. 
 
-This vignette illustrates how to build a Shiny app including a ggalluvial plot with tooltips that appear when the user hovers over elements of the plot that show a text label and the number of flows included in each group. More information is displayed when the user clicks on the element. This is made relatively straightforward because if the user hovers or clicks somewhere inside a ggplot panel, Shiny automatically returns information about the location of the mouse in plot coordinates. That means the main work we have to do is to extract or manually recalculate the coordinates of the different plot elements. With that information, we can determine which plot element the mouse is hovering over and display the appropriate information in the tooltip or other output method.
+The tooltips that appear when the user hovers over elements of the plot show a text label and the number of flows included in each group. More information is displayed when the user clicks on the element. This is made relatively straightforward because if the user hovers or clicks somewhere inside a ggplot panel, Shiny automatically returns information about the location of the mouse in plot coordinates. That means the main work we have to do is to extract or manually recalculate the coordinates of the different plot elements. With that information, we can determine which plot element the mouse is hovering over and display the appropriate information in the tooltip or other output method.
 
-N.B.: The following code has quite a few package dependencies; please be aware that all the required packages will need to be installed on the server where your Shiny app is running.
+N.B.: The following code has several package dependencies; please be aware that all the required packages will need to be installed on the server where your Shiny app is running.
+
+### Hovering over and clicking on strata
+
+Enabling hovering over and clicking on strata is straightforward because of their rectangular shape. We only need the minimum and maximum `x` and `y` coordinates for each of the rectangles. The rectangles are evenly spaced along the x-axis, centered on each positive integer beginning with 1. The width is set with `geom_stratum` so for example we know that the x-coordinates of the first stratum are 1 &plusm; width/2. The y-coordinates can be determined from the number of rows in the input data multiplied by their weights.
+
+### Hovering over and clicking on alluvia
+
+Hovering over and clicking on alluvia are more difficult because the shapes of the alluvia are more complex. The default shape of the polygons includes an "xspline" curve drawn using the `grid` package. We need to manually reconstruct the coordinates of the polygons, then use `sp::pointInPolygon()` to detect which, if any, polygons the mouse is over.
 
 ## Data for reproducible example
 
-This dummy dataset is used for 
+This dummy dataset is used for the example app.
 
 ```{r dummy dataset}
+library(ggalluvial)
 
+example_data <- data.frame(weight = rep(1, 12),
+                           ID = 1:12,
+                           cluster = c(rep(c(1,2), 5),2,2),
+                           grp1 = rep(c('1a','1b'), c(6,6)),
+                           grp2 = rep(c('2a','2b','2a'), c(3,4,5)),
+                           grp3 = rep(c('3a','3b'), c(5,7)))
 ```
 
 Here is a static plot generated using the dummy dataset.
 
-## Hovering over strata
+```{r static plot}
+ggplot(example_data, aes(y = weight, axis1 = grp1, axis2 = grp2, axis3 = grp3)) + 
+  geom_alluvium(aes(fill = factor(cluster)), knot.pos = 0.25) + 
+  geom_stratum(width = 1/8, reverse = TRUE) + # plot the boxes over the connections
+  geom_text(aes(label = after_stat(stratum)), 
+            stat = "stratum", 
+            reverse = TRUE, 
+            size = rel(1.5)) + 
+  theme_bw() 
+```
 
-## Hovering over alluvia
+## Structure of the app
 
+The example app demonstrated here includes a minimal user interface with three output elements.
 
+```{r ui, eval = FALSE}
+ui <- fluidPage(
+  titlePanel("Shiny ggalluvial reprex"),
+  fluidRow(tags$div(
+    style = "position: relative;",
+    plotOutput("alluvial_plot", height = "800px", 
+               hover = hoverOpts(id = "plot_hover"),
+               click = clickOpts(id = "plot_click")
+               ),
+    htmlOutput("tooltip"))),
+  fluidRow(verbatimTextOutput("click_info"))
+)
+```
 
+The elements are:
 
-## Solutions
+- a `plotOutput` with arguments `hover` and `click` defined, to enable behavior determined by the mouse's plot coordinates whenever the user hovers over or clicks on the plot.
+- a `htmlOutput` for the tooltip that appears next to the mouse on hover.
+- a `verbatimTextOutput` that appears beneath the plot on click. (This is a simple example; of course, much more complex output is possible.)
 
+The server function is more complex. First, it creates the `ggplot` object for the alluvial plot, then we call the `ggplot_build` function to build the plot without displaying it. The next lines of code are to "reverse engineer" the polygon coordinates. Finally, we call `renderPlot` to pass the plot to `output`.
 
+Next, we define the tooltip with a `renderText` expression. Within that expression, we first extract the mouse's plot coordinates from the user input. We first determine whether the mouse is hovering over a stratum and if so, display the appropriate tooltip. 
 
+![screenshot of tooltip on stratum]()
+
+If it is not hovering over a stratum, we determine whether it is hovering over an alluvium polygon and if so, display different information in the tooltip. 
+
+![screenshot of tooltip on alluvium]()
+
+If the mouse is hovering over an empty region of the plot, nothing is returned by `renderText` and so no tooltip text box is displayed.
+
+![screenshot of mouse over empty region]()
+
+Finally, we set the on-click behavior using the same logic as for the tooltip, but this time with a `renderPrint` expression that displays texxt below the plot. 
+
+![screenshots of textoutput clicking on alluvium and stratum]()
+
+Let's take a deeper dive into each part of the server function.
+
+```{r server part 1, eval = FALSE}
+server <- function(input, output, session) {
+  
+  # Make and build plot.
+  p <- ggplot(example_data, aes(y = weight, axis1 = grp1, axis2 = grp2, axis3 = grp3)) + 
+    geom_alluvium(aes(fill = factor(cluster)), knot.pos = 0.25) + 
+    geom_stratum(width = 1/8, reverse = TRUE) + 
+    geom_text(aes(label = after_stat(stratum)), 
+              stat = "stratum", 
+              reverse = TRUE, 
+              size = rel(1.5)) + 
+    theme_bw() 
+  
+  pbuilt <- ggplot_build(p)
+  
+  # Use built plot data to calculate the locations of the flow polygons
+  data_draw <- transform(pbuilt$data[[1]], width = 1/3)
+  
+  groups_to_draw <- split(data_draw, data_draw$group)
+  polygon_coords <- lapply(groups_to_draw, draw_by_group)
+
+  output$sankey_plot <- renderPlot(p, res = 200)
+  
+  ... # Function continued below.
+}
+```
+
+### Logic for determining coordinates
+
+Strata:
+in this case `c(1 - 1/16, 1 + 1/16)`. The y-coordinates correspond to the row of the data frame because we set `reverse = TRUE` and all `weight = 1` in the input data. So for example the first row of the data frame corresponds to y range `c(0, 1)`, the second `c(1, 2)`, and so forth.
+
+## Conclusion
+
+This vignette demonstrates how to enable some fairly sophisticated features for `ggalluvial` plots in Shiny apps. However it's important to note that some of the workarounds are slightly inelegant. This may not be the optimal way to do it &mdash; other solutions are certainly possible!
 
 ## Appendix
+
+### Complete app code
+
+### R session info
 
 ```{r session info}
 sessioninfo::session_info()
