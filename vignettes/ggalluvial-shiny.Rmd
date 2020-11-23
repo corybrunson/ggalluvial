@@ -5,7 +5,7 @@ date: "`r Sys.Date()`"
 output:
   rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{labeling small strata}
+  %\VignetteIndexEntry{ggalluvial in Shiny apps}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -16,7 +16,7 @@ In an interactive visualization that incorporates an alluvial plot, it is visual
 
 The tooltips that appear when the user hovers over elements of the plot show a text label and the number of flows included in each group. This is made relatively straightforward because if the user hovers or clicks somewhere inside a ggplot panel, Shiny automatically returns information about the location of the mouse cursor in plot coordinates. That means the main work we have to do is to extract or manually recalculate the coordinates of the different plot elements. With that information, we can determine which plot element the mouse is hovering over and display the appropriate information in the tooltip or other output method.
 
-N.B.: The following code has several package dependencies; please be aware that all the required packages will need to be installed on the server where your Shiny app is running.
+N.B.: The app demonstrated here depends on the packages `htmltools` and `sp`, in addition to the obvious `ggalluvial` and `shiny`. Please be aware that all those packages will need to be installed on the server where your Shiny app is running.
 
 ### Hovering over and clicking on strata
 
@@ -253,7 +253,7 @@ output$tooltip <- renderText(
 
 First, we check whether the cursor is over a stratum. We round the x-coordinate of the mouse cursor in data units to the nearest integer, then determine whether the x-coordinate is within `node_width / 2` of that integer. If so, the mouse cursor is horizontally within the box.
 
-```{r}
+```{r, eval = FALSE}
 hover <- input$plot_hover
 x_coord <- round(hover$x)
     
@@ -261,17 +261,69 @@ if(abs(hover$x - x_coord) < (node_width / 2)) { ... }
 ```
 
 
-The nearest integer to the y-coordinate corresponds to the row of the data frame because we set `reverse = TRUE` and all `weight = 1` in the input data. So for example the first row of the data frame corresponds to y range `c(0, 1)`, the second `c(1, 2)`, and so forth.
+The nearest integer to the y-coordinate corresponds to the row of the data frame because we set `reverse = TRUE` and all `weight = 1` in the input data. So for example the first row of the data frame corresponds to y range `c(0, 1)`, the second `c(1, 2)`, and so forth. This gives us all the information we need to find the index of the rows of the input data that goes with the stratum the mouse is on.
 
-```{r}
+```{r, eval = FALSE}
 node_row <- pbuilt$data[[2]]$x == x_coord & hover$y > pbuilt$data[[2]]$ymin & hover$y < pbuilt$data[[2]]$ymax
+```
+
+We get the name of the stratum as well as the total number of flows passing through it.
+
+```{r, eval = FALSE}
+node_label <- pbuilt$data[[2]]$stratum[node_row]
+node_n <- pbuilt$data[[2]]$n[node_row]
+```
+
+Finally, we render a tooltip using the `div` tag. Note that the tooltip positioning is provided in CSS coordinates, not data coordinates. This does not require any additional effort on our part because the `hover` information also returns the mouse cursor location in those units.
+
+```{r, eval = FALSE}
+renderTags(
+  tags$div(
+    node_label, tags$br(),
+    "n =", node_n,
+    style = paste0(
+      "position: absolute; ",
+      "top: ", hover$coords_css$y + offset, "px; ",
+      "left: ", hover$coords_css$x + offset, "px; ",
+      "background: gray; ",
+      "padding: 3px; ",
+      "color: white; "
+    )
+  )
+)$html
 ```
 
 
 If the cursor is not over a stratum, the next logic checks whether it is over an alluvium. This is done using the function `sp::point.in.polygon` applied across each of the polygons for which we defined the coordinates inside the `renderPlot` expression.
 
-```{r}
+```{r, eval = FALSE}
 hover_within_flow <- sapply(polygon_coords, function(pol) point.in.polygon(point.x = hover$x, point.y = hover$y, pol.x = pol$x, pol.y = pol$y))
+```
+
+If at least one polygon is beneath the mouse cursor, we locate the corresponding row in the input data and extract information to display in the tooltip. In the situation where there are more than one polygon overlapping, we get the information for the polygon that is plotted last, meaning it will appear "on top" in the plot.
+
+```{r, eval = FALSE}
+coord_id <- rev(which(hover_within_flow == 1))[1]
+flow_id <- example_data$ID[coord_id]
+axis_values <- example_data[flow_id, c('grp1', 'grp2', 'grp3')]
+```
+
+We render a tooltip that shows the names of all the nodes that the hovered path passes through, using very similar syntax to the above tooltip.
+
+```{r, eval = FALSE}
+renderTags(
+  tags$div(
+    paste(axis_values, collapse = ' -> '),
+    style = paste0(
+      "position: absolute; ",
+      "top: ", hover$coords_css$y + offset, "px; ",
+      "left: ", hover$coords_css$x + offset, "px; ",
+      "background: gray; ",
+      "padding: 3px; ",
+      "color: white; "
+    )
+  )
+)$html
 ```
 
 
@@ -284,7 +336,161 @@ This vignette demonstrates how to enable some fairly sophisticated features for 
 ### Complete app code
 
 ```{r full app, eval = FALSE}
+library(ggalluvial)
+library(shiny)
+library(htmltools)
+library(sp)
 
+example_data <- data.frame(weight = rep(1, 12),
+                           ID = 1:12,
+                           cluster = rep(c(1, 2), c(4, 8)),
+                           grp1 = rep(c('1a', '1b', '1a', '1b'), c(3, 2, 3, 4)),
+                           grp2 = rep(c('2a', '2b', '2a', '2b', '2a'), c(2, 2, 2, 2, 4)),
+                           grp3 = rep(c('3a','3b', '3a', '3b'), c(3, 2, 2, 5)))
+
+# Define function to draw xspline (modified from ggalluvial)
+draw_by_group <- function(dat) {
+  first_row <- dat[1, setdiff(names(dat),
+                              c("x", "xmin", "xmax",
+                                "width", "knot.pos",
+                                "y", "ymin", "ymax")),
+                   drop = FALSE]
+  rownames(first_row) <- NULL
+  
+  curve_data <- ggalluvial:::data_to_xspline(dat, knot.prop = TRUE)
+  data.frame(first_row, curve_data)
+}
+
+# Define function to convert grid graphics coordinates to data coordinates
+new_range_transform <- function(x_old, range_old, range_new) {
+  (x_old - range_old[1])/(range_old[2] - range_old[1]) * (range_new[2] - range_new[1]) + range_new[1]
+}
+
+# Offset, in pixels, for location of tooltip relative to mouse cursor, in both x and y direction.
+offset <- 5
+
+# User interface
+ui <- fluidPage(
+  fluidRow(tags$div(
+    style = "position: relative;",
+    plotOutput("alluvial_plot", height = "800px", 
+               hover = hoverOpts(id = "plot_hover")
+    ),
+    htmlOutput("tooltip")))
+)
+
+
+
+server <- function(input, output, session) {
+  
+  # Draw plot and extract coordinates
+  output$alluvial_plot <- renderPlot({
+   
+    # Width of node boxes
+    node_width <<- 1/4
+    
+    p <- ggplot(example_data, aes(y = weight, axis1 = grp1, axis2 = grp2, axis3 = grp3)) + 
+      geom_alluvium(aes(fill = factor(cluster)), knot.pos = 0.25) + 
+      geom_stratum(width = node_width, reverse = TRUE) + # plot the boxes over the connections
+      geom_text(aes(label = after_stat(stratum)), 
+                stat = "stratum", 
+                reverse = TRUE, 
+                size = rel(3)) + 
+      theme_bw() +
+      scale_x_continuous(expand = c(0, 0)) +
+      scale_y_continuous(expand = c(0, 0))
+    
+    # Build the plot. Use global assignment so that this object is accessible later.
+    pbuilt <<- ggplot_build(p)
+    
+    # Use built plot data to recalculate the locations of the flow polygons.
+    data_draw <- transform(pbuilt$data[[1]], width = 1/3)
+    groups_to_draw <- split(data_draw, data_draw$group)
+    group_coords <- lapply(groups_to_draw, draw_by_group) 
+    
+    # xspline coordinates
+    xsplines <- lapply(group_coords, function(coords) grid::xsplineGrob(x=coords$x, y=coords$y, shape=coords$shape, open=FALSE))
+    
+    # Use grid::xsplinePoints to draw the curve for each polygon
+    xspline_points <- lapply(xsplines, grid::xsplinePoints)
+    
+    # Define the x and y axis limits in grid coordinates (old) and plot coordinates (new)
+    xrange_old <- range(unlist(lapply(xspline_points, function(pts) as.numeric(pts$x))))
+    yrange_old <- range(unlist(lapply(xspline_points, function(pts) as.numeric(pts$y))))
+    xrange_new <- c(1 - 1/6, 3 + 1/6) # From 1 to number of strata, adjusted by node width/2 (width always 1/3)
+    yrange_new <- c(0, nrow(example_data)) 
+    
+    # Using the x and y limits, convert the grid coordinates into plot coordinates.
+    # Use global assignment so that the object is accessible from within the following renderText expression.
+    polygon_coords <<- lapply(xspline_points, function(pts) {
+      x_trans <- new_range_transform(x_old = as.numeric(pts$x), range_old = xrange_old, range_new = xrange_new)
+      y_trans <- new_range_transform(x_old = as.numeric(pts$y), range_old = yrange_old, range_new = yrange_new)
+      list(x = x_trans, y = y_trans)
+    })
+
+    p # Return plot
+  }, 
+  res = 200)
+  
+  output$tooltip <- renderText(
+    if(!is.null(input$plot_hover)) {
+      hover <- input$plot_hover
+      x_coord <- round(hover$x)
+      
+      if(abs(hover$x - x_coord) < (node_width / 2)) {
+        # Display node information if mouse is over a stratum box.
+
+        # Determine stratum name from x and y coord, and the n.
+        node_row <- pbuilt$data[[2]]$x == x_coord & hover$y > pbuilt$data[[2]]$ymin & hover$y < pbuilt$data[[2]]$ymax
+        node_label <- pbuilt$data[[2]]$stratum[node_row]
+        node_n <- pbuilt$data[[2]]$n[node_row]
+        renderTags(
+          tags$div(
+            node_label, tags$br(),
+            "n =", node_n,
+            style = paste0(
+              "position: absolute; ",
+              "top: ", hover$coords_css$y + offset, "px; ",
+              "left: ", hover$coords_css$x + offset, "px; ",
+              "background: gray; ",
+              "padding: 3px; ",
+              "color: white; "
+            )
+          )
+        )$html
+      } else {
+        # Display flow information if mouse is over a flow polygon: what alluvia does it pass through?
+        
+        # Calculate whether coordinates of hovering mouse are inside one of the polygons.
+        hover_within_flow <- sapply(polygon_coords, function(pol) point.in.polygon(point.x = hover$x, point.y = hover$y, pol.x = pol$x, pol.y = pol$y))
+        if (any(hover_within_flow)) {
+          # Find the alluvium that is plotted on top. (last)
+          coord_id <- rev(which(hover_within_flow == 1))[1]
+          # Get the corresponding row ID from the data.
+          flow_id <- example_data$ID[coord_id]
+          # Get the axis 1-3 values for all axes for that row ID.
+          axis_values <- example_data[flow_id, c('grp1', 'grp2', 'grp3')]
+          
+          renderTags(
+            tags$div(
+              paste(axis_values, collapse = ' -> '),
+              style = paste0(
+                "position: absolute; ",
+                "top: ", hover$coords_css$y + offset, "px; ",
+                "left: ", hover$coords_css$x + offset, "px; ",
+                "background: gray; ",
+                "padding: 3px; ",
+                "color: white; "
+              )
+            )
+          )$html
+        }
+      }
+    }
+  )
+}
+
+shinyApp(ui = ui, server = server)
 ```
 
 
