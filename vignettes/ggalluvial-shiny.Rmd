@@ -139,7 +139,9 @@ Let's take a deeper dive into each part of the server function.
 
 #### 1. Drawing plot and extracting coordinates
 
-```{r server part 1, eval = FALSE}
+The first snippet includes code to draw the plot and build it with `ggplot_build()`. Note that the global assignment operator `<<-` is used to assign `node_width` and `pbuilt` so they are both accessible outside the `renderPlot()` expression.
+
+```{r server part 1a, eval = FALSE}
 output$alluvial_plot <- renderPlot({
  
   # Width of node boxes
@@ -158,7 +160,11 @@ output$alluvial_plot <- renderPlot({
   
   # Build the plot. Use global assignment so that this object is accessible later.
   pbuilt <<- ggplot_build(p)
-  
+```
+
+Now for the hard part: reverse-engineering the locations of the alluvia polygons. This makes use of `pbuilt$data[[1]]`, a dataframe with the individual elements of the alluvial plot. We add an additional column for `width`, which has a value of `1/3` hard-coded into `ggalluvial::geom_alluvium()`. We defined the `draw_by_group()` function above, which is slightly modified from `ggalluvial::geom_alluvium()` and uses the unexported function `ggalluvial:::data_to_xspline()`. The function is applied to each polygon to get the xspline coordinates. Then, we feed the xspline coordinates into the function `grid::xsplineGrob()` and the resulting grob into `grid::xsplinePoints()`. At this point we now have the coordinates of the alluvia polygons.
+
+```{r server part 1b, eval = FALSE}
   # Use built plot data to recalculate the locations of the flow polygons.
   data_draw <- transform(pbuilt$data[[1]], width = 1/3)
   groups_to_draw <- split(data_draw, data_draw$group)
@@ -169,7 +175,13 @@ output$alluvial_plot <- renderPlot({
   
   # Use grid::xsplinePoints to draw the curve for each polygon
   xspline_points <- lapply(xsplines, grid::xsplinePoints)
-  
+``` 
+
+The coordinates we have are in grid plotting units but we need to convert them into the same units as the axes on the plot. We do this by determining the range of the x and y axes in grid units (`xrange_old` and `yrange_old`), then fixing the range of the x axis as 1 to the number of strata, adjusted by the width of the nodes, and the y axis to the number of rows in the data (again this is possible here because each flow polygon is exactly 1 unit high).
+
+We apply the function `new_range_transform()` we defined above to each set of coordinates. Now we have the coordinates of the polygons in plot units! So we can close the expression after returning the plot.
+
+```{r server part 1c, eval = FALSE}
   # Define the x and y axis limits in grid coordinates (old) and plot coordinates (new)
   xrange_old <- range(unlist(lapply(xspline_points, function(pts) as.numeric(pts$x))))
   yrange_old <- range(unlist(lapply(xspline_points, function(pts) as.numeric(pts$y))))
