@@ -1,5 +1,5 @@
 ---
-title: "ggalluvial in Shiny apps"
+title: "Tooltips for ggalluvial plots in Shiny apps"
 author: "Quentin D. Read"
 date: "`r Sys.Date()`"
 output:
@@ -12,11 +12,11 @@ vignette: >
 
 ## Problem
 
-In an interactive visualization that incorporates an alluvial plot, it is visually cleaner and better for interpretation if labels and other information appear as "tooltips" when the user hovers over or clicks on elements of the plot. However, the `ggalluvial` package does not natively include this functionality. It is possible to enable this using functions from several other packages. This vignette illustrates a Shiny app that displays a ggalluvial plot with tooltips that appear when the user hovers over two different plot elements: strata created with `geom_stratum()` and alluvia created with `geom_alluvium()`. 
+In an interactive visualization, it is visually cleaner and better for interpretation if labels and other information appear as "tooltips" when the user hovers over or clicks on elements of the plot, rather than statically displaying all the labels on the plot at one time. However, the `ggalluvial` package does not natively include this functionality. It is possible to enable this using functions from several other packages. This vignette illustrates a Shiny app that displays a ggalluvial plot with tooltips that appear when the user hovers over two different plot elements: strata created with `geom_stratum()` and alluvia created with `geom_alluvium()`. 
 
 The tooltips that appear when the user hovers over elements of the plot show a text label and the number of flows included in each group. This is made relatively straightforward because if the user hovers or clicks somewhere inside a ggplot panel, Shiny automatically returns information about the location of the mouse cursor in plot coordinates. That means the main work we have to do is to extract or manually recalculate the coordinates of the different plot elements. With that information, we can determine which plot element the mouse is hovering over and display the appropriate information in the tooltip or other output method.
 
-N.B.: The app demonstrated here depends on the packages `htmltools` and `sp`, in addition to the obvious `ggalluvial` and `shiny`. Please be aware that all those packages will need to be installed on the server where your Shiny app is running.
+*Note*: The app demonstrated here depends on the packages `htmltools` and `sp`, in addition to the obvious `ggalluvial` and `shiny`. Please be aware that all those packages will need to be installed on the server where your Shiny app is running.
 
 ### Hovering over and clicking on strata
 
@@ -56,7 +56,7 @@ ggplot(example_data, aes(y = weight, axis1 = grp1, axis2 = grp2, axis3 = grp3)) 
   scale_y_continuous(expand = c(0, 0))
 ```
 
-## Structure of the app
+## Structure of the example app
 
 Here, we will go over each section of the code in detail. The full code is reproduced at the bottom of this document.
 
@@ -77,8 +77,8 @@ ui <- fluidPage(
 
 The elements are:
 
-- a `plotOutput` with the argument `hover` defined, to enable behavior determined by the mouse's plot coordinates whenever the user hovers over or clicks on the plot.
-- a `htmlOutput` for the tooltip that appears next to the mouse on hover.
+- a `plotOutput` with the argument `hover` defined, to enable behavior determined by the mouse's plot coordinates whenever the user hovers over the plot.
+- an `htmlOutput` for the tooltip that appears next to the mouse on hover.
 
 Both of the elements are wrapped in a `fluidRow()` and a `div()` tag.
 
@@ -101,7 +101,7 @@ server <- function(input, output, session) {
     
     Use the polygon splines to generate coordinates of the curved edges of the alluvia, in grid units.
     
-    Convert the coordinates from grid units to data units. Assign this object globally.
+    Convert the coordinates from grid units to plot units. Assign this object globally.
     
     Render the plot.
   })
@@ -122,9 +122,9 @@ server <- function(input, output, session) {
 
 ```
 
-First, it creates the `ggplot` object for the alluvial plot, then we call the `ggplot_build` function to build the plot without displaying it. The next lines of code are to "reverse engineer" the polygon coordinates. Finally, we call `renderPlot` to pass the plot to `output`.
+First, we create the `ggplot` object for the alluvial plot, then we call the `ggplot_build` function to build the plot without displaying it. The next lines of code are to "reverse engineer" the polygon coordinates. Finally, we call `renderPlot` to pass the plot to `output`.
 
-Next, we define the tooltip with a `renderText` expression. Within that expression, we first extract the mouse's plot coordinates from the user input. We first determine whether the mouse is hovering over a stratum and if so, display the appropriate tooltip. 
+Next, we define the tooltip with a `renderText` expression. Within that expression, we first extract the mouse's plot coordinates from the user input. We determine whether the mouse is hovering over a stratum and if so, display the appropriate tooltip. 
 
 ![screenshot of tooltip on stratum](hover_stratum.jpg)
 
@@ -141,6 +141,8 @@ Let's take a deeper dive into each part of the server function.
 #### 1. Drawing plot and extracting coordinates
 
 The first part of the server function includes code to draw the plot and build it with `ggplot_build()`. Note that the global assignment operator `<<-` is used to assign `node_width` and `pbuilt` so they are both accessible outside the `renderPlot()` expression.
+
+*Note*: In the example presented here, strictly speaking all of the plot drawing and coordinate extracting code could be outside the `server` function, because the plot itself does not change with user input. However if you are building an app where the plot changes in response to user input, for example a menu of options of which variables to display, the plot drawing code has to be inside the `renderPlot()` expression. So we've left it there in the example code.
 
 ```{r server part 1a, eval = FALSE}
 output$alluvial_plot <- renderPlot({
@@ -163,7 +165,7 @@ output$alluvial_plot <- renderPlot({
   pbuilt <<- ggplot_build(p)
 ```
 
-Now for the hard part: reverse-engineering the locations of the alluvia polygons. This makes use of `pbuilt$data[[1]]`, a dataframe with the individual elements of the alluvial plot. We add an additional column for `width`, which has a value of `1/3` hard-coded into `ggalluvial::geom_alluvium()`, then split the dataframe by group (groups correspond to the individual alluvia polygons). We apply the unexported function `ggalluvial:::data_to_xspline()` to each element ofthe list to get the xspline coordinates. Then, we pass the xspline coordinates to the function `grid::xsplineGrob()` to convert them into a `grid` object. We pass the resulting object into `grid::xsplinePoints()`. At this point we now have the coordinates of the alluvia polygons.
+Now for the hard part: reverse-engineering the coordinates of the alluvia polygons. This makes use of `pbuilt$data[[1]]`, a dataframe with the individual elements of the alluvial plot. We add an additional column for `width`, which has a value of `1/3` hard-coded into `ggalluvial::geom_alluvium()`, then split the dataframe by group (groups correspond to the individual alluvia polygons). We apply the unexported function `ggalluvial:::data_to_xspline()` to each element of the list to get the xspline coordinates. Then, we pass the xspline coordinates to the function `grid::xsplineGrob()` to convert them into a `grid` object. We pass the resulting object to `grid::xsplinePoints()`. At this point we now have the coordinates of the alluvia polygons.
 
 ```{r server part 1b, eval = FALSE}
   # Use built plot data to recalculate the locations of the flow polygons:
@@ -281,9 +283,9 @@ hover_within_flow <- sapply(polygon_coords, function(pol) point.in.polygon(point
                                                                            pol.y = pol$y))
 ```
 
-If at least one polygon is beneath the mouse cursor, we locate the corresponding row in the input data and extract information to display in the tooltip. In the situation where there are more than one polygon overlapping, we get the information for the polygon that is plotted last, meaning it will appear "on top" in the plot. In this example, we will display the names of all the nodes that the alluvium passes through.
+If at least one polygon is beneath the mouse cursor, we locate the corresponding row in the input data and extract information to display in the tooltip. In the situation where there are more than one polygon overlapping, we get the information for the polygon that is plotted last by calling `rev()` on the logical vector returned by `point.in.polygon()`. This means that the tooltip will display information from the alluvium that appears "on top" in the plot. In this example, we will display the names of all the nodes that the alluvium passes through.
 
-```{r, eval = FALSE}
+```{r info for alluvia tooltip, eval = FALSE}
 coord_id <- rev(which(hover_within_flow == 1))[1]
 flow_id <- example_data$ID[coord_id]
 axis_values <- example_data[flow_id, c('grp1', 'grp2', 'grp3')]
@@ -310,7 +312,7 @@ renderTags(
 
 ## Conclusion
 
-This vignette demonstrates how to enable some fairly sophisticated features for `ggalluvial` plots in Shiny apps. However it's important to note that some of the workarounds are slightly inelegant. This may not be the optimal way to do it &mdash; other solutions are certainly possible!
+This vignette demonstrates how to enable tooltips for `ggalluvial` plots in Shiny apps. However it's important to note that some of the workarounds are slightly inelegant. This may not be the optimal way to do it &mdash; other solutions are certainly possible!
 
 ## Appendix
 
@@ -335,7 +337,7 @@ example_data <- data.frame(weight = rep(1, 12),
 ui <- fluidPage(
   fluidRow(tags$div(
     style = "position: relative;",
-    plotOutput("alluvial_plot", height = "800px", 
+    plotOutput("alluvial_plot", height = "500px", 
                hover = hoverOpts(id = "plot_hover")
     ),
     htmlOutput("tooltip")))
