@@ -28,20 +28,19 @@ Hovering over and clicking on alluvia are more difficult because the shapes of t
 
 ## Data for reproducible example
 
-This dummy dataset is used for the example app.
+This toy dataset is used for the example app.
 
-```{r dummy dataset, message = FALSE, warning = FALSE}
+```{r toy dataset, message = FALSE, warning = FALSE}
 library(ggalluvial)
 
 example_data <- data.frame(weight = rep(1, 12),
-                           ID = 1:12,
                            cluster = rep(c(1, 2), c(4, 8)),
                            grp1 = rep(c('1a', '1b', '1a', '1b'), c(3, 2, 3, 4)),
                            grp2 = rep(c('2a', '2b', '2a', '2b', '2a'), c(2, 2, 2, 2, 4)),
                            grp3 = rep(c('3a','3b', '3a', '3b'), c(3, 2, 2, 5)))
 ```
 
-Here is a static plot generated using the dummy dataset.
+Here is a static plot generated using the toy dataset.
 
 ```{r static plot, fig.width = 5}
 ggplot(example_data, aes(y = weight, axis1 = grp1, axis2 = grp2, axis3 = grp3)) + 
@@ -240,7 +239,7 @@ x_coord <- round(hover$x)
 if(abs(hover$x - x_coord) < (node_width / 2)) { ... }
 ```
 
-The nearest integer to the y-coordinate corresponds to the row of the data frame because we set `reverse = TRUE` and all `weight = 1` in the input data. So for example the first row of the data frame corresponds to y range `c(0, 1)`, the second `c(1, 2)`, and so forth. This gives us all the information we need to find the index of the rows of the input data that goes with the stratum the mouse is on.
+The nearest integer to the y-coordinate corresponds to the row of the data frame because we set `reverse = TRUE` and all `weight = 1` in the input data. So for example the first row of the data frame corresponds to y range `c(0, 1)`, the second `c(1, 2)`, and so forth. This gives us all the information we need to find the index of the rows of the input data that goes with the stratum the mouse is on. *Note*: it is necessary for the input data to be sorted in ascending order of the `group` column, named `cluster` in this example. If it is not sorted in this way, the relative order of the flows along the y-axis will not correspond to their order in the data. 
 
 ```{r, eval = FALSE}
 node_row <- 
@@ -325,7 +324,6 @@ library(htmltools)
 library(sp)
 
 example_data <- data.frame(weight = rep(1, 12),
-                           ID = 1:12,
                            cluster = rep(c(1, 2), c(4, 8)),
                            grp1 = rep(c('1a', '1b', '1a', '1b'), c(3, 2, 3, 4)),
                            grp2 = rep(c('2a', '2b', '2a', '2b', '2a'), c(2, 2, 2, 2, 4)),
