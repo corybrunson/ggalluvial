@@ -28,9 +28,9 @@ Hovering over and clicking on alluvia are more difficult because the shapes of t
 
 ## Data for reproducible example
 
-This dummy dataset is used for the example app.
+This toy dataset is used for the example app.
 
-```{r dummy dataset, message = FALSE, warning = FALSE}
+```{r toy dataset, message = FALSE, warning = FALSE}
 library(ggalluvial)
 
 example_data <- data.frame(
@@ -43,7 +43,7 @@ example_data <- data.frame(
 )
 ```
 
-Here is a static plot generated using the dummy dataset.
+Here is a static plot generated using the toy dataset.
 
 ```{r static plot, fig.width = 5}
 ggplot(example_data,
@@ -256,7 +256,7 @@ x_coord <- round(hover$x)
 if(abs(hover$x - x_coord) < (node_width / 2)) { ... }
 ```
 
-The nearest integer to the y-coordinate corresponds to the row of the data frame because we set `reverse = TRUE` and all `weight = 1` in the input data. So for example the first row of the data frame corresponds to y range `c(0, 1)`, the second `c(1, 2)`, and so forth. This gives us all the information we need to find the index of the rows of the input data that goes with the stratum the cursor is on.
+The nearest integer to the y-coordinate corresponds to the row of the data frame because we set `reverse = TRUE` and all `weight = 1` in the input data. So, for example, the first row of the data frame corresponds to y range `c(0, 1)`, the second `c(1, 2)`, and so forth. This gives us all the information we need to find the index of the rows of the input data that goes with the stratum the cursor is on. _Note:_ It is necessary for the input data to be sorted in ascending order of the `group` column, named `cluster` in this example. If it is not sorted in this way, the relative order of the flows along the y-axis will not correspond to their order in the data.
 
 ```{r, eval = FALSE}
 node_row <- 
