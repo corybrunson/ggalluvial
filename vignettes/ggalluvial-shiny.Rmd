@@ -12,19 +12,19 @@ vignette: >
 
 ## Problem
 
-In an interactive visualization, it is visually cleaner and better for interpretation if labels and other information appear as "tooltips" when the user hovers over or clicks on elements of the plot, rather than statically displaying all the labels on the plot at one time. However, the `ggalluvial` package does not natively include this functionality. It is possible to enable this using functions from several other packages. This vignette illustrates a Shiny app that displays a ggalluvial plot with tooltips that appear when the user hovers over two different plot elements: strata created with `geom_stratum()` and alluvia created with `geom_alluvium()`. 
+In an interactive visualization, it is visually cleaner and better for interpretation if labels and other information appear as "tooltips" when the user hovers over or clicks on elements of the plot, rather than displaying all the labels on the plot at one time. However, the **ggalluvial** package does not natively include this functionality. It is possible to enable this using functions from several other packages. This vignette illustrates a Shiny app that displays an alluvial plot with tooltips that appear when the user hovers over two different plot elements: strata created with `geom_stratum()` and alluvia created with `geom_alluvium()`.
 
-The tooltips that appear when the user hovers over elements of the plot show a text label and the number of flows included in each group. This is made relatively straightforward because if the user hovers or clicks somewhere inside a ggplot panel, Shiny automatically returns information about the location of the mouse cursor in plot coordinates. That means the main work we have to do is to extract or manually recalculate the coordinates of the different plot elements. With that information, we can determine which plot element the mouse is hovering over and display the appropriate information in the tooltip or other output method.
+The tooltips that appear when the user hovers over elements of the plot show a text label and the number of flows included in each group. This is made relatively straightforward because if the user hovers or clicks somewhere inside a ggplot panel, Shiny automatically returns information about the location of the mouse cursor in plot coordinates. That means the main work we have to do is to extract or manually recalculate the coordinates of the different plot elements. With that information, we can determine which plot element the cursor is hovering over and display the appropriate information in the tooltip or other output method.
 
-*Note*: The app demonstrated here depends on the packages `htmltools` and `sp`, in addition to the obvious `ggalluvial` and `shiny`. Please be aware that all those packages will need to be installed on the server where your Shiny app is running.
+_Note:_ The app demonstrated here depends on the packages **htmltools** and **sp**, in addition of course to **ggalluvial** and **shiny**. Please be aware that all of these packages will need to be installed on the server where your Shiny app is running.
 
 ### Hovering over and clicking on strata
 
-Enabling hovering over and clicking on strata is straightforward because of their rectangular shape. We only need the minimum and maximum `x` and `y` coordinates for each of the rectangles. The rectangles are evenly spaced along the x-axis, centered on each positive integer beginning with 1. The width is set with `geom_stratum` so for example we know that the x-coordinates of the first stratum are 1 &plusm; width/2. The y-coordinates can be determined from the number of rows in the input data multiplied by their weights.
+Enabling hovering over and clicking on strata is straightforward because of their rectangular shape. We only need the minimum and maximum `x` and `y` coordinates for each of the rectangles. The rectangles are evenly spaced along the x-axis, centered on positive integers beginning with 1. The width is set in `geom_stratum()` so, for example, we know that the x-coordinates of the first stratum are 1 &plusmn; `width`/2. The y-coordinates can be determined from the number of rows in the input data multiplied by their weights.
 
 ### Hovering over and clicking on alluvia
 
-Hovering over and clicking on alluvia are more difficult because the shapes of the alluvia are more complex. The default shape of the polygons includes an "xspline" curve drawn using the `grid` package. We need to manually reconstruct the coordinates of the polygons, then use `sp::pointInPolygon()` to detect which, if any, polygons the mouse is over.
+Hovering over and clicking on alluvia are more difficult because the shapes of the alluvia are more complex. The default shape of the polygons includes an `xspline` curve drawn using the **grid** package. We need to manually reconstruct the coordinates of the polygons, then use `sp::pointInPolygon()` to detect which, if any, polygons the cursor is over.
 
 ## Data for reproducible example
 
@@ -33,18 +33,21 @@ This dummy dataset is used for the example app.
 ```{r dummy dataset, message = FALSE, warning = FALSE}
 library(ggalluvial)
 
-example_data <- data.frame(weight = rep(1, 12),
-                           ID = 1:12,
-                           cluster = rep(c(1, 2), c(4, 8)),
-                           grp1 = rep(c('1a', '1b', '1a', '1b'), c(3, 2, 3, 4)),
-                           grp2 = rep(c('2a', '2b', '2a', '2b', '2a'), c(2, 2, 2, 2, 4)),
-                           grp3 = rep(c('3a','3b', '3a', '3b'), c(3, 2, 2, 5)))
+example_data <- data.frame(
+  weight = rep(1, 12),
+  ID = 1:12,
+  cluster = rep(c(1, 2), c(4, 8)),
+  grp1 = rep(c('1a', '1b', '1a', '1b'), c(3, 2, 3, 4)),
+  grp2 = rep(c('2a', '2b', '2a', '2b', '2a'), c(2, 2, 2, 2, 4)),
+  grp3 = rep(c('3a','3b', '3a', '3b'), c(3, 2, 2, 5))
+)
 ```
 
 Here is a static plot generated using the dummy dataset.
 
 ```{r static plot, fig.width = 5}
-ggplot(example_data, aes(y = weight, axis1 = grp1, axis2 = grp2, axis3 = grp3)) + 
+ggplot(example_data,
+       aes(y = weight, axis1 = grp1, axis2 = grp2, axis3 = grp3)) + 
   geom_alluvium(aes(fill = factor(cluster)), knot.pos = 0.25) + 
   geom_stratum(width = 1/8, reverse = TRUE) + 
   geom_text(aes(label = after_stat(stratum)), 
@@ -77,64 +80,63 @@ ui <- fluidPage(
 
 The elements are:
 
-- a `plotOutput` with the argument `hover` defined, to enable behavior determined by the mouse's plot coordinates whenever the user hovers over the plot.
-- an `htmlOutput` for the tooltip that appears next to the mouse on hover.
+- a `plotOutput` with the argument `hover` defined, to enable behavior determined by the cursor's plot coordinates whenever the user hovers over the plot.
+- an `htmlOutput` for the tooltip that appears next to the cursor on hover.
 
 Both of the elements are wrapped in a `fluidRow()` and a `div()` tag.
 
-*Note*: This vignette only illustrates how to display output when the user hovers over an element. If you want to display output when the user clicks on an element, the corresponding argument to `plotOutput()` is `click = clickOpts(id = "plot_click")`. This will return the location of the mouse cursor in plot coordinates when the user clicks somewhere within the plot panel.
+_Note:_ This vignette only illustrates how to display output when the user hovers over an element. If you want to display output when the user clicks on an element, the corresponding argument to `plotOutput()` is `click = clickOpts(id = "plot_click")`. This will return the location of the mouse cursor in plot coordinates when the user clicks somewhere within the plot panel.
 
 ### Server function
 
-The server function is more complex. Its general structure looks like this in pseudocode:
+The server function is more complex. Its general structure looks like this, in pseudocode:
 
 ```{r server function skeleton, eval = FALSE}
-
 server <- function(input, output, session) {
   
   output$alluvial_plot <- renderPlot({
-    Create ggplot object for alluvial plot.
     
-    Build alluvial plot.
+    '<Create "ggplot" object for alluvial plot.>'
     
-    Extract data from built plot object that was used to create the alluvia polygons.
+    '<Build alluvial plot and assign globally.>'
     
-    Use the polygon splines to generate coordinates of the curved edges of the alluvia, in grid units.
+    '<Extract data from built plot object used to create alluvium polygons.>'
     
-    Convert the coordinates from grid units to plot units. Assign this object globally.
+    '<Use polygon splines to generate coordinates of alluvium boundaries.>'
     
-    Render the plot.
+    '<Convert coordinates from grid units to plot units and assign globally.>'
+    
+    '<Render the plot.>'
   })
   
   output$tooltip <- renderText({
-    if (mouse cursor is within the plot panel) {
-      if (mouse cursor is within a stratum box) {
-        Render stratum tooltip.
+    if ('<mouse cursor is within the plot panel>') {
+      if ('<mouse cursor is within a stratum box>') {
+        '<Render stratum tooltip.>'
       } else {
-        if (mouse cursor is within an alluvium polygon) {
-          Render alluvium tooltip.
+        if ('<mouse cursor is within an alluvium polygon>') {
+          '<Render alluvium tooltip.>'
         }
       }
     }
   })
   
 }
-
 ```
 
-First, we create the `ggplot` object for the alluvial plot, then we call the `ggplot_build` function to build the plot without displaying it. The next lines of code are to "reverse engineer" the polygon coordinates. Finally, we call `renderPlot` to pass the plot to `output`.
+First, we create the `ggplot` object for the alluvial plot, then we call the `ggplot_build()` function to build the plot without displaying it. The next lines of code are to "reverse engineer" the polygon coordinates. Finally, we call `renderPlot()` to pass the plot to `output`.
 
-Next, we define the tooltip with a `renderText` expression. Within that expression, we first extract the mouse's plot coordinates from the user input. We determine whether the mouse is hovering over a stratum and if so, display the appropriate tooltip. 
+Next, we define the tooltip with a `renderText()` expression. Within that expression, we first extract the cursor's plot coordinates from the user input. We determine whether the cursor is hovering over a stratum and if so, display the appropriate tooltip.
 
 ![screenshot of tooltip on stratum](hover_stratum.jpg)
 
-If the mouse cursor is not hovering over a stratum, we determine whether it is hovering over an alluvium polygon and if so, display different information in the tooltip. 
+If the mouse cursor is not hovering over a stratum, we determine whether it is hovering over an alluvium polygon and if so, display different information in the tooltip.
 
 ![screenshot of tooltip on alluvium](hover_alluvium.jpg)
 
-If the mouse cursor is hovering over an empty region of the plot, nothing is returned by `renderText` and so no tooltip text box is displayed.
+If the mouse cursor is hovering over an empty region of the plot, nothing is returned by `renderText()` and so no tooltip text box is displayed.
 
-![screenshot of mouse over empty region](hover_empty_area.jpg)
+![screenshot of cursor over empty region](hover_empty_area.jpg)
 
 Let's take a deeper dive into each part of the server function.
 
@@ -142,7 +144,7 @@ Let's take a deeper dive into each part of the server function.
 
 The first part of the server function includes code to draw the plot and build it with `ggplot_build()`. Note that the global assignment operator `<<-` is used to assign `node_width` and `pbuilt` so they are both accessible outside the `renderPlot()` expression.
 
-*Note*: In the example presented here, strictly speaking all of the plot drawing and coordinate extracting code could be outside the `server` function, because the plot itself does not change with user input. However if you are building an app where the plot changes in response to user input, for example a menu of options of which variables to display, the plot drawing code has to be inside the `renderPlot()` expression. So we've left it there in the example code.
+_Note:_ In the example presented here, strictly speaking all of the plot drawing and coordinate extracting code could be outside the `server()` function, because the plot itself does not change with user input. However if you are building an app where the plot changes in response to user input, for example a menu of options of which variables to display, the plot drawing code has to be inside the `renderPlot()` expression. So we've left it there in the example code.
 
 ```{r server part 1a, eval = FALSE}
 output$alluvial_plot <- renderPlot({
@@ -150,7 +152,8 @@ output$alluvial_plot <- renderPlot({
   # Width of node boxes
   node_width <<- 1/4
   
-  p <- ggplot(example_data, aes(y = weight, axis1 = grp1, axis2 = grp2, axis3 = grp3)) + 
+  p <- ggplot(example_data,
+              aes(y = weight, axis1 = grp1, axis2 = grp2, axis3 = grp3)) + 
     geom_alluvium(aes(fill = factor(cluster)), knot.pos = 0.25) + 
     geom_stratum(width = node_width, reverse = TRUE) + 
     geom_text(aes(label = after_stat(stratum)), 
@@ -161,11 +164,12 @@ output$alluvial_plot <- renderPlot({
     scale_x_continuous(expand = c(0, 0)) +
     scale_y_continuous(expand = c(0, 0))
   
-  # Build the plot. Use global assignment so that this object is accessible later.
+  # Build the plot. Use global assignment so that this object is accessible
+  # later.
   pbuilt <<- ggplot_build(p)
 ```
 
-Now for the hard part: reverse-engineering the coordinates of the alluvia polygons. This makes use of `pbuilt$data[[1]]`, a dataframe with the individual elements of the alluvial plot. We add an additional column for `width`, which has a value of `1/3` hard-coded into `ggalluvial::geom_alluvium()`, then split the dataframe by group (groups correspond to the individual alluvia polygons). We apply the unexported function `ggalluvial:::data_to_xspline()` to each element of the list to get the xspline coordinates. Then, we pass the xspline coordinates to the function `grid::xsplineGrob()` to convert them into a `grid` object. We pass the resulting object to `grid::xsplinePoints()`. At this point we now have the coordinates of the alluvia polygons.
+Now for the hard part: reverse-engineering the coordinates of the alluvia polygons. This makes use of `pbuilt$data[[1]]`, a data frame with the individual elements of the alluvial plot. We add an additional column for `width`, which has a value of 1/3 hard-coded into `ggalluvial::geom_alluvium()`, then split the data frame by group (groups correspond to the individual alluvium polygons). We apply the unexported function `ggalluvial:::data_to_xspline()` to each element of the list to get the x-spline coordinates. Then, we pass the x-spline coordinates to the function `grid::xsplineGrob()` to convert them into a `grid` object. We pass the resulting object to `grid::xsplinePoints()`. At this point we now have the coordinates of the alluvium polygons.
 
 ```{r server part 1b, eval = FALSE}
   # Use built plot data to recalculate the locations of the flow polygons:
@@ -173,37 +177,48 @@ Now for the hard part: reverse-engineering the coordinates of the alluvia polygo
   # Add width parameter, and then convert built plot data to xsplines
   data_draw <- transform(pbuilt$data[[1]], width = 1/3)
   groups_to_draw <- split(data_draw, data_draw$group)
-  group_xsplines <- lapply(groups_to_draw, ggalluvial:::data_to_xspline, knot.prop = TRUE) 
+  group_xsplines <- lapply(groups_to_draw,
+                           ggalluvial:::data_to_xspline,
+                           knot.prop = TRUE) 
   
   # Convert xspline coordinates to grid object.
-  xspline_coords <- lapply(group_xsplines, 
-                           function(coords) grid::xsplineGrob(x=coords$x, 
-                                                              y=coords$y, 
-                                                              shape=coords$shape, 
-                                                              open=FALSE))
+  xspline_coords <- lapply(
+    group_xsplines, 
+    function(coords) grid::xsplineGrob(x=coords$x, 
+                                       y=coords$y, 
+                                       shape=coords$shape, 
+                                       open=FALSE)
+  )
   
   # Use grid::xsplinePoints to draw the curve for each polygon
   xspline_points <- lapply(xspline_coords, grid::xsplinePoints)
-``` 
+```
 
-The coordinates we have are in grid plotting units but we need to convert them into the same units as the axes on the plot. We do this by determining the range of the x and y axes in grid units (`xrange_old` and `yrange_old`), then fixing the range of the x axis as 1 to the number of strata, adjusted by the width of the nodes, and the y axis to the number of rows in the data (again this is possible here because each flow polygon is exactly 1 unit high).
+The coordinates we have are in grid plotting units but we need to convert them into the same units as the axes on the plot. We do this by determining the range of the x and y axes in grid units (`xrange_old` and `yrange_old`), then fixing the range of the x axis as 1 to the number of strata, adjusted by the width of the nodes, and the y axis to the number of rows in the data (again, this is possible here because each flow polygon is exactly 1 unit high).
 
 We define a function `new_range_transform()` inline and apply it to each set of coordinates, assigning the resulting object globally so it can be accessed later. Now we have the coordinates of the polygons in plot units! So we can close the expression after returning the plot.
 
 ```{r server part 1c, eval = FALSE}
-  # Define the x and y axis limits in grid coordinates (old) and plot coordinates (new)
-  xrange_old <- range(unlist(lapply(xspline_points, function(pts) as.numeric(pts$x))))
-  yrange_old <- range(unlist(lapply(xspline_points, function(pts) as.numeric(pts$y))))
+  # Define the x and y axis limits in grid coordinates (old) and plot
+  # coordinates (new)
+  xrange_old <- range(unlist(lapply(
+    xspline_points,
+    function(pts) as.numeric(pts$x)
+  )))
+  yrange_old <- range(unlist(lapply(
+    xspline_points, function(pts) as.numeric(pts$y)
+  )))
   xrange_new <- c(1 - 1/6, 3 + 1/6) 
   yrange_new <- c(0, nrow(example_data)) 
   
   # Define function to convert grid graphics coordinates to data coordinates
   new_range_transform <- function(x_old, range_old, range_new) {
-    (x_old - range_old[1])/(range_old[2] - range_old[1]) * (range_new[2] - range_new[1]) + range_new[1]
+    (x_old - range_old[1])/(range_old[2] - range_old[1]) *
+      (range_new[2] - range_new[1]) + range_new[1]
   }
   
-  # Using the x and y limits, convert the grid coordinates into plot coordinates.
-  # Use global assignment.
+  # Using the x and y limits, convert the grid coordinates into plot
+  # coordinates. Use global assignment.
   polygon_coords <<- lapply(xspline_points, function(pts) {
     x_trans <- new_range_transform(x_old = as.numeric(pts$x), 
                                    range_old = xrange_old, 
@@ -214,7 +229,8 @@ We define a function `new_range_transform()` inline and apply it to each set of 
     list(x = x_trans, y = y_trans)
   })
 
-  p # Return plot
+  # Return plot
+  p
 }, 
 res = 200)
 ```
@@ -231,7 +247,7 @@ output$tooltip <- renderText(
 ```
 
 
-Next, we check whether the cursor is over a stratum. We round the x-coordinate of the mouse cursor in data units to the nearest integer, then determine whether the x-coordinate is within `node_width / 2` of that integer. If so, the mouse cursor is horizontally within the box.
+Next, we check whether the cursor is over a stratum. We round the x-coordinate of the mouse cursor in data units to the nearest integer, then determine whether the x-coordinate is within `node_width/2` of that integer. If so, the mouse cursor is horizontally within the box.
 
 ```{r, eval = FALSE}
 hover <- input$plot_hover
@@ -240,7 +256,7 @@ x_coord <- round(hover$x)
 if(abs(hover$x - x_coord) < (node_width / 2)) { ... }
 ```
 
-The nearest integer to the y-coordinate corresponds to the row of the data frame because we set `reverse = TRUE` and all `weight = 1` in the input data. So for example the first row of the data frame corresponds to y range `c(0, 1)`, the second `c(1, 2)`, and so forth. This gives us all the information we need to find the index of the rows of the input data that goes with the stratum the mouse is on.
+The nearest integer to the y-coordinate corresponds to the row of the data frame because we set `reverse = TRUE` and all `weight = 1` in the input data. So for example the first row of the data frame corresponds to y range `c(0, 1)`, the second `c(1, 2)`, and so forth. This gives us all the information we need to find the index of the rows of the input data that goes with the stratum the cursor is on.
 
 ```{r, eval = FALSE}
 node_row <- 
@@ -277,10 +293,13 @@ renderTags(
 If the cursor is not over a stratum, the next logic checks whether it is over an alluvium. This is done using the function `sp::point.in.polygon` applied across each of the polygons for which we defined the coordinates inside the `renderPlot` expression.
 
 ```{r, eval = FALSE}
-hover_within_flow <- sapply(polygon_coords, function(pol) point.in.polygon(point.x = hover$x, 
-                                                                           point.y = hover$y, 
-                                                                           pol.x = pol$x, 
-                                                                           pol.y = pol$y))
+hover_within_flow <- sapply(
+  polygon_coords,
+  function(pol) point.in.polygon(point.x = hover$x, 
+                                 point.y = hover$y, 
+                                 pol.x = pol$x, 
+                                 pol.y = pol$y)
+)
 ```
 
 If at least one polygon is beneath the mouse cursor, we locate the corresponding row in the input data and extract information to display in the tooltip. In the situation where there are more than one polygon overlapping, we get the information for the polygon that is plotted last by calling `rev()` on the logical vector returned by `point.in.polygon()`. This means that the tooltip will display information from the alluvium that appears "on top" in the plot. In this example, we will display the names of all the nodes that the alluvium passes through.
@@ -309,10 +328,9 @@ renderTags(
 )$html
 ```
 
-
 ## Conclusion
 
-This vignette demonstrates how to enable tooltips for `ggalluvial` plots in Shiny apps. However it's important to note that some of the workarounds are slightly inelegant. This may not be the optimal way to do it &mdash; other solutions are certainly possible!
+This vignette demonstrates how to enable tooltips for **ggalluvial** plots in Shiny apps. However it's important to note that some of the workarounds are slightly inelegant. This may not be the optimal way to do it &mdash; other solutions are certainly possible!
 
 ## Appendix
 
@@ -324,14 +342,14 @@ library(shiny)
 library(htmltools)
 library(sp)
 
-example_data <- data.frame(weight = rep(1, 12),
-                           ID = 1:12,
-                           cluster = rep(c(1, 2), c(4, 8)),
-                           grp1 = rep(c('1a', '1b', '1a', '1b'), c(3, 2, 3, 4)),
-                           grp2 = rep(c('2a', '2b', '2a', '2b', '2a'), c(2, 2, 2, 2, 4)),
-                           grp3 = rep(c('3a','3b', '3a', '3b'), c(3, 2, 2, 5)))
-
-
+example_data <- data.frame(
+  weight = rep(1, 12),
+  ID = 1:12,
+  cluster = rep(c(1, 2), c(4, 8)),
+  grp1 = rep(c('1a', '1b', '1a', '1b'), c(3, 2, 3, 4)),
+  grp2 = rep(c('2a', '2b', '2a', '2b', '2a'), c(2, 2, 2, 2, 4)),
+  grp3 = rep(c('3a','3b', '3a', '3b'), c(3, 2, 2, 5))
+)
 
 # User interface
 ui <- fluidPage(
@@ -343,8 +361,6 @@ ui <- fluidPage(
     htmlOutput("tooltip")))
 )
 
-
-
 server <- function(input, output, session) {
   
   # Draw plot and extract coordinates
@@ -353,7 +369,8 @@ server <- function(input, output, session) {
     # Width of node boxes
     node_width <<- 1/4
     
-    p <- ggplot(example_data, aes(y = weight, axis1 = grp1, axis2 = grp2, axis3 = grp3)) + 
+    p <- ggplot(example_data,
+                aes(y = weight, axis1 = grp1, axis2 = grp2, axis3 = grp3)) + 
       geom_alluvium(aes(fill = factor(cluster)), knot.pos = 0.25) + 
       geom_stratum(width = node_width, reverse = TRUE) + 
       geom_text(aes(label = after_stat(stratum)), 
@@ -364,7 +381,8 @@ server <- function(input, output, session) {
       scale_x_continuous(expand = c(0, 0)) +
       scale_y_continuous(expand = c(0, 0))
     
-    # Build the plot. Use global assignment so that this object is accessible later.
+    # Build the plot. Use global assignment so that this object is accessible
+    # later.
     pbuilt <<- ggplot_build(p)
     
     # Use built plot data to recalculate the locations of the flow polygons:
@@ -372,30 +390,43 @@ server <- function(input, output, session) {
     # Add width parameter, and then convert built plot data to xsplines
     data_draw <- transform(pbuilt$data[[1]], width = 1/3)
     groups_to_draw <- split(data_draw, data_draw$group)
-    group_xsplines <- lapply(groups_to_draw, ggalluvial:::data_to_xspline, knot.prop = TRUE) 
+    group_xsplines <- lapply(groups_to_draw,
+                             ggalluvial:::data_to_xspline,
+                             knot.prop = TRUE) 
     
     # Convert xspline coordinates to grid object.
-    xspline_coords <- lapply(group_xsplines, function(coords) grid::xsplineGrob(x=coords$x, 
-                                                                                y=coords$y, 
-                                                                                shape=coords$shape, 
-                                                                                open=FALSE))
+    xspline_coords <- lapply(
+      group_xsplines,
+      function(coords) grid::xsplineGrob(x = coords$x, 
+                                         y = coords$y, 
+                                         shape = coords$shape, 
+                                         open = FALSE)
+    )
     
     # Use grid::xsplinePoints to draw the curve for each polygon
     xspline_points <- lapply(xspline_coords, grid::xsplinePoints)
     
-    # Define the x and y axis limits in grid coordinates (old) and plot coordinates (new)
-    xrange_old <- range(unlist(lapply(xspline_points, function(pts) as.numeric(pts$x))))
-    yrange_old <- range(unlist(lapply(xspline_points, function(pts) as.numeric(pts$y))))
+    # Define the x and y axis limits in grid coordinates (old) and plot
+    # coordinates (new)
+    xrange_old <- range(unlist(lapply(
+      xspline_points,
+      function(pts) as.numeric(pts$x)
+    )))
+    yrange_old <- range(unlist(lapply(
+      xspline_points,
+      function(pts) as.numeric(pts$y)
+    )))
     xrange_new <- c(1 - 1/6, 3 + 1/6) 
     yrange_new <- c(0, nrow(example_data)) 
     
     # Define function to convert grid graphics coordinates to data coordinates
     new_range_transform <- function(x_old, range_old, range_new) {
-      (x_old - range_old[1])/(range_old[2] - range_old[1]) * (range_new[2] - range_new[1]) + range_new[1]
+      (x_old - range_old[1])/(range_old[2] - range_old[1]) *
+        (range_new[2] - range_new[1]) + range_new[1]
     }
     
-    # Using the x and y limits, convert the grid coordinates into plot coordinates.
-    # Use global assignment.
+    # Using the x and y limits, convert the grid coordinates into plot
+    # coordinates. Use global assignment.
     polygon_coords <<- lapply(xspline_points, function(pts) {
       x_trans <- new_range_transform(x_old = as.numeric(pts$x), 
                                      range_old = xrange_old, 
@@ -406,7 +437,8 @@ server <- function(input, output, session) {
       list(x = x_trans, y = y_trans)
     })
 
-    p # Return plot
+    # Return plot
+    p
   }, 
   res = 200)
   
@@ -416,7 +448,7 @@ server <- function(input, output, session) {
       x_coord <- round(hover$x)
       
       if(abs(hover$x - x_coord) < (node_width / 2)) {
-        # Display node information if mouse is over a stratum box.
+        # Display node information if cursor is over a stratum box.
 
         # Determine stratum name from x and y coord, and the n.
         node_row <- pbuilt$data[[2]]$x == x_coord & 
@@ -425,7 +457,8 @@ server <- function(input, output, session) {
         node_label <- pbuilt$data[[2]]$stratum[node_row]
         node_n <- pbuilt$data[[2]]$n[node_row]
         
-        # Offset, in pixels, for location of tooltip relative to mouse cursor, in both x and y direction.
+        # Offset, in pixels, for location of tooltip relative to mouse cursor,
+        # in both x and y direction.
         offset <- 5
         
         # Render tooltip
@@ -444,13 +477,18 @@ server <- function(input, output, session) {
           )
         )$html
       } else {
-        # Display flow information if mouse is over a flow polygon: what alluvia does it pass through?
+        # Display flow information if cursor is over a flow polygon: what
+        # alluvia does it pass through?
         
-        # Calculate whether coordinates of hovering mouse are inside one of the polygons.
-        hover_within_flow <- sapply(polygon_coords, function(pol) point.in.polygon(point.x = hover$x, 
-                                                                                   point.y = hover$y, 
-                                                                                   pol.x = pol$x, 
-                                                                                   pol.y = pol$y))
+        # Calculate whether coordinates of hovering cursor are inside one of the
+        # polygons.
+        hover_within_flow <- sapply(
+          polygon_coords,
+          function(pol) point.in.polygon(point.x = hover$x, 
+                                         point.y = hover$y, 
+                                         pol.x = pol$x, 
+                                         pol.y = pol$y)
+        )
         if (any(hover_within_flow)) {
           # Find the alluvium that is plotted on top. (last)
           coord_id <- rev(which(hover_within_flow == 1))[1]
@@ -483,7 +521,6 @@ server <- function(input, output, session) {
 
 shinyApp(ui = ui, server = server)
 ```
-
 
 ### R session info
 
