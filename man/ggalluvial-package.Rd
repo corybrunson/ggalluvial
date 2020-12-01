@@ -39,5 +39,10 @@ Useful links:
 \author{
 \strong{Maintainer}: Jason Cory Brunson \email{cornelioid@gmail.com}
 
+Authors:
+\itemize{
+  \item Quentin D. Read
+}
+
 }
 \keyword{internal}

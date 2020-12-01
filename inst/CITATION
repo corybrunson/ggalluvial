@@ -1,5 +1,7 @@
+citation("ggalluvial", auto = TRUE)
+
 citEntry(
-  header = gettextf("To cite package %s in publications, use:",
+  header = gettextf("To cite layered alluvial plots as implemented in %s:",
                     sQuote("ggalluvial")),
   entry = "Article",
   title = "{ggalluvial}: Layered Grammar for Alluvial Plots",
