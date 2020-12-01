@@ -521,9 +521,3 @@ server <- function(input, output, session) {
 
 shinyApp(ui = ui, server = server)
 ```
-
-### R session info
-
-```{r session info}
-sessioninfo::session_info()
-```
