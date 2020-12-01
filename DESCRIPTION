@@ -42,9 +42,9 @@ Suggests:
     babynames,
     sessioninfo,
     ggrepel,
-    shiny,
+    shiny (>= 1.4.0.2),
     htmltools,
-    sp,
+    sp (>= 1.4-0),
     ggfittext (>= 0.6),
     vdiffr (>= 0.2)
 License: GPL-3
