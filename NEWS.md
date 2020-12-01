@@ -1,7 +1,13 @@
 
 # next release
 
-This patch/release corrects erroneous legacy code, found in one example and two vignettes, to reorder the factor levels of the `"response"` field in the data set `vaccinations` and updates the documentation and website accordingly.
+## Shiny vignette
+
+A new vignette by Quentin D. Read shows how to build interactive Shiny apps with tooltips sensitive to the locations of graphical elements. This is especially important for the spline boundaries of flows and alluvia.
+
+## Examples using `vaccinations` data
+
+Corrections have been made to erroneous legacy code, found in one example and two vignettes, to reorder the factor levels of the `"response"` field in the data set `vaccinations`. The documentation is updated accordingly.
 
 # ggalluvial 0.12.2
 

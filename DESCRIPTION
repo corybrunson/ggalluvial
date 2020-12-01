@@ -42,6 +42,9 @@ Suggests:
     babynames,
     sessioninfo,
     ggrepel,
+    shiny,
+    htmltools,
+    sp,
     ggfittext (>= 0.6),
     vdiffr (>= 0.2)
 License: GPL-3
