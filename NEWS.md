@@ -1,5 +1,5 @@
 
-# next release
+# ggalluvial 0.12.3
 
 ## Shiny vignette
 

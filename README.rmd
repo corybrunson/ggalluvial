@@ -28,7 +28,7 @@ The alluvial plots implemented here can be used to visualize frequency distribut
 
 - **alluvial** understands a variety of inputs (vectors, lists, data frames), whereas **ggalluvial** requires a single data frame;
 - **alluvial** uses each variable of these inputs as a dimension of the data, whereas **ggalluvial** requires the user to specify the dimensions, either as separate aesthetics or as [key-value pairs](https://tidyr.tidyverse.org/);
-- **alluvial** produces both the *alluvia*, which link cohorts across multiple dimensions, and (what are here called) the *strata*, which partition the data along each dimension, in a single function; whereas **ggalluvial** relies on separate layers (stats and geoms) to produce strata, alluvia, and alluvial segments called *lodes* and *flows*.
+- **alluvial** produces both the _alluvia_, which link cohorts across multiple dimensions, and (what are here called) the _strata_, which partition the data along each dimension, in a single function; whereas **ggalluvial** relies on separate layers (stats and geoms) to produce strata, alluvia, and alluvial segments called _lodes_ and _flows_.
 
 Additionally, **ggalluvial** arranges these layers vertically without gaps, so that the secondary plotting axis indicates the cumulative values of the strata at each dimension.
 
