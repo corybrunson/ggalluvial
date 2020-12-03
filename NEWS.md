@@ -9,6 +9,8 @@ A new vignette by Quentin D. Read shows how to build interactive Shiny apps with
 
 Corrections have been made to erroneous legacy code, found in one example and two vignettes, to reorder the factor levels of the `"response"` field in the data set `vaccinations`. The documentation is updated accordingly.
 
+Also, an explanation of the (misleading) column names of this data set has been added to the main vignette.
+
 # ggalluvial 0.12.2
 
 This patch addresses a bug introduced in v0.12.0 that had `is_lodes_form()` return an error when a data frame contains duplicate id-axis pairings, which may be appropriate for producing faceted plots. The new `site` parameter can be passed one or more grouping variables for this purpose, and internally it is passed `"PANEL"` to prevent this error from being thrown.
