@@ -131,15 +131,15 @@ First, we create the `ggplot` object for the alluvial plot, then we call the `gg
 
 Next, we define the tooltip with a `renderText()` expression. Within that expression, we first extract the cursor's plot coordinates from the user input. We determine whether the cursor is hovering over a stratum and if so, display the appropriate tooltip.
 
-![screenshot of tooltip on stratum](https://raw.githubusercontent.com/corybrunson/ggalluvial/main/vignettes/img/hover_stratum.jpg){ align=center }
+![screenshot of tooltip on stratum](https://raw.githubusercontent.com/corybrunson/ggalluvial/main/vignettes/img/hover_stratum.jpg)
 
 If the mouse cursor is not hovering over a stratum, we determine whether it is hovering over an alluvium polygon and if so, display different information in the tooltip.
 
-![screenshot of tooltip on alluvium](https://raw.githubusercontent.com/corybrunson/ggalluvial/main/vignettes/img/hover_alluvium.jpg){ align=center }
+![screenshot of tooltip on alluvium](https://raw.githubusercontent.com/corybrunson/ggalluvial/main/vignettes/img/hover_alluvium.jpg)
 
 If the mouse cursor is hovering over an empty region of the plot, nothing is returned by `renderText()` and so no tooltip text box is displayed.
 
-![screenshot of cursor over empty region](https://raw.githubusercontent.com/corybrunson/ggalluvial/main/vignettes/img/hover_empty_area.jpg){ align=center }
+![screenshot of cursor over empty region](https://raw.githubusercontent.com/corybrunson/ggalluvial/main/vignettes/img/hover_empty_area.jpg)
 
 Let's take a deeper dive into each part of the server function.
 
