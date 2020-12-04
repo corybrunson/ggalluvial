@@ -10,6 +10,11 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
+```{r setup}
+knitr::opts_chunk$set(fig.width = 6, fig.height = 3, fig.align = "center")
+root_loc <- rprojroot::find_root(criterion = rprojroot::has_dir("vignettes"))
+```
+
 ## Problem
 
 In an interactive visualization, it is visually cleaner and better for interpretation if labels and other information appear as "tooltips" when the user hovers over or clicks on elements of the plot, rather than displaying all the labels on the plot at one time. However, the **ggalluvial** package does not natively include this functionality. It is possible to enable this using functions from several other packages. This vignette illustrates a Shiny app that displays an alluvial plot with tooltips that appear when the user hovers over two different plot elements: strata created with `geom_stratum()` and alluvia created with `geom_alluvium()`.
@@ -45,7 +50,7 @@ example_data <- data.frame(
 
 Here is a static plot generated using the toy dataset.
 
-```{r static plot, fig.width = 5}
+```{r static plot, fig.width = 6}
 ggplot(example_data,
        aes(y = weight, axis1 = grp1, axis2 = grp2, axis3 = grp3)) + 
   geom_alluvium(aes(fill = factor(cluster)), knot.pos = 0.25) + 
@@ -128,15 +133,15 @@ First, we create the `ggplot` object for the alluvial plot, then we call the `gg
 
 Next, we define the tooltip with a `renderText()` expression. Within that expression, we first extract the cursor's plot coordinates from the user input. We determine whether the cursor is hovering over a stratum and if so, display the appropriate tooltip.
 
-![screenshot of tooltip on stratum](hover_stratum.jpg)
+![screenshot of tooltip on stratum](https://raw.githubusercontent.com/corybrunson/ggalluvial/main/vignettes/img/hover_stratum.jpg)
 
 If the mouse cursor is not hovering over a stratum, we determine whether it is hovering over an alluvium polygon and if so, display different information in the tooltip.
 
-![screenshot of tooltip on alluvium](hover_alluvium.jpg)
+![screenshot of tooltip on alluvium](https://raw.githubusercontent.com/corybrunson/ggalluvial/main/vignettes/img/hover_alluvium.jpg)
 
 If the mouse cursor is hovering over an empty region of the plot, nothing is returned by `renderText()` and so no tooltip text box is displayed.
 
-![screenshot of cursor over empty region](hover_empty_area.jpg)
+![screenshot of cursor over empty region](https://raw.githubusercontent.com/corybrunson/ggalluvial/main/vignettes/img/hover_empty_area.jpg)
 
 Let's take a deeper dive into each part of the server function.
 
