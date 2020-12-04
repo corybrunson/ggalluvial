@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.2.0001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.3</span>
       </span>
     </div>
 
@@ -62,6 +62,9 @@
     <li>
       <a href="../articles/order-rectangles.html">The Order of the Rectangles</a>
     </li>
+    <li>
+      <a href="../articles/shiny.html">Tooltips for ggalluvial plots in Shiny apps</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -85,13 +88,14 @@
 
       
 
-      </header><div class="row">
+      </header><script src="labels_files/header-attrs-2.5/header-attrs.js"></script><link href="labels_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="labels_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Labeling small strata</h1>
                         <h4 class="author">Jason Cory Brunson</h4>
             
-            <h4 class="date">2020-10-15</h4>
+            <h4 class="date">2020-12-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/corybrunson/ggalluvial/blob/master/vignettes/labels.rmd"><code>vignettes/labels.rmd</code></a></small>
       <div class="hidden name"><code>labels.rmd</code></div>
@@ -103,45 +107,49 @@
 <div id="setup" class="section level2">
 <h2 class="hasAnchor">
 <a href="#setup" class="anchor"></a>Setup</h2>
-<p>This brief vignette uses the <code>vaccinations</code> dataset included in <strong>ggalluvial</strong>. As in <a href="http://corybrunson.github.io/ggalluvial/articles/ggalluvial.html">the technical introduction</a>, the order of the levels is reversed to be more intuitive. Objects from other <strong>ggplot2</strong> extensions are accessed via <code>::</code> and <code>:::</code>.</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="kw pkg">knitr</span><span class="kw ns">::</span><span class="no"><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html">opts_chunk</a></span>$<span class="fu">set</span>(<span class="kw">fig.width</span> <span class="kw">=</span> <span class="fl">6</span>, <span class="kw">fig.height</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">fig.align</span> <span class="kw">=</span> <span class="st">"center"</span>)
-<span class="fu"><a href="https://rdrr.io/r/base/library.html">library</a></span>(<span class="no">ggalluvial</span>)</pre></body></html></div>
+<p>This brief vignette uses the <code>vaccinations</code> dataset included in <strong>ggalluvial</strong>. As in <a href="http://corybrunson.github.io/ggalluvial/articles/ggalluvial.html">the technical introduction</a>, the order of the levels is reversed to be more intuitive. Objects from other <strong>ggplot2</strong> extensions are accessed via <code><a href="https://rdrr.io/r/base/ns-dblcolon.html">::</a></code> and <code><a href="https://rdrr.io/r/base/ns-dblcolon.html">:::</a></code>.</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html">opts_chunk</a></span><span class="op">$</span><span class="fu">set</span><span class="op">(</span>fig.width <span class="op">=</span> <span class="fl">6</span>, fig.height <span class="op">=</span> <span class="fl">4</span>, fig.align <span class="op">=</span> <span class="st">"center"</span><span class="op">)</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://corybrunson.github.io/ggalluvial/">ggalluvial</a></span><span class="op">)</span></code></pre></div>
 <pre><code>## Loading required package: ggplot2</code></pre>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">vaccinations</span>)
-<span class="no">vaccinations</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html">transform</a></span>(<span class="no">vaccinations</span>,
-                          <span class="kw">response</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">response</span>, <span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span>(<span class="no">response</span>))))</pre></body></html></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">vaccinations</span><span class="op">)</span>
+<span class="va">vaccinations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html">transform</a></span><span class="op">(</span><span class="va">vaccinations</span>,
+                          response <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">response</span>, <span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">response</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="problem" class="section level2">
 <h2 class="hasAnchor">
 <a href="#problem" class="anchor"></a>Problem</h2>
 <p>The issue on the table: Strata are most helpful when they’re overlaid with text labels. Yet the strata often vary in height, and the labels in length, to such a degree that fitting the text inside the strata at a uniform size renders them illegible. In principle, the user could treat <code>size</code> as a variable aesthetic and manually fit text to strata, but this is cumbersome, and doesn’t help anyway in cases where large text is needed.</p>
 <p>To illustrate the problem, check out the plot below. It’s by no means an egregious case, but it’ll do. (For a more practical example, see <a href="https://stackoverflow.com/questions/50720718/labelling-and-theme-of-ggalluvial-plot-in-r">this question on StackOverflow</a>, which prompted this vignette.)</p>
-<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu">ggplot</span>(<span class="no">vaccinations</span>,
-       <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">survey</span>, <span class="kw">stratum</span> <span class="kw">=</span> <span class="no">response</span>, <span class="kw">alluvium</span> <span class="kw">=</span> <span class="no">subject</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">freq</span>,
-           <span class="kw">fill</span> <span class="kw">=</span> <span class="no">response</span>, <span class="kw">label</span> <span class="kw">=</span> <span class="no">response</span>)) +
-  <span class="fu">scale_x_discrete</span>(<span class="kw">expand</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.1</span>, <span class="fl">0</span>)) +
-  <span class="fu"><a href="../reference/geom_flow.html">geom_flow</a></span>(<span class="kw">width</span> <span class="kw">=</span> <span class="fl">1</span>/<span class="fl">4</span>) +
-  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span>(<span class="kw">alpha</span> <span class="kw">=</span> <span class="fl">.5</span>, <span class="kw">width</span> <span class="kw">=</span> <span class="fl">1</span>/<span class="fl">4</span>) +
-  <span class="fu">geom_text</span>(<span class="kw">stat</span> <span class="kw">=</span> <span class="st">"stratum"</span>, <span class="kw">size</span> <span class="kw">=</span> <span class="fl">4</span>) +
-  <span class="fu">theme</span>(<span class="kw">legend.position</span> <span class="kw">=</span> <span class="st">"none"</span>) +
-  <span class="fu">ggtitle</span>(<span class="st">"vaccination survey responses"</span>, <span class="st">"labeled using `geom_text()`"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">ggplot</span><span class="op">(</span><span class="va">vaccinations</span>,
+       <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">survey</span>, stratum <span class="op">=</span> <span class="va">response</span>, alluvium <span class="op">=</span> <span class="va">subject</span>, y <span class="op">=</span> <span class="va">freq</span>,
+           fill <span class="op">=</span> <span class="va">response</span>, label <span class="op">=</span> <span class="va">response</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">scale_x_discrete</span><span class="op">(</span>expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/geom_flow.html">geom_flow</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">.5</span>, width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">geom_text</span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"stratum"</span>, size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"vaccination survey responses"</span>, <span class="st">"labeled using `geom_text()`"</span><span class="op">)</span></code></pre></div>
 <p><img src="labels_files/figure-html/raw-1.png" width="576" style="display: block; margin: auto;"></p>
 <div id="fix" class="section level3">
 <h3 class="hasAnchor">
 <a href="#fix" class="anchor"></a>Fix</h3>
 <p>One option is to simply omit those labels that don’t fit within their strata. In response to <a href="https://github.com/corybrunson/ggalluvial/issues/27">an issue</a>, <code>v0.9.2</code> includes parameters in <code><a href="../reference/stat_stratum.html">stat_stratum()</a></code> to exclude strata outside a specified height range; while few would use this to omit the rectangles themselves, it can be used in tandem with <code>geom_text()</code> to shirk this problem, at least when the labels are concise:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu">ggplot</span>(<span class="no">vaccinations</span>,
-       <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">survey</span>, <span class="kw">stratum</span> <span class="kw">=</span> <span class="no">response</span>, <span class="kw">alluvium</span> <span class="kw">=</span> <span class="no">subject</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">freq</span>,
-           <span class="kw">fill</span> <span class="kw">=</span> <span class="no">response</span>, <span class="kw">label</span> <span class="kw">=</span> <span class="no">response</span>)) +
-  <span class="fu">scale_x_discrete</span>(<span class="kw">expand</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.1</span>, <span class="fl">0</span>)) +
-  <span class="fu"><a href="../reference/geom_flow.html">geom_flow</a></span>(<span class="kw">width</span> <span class="kw">=</span> <span class="fl">1</span>/<span class="fl">4</span>) +
-  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span>(<span class="kw">alpha</span> <span class="kw">=</span> <span class="fl">.5</span>, <span class="kw">width</span> <span class="kw">=</span> <span class="fl">1</span>/<span class="fl">4</span>) +
-  <span class="fu">geom_text</span>(<span class="kw">stat</span> <span class="kw">=</span> <span class="st">"stratum"</span>, <span class="kw">size</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">min.y</span> <span class="kw">=</span> <span class="fl">100</span>) +
-  <span class="fu">theme</span>(<span class="kw">legend.position</span> <span class="kw">=</span> <span class="st">"none"</span>) +
-  <span class="fu">ggtitle</span>(
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">ggplot</span><span class="op">(</span><span class="va">vaccinations</span>,
+       <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">survey</span>, stratum <span class="op">=</span> <span class="va">response</span>, alluvium <span class="op">=</span> <span class="va">subject</span>, y <span class="op">=</span> <span class="va">freq</span>,
+           fill <span class="op">=</span> <span class="va">response</span>, label <span class="op">=</span> <span class="va">response</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">scale_x_discrete</span><span class="op">(</span>expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/geom_flow.html">geom_flow</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">.5</span>, width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">geom_text</span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"stratum"</span>, size <span class="op">=</span> <span class="fl">4</span>, min.y <span class="op">=</span> <span class="fl">100</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">ggtitle</span><span class="op">(</span>
     <span class="st">"vaccination survey responses"</span>,
     <span class="st">"labeled using `geom_text()` with `min.y = 100`"</span>
-  )</pre></body></html></div>
+  <span class="op">)</span></code></pre></div>
 <p><img src="labels_files/figure-html/omit-1.png" width="576" style="display: block; margin: auto;"></p>
 <p>This is a useful fix for some cases. Still, if the goal is a publication-ready graphic, then it reaffirms the need for more adaptable and elegant solutions. Fortunately, two wonderful packages deliver with, shall we say, flowing colors.</p>
 </div>
@@ -149,13 +157,16 @@
 <div id="solutions" class="section level2">
 <h2 class="hasAnchor">
 <a href="#solutions" class="anchor"></a>Solutions</h2>
-<p>Two <strong>ggplot2</strong> extensions are well-suited to this problem: <a href="https://github.com/slowkow/ggrepel"><strong>ggrepel</strong></a> and <a href="https://github.com/wilkox/ggfittext"><strong>ggfittext</strong></a>. They provide new geom layers that use the output of existing stat layers to situate text: <code><a href="https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html">ggrepel::geom_text_repel()</a></code> takes the same aesthetics as <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">ggplot2::geom_text()</a></code>, namely <code>x</code>, <code>y</code>, and <code>label</code>. In contrast, <code><a href="https://rdrr.io/pkg/ggfittext/man/geom_fit_text.html">ggfittext::geom_fit_text()</a></code> only specifically requires <code>label</code> but also needs enough information to determine the rectangle that will contain the text. This can be encoded as <code>xmin</code> and <code>xmax</code> or as <code>x</code> and <code>width</code> for the horizontal direction, and as <code>ymin</code> and <code>ymax</code> or as <code>y</code> and <code>height</code> for the vertical direction. Conveniently, <code><a href="../reference/stat_stratum.html">ggalluvial::stat_stratum()</a></code> produces more than enough information for both geoms, including <code>x</code>, <code>xmin</code>, <code>xmax</code>, and their vertical counterparts.</p>
+<p>Two <strong>ggplot2</strong> extensions are well-suited to this problem: <a href="https://github.com/slowkow/ggrepel"><strong>ggrepel</strong></a> and <a href="https://github.com/wilkox/ggfittext"><strong>ggfittext</strong></a>. They provide new geom layers that use the output of existing stat layers to situate text: <code><a href="https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html">ggrepel::geom_text_repel()</a></code> takes the same aesthetics as <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">ggplot2::geom_text()</a></code>, namely <code>x</code>, <code>y</code>, and <code>label</code>. In contrast, <code><a href="https://wilkox.org/ggfittext/reference/geom_fit_text.html">ggfittext::geom_fit_text()</a></code> only specifically requires <code>label</code> but also needs enough information to determine the rectangle that will contain the text. This can be encoded as <code>xmin</code> and <code>xmax</code> or as <code>x</code> and <code>width</code> for the horizontal direction, and as <code>ymin</code> and <code>ymax</code> or as <code>y</code> and <code>height</code> for the vertical direction. Conveniently, <code><a href="../reference/stat_stratum.html">ggalluvial::stat_stratum()</a></code> produces more than enough information for both geoms, including <code>x</code>, <code>xmin</code>, <code>xmax</code>, and their vertical counterparts.</p>
 <p>All this can be gleaned from the <code>ggproto</code> objects that construct the layers:</p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw pkg">ggrepel</span><span class="kw ns">::</span><span class="no"><a href="https://rdrr.io/pkg/ggrepel/man/ggplot2-ggproto.html">GeomTextRepel</a></span>$<span class="no">required_aes</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu">ggrepel</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/ggrepel/man/ggplot2-ggproto.html">GeomTextRepel</a></span><span class="op">$</span><span class="va">required_aes</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] "x"     "y"     "label"</code></pre>
-<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw pkg">ggfittext</span><span class="kw ns">:::</span><span class="no">GeomFitText</span>$<span class="no">required_aes</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu">ggfittext</span><span class="fu">:::</span><span class="va">GeomFitText</span><span class="op">$</span><span class="va">required_aes</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] "label"</code></pre>
-<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw pkg">ggfittext</span><span class="kw ns">:::</span><span class="no">GeomFitText</span>$<span class="no">setup_data</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu">ggfittext</span><span class="fu">:::</span><span class="va">GeomFitText</span><span class="op">$</span><span class="va">setup_data</span><span class="op">)</span></code></pre></div>
 <pre><code>## &lt;ggproto method&gt;
 ##   &lt;Wrapper function&gt;
 ##     function (...) 
@@ -208,7 +219,8 @@
 ##     }
 ##     data
 ## }</code></pre>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="no">StatStratum</span>$<span class="no">compute_panel</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">StatStratum</span><span class="op">$</span><span class="va">compute_panel</span><span class="op">)</span></code></pre></div>
 <pre><code>## &lt;ggproto method&gt;
 ##   &lt;Wrapper function&gt;
 ##     function (...) 
@@ -307,23 +319,24 @@
 <a href="#solution-1-ggrepel" class="anchor"></a>Solution 1: <strong>ggrepel</strong>
 </h3>
 <p><strong>ggrepel</strong> is most often (in my experience) used to repel text away from symbols in a scatterplot, in whatever directions prevent them from overlapping the symbols and each other. In this case, however, it makes much more sense to align them vertically a fixed horizontal distance (<code>nudge_x</code>) away from the strata and repel them vertically from each other (<code>direction = "y"</code>) just enough to print them without overlap. It takes an extra bit of effort to render text <em>only</em> for the strata at the first (or at the last) axis, but the result is worth it.</p>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="fu">ggplot</span>(<span class="no">vaccinations</span>,
-       <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">survey</span>, <span class="kw">stratum</span> <span class="kw">=</span> <span class="no">response</span>, <span class="kw">alluvium</span> <span class="kw">=</span> <span class="no">subject</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">freq</span>,
-           <span class="kw">fill</span> <span class="kw">=</span> <span class="no">response</span>)) +
-  <span class="fu">scale_x_discrete</span>(<span class="kw">expand</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.4</span>, <span class="fl">0</span>)) +
-  <span class="fu"><a href="../reference/geom_flow.html">geom_flow</a></span>(<span class="kw">width</span> <span class="kw">=</span> <span class="fl">1</span>/<span class="fl">4</span>) +
-  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span>(<span class="kw">alpha</span> <span class="kw">=</span> <span class="fl">.5</span>, <span class="kw">width</span> <span class="kw">=</span> <span class="fl">1</span>/<span class="fl">4</span>) +
-  <span class="fu">scale_linetype_manual</span>(<span class="kw">values</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"blank"</span>, <span class="st">"solid"</span>)) +
-  <span class="kw pkg">ggrepel</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html">geom_text_repel</a></span>(
-    <span class="fu">aes</span>(<span class="kw">label</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="no">survey</span>) <span class="kw">==</span> <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="no">response</span>), <span class="fl">NA</span>)),
-    <span class="kw">stat</span> <span class="kw">=</span> <span class="st">"stratum"</span>, <span class="kw">size</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">direction</span> <span class="kw">=</span> <span class="st">"y"</span>, <span class="kw">nudge_x</span> <span class="kw">=</span> -<span class="fl">.5</span>
-  ) +
-  <span class="kw pkg">ggrepel</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html">geom_text_repel</a></span>(
-    <span class="fu">aes</span>(<span class="kw">label</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span>(<span class="no">survey</span>) <span class="kw">==</span> <span class="fl">3</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span>(<span class="no">response</span>), <span class="fl">NA</span>)),
-    <span class="kw">stat</span> <span class="kw">=</span> <span class="st">"stratum"</span>, <span class="kw">size</span> <span class="kw">=</span> <span class="fl">4</span>, <span class="kw">direction</span> <span class="kw">=</span> <span class="st">"y"</span>, <span class="kw">nudge_x</span> <span class="kw">=</span> <span class="fl">.5</span>
-  ) +
-  <span class="fu">theme</span>(<span class="kw">legend.position</span> <span class="kw">=</span> <span class="st">"none"</span>) +
-  <span class="fu">ggtitle</span>(<span class="st">"vaccination survey responses"</span>, <span class="st">"labeled using `geom_text_repel()`"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">ggplot</span><span class="op">(</span><span class="va">vaccinations</span>,
+       <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">survey</span>, stratum <span class="op">=</span> <span class="va">response</span>, alluvium <span class="op">=</span> <span class="va">subject</span>, y <span class="op">=</span> <span class="va">freq</span>,
+           fill <span class="op">=</span> <span class="va">response</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">scale_x_discrete</span><span class="op">(</span>expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.4</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/geom_flow.html">geom_flow</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">.5</span>, width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">scale_linetype_manual</span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"blank"</span>, <span class="st">"solid"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">ggrepel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html">geom_text_repel</a></span><span class="op">(</span>
+    <span class="fu">aes</span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">survey</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">response</span><span class="op">)</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span>,
+    stat <span class="op">=</span> <span class="st">"stratum"</span>, size <span class="op">=</span> <span class="fl">4</span>, direction <span class="op">=</span> <span class="st">"y"</span>, nudge_x <span class="op">=</span> <span class="op">-</span><span class="fl">.5</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu">ggrepel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html">geom_text_repel</a></span><span class="op">(</span>
+    <span class="fu">aes</span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">survey</span><span class="op">)</span> <span class="op">==</span> <span class="fl">3</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">response</span><span class="op">)</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span>,
+    stat <span class="op">=</span> <span class="st">"stratum"</span>, size <span class="op">=</span> <span class="fl">4</span>, direction <span class="op">=</span> <span class="st">"y"</span>, nudge_x <span class="op">=</span> <span class="fl">.5</span>
+  <span class="op">)</span> <span class="op">+</span>
+  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"vaccination survey responses"</span>, <span class="st">"labeled using `geom_text_repel()`"</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning: Removed 8 rows containing missing values (geom_text_repel).
 
 ## Warning: Removed 8 rows containing missing values (geom_text_repel).</code></pre>
@@ -334,15 +347,16 @@
 <a href="#solution-2-ggfittext" class="anchor"></a>Solution 2: <strong>ggfittext</strong>
 </h3>
 <p><strong>ggfittext</strong> is simplicity itself: The strata are just rectangles, so no more parameter specifications are necessary to fit the text into them. One key parameter is <code>min.size</code>, which defaults to <code>4</code> and controls how small the text is allowed to get without being omitted.</p>
-<div class="sourceCode" id="cb16"><html><body><pre class="r"><span class="fu">ggplot</span>(<span class="no">vaccinations</span>,
-       <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">survey</span>, <span class="kw">stratum</span> <span class="kw">=</span> <span class="no">response</span>, <span class="kw">alluvium</span> <span class="kw">=</span> <span class="no">subject</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">freq</span>,
-           <span class="kw">fill</span> <span class="kw">=</span> <span class="no">response</span>, <span class="kw">label</span> <span class="kw">=</span> <span class="no">response</span>)) +
-  <span class="fu">scale_x_discrete</span>(<span class="kw">expand</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.1</span>, <span class="fl">0</span>)) +
-  <span class="fu"><a href="../reference/geom_flow.html">geom_flow</a></span>(<span class="kw">width</span> <span class="kw">=</span> <span class="fl">1</span>/<span class="fl">4</span>) +
-  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span>(<span class="kw">alpha</span> <span class="kw">=</span> <span class="fl">.5</span>, <span class="kw">width</span> <span class="kw">=</span> <span class="fl">1</span>/<span class="fl">4</span>) +
-  <span class="kw pkg">ggfittext</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggfittext/man/geom_fit_text.html">geom_fit_text</a></span>(<span class="kw">stat</span> <span class="kw">=</span> <span class="st">"stratum"</span>, <span class="kw">width</span> <span class="kw">=</span> <span class="fl">1</span>/<span class="fl">4</span>, <span class="kw">min.size</span> <span class="kw">=</span> <span class="fl">3</span>) +
-  <span class="fu">theme</span>(<span class="kw">legend.position</span> <span class="kw">=</span> <span class="st">"none"</span>) +
-  <span class="fu">ggtitle</span>(<span class="st">"vaccination survey responses"</span>, <span class="st">"labeled using `geom_fit_text()`"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">ggplot</span><span class="op">(</span><span class="va">vaccinations</span>,
+       <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">survey</span>, stratum <span class="op">=</span> <span class="va">response</span>, alluvium <span class="op">=</span> <span class="va">subject</span>, y <span class="op">=</span> <span class="va">freq</span>,
+           fill <span class="op">=</span> <span class="va">response</span>, label <span class="op">=</span> <span class="va">response</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">scale_x_discrete</span><span class="op">(</span>expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/geom_flow.html">geom_flow</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">.5</span>, width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">ggfittext</span><span class="fu">::</span><span class="fu"><a href="https://wilkox.org/ggfittext/reference/geom_fit_text.html">geom_fit_text</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"stratum"</span>, width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span>, min.size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"vaccination survey responses"</span>, <span class="st">"labeled using `geom_fit_text()`"</span><span class="op">)</span></code></pre></div>
 <p><img src="labels_files/figure-html/ggfittext-1.png" width="576" style="display: block; margin: auto;"></p>
 <p>Note that this solution requires <strong>ggfittext</strong> v0.6.0.</p>
 </div>
@@ -350,7 +364,8 @@
 <div id="appendix" class="section level2">
 <h2 class="hasAnchor">
 <a href="#appendix" class="anchor"></a>Appendix</h2>
-<div class="sourceCode" id="cb17"><html><body><pre class="r"><span class="kw pkg">sessioninfo</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/sessioninfo/man/session_info.html">session_info</a></span>()</pre></body></html></div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">sessioninfo</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sessioninfo/man/session_info.html">session_info</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>## ─ Session info ───────────────────────────────────────────────────────────────
 ##  setting  value                       
 ##  version  R version 4.0.0 (2020-04-24)
@@ -361,62 +376,63 @@
 ##  collate  en_US.UTF-8                 
 ##  ctype    en_US.UTF-8                 
 ##  tz       America/New_York            
-##  date     2020-10-15                  
+##  date     2020-12-04                  
 ## 
 ## ─ Packages ───────────────────────────────────────────────────────────────────
-##  package     * version     date       lib source                           
-##  assertthat    0.2.1       2019-03-21 [3] CRAN (R 4.0.0)                   
-##  backports     1.1.10      2020-09-15 [3] CRAN (R 4.0.2)                   
-##  cli           2.1.0       2020-10-12 [3] CRAN (R 4.0.0)                   
-##  colorspace    1.4-1       2019-03-18 [3] CRAN (R 4.0.0)                   
-##  crayon        1.3.4       2017-09-16 [3] CRAN (R 4.0.0)                   
-##  desc          1.2.0       2018-05-01 [3] CRAN (R 4.0.0)                   
-##  digest        0.6.25      2020-02-23 [3] CRAN (R 4.0.0)                   
-##  dplyr         1.0.2       2020-08-18 [3] CRAN (R 4.0.2)                   
-##  ellipsis      0.3.1       2020-05-15 [3] CRAN (R 4.0.0)                   
-##  evaluate      0.14        2019-05-28 [3] CRAN (R 4.0.0)                   
-##  fansi         0.4.1       2020-01-08 [3] CRAN (R 4.0.0)                   
-##  farver        2.0.3       2020-01-16 [3] CRAN (R 4.0.0)                   
-##  fs            1.5.0       2020-07-31 [3] CRAN (R 4.0.2)                   
-##  generics      0.0.2       2018-11-29 [3] CRAN (R 4.0.0)                   
-##  ggalluvial  * 0.12.2.0001 2020-10-15 [1] local                            
-##  ggfittext     0.9.0       2020-06-14 [3] CRAN (R 4.0.0)                   
-##  ggplot2     * 3.3.2       2020-06-19 [3] CRAN (R 4.0.0)                   
-##  ggrepel       0.8.2       2020-03-08 [3] CRAN (R 4.0.0)                   
-##  glue          1.4.2       2020-08-27 [3] CRAN (R 4.0.0)                   
-##  gtable        0.3.0       2019-03-25 [3] CRAN (R 4.0.0)                   
-##  htmltools     0.5.0       2020-06-16 [3] CRAN (R 4.0.0)                   
-##  knitr         1.30        2020-09-22 [3] CRAN (R 4.0.2)                   
-##  labeling      0.3         2014-08-23 [3] CRAN (R 4.0.0)                   
-##  lifecycle     0.2.0       2020-03-06 [3] CRAN (R 4.0.0)                   
-##  magrittr      1.5         2014-11-22 [3] CRAN (R 4.0.2)                   
-##  MASS          7.3-51.5    2019-12-20 [3] CRAN (R 4.0.0)                   
-##  memoise       1.1.0       2017-04-21 [3] CRAN (R 4.0.0)                   
-##  munsell       0.5.0       2018-06-12 [3] CRAN (R 4.0.0)                   
-##  pillar        1.4.6       2020-07-10 [3] CRAN (R 4.0.0)                   
-##  pkgconfig     2.0.3       2019-09-22 [3] CRAN (R 4.0.0)                   
-##  pkgdown       1.5.1       2020-04-09 [3] CRAN (R 4.0.0)                   
-##  purrr         0.3.4       2020-04-17 [3] CRAN (R 4.0.0)                   
-##  R6            2.4.1       2019-11-12 [3] CRAN (R 4.0.0)                   
-##  Rcpp          1.0.5       2020-10-02 [3] Github (RcppCore/Rcpp@a9ca85d)   
-##  rlang         0.4.8       2020-10-08 [3] CRAN (R 4.0.0)                   
-##  rmarkdown     2.3         2020-06-18 [3] CRAN (R 4.0.0)                   
-##  rprojroot     1.3-2       2018-01-03 [3] CRAN (R 4.0.0)                   
-##  rstudioapi    0.11        2020-02-07 [3] CRAN (R 4.0.0)                   
-##  scales        1.1.1       2020-05-11 [3] CRAN (R 4.0.0)                   
-##  sessioninfo   1.1.1       2018-11-05 [3] CRAN (R 4.0.0)                   
-##  stringi       1.5.3       2020-09-09 [3] CRAN (R 4.0.2)                   
-##  stringr       1.4.0       2019-02-10 [3] CRAN (R 4.0.0)                   
-##  tibble        3.0.3.9000  2020-07-28 [3] Github (tidyverse/tibble@b4eec19)
-##  tidyr         1.1.2       2020-08-27 [3] CRAN (R 4.0.0)                   
-##  tidyselect    1.1.0       2020-05-11 [3] CRAN (R 4.0.0)                   
-##  vctrs         0.3.4       2020-08-29 [3] CRAN (R 4.0.0)                   
-##  withr         2.3.0       2020-09-22 [3] CRAN (R 4.0.2)                   
-##  xfun          0.18        2020-09-29 [3] CRAN (R 4.0.2)                   
-##  yaml          2.2.1       2020-02-01 [3] CRAN (R 4.0.0)                   
+##  package     * version date       lib source                        
+##  assertthat    0.2.1   2019-03-21 [3] CRAN (R 4.0.0)                
+##  cli           2.2.0   2020-11-20 [3] CRAN (R 4.0.2)                
+##  colorspace    2.0-0   2020-11-11 [3] CRAN (R 4.0.0)                
+##  crayon        1.3.4   2017-09-16 [3] CRAN (R 4.0.0)                
+##  desc          1.2.0   2018-05-01 [3] CRAN (R 4.0.0)                
+##  digest        0.6.27  2020-10-24 [3] CRAN (R 4.0.2)                
+##  dplyr         1.0.2   2020-08-18 [3] CRAN (R 4.0.2)                
+##  ellipsis      0.3.1   2020-05-15 [3] CRAN (R 4.0.0)                
+##  evaluate      0.14    2019-05-28 [3] CRAN (R 4.0.0)                
+##  fansi         0.4.1   2020-01-08 [3] CRAN (R 4.0.0)                
+##  farver        2.0.3   2020-01-16 [3] CRAN (R 4.0.0)                
+##  fs            1.5.0   2020-07-31 [3] CRAN (R 4.0.2)                
+##  generics      0.1.0   2020-10-31 [3] CRAN (R 4.0.2)                
+##  ggalluvial  * 0.12.3  2020-12-04 [1] local                         
+##  ggfittext     0.9.0   2020-06-14 [3] CRAN (R 4.0.0)                
+##  ggplot2     * 3.3.2   2020-06-19 [3] CRAN (R 4.0.0)                
+##  ggrepel       0.8.2   2020-03-08 [3] CRAN (R 4.0.0)                
+##  glue          1.4.2   2020-08-27 [3] CRAN (R 4.0.0)                
+##  gtable        0.3.0   2019-03-25 [3] CRAN (R 4.0.0)                
+##  htmltools     0.5.0   2020-06-16 [3] CRAN (R 4.0.0)                
+##  knitr         1.30    2020-09-22 [3] CRAN (R 4.0.2)                
+##  labeling      0.4.2   2020-10-20 [3] CRAN (R 4.0.2)                
+##  lifecycle     0.2.0   2020-03-06 [3] CRAN (R 4.0.0)                
+##  magrittr      2.0.1   2020-11-17 [3] CRAN (R 4.0.2)                
+##  memoise       1.1.0   2017-04-21 [3] CRAN (R 4.0.0)                
+##  munsell       0.5.0   2018-06-12 [3] CRAN (R 4.0.0)                
+##  pillar        1.4.7   2020-11-20 [3] CRAN (R 4.0.2)                
+##  pkgconfig     2.0.3   2019-09-22 [3] CRAN (R 4.0.0)                
+##  pkgdown       1.6.1   2020-09-12 [3] CRAN (R 4.0.2)                
+##  purrr         0.3.4   2020-04-17 [3] CRAN (R 4.0.0)                
+##  R6            2.5.0   2020-10-28 [3] CRAN (R 4.0.2)                
+##  ragg          0.4.0   2020-10-05 [3] CRAN (R 4.0.2)                
+##  Rcpp          1.0.5   2020-10-02 [3] Github (RcppCore/Rcpp@a9ca85d)
+##  rlang         0.4.9   2020-11-26 [3] CRAN (R 4.0.2)                
+##  rmarkdown     2.5     2020-10-21 [3] CRAN (R 4.0.0)                
+##  rprojroot     2.0.2   2020-11-15 [3] CRAN (R 4.0.2)                
+##  rstudioapi    0.13    2020-11-12 [3] CRAN (R 4.0.2)                
+##  scales        1.1.1   2020-05-11 [3] CRAN (R 4.0.0)                
+##  sessioninfo   1.1.1   2018-11-05 [3] CRAN (R 4.0.0)                
+##  stringi       1.5.3   2020-09-09 [3] CRAN (R 4.0.2)                
+##  stringr       1.4.0   2019-02-10 [3] CRAN (R 4.0.0)                
+##  systemfonts   0.3.2   2020-09-29 [3] CRAN (R 4.0.2)                
+##  textshaping   0.2.1   2020-11-13 [3] CRAN (R 4.0.2)                
+##  tibble        3.0.4   2020-10-12 [3] CRAN (R 4.0.2)                
+##  tidyr         1.1.2   2020-08-27 [3] CRAN (R 4.0.0)                
+##  tidyselect    1.1.0   2020-05-11 [3] CRAN (R 4.0.0)                
+##  vctrs         0.3.5   2020-11-17 [3] CRAN (R 4.0.2)                
+##  withr         2.3.0   2020-09-22 [3] CRAN (R 4.0.2)                
+##  xfun          0.19    2020-10-30 [3] CRAN (R 4.0.2)                
+##  yaml          2.2.1   2020-02-01 [3] CRAN (R 4.0.0)                
 ## 
-## [1] /private/var/folders/pg/fjg8r4fj5v33zqmwptf9mfg80000gn/T/RtmpuCTWyN/temp_libpathc1ea655c6f7b
-## [2] /private/var/folders/pg/fjg8r4fj5v33zqmwptf9mfg80000gn/T/RtmpuCTWyN/temp_libpathc1ea144b13ee
+## [1] /private/var/folders/pg/fjg8r4fj5v33zqmwptf9mfg80000gn/T/RtmpSjo38X/temp_libpathf5b366ae412a
+## [2] /private/var/folders/pg/fjg8r4fj5v33zqmwptf9mfg80000gn/T/RtmpSjo38X/temp_libpathf5b318ecca78
 ## [3] /Library/Frameworks/R.framework/Versions/4.0/Resources/library</code></pre>
 </div>
   </div>
@@ -432,11 +448,11 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Jason Cory Brunson.</p>
+  <p>Developed by Jason Cory Brunson, Quentin D. Read.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

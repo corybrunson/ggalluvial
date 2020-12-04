@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.2.0001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.3</span>
       </span>
     </div>
 
@@ -62,6 +62,9 @@
     <li>
       <a href="../articles/order-rectangles.html">The Order of the Rectangles</a>
     </li>
+    <li>
+      <a href="../articles/shiny.html">Tooltips for ggalluvial plots in Shiny apps</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -85,13 +88,14 @@
 
       
 
-      </header><div class="row">
+      </header><script src="ggalluvial_files/header-attrs-2.5/header-attrs.js"></script><link href="ggalluvial_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
+<script src="ggalluvial_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Alluvial Plots in ggplot2</h1>
                         <h4 class="author">Jason Cory Brunson</h4>
             
-            <h4 class="date">2020-10-15</h4>
+            <h4 class="date">2020-12-04</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/corybrunson/ggalluvial/blob/master/vignettes/ggalluvial.rmd"><code>vignettes/ggalluvial.rmd</code></a></small>
       <div class="hidden name"><code>ggalluvial.rmd</code></div>
@@ -132,7 +136,8 @@
 <h3 class="hasAnchor">
 <a href="#alluvia-wide-format" class="anchor"></a>Alluvia (wide) format</h3>
 <p>The wide format reflects the visual arrangement of an alluvial plot, but “untwisted”: Each row corresponds to a cohort of observations that take a specific value at each variable, and each variable has its own column. An additional column contains the quantity of each row, e.g. the number of observational units in the cohort, which may be used to control the heights of the strata.<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> Basically, the wide format consists of <em>one row per alluvium</em>. This is the format into which the base function <code><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame()</a></code> transforms a frequency table, for instance the 3-dimensional <code>UCBAdmissions</code> dataset:</p>
-<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="no">UCBAdmissions</span>), <span class="kw">n</span> <span class="kw">=</span> <span class="fl">12</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">UCBAdmissions</span><span class="op">)</span>, n <span class="op">=</span> <span class="fl">12</span><span class="op">)</span></code></pre></div>
 <pre><code>##       Admit Gender Dept Freq
 ## 1  Admitted   Male    A  512
 ## 2  Rejected   Male    A  313
@@ -146,31 +151,34 @@
 ## 10 Rejected   Male    C  205
 ## 11 Admitted Female    C  202
 ## 12 Rejected Female    C  391</code></pre>
-<div class="sourceCode" id="cb3"><html><body><pre class="r"><span class="fu"><a href="../reference/alluvial-data.html">is_alluvia_form</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="no">UCBAdmissions</span>), <span class="kw">axes</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fl">3</span>, <span class="kw">silent</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/alluvial-data.html">is_alluvia_form</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">UCBAdmissions</span><span class="op">)</span>, axes <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, silent <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>This format is inherited from the first version of <strong>ggalluvial</strong>, which modeled it after usage in <strong>alluvial</strong>: The user declares any number of axis variables, which <code><a href="../reference/stat_alluvium.html">stat_alluvium()</a></code> and <code><a href="../reference/stat_stratum.html">stat_stratum()</a></code> recognize and process in a consistent way:</p>
-<div class="sourceCode" id="cb5"><html><body><pre class="r"><span class="fu">ggplot</span>(<span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="no">UCBAdmissions</span>),
-       <span class="fu">aes</span>(<span class="kw">y</span> <span class="kw">=</span> <span class="no">Freq</span>, <span class="kw">axis1</span> <span class="kw">=</span> <span class="no">Gender</span>, <span class="kw">axis2</span> <span class="kw">=</span> <span class="no">Dept</span>)) +
-  <span class="fu"><a href="../reference/geom_alluvium.html">geom_alluvium</a></span>(<span class="fu">aes</span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="no">Admit</span>), <span class="kw">width</span> <span class="kw">=</span> <span class="fl">1</span>/<span class="fl">12</span>) +
-  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span>(<span class="kw">width</span> <span class="kw">=</span> <span class="fl">1</span>/<span class="fl">12</span>, <span class="kw">fill</span> <span class="kw">=</span> <span class="st">"black"</span>, <span class="kw">color</span> <span class="kw">=</span> <span class="st">"grey"</span>) +
-  <span class="fu">geom_label</span>(<span class="kw">stat</span> <span class="kw">=</span> <span class="st">"stratum"</span>, <span class="fu">aes</span>(<span class="kw">label</span> <span class="kw">=</span> <span class="fu">after_stat</span>(<span class="no">stratum</span>))) +
-  <span class="fu">scale_x_discrete</span>(<span class="kw">limits</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Gender"</span>, <span class="st">"Dept"</span>), <span class="kw">expand</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.05</span>, <span class="fl">.05</span>)) +
-  <span class="fu">scale_fill_brewer</span>(<span class="kw">type</span> <span class="kw">=</span> <span class="st">"qual"</span>, <span class="kw">palette</span> <span class="kw">=</span> <span class="st">"Set1"</span>) +
-  <span class="fu">ggtitle</span>(<span class="st">"UC Berkeley admissions and rejections, by sex and department"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">ggplot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">UCBAdmissions</span><span class="op">)</span>,
+       <span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">Freq</span>, axis1 <span class="op">=</span> <span class="va">Gender</span>, axis2 <span class="op">=</span> <span class="va">Dept</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/geom_alluvium.html">geom_alluvium</a></span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">Admit</span><span class="op">)</span>, width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">12</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">12</span>, fill <span class="op">=</span> <span class="st">"black"</span>, color <span class="op">=</span> <span class="st">"grey"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">geom_label</span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"stratum"</span>, <span class="fu">aes</span><span class="op">(</span>label <span class="op">=</span> <span class="fu">after_stat</span><span class="op">(</span><span class="va">stratum</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">scale_x_discrete</span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Gender"</span>, <span class="st">"Dept"</span><span class="op">)</span>, expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.05</span>, <span class="fl">.05</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">scale_fill_brewer</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"qual"</span>, palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"UC Berkeley admissions and rejections, by sex and department"</span><span class="op">)</span></code></pre></div>
 <p><img src="ggalluvial_files/figure-html/alluvial%20plot%20of%20UC%20Berkeley%20admissions%20dataset-1.png" width="576" style="display: block; margin: auto;"></p>
 <p>An important feature of these plots is the meaningfulness of the vertical axis: No gaps are inserted between the strata, so the total height of the plot reflects the cumulative quantity of the observations. The plots produced by <strong>ggalluvial</strong> conform (somewhat; keep reading) to the “grammar of graphics” principles of <strong>ggplot2</strong>, and this prevents users from producing “free-floating” visualizations like the Sankey diagrams showcased <a href="https://developers.google.com/chart/interactive/docs/gallery/sankey">here</a>.<a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a> <strong>ggalluvial</strong> parameters and existing <strong>ggplot2</strong> functionality can also produce <a href="https://eagereyes.org/parallel-sets">parallel sets</a> plots, illustrated here using the <code>Titanic</code> dataset:<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
-<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu">ggplot</span>(<span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="no">Titanic</span>),
-       <span class="fu">aes</span>(<span class="kw">y</span> <span class="kw">=</span> <span class="no">Freq</span>,
-           <span class="kw">axis1</span> <span class="kw">=</span> <span class="no">Survived</span>, <span class="kw">axis2</span> <span class="kw">=</span> <span class="no">Sex</span>, <span class="kw">axis3</span> <span class="kw">=</span> <span class="no">Class</span>)) +
-  <span class="fu"><a href="../reference/geom_alluvium.html">geom_alluvium</a></span>(<span class="fu">aes</span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="no">Class</span>),
-                <span class="kw">width</span> <span class="kw">=</span> <span class="fl">0</span>, <span class="kw">knot.pos</span> <span class="kw">=</span> <span class="fl">0</span>, <span class="kw">reverse</span> <span class="kw">=</span> <span class="fl">FALSE</span>) +
-  <span class="fu">guides</span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="fl">FALSE</span>) +
-  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span>(<span class="kw">width</span> <span class="kw">=</span> <span class="fl">1</span>/<span class="fl">8</span>, <span class="kw">reverse</span> <span class="kw">=</span> <span class="fl">FALSE</span>) +
-  <span class="fu">geom_text</span>(<span class="kw">stat</span> <span class="kw">=</span> <span class="st">"stratum"</span>, <span class="fu">aes</span>(<span class="kw">label</span> <span class="kw">=</span> <span class="fu">after_stat</span>(<span class="no">stratum</span>)),
-            <span class="kw">reverse</span> <span class="kw">=</span> <span class="fl">FALSE</span>) +
-  <span class="fu">scale_x_continuous</span>(<span class="kw">breaks</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fl">3</span>, <span class="kw">labels</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Survived"</span>, <span class="st">"Sex"</span>, <span class="st">"Class"</span>)) +
-  <span class="fu">coord_flip</span>() +
-  <span class="fu">ggtitle</span>(<span class="st">"Titanic survival by class and sex"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">ggplot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">Titanic</span><span class="op">)</span>,
+       <span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">Freq</span>,
+           axis1 <span class="op">=</span> <span class="va">Survived</span>, axis2 <span class="op">=</span> <span class="va">Sex</span>, axis3 <span class="op">=</span> <span class="va">Class</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/geom_alluvium.html">geom_alluvium</a></span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">Class</span><span class="op">)</span>,
+                width <span class="op">=</span> <span class="fl">0</span>, knot.pos <span class="op">=</span> <span class="fl">0</span>, reverse <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">guides</span><span class="op">(</span>fill <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">8</span>, reverse <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">geom_text</span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"stratum"</span>, <span class="fu">aes</span><span class="op">(</span>label <span class="op">=</span> <span class="fu">after_stat</span><span class="op">(</span><span class="va">stratum</span><span class="op">)</span><span class="op">)</span>,
+            reverse <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">scale_x_continuous</span><span class="op">(</span>breaks <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Survived"</span>, <span class="st">"Sex"</span>, <span class="st">"Class"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">coord_flip</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Titanic survival by class and sex"</span><span class="op">)</span></code></pre></div>
 <p><img src="ggalluvial_files/figure-html/parallel%20sets%20plot%20of%20Titanic%20dataset-1.png" width="576" style="display: block; margin: auto;"></p>
 <p>This format and functionality are useful for many applications and will be retained in future versions. They also involve some conspicuous deviations from <strong>ggplot2</strong> norms:</p>
 <ul>
@@ -186,10 +194,11 @@
 <h3 class="hasAnchor">
 <a href="#lodes-long-format" class="anchor"></a>Lodes (long) format</h3>
 <p>The long format recognized by <strong>ggalluvial</strong> contains <em>one row per lode</em>, and can be understood as the result of “gathering” (in the <strong>dplyr</strong> sense) or “pivoting” (in the Microsoft Excel sense) the axis columns of a dataset in the alluvia format into a key-value pair of columns encoding the axis as the key and the stratum as the value. This format requires an additional indexing column that links the rows corresponding to a common cohort, i.e. the lodes of a single alluvium:</p>
-<div class="sourceCode" id="cb7"><html><body><pre class="r"><span class="no">UCB_lodes</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/alluvial-data.html">to_lodes_form</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span>(<span class="no">UCBAdmissions</span>),
-                           <span class="kw">axes</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fl">3</span>,
-                           <span class="kw">id</span> <span class="kw">=</span> <span class="st">"Cohort"</span>)
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">UCB_lodes</span>, <span class="kw">n</span> <span class="kw">=</span> <span class="fl">12</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">UCB_lodes</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/alluvial-data.html">to_lodes_form</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">UCBAdmissions</span><span class="op">)</span>,
+                           axes <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,
+                           id <span class="op">=</span> <span class="st">"Cohort"</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">UCB_lodes</span>, n <span class="op">=</span> <span class="fl">12</span><span class="op">)</span></code></pre></div>
 <pre><code>##    Freq Cohort     x  stratum
 ## 1   512      1 Admit Admitted
 ## 2   313      2 Admit Rejected
@@ -203,7 +212,8 @@
 ## 10  205     10 Admit Rejected
 ## 11  202     11 Admit Admitted
 ## 12  391     12 Admit Rejected</code></pre>
-<div class="sourceCode" id="cb9"><html><body><pre class="r"><span class="fu"><a href="../reference/alluvial-data.html">is_lodes_form</a></span>(<span class="no">UCB_lodes</span>, <span class="kw">key</span> <span class="kw">=</span> <span class="no">x</span>, <span class="kw">value</span> <span class="kw">=</span> <span class="no">stratum</span>, <span class="kw">id</span> <span class="kw">=</span> <span class="no">Cohort</span>, <span class="kw">silent</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/alluvial-data.html">is_lodes_form</a></span><span class="op">(</span><span class="va">UCB_lodes</span>, key <span class="op">=</span> <span class="va">x</span>, value <span class="op">=</span> <span class="va">stratum</span>, id <span class="op">=</span> <span class="va">Cohort</span>, silent <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <pre><code>## [1] TRUE</code></pre>
 <p>The functions that convert data between wide (alluvia) and long (lodes) format include several parameters that help preserve ancillary information. See <code><a href="../reference/alluvial-data.html">help("alluvial-data")</a></code> for examples.</p>
 <p>The same stat and geom can receive data in this format using a different set of positional aesthetics, also specific to <strong>ggalluvial</strong>:</p>
@@ -216,60 +226,63 @@
 <code>alluvium</code>, the indexing scheme that links the rows of a single alluvium.</li>
 </ul>
 <p>Heights can vary from axis to axis, allowing users to produce bump charts like those showcased <a href="https://imgur.com/gallery/gI5p7">here</a>.<a href="#fn5" class="footnote-ref" id="fnref5"><sup>5</sup></a> In these cases, the strata contain no more information than the alluvia and often not plotted. For convenience, both <code><a href="../reference/stat_alluvium.html">stat_alluvium()</a></code> and <code><a href="../reference/stat_flow.html">stat_flow()</a></code> will accept arguments for <code>x</code> and <code>alluvium</code> even if none is given for <code>stratum</code>.<a href="#fn6" class="footnote-ref" id="fnref6"><sup>6</sup></a> As an example, we can group countries in the <code>Refugees</code> dataset by region, in order to compare refugee volumes at different scales:</p>
-<div class="sourceCode" id="cb11"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">Refugees</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"alluvial"</span>)
-<span class="no">country_regions</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(
-  <span class="kw">Afghanistan</span> <span class="kw">=</span> <span class="st">"Middle East"</span>,
-  <span class="kw">Burundi</span> <span class="kw">=</span> <span class="st">"Central Africa"</span>,
-  <span class="kw">`Congo DRC`</span> <span class="kw">=</span> <span class="st">"Central Africa"</span>,
-  <span class="kw">Iraq</span> <span class="kw">=</span> <span class="st">"Middle East"</span>,
-  <span class="kw">Myanmar</span> <span class="kw">=</span> <span class="st">"Southeast Asia"</span>,
-  <span class="kw">Palestine</span> <span class="kw">=</span> <span class="st">"Middle East"</span>,
-  <span class="kw">Somalia</span> <span class="kw">=</span> <span class="st">"Horn of Africa"</span>,
-  <span class="kw">Sudan</span> <span class="kw">=</span> <span class="st">"Central Africa"</span>,
-  <span class="kw">Syria</span> <span class="kw">=</span> <span class="st">"Middle East"</span>,
-  <span class="kw">Vietnam</span> <span class="kw">=</span> <span class="st">"Southeast Asia"</span>
-)
-<span class="no">Refugees</span>$<span class="no">region</span> <span class="kw">&lt;-</span> <span class="no">country_regions</span>[<span class="no">Refugees</span>$<span class="no">country</span>]
-<span class="fu">ggplot</span>(<span class="kw">data</span> <span class="kw">=</span> <span class="no">Refugees</span>,
-       <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">year</span>, <span class="kw">y</span> <span class="kw">=</span> <span class="no">refugees</span>, <span class="kw">alluvium</span> <span class="kw">=</span> <span class="no">country</span>)) +
-  <span class="fu"><a href="../reference/geom_alluvium.html">geom_alluvium</a></span>(<span class="fu">aes</span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="no">country</span>, <span class="kw">colour</span> <span class="kw">=</span> <span class="no">country</span>),
-                <span class="kw">alpha</span> <span class="kw">=</span> <span class="fl">.75</span>, <span class="kw">decreasing</span> <span class="kw">=</span> <span class="fl">FALSE</span>) +
-  <span class="fu">scale_x_continuous</span>(<span class="kw">breaks</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span>(<span class="fl">2003</span>, <span class="fl">2013</span>, <span class="fl">2</span>)) +
-  <span class="fu">theme_bw</span>() +
-  <span class="fu">theme</span>(<span class="kw">axis.text.x</span> <span class="kw">=</span> <span class="fu">element_text</span>(<span class="kw">angle</span> <span class="kw">=</span> -<span class="fl">30</span>, <span class="kw">hjust</span> <span class="kw">=</span> <span class="fl">0</span>)) +
-  <span class="fu">scale_fill_brewer</span>(<span class="kw">type</span> <span class="kw">=</span> <span class="st">"qual"</span>, <span class="kw">palette</span> <span class="kw">=</span> <span class="st">"Set3"</span>) +
-  <span class="fu">scale_color_brewer</span>(<span class="kw">type</span> <span class="kw">=</span> <span class="st">"qual"</span>, <span class="kw">palette</span> <span class="kw">=</span> <span class="st">"Set3"</span>) +
-  <span class="fu">facet_wrap</span>(~ <span class="no">region</span>, <span class="kw">scales</span> <span class="kw">=</span> <span class="st">"fixed"</span>) +
-  <span class="fu">ggtitle</span>(<span class="st">"refugee volume by country and region of origin"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">Refugees</span>, package <span class="op">=</span> <span class="st">"alluvial"</span><span class="op">)</span>
+<span class="va">country_regions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>
+  Afghanistan <span class="op">=</span> <span class="st">"Middle East"</span>,
+  Burundi <span class="op">=</span> <span class="st">"Central Africa"</span>,
+  `Congo DRC` <span class="op">=</span> <span class="st">"Central Africa"</span>,
+  Iraq <span class="op">=</span> <span class="st">"Middle East"</span>,
+  Myanmar <span class="op">=</span> <span class="st">"Southeast Asia"</span>,
+  Palestine <span class="op">=</span> <span class="st">"Middle East"</span>,
+  Somalia <span class="op">=</span> <span class="st">"Horn of Africa"</span>,
+  Sudan <span class="op">=</span> <span class="st">"Central Africa"</span>,
+  Syria <span class="op">=</span> <span class="st">"Middle East"</span>,
+  Vietnam <span class="op">=</span> <span class="st">"Southeast Asia"</span>
+<span class="op">)</span>
+<span class="va">Refugees</span><span class="op">$</span><span class="va">region</span> <span class="op">&lt;-</span> <span class="va">country_regions</span><span class="op">[</span><span class="va">Refugees</span><span class="op">$</span><span class="va">country</span><span class="op">]</span>
+<span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">Refugees</span>,
+       <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">year</span>, y <span class="op">=</span> <span class="va">refugees</span>, alluvium <span class="op">=</span> <span class="va">country</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/geom_alluvium.html">geom_alluvium</a></span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">country</span>, colour <span class="op">=</span> <span class="va">country</span><span class="op">)</span>,
+                alpha <span class="op">=</span> <span class="fl">.75</span>, decreasing <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">scale_x_continuous</span><span class="op">(</span>breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">2003</span>, <span class="fl">2013</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">theme</span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>angle <span class="op">=</span> <span class="op">-</span><span class="fl">30</span>, hjust <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">scale_fill_brewer</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"qual"</span>, palette <span class="op">=</span> <span class="st">"Set3"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">scale_color_brewer</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"qual"</span>, palette <span class="op">=</span> <span class="st">"Set3"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span> <span class="va">region</span>, scales <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"refugee volume by country and region of origin"</span><span class="op">)</span></code></pre></div>
 <p><img src="ggalluvial_files/figure-html/time%20series%20alluvia%20plot%20of%20refugees%20dataset-1.png" width="576" style="display: block; margin: auto;"></p>
 <p>The format allows us to assign aesthetics that change from axis to axis along the same alluvium, which is useful for repeated measures datasets. This requires generating a separate graphical object for each flow, as implemented in <code><a href="../reference/geom_flow.html">geom_flow()</a></code>. The plot below uses a set of (changes to) students’ academic curricula over the course of several semesters. Since <code><a href="../reference/geom_flow.html">geom_flow()</a></code> calls <code><a href="../reference/stat_flow.html">stat_flow()</a></code> by default (see the next example), we override it with <code><a href="../reference/stat_alluvium.html">stat_alluvium()</a></code> in order to track each student across all semesters:</p>
-<div class="sourceCode" id="cb12"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">majors</span>)
-<span class="no">majors</span>$<span class="no">curriculum</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span>(<span class="no">majors</span>$<span class="no">curriculum</span>)
-<span class="fu">ggplot</span>(<span class="no">majors</span>,
-       <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">semester</span>, <span class="kw">stratum</span> <span class="kw">=</span> <span class="no">curriculum</span>, <span class="kw">alluvium</span> <span class="kw">=</span> <span class="no">student</span>,
-           <span class="kw">fill</span> <span class="kw">=</span> <span class="no">curriculum</span>, <span class="kw">label</span> <span class="kw">=</span> <span class="no">curriculum</span>)) +
-  <span class="fu">scale_fill_brewer</span>(<span class="kw">type</span> <span class="kw">=</span> <span class="st">"qual"</span>, <span class="kw">palette</span> <span class="kw">=</span> <span class="st">"Set2"</span>) +
-  <span class="fu"><a href="../reference/geom_flow.html">geom_flow</a></span>(<span class="kw">stat</span> <span class="kw">=</span> <span class="st">"alluvium"</span>, <span class="kw">lode.guidance</span> <span class="kw">=</span> <span class="st">"frontback"</span>,
-            <span class="kw">color</span> <span class="kw">=</span> <span class="st">"darkgray"</span>) +
-  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span>() +
-  <span class="fu">theme</span>(<span class="kw">legend.position</span> <span class="kw">=</span> <span class="st">"bottom"</span>) +
-  <span class="fu">ggtitle</span>(<span class="st">"student curricula across several semesters"</span>)</pre></body></html></div>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">majors</span><span class="op">)</span>
+<span class="va">majors</span><span class="op">$</span><span class="va">curriculum</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">as.factor</a></span><span class="op">(</span><span class="va">majors</span><span class="op">$</span><span class="va">curriculum</span><span class="op">)</span>
+<span class="fu">ggplot</span><span class="op">(</span><span class="va">majors</span>,
+       <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">semester</span>, stratum <span class="op">=</span> <span class="va">curriculum</span>, alluvium <span class="op">=</span> <span class="va">student</span>,
+           fill <span class="op">=</span> <span class="va">curriculum</span>, label <span class="op">=</span> <span class="va">curriculum</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">scale_fill_brewer</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"qual"</span>, palette <span class="op">=</span> <span class="st">"Set2"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/geom_flow.html">geom_flow</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"alluvium"</span>, lode.guidance <span class="op">=</span> <span class="st">"frontback"</span>,
+            color <span class="op">=</span> <span class="st">"darkgray"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"student curricula across several semesters"</span><span class="op">)</span></code></pre></div>
 <p><img src="ggalluvial_files/figure-html/alluvial%20plot%20of%20majors%20dataset-1.png" width="576" style="display: block; margin: auto;"></p>
 <p>The stratum heights <code>y</code> are unspecified, so each row is given unit height. This example demonstrates one way <strong>ggalluvial</strong> handles missing data. The alternative is to set the parameter <code>na.rm</code> to <code>TRUE</code>.<a href="#fn7" class="footnote-ref" id="fnref7"><sup>7</sup></a> Missing data handling (specifically, the order of the strata) also depends on whether the <code>stratum</code> variable is character or factor/numeric.</p>
-<p>Finally, lode format gives us the option to aggregate the flows between adjacent axes, which may be appropriate when the transitions between adjacent axes are of primary importance. We can demonstrate this option on data from the influenza vaccination surveys conducted by the <a href="https://alpdata.rand.org/">RAND American Life Panel</a>:</p>
-<div class="sourceCode" id="cb13"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span>(<span class="no">vaccinations</span>)
-<span class="no">vaccinations</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html">transform</a></span>(<span class="no">vaccinations</span>,
-                          <span class="kw">response</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span>(<span class="no">response</span>, <span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span>(<span class="no">response</span>))))
-<span class="fu">ggplot</span>(<span class="no">vaccinations</span>,
-       <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">survey</span>, <span class="kw">stratum</span> <span class="kw">=</span> <span class="no">response</span>, <span class="kw">alluvium</span> <span class="kw">=</span> <span class="no">subject</span>,
-           <span class="kw">y</span> <span class="kw">=</span> <span class="no">freq</span>,
-           <span class="kw">fill</span> <span class="kw">=</span> <span class="no">response</span>, <span class="kw">label</span> <span class="kw">=</span> <span class="no">response</span>)) +
-  <span class="fu">scale_x_discrete</span>(<span class="kw">expand</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.1</span>, <span class="fl">.1</span>)) +
-  <span class="fu"><a href="../reference/geom_flow.html">geom_flow</a></span>() +
-  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span>(<span class="kw">alpha</span> <span class="kw">=</span> <span class="fl">.5</span>) +
-  <span class="fu">geom_text</span>(<span class="kw">stat</span> <span class="kw">=</span> <span class="st">"stratum"</span>, <span class="kw">size</span> <span class="kw">=</span> <span class="fl">3</span>) +
-  <span class="fu">theme</span>(<span class="kw">legend.position</span> <span class="kw">=</span> <span class="st">"none"</span>) +
-  <span class="fu">ggtitle</span>(<span class="st">"vaccination survey responses at three points in time"</span>)</pre></body></html></div>
+<p>Finally, lode format gives us the option to aggregate the flows between adjacent axes, which may be appropriate when the transitions between adjacent axes are of primary importance. We can demonstrate this option on data from the influenza vaccination surveys conducted by the <a href="https://alpdata.rand.org/">RAND American Life Panel</a>. The data, including one question from each of three surveys, has been aggregated by response profile: Each “subject” (mapped to <code>alluvium</code>) actually represents a cohort of subjects who responded the same way on all three questions, and the size of each cohort (mapped to <code>y</code>) is recorded in “freq”.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">vaccinations</span><span class="op">)</span>
+<span class="va">vaccinations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html">transform</a></span><span class="op">(</span><span class="va">vaccinations</span>,
+                          response <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">response</span>, <span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">response</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
+<span class="fu">ggplot</span><span class="op">(</span><span class="va">vaccinations</span>,
+       <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">survey</span>, stratum <span class="op">=</span> <span class="va">response</span>, alluvium <span class="op">=</span> <span class="va">subject</span>,
+           y <span class="op">=</span> <span class="va">freq</span>,
+           fill <span class="op">=</span> <span class="va">response</span>, label <span class="op">=</span> <span class="va">response</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">scale_x_discrete</span><span class="op">(</span>expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">.1</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/geom_flow.html">geom_flow</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">.5</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">geom_text</span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"stratum"</span>, size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"vaccination survey responses at three points in time"</span><span class="op">)</span></code></pre></div>
 <p><img src="ggalluvial_files/figure-html/alluvial%20plot%20of%20vaccinations%20dataset-1.png" width="576" style="display: block; margin: auto;"></p>
 <p>This plot ignores any continuity between the flows between axes. This “memoryless” plot produces a less cluttered plot, in which at most one flow proceeds from each stratum at one axis to each stratum at the next, but at the cost of being able to track each cohort across the entire plot.</p>
 </div>
@@ -277,7 +290,8 @@
 <div id="appendix" class="section level2">
 <h2 class="hasAnchor">
 <a href="#appendix" class="anchor"></a>Appendix</h2>
-<div class="sourceCode" id="cb14"><html><body><pre class="r"><span class="kw pkg">sessioninfo</span><span class="kw ns">::</span><span class="fu"><a href="https://rdrr.io/pkg/sessioninfo/man/session_info.html">session_info</a></span>()</pre></body></html></div>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">sessioninfo</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/sessioninfo/man/session_info.html">session_info</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
 <pre><code>## ─ Session info ───────────────────────────────────────────────────────────────
 ##  setting  value                       
 ##  version  R version 4.0.0 (2020-04-24)
@@ -288,72 +302,73 @@
 ##  collate  en_US.UTF-8                 
 ##  ctype    en_US.UTF-8                 
 ##  tz       America/New_York            
-##  date     2020-10-15                  
+##  date     2020-12-04                  
 ## 
 ## ─ Packages ───────────────────────────────────────────────────────────────────
-##  package      * version     date       lib source                           
-##  assertthat     0.2.1       2019-03-21 [3] CRAN (R 4.0.0)                   
-##  backports      1.1.10      2020-09-15 [3] CRAN (R 4.0.2)                   
-##  cli            2.1.0       2020-10-12 [3] CRAN (R 4.0.0)                   
-##  colorspace     1.4-1       2019-03-18 [3] CRAN (R 4.0.0)                   
-##  crayon         1.3.4       2017-09-16 [3] CRAN (R 4.0.0)                   
-##  desc           1.2.0       2018-05-01 [3] CRAN (R 4.0.0)                   
-##  digest         0.6.25      2020-02-23 [3] CRAN (R 4.0.0)                   
-##  dplyr          1.0.2       2020-08-18 [3] CRAN (R 4.0.2)                   
-##  ellipsis       0.3.1       2020-05-15 [3] CRAN (R 4.0.0)                   
-##  evaluate       0.14        2019-05-28 [3] CRAN (R 4.0.0)                   
-##  fansi          0.4.1       2020-01-08 [3] CRAN (R 4.0.0)                   
-##  farver         2.0.3       2020-01-16 [3] CRAN (R 4.0.0)                   
-##  fs             1.5.0       2020-07-31 [3] CRAN (R 4.0.2)                   
-##  generics       0.0.2       2018-11-29 [3] CRAN (R 4.0.0)                   
-##  ggalluvial   * 0.12.2.0001 2020-10-15 [1] local                            
-##  ggplot2      * 3.3.2       2020-06-19 [3] CRAN (R 4.0.0)                   
-##  glue           1.4.2       2020-08-27 [3] CRAN (R 4.0.0)                   
-##  gtable         0.3.0       2019-03-25 [3] CRAN (R 4.0.0)                   
-##  htmltools      0.5.0       2020-06-16 [3] CRAN (R 4.0.0)                   
-##  knitr          1.30        2020-09-22 [3] CRAN (R 4.0.2)                   
-##  labeling       0.3         2014-08-23 [3] CRAN (R 4.0.0)                   
-##  lifecycle      0.2.0       2020-03-06 [3] CRAN (R 4.0.0)                   
-##  magrittr       1.5         2014-11-22 [3] CRAN (R 4.0.2)                   
-##  MASS           7.3-51.5    2019-12-20 [3] CRAN (R 4.0.0)                   
-##  memoise        1.1.0       2017-04-21 [3] CRAN (R 4.0.0)                   
-##  munsell        0.5.0       2018-06-12 [3] CRAN (R 4.0.0)                   
-##  pillar         1.4.6       2020-07-10 [3] CRAN (R 4.0.0)                   
-##  pkgconfig      2.0.3       2019-09-22 [3] CRAN (R 4.0.0)                   
-##  pkgdown        1.5.1       2020-04-09 [3] CRAN (R 4.0.0)                   
-##  purrr          0.3.4       2020-04-17 [3] CRAN (R 4.0.0)                   
-##  R6             2.4.1       2019-11-12 [3] CRAN (R 4.0.0)                   
-##  RColorBrewer   1.1-2       2014-12-07 [3] CRAN (R 4.0.0)                   
-##  rlang          0.4.8       2020-10-08 [3] CRAN (R 4.0.0)                   
-##  rmarkdown      2.3         2020-06-18 [3] CRAN (R 4.0.0)                   
-##  rprojroot      1.3-2       2018-01-03 [3] CRAN (R 4.0.0)                   
-##  rstudioapi     0.11        2020-02-07 [3] CRAN (R 4.0.0)                   
-##  scales         1.1.1       2020-05-11 [3] CRAN (R 4.0.0)                   
-##  sessioninfo    1.1.1       2018-11-05 [3] CRAN (R 4.0.0)                   
-##  stringi        1.5.3       2020-09-09 [3] CRAN (R 4.0.2)                   
-##  stringr        1.4.0       2019-02-10 [3] CRAN (R 4.0.0)                   
-##  tibble         3.0.3.9000  2020-07-28 [3] Github (tidyverse/tibble@b4eec19)
-##  tidyr          1.1.2       2020-08-27 [3] CRAN (R 4.0.0)                   
-##  tidyselect     1.1.0       2020-05-11 [3] CRAN (R 4.0.0)                   
-##  vctrs          0.3.4       2020-08-29 [3] CRAN (R 4.0.0)                   
-##  withr          2.3.0       2020-09-22 [3] CRAN (R 4.0.2)                   
-##  xfun           0.18        2020-09-29 [3] CRAN (R 4.0.2)                   
-##  yaml           2.2.1       2020-02-01 [3] CRAN (R 4.0.0)                   
+##  package      * version date       lib source        
+##  assertthat     0.2.1   2019-03-21 [3] CRAN (R 4.0.0)
+##  cli            2.2.0   2020-11-20 [3] CRAN (R 4.0.2)
+##  colorspace     2.0-0   2020-11-11 [3] CRAN (R 4.0.0)
+##  crayon         1.3.4   2017-09-16 [3] CRAN (R 4.0.0)
+##  desc           1.2.0   2018-05-01 [3] CRAN (R 4.0.0)
+##  digest         0.6.27  2020-10-24 [3] CRAN (R 4.0.2)
+##  dplyr          1.0.2   2020-08-18 [3] CRAN (R 4.0.2)
+##  ellipsis       0.3.1   2020-05-15 [3] CRAN (R 4.0.0)
+##  evaluate       0.14    2019-05-28 [3] CRAN (R 4.0.0)
+##  fansi          0.4.1   2020-01-08 [3] CRAN (R 4.0.0)
+##  farver         2.0.3   2020-01-16 [3] CRAN (R 4.0.0)
+##  fs             1.5.0   2020-07-31 [3] CRAN (R 4.0.2)
+##  generics       0.1.0   2020-10-31 [3] CRAN (R 4.0.2)
+##  ggalluvial   * 0.12.3  2020-12-04 [1] local         
+##  ggplot2      * 3.3.2   2020-06-19 [3] CRAN (R 4.0.0)
+##  glue           1.4.2   2020-08-27 [3] CRAN (R 4.0.0)
+##  gtable         0.3.0   2019-03-25 [3] CRAN (R 4.0.0)
+##  htmltools      0.5.0   2020-06-16 [3] CRAN (R 4.0.0)
+##  knitr          1.30    2020-09-22 [3] CRAN (R 4.0.2)
+##  labeling       0.4.2   2020-10-20 [3] CRAN (R 4.0.2)
+##  lifecycle      0.2.0   2020-03-06 [3] CRAN (R 4.0.0)
+##  magrittr       2.0.1   2020-11-17 [3] CRAN (R 4.0.2)
+##  memoise        1.1.0   2017-04-21 [3] CRAN (R 4.0.0)
+##  munsell        0.5.0   2018-06-12 [3] CRAN (R 4.0.0)
+##  pillar         1.4.7   2020-11-20 [3] CRAN (R 4.0.2)
+##  pkgconfig      2.0.3   2019-09-22 [3] CRAN (R 4.0.0)
+##  pkgdown        1.6.1   2020-09-12 [3] CRAN (R 4.0.2)
+##  purrr          0.3.4   2020-04-17 [3] CRAN (R 4.0.0)
+##  R6             2.5.0   2020-10-28 [3] CRAN (R 4.0.2)
+##  ragg           0.4.0   2020-10-05 [3] CRAN (R 4.0.2)
+##  RColorBrewer   1.1-2   2014-12-07 [3] CRAN (R 4.0.0)
+##  rlang          0.4.9   2020-11-26 [3] CRAN (R 4.0.2)
+##  rmarkdown      2.5     2020-10-21 [3] CRAN (R 4.0.0)
+##  rprojroot      2.0.2   2020-11-15 [3] CRAN (R 4.0.2)
+##  rstudioapi     0.13    2020-11-12 [3] CRAN (R 4.0.2)
+##  scales         1.1.1   2020-05-11 [3] CRAN (R 4.0.0)
+##  sessioninfo    1.1.1   2018-11-05 [3] CRAN (R 4.0.0)
+##  stringi        1.5.3   2020-09-09 [3] CRAN (R 4.0.2)
+##  stringr        1.4.0   2019-02-10 [3] CRAN (R 4.0.0)
+##  systemfonts    0.3.2   2020-09-29 [3] CRAN (R 4.0.2)
+##  textshaping    0.2.1   2020-11-13 [3] CRAN (R 4.0.2)
+##  tibble         3.0.4   2020-10-12 [3] CRAN (R 4.0.2)
+##  tidyr          1.1.2   2020-08-27 [3] CRAN (R 4.0.0)
+##  tidyselect     1.1.0   2020-05-11 [3] CRAN (R 4.0.0)
+##  vctrs          0.3.5   2020-11-17 [3] CRAN (R 4.0.2)
+##  withr          2.3.0   2020-09-22 [3] CRAN (R 4.0.2)
+##  xfun           0.19    2020-10-30 [3] CRAN (R 4.0.2)
+##  yaml           2.2.1   2020-02-01 [3] CRAN (R 4.0.0)
 ## 
-## [1] /private/var/folders/pg/fjg8r4fj5v33zqmwptf9mfg80000gn/T/RtmpuCTWyN/temp_libpathc1ea655c6f7b
-## [2] /private/var/folders/pg/fjg8r4fj5v33zqmwptf9mfg80000gn/T/RtmpuCTWyN/temp_libpathc1ea144b13ee
+## [1] /private/var/folders/pg/fjg8r4fj5v33zqmwptf9mfg80000gn/T/RtmpSjo38X/temp_libpathf5b366ae412a
+## [2] /private/var/folders/pg/fjg8r4fj5v33zqmwptf9mfg80000gn/T/RtmpSjo38X/temp_libpathf5b318ecca78
 ## [3] /Library/Frameworks/R.framework/Versions/4.0/Resources/library</code></pre>
 </div>
 <div class="footnotes">
 <hr>
 <ol>
-<li id="fn1"><p>See Friendly’s tutorial, linked above, for a discussion.<a href="#fnref1" class="footnote-back">↩</a></p></li>
-<li id="fn2"><p>Previously, quantities were passed to the <code>weight</code> aesthetic rather than to <code>y</code>. This prevented <code>scale_y_continuous()</code> from correctly transforming scales, and anyway it was inconsistent with the behavior of <code>geom_bar()</code>. As of version 0.12.0, <code>weight</code> is an optional parameter used only by computed variables intended for labeling, not by polygonal graphical elements.<a href="#fnref2" class="footnote-back">↩</a></p></li>
-<li id="fn3"><p><a href="https://github.com/thomasp85/ggforce">The <strong>ggforce</strong> package</a> includes parallel set geom and stat layers to produce similar diagrams that can be allowed to free-float.<a href="#fnref3" class="footnote-back">↩</a></p></li>
-<li id="fn4"><p>A greater variety of parallel sets plots are implemented in the <a href="https://github.com/heike/ggparallel"><strong>ggparallel</strong></a> and <a href="https://github.com/yaweige/ggpcp"><strong>ggpcp</strong></a> packages.<a href="#fnref4" class="footnote-back">↩</a></p></li>
-<li id="fn5"><p>If bumping is unnecessary, consider using <a href="https://www.r-graph-gallery.com/136-stacked-area-chart"><code>geom_area()</code></a> instead.<a href="#fnref5" class="footnote-back">↩</a></p></li>
-<li id="fn6"><p><code><a href="../reference/stat_stratum.html">stat_stratum()</a></code> will similarly accept arguments for <code>x</code> and <code>stratum</code> without <code>alluvium</code>. If both strata and either alluvia or flows are to be plotted, though, all three parameters need arguments.<a href="#fnref6" class="footnote-back">↩</a></p></li>
-<li id="fn7"><p>Be sure to set <code>na.rm</code> consistently in each layer, in this case both the flows and the strata.<a href="#fnref7" class="footnote-back">↩</a></p></li>
+<li id="fn1"><p>See Friendly’s tutorial, linked above, for a discussion.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p>Previously, quantities were passed to the <code>weight</code> aesthetic rather than to <code>y</code>. This prevented <code>scale_y_continuous()</code> from correctly transforming scales, and anyway it was inconsistent with the behavior of <code>geom_bar()</code>. As of version 0.12.0, <code>weight</code> is an optional parameter used only by computed variables intended for labeling, not by polygonal graphical elements.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p><a href="https://github.com/thomasp85/ggforce">The <strong>ggforce</strong> package</a> includes parallel set geom and stat layers to produce similar diagrams that can be allowed to free-float.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>A greater variety of parallel sets plots are implemented in the <a href="https://github.com/heike/ggparallel"><strong>ggparallel</strong></a> and <a href="https://github.com/yaweige/ggpcp"><strong>ggpcp</strong></a> packages.<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn5"><p>If bumping is unnecessary, consider using <a href="https://www.r-graph-gallery.com/136-stacked-area-chart"><code>geom_area()</code></a> instead.<a href="#fnref5" class="footnote-back">↩︎</a></p></li>
+<li id="fn6"><p><code><a href="../reference/stat_stratum.html">stat_stratum()</a></code> will similarly accept arguments for <code>x</code> and <code>stratum</code> without <code>alluvium</code>. If both strata and either alluvia or flows are to be plotted, though, all three parameters need arguments.<a href="#fnref6" class="footnote-back">↩︎</a></p></li>
+<li id="fn7"><p>Be sure to set <code>na.rm</code> consistently in each layer, in this case both the flows and the strata.<a href="#fnref7" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
   </div>
@@ -369,11 +384,11 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Jason Cory Brunson.</p>
+  <p>Developed by Jason Cory Brunson, Quentin D. Read.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
