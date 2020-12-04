@@ -12,7 +12,7 @@ vignette: >
 
 ```{r setup}
 knitr::opts_chunk$set(fig.width = 6, fig.height = 3, fig.align = "center")
-root_loc <- rprojroot::find_root(criterion = rprojroot::has_dir("vignettes"))
+library(ggalluvial)
 ```
 
 ## Problem
@@ -36,8 +36,6 @@ Hovering over and clicking on alluvia are more difficult because the shapes of t
 This toy dataset is used for the example app.
 
 ```{r toy dataset, message = FALSE, warning = FALSE}
-library(ggalluvial)
-
 example_data <- data.frame(
   weight = rep(1, 12),
   ID = 1:12,
