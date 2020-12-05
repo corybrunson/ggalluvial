@@ -22,7 +22,7 @@ On one platform (Ubuntu Linux 16.04 LTS, R-release, GCC), one ERROR was due to *
 
 ### WinBuilder
 
-There were no ERRORs. Each run produced the WARNING "checking CRAN incoming feasibility" of unknown cause. On some runs, one NOTE flagged several last names in the DESCRIPTION as possibly misspelled words. (These have been checked.)
+There were no ERRORs. Each run produced the WARNING "checking CRAN incoming feasibility" of unknown cause as well as a NOTE about the runtime issue above. On some runs, one NOTE flagged several last names in the DESCRIPTION as possibly misspelled words. (These have been checked.)
 
 ## Downstream dependencies
 
