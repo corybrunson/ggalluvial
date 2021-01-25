@@ -3,14 +3,15 @@ library(shiny)
 library(htmltools)
 library(sp)
 
-example_data <- data.frame(
-  weight = c(3, rep(1, 5), rep(2, 5), 3),
-  ID = 1:12,
-  cluster = rep(c(1, 2), c(4, 8)),
-  grp1 = rep(c('1a', '1b', '1a', '1b'), c(3, 2, 3, 4)),
-  grp2 = rep(c('2a', '2b', '2a', '2b', '2a'), c(2, 2, 2, 2, 4)),
-  grp3 = rep(c('3a','3b', '3a', '3b'), c(3, 2, 2, 5))
-)
+data(vaccinations)
+vaccinations <- transform(vaccinations,
+                          response = factor(response, rev(levels(response))))
+
+# Offset, in pixels, for location of tooltip relative to mouse cursor,
+# in both x and y direction.
+offset <- 5
+# Width of node boxes
+node_width <- 1/3
 
 # User interface
 ui <- fluidPage(
@@ -27,20 +28,18 @@ server <- function(input, output, session) {
   # Draw plot and extract coordinates
   output$alluvial_plot <- renderPlot({
     
-    # Width of node boxes
-    node_width <<- 1/4
-    
-    p <- ggplot(example_data,
-                aes(y = weight, axis1 = grp1, axis2 = grp2, axis3 = grp3)) + 
-      geom_alluvium(aes(fill = factor(cluster)), knot.pos = 0.25) + 
-      geom_stratum(width = node_width, reverse = TRUE) + 
-      geom_text(aes(label = after_stat(stratum)), 
-                stat = "stratum", 
-                reverse = TRUE, 
-                size = rel(3)) + 
+    p <- ggplot(vaccinations,
+           aes(x = survey, stratum = response, alluvium = subject,
+               y = freq,
+               fill = response, label = response)) +
+      scale_x_discrete(expand = c(.1, .1)) +
+      scale_y_continuous(expand = c(0, 0)) +
+      geom_flow(knot.pos = 1/4) +
+      geom_stratum(width = node_width) +
+      geom_text(stat = "stratum", size = rel(3)) +
       theme_bw() +
-      scale_x_continuous(expand = c(0, 0)) +
-      scale_y_continuous(expand = c(0, 0))
+      theme(legend.position = "none") +
+      ggtitle("vaccination survey responses at three points in time")
     
     # Build the plot. Use global assignment so that this object is accessible
     # later.
@@ -78,7 +77,7 @@ server <- function(input, output, session) {
       function(pts) as.numeric(pts$y)
     )))
     xrange_new <- c(1 - 1/6, 3 + 1/6) 
-    yrange_new <- c(0, sum(example_data$weight)) 
+    yrange_new <- c(0, sum(pbuilt$data[[2]]$count[pbuilt$data[[2]]$x == 1])) 
     
     # Define function to convert grid graphics coordinates to data coordinates
     new_range_transform <- function(x_old, range_old, range_new) {
@@ -116,11 +115,7 @@ server <- function(input, output, session) {
           hover$y > pbuilt$data[[2]]$ymin & 
           hover$y < pbuilt$data[[2]]$ymax
         node_label <- pbuilt$data[[2]]$stratum[node_row]
-        node_n <- pbuilt$data[[2]]$n[node_row]
-        
-        # Offset, in pixels, for location of tooltip relative to mouse cursor,
-        # in both x and y direction.
-        offset <- 5
+        node_n <- pbuilt$data[[2]]$count[node_row] 
         
         # Render tooltip
         renderTags(
@@ -153,17 +148,17 @@ server <- function(input, output, session) {
         if (any(hover_within_flow)) {
           # Find the alluvium that is plotted on top. (last)
           coord_id <- rev(which(hover_within_flow == 1))[1]
-          # Get the corresponding row ID from the data.
-          flow_id <- example_data$ID[coord_id]
-          # Get the axis 1-3 values for all axes for that row ID.
-          axis_values <- example_data[flow_id, c('grp1', 'grp2', 'grp3')]
-          
-          offset <- 5
+          # Find the subject and freq corresponding to that alluvium in the data.
+          flow_label <- paste(groups_to_draw[[coord_id]]$label, collapse = ' -> ')
+          flow_n <- groups_to_draw[[coord_id]]$count[1]
+          # Get the values for all axes for that row ID.
+          #axis_values <- sapply(UCBAdmissions[coord_id, c('Gender', 'Dept')], as.character)
           
           # Render tooltip
           renderTags(
             tags$div(
-              paste(axis_values, collapse = ' -> '),
+              flow_label, tags$br(),
+              "n =", flow_n,
               style = paste0(
                 "position: absolute; ",
                 "top: ", hover$coords_css$y + offset, "px; ",
