@@ -5,8 +5,6 @@ library(sp)
 
 data(UCBAdmissions)
 UCBAdmissions <- as.data.frame(UCBAdmissions)
-# Arrange data so that the row IDs match the order in the data
-UCBAdmissions <- UCBAdmissions[order(UCBAdmissions$Admit, UCBAdmissions$Gender, UCBAdmissions$Dept), ]
 
 # Offset, in pixels, for location of tooltip relative to mouse cursor,
 # in both x and y direction.
@@ -64,7 +62,7 @@ yrange_old <- range(unlist(lapply(
   function(pts) as.numeric(pts$y)
 )))
 xrange_new <- c(1 - 1/6, max(pbuilt$data[[1]]$x) + 1/6) 
-yrange_new <- c(0, sum(UCBAdmissions$Freq)) 
+yrange_new <- c(0, sum(pbuilt$data[[2]]$count[pbuilt$data[[2]]$x == 1])) 
 
 # Define function to convert grid graphics coordinates to data coordinates
 new_range_transform <- function(x_old, range_old, range_new) {
