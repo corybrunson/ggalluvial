@@ -272,17 +272,13 @@ renderTags(
 
 ## App with long-format alluvial data
 
-The vaccinations dataset is used for long-format alluvial data. This vignette does not go through the code as thoroughly. The main thing to note is that the way the app calculates the range transformations and populates the data to display in the tooltip is slightly different, given the different input data. However, the changes are minimal because the output of `ggplot_build()` that is used to find the polygon coordinates and information is essentially the same regardless of the initial format of the input data.
-
-Notable differences between the two apps are as follows:
-
-(INSERT CODE HERE)
+The vaccinations dataset is used for long-format alluvial data. This vignette does not go through the code as thoroughly. In fact, the output of `ggplot_build()` that is used to find the polygon coordinates and information has a consistent structure regardless of the initial format of the input data. Therefore the calculation of polygon coordinates, user interface, and server functions of the two apps are identical. The only difference is in the initial creation of the `ggplot()` object. Refer back to the **EXAMPLES OF PLOTS MADE WITH LONG AND WIDE DATA**.
 
 ## Conclusion
 
 This vignette demonstrates how to enable tooltips for **ggalluvial** plots in Shiny apps. However it's important to note that some of the workarounds are slightly inelegant. This may not be the optimal way to do it &mdash; other solutions are certainly possible!
 
-## Embedded Shiny apps
+## Appendix: embedded Shiny apps
 
 The full source code for both of these Shiny apps is included with the **ggalluvial** package in the **examples** subdirectory where the package is installed: the source files are `ggalluvial/examples/ex-shiny-long-data/app.R` and `ggalluvial/examples/ex-shiny-wide-data/app.R` respectively.
 

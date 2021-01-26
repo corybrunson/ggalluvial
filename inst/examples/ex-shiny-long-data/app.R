@@ -144,12 +144,10 @@ server <- function(input, output, session) {
         if (any(hover_within_flow)) {
           # Find the alluvium that is plotted on top. (last)
           coord_id <- rev(which(hover_within_flow == 1))[1]
-          # Find the subject and freq corresponding to that alluvium in the data.
-          flow_label <- paste(groups_to_draw[[coord_id]]$label, collapse = ' -> ')
+          # Find the strata labels and n corresponding to that alluvium in the data.
+          flow_label <- paste(groups_to_draw[[coord_id]]$stratum, collapse = ' -> ')
           flow_n <- groups_to_draw[[coord_id]]$count[1]
-          # Get the values for all axes for that row ID.
-          #axis_values <- sapply(UCBAdmissions[coord_id, c('Gender', 'Dept')], as.character)
-          
+
           # Render tooltip
           renderTags(
             tags$div(
