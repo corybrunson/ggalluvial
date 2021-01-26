@@ -13,6 +13,75 @@ offset <- 5
 # Width of node boxes
 node_width <- 1/3
 
+# Draw plot and extract coordinates
+p <- ggplot(vaccinations,
+            aes(x = survey, stratum = response, alluvium = subject,
+                y = freq,
+                fill = response, label = response)) +
+  scale_x_discrete(expand = c(.1, .1)) +
+  scale_y_continuous(expand = c(0, 0)) +
+  geom_flow(knot.pos = 1/4) +
+  geom_stratum(width = node_width) +
+  geom_text(stat = "stratum", size = rel(3)) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  ggtitle("vaccination survey responses at three points in time")
+
+# Build the plot. Use global assignment so that this object is accessible
+# later.
+pbuilt <- ggplot_build(p)
+
+# Use built plot data to recalculate the locations of the flow polygons:
+
+# Add width parameter, and then convert built plot data to xsplines
+data_draw <- transform(pbuilt$data[[1]], width = 1/3)
+groups_to_draw <- split(data_draw, data_draw$group) # Global assignment because this is used to extract information for the tooltip later.
+group_xsplines <- lapply(groups_to_draw,
+                         ggalluvial:::data_to_xspline,
+                         knot.prop = TRUE) 
+
+# Convert xspline coordinates to grid object.
+xspline_coords <- lapply(
+  group_xsplines,
+  function(coords) grid::xsplineGrob(x = coords$x, 
+                                     y = coords$y, 
+                                     shape = coords$shape, 
+                                     open = FALSE)
+)
+
+# Use grid::xsplinePoints to draw the curve for each polygon
+xspline_points <- lapply(xspline_coords, grid::xsplinePoints)
+
+# Define the x and y axis limits in grid coordinates (old) and plot
+# coordinates (new)
+xrange_old <- range(unlist(lapply(
+  xspline_points,
+  function(pts) as.numeric(pts$x)
+)))
+yrange_old <- range(unlist(lapply(
+  xspline_points,
+  function(pts) as.numeric(pts$y)
+)))
+xrange_new <- c(1 - 1/6, max(pbuilt$data[[1]]$x) + 1/6) 
+yrange_new <- c(0, sum(pbuilt$data[[2]]$count[pbuilt$data[[2]]$x == 1])) 
+
+# Define function to convert grid graphics coordinates to data coordinates
+new_range_transform <- function(x_old, range_old, range_new) {
+  (x_old - range_old[1])/(range_old[2] - range_old[1]) *
+    (range_new[2] - range_new[1]) + range_new[1]
+}
+
+# Using the x and y limits, convert the grid coordinates into plot coordinates. 
+polygon_coords <- lapply(xspline_points, function(pts) {
+  x_trans <- new_range_transform(x_old = as.numeric(pts$x), 
+                                 range_old = xrange_old, 
+                                 range_new = xrange_new)
+  y_trans <- new_range_transform(x_old = as.numeric(pts$y), 
+                                 range_old = yrange_old, 
+                                 range_new = yrange_new)
+  list(x = x_trans, y = y_trans)
+})
+
 # User interface
 ui <- fluidPage(
   fluidRow(tags$div(
@@ -25,83 +94,10 @@ ui <- fluidPage(
 
 server <- function(input, output, session) {
   
-  # Draw plot and extract coordinates
-  output$alluvial_plot <- renderPlot({
-    
-    p <- ggplot(vaccinations,
-           aes(x = survey, stratum = response, alluvium = subject,
-               y = freq,
-               fill = response, label = response)) +
-      scale_x_discrete(expand = c(.1, .1)) +
-      scale_y_continuous(expand = c(0, 0)) +
-      geom_flow(knot.pos = 1/4) +
-      geom_stratum(width = node_width) +
-      geom_text(stat = "stratum", size = rel(3)) +
-      theme_bw() +
-      theme(legend.position = "none") +
-      ggtitle("vaccination survey responses at three points in time")
-    
-    # Build the plot. Use global assignment so that this object is accessible
-    # later.
-    pbuilt <<- ggplot_build(p)
-    
-    # Use built plot data to recalculate the locations of the flow polygons:
-    
-    # Add width parameter, and then convert built plot data to xsplines
-    data_draw <- transform(pbuilt$data[[1]], width = 1/3)
-    groups_to_draw <- split(data_draw, data_draw$group)
-    group_xsplines <- lapply(groups_to_draw,
-                             ggalluvial:::data_to_xspline,
-                             knot.prop = TRUE) 
-    
-    # Convert xspline coordinates to grid object.
-    xspline_coords <- lapply(
-      group_xsplines,
-      function(coords) grid::xsplineGrob(x = coords$x, 
-                                         y = coords$y, 
-                                         shape = coords$shape, 
-                                         open = FALSE)
-    )
-    
-    # Use grid::xsplinePoints to draw the curve for each polygon
-    xspline_points <- lapply(xspline_coords, grid::xsplinePoints)
-    
-    # Define the x and y axis limits in grid coordinates (old) and plot
-    # coordinates (new)
-    xrange_old <- range(unlist(lapply(
-      xspline_points,
-      function(pts) as.numeric(pts$x)
-    )))
-    yrange_old <- range(unlist(lapply(
-      xspline_points,
-      function(pts) as.numeric(pts$y)
-    )))
-    xrange_new <- c(1 - 1/6, 3 + 1/6) 
-    yrange_new <- c(0, sum(pbuilt$data[[2]]$count[pbuilt$data[[2]]$x == 1])) 
-    
-    # Define function to convert grid graphics coordinates to data coordinates
-    new_range_transform <- function(x_old, range_old, range_new) {
-      (x_old - range_old[1])/(range_old[2] - range_old[1]) *
-        (range_new[2] - range_new[1]) + range_new[1]
-    }
-    
-    # Using the x and y limits, convert the grid coordinates into plot
-    # coordinates. Use global assignment.
-    polygon_coords <<- lapply(xspline_points, function(pts) {
-      x_trans <- new_range_transform(x_old = as.numeric(pts$x), 
-                                     range_old = xrange_old, 
-                                     range_new = xrange_new)
-      y_trans <- new_range_transform(x_old = as.numeric(pts$y), 
-                                     range_old = yrange_old, 
-                                     range_new = yrange_new)
-      list(x = x_trans, y = y_trans)
-    })
-    
-    # Return plot
-    p
-  }, 
-  res = 200)
+  # Draw plot 
+  output$alluvial_plot <- renderPlot(p, res = 200)
   
+  # Display tooltip
   output$tooltip <- renderText(
     if(!is.null(input$plot_hover)) {
       hover <- input$plot_hover
