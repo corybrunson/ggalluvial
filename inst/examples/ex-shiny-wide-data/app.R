@@ -12,7 +12,7 @@ UCBAdmissions <- UCBAdmissions[order(UCBAdmissions$Admit, UCBAdmissions$Gender, 
 # in both x and y direction.
 offset <- 5
 # Width of node boxes
-node_width <- 1/12
+node_width <- 1/4
 
 # Draw plot.
 p <- ggplot(UCBAdmissions,
@@ -25,7 +25,7 @@ p <- ggplot(UCBAdmissions,
              size = rel(3)) + 
   theme_bw() +
   scale_fill_brewer(type = "qual", palette = "Set1") +
-  scale_x_discrete(limits = c("Gender", "Dept"), expand = c(0, 0)) +
+  scale_x_discrete(limits = c("Gender", "Dept"), expand = c(.05, .05)) +
   scale_y_continuous(expand = c(0, 0)) +
   ggtitle("UC Berkeley admissions and rejections, by sex and department")
 
