@@ -11,14 +11,14 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
-```{r setup}
+```{r setup, echo = FALSE}
 knitr::opts_chunk$set(fig.width = 6, fig.height = 3, fig.align = "center")
 library(ggalluvial)
 ```
 
 ## Problem
 
-In an interactive visualization, it is visually cleaner and better for interpretation if labels and other information appear as "tooltips" when the user hovers over or clicks on elements of the plot, rather than displaying all the labels on the plot at one time. However, the **ggalluvial** package does not natively include this functionality. It is possible to enable this using functions from several other packages. This vignette illustrates how to create Shiny apps that display an alluvial plot with tooltips that appear when the user hovers over two different plot elements: strata created with `geom_stratum()` and alluvia created with `geom_alluvium()`. An example is provided for wide-format alluvial data (the UCBAdmissions dataset) and long-format alluvial data (the vaccinations dataset).
+In an interactive visualization, it is visually cleaner and better for interpretation if labels and other information appear as "tooltips" when the user hovers over or clicks on elements of the plot, rather than displaying all the labels on the plot at one time. However, the **ggalluvial** package does not natively include this functionality. It is possible to enable this using functions from several other packages. This vignette illustrates how to create Shiny apps that display an alluvial plot with tooltips that appear when the user hovers over two different plot elements: strata created with `geom_stratum()` and alluvia created with `geom_alluvium()`. An example is provided for wide-format alluvial data (the `UCBAdmissions` dataset) and long-format alluvial data (the `vaccinations` dataset).
 
 The tooltips that appear when the user hovers over elements of the plot show a text label and the count in each group. If the user hovers or clicks somewhere inside a ggplot panel, Shiny automatically returns information about the location of the mouse cursor *in plot coordinates*. That means the main work we have to do is to extract or manually recalculate the coordinates of the different plot elements. With that information, we can determine which plot element the cursor is hovering over and display the appropriate information in the tooltip or other output method.
 
@@ -26,7 +26,7 @@ _Note:_ The app demonstrated here depends on the packages **htmltools** and **sp
 
 ### Hovering over and clicking on strata
 
-Enabling hovering over and clicking on strata is straightforward because of their rectangular shape. We only need the minimum and maximum `x` and `y` coordinates for each of the rectangles. The rectangles are evenly spaced along the x-axis, centered on positive integers beginning with 1. The width is set in `geom_stratum()` so, for example, we know that the x-coordinates of the first stratum are 1 &plusmn; `width`/2. The y-coordinates can be determined from the number of rows in the input data multiplied by their weights.
+Enabling hovering over and clicking on strata is straightforward because of their rectangular shape. We only need the minimum and maximum `x` and `y` coordinates for each of the rectangles. The rectangles are evenly spaced along the x-axis, centered on positive integers beginning with 1. The width is set in `geom_stratum()` so, for example, we know that the x-coordinates of the first stratum are `c(1 - width/2, 1 + width/2)`. The y-coordinates can be determined from the number of rows in the input data multiplied by their weights.
 
 ### Hovering over and clicking on alluvia
 
@@ -99,14 +99,14 @@ server <- function(input, output, session) {
 
 ### Loading data
 
-The UC-Berkeley admissions dataset is used in this example. After loading the necessary packages, the first thing we do in the app is load the data.
+The UC-Berkeley admissions dataset, `UCBAdmissions`, is used in this example. After loading the necessary packages, the first thing we do in the app is load the data.
 
 ```{r load dataset, eval = FALSE}
 data(UCBAdmissions)
 UCBAdmissions <- as.data.frame(UCBAdmissions)
 ```
 
-Next we set `offset`, the distance from cursor to tooltip, in pixels, in both x and y directions. We also set `node_width` here which is used as an argument to `geom_stratum()` below, and is used again later to determine whether the mouse cursor is hovering over a stratum.
+Next we set `offset`, the distance from cursor to tooltip, in pixels, in both x and y directions. We also set `node_width` here, which is used as an argument to `geom_stratum()` below, and again later to determine whether the mouse cursor is hovering over a stratum.
 
 ```{r set options, eval = FALSE}
 # Offset, in pixels, for location of tooltip relative to mouse cursor,
@@ -138,11 +138,9 @@ p <- ggplot(UCBAdmissions,
 
 # Build the plot. 
 pbuilt <- ggplot_build(p)
-
 ```
 
-
-Now for the hard part: reverse-engineering the coordinates of the alluvia polygons. This makes use of `pbuilt$data[[1]]`, a data frame with the individual elements of the alluvial plot. We add an additional column for `width`, which has a value of 1/3 hard-coded into `ggalluvial::geom_alluvium()`, then split the data frame by group (groups correspond to the individual alluvium polygons). We apply the unexported function `ggalluvial:::data_to_xspline()` to each element of the list to get the x-spline coordinates. Then, we pass the x-spline coordinates to the function `grid::xsplineGrob()` to convert them into a `grid` object. We pass the resulting object to `grid::xsplinePoints()`. At this point we now have the coordinates of the alluvium polygons.
+Now for the hard part: reverse-engineering the coordinates of the alluvia polygons. This makes use of `pbuilt$data[[1]]`, a data frame with the individual elements of the alluvial plot. We add an additional column for `width`, which has a value of `1/3` hard-coded into `geom_alluvium()`, then split the data frame by group (groups correspond to the individual alluvium polygons). We apply the unexported function `ggalluvial:::data_to_xspline()` to each element of the list to get the x-spline coordinates. Then, we pass the x-spline coordinates to the function `grid::xsplineGrob()` to convert them into a **grid** object. We pass the resulting object to `grid::xsplinePoints()`. At this point we now have the coordinates of the alluvium polygons. The object `xspline_points` is a list with length equal to the number of alluvium polygons in the plot. Each element of the list is a list with elements `x` and `y`, which are numeric vectors.
 
 ```{r get xsplines and draw curves}
 # Add width parameter, and then convert built plot data to xsplines
@@ -165,7 +163,7 @@ xspline_coords <- lapply(
 xspline_points <- lapply(xspline_coords, grid::xsplinePoints)
 ```
 
-The coordinates we have are in grid plotting units but we need to convert them into the same units as the axes on the plot. We do this by determining the range of the x and y axes in grid units (`xrange_old` and `yrange_old`). Then we fix the range of the x axis as 1 to the number of strata, adjusted by the width of the nodes (the value of `1/6` is internal to **ggalluvial**). Next we fix the range of the y axis to the sum of the counts across all alluvia at one node.
+The coordinates we have are in **grid** plotting units but we need to convert them into the same units as the axes on the plot. We do this by determining the range of the x and y-axes in **grid** units (`xrange_old` and `yrange_old`). Then we fix the range of the x axis as 1 to the number of strata, adjusted by the half the width of the nodes on each side (`1/6`, because the nodes are always `1/3` units wide). Next we fix the range of the y-axis to the sum of the counts across all alluvia at one node.
 
 ```{r get coordinate ranges, eval = FALSE}
 # Define the x and y axis limits in grid coordinates (old) and plot
@@ -183,7 +181,7 @@ yrange_new <- c(0, sum(pbuilt$data[[2]]$count[pbuilt$data[[2]]$x == 1]))
 ```
 
 
-We define a function `new_range_transform()` inline and apply it to each set of coordinates. Now we have the coordinates of the polygons in plot units! 
+We define a function `new_range_transform()` inline and apply it to each set of coordinates. This returns another list, `polygon_coords`, with the same structure as `xspline_points`. Now we have the coordinates of the polygons in plot units! 
 
 ```{r transform coordinates, eval = FALSE}
 # Define function to convert grid graphics coordinates to data coordinates
@@ -225,7 +223,7 @@ The elements are:
 - a `plotOutput` with the argument `hover` defined, to enable behavior determined by the cursor's plot coordinates whenever the user hovers over the plot.
 - an `htmlOutput` for the tooltip that appears next to the cursor on hover.
 
-Both of the elements are wrapped in a `fluidRow()` and a `div()` tag.
+The elements are wrapped in a `fluidRow()` and a `div()` tag.
 
 _Note:_ This vignette only illustrates how to display output when the user hovers over an element. If you want to display output when the user clicks on an element, the corresponding argument to `plotOutput()` is `click = clickOpts(id = "plot_click")`. This will return the location of the mouse cursor in plot coordinates when the user clicks somewhere within the plot panel.
 
@@ -233,12 +231,11 @@ _Also Note:_ In the example presented here, all of the plot drawing and coordina
 
 ### Server function
 
-In the server function, we first call `renderPlot()` and pass the ggplot object to `output`.
+In the server function, we first call `renderPlot()` to draw the plot in the app window.
 
 ```{r renderPlot, eval = FALSE}
 output$alluvial_plot <- renderPlot(p, res = 200)
 ```
-
 
 Next, we define the tooltip with a `renderText()` expression. Within that expression, we first extract the cursor's plot coordinates from the user input. We determine whether the cursor is hovering over a stratum and if so, display the appropriate tooltip.
 
@@ -248,13 +245,13 @@ If the mouse cursor is not hovering over a stratum, we determine whether it is h
 
 ![screenshot of tooltip on alluvium](https://raw.githubusercontent.com/corybrunson/ggalluvial/main/vignettes/img/hover_alluvium.jpg)
 
-If the mouse cursor is hovering over an empty region of the plot, nothing is returned by `renderText()` and so no tooltip text box is displayed.
+If the mouse cursor is hovering over an empty region of the plot, `renderText()` returns nothing and no tooltip appears.
 
 ![screenshot of cursor over empty region](https://raw.githubusercontent.com/corybrunson/ggalluvial/main/vignettes/img/hover_empty_area.jpg)
 
 Let's take a deeper dive into the logic used to determine the text that appears in the tooltip.
 
-First, we check whether the cursor is inside the plot panel. If it is not, the element `plot_hover` of the input will be `NULL`.
+First, we check whether the cursor is inside the plot panel. If it is not, the element `plot_hover` of the input will be `NULL`. In that case `renderText()` will return nothing and no tooltip will appear.
 
 ```{r, eval = FALSE}
 output$tooltip <- renderText(
@@ -274,21 +271,21 @@ x_coord <- round(hover$x)
 if(abs(hover$x - x_coord) < (node_width / 2)) { ... } else { ... }
 ```
 
-The nearest integer to the y-coordinate corresponds to the row of the data frame because we set `reverse = TRUE` and all `weight = 1` in the input data. So, for example, the first row of the data frame corresponds to y range `c(0, 1)`, the second `c(1, 2)`, and so forth. This gives us all the information we need to find the index of the rows of the input data that goes with the stratum the cursor is on. _Note:_ It is necessary for the input data to be sorted in ascending order of the `group` column, named `cluster` in this example. If it is not sorted in this way, the relative order of the flows along the y-axis will not correspond to their order in the data.
+If the condition is true, we need to find the index of the row of the input data that goes with the stratum the cursor is on. The data frame `pbuilt$data[[2]]` includes columns `x`, `ymin`, and `ymax` that define the x-coordinate of the center of the stratum, and the minimum and maximum y-coordinates of the stratum. We find the row index of that data frame where `x` is equal to the rounded x-coordinate of the cursor, and the y-coordinate of the cursor falls between `ymin` and `ymax`.
 
 ```{r, eval = FALSE}
 node_row <- 
   pbuilt$data[[2]]$x == x_coord & hover$y > pbuilt$data[[2]]$ymin & hover$y < pbuilt$data[[2]]$ymax
 ```
 
-We get the name of the stratum as well as its width from the data in `pbuilt`.
+To find the information to display in the tooltip, we get the name of the stratum as well as its width from the data in `pbuilt`.
 
 ```{r, eval = FALSE}
 node_label <- pbuilt$data[[2]]$stratum[node_row]
 node_n <- pbuilt$data[[2]]$count[node_row]
 ```
 
-Finally, we render a tooltip using the `div` tag and passing it to `htmltools::renderTags()`. Note that the tooltip positioning is provided in CSS coordinates (pixels), not data coordinates. This does not require any additional effort on our part because `plot_hover` also includes the mouse cursor location in those units.
+Finally, we render a tooltip using the `div` tag. We provide the text to display as arguments to `htmltools::renderTags()`. We also paste CSS style information together and pass it to the `style` argument. Note that the tooltip positioning is provided in CSS coordinates (pixels), not data coordinates. This does not require any additional effort on our part because `plot_hover` also includes an element called `coords_css`, which contains the mouse cursor location in pixel units.
 
 ```{r render strata tooltip, eval = FALSE}
 renderTags(
@@ -309,7 +306,7 @@ renderTags(
 
 #### Hovering over an alluvium
 
-If the cursor is not over a stratum, the next nested `if`-statement checks whether it is over an alluvium. This is done using the function `sp::point.in.polygon` applied across each of the polygons for which we defined the coordinates inside the `renderPlot` expression.
+If the cursor is not over a stratum, the next nested `if`-statement checks whether it is over an alluvium. This is done using the function `sp::point.in.polygon()` applied across each of the polygons for which we defined the coordinates inside the `renderPlot()` expression.
 
 ```{r test within polygon, eval = FALSE}
 hover_within_flow <- sapply(
@@ -328,7 +325,7 @@ if (any(hover_within_flow)) { ... }
 ```
 
 
-In the situation where there are more than one polygon overlapping, we get the information for the polygon that is plotted last by calling `rev()` on the logical vector returned by `point.in.polygon()`. This means that the tooltip will display information from the alluvium that appears "on top" in the plot. In this example, we will display the names of the nodes that the alluvium connects, with arrows between them, and the width of the alluvium.
+In the situation where there are more than one polygon overlapping, we get the information for the polygon that is plotted last by calling `rev()` on the logical vector returned by `point.in.polygon()`. This means that the tooltip will display information from the alluvium that appears "on top" in the plot. In this example, we display the names of the nodes that the alluvium connects, with arrows between them, and the width of the alluvium.
 
 ```{r info for alluvia tooltip, eval = FALSE}
 coord_id <- rev(which(hover_within_flow == 1))[1]
@@ -336,7 +333,7 @@ flow_label <- paste(groups_to_draw[[coord_id]]$stratum, collapse = ' -> ')
 flow_n <- groups_to_draw[[coord_id]]$count[1]
 ```
 
-We render a tooltip using very similar syntax to the one above.
+We render a tooltip using identical syntax to the one above.
 
 ```{r render alluvia tooltip, eval = FALSE}
 renderTags(
@@ -357,7 +354,7 @@ renderTags(
 
 ## App with long-format alluvial data
 
-The vaccinations dataset is used for long-format alluvial data. The app is embedded at the bottom of this document, but we don't need to walk through the source code because it's almost identical to the code above. The output of `ggplot_build()` that is used to find the polygon coordinates and information for the tooltips has a consistent structure regardless of the initial format of the input data. Therefore, the calculation of polygon coordinates, user interface, and server functions of the two apps are identical. The only difference is in the initial creation of the `ggplot()` object. Refer back to the **EXAMPLES OF PLOTS MADE WITH LONG AND WIDE DATA**.
+The `vaccinations` dataset is used for long-format alluvial data. The app is embedded at the bottom of this document, but we don't need to walk through the source code because it's almost identical to the code above. The output of `ggplot_build()` that is used to find the polygon coordinates and information for the tooltips has a consistent structure regardless of the initial format of the input data. Therefore, the calculation of polygon coordinates, user interface, and server functions of the two apps are identical. The only difference is in the initial creation of the `ggplot()` object. Refer back to the **EXAMPLES OF PLOTS MADE WITH LONG AND WIDE DATA**.
 
 The app is embedded below.
 
@@ -370,6 +367,6 @@ shinyAppDir(
 
 ## Conclusion
 
-This vignette demonstrates how to enable tooltips for **ggalluvial** plots in Shiny apps. However it's important to note that some of the workarounds are slightly inelegant. This may not be the optimal way to do it &mdash; other solutions are certainly possible!
+This vignette demonstrates how to enable tooltips for **ggalluvial** plots in Shiny apps. This is one of many possible ways to do that. It may not be the optimal way &mdash; other solutions are certainly possible!
 
-The full source code for both of these Shiny apps is included with the **ggalluvial** package in the **examples** subdirectory where the package is installed: the source files are `ggalluvial/examples/ex-shiny-long-data/app.R` and `ggalluvial/examples/ex-shiny-wide-data/app.R` respectively.
+The full source code for both of these Shiny apps is included with the **ggalluvial** package in the **examples** subdirectory where the package is installed: the source files are `ggalluvial/examples/ex-shiny-wide-data/app.R` and `ggalluvial/examples/ex-shiny-long-data/app.R`.
