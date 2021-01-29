@@ -99,14 +99,14 @@ server <- function(input, output, session) {
 
 ### Loading data
 
-The UC-Berkeley admissions dataset, `UCBAdmissions`, is used in this example. After loading the necessary packages, the first thing we do in the app is load the data.
+The UC-Berkeley admissions dataset, `UCBAdmissions`, is used in this example. After loading the necessary packages, the first thing we do in the app is load the data and coerce from array to data frame.
 
 ```{r load dataset, eval = FALSE}
 data(UCBAdmissions)
-UCBAdmissions <- as.data.frame(UCBAdmissions)
+ucb_admissions <- as.data.frame(UCBAdmissions)
 ```
 
-Next we set `offset`, the distance from cursor to tooltip, in pixels, in both x and y directions. We also set `node_width` here, which is used as an argument to `geom_stratum()` below, and again later to determine whether the mouse cursor is hovering over a stratum.
+Next we set `offset`, the distance from cursor to tooltip, in pixels, in both x and y directions. We also set `node_width` and `alluvium_width` here, which are used as arguments to `geom_stratum()` and `geom_alluvium()` below, and again later to determine whether the mouse cursor is hovering over a stratum/alluvium.
 
 ```{r set options, eval = FALSE}
 # Offset, in pixels, for location of tooltip relative to mouse cursor,
@@ -114,6 +114,8 @@ Next we set `offset`, the distance from cursor to tooltip, in pixels, in both x 
 offset <- 5
 # Width of node boxes
 node_width <- 1/4
+# Width of alluvia
+alluvium_width <- 1/3
 ```
 
 ### Drawing the plot and extracting coordinates
@@ -122,9 +124,9 @@ Next, we create the `ggplot` object for the alluvial plot, then we call the `ggp
 
 ```{r draw and build plot, eval = FALSE}
 # Draw plot.
-p <- ggplot(UCBAdmissions,
+p <- ggplot(ucb_admissions,
             aes(y = Freq, axis1 = Gender, axis2 = Dept)) + 
-  geom_alluvium(aes(fill = Admit), knot.pos = 1/4) + 
+  geom_alluvium(aes(fill = Admit), knot.pos = 1/4, width = alluvium_width) + 
   geom_stratum(width = node_width, reverse = TRUE, fill = 'black', color = 'grey') + 
   geom_label(aes(label = after_stat(stratum)), 
              stat = "stratum", 
@@ -140,11 +142,11 @@ p <- ggplot(UCBAdmissions,
 pbuilt <- ggplot_build(p)
 ```
 
-Now for the hard part: reverse-engineering the coordinates of the alluvia polygons. This makes use of `pbuilt$data[[1]]`, a data frame with the individual elements of the alluvial plot. We add an additional column for `width`, which has a value of `1/3` hard-coded into `geom_alluvium()`, then split the data frame by group (groups correspond to the individual alluvium polygons). We apply the unexported function `ggalluvial:::data_to_xspline()` to each element of the list to get the x-spline coordinates. Then, we pass the x-spline coordinates to the function `grid::xsplineGrob()` to convert them into a **grid** object. We pass the resulting object to `grid::xsplinePoints()`. At this point we now have the coordinates of the alluvium polygons. The object `xspline_points` is a list with length equal to the number of alluvium polygons in the plot. Each element of the list is a list with elements `x` and `y`, which are numeric vectors.
+Now for the hard part: reverse-engineering the coordinates of the alluvia polygons. This makes use of `pbuilt$data[[1]]`, a data frame with the individual elements of the alluvial plot. We add an additional column for `width` using the value we set above, then split the data frame by group (groups correspond to the individual alluvium polygons). We apply the unexported function `ggalluvial:::data_to_xspline()` to each element of the list to get the x-spline coordinates. Then, we pass the x-spline coordinates to the function `grid::xsplineGrob()` to convert them into a **grid** object. We pass the resulting object to `grid::xsplinePoints()`. At this point we now have the coordinates of the alluvium polygons. The object `xspline_points` is a list with length equal to the number of alluvium polygons in the plot. Each element of the list is a list with elements `x` and `y`, which are numeric vectors.
 
 ```{r get xsplines and draw curves, eval = FALSE}
 # Add width parameter, and then convert built plot data to xsplines
-data_draw <- transform(pbuilt$data[[1]], width = 1/3)
+data_draw <- transform(pbuilt$data[[1]], width = alluvium_width)
 groups_to_draw <- split(data_draw, data_draw$group)
 group_xsplines <- lapply(groups_to_draw,
                          ggalluvial:::data_to_xspline,
@@ -163,7 +165,7 @@ xspline_coords <- lapply(
 xspline_points <- lapply(xspline_coords, grid::xsplinePoints)
 ```
 
-The coordinates we have are in **grid** plotting units but we need to convert them into the same units as the axes on the plot. We do this by determining the range of the x and y-axes in **grid** units (`xrange_old` and `yrange_old`). Then we fix the range of the x axis as 1 to the number of strata, adjusted by the half the width of the nodes on each side (`1/6`, because the nodes are always `1/3` units wide). Next we fix the range of the y-axis to the sum of the counts across all alluvia at one node.
+The coordinates we have are in **grid** plotting units but we need to convert them into the same units as the axes on the plot. We do this by determining the range of the x and y-axes in **grid** units (`xrange_old` and `yrange_old`). Then we fix the range of the x axis as 1 to the number of strata, adjusted by half the alluvium width on each side. Next we fix the range of the y-axis to the sum of the counts across all alluvia at one node.
 
 ```{r get coordinate ranges, eval = FALSE}
 # Define the x and y axis limits in grid coordinates (old) and plot
@@ -176,7 +178,7 @@ yrange_old <- range(unlist(lapply(
   xspline_points,
   function(pts) as.numeric(pts$y)
 )))
-xrange_new <- c(1 - 1/6, max(pbuilt$data[[1]]$x) + 1/6) 
+xrange_new <- c(1 - alluvium_width/2, max(pbuilt$data[[1]]$x) + alluvium_width/2) 
 yrange_new <- c(0, sum(pbuilt$data[[2]]$count[pbuilt$data[[2]]$x == 1])) 
 ```
 

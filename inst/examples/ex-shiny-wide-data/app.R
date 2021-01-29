@@ -4,18 +4,20 @@ library(htmltools)
 library(sp)
 
 data(UCBAdmissions)
-UCBAdmissions <- as.data.frame(UCBAdmissions)
+ucb_admissions <- as.data.frame(UCBAdmissions)
 
 # Offset, in pixels, for location of tooltip relative to mouse cursor,
 # in both x and y direction.
 offset <- 5
 # Width of node boxes
 node_width <- 1/4
+# Width of alluvia
+alluvium_width <- 1/3
 
 # Draw plot.
-p <- ggplot(UCBAdmissions,
+p <- ggplot(ucb_admissions,
             aes(y = Freq, axis1 = Gender, axis2 = Dept)) + 
-  geom_alluvium(aes(fill = Admit), knot.pos = 1/4) + 
+  geom_alluvium(aes(fill = Admit), knot.pos = 1/4, width = alluvium_width) + 
   geom_stratum(width = node_width, reverse = TRUE, fill = 'black', color = 'grey') + 
   geom_label(aes(label = after_stat(stratum)), 
              stat = "stratum", 
@@ -33,7 +35,7 @@ pbuilt <- ggplot_build(p)
 # Use built plot data to recalculate the locations of the flow polygons:
 
 # Add width parameter, and then convert built plot data to xsplines
-data_draw <- transform(pbuilt$data[[1]], width = 1/3)
+data_draw <- transform(pbuilt$data[[1]], width = alluvium_width)
 groups_to_draw <- split(data_draw, data_draw$group)
 group_xsplines <- lapply(groups_to_draw,
                          ggalluvial:::data_to_xspline,
@@ -61,7 +63,7 @@ yrange_old <- range(unlist(lapply(
   xspline_points,
   function(pts) as.numeric(pts$y)
 )))
-xrange_new <- c(1 - 1/6, max(pbuilt$data[[1]]$x) + 1/6) 
+xrange_new <- c(1 - alluvium_width/2, max(pbuilt$data[[1]]$x) + alluvium_width/2) 
 yrange_new <- c(0, sum(pbuilt$data[[2]]$count[pbuilt$data[[2]]$x == 1])) 
 
 # Define function to convert grid graphics coordinates to data coordinates
