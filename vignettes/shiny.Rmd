@@ -47,48 +47,48 @@ shinyAppDir(
 
 Here, we will go over each section of the code in detail. The full source code is included in the package's `examples` directory.
 
-The app first loads the data and builds the plot. Then, information is extracted from the built plot object to manually recalculate the coordinates of the polygons that make up the plot. Internally, **ggalluvial** uses the **grid** package to draw the polygons, so the next step is to convert the coordinates from **grid** units to the units that appear on the plot's coordinate system. Next, the user interface is defined. Finally, in the server function, the tooltip is defined. This includes logic to determine whether the mouse is hovering over a stratum, an alluvium, or neither, based on the mouse coordinates provided by Shiny. If the mouse is hovering over a plot element, the app finds appropriate information and prints it in a small "tooltip" box next to the mouse cursor.
+The app first (1) loads the data and (2) builds the plot. Then, (3) information is extracted from the built plot object to (4) manually recalculate the coordinates of the polygons that make up the plot. Internally, **ggalluvial** uses the **grid** package to draw the polygons, so the next steps are (5) to define the minima and maxima of the x and y axes in **grid** units and the units that appear on the plot's coordinate system, and (6) to convert the polygon coordinates from **grid** units plot units. Next, the user interface is defined, including output of (7) the plot image and (8) the tooltip. The final block of code is the server function, which first (9) renders the plot. Finally, the tooltip is defined. This includes (10) logic to determine whether the mouse cursor is inside the plot panel, then (11) whether it is hovering over a stratum, (12) an alluvium, or neither, based on the mouse coordinates provided by Shiny. If the mouse is hovering over a plot element, the app finds appropriate information and prints it in a small "tooltip" box next to the mouse cursor (11b and 12b).
 
 This is the structure of the app in pseudocode.
 
 ```{r pseudocode, eval = FALSE}
 
-'<Load data.>'
+'<(1) Load data.>'
 
-'<Create "ggplot" object for alluvial plot and build it.>'
+'<(2) Create "ggplot" object for alluvial plot and build it.>'
 
-'<Extract data from built plot object used to create alluvium polygons.>'
+'<(3) Extract data from built plot object used to create alluvium polygons.>'
 
 for (polygon in polygons) {
-     '<Use polygon splines to generate coordinates of alluvium boundaries.>'
+     '<(4) Use polygon splines to generate coordinates of alluvium boundaries.>'
 }
 
-'<Define range of coordinates in grid units and plot units.>'
+'<(5) Define range of coordinates in grid units and plot units.>'
 
 for (polygon in polygons) {    
-     '<Convert coordinates from grid units to plot units.>'
+     '<(6) Convert coordinates from grid units to plot units.>'
 }
 
 ui <- fluidPage(
-     '<Output plot with hovering enabled.>'
+     '<(7) Output plot with hovering enabled.>'
      
-     '<Output tooltip.>'
+     '<(8) Output tooltip.>'
 )
 
 
 server <- function(input, output, session) {
   
   output$alluvial_plot <- renderPlot({
-    '<Render the plot.>'
+    '<(9) Render the plot.>'
   })
   
   output$tooltip <- renderText({
-    if ('<mouse cursor is within the plot panel>') {
-      if ('<mouse cursor is within a stratum box>') {
-        '<Render stratum tooltip.>'
+    if ('<(10) mouse cursor is within the plot panel>') {
+      if ('<(11) mouse cursor is within a stratum box>') {
+        '<(11b) Render stratum tooltip.>'
       } else {
-        if ('<mouse cursor is within an alluvium polygon>') {
-          '<Render alluvium tooltip.>'
+        if ('<(12) mouse cursor is within an alluvium polygon>') {
+          '<(12b) Render alluvium tooltip.>'
         }
       }
     }
