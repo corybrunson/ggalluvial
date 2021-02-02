@@ -27,7 +27,8 @@ p <- ggplot(ucb_admissions,
   scale_fill_brewer(type = "qual", palette = "Set1") +
   scale_x_discrete(limits = c("Gender", "Dept"), expand = c(.05, .05)) +
   scale_y_continuous(expand = c(0, 0)) +
-  ggtitle("UC Berkeley admissions and rejections, by sex and department")
+  ggtitle("UC Berkeley admissions and rejections, by sex and department") +
+  theme(plot.title = element_text(size = rel(0.8)))
 
 # Build the plot. 
 pbuilt <- ggplot_build(p)
