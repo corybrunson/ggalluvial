@@ -39,7 +39,7 @@ The app is embedded below, followed by a walkthrough of the source code.
 ```{r wide app, echo = FALSE}
 shinyAppDir(
   system.file("examples/ex-shiny-wide-data", package="ggalluvial"),
-  options = list(width = "100%", height = 500)
+  options = list(width = 800, height = 500)
 )
 ```
 
@@ -363,7 +363,7 @@ The app is embedded below.
 ```{r long app, echo = FALSE}
 shinyAppDir(
   system.file("examples/ex-shiny-long-data", package="ggalluvial"),
-  options = list(width = "100%", height = 500)
+  options = list(width = 800, height = 500)
 )
 ```
 

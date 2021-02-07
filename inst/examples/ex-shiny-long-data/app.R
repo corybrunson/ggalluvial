@@ -27,8 +27,8 @@ p <- ggplot(vaccinations,
   geom_text(stat = "stratum", size = rel(3)) +
   theme_bw() +
   theme(legend.position = "none") +
-  ggtitle("Vaccination survey responses at three points in time") +
-  theme(plot.title = element_text(size = rel(0.8)))
+  ggtitle("Vaccination responses on three surveys") +
+  theme(plot.title = element_text(size = rel(1)))
 
 # Build the plot. Use global assignment so that this object is accessible
 # later.
