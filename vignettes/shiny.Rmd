@@ -356,7 +356,7 @@ renderTags(
 
 ## App with long-format alluvial data
 
-The `vaccinations` dataset is used for long-format alluvial data. The app is embedded at the bottom of this document, but we don't need to walk through the source code because it's almost identical to the code above. The output of `ggplot_build()` that is used to find the polygon coordinates and information for the tooltips has a consistent structure regardless of the initial format of the input data. Therefore, the calculation of polygon coordinates, user interface, and server functions of the two apps are identical. The only difference is in the initial creation of the `ggplot()` object. Refer back to the **EXAMPLES OF PLOTS MADE WITH LONG AND WIDE DATA**.
+The `vaccinations` dataset is used for long-format alluvial data. The app is embedded at the bottom of this document, but we don't need to walk through the source code because it's almost identical to the code above. The output of `ggplot_build()` that is used to find the polygon coordinates and information for the tooltips has a consistent structure regardless of the initial format of the input data. Therefore, the calculation of polygon coordinates, user interface, and server functions of the two apps are identical. The only difference is in the initial creation of the `ggplot()` object. Refer back to the [primary vignette](ggalluvial.html) for several example plots made both with long and with wide data.
 
 The app is embedded below.
 

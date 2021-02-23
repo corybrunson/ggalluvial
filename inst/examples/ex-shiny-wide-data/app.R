@@ -22,7 +22,7 @@ p <- ggplot(ucb_admissions,
   geom_label(aes(label = after_stat(stratum)), 
              stat = "stratum", 
              reverse = TRUE, 
-             size = rel(3)) + 
+             size = rel(2)) + 
   theme_bw() +
   scale_fill_brewer(type = "qual", palette = "Set1") +
   scale_x_discrete(limits = c("Gender", "Dept"), expand = c(.05, .05)) +

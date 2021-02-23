@@ -24,7 +24,7 @@ p <- ggplot(vaccinations,
   scale_y_continuous(expand = c(0, 0)) +
   geom_flow(knot.pos = 1/4, width = alluvium_width) +
   geom_stratum(width = node_width) +
-  geom_text(stat = "stratum", size = rel(3)) +
+  geom_text(stat = "stratum", size = rel(2)) +
   theme_bw() +
   theme(legend.position = "none") +
   ggtitle("Vaccination responses on three surveys") +
