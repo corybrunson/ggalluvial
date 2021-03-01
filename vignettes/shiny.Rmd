@@ -14,6 +14,7 @@ vignette: >
 ```{r setup, echo = FALSE, message = FALSE, warning = FALSE}
 knitr::opts_chunk$set(fig.width = 6, fig.height = 3, fig.align = "center")
 library(ggalluvial)
+pdf(NULL)
 ```
 
 ## Problem
