@@ -36,7 +36,8 @@ ggplot(wph,
 
 # rightward flow aesthetics for vaccine survey data, with cubic flows
 data(vaccinations)
-levels(vaccinations$response) <- rev(levels(vaccinations$response))
+vaccinations$response <- factor(vaccinations$response,
+                                rev(levels(vaccinations$response)))
 # annotate with proportional counts
 ggplot(vaccinations,
        aes(x = survey, stratum = response, alluvium = subject,

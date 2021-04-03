@@ -1,13 +1,15 @@
 Package: ggalluvial
 Type: Package
 Title: Alluvial Plots in 'ggplot2'
-Version: 0.12.1
-Date: 2020-08-08
-Authors@R: 
+Version: 0.12.3
+Authors@R: c(
     person(given = "Jason Cory",
            family = "Brunson",
            role = c("aut", "cre"),
-           email = "cornelioid@gmail.com")
+           email = "cornelioid@gmail.com"),
+    person(given = "Quentin D.",
+           family = "Read",
+           role = 'aut'))
 Maintainer: Jason Cory Brunson <cornelioid@gmail.com>
 Description: Alluvial plots use variable-width ribbons and stacked bar plots to
     represent multi-dimensional or repeated-measures data with categorical or
@@ -39,6 +41,9 @@ Suggests:
     babynames,
     sessioninfo,
     ggrepel,
+    shiny (>= 1.4.0.2),
+    htmltools,
+    sp (>= 1.4-0),
     ggfittext (>= 0.6),
     vdiffr (>= 0.2)
 License: GPL-3

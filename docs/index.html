@@ -41,7 +41,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">ggalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.3</span>
       </span>
     </div>
 
@@ -71,6 +71,9 @@
     </li>
     <li>
       <a href="articles/order-rectangles.html">The Order of the Rectangles</a>
+    </li>
+    <li>
+      <a href="articles/shiny.html">Tooltips for ggalluvial plots in Shiny apps</a>
     </li>
   </ul>
 </li>
@@ -111,7 +114,7 @@
 <li>
 <strong>alluvial</strong> understands a variety of inputs (vectors, lists, data frames), whereas <strong>ggalluvial</strong> requires a single data frame;</li>
 <li>
-<strong>alluvial</strong> uses each variable of these inputs as a dimension of the data, whereas <strong>ggalluvial</strong> requires the user to specify the dimensions, either as separate aesthetics or as <a href="http://tidyr.tidyverse.org/">key-value pairs</a>;</li>
+<strong>alluvial</strong> uses each variable of these inputs as a dimension of the data, whereas <strong>ggalluvial</strong> requires the user to specify the dimensions, either as separate aesthetics or as <a href="https://tidyr.tidyverse.org/">key-value pairs</a>;</li>
 <li>
 <strong>alluvial</strong> produces both the <em>alluvia</em>, which link cohorts across multiple dimensions, and (what are here called) the <em>strata</em>, which partition the data along each dimension, in a single function; whereas <strong>ggalluvial</strong> relies on separate layers (stats and geoms) to produce strata, alluvia, and alluvial segments called <em>lodes</em> and <em>flows</em>.</li>
 </ul>
@@ -121,13 +124,16 @@
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
 <p>The latest stable release can be installed from CRAN:</p>
-<div class="sourceCode" id="cb1"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"ggalluvial"</span>)</pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"ggalluvial"</span><span class="op">)</span></code></pre></div>
 <p>The <a href="https://github.com/corybrunson/ggalluvial/tree/cran"><code>cran</code> branch</a> will contain the version most recently submitted to <a href="https://cran.r-project.org/package=ggalluvial">CRAN</a>. It is duplicated in the <code>master</code> branch, from which source the <a href="https://corybrunson.github.io/ggalluvial/">website</a> is built.</p>
 <p>The development version can be installed from the (default) <code>main</code> branch on GitHub:</p>
-<div class="sourceCode" id="cb2"><pre class="r"><span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"corybrunson/ggalluvial@main"</span>, <span class="kw">build_vignettes</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"corybrunson/ggalluvial@main"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
 <p>Note that, in order to build the vignettes, the imported packages <strong>alluvial</strong>, <strong>ggfittext</strong>, and <strong>ggrepel</strong> must be installed. To skip this step, leave <code>build_vignettes</code> unspecified or set it to <code>FALSE</code>.</p>
 <p>The <a href="https://github.com/corybrunson/ggalluvial/tree/optimization"><code>optimization</code> branch</a> contains a development version with experimental functions to reduce the number or area of alluvial overlaps (see issue <a href="https://github.com/corybrunson/ggalluvial/issues/6">#6</a>). Install it as follows:</p>
-<div class="sourceCode" id="cb3"><pre class="r"><span class="kw pkg">remotes</span><span class="kw ns">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span>(<span class="st">"corybrunson/ggalluvial"</span>, <span class="kw">ref</span> <span class="kw">=</span> <span class="st">"optimization"</span>)</pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"corybrunson/ggalluvial"</span>, ref <span class="op">=</span> <span class="st">"optimization"</span><span class="op">)</span></code></pre></div>
 <p>Note, however, that this branch has not kept pace with the <code>main</code> branch or with recent upgrades on CRAN.</p>
 </div>
 <div id="usage" class="section level2">
@@ -137,8 +143,9 @@
 <h3 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h3>
 <p>Here is how to generate an alluvial plot representation of the multi-dimensional categorical dataset of passengers on the Titanic:</p>
-<div class="sourceCode" id="cb4"><pre class="r"><span class="no">titanic_wide</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="no">Titanic</span>)
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">titanic_wide</span>)
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">titanic_wide</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">Titanic</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">titanic_wide</span><span class="op">)</span>
 <span class="co">#&gt;   Class    Sex   Age Survived Freq</span>
 <span class="co">#&gt; 1   1st   Male Child       No    0</span>
 <span class="co">#&gt; 2   2nd   Male Child       No    0</span>
@@ -146,23 +153,24 @@
 <span class="co">#&gt; 4  Crew   Male Child       No    0</span>
 <span class="co">#&gt; 5   1st Female Child       No    0</span>
 <span class="co">#&gt; 6   2nd Female Child       No    0</span>
-<span class="fu">ggplot</span>(<span class="kw">data</span> <span class="kw">=</span> <span class="no">titanic_wide</span>,
-       <span class="fu">aes</span>(<span class="kw">axis1</span> <span class="kw">=</span> <span class="no">Class</span>, <span class="kw">axis2</span> <span class="kw">=</span> <span class="no">Sex</span>, <span class="kw">axis3</span> <span class="kw">=</span> <span class="no">Age</span>,
-           <span class="kw">y</span> <span class="kw">=</span> <span class="no">Freq</span>)) +
-  <span class="fu">scale_x_discrete</span>(<span class="kw">limits</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"Class"</span>, <span class="st">"Sex"</span>, <span class="st">"Age"</span>), <span class="kw">expand</span> <span class="kw">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="fl">.2</span>, <span class="fl">.05</span>)) +
-  <span class="fu">xlab</span>(<span class="st">"Demographic"</span>) +
-  <span class="fu"><a href="reference/geom_alluvium.html">geom_alluvium</a></span>(<span class="fu">aes</span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="no">Survived</span>)) +
-  <span class="fu"><a href="reference/geom_stratum.html">geom_stratum</a></span>() +
-  <span class="fu">geom_text</span>(<span class="kw">stat</span> <span class="kw">=</span> <span class="st">"stratum"</span>, <span class="fu">aes</span>(<span class="kw">label</span> <span class="kw">=</span> <span class="fu">after_stat</span>(<span class="no">stratum</span>))) +
-  <span class="fu">theme_minimal</span>() +
-  <span class="fu">ggtitle</span>(<span class="st">"passengers on the maiden voyage of the Titanic"</span>,
-          <span class="st">"stratified by demographics and survival"</span>)</pre></div>
+<span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">titanic_wide</span>,
+       <span class="fu">aes</span><span class="op">(</span>axis1 <span class="op">=</span> <span class="va">Class</span>, axis2 <span class="op">=</span> <span class="va">Sex</span>, axis3 <span class="op">=</span> <span class="va">Age</span>,
+           y <span class="op">=</span> <span class="va">Freq</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">scale_x_discrete</span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Class"</span>, <span class="st">"Sex"</span>, <span class="st">"Age"</span><span class="op">)</span>, expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.2</span>, <span class="fl">.05</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">xlab</span><span class="op">(</span><span class="st">"Demographic"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="reference/geom_alluvium.html">geom_alluvium</a></span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">Survived</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="reference/geom_stratum.html">geom_stratum</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">geom_text</span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"stratum"</span>, <span class="fu">aes</span><span class="op">(</span>label <span class="op">=</span> <span class="fu">after_stat</span><span class="op">(</span><span class="va">stratum</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"passengers on the maiden voyage of the Titanic"</span>,
+          <span class="st">"stratified by demographics and survival"</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-6-1.png"><!-- --></p>
 <p>The data is in “wide” format, but <strong>ggalluvial</strong> also recognizes data in “long” format and can convert between the two:</p>
-<div class="sourceCode" id="cb5"><pre class="r"><span class="no">titanic_long</span> <span class="kw">&lt;-</span> <span class="fu"><a href="reference/alluvial-data.html">to_lodes_form</a></span>(<span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="no">Titanic</span>),
-                              <span class="kw">key</span> <span class="kw">=</span> <span class="st">"Demographic"</span>,
-                              <span class="kw">axes</span> <span class="kw">=</span> <span class="fl">1</span>:<span class="fl">3</span>)
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="no">titanic_long</span>)
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">titanic_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/alluvial-data.html">to_lodes_form</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">Titanic</span><span class="op">)</span>,
+                              key <span class="op">=</span> <span class="st">"Demographic"</span>,
+                              axes <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">titanic_long</span><span class="op">)</span>
 <span class="co">#&gt;   Survived Freq alluvium Demographic stratum</span>
 <span class="co">#&gt; 1       No    0        1       Class     1st</span>
 <span class="co">#&gt; 2       No    0        2       Class     2nd</span>
@@ -170,21 +178,22 @@
 <span class="co">#&gt; 4       No    0        4       Class    Crew</span>
 <span class="co">#&gt; 5       No    0        5       Class     1st</span>
 <span class="co">#&gt; 6       No    0        6       Class     2nd</span>
-<span class="fu">ggplot</span>(<span class="kw">data</span> <span class="kw">=</span> <span class="no">titanic_long</span>,
-       <span class="fu">aes</span>(<span class="kw">x</span> <span class="kw">=</span> <span class="no">Demographic</span>, <span class="kw">stratum</span> <span class="kw">=</span> <span class="no">stratum</span>, <span class="kw">alluvium</span> <span class="kw">=</span> <span class="no">alluvium</span>,
-           <span class="kw">y</span> <span class="kw">=</span> <span class="no">Freq</span>, <span class="kw">label</span> <span class="kw">=</span> <span class="no">stratum</span>)) +
-  <span class="fu"><a href="reference/geom_alluvium.html">geom_alluvium</a></span>(<span class="fu">aes</span>(<span class="kw">fill</span> <span class="kw">=</span> <span class="no">Survived</span>)) +
-  <span class="fu"><a href="reference/geom_stratum.html">geom_stratum</a></span>() + <span class="fu">geom_text</span>(<span class="kw">stat</span> <span class="kw">=</span> <span class="st">"stratum"</span>) +
-  <span class="fu">theme_minimal</span>() +
-  <span class="fu">ggtitle</span>(<span class="st">"passengers on the maiden voyage of the Titanic"</span>,
-          <span class="st">"stratified by demographics and survival"</span>)</pre></div>
+<span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">titanic_long</span>,
+       <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Demographic</span>, stratum <span class="op">=</span> <span class="va">stratum</span>, alluvium <span class="op">=</span> <span class="va">alluvium</span>,
+           y <span class="op">=</span> <span class="va">Freq</span>, label <span class="op">=</span> <span class="va">stratum</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="reference/geom_alluvium.html">geom_alluvium</a></span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">Survived</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="reference/geom_stratum.html">geom_stratum</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_text</span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"stratum"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"passengers on the maiden voyage of the Titanic"</span>,
+          <span class="st">"stratified by demographics and survival"</span><span class="op">)</span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-7-1.png"><!-- --></p>
 </div>
 <div id="documentation" class="section level3">
 <h3 class="hasAnchor">
 <a href="#documentation" class="anchor"></a>Documentation</h3>
 <p>For detailed discussion of the data formats recognized by <strong>ggalluvial</strong> and several examples that illustrate its flexibility and limitations, read the technical vignette:</p>
-<div class="sourceCode" id="cb6"><pre class="r"><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html">vignette</a></span>(<span class="kw">topic</span> <span class="kw">=</span> <span class="st">"ggalluvial"</span>, <span class="kw">package</span> <span class="kw">=</span> <span class="st">"ggalluvial"</span>)</pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html">vignette</a></span><span class="op">(</span>topic <span class="op">=</span> <span class="st">"ggalluvial"</span>, package <span class="op">=</span> <span class="st">"ggalluvial"</span><span class="op">)</span></code></pre></div>
 <p>The documentation contains several examples; use <code>help()</code> to call forth examples of any layer (<code>stat_*</code> or <code>geom_*</code>) or of the conversion functions (<code>to_*_form</code>).</p>
 </div>
 </div>
@@ -245,6 +254,7 @@
 <h2>Developers</h2>
 <ul class="list-unstyled">
 <li>Jason Cory Brunson <br><small class="roles"> Author, maintainer </small>  </li>
+<li>Quentin D. Read <br><small class="roles"> Author </small>  </li>
 </ul>
 </div>
 
@@ -260,11 +270,11 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Jason Cory Brunson.</p>
+  <p>Developed by Jason Cory Brunson, Quentin D. Read.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>

@@ -11,6 +11,22 @@ Several changes have been made to the `*_*_form()` functions:
     - This reduces performance on some small examples, though this may be resolved with future **tidyr** releases.
     - Changes to how factor levels are handled when `discern = FALSE` yield more consistent stratum orders that are nevertheless different from previous behavior.
 
+# ggalluvial 0.12.3
+
+## Shiny vignette
+
+A new vignette by Quentin D. Read shows how to build interactive Shiny apps with tooltips sensitive to the locations of graphical elements. This is especially important for the spline boundaries of flows and alluvia.
+
+## Examples using `vaccinations` data
+
+Corrections have been made to erroneous legacy code, found in one example and two vignettes, to reorder the factor levels of the `"response"` field in the data set `vaccinations`. The documentation is updated accordingly.
+
+Also, an explanation of the (misleading) column names of this data set has been added to the main vignette.
+
+# ggalluvial 0.12.2
+
+This patch addresses a bug introduced in v0.12.0 that had `is_lodes_form()` return an error when a data frame contains duplicate id-axis pairings, which may be appropriate for producing faceted plots. The new `site` parameter can be passed one or more grouping variables for this purpose, and internally it is passed `"PANEL"` to prevent this error from being thrown.
+
 # ggalluvial 0.12.1
 
 This patch corrects a bug introduced in v0.12.0 that dropped missing values used internally by `StatFlow$compute_panel()` to keep track of flowless lodes. The problem was illustrated in issue #64.

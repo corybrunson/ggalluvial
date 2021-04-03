@@ -20,13 +20,13 @@ categorical variables. The design is inspired by the
 [**alluvial**](https://github.com/mbojan/alluvial) package, but the
 **ggplot2** framework induced several conspicuous differences:
 
-  - **alluvial** understands a variety of inputs (vectors, lists, data
+-   **alluvial** understands a variety of inputs (vectors, lists, data
     frames), whereas **ggalluvial** requires a single data frame;
-  - **alluvial** uses each variable of these inputs as a dimension of
+-   **alluvial** uses each variable of these inputs as a dimension of
     the data, whereas **ggalluvial** requires the user to specify the
     dimensions, either as separate aesthetics or as [key-value
     pairs](https://tidyr.tidyverse.org/);
-  - **alluvial** produces both the *alluvia*, which link cohorts across
+-   **alluvial** produces both the *alluvia*, which link cohorts across
     multiple dimensions, and (what are here called) the *strata*, which
     partition the data along each dimension, in a single function;
     whereas **ggalluvial** relies on separate layers (stats and geoms)
@@ -52,8 +52,7 @@ in the `master` branch, from which source the
 [website](https://corybrunson.github.io/ggalluvial/) is built.
 
 The development version can be installed from the (default) `main`
-branch on
-GitHub:
+branch on GitHub:
 
 ``` r
 remotes::install_github("corybrunson/ggalluvial@main", build_vignettes = TRUE)
@@ -159,7 +158,7 @@ support of colleagues at [UConn Health](https://health.uconn.edu/).
 
 ### Contribute
 
-Contributions in any form are more than welcome\! Pretty much every fix
+Contributions in any form are more than welcome! Pretty much every fix
 and feature of this package derives from a problem or question posed by
 someone with datasets or design goals i hadn’t anticipated. See the
 [CONTRIBUTING](https://github.com/corybrunson/ggalluvial/blob/main/CONTRIBUTING.md)
@@ -169,5 +168,5 @@ Conduct](https://github.com/corybrunson/ggalluvial/blob/main/CODE_OF_CONDUCT.md)
 ### Cite
 
 If you use **ggalluvial**-generated figures in publication, i’d be
-grateful to hear about it\! You can also cite the package according to
+grateful to hear about it! You can also cite the package according to
 `citation("ggalluvial")`.

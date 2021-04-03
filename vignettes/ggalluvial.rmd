@@ -14,7 +14,7 @@ The **ggalluvial** package is a **ggplot2** extension for producing alluvial plo
 The design and functionality were originally inspired by the [**alluvial**](https://github.com/mbojan/alluvial) package and have benefitted from the feedback of many users.
 This vignette
 
-- defines the essential components of alluvial plots as used in the naming schemes and documentation (*axis*, *alluvium*, *stratum*, *lode*, *flow*),
+- defines the essential components of alluvial plots as used in the naming schemes and documentation (_axis_, _alluvium_, _stratum_, _lode_, _flow_),
 - describes the alluvial data structures recognized by **ggalluvial**,
 - illustrates the new stats and geoms, and
 - showcases some popular variants on the theme and how to produce them.
@@ -48,11 +48,11 @@ ggplot(data = to_lodes_form(as.data.frame(Titanic),
 The next section details how the elements of this image encode information about the underlying dataset.
 For now, we use the image as a point of reference to define the following elements of a typical alluvial plot:
 
-- An *axis* is a dimension (variable) along which the data are vertically grouped at a fixed horizontal position. The plot above uses three categorical axes: `Class`, `Sex`, and `Age`.
-- The groups at each axis are depicted as opaque blocks called *strata*. For example, the `Class` axis contains four strata: `1st`, `2nd`, `3rd`, and `Crew`.
-- Horizontal (x-) splines called *alluvia* span the width of the plot. In this plot, each alluvium corresponds to a fixed value of each axis variable, indicated by its vertical position at the axis, as well as of the `Survived` variable, indicated by its fill color.
-- The segments of the alluvia between pairs of adjacent axes are *flows*.
-- The alluvia intersect the strata at *lodes*. The lodes are not visualized in the above plot, but they can be inferred as filled rectangles extending the flows through the strata at each end of the plot or connecting the flows on either side of the center stratum.
+- An _axis_ is a dimension (variable) along which the data are vertically grouped at a fixed horizontal position. The plot above uses three categorical axes: `Class`, `Sex`, and `Age`.
+- The groups at each axis are depicted as opaque blocks called _strata_. For example, the `Class` axis contains four strata: `1st`, `2nd`, `3rd`, and `Crew`.
+- Horizontal (x-) splines called _alluvia_ span the width of the plot. In this plot, each alluvium corresponds to a fixed value of each axis variable, indicated by its vertical position at the axis, as well as of the `Survived` variable, indicated by its fill color.
+- The segments of the alluvia between pairs of adjacent axes are _flows_.
+- The alluvia intersect the strata at _lodes_. The lodes are not visualized in the above plot, but they can be inferred as filled rectangles extending the flows through the strata at each end of the plot or connecting the flows on either side of the center stratum.
 
 As the examples in the next section will demonstrate, which of these elements are incorporated into an alluvial plot depends on both how the underlying data is structured and what the creator wants the plot to communicate.
 
@@ -191,11 +191,13 @@ This example demonstrates one way **ggalluvial** handles missing data. The alter
 [^na.rm]: Be sure to set `na.rm` consistently in each layer, in this case both the flows and the strata.
 
 Finally, lode format gives us the option to aggregate the flows between adjacent axes, which may be appropriate when the transitions between adjacent axes are of primary importance.
-We can demonstrate this option on data from the influenza vaccination surveys conducted by the [RAND American Life Panel](https://alpdata.rand.org/):
+We can demonstrate this option on data from the influenza vaccination surveys conducted by the [RAND American Life Panel](https://alpdata.rand.org/).
+The data, including one question from each of three surveys, has been aggregated by response profile: Each "subject" (mapped to `alluvium`) actually represents a cohort of subjects who responded the same way on all three questions, and the size of each cohort (mapped to `y`) is recorded in "freq".
 
 ```{r alluvial plot of vaccinations dataset}
 data(vaccinations)
-levels(vaccinations$response) <- rev(levels(vaccinations$response))
+vaccinations <- transform(vaccinations,
+                          response = factor(response, rev(levels(response))))
 ggplot(vaccinations,
        aes(x = survey, stratum = response, alluvium = subject,
            y = freq,

@@ -17,3 +17,10 @@ reference:
   - '`geom_alluvium`'
   - '`geom_lode`'
   - '`geom_flow`'
+articles:
+- title: Vignettes
+  navbar: ~
+  contents:
+  - labels
+  - order-rectangles
+  - shiny
