@@ -38,7 +38,7 @@ Hovering over and clicking on alluvia are more difficult because the shapes of t
 The app is embedded below, followed by a walkthrough of the source code.
 
 ```{r wide app, echo = FALSE}
-shinyAppDir(
+shiny::shinyAppDir(
   system.file("examples/ex-shiny-wide-data", package="ggalluvial"),
   options = list(width = 800, height = 500)
 )
@@ -362,7 +362,7 @@ The `vaccinations` dataset is used for long-format alluvial data. The app is emb
 The app is embedded below.
 
 ```{r long app, echo = FALSE}
-shinyAppDir(
+shiny::shinyAppDir(
   system.file("examples/ex-shiny-long-data", package="ggalluvial"),
   options = list(width = 800, height = 500)
 )
