@@ -105,13 +105,23 @@ For detailed discussion of the data formats recognized by **ggalluvial** and sev
 vignette(topic = "ggalluvial", package = "ggalluvial")
 ```
 
-The documentation contains several examples; use `help()` to call forth examples of any layer (`stat_*` or `geom_*`) or of the conversion functions (`to_*_form`).
+Several additional vignettes offer detailed solutions to specific needs:
+
+* "Labeling small strata" (`"labels"`) for how to elegantly label strata of a wide range of heights in an alluvial plot;
+* "The Order of the Rectangles" (`"order-rectangles"`) for how to control the positioning of strata and lodes in an alluvial plot; and
+* "Tooltips for ggalluvial plots in Shiny apps" (`"shiny"`) for how to incorporate alluvial plots into interactive apps.
+
+The object documentation includes several more examples. Use `help()` to call forth more detail on
+
+* any layer (`stat_*` or `geom_*`),
+* the conversion functions (`to_*_form`), and
+* the data sets installed with the package (`vaccinations` and `majors`).
 
 ## Acknowledgments
 
 ### Resources
 
-Development of this package benefitted from the use of equipment and the support of colleagues at [UConn Health](https://health.uconn.edu/).
+Development of this package benefitted from the use of equipment and the support of colleagues at [UConn Health](https://health.uconn.edu/) and at [UF Health](https://ufhealth.org/).
 
 ### Contribute
 
