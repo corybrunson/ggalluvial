@@ -10,7 +10,8 @@
 #' consisting of column bindings of these measures (by any `by` variables) along
 #' adjacent values of `key`.
 #' @name self-adjoin
-#' @import tidyselect
+#' @importFrom rlang enquo
+#' @importFrom tidyselect vars_pull
 #' @family alluvial data manipulation
 #' @param data A data frame in lodes form (repeated measures data; see
 #'   [`alluvial-data`]).
@@ -34,7 +35,7 @@ self_adjoin <- function(
   keep.x = NULL, keep.y = NULL,
   suffix = c(".x", ".y")
 ) {
-  key_var <- tidyselect::vars_pull(names(data), !! rlang::enquo(key))
+  key_var <- vars_pull(names(data), !! enquo(key))
   
   # ensure that `key` is coercible to numeric
   #key_num <- data[[key_var]]

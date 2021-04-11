@@ -32,7 +32,9 @@
 #'
 
 #' @name alluvial-data
-#' @import tidyselect
+#' @importFrom rlang enquo enquos enexpr enexprs quos is_empty quo_name
+#'   is_character is_integerish is_quosures have_name
+#' @importFrom tidyselect vars_pull vars_select
 #' @family alluvial data manipulation
 #' @param data A data frame.
 #' @param logical Defunct. Whether to return a logical value or a character
@@ -84,19 +86,19 @@ is_lodes_form <- function(data,
                           logical = TRUE, silent = FALSE) {
   if (! isTRUE(logical)) defunct_parameter("logical")
   
-  key_var <- vars_pull(names(data), !! rlang::enquo(key))
-  value_var <- vars_pull(names(data), !! rlang::enquo(value))
-  id_var <- vars_pull(names(data), !! rlang::enquo(id))
+  key_var <- vars_pull(names(data), !! enquo(key))
+  value_var <- vars_pull(names(data), !! enquo(value))
+  id_var <- vars_pull(names(data), !! enquo(id))
   
   # test id-axis pairings within each site (see issue #65)
-  if (! is.null(rlang::enexprs(site))) {
-    site_vars <- vars_select(names(data), !!! rlang::enquos(site))
+  if (! is.null(enexprs(site))) {
+    site_vars <- vars_select(names(data), !!! enquos(site))
     data[[id_var]] <- interaction(data[c(id_var, site_vars)], drop = FALSE)
   }
   
   if (any(duplicated(cbind(data[c(key_var, id_var)])))) {
     if (! silent) message("Duplicated id-axis pairings",
-                          if (! is.null(rlang::enexprs(site))) "." else
+                          if (! is.null(enexprs(site))) "." else
                             "; should `site` have been specified?")
     return(if (logical) FALSE else "none")
   }
@@ -108,8 +110,8 @@ is_lodes_form <- function(data,
   }
   
   # if `weight` is not `NULL`, use NSE to identify `weight_var`
-  if (! is.null(rlang::enexpr(weight))) {
-    weight_var <- vars_select(names(data), !! rlang::enquo(weight))
+  if (! is.null(enexpr(weight))) {
+    weight_var <- vars_select(names(data), !! enquo(weight))
     if (! is.numeric(data[[weight_var]])) {
       if (! silent) message("Lode weights are non-numeric.")
       return(if (logical) FALSE else "none")
@@ -127,21 +129,21 @@ is_alluvia_form <- function(data,
                             logical = TRUE, silent = FALSE) {
   if (! isTRUE(logical)) defunct_parameter("logical")
   
-  if (is.null(rlang::enexpr(weight))) {
+  if (is.null(enexpr(weight))) {
     weight_var <- NULL
   } else {
-    weight_var <- vars_select(names(data), !! rlang::enquo(weight))
+    weight_var <- vars_select(names(data), !! enquo(weight))
     if (! is.numeric(data[[weight_var]])) {
       if (! silent) message("Alluvium weights are non-numeric.")
       return(if (logical) FALSE else "none")
     }
   }
   
-  if (! is.null(rlang::enexpr(axes))) {
+  if (! is.null(enexpr(axes))) {
     axes <- data_at_vars(data, axes)
   } else {
-    quos <- rlang::quos(...)
-    if (rlang::is_empty(quos)) {
+    quos <- quos(...)
+    if (is_empty(quos)) {
       axes <- setdiff(names(data), c(weight_var))
     } else {
       axes <- unname(vars_select(names(data), !!! quos))
@@ -164,15 +166,15 @@ to_lodes_form <- function(data,
                           key = "x", value = "stratum", id = "alluvium",
                           diffuse = FALSE, discern = FALSE) {
   
-  key_var <- rlang::quo_name(rlang::enexpr(key))
-  value_var <- rlang::quo_name(rlang::enexpr(value))
-  id_var <- rlang::quo_name(rlang::enexpr(id))
+  key_var <- quo_name(enexpr(key))
+  value_var <- quo_name(enexpr(value))
+  id_var <- quo_name(enexpr(id))
   
-  if (! is.null(rlang::enexpr(axes))) {
+  if (! is.null(enexpr(axes))) {
     axes <- data_at_vars(data, axes)
   } else {
-    quos <- rlang::quos(...)
-    if (rlang::is_empty(quos)) {
+    quos <- quos(...)
+    if (is_empty(quos)) {
       axes <- names(data)
     } else {
       axes <- unname(vars_select(names(data), !!! quos))
@@ -183,10 +185,10 @@ to_lodes_form <- function(data,
   
   if (! is.data.frame(data)) data <- as.data.frame(data)
   
-  if (is.logical(rlang::enexpr(diffuse))) {
+  if (is.logical(enexpr(diffuse))) {
     diffuse <- if (diffuse) axes else NULL
   } else {
-    diffuse <- unname(vars_select(names(data), !! rlang::enquo(diffuse)))
+    diffuse <- unname(vars_select(names(data), !! enquo(diffuse)))
     if (! all(diffuse %in% axes)) {
       stop("All `diffuse` variables must be `axes` variables.")
     }
@@ -232,9 +234,9 @@ to_alluvia_form <- function(data,
                             key, value, id,
                             distill = FALSE) {
   
-  key_var <- vars_pull(names(data), !! rlang::enquo(key))
-  value_var <- vars_pull(names(data), !! rlang::enquo(value))
-  id_var <- vars_pull(names(data), !! rlang::enquo(id))
+  key_var <- vars_pull(names(data), !! enquo(key))
+  value_var <- vars_pull(names(data), !! enquo(value))
+  id_var <- vars_pull(names(data), !! enquo(id))
   
   stopifnot(is_lodes_form(data, key_var, value_var, id_var, silent = TRUE))
   
@@ -306,13 +308,13 @@ discern_data <- function(data, axes, sep = ".") {
 # mimic the behavior of `tbl_at_vars()` in `select_at()`
 data_at_vars <- function(data, vars) {
   data_vars <- names(data)
-  if (rlang::is_character(vars)) {
+  if (is_character(vars)) {
     vars
-  } else if (rlang::is_integerish(vars)) {
+  } else if (is_integerish(vars)) {
     data_vars[vars]
-  } else if (rlang::is_quosures(vars)) {
+  } else if (is_quosures(vars)) {
     out <- dplyr::select_vars(data_vars, !!! vars)
-    if (! any(rlang::have_name(vars))) {
+    if (! any(have_name(vars))) {
       names(out) <- NULL
     }
     out
