@@ -6,7 +6,6 @@
 [![Travis](https://travis-ci.org/corybrunson/ggalluvial.svg?branch=main)](https://travis-ci.org/corybrunson/ggalluvial)
 [![CRAN](http://www.r-pkg.org/badges/version/ggalluvial)](https://cran.r-project.org/package=ggalluvial)
 [![downloads](https://cranlogs.r-pkg.org/badges/ggalluvial)](https://cran.r-project.org/package=ggalluvial)
-
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3836748.svg)](https://doi.org/10.5281/zenodo.3836748)
 [![JOSS](https://joss.theoj.org/papers/10.21105/joss.02017/status.svg)](https://doi.org/10.21105/joss.02017)
 
