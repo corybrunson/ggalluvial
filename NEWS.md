@@ -1,6 +1,10 @@
 
 # ggalluvial 0.12.4
 
+## Aesthetic defaults
+
+To address #78 and for clarity, the legacy default `colour = 0` of three `Geom*()`s is changed to `colour = "transparent"`.
+
 ## Vignette revisions
 
 The primary vignette now uses the `HairEyeColor` data set, rather than over-using `Titanic`, to illustrate the parallel sets plot.
