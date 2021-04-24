@@ -1,4 +1,10 @@
 
+# ggalluvial 0.12.4
+
+## Vignette revisions
+
+The primary vignette now uses the `HairEyeColor` data set, rather than over-using `Titanic`, to illustrate the parallel sets plot.
+
 # ggalluvial 0.12.3
 
 ## Shiny vignette
