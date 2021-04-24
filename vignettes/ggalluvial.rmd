@@ -85,25 +85,29 @@ ggplot(as.data.frame(UCBAdmissions),
 ```
 
 An important feature of these plots is the meaningfulness of the vertical axis: No gaps are inserted between the strata, so the total height of the plot reflects the cumulative quantity of the observations. The plots produced by **ggalluvial** conform (somewhat; keep reading) to the "grammar of graphics" principles of **ggplot2**, and this prevents users from producing "free-floating" visualizations like the Sankey diagrams showcased [here](https://developers.google.com/chart/interactive/docs/gallery/sankey).[^ggforce]
-**ggalluvial** parameters and existing **ggplot2** functionality can also produce [parallel sets](https://eagereyes.org/parallel-sets) plots, illustrated here using the `Titanic` dataset:[^ggparallel]
+**ggalluvial** parameters and existing **ggplot2** functionality can also produce [parallel sets](https://eagereyes.org/parallel-sets) plots, illustrated here using the `HairEyeColor` dataset:[^ggparallel][^crayola]
 
 [^ggforce]: [The **ggforce** package](https://github.com/thomasp85/ggforce) includes parallel set geom and stat layers to produce similar diagrams that can be allowed to free-float.
 [^ggparallel]: A greater variety of parallel sets plots are implemented in the [**ggparallel**](https://github.com/heike/ggparallel) and [**ggpcp**](https://github.com/yaweige/ggpcp) packages.
+[^crayola]: Eye color hex codes are taken from [Crayola's Colors of the World crayons](https://en.wikipedia.org/wiki/List_of_Crayola_crayon_colors).
 
-```{r parallel sets plot of Titanic dataset}
-ggplot(as.data.frame(Titanic),
+```{r parallel sets plot of hair and eye color dataset}
+ggplot(as.data.frame(HairEyeColor),
        aes(y = Freq,
-           axis1 = Survived, axis2 = Sex, axis3 = Class)) +
-  geom_alluvium(aes(fill = Class),
-                width = 0, knot.pos = 0, reverse = FALSE) +
+           axis1 = Sex, axis2 = Eye, axis3 = Hair)) +
+  geom_alluvium(aes(fill = Eye), lode.guidance = "zagzig",
+                width = 1/8, knot.pos = 0, reverse = FALSE) +
+  scale_fill_manual(values = c("#70493D", "#81B0E4", "#E2AC76", "#3F752B")) +
   guides(fill = FALSE) +
-  geom_stratum(width = 1/8, reverse = FALSE) +
+  geom_stratum(alpha = .25, width = 1/8, reverse = FALSE) +
   geom_text(stat = "stratum", aes(label = after_stat(stratum)),
             reverse = FALSE) +
-  scale_x_continuous(breaks = 1:3, labels = c("Survived", "Sex", "Class")) +
+  scale_x_continuous(breaks = 1:3, labels = c("Sex", "Eye", "Hair")) +
   coord_flip() +
-  ggtitle("Titanic survival by class and sex")
+  ggtitle("Eye colors of statistics students, by sex and hair color")
 ```
+
+(The warning is due to the "Hair" and "Eye" axes having the value "Brown" in common.)
 
 This format and functionality are useful for many applications and will be retained in future versions. They also involve some conspicuous deviations from **ggplot2** norms:
 

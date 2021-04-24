@@ -20,13 +20,13 @@ categorical variables. The design is inspired by the
 [**alluvial**](https://github.com/mbojan/alluvial) package, but the
 **ggplot2** framework induced several conspicuous differences:
 
--   **alluvial** understands a variety of inputs (vectors, lists, data
+  - **alluvial** understands a variety of inputs (vectors, lists, data
     frames), whereas **ggalluvial** requires a single data frame;
--   **alluvial** uses each variable of these inputs as a dimension of
+  - **alluvial** uses each variable of these inputs as a dimension of
     the data, whereas **ggalluvial** requires the user to specify the
     dimensions, either as separate aesthetics or as [key-value
     pairs](https://tidyr.tidyverse.org/);
--   **alluvial** produces both the *alluvia*, which link cohorts across
+  - **alluvial** produces both the *alluvia*, which link cohorts across
     multiple dimensions, and (what are here called) the *strata*, which
     partition the data along each dimension, in a single function;
     whereas **ggalluvial** relies on separate layers (stats and geoms)
@@ -52,7 +52,8 @@ in the `master` branch, from which source the
 [website](https://corybrunson.github.io/ggalluvial/) is built.
 
 The development version can be installed from the (default) `main`
-branch on GitHub:
+branch on
+GitHub:
 
 ``` r
 remotes::install_github("corybrunson/ggalluvial@main", build_vignettes = TRUE)
@@ -145,20 +146,34 @@ read the technical vignette:
 vignette(topic = "ggalluvial", package = "ggalluvial")
 ```
 
-The documentation contains several examples; use `help()` to call forth
-examples of any layer (`stat_*` or `geom_*`) or of the conversion
-functions (`to_*_form`).
+Several additional vignettes offer detailed solutions to specific needs:
+
+  - “Labeling small strata” (`"labels"`) for how to elegantly label
+    strata of a wide range of heights in an alluvial plot;
+  - “The Order of the Rectangles” (`"order-rectangles"`) for how to
+    control the positioning of strata and lodes in an alluvial plot; and
+  - “Tooltips for ggalluvial plots in Shiny apps” (`"shiny"`) for how to
+    incorporate alluvial plots into interactive apps.
+
+The object documentation includes several more examples. Use `help()` to
+call forth more detail on
+
+  - any layer (`stat_*` or `geom_*`),
+  - the conversion functions (`to_*_form`), and
+  - the data sets installed with the package (`vaccinations` and
+    `majors`).
 
 ## Acknowledgments
 
 ### Resources
 
 Development of this package benefitted from the use of equipment and the
-support of colleagues at [UConn Health](https://health.uconn.edu/).
+support of colleagues at [UConn Health](https://health.uconn.edu/) and
+at [UF Health](https://ufhealth.org/).
 
 ### Contribute
 
-Contributions in any form are more than welcome! Pretty much every fix
+Contributions in any form are more than welcome\! Pretty much every fix
 and feature of this package derives from a problem or question posed by
 someone with datasets or design goals i hadn’t anticipated. See the
 [CONTRIBUTING](https://github.com/corybrunson/ggalluvial/blob/main/CONTRIBUTING.md)
@@ -168,5 +183,5 @@ Conduct](https://github.com/corybrunson/ggalluvial/blob/main/CODE_OF_CONDUCT.md)
 ### Cite
 
 If you use **ggalluvial**-generated figures in publication, i’d be
-grateful to hear about it! You can also cite the package according to
+grateful to hear about it\! You can also cite the package according to
 `citation("ggalluvial")`.

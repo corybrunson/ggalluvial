@@ -11,6 +11,16 @@ Several changes have been made to the `*_*_form()` functions:
     - This reduces performance on some small examples, though this may be resolved with future **tidyr** releases.
     - Changes to how factor levels are handled when `discern = FALSE` yield more consistent stratum orders that are nevertheless different from previous behavior.
 
+# ggalluvial 0.12.4
+
+## Aesthetic defaults
+
+To address #78 and for clarity, the legacy default `colour = 0` of three `Geom*()`s is changed to `colour = "transparent"`.
+
+## Vignette revisions
+
+The primary vignette now uses the `HairEyeColor` data set, rather than over-using `Titanic`, to illustrate the parallel sets plot.
+
 # ggalluvial 0.12.3
 
 ## Shiny vignette
