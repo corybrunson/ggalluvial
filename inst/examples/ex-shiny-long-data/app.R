@@ -28,7 +28,8 @@ p <- ggplot(vaccinations,
   theme_bw() +
   theme(legend.position = "none") +
   ggtitle("Vaccination responses on three surveys") +
-  theme(plot.title = element_text(size = rel(1)))
+  theme(plot.title = element_text(size = rel(1)),
+        legend.position = 'bottom')
 
 # Build the plot. Use global assignment so that this object is accessible
 # later.
@@ -89,7 +90,7 @@ polygon_coords <- lapply(xspline_points, function(pts) {
 ui <- fluidPage(
   fluidRow(tags$div(
     style = "position: relative;",
-    plotOutput("alluvial_plot", height = "500px", 
+    plotOutput("alluvial_plot", height = "650px", 
                hover = hoverOpts(id = "plot_hover")
     ),
     htmlOutput("tooltip")))
