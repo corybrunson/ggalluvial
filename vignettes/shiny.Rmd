@@ -38,7 +38,7 @@ Hovering over and clicking on alluvia are more difficult because the shapes of t
 The app is embedded below, followed by a walkthrough of the source code.
 
 ```{r wide app, echo = FALSE}
-knitr::include_app('https://qdread.shinyapps.io/ex-shiny-wide-data', height = '500px')
+knitr::include_app('https://qdread.shinyapps.io/ex-shiny-wide-data', height = '650px')
 ```
 
 If you aren't connected to the internet, or if you loaded this vignette using `vignette('shiny', package = 'ggalluvial')` rather than `browseVignettes(package = 'ggalluvial')`, the app will not display in the window above. You can view the app locally by running this line of code in your console:
@@ -135,12 +135,15 @@ p <- ggplot(ucb_admissions,
   geom_label(aes(label = after_stat(stratum)), 
              stat = "stratum", 
              reverse = TRUE, 
-             size = rel(3)) + 
+             size = rel(2)) + 
   theme_bw() +
   scale_fill_brewer(type = "qual", palette = "Set1") +
   scale_x_discrete(limits = c("Gender", "Dept"), expand = c(.05, .05)) +
   scale_y_continuous(expand = c(0, 0)) +
-  ggtitle("UC Berkeley admissions and rejections, by sex and department")
+  ggtitle("UC Berkeley admissions and rejections", "by sex and department") +
+  theme(plot.title = element_text(size = rel(1)),
+        plot.subtitle = element_text(size = rel(1)),
+        legend.position = 'bottom')
 
 # Build the plot. 
 pbuilt <- ggplot_build(p)
@@ -217,7 +220,7 @@ The app includes a minimal user interface with two output elements.
 ui <- fluidPage(
   fluidRow(tags$div(
     style = "position: relative;",
-    plotOutput("alluvial_plot", height = "500px", 
+    plotOutput("alluvial_plot", height = "650px", 
                hover = hoverOpts(id = "plot_hover")
                ),
     htmlOutput("tooltip")))
@@ -365,7 +368,7 @@ The `vaccinations` dataset is used for long-format alluvial data. The app is emb
 The app is embedded below.
 
 ```{r long app, echo = FALSE}
-knitr::include_app('https://qdread.shinyapps.io/ex-shiny-long-data', height = '500px')
+knitr::include_app('https://qdread.shinyapps.io/ex-shiny-long-data', height = '650px')
 ```
 
 Again, if the app doesn't display in the window above for whatever reason, you can view it locally by running this line of code in your console:

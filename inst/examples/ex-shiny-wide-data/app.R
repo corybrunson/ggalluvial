@@ -29,7 +29,8 @@ p <- ggplot(ucb_admissions,
   scale_y_continuous(expand = c(0, 0)) +
   ggtitle("UC Berkeley admissions and rejections", "by sex and department") +
   theme(plot.title = element_text(size = rel(1)),
-        plot.subtitle = element_text(size = rel(1)))
+        plot.subtitle = element_text(size = rel(1)),
+        legend.position = 'bottom')
 
 # Build the plot. 
 pbuilt <- ggplot_build(p)
@@ -89,7 +90,7 @@ polygon_coords <- lapply(xspline_points, function(pts) {
 ui <- fluidPage(
   fluidRow(tags$div(
     style = "position: relative;",
-    plotOutput("alluvial_plot", height = "500px", 
+    plotOutput("alluvial_plot", height = "650px", 
                hover = hoverOpts(id = "plot_hover")
     ),
     htmlOutput("tooltip")))
