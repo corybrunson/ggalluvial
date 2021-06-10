@@ -37,9 +37,7 @@ Hovering over and clicking on alluvia are more difficult because the shapes of t
 
 The app is embedded below, followed by a walkthrough of the source code.
 
-```{r wide app, echo = FALSE}
-knitr::include_app('https://qdread.shinyapps.io/ex-shiny-wide-data', height = '650px')
-```
+<iframe src="https://qdread.shinyapps.io/ex-shiny-wide-data" height="650" width="800"></iframe>
 
 If you aren't connected to the internet, or if you loaded this vignette using `vignette('shiny', package = 'ggalluvial')` rather than `browseVignettes(package = 'ggalluvial')`, the app will not display in the window above. You can view the app locally by running this line of code in your console:
 
@@ -367,9 +365,7 @@ The `vaccinations` dataset is used for long-format alluvial data. The app is emb
 
 The app is embedded below.
 
-```{r long app, echo = FALSE}
-knitr::include_app('https://qdread.shinyapps.io/ex-shiny-long-data', height = '650px')
-```
+<iframe src="https://qdread.shinyapps.io/ex-shiny-long-data" height="650" width="800"></iframe>
 
 Again, if the app doesn't display in the window above for whatever reason, you can view it locally by running this line of code in your console:
 

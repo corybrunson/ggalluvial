@@ -124,7 +124,7 @@
 <h2 class="hasAnchor">
 <a href="#section-app-with-wide-format-alluvial-data" class="anchor"></a>App with wide-format alluvial data</h2>
 <p>The app is embedded below, followed by a walkthrough of the source code.</p>
-<iframe src="https://qdread.shinyapps.io/ex-shiny-wide-data?showcase=0" width="576" height="650px">
+<iframe src="https://qdread.shinyapps.io/ex-shiny-wide-data" height="650" width="800">
 </iframe>
 <p>If you aren’t connected to the internet, or if you loaded this vignette using <code><a href="../articles/shiny.html">vignette('shiny', package = 'ggalluvial')</a></code> rather than <code><a href="https://rdrr.io/r/utils/browseVignettes.html">browseVignettes(package = 'ggalluvial')</a></code>, the app will not display in the window above. You can view the app locally by running this line of code in your console:</p>
 <div class="sourceCode" id="section-cb1"><pre class="downlit sourceCode r">
@@ -397,7 +397,7 @@
 <a href="#section-app-with-long-format-alluvial-data" class="anchor"></a>App with long-format alluvial data</h2>
 <p>The <code>vaccinations</code> dataset is used for long-format alluvial data. The app is embedded at the bottom of this document, but we don’t need to walk through the source code because it’s almost identical to the code above. The output of <code>ggplot_build()</code> that is used to find the polygon coordinates and information for the tooltips has a consistent structure regardless of the initial format of the input data. Therefore, the calculation of polygon coordinates, user interface, and server functions of the two apps are identical. The only difference is in the initial creation of the <code>ggplot()</code> object. Refer back to the <a href="ggalluvial.html">primary vignette</a> for several example plots made both with long and with wide data.</p>
 <p>The app is embedded below.</p>
-<iframe src="https://qdread.shinyapps.io/ex-shiny-long-data?showcase=0" width="576" height="650px">
+<iframe src="https://qdread.shinyapps.io/ex-shiny-long-data" height="650" width="800">
 </iframe>
 <p>Again, if the app doesn’t display in the window above for whatever reason, you can view it locally by running this line of code in your console:</p>
 <div class="sourceCode" id="section-cb20"><pre class="downlit sourceCode r">
