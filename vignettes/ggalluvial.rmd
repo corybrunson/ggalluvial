@@ -94,17 +94,18 @@ An important feature of these plots is the meaningfulness of the vertical axis: 
 ```{r parallel sets plot of hair and eye color dataset}
 ggplot(as.data.frame(HairEyeColor),
        aes(y = Freq,
-           axis1 = Sex, axis2 = Eye, axis3 = Hair)) +
-  geom_alluvium(aes(fill = Eye), lode.guidance = "zagzig",
+           axis1 = Hair, axis2 = Eye, axis3 = Sex)) +
+  geom_alluvium(aes(fill = Eye),
                 width = 1/8, knot.pos = 0, reverse = FALSE) +
-  scale_fill_manual(values = c("#70493D", "#81B0E4", "#E2AC76", "#3F752B")) +
+  scale_fill_manual(values = c(Brown = "#70493D", Hazel = "#E2AC76",
+                               Green = "#3F752B", Blue = "#81B0E4")) +
   guides(fill = FALSE) +
   geom_stratum(alpha = .25, width = 1/8, reverse = FALSE) +
   geom_text(stat = "stratum", aes(label = after_stat(stratum)),
             reverse = FALSE) +
-  scale_x_continuous(breaks = 1:3, labels = c("Sex", "Eye", "Hair")) +
+  scale_x_continuous(breaks = 1:3, labels = c("Hair", "Eye", "Sex")) +
   coord_flip() +
-  ggtitle("Eye colors of statistics students, by sex and hair color")
+  ggtitle("Eye colors of 592 subjects, by sex and hair color")
 ```
 
 (The warning is due to the "Hair" and "Eye" axes having the value "Brown" in common.)

@@ -168,17 +168,18 @@
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu">ggplot</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">HairEyeColor</span><span class="op">)</span>,
        <span class="fu">aes</span><span class="op">(</span>y <span class="op">=</span> <span class="va">Freq</span>,
-           axis1 <span class="op">=</span> <span class="va">Sex</span>, axis2 <span class="op">=</span> <span class="va">Eye</span>, axis3 <span class="op">=</span> <span class="va">Hair</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="../reference/geom_alluvium.html">geom_alluvium</a></span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">Eye</span><span class="op">)</span>, lode.guidance <span class="op">=</span> <span class="st">"zagzig"</span>,
+           axis1 <span class="op">=</span> <span class="va">Hair</span>, axis2 <span class="op">=</span> <span class="va">Eye</span>, axis3 <span class="op">=</span> <span class="va">Sex</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu"><a href="../reference/geom_alluvium.html">geom_alluvium</a></span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">Eye</span><span class="op">)</span>,
                 width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">8</span>, knot.pos <span class="op">=</span> <span class="fl">0</span>, reverse <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">scale_fill_manual</span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#70493D"</span>, <span class="st">"#81B0E4"</span>, <span class="st">"#E2AC76"</span>, <span class="st">"#3F752B"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">scale_fill_manual</span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>Brown <span class="op">=</span> <span class="st">"#70493D"</span>, Hazel <span class="op">=</span> <span class="st">"#E2AC76"</span>,
+                               Green <span class="op">=</span> <span class="st">"#3F752B"</span>, Blue <span class="op">=</span> <span class="st">"#81B0E4"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">guides</span><span class="op">(</span>fill <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">.25</span>, width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">8</span>, reverse <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">geom_text</span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"stratum"</span>, <span class="fu">aes</span><span class="op">(</span>label <span class="op">=</span> <span class="fu">after_stat</span><span class="op">(</span><span class="va">stratum</span><span class="op">)</span><span class="op">)</span>,
             reverse <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">scale_x_continuous</span><span class="op">(</span>breaks <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Sex"</span>, <span class="st">"Eye"</span>, <span class="st">"Hair"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">scale_x_continuous</span><span class="op">(</span>breaks <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Hair"</span>, <span class="st">"Eye"</span>, <span class="st">"Sex"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">coord_flip</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Eye colors of statistics students, by sex and hair color"</span><span class="op">)</span></code></pre></div>
+  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"Eye colors of 592 subjects, by sex and hair color"</span><span class="op">)</span></code></pre></div>
 <pre><code>## Warning in to_lodes_form(data = data, axes = axis_ind, discern =
 ## params$discern): Some strata appear at multiple axes.
 
@@ -373,7 +374,7 @@
 ##  xfun           0.23    2021-05-15 [2] CRAN (R 4.0.2)
 ##  yaml           2.2.1   2020-02-01 [2] CRAN (R 4.0.0)
 ## 
-## [1] /private/var/folders/pg/fjg8r4fj5v33zqmwptf9mfg80000gn/T/RtmpttHQzj/temp_libpath876b397e1655
+## [1] /private/var/folders/pg/fjg8r4fj5v33zqmwptf9mfg80000gn/T/Rtmp9exkdK/temp_libpath88a51d0d19f9
 ## [2] /Library/Frameworks/R.framework/Versions/4.0/Resources/library</code></pre>
 </div>
 <div class="footnotes">
