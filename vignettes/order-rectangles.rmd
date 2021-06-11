@@ -171,7 +171,7 @@ ggplot(toy, aes(x = collection, stratum = category, alluvium = subject)) +
             aes(label = subject, hjust = after_stat(flow) == "to"))
 ```
 
-The [computed variable](https://ggplot2.tidyverse.org/reference/stat.html) `flow` indicates whether each row of the `compute_panel()` output corresponds to a flow _to_ or _from_ its axis; the values are used to nudge the labels toward their respective flows (to avoid overlap). Mismatches between adjacent labels indicate where lodes are ordered differently on either side of a stratum.
+The [computed variable](https://ggplot2.tidyverse.org/reference/aes_eval.html) `flow` indicates whether each row of the `compute_panel()` output corresponds to a flow _to_ or _from_ its axis; the values are used to nudge the labels toward their respective flows (to avoid overlap). Mismatches between adjacent labels indicate where lodes are ordered differently on either side of a stratum.
 
 ### Lode guidance
 

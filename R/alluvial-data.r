@@ -32,7 +32,9 @@
 #'
 
 #' @name alluvial-data
-#' @import tidyselect
+#' @importFrom rlang enquo enquos enexpr enexprs quos is_empty quo_name
+#'   is_character is_integerish is_quosures have_name
+#' @importFrom tidyselect vars_pull vars_select all_of
 #' @family alluvial data manipulation
 #' @param data A data frame.
 #' @param silent Whether to print messages.
@@ -78,35 +80,35 @@ is_lodes_form <- function(data,
                           key, value, id,
                           y = NULL, site = NULL,
                           silent = FALSE) {
-  
+
   key_var <- vars_pull(names(data), !! enquo(key))
   value_var <- vars_pull(names(data), !! enquo(value))
   id_var <- vars_pull(names(data), !! enquo(id))
   if (key_var %in% c(value_var, id_var)) {
     stop("`key` must be distinct from `id` and `value` variables.")
   }
-  
+
   # test id-axis pairings within each site (see issue #65)
-  if (! is.null(rlang::enexprs(site))) {
-    site_vars <- vars_select(names(data), !!! rlang::enquos(site))
+  if (! is.null(enexprs(site))) {
+    site_vars <- vars_select(names(data), !!! enquos(site))
     data[[id_var]] <- interaction(data[c(id_var, site_vars)], drop = FALSE)
   }
-  
+
   if (any(duplicated(cbind(data[c(key_var, id_var)])))) {
     if (! silent) message("Duplicated id-axis pairings",
-                          if (! is.null(rlang::enexprs(site))) "." else
+                          if (! is.null(enexprs(site))) "." else
                             "; should `site` have been specified?")
     return(FALSE)
   }
-  
+
   n_pairs <-
     dplyr::n_distinct(data[key_var]) * dplyr::n_distinct(data[id_var])
   if (nrow(data) < n_pairs) {
     if (! silent) warning("Missing id-axis pairings (at some sites).")
   }
-  
+
   # if `y` is not `NULL`, use non-standard evaluation to identify `y_var`
-  if (! is.null(rlang::enexpr(y))) {
+  if (! is.null(enexpr(y))) {
     y_var <- vars_select(unique(names(data)), !! enquo(y))
     if (length(y_var) > 0) {
       if (length(y_var) > 1) stop("`y` must be a single variable.")
@@ -114,12 +116,12 @@ is_lodes_form <- function(data,
         stop("`y` must be distinct from id-key-value variables.")
       }
       if (! is.numeric(data[[y_var]])) {
-        if (! silent) message("Lode y (height) values are non-numeric.")
+        if (! silent) message("Lode `y` (height) values are non-numeric.")
         return(FALSE)
       }
     }
   }
-  
+
   TRUE
 }
 
@@ -128,36 +130,35 @@ is_lodes_form <- function(data,
 is_alluvia_form <- function(data,
                             axes = NULL, y = NULL,
                             silent = FALSE) {
-  
+
   # note: specifying `y` is optional
-  if (is.null(rlang::enexpr(y))) {
+  if (is.null(enexpr(y))) {
     y_var <- NULL
   } else {
     y_var <- vars_select(unique(names(data)), !! enquo(y))
     if (! all(sapply(data[y_var], is.numeric))) {
-      if (! silent) message("Some lode y (height) values are non-numeric.")
+      if (! silent) message("Some lode `y` (height) values are non-numeric.")
       return(FALSE)
     }
   }
-  
-  if (is.null(rlang::enexpr(axes))) {
-    axes <- setdiff(names(data), y_var)
+
+  if (! is.null(enexpr(axes))) {
+    axes <- data_at_vars(data, enquos(axes))
   } else {
-    axes <- enquo(axes)
-    axes <- unname(vars_select(unique(names(data)), !! enquo(axes)))
+    axes <- setdiff(names(data), c(y_var))
   }
   if (length(y_var) > 1 && length(y_var) != length(axes)) {
-    if (! silent) message("The number of y (height) columns, if > 1, ",
+    if (! silent) message("The number of `y` (height) columns, if > 1, ",
                           "must equal the number of axes.")
     return(FALSE)
   }
-  
+
   n_alluvia <- nrow(dplyr::distinct(data[axes]))
   n_combns <- do.call(prod, lapply(data[axes], dplyr::n_distinct))
   if (n_alluvia < n_combns) {
     if (! silent) message("Some stratum combinations are missing alluvia.")
   }
-  
+
   TRUE
 }
 
@@ -168,7 +169,7 @@ to_lodes_form <- function(data,
                           key = "x", value = "stratum", id = "alluvium",
                           y_to = NULL,
                           diffuse = FALSE, discern = FALSE) {
-  
+
   # note: specifying `y` is optional
   if (is.null(rlang::enexpr(y))) {
     y_var <- NULL
@@ -179,29 +180,29 @@ to_lodes_form <- function(data,
       return(FALSE)
     }
   }
-  
-  if (is.null(rlang::enexpr(axes))) {
-    axes <- setdiff(names(data), y_var)
+
+  if (! is.null(enexpr(axes))) {
+    axes <- data_at_vars(data, enquos(axes))
   } else {
-    axes <- unname(vars_select(unique(names(data)), !! enquo(axes)))
+    axes <- setdiff(names(data), c(y_var))
   }
   if (length(y_var) > 1 && length(y_var) != length(axes)) {
     message("The number of `y` (height) columns, if > 1, ",
             "must equal the number of `axes`.")
     return(FALSE)
   }
-  
+
   stopifnot(is_alluvia_form(data,
                             axes = all_of(axes), y = all_of(y_var),
                             silent = TRUE))
-  
+
   key_var <- rlang::quo_name(rlang::enexpr(key))
   value_var <- rlang::quo_name(rlang::enexpr(value))
   id_var <- rlang::quo_name(rlang::enexpr(id))
-  
+
   if (! is.data.frame(data)) data <- as.data.frame(data)
-  
-  if (is.logical(rlang::enexpr(diffuse))) {
+
+  if (is.logical(enexpr(diffuse))) {
     diffuse <- if (diffuse) axes else NULL
   } else {
     diffuse <- unname(vars_select(unique(names(data)), !! enquo(diffuse)))
@@ -209,7 +210,7 @@ to_lodes_form <- function(data,
       stop("All `diffuse` variables must be `axes` or `y` variables.")
     }
   }
-  
+
   # combine factor levels
   cat_levels <- unname(unlist(lapply(lapply(data[axes], as.factor), levels)))
   if (any(duplicated(cat_levels)) & is.null(discern)) {
@@ -222,14 +223,14 @@ to_lodes_form <- function(data,
   } else {
     strata <- unique(unname(cat_levels))
   }
-  
+
   # format data in preparation for `pivot_longer()`
   data[[id_var]] <- seq(nrow(data))
   if (! is.null(diffuse)) {
     diffuse_data <- data[, c(id_var, diffuse), drop = FALSE]
   }
   for (i in axes) data[[i]] <- as.character(data[[i]])
-  
+
   key_ptype <- list(factor())
   names(key_ptype) <- key_var
   # `pivot_longer()` by `axes` (and possibly `y`)
@@ -261,14 +262,14 @@ to_lodes_form <- function(data,
                         names_sep = "___")
   }
   res[[value_var]] <- factor(res[[value_var]], levels = strata)
-  
+
   # merge in `diffuse_data`
   if (is.null(diffuse)) {
     res <- as.data.frame(res)
   } else {
     res <- merge(diffuse_data, res, by = id_var, all.x = FALSE, all.y = TRUE)
   }
-  
+
   res
 }
 
@@ -278,7 +279,7 @@ to_alluvia_form <- function(data,
                             key, value, id,
                             y = NULL,
                             distill = FALSE) {
-  
+
   key_var <- vars_pull(names(data), !! enquo(key))
   value_var <- vars_pull(names(data), !! enquo(value))
   id_var <- vars_pull(names(data), !! enquo(id))
@@ -290,7 +291,7 @@ to_alluvia_form <- function(data,
     value_var <- paste0(value_var, "___")
     data[[value_var]] <- data[[id_var]]
   }
-  
+
   y_var <- if (is.null(rlang::enexpr(y))) NULL else {
     vars_pull(names(data), !! enquo(y))
   }
@@ -298,7 +299,7 @@ to_alluvia_form <- function(data,
                           key = key_var, value = value_var, id = id_var,
                           y = y_var,
                           silent = TRUE))
-  
+
   # whether any variables vary within `id`s
   uniq_id <- dplyr::n_distinct(data[[id_var]])
   uniq_data <- unique(data[setdiff(names(data), c(key_var, value_var, y_var))])
@@ -337,7 +338,7 @@ to_alluvia_form <- function(data,
     distill <- NULL
     distill_vars <- NULL
   }
-  
+
   const_vars <- setdiff(names(data),
                         c(key_var, value_var, id_var, y_var, distill_vars))
   if (! is.null(distill) && ! is.null(y_var)) distill_data[[y_var]] <- NULL
@@ -355,14 +356,14 @@ to_alluvia_form <- function(data,
                   names(res))
     names(res)[axes] <- as.character(unique(data[[key_var]]))
   }
-  
+
   # merge in `distill_data`
   if (is.null(distill)) {
     res <- as.data.frame(res)
   } else {
     res <- merge(distill_data, res, by = id_var, all.x = FALSE, all.y = TRUE)
   }
-  
+
   res
 }
 
@@ -388,13 +389,13 @@ discern_data <- function(data, axes, sep = ".") {
 # mimic the behavior of `tbl_at_vars()` in `select_at()`
 data_at_vars <- function(data, vars) {
   data_vars <- names(data)
-  if (rlang::is_character(vars)) {
+  if (is_character(vars)) {
     vars
-  } else if (rlang::is_integerish(vars)) {
+  } else if (is_integerish(vars)) {
     data_vars[vars]
-  } else if (rlang::is_quosures(vars)) {
-    out <- dplyr::select_vars(data_vars, !!! vars)
-    if (! any(rlang::have_name(vars))) {
+  } else if (is_quosures(vars)) {
+    out <- vars_select(data_vars, !!! vars)
+    if (! any(have_name(vars))) {
       names(out) <- NULL
     }
     out

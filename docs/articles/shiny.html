@@ -39,7 +39,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fas fa fas fa-home fa-lg"></span>
+    <span class="fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -74,7 +74,7 @@
 <ul class="nav navbar-nav navbar-right">
 <li>
   <a href="https://github.com/corybrunson/ggalluvial/">
-    <span class="fab fa fab fa-github fa-lg"></span>
+    <span class="fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -88,14 +88,13 @@
 
       
 
-      </header><script src="shiny_files/header-attrs-2.5/header-attrs.js"></script><link href="shiny_files/anchor-sections-1.0/anchor-sections.css" rel="stylesheet">
-<script src="shiny_files/anchor-sections-1.0/anchor-sections.js"></script><div class="row">
+      </header><script src="shiny_files/header-attrs-2.8/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Tooltips for ggalluvial plots in Shiny apps</h1>
                         <h4 class="author">Quentin D. Read</h4>
             
-            <h4 class="date">2021-04-06</h4>
+            <h4 class="date">2021-06-11</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/corybrunson/ggalluvial/blob/master/vignettes/shiny.Rmd"><code>vignettes/shiny.Rmd</code></a></small>
       <div class="hidden name"><code>shiny.Rmd</code></div>
@@ -125,8 +124,11 @@
 <h2 class="hasAnchor">
 <a href="#section-app-with-wide-format-alluvial-data" class="anchor"></a>App with wide-format alluvial data</h2>
 <p>The app is embedded below, followed by a walkthrough of the source code.</p>
-<pre><code>## Loading required package: shiny</code></pre>
-<iframe data-deferred-src="app1463dd24654958619060ca38e55165f4/?w=&amp;__subapp__=1" width="800" height="500" class="shiny-frame shiny-frame-deferred"></iframe>
+<iframe src="https://qdread.shinyapps.io/ex-shiny-wide-data" height="650" width="800">
+</iframe>
+<p>If you aren’t connected to the internet, or if you loaded this vignette using <code><a href="../articles/shiny.html">vignette('shiny', package = 'ggalluvial')</a></code> rather than <code><a href="https://rdrr.io/r/utils/browseVignettes.html">browseVignettes(package = 'ggalluvial')</a></code>, the app will not display in the window above. You can view the app locally by running this line of code in your console:</p>
+<div class="sourceCode" id="section-cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyAppDir</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"examples/ex-shiny-wide-data"</span>, package<span class="op">=</span><span class="st">"ggalluvial"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="section-structure-of-the-example-app" class="section level2">
 <h2 class="hasAnchor">
@@ -206,12 +208,15 @@
   <span class="fu">geom_label</span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>label <span class="op">=</span> <span class="fu">after_stat</span><span class="op">(</span><span class="va">stratum</span><span class="op">)</span><span class="op">)</span>, 
              stat <span class="op">=</span> <span class="st">"stratum"</span>, 
              reverse <span class="op">=</span> <span class="cn">TRUE</span>, 
-             size <span class="op">=</span> <span class="fu">rel</span><span class="op">(</span><span class="fl">3</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
+             size <span class="op">=</span> <span class="fu">rel</span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> 
   <span class="fu">theme_bw</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">scale_fill_brewer</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"qual"</span>, palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">scale_x_discrete</span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Gender"</span>, <span class="st">"Dept"</span><span class="op">)</span>, expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.05</span>, <span class="fl">.05</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu">scale_y_continuous</span><span class="op">(</span>expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"UC Berkeley admissions and rejections, by sex and department"</span><span class="op">)</span>
+  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"UC Berkeley admissions and rejections"</span>, <span class="st">"by sex and department"</span><span class="op">)</span> <span class="op">+</span>
+  <span class="fu">theme</span><span class="op">(</span>plot.title <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>size <span class="op">=</span> <span class="fu">rel</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>,
+        plot.subtitle <span class="op">=</span> <span class="fu">element_text</span><span class="op">(</span>size <span class="op">=</span> <span class="fu">rel</span><span class="op">(</span><span class="fl">1</span><span class="op">)</span><span class="op">)</span>,
+        legend.position <span class="op">=</span> <span class="st">'bottom'</span><span class="op">)</span>
 
 <span class="co"># Build the plot. </span>
 <span class="va">pbuilt</span> <span class="op">&lt;-</span> <span class="fu">ggplot_build</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></code></pre></div>
@@ -276,7 +281,7 @@
 <code class="sourceCode R"><span class="va">ui</span> <span class="op">&lt;-</span> <span class="fu">fluidPage</span><span class="op">(</span>
   <span class="fu">fluidRow</span><span class="op">(</span><span class="va">tags</span><span class="op">$</span><span class="fu">div</span><span class="op">(</span>
     style <span class="op">=</span> <span class="st">"position: relative;"</span>,
-    <span class="fu">plotOutput</span><span class="op">(</span><span class="st">"alluvial_plot"</span>, height <span class="op">=</span> <span class="st">"500px"</span>, 
+    <span class="fu">plotOutput</span><span class="op">(</span><span class="st">"alluvial_plot"</span>, height <span class="op">=</span> <span class="st">"650px"</span>, 
                hover <span class="op">=</span> <span class="fu">hoverOpts</span><span class="op">(</span>id <span class="op">=</span> <span class="st">"plot_hover"</span><span class="op">)</span>
                <span class="op">)</span>,
     <span class="fu">htmlOutput</span><span class="op">(</span><span class="st">"tooltip"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
@@ -392,8 +397,11 @@
 <a href="#section-app-with-long-format-alluvial-data" class="anchor"></a>App with long-format alluvial data</h2>
 <p>The <code>vaccinations</code> dataset is used for long-format alluvial data. The app is embedded at the bottom of this document, but we don’t need to walk through the source code because it’s almost identical to the code above. The output of <code>ggplot_build()</code> that is used to find the polygon coordinates and information for the tooltips has a consistent structure regardless of the initial format of the input data. Therefore, the calculation of polygon coordinates, user interface, and server functions of the two apps are identical. The only difference is in the initial creation of the <code>ggplot()</code> object. Refer back to the <a href="ggalluvial.html">primary vignette</a> for several example plots made both with long and with wide data.</p>
 <p>The app is embedded below.</p>
-<pre><code>## Warning: The `.dots` argument of `group_by()` is deprecated as of dplyr 1.0.0.</code></pre>
-<iframe data-deferred-src="app1161aff45b1b931c5578aac88adfd113/?w=&amp;__subapp__=1" width="800" height="500" class="shiny-frame shiny-frame-deferred"></iframe>
+<iframe src="https://qdread.shinyapps.io/ex-shiny-long-data" height="650" width="800">
+</iframe>
+<p>Again, if the app doesn’t display in the window above for whatever reason, you can view it locally by running this line of code in your console:</p>
+<div class="sourceCode" id="section-cb20"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu">shiny</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/shiny/man/shinyApp.html">shinyAppDir</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/system.file.html">system.file</a></span><span class="op">(</span><span class="st">"examples/ex-shiny-long-data"</span>, package<span class="op">=</span><span class="st">"ggalluvial"</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="section-conclusion" class="section level2">
 <h2 class="hasAnchor">
