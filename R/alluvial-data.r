@@ -9,27 +9,30 @@
 #' types of alluvial structure:
 #'
 #' - One row per **lode**, wherein each row encodes a subset or amount of
-#'   observations having a specific profile of axis values, a `key` field
-#'   encodes the axis, a `value` field encodes the value within each axis, and a
-#'   `id` column identifies multiple lodes corresponding to the same subset or
-#'   amount of observations. `is_lodes_form` tests for this structure.
-#' - One row per **alluvium**, wherein each row encodes a subset or amount of
-#'   observations having a specific profile of axis values and a set `axes` of
-#'   fields encodes its values at each axis variable. `is_alluvia_form` tests
-#'   for this structure.
+#' observations having a specific profile of axis values, a `key` field encodes
+#' the axis, a `value` field encodes the value within each axis, and a `id`
+#' column identifies multiple lodes corresponding to the same subset or amount
+#' of observations. `is_lodes_form` tests for this structure. - One row per
+#' **alluvium**, wherein each row encodes a subset or amount of observations
+#' having a specific profile of axis values and a set `axes` of fields encodes
+#' its values at each axis variable. `is_alluvia_form` tests for this structure.
 #'
-#' `to_lodes_form` takes a data frame with several designated variables to
-#' be used as axes in an alluvial plot, and reshapes the data frame so that
-#' the axis variable names constitute a new factor variable and their values
+#' `to_lodes_form` takes a data frame with several designated variables to be
+#' used as axes in an alluvial plot, and reshapes the data frame so that the
+#' axis variable names constitute a new factor variable and their values
 #' comprise another. Other variables' values will be repeated, and a
 #' row-grouping variable can be introduced. This function invokes
-#' [tidyr::gather()].
+#' [tidyr::pivot_longer()].
 #'
-#' `to_alluvia_form` takes a data frame with axis and axis value variables
-#' to be used in an alluvial plot, and reshape the data frame so that the
-#' axes constitute separate variables whose values are given by the value
-#' variable. This function invokes [tidyr::spread()].
+#' `to_alluvia_form` takes a data frame with axis and axis value variables to be
+#' used in an alluvial plot, and reshape the data frame so that the axes
+#' constitute separate variables whose values are given by the value variable.
+#' This function invokes [tidyr::pivot_wider()].
 #'
+#' The check and conversion functions both use **rlang** operators to [capture
+#' and defuse][rlang::nse-defuse] expressions. See the examples for different
+#' options.
+#' 
 
 #' @name alluvial-data
 #' @importFrom rlang enquo enquos enexpr enexprs quos is_empty quo_name
@@ -38,36 +41,31 @@
 #' @family alluvial data manipulation
 #' @param data A data frame.
 #' @param silent Whether to print messages.
-#' @param key,value,id In `to_lodes_form`, handled as in
-#'   [tidyr::gather()] and used to name the new axis (key), stratum
-#'   (value), and alluvium (identifying) variables. In `to_alluvia_form`,
-#'   handled as in [tidyr::spread()] and used to identify the fields
-#'   of `data` to be used as the axis (key), stratum (value), and alluvium
-#'   (identifying) variables.
-#' @param axes In `*_alluvia_form`, handled as in
-#'   [dplyr::select()] and used to identify the field(s) of
-#'   `data` to be used as axes.
-#' @param y Optional field(s) of `data`, handled using
-#'   [`rlang::enquo()`][rlang::nse-defuse], to be used as heights or depths of
-#'   the alluvia or lodes.
+#' @param key,value,id In `to_lodes_form`, captured, defused, and used to name
+#'   the new axis (`key`), stratum (`value`), and alluvium (`id`entifying)
+#'   variables. In `is_lodes_form` and `to_alluvia_form`, captured, defused, and
+#'   used to identify the fields of `data` to be used as the axis (key), stratum
+#'   (value), and alluvium (identifying) variables.
+#' @param axes In `*_alluvia_form`, captured, defused, and used to identify the
+#'   field(s) of `data` to be used as axes.
+#' @param y Optional field(s) of `data`, captured and defused, to be used as
+#'   heights or depths of the alluvia or lodes.
 #' @param y_to A string specifying the name of the column to create from the
 #'   column(s) identified by `y`. If needed for multiple columns but not
 #'   provided, defaults to 'y'.
-#' @param site Optional vector of fields of `data`, handled using
-#'   [`rlang::enquos()`][rlang::nse-defuse], to be used to group rows before
-#'   testing for duplicate and missing id-axis pairings. Variables intended for
-#'   faceting should be passed to `site`.
+#' @param site Optional vector of fields of `data`, captured and defused, to be
+#'   used to group rows before testing for duplicate and missing id-axis
+#'   pairings. Variables intended for faceting should be passed to `site`.
 #' @param diffuse Fields of `data`, handled using [tidyselect::vars_select()],
 #'   to merge into the reshapen data by `id`. They must be a subset of the axis
 #'   variables. Alternatively, a logical value indicating whether to merge all
 #'   (`TRUE`) or none (`FALSE`) of the axis variables.
 #' @param distill A logical value indicating whether to include variables, other
-#'   than those passed to `key` and `value`, that vary within values
-#'   of `id`. Alternatively, a function (or its name) to be used to distill
-#'   each such variable to a single value. In addition to existing functions,
-#'   `distill` accepts the character values `"first"` (used if
-#'   `distill` is `TRUE`), `"last"`, and `"most"` (which
-#'   returns the first modal value).
+#'   than those passed to `key` and `value`, that vary within values of `id`.
+#'   Alternatively, a function (or its name) to be used to distill each such
+#'   variable to a single value. In addition to existing functions, `distill`
+#'   accepts the character values `"first"` (used if `distill` is `TRUE`),
+#'   `"last"`, and `"most"` (which returns the first modal value).
 #' @param discern Logical value indicating whether to suffix values of the
 #'   variables used as axes that appear at more than one variable in order to
 #'   distinguish their factor levels. This forces the levels of the combined

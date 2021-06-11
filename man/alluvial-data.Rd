@@ -29,27 +29,23 @@ to_alluvia_form(data, key, value, id, y = NULL, distill = FALSE)
 \arguments{
 \item{data}{A data frame.}
 
-\item{key, value, id}{In \code{to_lodes_form}, handled as in
-\code{\link[tidyr:gather]{tidyr::gather()}} and used to name the new axis (key), stratum
-(value), and alluvium (identifying) variables. In \code{to_alluvia_form},
-handled as in \code{\link[tidyr:spread]{tidyr::spread()}} and used to identify the fields
-of \code{data} to be used as the axis (key), stratum (value), and alluvium
-(identifying) variables.}
+\item{key, value, id}{In \code{to_lodes_form}, captured, defused, and used to name
+the new axis (\code{key}), stratum (\code{value}), and alluvium (\code{id}entifying)
+variables. In \code{is_lodes_form} and \code{to_alluvia_form}, captured, defused, and
+used to identify the fields of \code{data} to be used as the axis (key), stratum
+(value), and alluvium (identifying) variables.}
 
-\item{y}{Optional field(s) of \code{data}, handled using
-\code{\link[rlang:nse-defuse]{rlang::enquo()}}, to be used as heights or depths of
-the alluvia or lodes.}
+\item{y}{Optional field(s) of \code{data}, captured and defused, to be used as
+heights or depths of the alluvia or lodes.}
 
-\item{site}{Optional vector of fields of \code{data}, handled using
-\code{\link[rlang:nse-defuse]{rlang::enquos()}}, to be used to group rows before
-testing for duplicate and missing id-axis pairings. Variables intended for
-faceting should be passed to \code{site}.}
+\item{site}{Optional vector of fields of \code{data}, captured and defused, to be
+used to group rows before testing for duplicate and missing id-axis
+pairings. Variables intended for faceting should be passed to \code{site}.}
 
 \item{silent}{Whether to print messages.}
 
-\item{axes}{In \verb{*_alluvia_form}, handled as in
-\code{\link[dplyr:select]{dplyr::select()}} and used to identify the field(s) of
-\code{data} to be used as axes.}
+\item{axes}{In \verb{*_alluvia_form}, captured, defused, and used to identify the
+field(s) of \code{data} to be used as axes.}
 
 \item{y_to}{A string specifying the name of the column to create from the
 column(s) identified by \code{y}. If needed for multiple columns but not
@@ -66,12 +62,11 @@ distinguish their factor levels. This forces the levels of the combined
 factor variable \code{value} to be in the order of the axes.}
 
 \item{distill}{A logical value indicating whether to include variables, other
-than those passed to \code{key} and \code{value}, that vary within values
-of \code{id}. Alternatively, a function (or its name) to be used to distill
-each such variable to a single value. In addition to existing functions,
-\code{distill} accepts the character values \code{"first"} (used if
-\code{distill} is \code{TRUE}), \code{"last"}, and \code{"most"} (which
-returns the first modal value).}
+than those passed to \code{key} and \code{value}, that vary within values of \code{id}.
+Alternatively, a function (or its name) to be used to distill each such
+variable to a single value. In addition to existing functions, \code{distill}
+accepts the character values \code{"first"} (used if \code{distill} is \code{TRUE}),
+\code{"last"}, and \code{"most"} (which returns the first modal value).}
 }
 \description{
 Alluvial plots consist of multiple horizontally-distributed columns (axes)
@@ -85,27 +80,29 @@ types of alluvial structure:
 \details{
 \itemize{
 \item One row per \strong{lode}, wherein each row encodes a subset or amount of
-observations having a specific profile of axis values, a \code{key} field
-encodes the axis, a \code{value} field encodes the value within each axis, and a
-\code{id} column identifies multiple lodes corresponding to the same subset or
-amount of observations. \code{is_lodes_form} tests for this structure.
-\item One row per \strong{alluvium}, wherein each row encodes a subset or amount of
-observations having a specific profile of axis values and a set \code{axes} of
-fields encodes its values at each axis variable. \code{is_alluvia_form} tests
-for this structure.
+observations having a specific profile of axis values, a \code{key} field encodes
+the axis, a \code{value} field encodes the value within each axis, and a \code{id}
+column identifies multiple lodes corresponding to the same subset or amount
+of observations. \code{is_lodes_form} tests for this structure. - One row per
+\strong{alluvium}, wherein each row encodes a subset or amount of observations
+having a specific profile of axis values and a set \code{axes} of fields encodes
+its values at each axis variable. \code{is_alluvia_form} tests for this structure.
 }
 
-\code{to_lodes_form} takes a data frame with several designated variables to
-be used as axes in an alluvial plot, and reshapes the data frame so that
-the axis variable names constitute a new factor variable and their values
+\code{to_lodes_form} takes a data frame with several designated variables to be
+used as axes in an alluvial plot, and reshapes the data frame so that the
+axis variable names constitute a new factor variable and their values
 comprise another. Other variables' values will be repeated, and a
 row-grouping variable can be introduced. This function invokes
-\code{\link[tidyr:gather]{tidyr::gather()}}.
+\code{\link[tidyr:pivot_longer]{tidyr::pivot_longer()}}.
 
-\code{to_alluvia_form} takes a data frame with axis and axis value variables
-to be used in an alluvial plot, and reshape the data frame so that the
-axes constitute separate variables whose values are given by the value
-variable. This function invokes \code{\link[tidyr:spread]{tidyr::spread()}}.
+\code{to_alluvia_form} takes a data frame with axis and axis value variables to be
+used in an alluvial plot, and reshape the data frame so that the axes
+constitute separate variables whose values are given by the value variable.
+This function invokes \code{\link[tidyr:pivot_wider]{tidyr::pivot_wider()}}.
+
+The check and conversion functions both use \strong{rlang} operators to \link[rlang:nse-defuse]{capture and defuse} expressions. See the examples for different
+options.
 }
 \examples{
 # Titanic data in alluvia format
