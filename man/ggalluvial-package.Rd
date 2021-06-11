@@ -25,7 +25,7 @@ Many users identified problems and suggested improvements via email and the
 GitHub issue tracker.
 
 Development benefitted from the use of equipment and the support of
-colleagues at \href{https://health.uconn.edu/}{UConn Health}.
+colleagues at \href{https://health.uconn.edu/}{UConn Health} and at \href{https://ufhealth.org/}{UF Health}.
 }
 
 \seealso{

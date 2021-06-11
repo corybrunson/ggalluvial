@@ -60,4 +60,9 @@ the remaining axes as follows:
 \item \code{backfront}: Proceed backward from \code{i} to 1, then forward to \code{n}
 (alias \code{leftright})
 }
+
+An extended discussion of how strata and lodes are arranged in alluvial
+plots, including the effects of different lode guidance functions, can be
+found in the vignette "The Order of the Rectangles" via
+\code{vignette("order-rectangles", package = "ggalluvial")}.
 }
