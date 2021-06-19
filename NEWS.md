@@ -1,6 +1,10 @@
 
 # ggalluvial 0.12.4
 
+## Error handling
+
+Rather than throw an error when `y` values are `NA`, the stat layers now follow **ggplot2** convention, using `remove_missing()` at the setup step with the `na.rm` parameter passed to each layer.
+
 ## Aesthetic defaults
 
 To address #78 and for clarity, the legacy default `colour = 0` of three `Geom*()`s is changed to `colour = "transparent"`.

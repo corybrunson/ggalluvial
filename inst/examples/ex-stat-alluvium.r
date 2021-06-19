@@ -75,10 +75,16 @@ ggplot(data = bn,
   geom_alluvium(aes(fill = name, color = name == "Tammy"),
                 decreasing = TRUE, show.legend = FALSE) +
   scale_color_manual(values = c("#00000000", "#000000"))
-# filling in missing zeros
+# expanded to include missing values
 bn2 <- merge(bn,
              expand.grid(year = unique(bn$year), name = unique(bn$name)),
              all = TRUE)
+ggplot(data = bn2,
+       aes(x = year, alluvium = name, y = prop)) +
+  geom_alluvium(aes(fill = name, color = name == "Tammy"),
+                decreasing = TRUE, show.legend = FALSE) +
+  scale_color_manual(values = c("#00000000", "#000000"))
+# with missing values filled in with zeros
 bn2$prop[is.na(bn2$prop)] <- 0
 ggplot(data = bn2,
        aes(x = year, alluvium = name, y = prop)) +

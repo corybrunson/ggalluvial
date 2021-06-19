@@ -34,16 +34,13 @@ get_alluvial_type <- function(data) {
 
 # incorporate any missing values into factor levels
 na_keep <- function(data, type) {
-  if (type == "none") {
-    stop("Data is not in a recognized alluvial form ",
-         "(see `help('alluvial-data')` for details).")
-  } else if (type == "lodes") {
+  if (type == "lodes") {
     if (is.factor(data$stratum)) {
       data$stratum <- addNA(data$stratum, ifany = TRUE)
     } else {
       data$stratum[is.na(data$stratum)] <- ""
     }
-  } else {
+  } else if (type == "alluvia") {
     axis_ind <- get_axes(names(data))
     for (i in axis_ind) {
       if (any(is.na(data[[i]]))) {
