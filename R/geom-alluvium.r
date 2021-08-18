@@ -137,7 +137,8 @@ GeomAlluvium <- ggproto(
       ))
     } else if (curve_type %in% c("spline", "xspline")) {
       # spline coordinates (more than one axis)
-      curve_data <- data_to_xspline(data, knot.prop)
+      # curve_range and segments are used if nrow(data) <= 2
+      curve_data <- data_to_alluvium(data, knot.prop = knot.prop, curve_range = curve_range, segments = segments)
     } else {
       # default to 48 segments per curve, ensure the minimum number of segments
       if (is.null(segments)) segments <- 48 else if (segments < 3) {
@@ -145,7 +146,7 @@ GeomAlluvium <- ggproto(
         segments <- 3
       }
       # unit curve coordinates (more than one axis)
-      curve_data <- data_to_unit_curve(data, curve_type, curve_range, segments)
+      curve_data <- data_to_alluvium(data, curve_type = curve_type, curve_range = curve_range, segments = segments)
     }
     data <- data.frame(first_row, curve_data)
     
@@ -166,60 +167,60 @@ GeomAlluvium <- ggproto(
   draw_key = draw_key_polygon
 )
 
-# calculate control point coordinates for x-splines
-data_to_xspline <- function(data, knot.prop) {
-  # left side, right side, forebound knot, backbound knot, left side, right side
-  w_fore <- rep(data$width, c(3, rep(4, nrow(data) - 2), 3))
-  k_fore <- rep(data$knot.pos, c(3, rep(4, nrow(data) - 2), 3))
-  if (knot.prop) {
-    # distances between strata
-    b_fore <- rep(data$x, c(1, rep(2, nrow(data) - 2), 1)) +
-      c(1, -1) * rep(data$width / 2, c(1, rep(2, nrow(data) - 2), 1))
-    d_fore <- diff(b_fore)[c(TRUE, FALSE)]
-    # scale `k_fore` to these distances
-    k_fore <- k_fore * c(0, rep(d_fore, rep(4, nrow(data) - 1)), 0)
+data_to_alluvium <- function(data, curve_type = 'spline', knot.prop = NULL, curve_range = NULL, segments = NULL) {
+  if (curve_type %in% c("spline", "xspline") & nrow(data) > 2) {
+    # calculate control point coordinates for x-splines:
+    # left side, right side, forebound knot, backbound knot, left side, right side
+    w_fore <- rep(data$width, c(3, rep(4, nrow(data) - 2), 3))
+    k_fore <- rep(data$knot.pos, c(3, rep(4, nrow(data) - 2), 3))
+    if (knot.prop) {
+      # distances between strata
+      b_fore <- rep(data$x, c(1, rep(2, nrow(data) - 2), 1)) +
+        c(1, -1) * rep(data$width / 2, c(1, rep(2, nrow(data) - 2), 1))
+      d_fore <- diff(b_fore)[c(TRUE, FALSE)]
+      # scale `k_fore` to these distances
+      k_fore <- k_fore * c(0, rep(d_fore, rep(4, nrow(data) - 1)), 0)
+    }
+    # axis position +/- corresponding width +/- relative knot position
+    x_fore <- rep(data$x, c(3, rep(4, nrow(data) - 2), 3)) +
+      w_fore / 2 * c(-1, rep(c(1, 1, -1, -1), nrow(data) - 1), 1) +
+      k_fore * c(0, rep(c(0, 1, -1, 0), nrow(data) - 1), 0)
+    # vertical positions are those of lodes
+    ymin_fore <- rep(data$ymin, c(3, rep(4, nrow(data) - 2), 3))
+    ymax_fore <- rep(data$ymax, c(3, rep(4, nrow(data) - 2), 3))
+    shape_fore <- c(0, rep(c(0, 1, 1, 0), nrow(data) - 1), 0)
+    data.frame(
+      x = c(x_fore, rev(x_fore)),
+      y = c(ymin_fore, rev(ymax_fore)),
+      shape = rep(shape_fore, 2)
+    )
+  } else {
+    # specs for a single flow curve
+    curve_fun <- make_curve_fun(ifelse(curve_type %in% c("spline", "xspline"), "linear", curve_type), curve_range)
+    i_once <- seq(0, 1, length.out = segments + 1)
+    f_once <- curve_fun(i_once)
+    # coordinates for a full curve
+    b_fore <- as.vector(rbind(data$x - data$w / 2, data$x + data$w / 2))
+    x_fore <- c(
+      b_fore[1],
+      t(b_fore[seq(nrow(data) - 1) * 2] +
+          outer(diff(b_fore)[seq(nrow(data) - 1) * 2], i_once, "*")),
+      b_fore[nrow(data) * 2]
+    )
+    ymin_fore <- c(
+      data$ymin[1],
+      t(data$ymin[-nrow(data)] + outer(diff(data$ymin), f_once, "*")),
+      data$ymin[nrow(data)]
+    )
+    ymax_fore <- c(
+      data$ymax[1],
+      t(data$ymax[-nrow(data)] + outer(diff(data$ymax), f_once, "*")),
+      data$ymax[nrow(data)]
+    )
+    data.frame(
+      x = c(x_fore, rev(x_fore)),
+      y = c(ymin_fore, rev(ymax_fore)),
+      shape = 0
+    )
   }
-  # axis position +/- corresponding width +/- relative knot position
-  x_fore <- rep(data$x, c(3, rep(4, nrow(data) - 2), 3)) +
-    w_fore / 2 * c(-1, rep(c(1, 1, -1, -1), nrow(data) - 1), 1) +
-    k_fore * c(0, rep(c(0, 1, -1, 0), nrow(data) - 1), 0)
-  # vertical positions are those of lodes
-  ymin_fore <- rep(data$ymin, c(3, rep(4, nrow(data) - 2), 3))
-  ymax_fore <- rep(data$ymax, c(3, rep(4, nrow(data) - 2), 3))
-  shape_fore <- c(0, rep(c(0, 1, 1, 0), nrow(data) - 1), 0)
-  data.frame(
-    x = c(x_fore, rev(x_fore)),
-    y = c(ymin_fore, rev(ymax_fore)),
-    shape = rep(shape_fore, 2)
-  )
-}
-
-data_to_unit_curve <- function(data, curve_type, curve_range, segments) {
-  # specs for a single flow curve
-  curve_fun <- make_curve_fun(curve_type, curve_range)
-  i_once <- seq(0, 1, length.out = segments + 1)
-  f_once <- curve_fun(i_once)
-  # coordinates for a full curve
-  b_fore <- as.vector(rbind(data$x - data$w / 2, data$x + data$w / 2))
-  x_fore <- c(
-    b_fore[1],
-    t(b_fore[seq(nrow(data) - 1) * 2] +
-        outer(diff(b_fore)[seq(nrow(data) - 1) * 2], i_once, "*")),
-    b_fore[nrow(data) * 2]
-  )
-  ymin_fore <- c(
-    data$ymin[1],
-    t(data$ymin[-nrow(data)] + outer(diff(data$ymin), f_once, "*")),
-    data$ymin[nrow(data)]
-  )
-  ymax_fore <- c(
-    data$ymax[1],
-    t(data$ymax[-nrow(data)] + outer(diff(data$ymax), f_once, "*")),
-    data$ymax[nrow(data)]
-  )
-  data.frame(
-    x = c(x_fore, rev(x_fore)),
-    y = c(ymin_fore, rev(ymax_fore)),
-    shape = 0
-  )
 }
