@@ -155,6 +155,11 @@ GeomAlluvium <- ggproto(
   draw_key = draw_key_polygon
 )
 
+#' Create alluvium curve points from data
+#' 
+#' Placeholder. Documentation goes here.
+#' 
+#' @export
 data_to_alluvium <- function(data, curve_type = 'spline', knot.prop = TRUE, curve_range = 6, segments = 3) {
   if (nrow(data) == 1) {
     # spline coordinates (one axis)

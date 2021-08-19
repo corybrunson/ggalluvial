@@ -31,18 +31,16 @@ p <- ggplot(vaccinations,
   theme(plot.title = element_text(size = rel(1)),
         legend.position = 'bottom')
 
-# Build the plot. Use global assignment so that this object is accessible
-# later.
+# Build the plot.
 pbuilt <- ggplot_build(p)
 
 # Use built plot data to recalculate the locations of the flow polygons:
 
 # Add width parameter, and then convert built plot data to xsplines
 data_draw <- transform(pbuilt$data[[1]], width = alluvium_width)
-groups_to_draw <- split(data_draw, data_draw$group) # Global assignment because this is used to extract information for the tooltip later.
+groups_to_draw <- split(data_draw, data_draw$group) 
 group_xsplines <- lapply(groups_to_draw,
-                         ggalluvial:::data_to_xspline,
-                         knot.prop = TRUE) 
+                         data_to_alluvium) 
 
 # Convert xspline coordinates to grid object.
 xspline_coords <- lapply(

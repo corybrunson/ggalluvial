@@ -41,8 +41,7 @@ pbuilt <- ggplot_build(p)
 data_draw <- transform(pbuilt$data[[1]], width = alluvium_width)
 groups_to_draw <- split(data_draw, data_draw$group)
 group_xsplines <- lapply(groups_to_draw,
-                         ggalluvial:::data_to_xspline,
-                         knot.prop = TRUE) 
+                         data_to_alluvium) 
 
 # Convert xspline coordinates to grid object.
 xspline_coords <- lapply(
