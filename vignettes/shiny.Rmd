@@ -147,15 +147,14 @@ p <- ggplot(ucb_admissions,
 pbuilt <- ggplot_build(p)
 ```
 
-Now for the hard part: reverse-engineering the coordinates of the alluvia polygons. This makes use of `pbuilt$data[[1]]`, a data frame with the individual elements of the alluvial plot. We add an additional column for `width` using the value we set above, then split the data frame by group (groups correspond to the individual alluvium polygons). We apply the unexported function `ggalluvial:::data_to_xspline()` to each element of the list to get the x-spline coordinates. Then, we pass the x-spline coordinates to the function `grid::xsplineGrob()` to convert them into a **grid** object. We pass the resulting object to `grid::xsplinePoints()`. At this point we now have the coordinates of the alluvium polygons. The object `xspline_points` is a list with length equal to the number of alluvium polygons in the plot. Each element of the list is a list with elements `x` and `y`, which are numeric vectors.
+Now for the hard part: reverse-engineering the coordinates of the alluvia polygons. This makes use of `pbuilt$data[[1]]`, a data frame with the individual elements of the alluvial plot. We add an additional column for `width` using the value we set above, then split the data frame by group (groups correspond to the individual alluvium polygons). We apply the unexported function `ggalluvial:::data_to_alluvium()` to each element of the list to get the x-spline coordinates. Then, we pass the x-spline coordinates to the function `grid::xsplineGrob()` to convert them into a **grid** object. We pass the resulting object to `grid::xsplinePoints()`. At this point we now have the coordinates of the alluvium polygons. The object `xspline_points` is a list with length equal to the number of alluvium polygons in the plot. Each element of the list is a list with elements `x` and `y`, which are numeric vectors.
 
 ```{r get xsplines and draw curves, eval = FALSE}
 # Add width parameter, and then convert built plot data to xsplines
 data_draw <- transform(pbuilt$data[[1]], width = alluvium_width)
 groups_to_draw <- split(data_draw, data_draw$group)
 group_xsplines <- lapply(groups_to_draw,
-                         ggalluvial:::data_to_xspline,
-                         knot.prop = TRUE) 
+                         ggalluvial:::data_to_alluvium) 
 
 # Convert xspline coordinates to grid object.
 xspline_coords <- lapply(

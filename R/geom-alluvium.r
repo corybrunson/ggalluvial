@@ -155,7 +155,7 @@ GeomAlluvium <- ggproto(
   draw_key = draw_key_polygon
 )
 
-data_to_alluvium <- function(data, curve_type = 'spline', knot.prop = NULL, curve_range = NULL, segments = NULL) {
+data_to_alluvium <- function(data, curve_type = 'spline', knot.prop = TRUE, curve_range = 6, segments = 3) {
   if (nrow(data) == 1) {
     # spline coordinates (one axis)
     with(data, data.frame(
@@ -164,10 +164,9 @@ data_to_alluvium <- function(data, curve_type = 'spline', knot.prop = NULL, curv
       shape = rep(0, 4)
     ))
   } else {
-    if (curve_type %in% c("spline", "xspline") & nrow(data) > 2) {
+    if (curve_type %in% c("spline", "xspline")) {
       # spline coordinates (more than one axis)
-      # curve_range and segments are used if nrow(data) <= 2
-      
+
       # calculate control point coordinates for x-splines:
       # left side, right side, forebound knot, backbound knot, left side, right side
       w_fore <- rep(data$width, c(3, rep(4, nrow(data) - 2), 3))
