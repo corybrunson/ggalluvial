@@ -1,14 +1,19 @@
 #' Alluvia across strata
 #'
-#' `geom_alluvium` receives a dataset of the horizontal (`x`) and
-#' vertical (`y`, `ymin`, `ymax`) positions of the **lodes**
-#' of an alluvial plot, the intersections of the alluvia with the strata.
-#' It plots both the lodes themselves, using [geom_lode()], and the
-#' flows between them, using [geom_flow()].
+#' `geom_alluvium` receives a dataset of the horizontal (`x`) and vertical (`y`,
+#' `ymin`, `ymax`) positions of the **lodes** of an alluvial plot, the
+#' intersections of the alluvia with the strata. It plots both the lodes
+#' themselves, using [geom_lode()], and the flows between them, using
+#' [geom_flow()].
+#'
+#' The helper function `data_to_alluvium()` takes internal **ggplot2** data
+#' (mapped aesthetics) and curve parameters for a single alluvium as input and
+#' returns a data frame of `x`, `y`, and `shape` used by [grid::xsplineGrob()]
+#' to render the alluvium.
 #' @template geom-aesthetics
 #' @template geom-curves
 #' @template defunct-geom-params
-#'
+#'   
 
 #' @import ggplot2
 #' @family alluvial geom layers
@@ -161,10 +166,6 @@ GeomAlluvium <- ggproto(
   draw_key = draw_key_polygon
 )
 
-#' Create alluvium curve points from data
-#' 
-#' Placeholder. Documentation goes here.
-#' 
 #' @rdname geom_alluvium
 #' @export
 data_to_alluvium <- function(

@@ -103,13 +103,17 @@ the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 \item{...}{Additional arguments passed to \code{\link[ggplot2:layer]{ggplot2::layer()}}.}
 }
 \description{
-\code{geom_alluvium} receives a dataset of the horizontal (\code{x}) and
-vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the \strong{lodes}
-of an alluvial plot, the intersections of the alluvia with the strata.
-It plots both the lodes themselves, using \code{\link[=geom_lode]{geom_lode()}}, and the
-flows between them, using \code{\link[=geom_flow]{geom_flow()}}.
-
-Placeholder. Documentation goes here.
+\code{geom_alluvium} receives a dataset of the horizontal (\code{x}) and vertical (\code{y},
+\code{ymin}, \code{ymax}) positions of the \strong{lodes} of an alluvial plot, the
+intersections of the alluvia with the strata. It plots both the lodes
+themselves, using \code{\link[=geom_lode]{geom_lode()}}, and the flows between them, using
+\code{\link[=geom_flow]{geom_flow()}}.
+}
+\details{
+The helper function \code{data_to_alluvium()} takes internal \strong{ggplot2} data
+(mapped aesthetics) and curve parameters for a single alluvium as input and
+returns a data frame of \code{x}, \code{y}, and \code{shape} used by \code{\link[grid:grid.xspline]{grid::xsplineGrob()}}
+to render the alluvium.
 }
 \section{Aesthetics}{
 

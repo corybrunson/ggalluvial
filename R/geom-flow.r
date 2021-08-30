@@ -1,16 +1,20 @@
 #' Flows between lodes or strata
 #'
-#' `geom_flow` receives a dataset of the horizontal (`x`) and
-#' vertical (`y`, `ymin`, `ymax`) positions of the **lodes**
-#' of an alluvial plot, the intersections of the alluvia with the strata.
-#' It reconfigures these into alluvial segments connecting pairs of
-#' corresponding lodes in adjacent strata and plots filled x-splines between
-#' each such pair, using a provided knot position parameter `knot.pos`, and
-#' filled rectangles at either end, using a provided `width`.
+#' `geom_flow` receives a dataset of the horizontal (`x`) and vertical (`y`,
+#' `ymin`, `ymax`) positions of the **lodes** of an alluvial plot, the
+#' intersections of the alluvia with the strata. It reconfigures these into
+#' alluvial segments connecting pairs of corresponding lodes in adjacent strata
+#' and plots filled x-splines between each such pair, using a provided knot
+#' position parameter `knot.pos`, and filled rectangles at either end, using a
+#' provided `width`.
+#'
+#' The helper function `positions_toflow()` takes the corner and knot positions
+#' and curve parameters for a single flow as input and returns a data frame of
+#' `x`, `y`, and `shape` used by [grid::xsplineGrob()] to render the flow.
 #' @template geom-aesthetics
 #' @template geom-curves
 #' @template defunct-geom-params
-#'
+#'   
 
 #' @import ggplot2
 #' @family alluvial geom layers
@@ -167,10 +171,6 @@ GeomFlow <- ggproto(
   draw_key = draw_key_polygon
 )
 
-#' Create flow curve points from a single row of data
-#' 
-#' Placeholder. Documentation goes here.
-#' 
 #' @rdname geom_flow
 #' @export
 positions_to_flow <- function(

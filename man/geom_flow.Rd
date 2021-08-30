@@ -117,15 +117,18 @@ the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 data for the ribbon of a single flow.}
 }
 \description{
-\code{geom_flow} receives a dataset of the horizontal (\code{x}) and
-vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the \strong{lodes}
-of an alluvial plot, the intersections of the alluvia with the strata.
-It reconfigures these into alluvial segments connecting pairs of
-corresponding lodes in adjacent strata and plots filled x-splines between
-each such pair, using a provided knot position parameter \code{knot.pos}, and
-filled rectangles at either end, using a provided \code{width}.
-
-Placeholder. Documentation goes here.
+\code{geom_flow} receives a dataset of the horizontal (\code{x}) and vertical (\code{y},
+\code{ymin}, \code{ymax}) positions of the \strong{lodes} of an alluvial plot, the
+intersections of the alluvia with the strata. It reconfigures these into
+alluvial segments connecting pairs of corresponding lodes in adjacent strata
+and plots filled x-splines between each such pair, using a provided knot
+position parameter \code{knot.pos}, and filled rectangles at either end, using a
+provided \code{width}.
+}
+\details{
+The helper function \code{positions_toflow()} takes the corner and knot positions
+and curve parameters for a single flow as input and returns a data frame of
+\code{x}, \code{y}, and \code{shape} used by \code{\link[grid:grid.xspline]{grid::xsplineGrob()}} to render the flow.
 }
 \section{Aesthetics}{
 
