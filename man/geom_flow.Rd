@@ -2,6 +2,7 @@
 % Please edit documentation in R/geom-flow.r
 \name{geom_flow}
 \alias{geom_flow}
+\alias{positions_to_flow}
 \title{Flows between lodes or strata}
 \usage{
 geom_flow(
@@ -20,6 +21,21 @@ geom_flow(
   show.legend = NA,
   inherit.aes = TRUE,
   ...
+)
+
+positions_to_flow(
+  x0,
+  x1,
+  ymin0,
+  ymax0,
+  ymin1,
+  ymax1,
+  kp0,
+  kp1,
+  knot.prop,
+  curve_type,
+  curve_range,
+  segments
 )
 }
 \arguments{
@@ -96,6 +112,9 @@ that define both data and aesthetics and shouldn't inherit behaviour from
 the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 
 \item{...}{Additional arguments passed to \code{\link[ggplot2:layer]{ggplot2::layer()}}.}
+
+\item{x0, x1, ymin0, ymax0, ymin1, ymax1, kp0, kp1}{Numeric corner and knot position
+data for the ribbon of a single flow.}
 }
 \description{
 \code{geom_flow} receives a dataset of the horizontal (\code{x}) and
@@ -105,6 +124,8 @@ It reconfigures these into alluvial segments connecting pairs of
 corresponding lodes in adjacent strata and plots filled x-splines between
 each such pair, using a provided knot position parameter \code{knot.pos}, and
 filled rectangles at either end, using a provided \code{width}.
+
+Placeholder. Documentation goes here.
 }
 \section{Aesthetics}{
 

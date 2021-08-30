@@ -20,6 +20,8 @@
 #' @inheritParams geom_alluvium
 #' @param aes.flow Character; how inter-lode flows assume aesthetics from lodes.
 #'   Options are "forward" and "backward".
+#' @param x0,x1,ymin0,ymax0,ymin1,ymax1,kp0,kp1 Numeric corner and knot position
+#'   data for the ribbon of a single flow.
 #' @example inst/examples/ex-geom-flow.r
 #' @export
 geom_flow <- function(mapping = NULL,
@@ -129,12 +131,14 @@ GeomFlow <- ggproto(
     grobs <- lapply(split(data, seq_len(nrow(data))), function(row) {
 
       # path of spline or unit curve
-      f_path <- row_to_curve(row$xmax.0, row$xmin.1,
-                             row$ymin.0, row$ymax.0, row$ymin.1, row$ymax.1,
-                             row$knot.pos.0, row$knot.pos.1,
-                             curve_type = curve_type, curve_range = curve_range,
-                             segments = segments,
-                             knot.prop = knot.prop)
+      f_path <- positions_to_flow(
+        row$xmax.0, row$xmin.1,
+        row$ymin.0, row$ymax.0, row$ymin.1, row$ymax.1,
+        row$knot.pos.0, row$knot.pos.1,
+        knot.prop = knot.prop,
+        curve_type = curve_type, curve_range = curve_range,
+        segments = segments
+      )
       # aesthetics
       aes <- as.data.frame(row[flow_aes], stringsAsFactors = FALSE)
       # join aesthetics to path
@@ -163,15 +167,26 @@ GeomFlow <- ggproto(
   draw_key = draw_key_polygon
 )
 
-# send to spline or unit curve depending on parameters
-row_to_curve <- function(
+#' Create flow curve points from a single row of data
+#' 
+#' Placeholder. Documentation goes here.
+#' 
+#' @rdname geom_flow
+#' @export
+positions_to_flow <- function(
   x0, x1, ymin0, ymax0, ymin1, ymax1, kp0, kp1,
-  curve_type, curve_range, segments, knot.prop
+  knot.prop, curve_type, curve_range, segments
 ) {
   if (curve_type %in% c("spline", "xspline")) {
     # x-spline path
-    row_to_xspline(x0, x1, ymin0, ymax0, ymin1, ymax1,
-                   kp0, kp1, knot.prop)
+    k_fore <- c(0, kp0, -kp1, 0)
+    if (knot.prop) k_fore <- k_fore * (x1 - x0)
+    x_fore <- rep(c(x0, x1), each = 2) + k_fore
+    data.frame(
+      x = c(x_fore, rev(x_fore)),
+      y = c(ymin0, ymin0, ymin1, ymin1, ymax1, ymax1, ymax0, ymax0),
+      shape = rep(c(0, 1, 1, 0), times = 2)
+    )
   } else {
     # default to 48 segments per curve, ensure the minimum number of segments
     if (is.null(segments)) segments <- 48 else if (segments < 3) {
@@ -179,37 +194,15 @@ row_to_curve <- function(
       segments <- 3
     }
     # unit curve path
-    row_to_unit_curve(x0, x1, ymin0, ymax0, ymin1, ymax1,
-                      curve_type, curve_range, segments)
+    curve_fun <- make_curve_fun(curve_type, curve_range)
+    i_fore <- seq(0, 1, length.out = segments + 1)
+    f_fore <- curve_fun(i_fore)
+    x_fore <- x0 + (x1 - x0) * i_fore
+    data.frame(
+      x = c(x_fore, rev(x_fore)),
+      y = c(ymin0 + (ymin1 - ymin0) * f_fore,
+            ymax1 + (ymax0 - ymax1) * f_fore),
+      shape = 0
+    )
   }
-}
-
-row_to_xspline <- function(
-  x0, x1, ymin0, ymax0, ymin1, ymax1,
-  kp0, kp1, knot.prop
-) {
-  k_fore <- c(0, kp0, -kp1, 0)
-  if (knot.prop) k_fore <- k_fore * (x1 - x0)
-  x_fore <- rep(c(x0, x1), each = 2) + k_fore
-  data.frame(
-    x = c(x_fore, rev(x_fore)),
-    y = c(ymin0, ymin0, ymin1, ymin1, ymax1, ymax1, ymax0, ymax0),
-    shape = rep(c(0, 1, 1, 0), times = 2)
-  )
-}
-
-row_to_unit_curve <- function(
-  x0, x1, ymin0, ymax0, ymin1, ymax1,
-  curve_type, curve_range, segments
-) {
-  curve_fun <- make_curve_fun(curve_type, curve_range)
-  i_fore <- seq(0, 1, length.out = segments + 1)
-  f_fore <- curve_fun(i_fore)
-  x_fore <- x0 + (x1 - x0) * i_fore
-  data.frame(
-    x = c(x_fore, rev(x_fore)),
-    y = c(ymin0 + (ymin1 - ymin0) * f_fore,
-          ymax1 + (ymax0 - ymax1) * f_fore),
-    shape = 0
-  )
 }
