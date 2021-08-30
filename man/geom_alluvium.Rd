@@ -2,6 +2,7 @@
 % Please edit documentation in R/geom-alluvium.r
 \name{geom_alluvium}
 \alias{geom_alluvium}
+\alias{data_to_alluvium}
 \title{Alluvia across strata}
 \usage{
 geom_alluvium(
@@ -19,6 +20,14 @@ geom_alluvium(
   show.legend = NA,
   inherit.aes = TRUE,
   ...
+)
+
+data_to_alluvium(
+  data,
+  knot.prop = TRUE,
+  curve_type = "spline",
+  curve_range = NULL,
+  segments = NULL
 )
 }
 \arguments{
@@ -99,6 +108,8 @@ vertical (\code{y}, \code{ymin}, \code{ymax}) positions of the \strong{lodes}
 of an alluvial plot, the intersections of the alluvia with the strata.
 It plots both the lodes themselves, using \code{\link[=geom_lode]{geom_lode()}}, and the
 flows between them, using \code{\link[=geom_flow]{geom_flow()}}.
+
+Placeholder. Documentation goes here.
 }
 \section{Aesthetics}{
 
