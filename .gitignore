@@ -16,3 +16,6 @@ CRAN-RELEASE
 
 # sandbox
 sandbox
+
+# rsconnect directories from Shiny app deployment
+rsconnect/
