@@ -88,13 +88,13 @@
 
       
 
-      </header><script src="shiny_files/header-attrs-2.8/header-attrs.js"></script><div class="row">
+      </header><script src="shiny_files/header-attrs-2.10/header-attrs.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Tooltips for ggalluvial plots in Shiny apps</h1>
                         <h4 class="author">Quentin D. Read</h4>
             
-            <h4 class="date">2021-06-11</h4>
+            <h4 class="date">2021-09-06</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/corybrunson/ggalluvial/blob/master/vignettes/shiny.Rmd"><code>vignettes/shiny.Rmd</code></a></small>
       <div class="hidden name"><code>shiny.Rmd</code></div>
@@ -220,14 +220,13 @@
 
 <span class="co"># Build the plot. </span>
 <span class="va">pbuilt</span> <span class="op">&lt;-</span> <span class="fu">ggplot_build</span><span class="op">(</span><span class="va">p</span><span class="op">)</span></code></pre></div>
-<p>Now for the hard part: reverse-engineering the coordinates of the alluvia polygons. This makes use of <code>pbuilt$data[[1]]</code>, a data frame with the individual elements of the alluvial plot. We add an additional column for <code>width</code> using the value we set above, then split the data frame by group (groups correspond to the individual alluvium polygons). We apply the unexported function <code>ggalluvial:::data_to_xspline()</code> to each element of the list to get the x-spline coordinates. Then, we pass the x-spline coordinates to the function <code><a href="https://rdrr.io/r/grid/grid.xspline.html">grid::xsplineGrob()</a></code> to convert them into a <strong>grid</strong> object. We pass the resulting object to <code><a href="https://rdrr.io/r/grid/xsplinePoints.html">grid::xsplinePoints()</a></code>. At this point we now have the coordinates of the alluvium polygons. The object <code>xspline_points</code> is a list with length equal to the number of alluvium polygons in the plot. Each element of the list is a list with elements <code>x</code> and <code>y</code>, which are numeric vectors.</p>
+<p>Now for the hard part: reverse-engineering the coordinates of the alluvia polygons. This makes use of <code>pbuilt$data[[1]]</code>, a data frame with the individual elements of the alluvial plot. We add an additional column for <code>width</code> using the value we set above, then split the data frame by group (groups correspond to the individual alluvium polygons). We apply the function <code><a href="../reference/geom_alluvium.html">data_to_alluvium()</a></code> to each element of the list to get the coordinates of the “skeleton” of the x-spline curve. Then, we pass these coordinates to the function <code><a href="https://rdrr.io/r/grid/grid.xspline.html">grid::xsplineGrob()</a></code> to fill in the smooth spline curves and convert them into a <strong>grid</strong> object. We pass the resulting object to <code><a href="https://rdrr.io/r/grid/xsplinePoints.html">grid::xsplinePoints()</a></code>, which converts back into numeric vectors. At this point we now have the coordinates of the alluvium polygons. The object <code>xspline_points</code> is a list with length equal to the number of alluvium polygons in the plot. Each element of the list is a list with elements <code>x</code> and <code>y</code>, which are numeric vectors.</p>
 <div class="sourceCode" id="section-cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Add width parameter, and then convert built plot data to xsplines</span>
 <span class="va">data_draw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html">transform</a></span><span class="op">(</span><span class="va">pbuilt</span><span class="op">$</span><span class="va">data</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, width <span class="op">=</span> <span class="va">alluvium_width</span><span class="op">)</span>
 <span class="va">groups_to_draw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html">split</a></span><span class="op">(</span><span class="va">data_draw</span>, <span class="va">data_draw</span><span class="op">$</span><span class="va">group</span><span class="op">)</span>
 <span class="va">group_xsplines</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">groups_to_draw</span>,
-                         <span class="fu">ggalluvial</span><span class="fu">:::</span><span class="va">data_to_xspline</span>,
-                         knot.prop <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> 
+                         <span class="va">data_to_alluvium</span><span class="op">)</span> 
 
 <span class="co"># Convert xspline coordinates to grid object.</span>
 <span class="va">xspline_coords</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span>

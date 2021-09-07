@@ -40,13 +40,13 @@
 
 
 <meta property="og:title" content="Flows between lodes or strata — geom_flow" />
-<meta property="og:description" content="geom_flow receives a dataset of the horizontal (x) and
-vertical (y, ymin, ymax) positions of the lodes
-of an alluvial plot, the intersections of the alluvia with the strata.
-It reconfigures these into alluvial segments connecting pairs of
-corresponding lodes in adjacent strata and plots filled x-splines between
-each such pair, using a provided knot position parameter knot.pos, and
-filled rectangles at either end, using a provided width." />
+<meta property="og:description" content="geom_flow receives a dataset of the horizontal (x) and vertical (y,
+ymin, ymax) positions of the lodes of an alluvial plot, the
+intersections of the alluvia with the strata. It reconfigures these into
+alluvial segments connecting pairs of corresponding lodes in adjacent strata
+and plots filled x-splines between each such pair, using a provided knot
+position parameter knot.pos, and filled rectangles at either end, using a
+provided width." />
 
 
 
@@ -144,13 +144,13 @@ filled rectangles at either end, using a provided width." />
     </div>
 
     <div class="ref-description">
-    <p><code>geom_flow</code> receives a dataset of the horizontal (<code>x</code>) and
-vertical (<code>y</code>, <code>ymin</code>, <code>ymax</code>) positions of the <strong>lodes</strong>
-of an alluvial plot, the intersections of the alluvia with the strata.
-It reconfigures these into alluvial segments connecting pairs of
-corresponding lodes in adjacent strata and plots filled x-splines between
-each such pair, using a provided knot position parameter <code>knot.pos</code>, and
-filled rectangles at either end, using a provided <code>width</code>.</p>
+    <p><code>geom_flow</code> receives a dataset of the horizontal (<code>x</code>) and vertical (<code>y</code>,
+<code>ymin</code>, <code>ymax</code>) positions of the <strong>lodes</strong> of an alluvial plot, the
+intersections of the alluvia with the strata. It reconfigures these into
+alluvial segments connecting pairs of corresponding lodes in adjacent strata
+and plots filled x-splines between each such pair, using a provided knot
+position parameter <code>knot.pos</code>, and filled rectangles at either end, using a
+provided <code>width</code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>geom_flow</span><span class='op'>(</span>
@@ -169,6 +169,21 @@ filled rectangles at either end, using a provided <code>width</code>.</p>
   show.legend <span class='op'>=</span> <span class='cn'>NA</span>,
   inherit.aes <span class='op'>=</span> <span class='cn'>TRUE</span>,
   <span class='va'>...</span>
+<span class='op'>)</span>
+
+<span class='fu'>positions_to_flow</span><span class='op'>(</span>
+  <span class='va'>x0</span>,
+  <span class='va'>x1</span>,
+  <span class='va'>ymin0</span>,
+  <span class='va'>ymax0</span>,
+  <span class='va'>ymin1</span>,
+  <span class='va'>ymax1</span>,
+  <span class='va'>kp0</span>,
+  <span class='va'>kp1</span>,
+  <span class='va'>knot.prop</span>,
+  <span class='va'>curve_type</span>,
+  <span class='va'>curve_range</span>,
+  <span class='va'>segments</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -275,8 +290,18 @@ the default plot specification, e.g. <code><a href='https://ggplot2.tidyverse.or
       <th>...</th>
       <td><p>Additional arguments passed to <code><a href='https://ggplot2.tidyverse.org/reference/layer.html'>ggplot2::layer()</a></code>.</p></td>
     </tr>
+    <tr>
+      <th>x0, x1, ymin0, ymax0, ymin1, ymax1, kp0, kp1</th>
+      <td><p>Numeric corner and knot position
+data for the ribbon of a single flow.</p></td>
+    </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The helper function <code>positions_toflow()</code> takes the corner and knot positions
+and curve parameters for a single flow as input and returns a data frame of
+<code>x</code>, <code>y</code>, and <code>shape</code> used by <code><a href='https://rdrr.io/r/grid/grid.xspline.html'>grid::xsplineGrob()</a></code> to render the flow.</p>
     <h2 class="hasAnchor" id="aesthetics"><a class="anchor" href="#aesthetics"></a>Aesthetics</h2>
 
     
