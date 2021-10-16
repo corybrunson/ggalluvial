@@ -1,5 +1,23 @@
 context("geom-flow")
 
+# curve tests
+
+test_that("`positions_to_flow` computes as expected", {
+  # spline curve
+  spline_curve <-
+    positions_to_flow(1, 2, 0, 1, 1, 2, 1.3, 1.7, FALSE, "spline", NULL, NULL)
+  expect_equal(nrow(spline_curve), 8L)
+  expect_equal(spline_curve$x, c(1, 2.3, 0.3, 2, 2, 0.3, 2.3, 1))
+  expect_equal(unique(spline_curve$y), c(0, 1, 2))
+  expect_equal(unique(spline_curve$shape), c(0, 1))
+  # cubic curve
+  cubic_curve <-
+    positions_to_flow(1, 2, 0, 1, 1, 2, 1.3, 1.7, FALSE, "cubic", NULL, 8L)
+  expect_equal(nrow(cubic_curve), 2L * 8L + 2L)
+  expect_equal(unique(cubic_curve$x), seq(1, 2, .125))
+  expect_equal(unique(cubic_curve$shape), 0)
+})
+
 # visual tests
 
 test_that("`geom_flow` draws correctly", {

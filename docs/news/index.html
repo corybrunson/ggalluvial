@@ -139,6 +139,16 @@
 <h1 class="page-header" data-toc-text="0.12.4">
 <a href="#ggalluvial-0124" class="anchor"></a>ggalluvial 0.12.4<small> Unreleased </small>
 </h1>
+<div id="curve-constructors" class="section level2">
+<h2 class="hasAnchor">
+<a href="#curve-constructors" class="anchor"></a>Curve constructors</h2>
+<p>Various curve constructors for alluvia and flows are consolidated into <code><a href="../reference/geom_alluvium.html">data_to_alluvium()</a></code> and <code><a href="../reference/geom_flow.html">positions_to_flow()</a></code>, which are now exported to the user as well as used internally by <code>GeomAlluvium$draw_group</code> and <code>GeomFlow$draw_panel</code>, respectively.</p>
+</div>
+<div id="error-handling" class="section level2">
+<h2 class="hasAnchor">
+<a href="#error-handling" class="anchor"></a>Error handling</h2>
+<p>Rather than throw an error when <code>y</code> values are <code>NA</code>, the stat layers now follow <strong>ggplot2</strong> convention, using <code>remove_missing()</code> at the setup step with the <code>na.rm</code> parameter passed to each layer.</p>
+</div>
 <div id="aesthetic-defaults" class="section level2">
 <h2 class="hasAnchor">
 <a href="#aesthetic-defaults" class="anchor"></a>Aesthetic defaults</h2>
@@ -148,6 +158,7 @@
 <h2 class="hasAnchor">
 <a href="#vignette-revisions" class="anchor"></a>Vignette revisions</h2>
 <p>The primary vignette now uses the <code>HairEyeColor</code> data set, rather than over-using <code>Titanic</code>, to illustrate the parallel sets plot.</p>
+<p>The Shiny vignette includes an embedded app using IFrame.</p>
 </div>
 </div>
     <div id="ggalluvial-0123" class="section level1">
