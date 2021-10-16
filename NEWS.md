@@ -15,6 +15,10 @@ The primary vignette now uses the `HairEyeColor` data set, rather than over-usin
 
 The Shiny vignette includes an embedded app using IFrame.
 
+## Dependency upgrades
+
+The deprecated `.dots` argument of `dplyr::group_by()` has been replaced with `dplyr::across()`, preventing a warning.
+
 # ggalluvial 0.12.3
 
 ## Shiny vignette

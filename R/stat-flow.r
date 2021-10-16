@@ -259,7 +259,7 @@ StatFlow <- ggproto(
                          names(data))
     only_vars <- c(diff_aes)
     sum_vars <- c("y", "n", "count")
-    data <- dplyr::group_by(data, .dots = by_vars)
+    data <- dplyr::group_by(data, dplyr::across(by_vars))
     # keep `NA`s in order to correctly position flows:
     # `distill()`, `only()`, and `sum(na.rm = TRUE)`
     agg_lode <- dplyr::summarize_at(data, "lode", distill)
