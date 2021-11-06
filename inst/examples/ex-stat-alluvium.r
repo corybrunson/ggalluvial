@@ -46,6 +46,7 @@ ggplot(ggalluvial::majors,
   theme_bw() +
   scale_y_reverse()
 
+\dontrun{
 # alluvium cementation examples
 gg <- ggplot(ggalluvial::majors,
              aes(x = semester, stratum = curriculum, alluvium = student,
@@ -65,6 +66,7 @@ gg +
   geom_text(aes(label = after_stat(lode)), stat = "alluvium",
             cement.alluvia = TRUE,
             distill = function(x) paste(x, collapse = "; "))
+}
 
 \dontrun{
 data(babynames, package = "babynames")
@@ -75,10 +77,16 @@ ggplot(data = bn,
   geom_alluvium(aes(fill = name, color = name == "Tammy"),
                 decreasing = TRUE, show.legend = FALSE) +
   scale_color_manual(values = c("#00000000", "#000000"))
-# filling in missing zeros
+# expanded to include missing values
 bn2 <- merge(bn,
              expand.grid(year = unique(bn$year), name = unique(bn$name)),
              all = TRUE)
+ggplot(data = bn2,
+       aes(x = year, alluvium = name, y = prop)) +
+  geom_alluvium(aes(fill = name, color = name == "Tammy"),
+                decreasing = TRUE, show.legend = FALSE) +
+  scale_color_manual(values = c("#00000000", "#000000"))
+# with missing values filled in with zeros
 bn2$prop[is.na(bn2$prop)] <- 0
 ggplot(data = bn2,
        aes(x = year, alluvium = name, y = prop)) +
@@ -97,7 +105,7 @@ ggplot(subset(titanic, Class != "Crew"),
   geom_text(stat = "stratum", aes(label = after_stat(stratum)),
             absolute = FALSE) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"), expand = c(.1, .05)) +
-  scale_alpha_discrete(range = c(.25, .75), guide = FALSE)
+  scale_alpha_discrete(range = c(.25, .75), guide = "none")
 
 # faceting with common alluvia
 ggplot(titanic, aes(y = Freq, axis1 = Class, axis2 = Sex, axis3 = Age)) +
@@ -108,4 +116,5 @@ ggplot(titanic, aes(y = Freq, axis1 = Class, axis2 = Sex, axis3 = Age)) +
 ggplot(transform(alluvial::Refugees, id = 1),
        aes(y = refugees, x = year, alluvium = id)) +
   facet_wrap(~ country) +
-  geom_alluvium()
+  geom_alluvium(alpha = .75, color = "darkgrey") +
+  scale_x_continuous(breaks = seq(2004, 2012, 4))

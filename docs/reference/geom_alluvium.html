@@ -40,11 +40,11 @@
 
 
 <meta property="og:title" content="Alluvia across strata — geom_alluvium" />
-<meta property="og:description" content="geom_alluvium receives a dataset of the horizontal (x) and
-vertical (y, ymin, ymax) positions of the lodes
-of an alluvial plot, the intersections of the alluvia with the strata.
-It plots both the lodes themselves, using geom_lode(), and the
-flows between them, using geom_flow()." />
+<meta property="og:description" content="geom_alluvium receives a dataset of the horizontal (x) and vertical (y,
+ymin, ymax) positions of the lodes of an alluvial plot, the
+intersections of the alluvia with the strata. It plots both the lodes
+themselves, using geom_lode(), and the flows between them, using
+geom_flow()." />
 
 
 
@@ -142,11 +142,11 @@ flows between them, using geom_flow()." />
     </div>
 
     <div class="ref-description">
-    <p><code>geom_alluvium</code> receives a dataset of the horizontal (<code>x</code>) and
-vertical (<code>y</code>, <code>ymin</code>, <code>ymax</code>) positions of the <strong>lodes</strong>
-of an alluvial plot, the intersections of the alluvia with the strata.
-It plots both the lodes themselves, using <code><a href='geom_lode.html'>geom_lode()</a></code>, and the
-flows between them, using <code><a href='geom_flow.html'>geom_flow()</a></code>.</p>
+    <p><code>geom_alluvium</code> receives a dataset of the horizontal (<code>x</code>) and vertical (<code>y</code>,
+<code>ymin</code>, <code>ymax</code>) positions of the <strong>lodes</strong> of an alluvial plot, the
+intersections of the alluvia with the strata. It plots both the lodes
+themselves, using <code><a href='geom_lode.html'>geom_lode()</a></code>, and the flows between them, using
+<code><a href='geom_flow.html'>geom_flow()</a></code>.</p>
     </div>
 
     <pre class="usage"><span class='fu'>geom_alluvium</span><span class='op'>(</span>
@@ -164,6 +164,14 @@ flows between them, using <code><a href='geom_flow.html'>geom_flow()</a></code>.
   show.legend <span class='op'>=</span> <span class='cn'>NA</span>,
   inherit.aes <span class='op'>=</span> <span class='cn'>TRUE</span>,
   <span class='va'>...</span>
+<span class='op'>)</span>
+
+<span class='fu'>data_to_alluvium</span><span class='op'>(</span>
+  <span class='va'>data</span>,
+  knot.prop <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  curve_type <span class='op'>=</span> <span class='st'>"spline"</span>,
+  curve_range <span class='op'>=</span> <span class='cn'>NULL</span>,
+  segments <span class='op'>=</span> <span class='cn'>NULL</span>
 <span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -267,6 +275,12 @@ the default plot specification, e.g. <code><a href='https://ggplot2.tidyverse.or
     </tr>
     </table>
 
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>The helper function <code>data_to_alluvium()</code> takes internal <strong>ggplot2</strong> data
+(mapped aesthetics) and curve parameters for a single alluvium as input and
+returns a data frame of <code>x</code>, <code>y</code>, and <code>shape</code> used by <code><a href='https://rdrr.io/r/grid/grid.xspline.html'>grid::xsplineGrob()</a></code>
+to render the alluvium.</p>
     <h2 class="hasAnchor" id="aesthetics"><a class="anchor" href="#aesthetics"></a>Aesthetics</h2>
 
     

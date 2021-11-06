@@ -117,8 +117,12 @@ StatStratum <- ggproto(
     # assign unit amounts if not provided
     if (is.null(data$y)) {
       data$y <- rep(1, nrow(data))
-    } else if (any(is.na(data$y))) {
-      stop("Data contains missing `y` values.")
+    } else {
+      data <- remove_missing(
+        data, na.rm = params$na.rm,
+        vars = "y", name = "stat_stratum",
+        finite = TRUE
+      )
     }
     
     type <- get_alluvial_type(data)

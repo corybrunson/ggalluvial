@@ -13,6 +13,14 @@ Several changes have been made to the `*_*_form()` functions:
 
 # ggalluvial 0.12.4
 
+## Curve constructors
+
+Various curve constructors for alluvia and flows are consolidated into `data_to_alluvium()` and `positions_to_flow()`, which are now exported to the user as well as used internally by `GeomAlluvium$draw_group` and `GeomFlow$draw_panel`, respectively.
+
+## Error handling
+
+Rather than throw an error when `y` values are `NA`, the stat layers now follow **ggplot2** convention, using `remove_missing()` at the setup step with the `na.rm` parameter passed to each layer.
+
 ## Aesthetic defaults
 
 To address #78 and for clarity, the legacy default `colour = 0` of three `Geom*()`s is changed to `colour = "transparent"`.
