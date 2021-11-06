@@ -288,6 +288,7 @@ ggplot(ggalluvial::majors,
   theme_bw() +
   scale_y_reverse()
 
+\dontrun{
 # alluvium cementation examples
 gg <- ggplot(ggalluvial::majors,
              aes(x = semester, stratum = curriculum, alluvium = student,
@@ -307,6 +308,7 @@ gg +
   geom_text(aes(label = after_stat(lode)), stat = "alluvium",
             cement.alluvia = TRUE,
             distill = function(x) paste(x, collapse = "; "))
+}
 
 \dontrun{
 data(babynames, package = "babynames")
@@ -345,7 +347,7 @@ ggplot(subset(titanic, Class != "Crew"),
   geom_text(stat = "stratum", aes(label = after_stat(stratum)),
             absolute = FALSE) +
   scale_x_discrete(limits = c("Class", "Sex", "Age"), expand = c(.1, .05)) +
-  scale_alpha_discrete(range = c(.25, .75), guide = FALSE)
+  scale_alpha_discrete(range = c(.25, .75), guide = "none")
 
 # faceting with common alluvia
 ggplot(titanic, aes(y = Freq, axis1 = Class, axis2 = Sex, axis3 = Age)) +
@@ -356,7 +358,8 @@ ggplot(titanic, aes(y = Freq, axis1 = Class, axis2 = Sex, axis3 = Age)) +
 ggplot(transform(alluvial::Refugees, id = 1),
        aes(y = refugees, x = year, alluvium = id)) +
   facet_wrap(~ country) +
-  geom_alluvium()
+  geom_alluvium(alpha = .75, color = "darkgrey") +
+  scale_x_continuous(breaks = seq(2004, 2012, 4))
 }
 \seealso{
 \code{\link[ggplot2:layer]{ggplot2::layer()}} for additional arguments and \code{\link[=geom_alluvium]{geom_alluvium()}},
