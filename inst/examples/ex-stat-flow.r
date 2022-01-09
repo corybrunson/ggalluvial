@@ -43,7 +43,7 @@ ggplot(vaccinations,
   geom_flow(negate.strata = "Missing") +
   geom_text(stat = "stratum", alpha = 1, negate.strata = "Missing") +
   scale_alpha_discrete(range = c(.2, .6)) +
-  guides(alpha = FALSE)
+  guides(alpha = "none")
 
 # aesthetics that vary betwween and within strata
 data(vaccinations)

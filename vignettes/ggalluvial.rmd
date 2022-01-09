@@ -117,7 +117,7 @@ This format and functionality are useful for many applications and will be retai
 - The `stratum` variable produced by `stat_stratum()` (called by `geom_text()`) is not available before the statistical transformation is performed and must be recovered using `after_stat()`.
 - The horizontal axis must be manually corrected (using `scale_x_discrete()` or `scale_x_continuous()`) to reflect the implicit categorical variable identifying the axis.
 
-Furthermore, format aesthetics like `fill` are necessarily fixed for each alluvium; they cannot, for example, change from axis to axis according to the value taken at each. This means that, although they can reproduce the branching-tree structure of parallel sets, this format and functionality cannot produce alluvial plots with the color schemes featured [here](https://epijim.uk/code-snippets/eq5d/) ("Alluvial diagram") and [here](https://developers.google.com/chart/interactive/docs/gallery/sankey) ("Controlling colors"), which are "reset" at each axis.
+Furthermore, format aesthetics like `fill` are necessarily fixed for each alluvium; they cannot, for example, change from axis to axis according to the value taken at each. This means that, although they can reproduce the branching-tree structure of parallel sets, this format and functionality cannot naturally produce alluvial plots with color schemes such as those featured [here](https://developers.google.com/chart/interactive/docs/gallery/sankey) ("Controlling colors"), which are "reset" at each axis.
 
 ### Lodes (long) format
 
