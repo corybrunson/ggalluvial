@@ -389,74 +389,85 @@ discontinued. Use <code>y</code> and <code>cement.alluvia</code> instead.</p>
 <code><a href='stat_stratum.html'>stat_stratum</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># illustrate positioning</span>
-<span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>Titanic</span><span class='op'>)</span>,
-       <span class='fu'>aes</span><span class='op'>(</span>y <span class='op'>=</span> <span class='va'>Freq</span>,
-           axis1 <span class='op'>=</span> <span class='va'>Class</span>, axis2 <span class='op'>=</span> <span class='va'>Sex</span>, axis3 <span class='op'>=</span> <span class='va'>Age</span>,
-           color <span class='op'>=</span> <span class='va'>Survived</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='stat_stratum.html'>stat_stratum</a></span><span class='op'>(</span>geom <span class='op'>=</span> <span class='st'>"errorbar"</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'>geom_line</span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"flow"</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'>stat_flow</span><span class='op'>(</span>geom <span class='op'>=</span> <span class='st'>"pointrange"</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'>geom_text</span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"stratum"</span>, <span class='fu'>aes</span><span class='op'>(</span>label <span class='op'>=</span> <span class='fu'>after_stat</span><span class='op'>(</span><span class='va'>stratum</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'>scale_x_discrete</span><span class='op'>(</span>limits <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='img'><img src='stat_flow-1.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># alluvium--flow comparison</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>vaccinations</span><span class='op'>)</span>
-<span class='va'>gg</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>vaccinations</span>,
-             <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>survey</span>, stratum <span class='op'>=</span> <span class='va'>response</span>, alluvium <span class='op'>=</span> <span class='va'>subject</span>,
-                 y <span class='op'>=</span> <span class='va'>freq</span>, fill <span class='op'>=</span> <span class='va'>response</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span><span class='op'>(</span>alpha <span class='op'>=</span> <span class='fl'>.5</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'>geom_text</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>label <span class='op'>=</span> <span class='va'>response</span><span class='op'>)</span>, stat <span class='op'>=</span> <span class='st'>"stratum"</span><span class='op'>)</span>
-<span class='co'># rightward alluvial aesthetics for vaccine survey data</span>
-<span class='va'>gg</span> <span class='op'>+</span> <span class='fu'><a href='geom_flow.html'>geom_flow</a></span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"alluvium"</span>, lode.guidance <span class='op'>=</span> <span class='st'>"forward"</span><span class='op'>)</span>
-</div><div class='img'><img src='stat_flow-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># memoryless flows for vaccine survey data</span>
-<span class='va'>gg</span> <span class='op'>+</span> <span class='fu'><a href='geom_flow.html'>geom_flow</a></span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='img'><img src='stat_flow-3.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># size filter examples</span>
-<span class='va'>gg</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>vaccinations</span>,
-       <span class='fu'>aes</span><span class='op'>(</span>y <span class='op'>=</span> <span class='va'>freq</span>,
-           x <span class='op'>=</span> <span class='va'>survey</span>, stratum <span class='op'>=</span> <span class='va'>response</span>, alluvium <span class='op'>=</span> <span class='va'>subject</span>,
-           fill <span class='op'>=</span> <span class='va'>response</span>, label <span class='op'>=</span> <span class='va'>response</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='stat_stratum.html'>stat_stratum</a></span><span class='op'>(</span>alpha <span class='op'>=</span> <span class='fl'>.5</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'>geom_text</span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"stratum"</span><span class='op'>)</span>
-<span class='co'># omit small flows</span>
-<span class='va'>gg</span> <span class='op'>+</span> <span class='fu'><a href='geom_flow.html'>geom_flow</a></span><span class='op'>(</span>min.y <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span>
-</div><div class='img'><img src='stat_flow-4.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># omit large flows</span>
-<span class='va'>gg</span> <span class='op'>+</span> <span class='fu'><a href='geom_flow.html'>geom_flow</a></span><span class='op'>(</span>max.y <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span>
-</div><div class='img'><img src='stat_flow-5.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># negate missing entries</span>
-<span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>vaccinations</span>,
-       <span class='fu'>aes</span><span class='op'>(</span>y <span class='op'>=</span> <span class='va'>freq</span>,
-           x <span class='op'>=</span> <span class='va'>survey</span>, stratum <span class='op'>=</span> <span class='va'>response</span>, alluvium <span class='op'>=</span> <span class='va'>subject</span>,
-           fill <span class='op'>=</span> <span class='va'>response</span>, label <span class='op'>=</span> <span class='va'>response</span>,
-           alpha <span class='op'>=</span> <span class='va'>response</span> <span class='op'>!=</span> <span class='st'>"Missing"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='stat_stratum.html'>stat_stratum</a></span><span class='op'>(</span>negate.strata <span class='op'>=</span> <span class='st'>"Missing"</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='geom_flow.html'>geom_flow</a></span><span class='op'>(</span>negate.strata <span class='op'>=</span> <span class='st'>"Missing"</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'>geom_text</span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"stratum"</span>, alpha <span class='op'>=</span> <span class='fl'>1</span>, negate.strata <span class='op'>=</span> <span class='st'>"Missing"</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'>scale_alpha_discrete</span><span class='op'>(</span>range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.2</span>, <span class='fl'>.6</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'>guides</span><span class='op'>(</span>alpha <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: `guides(&lt;scale&gt; = FALSE)` is deprecated. Please use `guides(&lt;scale&gt; = "none")` instead.</span></div><div class='img'><img src='stat_flow-6.png' alt='' width='700' height='433' /></div><div class='input'>
-<span class='co'># aesthetics that vary betwween and within strata</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>vaccinations</span><span class='op'>)</span>
-<span class='va'>vaccinations</span><span class='op'>$</span><span class='va'>subgroup</span> <span class='op'>&lt;-</span> <span class='va'>LETTERS</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span>
-  n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>vaccinations</span><span class='op'>$</span><span class='va'>subject</span><span class='op'>)</span><span class='op'>)</span>, size <span class='op'>=</span> <span class='fl'>1</span>, prob <span class='op'>=</span> <span class='fl'>.5</span>
-<span class='op'>)</span> <span class='op'>+</span> <span class='fl'>1</span><span class='op'>]</span><span class='op'>[</span><span class='va'>vaccinations</span><span class='op'>$</span><span class='va'>subject</span><span class='op'>]</span>
-<span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>vaccinations</span>,
-       <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>survey</span>, stratum <span class='op'>=</span> <span class='va'>response</span>, alluvium <span class='op'>=</span> <span class='va'>subject</span>,
-           y <span class='op'>=</span> <span class='va'>freq</span>, fill <span class='op'>=</span> <span class='va'>response</span>, label <span class='op'>=</span> <span class='va'>response</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='geom_flow.html'>geom_flow</a></span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>alpha <span class='op'>=</span> <span class='va'>subgroup</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'>scale_alpha_discrete</span><span class='op'>(</span>range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>/</span><span class='fl'>3</span>, <span class='fl'>2</span><span class='op'>/</span><span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span><span class='op'>(</span>alpha <span class='op'>=</span> <span class='fl'>.5</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'>geom_text</span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"stratum"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='img'><img src='stat_flow-7.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># can even set aesthetics that vary both ways</span>
-<span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>vaccinations</span>,
-       <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>survey</span>, stratum <span class='op'>=</span> <span class='va'>response</span>, alluvium <span class='op'>=</span> <span class='va'>subject</span>,
-           y <span class='op'>=</span> <span class='va'>freq</span>, label <span class='op'>=</span> <span class='va'>response</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='geom_flow.html'>geom_flow</a></span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/interaction.html'>interaction</a></span><span class='op'>(</span><span class='va'>response</span>, <span class='va'>subgroup</span><span class='op'>)</span><span class='op'>)</span>, aes.bind <span class='op'>=</span> <span class='st'>"flows"</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'>scale_alpha_discrete</span><span class='op'>(</span>range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>/</span><span class='fl'>3</span>, <span class='fl'>2</span><span class='op'>/</span><span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span><span class='op'>(</span>alpha <span class='op'>=</span> <span class='fl'>.5</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'>geom_text</span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"stratum"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: Using alpha for a discrete variable is not advised.</span></div><div class='img'><img src='stat_flow-8.png' alt='' width='700' height='433' /></div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># illustrate positioning</span></span>
+<span class='r-in'><span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>Titanic</span><span class='op'>)</span>,</span>
+<span class='r-in'>       <span class='fu'>aes</span><span class='op'>(</span>y <span class='op'>=</span> <span class='va'>Freq</span>,</span>
+<span class='r-in'>           axis1 <span class='op'>=</span> <span class='va'>Class</span>, axis2 <span class='op'>=</span> <span class='va'>Sex</span>, axis3 <span class='op'>=</span> <span class='va'>Age</span>,</span>
+<span class='r-in'>           color <span class='op'>=</span> <span class='va'>Survived</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'><a href='stat_stratum.html'>stat_stratum</a></span><span class='op'>(</span>geom <span class='op'>=</span> <span class='st'>"errorbar"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'>geom_line</span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"flow"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'>stat_flow</span><span class='op'>(</span>geom <span class='op'>=</span> <span class='st'>"pointrange"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'>geom_text</span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"stratum"</span>, <span class='fu'>aes</span><span class='op'>(</span>label <span class='op'>=</span> <span class='fu'>after_stat</span><span class='op'>(</span><span class='va'>stratum</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'>scale_x_discrete</span><span class='op'>(</span>limits <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"Class"</span>, <span class='st'>"Sex"</span>, <span class='st'>"Age"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='stat_flow-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># alluvium--flow comparison</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>vaccinations</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>gg</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>vaccinations</span>,</span>
+<span class='r-in'>             <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>survey</span>, stratum <span class='op'>=</span> <span class='va'>response</span>, alluvium <span class='op'>=</span> <span class='va'>subject</span>,</span>
+<span class='r-in'>                 y <span class='op'>=</span> <span class='va'>freq</span>, fill <span class='op'>=</span> <span class='va'>response</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span><span class='op'>(</span>alpha <span class='op'>=</span> <span class='fl'>.5</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'>geom_text</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>label <span class='op'>=</span> <span class='va'>response</span><span class='op'>)</span>, stat <span class='op'>=</span> <span class='st'>"stratum"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># rightward alluvial aesthetics for vaccine survey data</span></span>
+<span class='r-in'><span class='va'>gg</span> <span class='op'>+</span> <span class='fu'><a href='geom_flow.html'>geom_flow</a></span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"alluvium"</span>, lode.guidance <span class='op'>=</span> <span class='st'>"forward"</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='stat_flow-2.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='co'># memoryless flows for vaccine survey data</span></span>
+<span class='r-in'><span class='va'>gg</span> <span class='op'>+</span> <span class='fu'><a href='geom_flow.html'>geom_flow</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='stat_flow-3.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># size filter examples</span></span>
+<span class='r-in'><span class='va'>gg</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>vaccinations</span>,</span>
+<span class='r-in'>       <span class='fu'>aes</span><span class='op'>(</span>y <span class='op'>=</span> <span class='va'>freq</span>,</span>
+<span class='r-in'>           x <span class='op'>=</span> <span class='va'>survey</span>, stratum <span class='op'>=</span> <span class='va'>response</span>, alluvium <span class='op'>=</span> <span class='va'>subject</span>,</span>
+<span class='r-in'>           fill <span class='op'>=</span> <span class='va'>response</span>, label <span class='op'>=</span> <span class='va'>response</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'><a href='stat_stratum.html'>stat_stratum</a></span><span class='op'>(</span>alpha <span class='op'>=</span> <span class='fl'>.5</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'>geom_text</span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"stratum"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='co'># omit small flows</span></span>
+<span class='r-in'><span class='va'>gg</span> <span class='op'>+</span> <span class='fu'><a href='geom_flow.html'>geom_flow</a></span><span class='op'>(</span>min.y <span class='op'>=</span> <span class='fl'>50</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='stat_flow-4.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='co'># omit large flows</span></span>
+<span class='r-in'><span class='va'>gg</span> <span class='op'>+</span> <span class='fu'><a href='geom_flow.html'>geom_flow</a></span><span class='op'>(</span>max.y <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='stat_flow-5.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># negate missing entries</span></span>
+<span class='r-in'><span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>vaccinations</span>,</span>
+<span class='r-in'>       <span class='fu'>aes</span><span class='op'>(</span>y <span class='op'>=</span> <span class='va'>freq</span>,</span>
+<span class='r-in'>           x <span class='op'>=</span> <span class='va'>survey</span>, stratum <span class='op'>=</span> <span class='va'>response</span>, alluvium <span class='op'>=</span> <span class='va'>subject</span>,</span>
+<span class='r-in'>           fill <span class='op'>=</span> <span class='va'>response</span>, label <span class='op'>=</span> <span class='va'>response</span>,</span>
+<span class='r-in'>           alpha <span class='op'>=</span> <span class='va'>response</span> <span class='op'>!=</span> <span class='st'>"Missing"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'><a href='stat_stratum.html'>stat_stratum</a></span><span class='op'>(</span>negate.strata <span class='op'>=</span> <span class='st'>"Missing"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'><a href='geom_flow.html'>geom_flow</a></span><span class='op'>(</span>negate.strata <span class='op'>=</span> <span class='st'>"Missing"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'>geom_text</span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"stratum"</span>, alpha <span class='op'>=</span> <span class='fl'>1</span>, negate.strata <span class='op'>=</span> <span class='st'>"Missing"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'>scale_alpha_discrete</span><span class='op'>(</span>range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>.2</span>, <span class='fl'>.6</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'>guides</span><span class='op'>(</span>alpha <span class='op'>=</span> <span class='st'>"none"</span><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>Using alpha for a discrete variable is not advised.</span>
+<span class='r-plt img'><img src='stat_flow-6.png' alt='' width='700' height='433' /></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># aesthetics that vary betwween and within strata</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>vaccinations</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>vaccinations</span><span class='op'>$</span><span class='va'>subgroup</span> <span class='op'>&lt;-</span> <span class='va'>LETTERS</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>]</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/stats/Binomial.html'>rbinom</a></span><span class='op'>(</span></span>
+<span class='r-in'>  n <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/unique.html'>unique</a></span><span class='op'>(</span><span class='va'>vaccinations</span><span class='op'>$</span><span class='va'>subject</span><span class='op'>)</span><span class='op'>)</span>, size <span class='op'>=</span> <span class='fl'>1</span>, prob <span class='op'>=</span> <span class='fl'>.5</span></span>
+<span class='r-in'><span class='op'>)</span> <span class='op'>+</span> <span class='fl'>1</span><span class='op'>]</span><span class='op'>[</span><span class='va'>vaccinations</span><span class='op'>$</span><span class='va'>subject</span><span class='op'>]</span></span>
+<span class='r-in'><span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>vaccinations</span>,</span>
+<span class='r-in'>       <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>survey</span>, stratum <span class='op'>=</span> <span class='va'>response</span>, alluvium <span class='op'>=</span> <span class='va'>subject</span>,</span>
+<span class='r-in'>           y <span class='op'>=</span> <span class='va'>freq</span>, fill <span class='op'>=</span> <span class='va'>response</span>, label <span class='op'>=</span> <span class='va'>response</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'><a href='geom_flow.html'>geom_flow</a></span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>alpha <span class='op'>=</span> <span class='va'>subgroup</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'>scale_alpha_discrete</span><span class='op'>(</span>range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>/</span><span class='fl'>3</span>, <span class='fl'>2</span><span class='op'>/</span><span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span><span class='op'>(</span>alpha <span class='op'>=</span> <span class='fl'>.5</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'>geom_text</span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"stratum"</span><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>Using alpha for a discrete variable is not advised.</span>
+<span class='r-plt img'><img src='stat_flow-7.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='co'># can even set aesthetics that vary both ways</span></span>
+<span class='r-in'><span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>vaccinations</span>,</span>
+<span class='r-in'>       <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>survey</span>, stratum <span class='op'>=</span> <span class='va'>response</span>, alluvium <span class='op'>=</span> <span class='va'>subject</span>,</span>
+<span class='r-in'>           y <span class='op'>=</span> <span class='va'>freq</span>, label <span class='op'>=</span> <span class='va'>response</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'><a href='geom_flow.html'>geom_flow</a></span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/interaction.html'>interaction</a></span><span class='op'>(</span><span class='va'>response</span>, <span class='va'>subgroup</span><span class='op'>)</span><span class='op'>)</span>, aes.bind <span class='op'>=</span> <span class='st'>"flows"</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'>scale_alpha_discrete</span><span class='op'>(</span>range <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>/</span><span class='fl'>3</span>, <span class='fl'>2</span><span class='op'>/</span><span class='fl'>3</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span><span class='op'>(</span>alpha <span class='op'>=</span> <span class='fl'>.5</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'>geom_text</span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"stratum"</span><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>Using alpha for a discrete variable is not advised.</span>
+<span class='r-plt img'><img src='stat_flow-8.png' alt='' width='700' height='433' /></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

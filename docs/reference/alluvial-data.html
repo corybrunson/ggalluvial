@@ -295,126 +295,149 @@ variable. This function invokes <code><a href='https://tidyr.tidyverse.org/refer
 <code><a href='self-adjoin.html'>self-adjoin</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Titanic data in alluvia format</span>
-<span class='va'>titanic_alluvia</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>Titanic</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>titanic_alluvia</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   Class    Sex   Age Survived Freq
-#&gt; 1   1st   Male Child       No    0
-#&gt; 2   2nd   Male Child       No    0
-#&gt; 3   3rd   Male Child       No   35
-#&gt; 4  Crew   Male Child       No    0
-#&gt; 5   1st Female Child       No    0
-#&gt; 6   2nd Female Child       No    0</div><div class='input'><span class='fu'>is_alluvia_form</span><span class='op'>(</span><span class='va'>titanic_alluvia</span>,
-                weight <span class='op'>=</span> <span class='st'>"Freq"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># Titanic data in lodes format</span>
-<span class='va'>titanic_lodes</span> <span class='op'>&lt;-</span> <span class='fu'>to_lodes_form</span><span class='op'>(</span><span class='va'>titanic_alluvia</span>,
-                               key <span class='op'>=</span> <span class='st'>"x"</span>, value <span class='op'>=</span> <span class='st'>"stratum"</span>, id <span class='op'>=</span> <span class='st'>"alluvium"</span>,
-                               axes <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>titanic_lodes</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   Freq alluvium     x stratum
-#&gt; 1    0        1 Class     1st
-#&gt; 2    0        2 Class     2nd
-#&gt; 3   35        3 Class     3rd
-#&gt; 4    0        4 Class    Crew
-#&gt; 5    0        5 Class     1st
-#&gt; 6    0        6 Class     2nd</div><div class='input'><span class='fu'>is_lodes_form</span><span class='op'>(</span><span class='va'>titanic_lodes</span>,
-              key <span class='op'>=</span> <span class='st'>"x"</span>, value <span class='op'>=</span> <span class='st'>"stratum"</span>, id <span class='op'>=</span> <span class='st'>"alluvium"</span>,
-              weight <span class='op'>=</span> <span class='st'>"Freq"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># again in lodes format, this time diffusing the `Class` variable</span>
-<span class='va'>titanic_lodes2</span> <span class='op'>&lt;-</span> <span class='fu'>to_lodes_form</span><span class='op'>(</span><span class='va'>titanic_alluvia</span>,
-                                key <span class='op'>=</span> <span class='va'>variable</span>, value <span class='op'>=</span> <span class='va'>value</span>,
-                                id <span class='op'>=</span> <span class='va'>cohort</span>,
-                                <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, diffuse <span class='op'>=</span> <span class='va'>Class</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>titanic_lodes2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   cohort Class Survived Freq variable value
-#&gt; 1      1   1st       No    0    Class   1st
-#&gt; 2      1   1st       No    0      Sex  Male
-#&gt; 3      1   1st       No    0      Age Child
-#&gt; 4      2   2nd       No    0    Class   2nd
-#&gt; 5      2   2nd       No    0      Sex  Male
-#&gt; 6      2   2nd       No    0      Age Child</div><div class='input'><span class='fu'>is_lodes_form</span><span class='op'>(</span><span class='va'>titanic_lodes2</span>,
-              key <span class='op'>=</span> <span class='va'>variable</span>, value <span class='op'>=</span> <span class='va'>value</span>, id <span class='op'>=</span> <span class='va'>cohort</span>,
-              weight <span class='op'>=</span> <span class='va'>Freq</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># use `site` to separate data before lode testing</span>
-<span class='fu'>is_lodes_form</span><span class='op'>(</span><span class='va'>titanic_lodes2</span>,
-              key <span class='op'>=</span> <span class='va'>variable</span>, value <span class='op'>=</span> <span class='va'>value</span>, id <span class='op'>=</span> <span class='va'>Class</span>,
-              weight <span class='op'>=</span> <span class='va'>Freq</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Duplicated id-axis pairings.</span></div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'>is_lodes_form</span><span class='op'>(</span><span class='va'>titanic_lodes2</span>,
-              key <span class='op'>=</span> <span class='va'>variable</span>, value <span class='op'>=</span> <span class='va'>value</span>, id <span class='op'>=</span> <span class='va'>Class</span>,
-              weight <span class='op'>=</span> <span class='va'>Freq</span>, site <span class='op'>=</span> <span class='va'>cohort</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
-<span class='co'># curriculum data in lodes format</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>majors</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>majors</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   student semester curriculum
-#&gt; 1       1    CURR1   Painting
-#&gt; 2       2    CURR1   Painting
-#&gt; 3       6    CURR1   Sculpure
-#&gt; 4       8    CURR1   Painting
-#&gt; 5       9    CURR1   Sculpure
-#&gt; 6      10    CURR1   Painting</div><div class='input'><span class='fu'>is_lodes_form</span><span class='op'>(</span><span class='va'>majors</span>,
-              key <span class='op'>=</span> <span class='st'>"semester"</span>, value <span class='op'>=</span> <span class='st'>"curriculum"</span>, id <span class='op'>=</span> <span class='st'>"student"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='co'># curriculum data in alluvia format</span>
-<span class='va'>majors_alluvia</span> <span class='op'>&lt;-</span> <span class='fu'>to_alluvia_form</span><span class='op'>(</span><span class='va'>majors</span>,
-                                  key <span class='op'>=</span> <span class='st'>"semester"</span>, value <span class='op'>=</span> <span class='st'>"curriculum"</span>,
-                                  id <span class='op'>=</span> <span class='st'>"student"</span><span class='op'>)</span>
-<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>majors_alluvia</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   student    CURR1       CURR3       CURR5    CURR7    CURR9   CURR11   CURR13
-#&gt; 1       1 Painting    Painting    Painting Painting Painting Painting Painting
-#&gt; 2       2 Painting    Painting    Painting Painting Painting Painting     &lt;NA&gt;
-#&gt; 3       6 Sculpure    Sculpure    Painting Painting Painting Painting Painting
-#&gt; 4       8 Painting    Painting    Painting Painting     &lt;NA&gt; Painting Painting
-#&gt; 5       9 Sculpure Art History Art History Painting Painting Painting Painting
-#&gt; 6      10 Painting    Painting    Painting Painting Painting Painting     &lt;NA&gt;
-#&gt;     CURR15
-#&gt; 1 Painting
-#&gt; 2     &lt;NA&gt;
-#&gt; 3 Painting
-#&gt; 4 Painting
-#&gt; 5 Painting
-#&gt; 6     &lt;NA&gt;</div><div class='input'><span class='fu'>is_alluvia_form</span><span class='op'>(</span><span class='va'>majors_alluvia</span>, <span class='fu'>tidyselect</span><span class='fu'>::</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span><span class='op'>(</span><span class='st'>"CURR"</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Missing alluvia for some stratum combinations.</span></div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
-<span class='co'># distill variables that vary within `id` values</span>
-<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span>
-<span class='va'>majors</span><span class='op'>$</span><span class='va'>hypo_grade</span> <span class='op'>&lt;-</span> <span class='va'>LETTERS</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fl'>5</span>, size <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>majors</span><span class='op'>)</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>]</span>
-<span class='va'>majors_alluvia2</span> <span class='op'>&lt;-</span> <span class='fu'>to_alluvia_form</span><span class='op'>(</span><span class='va'>majors</span>,
-                                   key <span class='op'>=</span> <span class='st'>"semester"</span>, value <span class='op'>=</span> <span class='st'>"curriculum"</span>,
-                                   id <span class='op'>=</span> <span class='st'>"student"</span>,
-                                   distill <span class='op'>=</span> <span class='st'>"most"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'>Distilled variables: hypo_grade</span></div><div class='input'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>majors_alluvia2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt;   student hypo_grade    CURR1       CURR3       CURR5    CURR7    CURR9
-#&gt; 1       1          A Painting    Painting    Painting Painting Painting
-#&gt; 2       2          D Painting    Painting    Painting Painting Painting
-#&gt; 3       6          B Sculpure    Sculpure    Painting Painting Painting
-#&gt; 4       8          B Painting    Painting    Painting Painting     &lt;NA&gt;
-#&gt; 5       9          E Sculpure Art History Art History Painting Painting
-#&gt; 6      10          A Painting    Painting    Painting Painting Painting
-#&gt;     CURR11   CURR13   CURR15
-#&gt; 1 Painting Painting Painting
-#&gt; 2 Painting     &lt;NA&gt;     &lt;NA&gt;
-#&gt; 3 Painting Painting Painting
-#&gt; 4 Painting Painting Painting
-#&gt; 5 Painting Painting Painting
-#&gt; 6 Painting     &lt;NA&gt;     &lt;NA&gt;</div><div class='input'>
-<span class='co'># options to distinguish strata at different axes</span>
-<span class='va'>gg</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>majors_alluvia</span>,
-             <span class='fu'>aes</span><span class='op'>(</span>axis1 <span class='op'>=</span> <span class='va'>CURR1</span>, axis2 <span class='op'>=</span> <span class='va'>CURR7</span>, axis3 <span class='op'>=</span> <span class='va'>CURR13</span><span class='op'>)</span><span class='op'>)</span>
-<span class='va'>gg</span> <span class='op'>+</span>
-  <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>student</span><span class='op'>)</span><span class='op'>)</span>, width <span class='op'>=</span> <span class='fl'>2</span><span class='op'>/</span><span class='fl'>5</span>, discern <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span><span class='op'>(</span>width <span class='op'>=</span> <span class='fl'>2</span><span class='op'>/</span><span class='fl'>5</span>, discern <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'>geom_text</span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"stratum"</span>, discern <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='fu'>aes</span><span class='op'>(</span>label <span class='op'>=</span> <span class='fu'>after_stat</span><span class='op'>(</span><span class='va'>stratum</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='img'><img src='alluvial-data-1.png' alt='' width='700' height='433' /></div><div class='input'><span class='va'>gg</span> <span class='op'>+</span>
-  <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>student</span><span class='op'>)</span><span class='op'>)</span>, width <span class='op'>=</span> <span class='fl'>2</span><span class='op'>/</span><span class='fl'>5</span>, discern <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span><span class='op'>(</span>width <span class='op'>=</span> <span class='fl'>2</span><span class='op'>/</span><span class='fl'>5</span>, discern <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'>geom_text</span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"stratum"</span>, discern <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='fu'>aes</span><span class='op'>(</span>label <span class='op'>=</span> <span class='fu'>after_stat</span><span class='op'>(</span><span class='va'>stratum</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
-</div><div class='img'><img src='alluvial-data-2.png' alt='' width='700' height='433' /></div><div class='input'><span class='co'># warning when inappropriate</span>
-<span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>majors</span><span class='op'>[</span><span class='va'>majors</span><span class='op'>$</span><span class='va'>semester</span> <span class='op'>%in%</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"CURR"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>7</span>, <span class='fl'>13</span><span class='op'>)</span><span class='op'>)</span>, <span class='op'>]</span>,
-       <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>semester</span>, stratum <span class='op'>=</span> <span class='va'>curriculum</span>, alluvium <span class='op'>=</span> <span class='va'>student</span>,
-           label <span class='op'>=</span> <span class='va'>curriculum</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>student</span><span class='op'>)</span><span class='op'>)</span>, width <span class='op'>=</span> <span class='fl'>2</span><span class='op'>/</span><span class='fl'>5</span>, discern <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span><span class='op'>(</span>width <span class='op'>=</span> <span class='fl'>2</span><span class='op'>/</span><span class='fl'>5</span>, discern <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'>+</span>
-  <span class='fu'>geom_text</span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"stratum"</span>, discern <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so `discern` will be ignored.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so `discern` will be ignored.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Data is already in lodes format, so `discern` will be ignored.</span></div><div class='output co'>#&gt; <span class='warning'>Warning: Removed 1 rows containing missing values (geom_text).</span></div><div class='img'><img src='alluvial-data-3.png' alt='' width='700' height='433' /></div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># Titanic data in alluvia format</span></span>
+<span class='r-in'><span class='va'>titanic_alluvia</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='va'>Titanic</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>titanic_alluvia</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Class    Sex   Age Survived Freq</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1   1st   Male Child       No    0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2   2nd   Male Child       No    0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3   3rd   Male Child       No   35</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4  Crew   Male Child       No    0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5   1st Female Child       No    0</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6   2nd Female Child       No    0</span>
+<span class='r-in'><span class='fu'>is_alluvia_form</span><span class='op'>(</span><span class='va'>titanic_alluvia</span>,</span>
+<span class='r-in'>                weight <span class='op'>=</span> <span class='st'>"Freq"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-in'><span class='co'># Titanic data in lodes format</span></span>
+<span class='r-in'><span class='va'>titanic_lodes</span> <span class='op'>&lt;-</span> <span class='fu'>to_lodes_form</span><span class='op'>(</span><span class='va'>titanic_alluvia</span>,</span>
+<span class='r-in'>                               key <span class='op'>=</span> <span class='st'>"x"</span>, value <span class='op'>=</span> <span class='st'>"stratum"</span>, id <span class='op'>=</span> <span class='st'>"alluvium"</span>,</span>
+<span class='r-in'>                               axes <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>titanic_lodes</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   Freq alluvium     x stratum</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1    0        1 Class     1st</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2    0        2 Class     2nd</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3   35        3 Class     3rd</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4    0        4 Class    Crew</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5    0        5 Class     1st</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6    0        6 Class     2nd</span>
+<span class='r-in'><span class='fu'>is_lodes_form</span><span class='op'>(</span><span class='va'>titanic_lodes</span>,</span>
+<span class='r-in'>              key <span class='op'>=</span> <span class='st'>"x"</span>, value <span class='op'>=</span> <span class='st'>"stratum"</span>, id <span class='op'>=</span> <span class='st'>"alluvium"</span>,</span>
+<span class='r-in'>              weight <span class='op'>=</span> <span class='st'>"Freq"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-in'><span class='co'># again in lodes format, this time diffusing the `Class` variable</span></span>
+<span class='r-in'><span class='va'>titanic_lodes2</span> <span class='op'>&lt;-</span> <span class='fu'>to_lodes_form</span><span class='op'>(</span><span class='va'>titanic_alluvia</span>,</span>
+<span class='r-in'>                                key <span class='op'>=</span> <span class='va'>variable</span>, value <span class='op'>=</span> <span class='va'>value</span>,</span>
+<span class='r-in'>                                id <span class='op'>=</span> <span class='va'>cohort</span>,</span>
+<span class='r-in'>                                <span class='fl'>1</span><span class='op'>:</span><span class='fl'>3</span>, diffuse <span class='op'>=</span> <span class='va'>Class</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>titanic_lodes2</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   cohort Class Survived Freq variable value</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1      1   1st       No    0    Class   1st</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2      1   1st       No    0      Sex  Male</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3      1   1st       No    0      Age Child</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4      2   2nd       No    0    Class   2nd</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5      2   2nd       No    0      Sex  Male</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6      2   2nd       No    0      Age Child</span>
+<span class='r-in'><span class='fu'>is_lodes_form</span><span class='op'>(</span><span class='va'>titanic_lodes2</span>,</span>
+<span class='r-in'>              key <span class='op'>=</span> <span class='va'>variable</span>, value <span class='op'>=</span> <span class='va'>value</span>, id <span class='op'>=</span> <span class='va'>cohort</span>,</span>
+<span class='r-in'>              weight <span class='op'>=</span> <span class='va'>Freq</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-in'><span class='co'># use `site` to separate data before lode testing</span></span>
+<span class='r-in'><span class='fu'>is_lodes_form</span><span class='op'>(</span><span class='va'>titanic_lodes2</span>,</span>
+<span class='r-in'>              key <span class='op'>=</span> <span class='va'>variable</span>, value <span class='op'>=</span> <span class='va'>value</span>, id <span class='op'>=</span> <span class='va'>Class</span>,</span>
+<span class='r-in'>              weight <span class='op'>=</span> <span class='va'>Freq</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Duplicated id-axis pairings.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] FALSE</span>
+<span class='r-in'><span class='fu'>is_lodes_form</span><span class='op'>(</span><span class='va'>titanic_lodes2</span>,</span>
+<span class='r-in'>              key <span class='op'>=</span> <span class='va'>variable</span>, value <span class='op'>=</span> <span class='va'>value</span>, id <span class='op'>=</span> <span class='va'>Class</span>,</span>
+<span class='r-in'>              weight <span class='op'>=</span> <span class='va'>Freq</span>, site <span class='op'>=</span> <span class='va'>cohort</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># curriculum data in lodes format</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/data.html'>data</a></span><span class='op'>(</span><span class='va'>majors</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>majors</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   student semester curriculum</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1       1    CURR1   Painting</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2       2    CURR1   Painting</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3       6    CURR1   Sculpure</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4       8    CURR1   Painting</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5       9    CURR1   Sculpure</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6      10    CURR1   Painting</span>
+<span class='r-in'><span class='fu'>is_lodes_form</span><span class='op'>(</span><span class='va'>majors</span>,</span>
+<span class='r-in'>              key <span class='op'>=</span> <span class='st'>"semester"</span>, value <span class='op'>=</span> <span class='st'>"curriculum"</span>, id <span class='op'>=</span> <span class='st'>"student"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-in'><span class='co'># curriculum data in alluvia format</span></span>
+<span class='r-in'><span class='va'>majors_alluvia</span> <span class='op'>&lt;-</span> <span class='fu'>to_alluvia_form</span><span class='op'>(</span><span class='va'>majors</span>,</span>
+<span class='r-in'>                                  key <span class='op'>=</span> <span class='st'>"semester"</span>, value <span class='op'>=</span> <span class='st'>"curriculum"</span>,</span>
+<span class='r-in'>                                  id <span class='op'>=</span> <span class='st'>"student"</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>majors_alluvia</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   student    CURR1       CURR3       CURR5    CURR7    CURR9   CURR11   CURR13</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1       1 Painting    Painting    Painting Painting Painting Painting Painting</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2       2 Painting    Painting    Painting Painting Painting Painting     &lt;NA&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3       6 Sculpure    Sculpure    Painting Painting Painting Painting Painting</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4       8 Painting    Painting    Painting Painting     &lt;NA&gt; Painting Painting</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5       9 Sculpure Art History Art History Painting Painting Painting Painting</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6      10 Painting    Painting    Painting Painting Painting Painting     &lt;NA&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     CURR15</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 Painting</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2     &lt;NA&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 Painting</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 Painting</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 Painting</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6     &lt;NA&gt;</span>
+<span class='r-in'><span class='fu'>is_alluvia_form</span><span class='op'>(</span><span class='va'>majors_alluvia</span>, <span class='fu'>tidyselect</span><span class='fu'>::</span><span class='fu'><a href='https://tidyselect.r-lib.org/reference/starts_with.html'>starts_with</a></span><span class='op'>(</span><span class='st'>"CURR"</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Missing alluvia for some stratum combinations.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] TRUE</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># distill variables that vary within `id` values</span></span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>majors</span><span class='op'>$</span><span class='va'>hypo_grade</span> <span class='op'>&lt;-</span> <span class='va'>LETTERS</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/sample.html'>sample</a></span><span class='op'>(</span><span class='fl'>5</span>, size <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>majors</span><span class='op'>)</span>, replace <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>]</span></span>
+<span class='r-in'><span class='va'>majors_alluvia2</span> <span class='op'>&lt;-</span> <span class='fu'>to_alluvia_form</span><span class='op'>(</span><span class='va'>majors</span>,</span>
+<span class='r-in'>                                   key <span class='op'>=</span> <span class='st'>"semester"</span>, value <span class='op'>=</span> <span class='st'>"curriculum"</span>,</span>
+<span class='r-in'>                                   id <span class='op'>=</span> <span class='st'>"student"</span>,</span>
+<span class='r-in'>                                   distill <span class='op'>=</span> <span class='st'>"most"</span><span class='op'>)</span></span>
+<span class='r-msg co'><span class='r-pr'>#&gt;</span> Distilled variables: hypo_grade</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>majors_alluvia2</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>   student hypo_grade    CURR1       CURR3       CURR5    CURR7    CURR9</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1       1          A Painting    Painting    Painting Painting Painting</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2       2          D Painting    Painting    Painting Painting Painting</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3       6          B Sculpure    Sculpure    Painting Painting Painting</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4       8          B Painting    Painting    Painting Painting     &lt;NA&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5       9          E Sculpure Art History Art History Painting Painting</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6      10          A Painting    Painting    Painting Painting Painting</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span>     CURR11   CURR13   CURR15</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 1 Painting Painting Painting</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 2 Painting     &lt;NA&gt;     &lt;NA&gt;</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 3 Painting Painting Painting</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 4 Painting Painting Painting</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 5 Painting Painting Painting</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> 6 Painting     &lt;NA&gt;     &lt;NA&gt;</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># options to distinguish strata at different axes</span></span>
+<span class='r-in'><span class='va'>gg</span> <span class='op'>&lt;-</span> <span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>majors_alluvia</span>,</span>
+<span class='r-in'>             <span class='fu'>aes</span><span class='op'>(</span>axis1 <span class='op'>=</span> <span class='va'>CURR1</span>, axis2 <span class='op'>=</span> <span class='va'>CURR7</span>, axis3 <span class='op'>=</span> <span class='va'>CURR13</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>gg</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>student</span><span class='op'>)</span><span class='op'>)</span>, width <span class='op'>=</span> <span class='fl'>2</span><span class='op'>/</span><span class='fl'>5</span>, discern <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span><span class='op'>(</span>width <span class='op'>=</span> <span class='fl'>2</span><span class='op'>/</span><span class='fl'>5</span>, discern <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'>geom_text</span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"stratum"</span>, discern <span class='op'>=</span> <span class='cn'>TRUE</span>, <span class='fu'>aes</span><span class='op'>(</span>label <span class='op'>=</span> <span class='fu'>after_stat</span><span class='op'>(</span><span class='va'>stratum</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='alluvial-data-1.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='va'>gg</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>student</span><span class='op'>)</span><span class='op'>)</span>, width <span class='op'>=</span> <span class='fl'>2</span><span class='op'>/</span><span class='fl'>5</span>, discern <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span><span class='op'>(</span>width <span class='op'>=</span> <span class='fl'>2</span><span class='op'>/</span><span class='fl'>5</span>, discern <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'>geom_text</span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"stratum"</span>, discern <span class='op'>=</span> <span class='cn'>FALSE</span>, <span class='fu'>aes</span><span class='op'>(</span>label <span class='op'>=</span> <span class='fu'>after_stat</span><span class='op'>(</span><span class='va'>stratum</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span class='r-plt img'><img src='alluvial-data-2.png' alt='' width='700' height='433' /></span>
+<span class='r-in'><span class='co'># warning when inappropriate</span></span>
+<span class='r-in'><span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>majors</span><span class='op'>[</span><span class='va'>majors</span><span class='op'>$</span><span class='va'>semester</span> <span class='op'><a href='https://rdrr.io/r/base/match.html'>%in%</a></span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='st'>"CURR"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>7</span>, <span class='fl'>13</span><span class='op'>)</span><span class='op'>)</span>, <span class='op'>]</span>,</span>
+<span class='r-in'>       <span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>semester</span>, stratum <span class='op'>=</span> <span class='va'>curriculum</span>, alluvium <span class='op'>=</span> <span class='va'>student</span>,</span>
+<span class='r-in'>           label <span class='op'>=</span> <span class='va'>curriculum</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'><a href='geom_alluvium.html'>geom_alluvium</a></span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>student</span><span class='op'>)</span><span class='op'>)</span>, width <span class='op'>=</span> <span class='fl'>2</span><span class='op'>/</span><span class='fl'>5</span>, discern <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'><a href='geom_stratum.html'>geom_stratum</a></span><span class='op'>(</span>width <span class='op'>=</span> <span class='fl'>2</span><span class='op'>/</span><span class='fl'>5</span>, discern <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span class='r-in'>  <span class='fu'>geom_text</span><span class='op'>(</span>stat <span class='op'>=</span> <span class='st'>"stratum"</span>, discern <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>Data is already in lodes format, so `discern` will be ignored.</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>Data is already in lodes format, so `discern` will be ignored.</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>Data is already in lodes format, so `discern` will be ignored.</span>
+<span class='r-wrn co'><span class='r-pr'>#&gt;</span> <span class='warning'>Warning: </span>Removed 1 rows containing missing values (geom_text).</span>
+<span class='r-plt img'><img src='alluvial-data-3.png' alt='' width='700' height='433' /></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
