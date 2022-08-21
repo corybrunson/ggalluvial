@@ -162,12 +162,22 @@ call forth more detail on
 -   the data sets installed with the package (`vaccinations` and
     `majors`).
 
-### Cheat sheets
+### Short form
 
-For some much more digestible guidance on using **ggalluvial**, check
-out the cheat sheets and demos (chapters 14, 33, and 134) by students in
-Joyce Robbins’s [Exploratory Data Analysis and Visualization Community
-Contribution Project](https://jtr13.github.io/cc21fall2/index.html).
+For some more digestible guidance on using **ggalluvial**, check out
+three cheat sheets and demos by students in Joyce Robbins’s [Exploratory
+Data Analysis and Visualization Community Contribution
+Project](https://jtr13.github.io/cc21fall2/index.html):
+
+-   an
+    [introduction](https://jtr13.github.io/cc21fall2/ggalluvial-cheatsheet.html)
+    by Meggie Wen (Chapter 33)
+-   a [cheat
+    sheet](https://cheatography.com/seleven/cheat-sheets/ggalluvial/) by
+    Qingyi Zhang (Chapter 14)
+-   a [blog about how this package implements alluvial
+    plots](https://medium.com/@arnavsaxena96/all-about-alluvial-diagrams-21da1505520b)
+    by Arnav Saxena (Chapter 134)
 
 ## Acknowledgments
 
