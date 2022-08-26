@@ -74,7 +74,7 @@ GeomFlow <- ggproto(
 
   required_aes = c("x", "y", "ymin", "ymax"),
 
-  default_aes = aes(size = .5, linetype = 1,
+  default_aes = aes(size = .5, linewidth = .5, linetype = 1,
                     colour = "transparent", fill = "gray", alpha = .5),
 
   setup_data = function(data, params) {

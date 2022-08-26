@@ -51,5 +51,5 @@ LazyData: true
 URL: http://corybrunson.github.io/ggalluvial/
 BugReports: https://github.com/corybrunson/ggalluvial/issues
 VignetteBuilder: knitr
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.1
 Roxygen: list(markdown = TRUE)

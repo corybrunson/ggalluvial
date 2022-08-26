@@ -106,6 +106,9 @@ StatAlluvium <- ggproto(
       }
     }
     
+    # remove null parameter values (see #103)
+    params[vapply(params, is.null, NA)] <- NULL
+    
     params
   },
   
@@ -460,7 +463,7 @@ guide_lodes <- function(data, guidance_fun) {
 # build alluvial dataset for reference during lode-ordering
 alluviate <- function(data, key, value, id) {
   to_alluvia_form(
-    data[, c(key, value, id)],
+    data[, c(key, value, id), drop = FALSE],
     key = key, value = value, id = id
   )
 }

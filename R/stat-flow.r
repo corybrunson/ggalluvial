@@ -80,6 +80,14 @@ StatFlow <- ggproto(
   # `<new-aes> = NULL` prevents "unknown aesthetics" warnings
   default_aes = aes(weight = 1, stratum = NULL, alluvium = NULL),
   
+  setup_params = function(data, params) {
+    
+    # remove null parameter values (see #103)
+    params[vapply(params, is.null, NA)] <- NULL
+    
+    params
+  },
+  
   setup_data = function(data, params) {
     
     # assign `alluvium` to `stratum` if `stratum` not provided

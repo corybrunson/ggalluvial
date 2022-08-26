@@ -118,11 +118,7 @@ with data in alluva form, which are converted to lode form before the
 statistical transformation. Deprecated; use
 \code{\link[ggplot2:aes_eval]{ggplot2::after_stat()}} instead.}
 
-\item{min.y}{Numeric; bounds on the heights of the strata to be
-rendered. Use these bounds to exclude strata outside a certain range, for
-example when labeling strata using \code{\link[ggplot2:geom_text]{ggplot2::geom_text()}}.}
-
-\item{max.y}{Numeric; bounds on the heights of the strata to be
+\item{min.y, max.y}{Numeric; bounds on the heights of the strata to be
 rendered. Use these bounds to exclude strata outside a certain range, for
 example when labeling strata using \code{\link[ggplot2:geom_text]{ggplot2::geom_text()}}.}
 
