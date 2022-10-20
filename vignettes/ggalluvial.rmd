@@ -99,7 +99,7 @@ ggplot(as.data.frame(HairEyeColor),
                 width = 1/8, knot.pos = 0, reverse = FALSE) +
   scale_fill_manual(values = c(Brown = "#70493D", Hazel = "#E2AC76",
                                Green = "#3F752B", Blue = "#81B0E4")) +
-  guides(fill = FALSE) +
+  guides(fill = "none") +
   geom_stratum(alpha = .25, width = 1/8, reverse = FALSE) +
   geom_text(stat = "stratum", aes(label = after_stat(stratum)),
             reverse = FALSE) +

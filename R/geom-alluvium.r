@@ -83,7 +83,7 @@ GeomAlluvium <- ggproto(
   
   required_aes = c("x", "y", "ymin", "ymax"),
   
-  default_aes = aes(size = .5, linewidth = .5, linetype = 1,
+  default_aes = aes(linewidth = .5, linetype = 1,
                     colour = "transparent", fill = "gray", alpha = .5),
   
   setup_data = function(data, params) {
@@ -157,13 +157,18 @@ GeomAlluvium <- ggproto(
       x = coords$x, y = coords$y, shape = coords$shape,
       open = FALSE,
       gp = grid::gpar(
-        col = coords$colour, fill = coords$fill, alpha = coords$alpha,
-        lty = coords$linetype, lwd = coords$size * .pt
+        col = coords$colour, fill = coords$fill,
+        alpha = coords$alpha,
+        lty = coords$linetype,
+        lwd = (coords$linewidth %||% coords$size) * .pt
       )
     )
   },
   
-  draw_key = draw_key_polygon
+  draw_key = draw_key_polygon,
+  
+  non_missing_aes = "size",
+  rename_size = TRUE
 )
 
 #' @rdname geom_alluvium

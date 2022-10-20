@@ -74,7 +74,7 @@ GeomFlow <- ggproto(
 
   required_aes = c("x", "y", "ymin", "ymax"),
 
-  default_aes = aes(size = .5, linewidth = .5, linetype = 1,
+  default_aes = aes(linewidth = .5, linetype = 1,
                     colour = "transparent", fill = "gray", alpha = .5),
 
   setup_data = function(data, params) {
@@ -112,7 +112,7 @@ GeomFlow <- ggproto(
     flow_pos <- intersect(names(data), c("x", "xmin", "xmax",
                                          "width", "knot.pos",
                                          "y", "ymin", "ymax"))
-    flow_aes <- intersect(names(data), c("size", "linetype",
+    flow_aes <- intersect(names(data), c("linewidth", "size", "linetype",
                                          "colour", "fill", "alpha"))
     flow_fore <- if (aes.flow != "backward") flow_aes else NULL
     flow_back <- if (aes.flow != "forward") flow_aes else NULL
@@ -156,8 +156,10 @@ GeomFlow <- ggproto(
         x = f_coords$x, y = f_coords$y, shape = f_coords$shape,
         open = FALSE,
         gp = grid::gpar(
-          col = f_coords$colour, fill = f_coords$fill, alpha = f_coords$alpha,
-          lty = f_coords$linetype, lwd = f_coords$size * .pt
+          col = f_coords$colour, fill = f_coords$fill,
+          alpha = f_coords$alpha,
+          lty = f_coords$linetype,
+          lwd = (f_coords$linewidth %||% f_coords$size) * .pt
         )
       )
     })
@@ -168,7 +170,10 @@ GeomFlow <- ggproto(
     grob
   },
 
-  draw_key = draw_key_polygon
+  draw_key = draw_key_polygon,
+  
+  non_missing_aes = "size",
+  rename_size = TRUE
 )
 
 #' @rdname geom_flow

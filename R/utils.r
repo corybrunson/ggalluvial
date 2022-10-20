@@ -4,7 +4,7 @@
   "alpha",
   "fg", "col", "colour", "color",
   "lty", "linetype",
-  "cex", "lwd", "size",
+  "cex", "lwd", "linewidth", "size",
   "pch", "shape"
 )
 

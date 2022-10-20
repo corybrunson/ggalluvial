@@ -14,9 +14,9 @@
 \alias{StatStratum}
 \title{Base ggproto classes for ggalluvial}
 \format{
-An object of class \code{GeomAlluvium} (inherits from \code{Geom}, \code{ggproto}, \code{gg}) of length 6.
+An object of class \code{GeomAlluvium} (inherits from \code{Geom}, \code{ggproto}, \code{gg}) of length 8.
 
-An object of class \code{GeomFlow} (inherits from \code{Geom}, \code{ggproto}, \code{gg}) of length 6.
+An object of class \code{GeomFlow} (inherits from \code{Geom}, \code{ggproto}, \code{gg}) of length 8.
 
 An object of class \code{GeomLode} (inherits from \code{Geom}, \code{ggproto}, \code{gg}) of length 6.
 
