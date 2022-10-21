@@ -53,3 +53,4 @@ BugReports: https://github.com/corybrunson/ggalluvial/issues
 VignetteBuilder: knitr
 RoxygenNote: 7.2.1
 Roxygen: list(markdown = TRUE)
+Encoding: UTF-8
