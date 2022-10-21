@@ -24,7 +24,7 @@ An object of class \code{GeomStratum} (inherits from \code{GeomRect}, \code{Geom
 
 An object of class \code{StatAlluvium} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 6.
 
-An object of class \code{StatFlow} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 6.
+An object of class \code{StatFlow} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 7.
 
 An object of class \code{StatStratum} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 5.
 }
