@@ -24,7 +24,7 @@ CODE_OF_CONDUCT.md
 paper.*
 
 # hosting infrastructure
-.github
+^\.github$
 ^_pkgdown\.yml$
 ^\.travis\.yml$
 cran-comments.md
