@@ -76,9 +76,10 @@ StatFlow <- ggproto(
   "StatFlow", Stat,
   
   required_aes = c("x"),
+  optional_aes = c("order"),
   
   # `<new-aes> = NULL` prevents "unknown aesthetics" warnings
-  default_aes = aes(weight = 1, stratum = NULL, alluvium = NULL),
+  default_aes = aes(weight = 1, stratum = NULL, alluvium = NULL, order = NULL),
   
   setup_params = function(data, params) {
     
