@@ -23,7 +23,7 @@ Description: Alluvial plots use variable-width ribbons and stacked bar plots to
     <doi:10.1198/jcgs.2009.07098> layered grammar of graphics to generate
     alluvial plots from tidy data.
 Depends:
-    R (>= 3.5),
+    R (>= 3.6),
     ggplot2 (>= 2.2)
 Imports:
     stats,
