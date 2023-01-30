@@ -19,11 +19,11 @@ pdf(NULL)
 
 ## Problem
 
-In an interactive visualization, it is visually cleaner and better for interpretation if labels and other information appear as "tooltips" when the user hovers over or clicks on elements of the plot, rather than displaying all the labels on the plot at one time. However, the **ggalluvial** package does not natively include this functionality. It is possible to enable this using functions from several other packages. This vignette illustrates how to create Shiny apps that display an alluvial plot with tooltips that appear when the user hovers over two different plot elements: strata created with `geom_stratum()` and alluvia created with `geom_alluvium()`. An example is provided for wide-format alluvial data (the `UCBAdmissions` dataset) and long-format alluvial data (the `vaccinations` dataset).
+In an interactive visualization, it is visually cleaner and better for interpretation if labels and other information appear as "tooltips" when the user hovers over or clicks on elements of the plot, rather than displaying all the labels on the plot at one time. However, the {ggalluvial} package does not natively include this functionality. It is possible to enable this using functions from several other packages. This vignette illustrates how to create Shiny apps that display an alluvial plot with tooltips that appear when the user hovers over two different plot elements: strata created with `geom_stratum()` and alluvia created with `geom_alluvium()`. An example is provided for wide-format alluvial data (the `UCBAdmissions` dataset) and long-format alluvial data (the `vaccinations` dataset).
 
 The tooltips that appear when the user hovers over elements of the plot show a text label and the count in each group. If the user hovers or clicks somewhere inside a ggplot panel, Shiny automatically returns information about the location of the mouse cursor *in plot coordinates*. That means the main work we have to do is to extract or manually recalculate the coordinates of the different plot elements. With that information, we can determine which plot element the cursor is hovering over and display the appropriate information in the tooltip or other output method.
 
-_Note:_ The app demonstrated here depends on the packages **htmltools** and **sp**, in addition of course to **ggalluvial** and **shiny**. Please be aware that all of these packages will need to be installed on the server where your Shiny app is running.
+_Note:_ The app demonstrated here depends on the packages {htmltools} and {sp}, in addition of course to {ggalluvial} and {shiny}. Please be aware that all of these packages will need to be installed on the server where your Shiny app is running.
 
 ### Hovering over and clicking on strata
 
@@ -31,7 +31,7 @@ Enabling hovering over and clicking on strata is straightforward because of thei
 
 ### Hovering over and clicking on alluvia
 
-Hovering over and clicking on alluvia are more difficult because the shapes of the alluvia are more complex. The default shape of the polygons includes an `xspline` curve drawn using the **grid** package. We need to manually reconstruct the coordinates of the polygons, then use `sp::pointInPolygon()` to detect which, if any, polygons the cursor is over.
+Hovering over and clicking on alluvia are more difficult because the shapes of the alluvia are more complex. The default shape of the polygons includes an `xspline` curve drawn using the {grid} package. We need to manually reconstruct the coordinates of the polygons, then use `sp::pointInPolygon()` to detect which, if any, polygons the cursor is over.
 
 ## App with wide-format alluvial data
 
@@ -49,7 +49,7 @@ shiny::shinyAppDir(system.file("examples/ex-shiny-wide-data", package="ggalluvia
 
 Here, we will go over each section of the code in detail. The full source code is included in the package's `examples` directory.
 
-The app first (1) loads the data and (2) builds the plot. Then, (3) information is extracted from the built plot object to (4) manually recalculate the coordinates of the polygons that make up the plot. Internally, **ggalluvial** uses the **grid** package to draw the polygons, so the next steps are (5) to define the minima and maxima of the x and y axes in **grid** units and the units that appear on the plot's coordinate system, and (6) to convert the polygon coordinates from **grid** units plot units. Next, the user interface is defined, including output of (7) the plot image and (8) the tooltip. The final block of code is the server function, which first (9) renders the plot. Finally, the tooltip is defined. This includes (10) logic to determine whether the mouse cursor is inside the plot panel, then (11) whether it is hovering over a stratum, (12) an alluvium, or neither, based on the mouse coordinates provided by Shiny. If the mouse is hovering over a plot element, the app finds appropriate information and prints it in a small "tooltip" box next to the mouse cursor (11b and 12b).
+The app first (1) loads the data and (2) builds the plot. Then, (3) information is extracted from the built plot object to (4) manually recalculate the coordinates of the polygons that make up the plot. Internally, {ggalluvial} uses the {grid} package to draw the polygons, so the next steps are (5) to define the minima and maxima of the x and y axes in {grid} units and the units that appear on the plot's coordinate system, and (6) to convert the polygon coordinates from {grid} units plot units. Next, the user interface is defined, including output of (7) the plot image and (8) the tooltip. The final block of code is the server function, which first (9) renders the plot. Finally, the tooltip is defined. This includes (10) logic to determine whether the mouse cursor is inside the plot panel, then (11) whether it is hovering over a stratum, (12) an alluvium, or neither, based on the mouse coordinates provided by Shiny. If the mouse is hovering over a plot element, the app finds appropriate information and prints it in a small "tooltip" box next to the mouse cursor (11b and 12b).
 
 This is the structure of the app in pseudocode.
 
@@ -147,7 +147,7 @@ p <- ggplot(ucb_admissions,
 pbuilt <- ggplot_build(p)
 ```
 
-Now for the hard part: reverse-engineering the coordinates of the alluvia polygons. This makes use of `pbuilt$data[[1]]`, a data frame with the individual elements of the alluvial plot. We add an additional column for `width` using the value we set above, then split the data frame by group (groups correspond to the individual alluvium polygons). We apply the function `data_to_alluvium()` to each element of the list to get the coordinates of the "skeleton" of the x-spline curve. Then, we pass these coordinates to the function `grid::xsplineGrob()` to fill in the smooth spline curves and convert them into a **grid** object. We pass the resulting object to `grid::xsplinePoints()`, which converts back into numeric vectors. At this point we now have the coordinates of the alluvium polygons. The object `xspline_points` is a list with length equal to the number of alluvium polygons in the plot. Each element of the list is a list with elements `x` and `y`, which are numeric vectors.
+Now for the hard part: reverse-engineering the coordinates of the alluvia polygons. This makes use of `pbuilt$data[[1]]`, a data frame with the individual elements of the alluvial plot. We add an additional column for `width` using the value we set above, then split the data frame by group (groups correspond to the individual alluvium polygons). We apply the function `data_to_alluvium()` to each element of the list to get the coordinates of the "skeleton" of the x-spline curve. Then, we pass these coordinates to the function `grid::xsplineGrob()` to fill in the smooth spline curves and convert them into a {grid} object. We pass the resulting object to `grid::xsplinePoints()`, which converts back into numeric vectors. At this point we now have the coordinates of the alluvium polygons. The object `xspline_points` is a list with length equal to the number of alluvium polygons in the plot. Each element of the list is a list with elements `x` and `y`, which are numeric vectors.
 
 ```{r get xsplines and draw curves, eval = FALSE}
 # Add width parameter, and then convert built plot data to xsplines
@@ -169,7 +169,7 @@ xspline_coords <- lapply(
 xspline_points <- lapply(xspline_coords, grid::xsplinePoints)
 ```
 
-The coordinates we have are in **grid** plotting units but we need to convert them into the same units as the axes on the plot. We do this by determining the range of the x and y-axes in **grid** units (`xrange_old` and `yrange_old`). Then we fix the range of the x axis as 1 to the number of strata, adjusted by half the alluvium width on each side. Next we fix the range of the y-axis to the sum of the counts across all alluvia at one node.
+The coordinates we have are in {grid} plotting units but we need to convert them into the same units as the axes on the plot. We do this by determining the range of the x and y-axes in {grid} units (`xrange_old` and `yrange_old`). Then we fix the range of the x axis as 1 to the number of strata, adjusted by half the alluvium width on each side. Next we fix the range of the y-axis to the sum of the counts across all alluvia at one node.
 
 ```{r get coordinate ranges, eval = FALSE}
 # Define the x and y axis limits in grid coordinates (old) and plot
@@ -374,6 +374,6 @@ shiny::shinyAppDir(system.file("examples/ex-shiny-long-data", package="ggalluvia
 
 ## Conclusion
 
-This vignette demonstrates how to enable tooltips for **ggalluvial** plots in Shiny apps. This is one of many possible ways to do that. It may not be the optimal way &mdash; other solutions are certainly possible!
+This vignette demonstrates how to enable tooltips for {ggalluvial} plots in Shiny apps. This is one of many possible ways to do that. It may not be the optimal way &mdash; other solutions are certainly possible!
 
-The full source code for both of these Shiny apps is included with the **ggalluvial** package in the **examples** subdirectory where the package is installed: the source files are `ggalluvial/examples/ex-shiny-wide-data/app.R` and `ggalluvial/examples/ex-shiny-long-data/app.R`.
+The full source code for both of these Shiny apps is included with the {ggalluvial} package in the 'examples' subdirectory where the package is installed: the source files are `ggalluvial/examples/ex-shiny-wide-data/app.R` and `ggalluvial/examples/ex-shiny-long-data/app.R`.
