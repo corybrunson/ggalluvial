@@ -52,11 +52,11 @@ of \code{data} to be used as the axis (key), stratum (value), and alluvium
 (identifying) variables.}
 
 \item{weight}{Optional field of \code{data}, handled using
-\code{\link[rlang:nse-defuse]{rlang::enquo()}}, to be used as heights or depths of
+\code{\link[rlang:topic-defuse]{rlang::enquo()}}, to be used as heights or depths of
 the alluvia or lodes.}
 
 \item{site}{Optional vector of fields of \code{data}, handled using
-\code{\link[rlang:nse-defuse]{rlang::enquos()}}, to be used to group rows before
+\code{\link[rlang:topic-defuse]{rlang::enquos()}}, to be used to group rows before
 testing for duplicate and missing id-axis pairings. Variables intended for
 faceting should be passed to \code{site}.}
 

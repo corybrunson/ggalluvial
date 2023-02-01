@@ -10,18 +10,18 @@ vignette: >
   \usepackage[utf8]{inputenc}
 ---
 
-The **ggalluvial** package is a **ggplot2** extension for producing alluvial plots in a [**tidyverse**](https://github.com/tidyverse) framework.
-The design and functionality were originally inspired by the [**alluvial**](https://github.com/mbojan/alluvial) package and have benefitted from the feedback of many users.
+The {ggalluvial} package is a {ggplot2} extension for producing alluvial plots in a [{tidyverse}](https://github.com/tidyverse) framework.
+The design and functionality were originally inspired by the [{alluvial}](https://github.com/mbojan/alluvial) package and have benefitted from the feedback of many users.
 This vignette
 
 - defines the essential components of alluvial plots as used in the naming schemes and documentation (_axis_, _alluvium_, _stratum_, _lode_, _flow_),
-- describes the alluvial data structures recognized by **ggalluvial**,
+- describes the alluvial data structures recognized by {ggalluvial},
 - illustrates the new stats and geoms, and
 - showcases some popular variants on the theme and how to produce them.
 
-Unlike most alluvial and related diagrams, the plots produced by **ggalluvial** are uniquely determined by the data set and statistical transformation. The distinction is detailed in [this blog post](https://corybrunson.github.io/2019/09/13/flow-taxonomy/).
+Unlike most alluvial and related diagrams, the plots produced by {ggalluvial} are uniquely determined by the data set and statistical transformation. The distinction is detailed in [this blog post](https://corybrunson.github.io/2019/09/13/flow-taxonomy/).
 
-Many other resources exist for visualizing categorical data in R, including several more basic plot types that are likely to more accurately convey proportions to viewers when the data are not so structured as to warrant an alluvial plot. In particular, check out Michael Friendly's [**vcd** and **vcdExtra** packages (PDF)](https://CRAN.R-project.org/package=vcdExtra/vignettes/vcd-tutorial.pdf) for a variety of statistically-motivated categorical data visualization techniques, Hadley Wickham's [**productplots** package](https://github.com/hadley/productplots) and Haley Jeppson and Heike Hofmann's descendant [**ggmosaic** package](https://CRAN.R-project.org/package=ggmosaic/vignettes/ggmosaic.html) for product or mosaic plots, and Nicholas Hamilton's [**ggtern** package](http://www.ggtern.com/) for ternary coordinates. Other related packages are mentioned below.
+Many other resources exist for visualizing categorical data in R, including several more basic plot types that are likely to more accurately convey proportions to viewers when the data are not so structured as to warrant an alluvial plot. In particular, check out Michael Friendly's [{vcd} and {vcdExtra} packages (PDF)](https://CRAN.R-project.org/package=vcdExtra/vignettes/vcd-tutorial.pdf) for a variety of statistically-motivated categorical data visualization techniques, Hadley Wickham's [{productplots} package](https://github.com/hadley/productplots) and Haley Jeppson and Heike Hofmann's descendant [{ggmosaic} package](https://CRAN.R-project.org/package=ggmosaic/vignettes/ggmosaic.html) for product or mosaic plots, and Nicholas Hamilton's [{ggtern} package](http://www.ggtern.com/) for ternary coordinates. Other related packages are mentioned below.
 
 ```{r setup, echo=FALSE, message=FALSE, results='hide'}
 library(ggalluvial)
@@ -48,7 +48,7 @@ ggplot(data = to_lodes_form(as.data.frame(Titanic),
 The next section details how the elements of this image encode information about the underlying dataset.
 For now, we use the image as a point of reference to define the following elements of a typical alluvial plot:
 
-- An _axis_ is a dimension (variable) along which the data are vertically grouped at a fixed horizontal position. The plot above uses three categorical axes: `Class`, `Sex`, and `Age`.
+- An _axis_ is a dimension (variable) along which the data are vertically arranged at a fixed horizontal position. The plot above uses three categorical axes: `Class`, `Sex`, and `Age`.
 - The groups at each axis are depicted as opaque blocks called _strata_. For example, the `Class` axis contains four strata: `1st`, `2nd`, `3rd`, and `Crew`.
 - Horizontal (x-) splines called _alluvia_ span the width of the plot. In this plot, each alluvium corresponds to a fixed value of each axis variable, indicated by its vertical position at the axis, as well as of the `Survived` variable, indicated by its fill color.
 - The segments of the alluvia between pairs of adjacent axes are _flows_.
@@ -58,7 +58,7 @@ As the examples in the next section will demonstrate, which of these elements ar
 
 ## Alluvial data
 
-**ggalluvial** recognizes two formats of "alluvial data", treated in detail in the following subsections, but which basically correspond to the "wide" and "long" formats of categorical repeated measures data. A third, tabular (or array), form is popular for storing data with multiple categorical dimensions, such as the `Titanic` and `UCBAdmissions` datasets.[^tableform] For consistency with tidy data principles and **ggplot2** conventions, **ggalluvial** does not accept tabular input; `base::data.frame()` converts such an array to an acceptable data frame.
+{ggalluvial} recognizes two formats of "alluvial data", treated in detail in the following subsections, but which basically correspond to the "wide" and "long" formats of categorical repeated measures data. A third, tabular (or array), form is popular for storing data with multiple categorical dimensions, such as the `Titanic` and `UCBAdmissions` datasets.[^tableform] For consistency with tidy data principles and {ggplot2} conventions, {ggalluvial} does not accept tabular input; `base::as.data.frame()` converts such an array to an acceptable data frame.
 
 [^tableform]: See Friendly's tutorial, linked above, for a discussion.
 
@@ -71,7 +71,7 @@ head(as.data.frame(UCBAdmissions), n = 12)
 is_alluvia_form(as.data.frame(UCBAdmissions), axes = 1:3, silent = TRUE)
 ```
 
-This format is inherited from the first version of **ggalluvial**, which modeled it after usage in **alluvial**: The user declares any number of axis variables, which `stat_alluvium()` and `stat_stratum()` recognize and process in a consistent way:
+This format is inherited from the first release of {ggalluvial}, which modeled it after usage in {alluvial}: The user declares any number of axis variables, which `stat_alluvium()` and `stat_stratum()` recognize and process in a consistent way:
 
 ```{r alluvial plot of UC Berkeley admissions dataset}
 ggplot(as.data.frame(UCBAdmissions),
@@ -84,11 +84,11 @@ ggplot(as.data.frame(UCBAdmissions),
   ggtitle("UC Berkeley admissions and rejections, by sex and department")
 ```
 
-An important feature of these plots is the meaningfulness of the vertical axis: No gaps are inserted between the strata, so the total height of the plot reflects the cumulative quantity of the observations. The plots produced by **ggalluvial** conform (somewhat; keep reading) to the "grammar of graphics" principles of **ggplot2**, and this prevents users from producing "free-floating" visualizations like the Sankey diagrams showcased [here](https://developers.google.com/chart/interactive/docs/gallery/sankey).[^ggforce]
-**ggalluvial** parameters and existing **ggplot2** functionality can also produce [parallel sets](https://eagereyes.org/parallel-sets) plots, illustrated here using the `HairEyeColor` dataset:[^ggparallel][^crayola]
+An important feature of these plots is the meaningfulness of the vertical axis: No gaps are inserted between the strata, so the total height of the plot reflects the cumulative quantity of the observations. The plots produced by {ggalluvial} conform (somewhat; keep reading) to the "grammar of graphics" principles of {ggplot2}, and this prevents users from producing "free-floating" visualizations like the Sankey diagrams showcased [here](https://developers.google.com/chart/interactive/docs/gallery/sankey).[^ggforce]
+{ggalluvial} parameters and native {ggplot2} functionality can also produce [parallel sets](https://eagereyes.org/parallel-sets) plots, illustrated here using the `HairEyeColor` dataset:[^ggparallel][^crayola]
 
-[^ggforce]: [The **ggforce** package](https://github.com/thomasp85/ggforce) includes parallel set geom and stat layers to produce similar diagrams that can be allowed to free-float.
-[^ggparallel]: A greater variety of parallel sets plots are implemented in the [**ggparallel**](https://github.com/heike/ggparallel) and [**ggpcp**](https://github.com/yaweige/ggpcp) packages.
+[^ggforce]: [The {ggforce} package](https://github.com/thomasp85/ggforce) includes parallel set geom and stat layers to produce similar diagrams that can be allowed to free-float.
+[^ggparallel]: A greater variety of parallel sets plots are implemented in the [{ggparallel}](https://github.com/heike/ggparallel) and [{ggpcp}](https://github.com/yaweige/ggpcp) packages.
 [^crayola]: Eye color hex codes are taken from [Crayola's Colors of the World crayons](https://en.wikipedia.org/wiki/List_of_Crayola_crayon_colors).
 
 ```{r parallel sets plot of hair and eye color dataset}
@@ -99,7 +99,7 @@ ggplot(as.data.frame(HairEyeColor),
                 width = 1/8, knot.pos = 0, reverse = FALSE) +
   scale_fill_manual(values = c(Brown = "#70493D", Hazel = "#E2AC76",
                                Green = "#3F752B", Blue = "#81B0E4")) +
-  guides(fill = FALSE) +
+  guides(fill = "none") +
   geom_stratum(alpha = .25, width = 1/8, reverse = FALSE) +
   geom_text(stat = "stratum", aes(label = after_stat(stratum)),
             reverse = FALSE) +
@@ -110,18 +110,19 @@ ggplot(as.data.frame(HairEyeColor),
 
 (The warning is due to the "Hair" and "Eye" axes having the value "Brown" in common.)
 
-This format and functionality are useful for many applications and will be retained in future versions. They also involve some conspicuous deviations from **ggplot2** norms:
+This format and functionality are useful for many applications and will be retained in future versions. They also involve some conspicuous deviations from {ggplot2} norms:
 
 - The `axis[0-9]*` position aesthetics are non-standard: they are not an explicit set of parameters but a family based on a regular expression pattern; and at least one, but no specific one, is required.
 - `stat_alluvium()` ignores any argument to the `group` aesthetic; instead, `StatAlluvium$compute_panel()` uses `group` to link the rows of the internally-transformed dataset that correspond to the same alluvium.
-- The `stratum` variable produced by `stat_stratum()` (called by `geom_text()`) is not available before the statistical transformation is performed and must be recovered using `after_stat()`.
 - The horizontal axis must be manually corrected (using `scale_x_discrete()` or `scale_x_continuous()`) to reflect the implicit categorical variable identifying the axis.
 
-Furthermore, format aesthetics like `fill` are necessarily fixed for each alluvium; they cannot, for example, change from axis to axis according to the value taken at each. This means that, although they can reproduce the branching-tree structure of parallel sets, this format and functionality cannot naturally produce alluvial plots with color schemes such as those featured [here](https://developers.google.com/chart/interactive/docs/gallery/sankey) ("Controlling colors"), which are "reset" at each axis.
+Furthermore, format aesthetics like `fill` are necessarily fixed for each alluvium; they cannot, for example, change from axis to axis according to the value taken at each. This means that, although they can reproduce the branching-tree structure of parallel sets, this format cannot be used to produce alluvial plots with color schemes such as those featured [here](https://developers.google.com/chart/interactive/docs/gallery/sankey) ("Controlling colors"), which are "reset" at each axis.
+
+Note also that the `stratum` variable produced by `stat_stratum()` (called by `geom_text()`) is computed during the statistical transformation and must be recovered using `after_stat()` as a [calculated aesthetic](https://corybrunson.github.io/2020/04/17/calculate-aesthetics/).
 
 ### Lodes (long) format
 
-The long format recognized by **ggalluvial** contains _one row per lode_, and can be understood as the result of "gathering" (in the **dplyr** sense) or "pivoting" (in the Microsoft Excel sense) the axis columns of a dataset in the alluvia format into a key-value pair of columns encoding the axis as the key and the stratum as the value. This format requires an additional indexing column that links the rows corresponding to a common cohort, i.e. the lodes of a single alluvium:
+The long format recognized by {ggalluvial} contains _one row per lode_, and can be understood as the result of "gathering" (in a deprecated {dplyr} sense) or "pivoting" (in the Microsoft Excel or current {dplyr} sense) the axis columns of a dataset in the alluvia format into a key-value pair of columns encoding the axis as the key and the stratum as the value. This format requires an additional indexing column that links the rows corresponding to a common cohort, i.e. the lodes of a single alluvium:
 
 ```{r lodes format of Berkeley admissions dataset}
 UCB_lodes <- to_lodes_form(as.data.frame(UCBAdmissions),
@@ -133,13 +134,13 @@ is_lodes_form(UCB_lodes, key = x, value = stratum, id = Cohort, silent = TRUE)
 
 The functions that convert data between wide (alluvia) and long (lodes) format include several parameters that help preserve ancillary information. See `help("alluvial-data")` for examples.
 
-The same stat and geom can receive data in this format using a different set of positional aesthetics, also specific to **ggalluvial**:
+The same stat and geom can receive data in this format using a different set of positional aesthetics, also specific to {ggalluvial}:
 
 - `x`, the "key" variable indicating the axis to which the row corresponds, which are to be arranged along the horizontal axis;
 - `stratum`, the "value" taken by the axis variable indicated by `x`; and
 - `alluvium`, the indexing scheme that links the rows of a single alluvium.
 
-Heights can vary from axis to axis, allowing users to produce bump charts like those showcased [here](https://imgur.com/gallery/gI5p7).[^geom-area] In these cases, the strata contain no more information than the alluvia and often not plotted. For convenience, both `stat_alluvium()` and `stat_flow()` will accept arguments for `x` and `alluvium` even if none is given for `stratum`.[^arguments] As an example, we can group countries in the `Refugees` dataset by region, in order to compare refugee volumes at different scales:
+Heights can vary from axis to axis, allowing users to produce bump charts like those showcased [here](https://imgur.com/gallery/gI5p7).[^geom-area] In these cases, the strata contain no more information than the alluvia and often are not plotted. For convenience, both `stat_alluvium()` and `stat_flow()` will accept arguments for `x` and `alluvium` even if none is given for `stratum`.[^arguments] As an example, we can group countries in the `Refugees` dataset by region, in order to compare refugee volumes at different scales:
 
 [^geom-area]: If bumping is unnecessary, consider using [`geom_area()`](https://www.r-graph-gallery.com/136-stacked-area-chart) instead.
 [^arguments]: `stat_stratum()` will similarly accept arguments for `x` and `stratum` without `alluvium`. If both strata and either alluvia or flows are to be plotted, though, all three parameters need arguments.
@@ -191,7 +192,7 @@ ggplot(majors,
 ```
 
 The stratum heights `y` are unspecified, so each row is given unit height.
-This example demonstrates one way **ggalluvial** handles missing data. The alternative is to set the parameter `na.rm` to `TRUE`.[^na.rm] Missing data handling (specifically, the order of the strata) also depends on whether the `stratum` variable is character or factor/numeric.
+This example demonstrates one way {ggalluvial} handles missing data. The alternative is to set the parameter `na.rm` to `TRUE`.[^na.rm] Missing data handling (specifically, the order of the strata) also depends on whether the `stratum` variable is character or factor/numeric.
 
 [^na.rm]: Be sure to set `na.rm` consistently in each layer, in this case both the flows and the strata.
 
@@ -215,7 +216,7 @@ ggplot(vaccinations,
   ggtitle("vaccination survey responses at three points in time")
 ```
 
-This plot ignores any continuity between the flows between axes. This "memoryless" plot produces a less cluttered plot, in which at most one flow proceeds from each stratum at one axis to each stratum at the next, but at the cost of being able to track each cohort across the entire plot.
+This plot ignores any continuity between the flows between axes. This "memoryless" statistical transformation yields a less cluttered plot, in which at most one flow proceeds from each stratum at one axis to each stratum at the next, but at the cost of being able to track each cohort across the entire plot.
 
 ## Appendix
 

@@ -127,9 +127,9 @@
 <rect x='671.70' y='273.62' width='42.82' height='49.89' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
 <text x='671.70' y='282.34' style='font-size: 11.00px; font-family: sans;' textLength='19.58px' lengthAdjust='spacingAndGlyphs'>Age</text>
 <rect x='671.70' y='288.96' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-<rect x='672.41' y='289.67' width='15.86' height='15.86' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #F8766D; fill-opacity: 0.50;' />
+<rect x='672.41' y='289.67' width='15.86' height='15.86' style='stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #F8766D; fill-opacity: 0.50;' />
 <rect x='671.70' y='306.24' width='17.28' height='17.28' style='stroke-width: 1.07; stroke: none; fill: #FFFFFF;' />
-<rect x='672.41' y='306.95' width='15.86' height='15.86' style='stroke-width: 1.07; stroke: none; stroke-linecap: square; stroke-linejoin: miter; fill: #00BFC4; fill-opacity: 0.50;' />
+<rect x='672.41' y='306.95' width='15.86' height='15.86' style='stroke-width: 1.07; stroke: none; stroke-linecap: butt; stroke-linejoin: miter; fill: #00BFC4; fill-opacity: 0.50;' />
 <text x='694.46' y='300.62' style='font-size: 8.80px; font-family: sans;' textLength='20.05px' lengthAdjust='spacingAndGlyphs'>Child</text>
 <text x='694.46' y='317.90' style='font-size: 8.80px; font-family: sans;' textLength='20.06px' lengthAdjust='spacingAndGlyphs'>Adult</text>
 <text x='42.58' y='14.56' style='font-size: 13.20px; font-family: sans;' textLength='140.14px' lengthAdjust='spacingAndGlyphs'>`geom_alluvium`: facets</text>

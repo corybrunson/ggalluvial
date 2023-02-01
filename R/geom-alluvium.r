@@ -83,7 +83,7 @@ GeomAlluvium <- ggproto(
   
   required_aes = c("x", "y", "ymin", "ymax"),
   
-  default_aes = aes(size = .5, linetype = 1,
+  default_aes = aes(linewidth = .5, linetype = 1,
                     colour = "transparent", fill = "gray", alpha = .5),
   
   setup_data = function(data, params) {
@@ -157,13 +157,18 @@ GeomAlluvium <- ggproto(
       x = coords$x, y = coords$y, shape = coords$shape,
       open = FALSE,
       gp = grid::gpar(
-        col = coords$colour, fill = coords$fill, alpha = coords$alpha,
-        lty = coords$linetype, lwd = coords$size * .pt
+        col = coords$colour, fill = coords$fill,
+        alpha = coords$alpha,
+        lty = coords$linetype,
+        lwd = (coords$linewidth %||% coords$size) * .pt
       )
     )
   },
   
-  draw_key = draw_key_polygon
+  draw_key = draw_key_polygon,
+  
+  non_missing_aes = "size",
+  rename_size = TRUE
 )
 
 #' @rdname geom_alluvium
@@ -175,64 +180,64 @@ data_to_alluvium <- function(
   curve_range = NULL,
   segments = NULL
 ) {
-  if (nrow(data) == 1) {
+  if (nrow(data) == 1L) {
     # spline coordinates (one axis)
     
     with(data, data.frame(
       x = x + width / 2 * c(-1, 1, 1, -1),
       y = ymin + (ymax - ymin) * c(0, 0, 1, 1),
-      shape = rep(0, 4)
+      shape = rep(0, 4L)
     ))
   } else if (curve_type %in% c("spline", "xspline")) {
     # spline coordinates (more than one axis)
     
     # calculate control point coordinates for x-splines:
     # left side, right side, foreward knot, rearward knot, left side, right side
-    w_fore <- rep(data$width, c(3, rep(4, nrow(data) - 2), 3))
-    k_fore <- rep(data$knot.pos, c(3, rep(4, nrow(data) - 2), 3))
+    w_fore <- rep(data$width, c(3, rep(4, nrow(data) - 2L), 3))
+    k_fore <- rep(data$knot.pos, c(3, rep(4, nrow(data) - 2L), 3))
     if (knot.prop) {
       # distances between strata
-      b_fore <- rep(data$x, c(1, rep(2, nrow(data) - 2), 1)) +
-        c(1, -1) * rep(data$width / 2, c(1, rep(2, nrow(data) - 2), 1))
-      d_fore <- diff(b_fore)[c(TRUE, FALSE)]
+      b_fore <- rep(data$x, c(1, rep(2, nrow(data) - 2L), 1)) +
+        c(1, -1) * rep(data$width / 2, c(1, rep(2, nrow(data) - 2L), 1))
+      d_fore <- diff(b_fore)[seq(length(b_fore) - 1L) %% 2L]
       # scale `k_fore` to these distances
-      k_fore <- k_fore * c(0, rep(d_fore, rep(4, nrow(data) - 1)), 0)
+      k_fore <- k_fore * c(0, rep(d_fore, rep(4, nrow(data) - 1L)), 0)
     }
     # axis position +/- corresponding width +/- relative knot position
-    x_fore <- rep(data$x, c(3, rep(4, nrow(data) - 2), 3)) +
-      w_fore / 2 * c(-1, rep(c(1, 1, -1, -1), nrow(data) - 1), 1) +
-      k_fore * c(0, rep(c(0, 1, -1, 0), nrow(data) - 1), 0)
+    x_fore <- rep(data$x, c(3, rep(4, nrow(data) - 2L), 3)) +
+      w_fore / 2 * c(-1, rep(c(1, 1, -1, -1), nrow(data) - 1L), 1) +
+      k_fore * c(0, rep(c(0, 1, -1, 0), nrow(data) - 1L), 0)
     # vertical positions are those of lodes
-    ymin_fore <- rep(data$ymin, c(3, rep(4, nrow(data) - 2), 3))
-    ymax_fore <- rep(data$ymax, c(3, rep(4, nrow(data) - 2), 3))
-    shape_fore <- c(0, rep(c(0, 1, 1, 0), nrow(data) - 1), 0)
+    ymin_fore <- rep(data$ymin, c(3, rep(4, nrow(data) - 2L), 3))
+    ymax_fore <- rep(data$ymax, c(3, rep(4, nrow(data) - 2L), 3))
+    shape_fore <- c(0, rep(c(0, 1, 1, 0), nrow(data) - 1L), 0)
     data.frame(
       x = c(x_fore, rev(x_fore)),
       y = c(ymin_fore, rev(ymax_fore)),
-      shape = rep(shape_fore, 2)
+      shape = rep(shape_fore, 2L)
     )
   } else {
     # unit curve coordinates (more than one axis)
     
     # specs for a single flow curve
     curve_fun <- make_curve_fun(curve_type, curve_range)
-    i_once <- seq(0, 1, length.out = segments + 1)
+    i_once <- seq(0L, 1L, length.out = segments + 1L)
     f_once <- curve_fun(i_once)
     # coordinates for a full curve
     b_fore <- as.vector(rbind(data$x - data$w / 2, data$x + data$w / 2))
     x_fore <- c(
       b_fore[1],
-      t(b_fore[seq(nrow(data) - 1) * 2] +
-          outer(diff(b_fore)[seq(nrow(data) - 1) * 2], i_once, "*")),
-      b_fore[nrow(data) * 2]
+      t(b_fore[seq(nrow(data) - 1L) * 2L] +
+          outer(diff(b_fore)[seq(nrow(data) - 1L) * 2L], i_once, "*")),
+      b_fore[nrow(data) * 2L]
     )
     ymin_fore <- c(
-      data$ymin[1],
+      data$ymin[1L],
       t(data$ymin[-nrow(data)] + outer(diff(data$ymin), f_once, "*")),
       data$ymin[nrow(data)]
     )
     ymax_fore <- c(
-      data$ymax[1],
+      data$ymax[1L],
       t(data$ymax[-nrow(data)] + outer(diff(data$ymax), f_once, "*")),
       data$ymax[nrow(data)]
     )

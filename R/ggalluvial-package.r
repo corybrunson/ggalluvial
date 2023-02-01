@@ -13,6 +13,8 @@
 #' 
 "_PACKAGE"
 
+#' @importFrom rlang "%||%"
+
 # stratum and lode ordering options are documented in the `stat_*()` topics
 # curve options are documented in the `geom_*()` topics
 op.ggalluvial <- list(

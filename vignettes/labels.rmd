@@ -12,7 +12,7 @@ vignette: >
 
 ## Setup
 
-This brief vignette uses the `vaccinations` dataset included in **ggalluvial**. As in [the technical introduction](http://corybrunson.github.io/ggalluvial/articles/ggalluvial.html), the order of the levels is reversed to be more intuitive. Objects from other **ggplot2** extensions are accessed via `::` and `:::`.
+This brief vignette uses the `vaccinations` dataset included in {ggalluvial}. As in [the technical introduction](http://corybrunson.github.io/ggalluvial/articles/ggalluvial.html), the order of the levels is reversed to be more intuitive. Objects from other {ggplot2} extensions are accessed via `::` and `:::`.
 
 ```{r setup}
 knitr::opts_chunk$set(fig.width = 6, fig.height = 4, fig.align = "center")
@@ -63,7 +63,7 @@ This is a useful fix for some cases. Still, if the goal is a publication-ready g
 
 ## Solutions
 
-Two **ggplot2** extensions are well-suited to this problem: [**ggrepel**](https://github.com/slowkow/ggrepel) and [**ggfittext**](https://github.com/wilkox/ggfittext). They provide new geom layers that use the output of existing stat layers to situate text:
+Two {ggplot2} extensions are well-suited to this problem: [{ggrepel}](https://github.com/slowkow/ggrepel) and [{ggfittext}](https://github.com/wilkox/ggfittext). They provide new geom layers that use the output of existing stat layers to situate text:
 `ggrepel::geom_text_repel()` takes the same aesthetics as `ggplot2::geom_text()`, namely `x`, `y`, and `label`. In contrast, `ggfittext::geom_fit_text()` only specifically requires `label` but also needs enough information to determine the rectangle that will contain the text. This can be encoded as `xmin` and `xmax` or as `x` and `width` for the horizontal direction, and as `ymin` and `ymax` or as `y` and `height` for the vertical direction. Conveniently, `ggalluvial::stat_stratum()` produces more than enough information for both geoms, including `x`, `xmin`, `xmax`, and their vertical counterparts.
 
 All this can be gleaned from the `ggproto` objects that construct the layers:
@@ -75,11 +75,11 @@ print(ggfittext:::GeomFitText$setup_data)
 print(StatStratum$compute_panel)
 ```
 
-I reached the specific solutions through trial and error. They may not be the best tricks for most cases, but they demonstrate what these packages can do. For many more examples, see the respective package vignettes: [for **ggrepel**](https://CRAN.R-project.org/package=ggrepel/vignettes/ggrepel.html), and [for **ggfittext**](https://CRAN.R-project.org/package=ggfittext/vignettes/introduction-to-ggfittext.html).
+I reached the specific solutions through trial and error. They may not be the best tricks for most cases, but they demonstrate what these packages can do. For many more examples, see the respective package vignettes: [for {ggrepel}](https://CRAN.R-project.org/package=ggrepel/vignettes/ggrepel.html), and [for {ggfittext}](https://CRAN.R-project.org/package=ggfittext/vignettes/introduction-to-ggfittext.html).
 
-### Solution 1: **ggrepel**
+### Solution 1: {ggrepel}
 
-**ggrepel** is most often (in my experience) used to repel text away from symbols in a scatterplot, in whatever directions prevent them from overlapping the symbols and each other. In this case, however, it makes much more sense to align them vertically a fixed horizontal distance (`nudge_x`) away from the strata and repel them vertically from each other (`direction = "y"`) just enough to print them without overlap. It takes an extra bit of effort to render text _only_ for the strata at the first (or at the last) axis, but the result is worth it.
+{ggrepel} is most often (in my experience) used to repel text away from symbols in a scatterplot, in whatever directions prevent them from overlapping the symbols and each other. In this case, however, it makes much more sense to align them vertically a fixed horizontal distance (`nudge_x`) away from the strata and repel them vertically from each other (`direction = "y"`) just enough to print them without overlap. It takes an extra bit of effort to render text _only_ for the strata at the first (or at the last) axis, but the result is worth it.
 
 ```{r ggrepel}
 ggplot(vaccinations,
@@ -101,9 +101,9 @@ ggplot(vaccinations,
   ggtitle("vaccination survey responses", "labeled using `geom_text_repel()`")
 ```
 
-### Solution 2: **ggfittext**
+### Solution 2: {ggfittext}
 
-**ggfittext** is simplicity itself: The strata are just rectangles, so no more parameter specifications are necessary to fit the text into them. One key parameter is `min.size`, which defaults to `4` and controls how small the text is allowed to get without being omitted.
+{ggfittext} is simplicity itself: The strata are just rectangles, so no more parameter specifications are necessary to fit the text into them. One key parameter is `min.size`, which defaults to `4` and controls how small the text is allowed to get without being omitted.
 
 ```{r ggfittext}
 ggplot(vaccinations,
@@ -117,7 +117,7 @@ ggplot(vaccinations,
   ggtitle("vaccination survey responses", "labeled using `geom_fit_text()`")
 ```
 
-Note that this solution requires **ggfittext** v0.6.0.
+Note that this solution requires {ggfittext} v0.6.0.
 
 ## Appendix
 

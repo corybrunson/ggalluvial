@@ -1,3 +1,8 @@
+# next version
+
+## `linewidth` aesthetic (breaking change)
+
+An upcoming release of *ggplot2* controls stroke width using the new `linewidth` aesthetic rather than `size`. This release adapts to this change internally by updating row and column layers as recommended here: <https://www.tidyverse.org/blog/2022/08/ggplot2-3-4-0-size-to-linewidth/>
 
 # ggalluvial 0.12.4
 

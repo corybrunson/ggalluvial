@@ -147,7 +147,7 @@
 <div id="error-handling" class="section level2">
 <h2 class="hasAnchor">
 <a href="#error-handling" class="anchor"></a>Error handling</h2>
-<p>Rather than throw an error when <code>y</code> values are <code>NA</code>, the stat layers now follow <strong>ggplot2</strong> convention, using <code>remove_missing()</code> at the setup step with the <code>na.rm</code> parameter passed to each layer.</p>
+<p>Rather than throw an error when <code>y</code> values are <code>NA</code>, the stat layers now follow <strong>ggplot2</strong> convention, using <code><a href="https://ggplot2.tidyverse.org/reference/remove_missing.html">remove_missing()</a></code> at the setup step with the <code>na.rm</code> parameter passed to each layer.</p>
 </div>
 <div id="aesthetic-defaults" class="section level2">
 <h2 class="hasAnchor">
@@ -159,6 +159,11 @@
 <a href="#vignette-revisions" class="anchor"></a>Vignette revisions</h2>
 <p>The primary vignette now uses the <code>HairEyeColor</code> data set, rather than over-using <code>Titanic</code>, to illustrate the parallel sets plot.</p>
 <p>The Shiny vignette includes an embedded app using IFrame.</p>
+</div>
+<div id="dependency-upgrades" class="section level2">
+<h2 class="hasAnchor">
+<a href="#dependency-upgrades" class="anchor"></a>Dependency upgrades</h2>
+<p>The deprecated <code>.dots</code> argument of <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">dplyr::group_by()</a></code> has been replaced with <code><a href="https://dplyr.tidyverse.org/reference/across.html">dplyr::across()</a></code>, preventing a warning.</p>
 </div>
 </div>
     <div id="ggalluvial-0123" class="section level1">
@@ -233,7 +238,7 @@
 <div id="computed-variables" class="section level2">
 <h2 class="hasAnchor">
 <a href="#computed-variables" class="anchor"></a>Computed variables</h2>
-<p>The alluvial stats now compute four variables for use with <code>after_stat()</code>: numeric variables <code>n</code>, <code>count</code>, and <code>prop</code>; and character variables <code>lode</code> (when the <code>alluvium</code> aesthetic is specified) and <code>flow</code> (when using the flow stat). The numerical variables can be weighted using the <code>weight</code> aesthetic, which is dropped during computation (so that it does not confuse the geoms), while <code>lode</code> is distilled according to a new <code>distill</code> parameter. This use of <code>weight</code> may cause confusion with its use by the <code>is_*_form()</code> functions until they are upgraded in the next version.</p>
+<p>The alluvial stats now compute four variables for use with <code><a href="https://ggplot2.tidyverse.org/reference/aes_eval.html">after_stat()</a></code>: numeric variables <code>n</code>, <code>count</code>, and <code>prop</code>; and character variables <code>lode</code> (when the <code>alluvium</code> aesthetic is specified) and <code>flow</code> (when using the flow stat). The numerical variables can be weighted using the <code>weight</code> aesthetic, which is dropped during computation (so that it does not confuse the geoms), while <code>lode</code> is distilled according to a new <code>distill</code> parameter. This use of <code>weight</code> may cause confusion with its use by the <code>is_*_form()</code> functions until they are upgraded in the next version.</p>
 <p>These new variables complement the already-computed but heretofore undocumented variables <code>stratum</code> and <code>deposit</code>. <code>stratum</code> obviates the need for the <code>infer.label</code> parameter, which is deprecated. Its alias, <code>label.strata</code>, is now defunct. (The variable <code>alluvium</code> is often computed, but it is manipulated to be used by the geom layers and should not be passed to an aesthetic.) <code>deposit</code> takes contiguous integer values forward along the axes and upward along the (signed) strata at each axis.</p>
 </div>
 <div id="flow-upgrades-and-extensions" class="section level2">
@@ -288,7 +293,7 @@
 <div id="negative-observations" class="section level2">
 <h2 class="hasAnchor">
 <a href="#negative-observations" class="anchor"></a>Negative observations</h2>
-<p>Negative values can now be meaningfully passed to <code>y</code>, producing behavior that mimics that of <code>geom_bar()</code>. The new logical parameter <code>absolute</code> controls whether negative strata, and lodes within them, are ordered vertically in the same way as positive strata and lodes (<code>FALSE</code>) or in the opposite way (<code>TRUE</code>). Additionally, the <code>negate.strata</code> parameter can be used to negate the observations associated with specific strata, in order to situate them below rather than above the <code>x</code> axis.</p>
+<p>Negative values can now be meaningfully passed to <code>y</code>, producing behavior that mimics that of <code><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_bar()</a></code>. The new logical parameter <code>absolute</code> controls whether negative strata, and lodes within them, are ordered vertically in the same way as positive strata and lodes (<code>FALSE</code>) or in the opposite way (<code>TRUE</code>). Additionally, the <code>negate.strata</code> parameter can be used to negate the observations associated with specific strata, in order to situate them below rather than above the <code>x</code> axis.</p>
 </div>
 <div id="new-lode-guidance-function" class="section level2">
 <h2 class="hasAnchor">
@@ -434,7 +439,7 @@
 <h2 class="hasAnchor">
 <a href="#stat-layer-functionality" class="anchor"></a>Stat layer functionality</h2>
 <ul>
-<li>The <code>weight</code> aesthetic for the three <code>stat_*()</code> functions is replaced by the <code>y</code> aesthetic, so that <code>scale_y_continuous()</code> will correctly transform the vertical scales of the layers. An example is provided in the documentation for <code><a href="../reference/stat_alluvium.html">stat_alluvium()</a></code>. <em>The <code>y</code> aesthetic must be present in order for scales to be correctly transformed.</em> The <code>weight</code> parameter is still available but deprecated.</li>
+<li>The <code>weight</code> aesthetic for the three <code>stat_*()</code> functions is replaced by the <code>y</code> aesthetic, so that <code><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous()</a></code> will correctly transform the vertical scales of the layers. An example is provided in the documentation for <code><a href="../reference/stat_alluvium.html">stat_alluvium()</a></code>. <em>The <code>y</code> aesthetic must be present in order for scales to be correctly transformed.</em> The <code>weight</code> parameter is still available but deprecated.</li>
 <li>For consistency with the switch from <code>weight</code> to <code>y</code>, the <code>aggregate.wts</code> parameter to <code><a href="../reference/stat_alluvium.html">stat_alluvium()</a></code> is replaced with <code>aggregate.y</code>; <code>aggregate.wts</code> is deprecated.</li>
 </ul>
 </div>
@@ -462,7 +467,7 @@
 <li>The setting <code>silent = TRUE</code> now silences all messages.</li>
 <li>The functions <code>is_*_form()</code> now return <code>FALSE</code> if any weights are negative, with a message to this effect.</li>
 <li>These functions now accept unquoted variable names for the <code>key</code>, <code>value</code>, <code>id</code>, <code>weight</code>, and <code>diffuse</code> parameters, using up-to-date <strong>rlang</strong> and <strong>tidyselect</strong> functionality.</li>
-<li>The <code>axes</code> parameter in <code><a href="../reference/alluvial-data.html">is_alluvia_form()</a></code> and <code><a href="../reference/alluvial-data.html">to_lodes_form()</a></code> now accepts <code><a href="https://dplyr.tidyverse.org/reference/vars.html">dplyr::vars()</a></code> objects, as in <code><a href="https://dplyr.tidyverse.org/reference/select_all.html">dplyr::select_at()</a></code>. Alternatively, variables can be fed to these functions as in <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code>, to be collected by <code><a href="https://rlang.r-lib.org/reference/nse-defuse.html">rlang::quos(...)</a></code> and used as axis variables. If <code>axes</code> is not <code>NULL</code>, then such additional arguments are ignored.</li>
+<li>The <code>axes</code> parameter in <code><a href="../reference/alluvial-data.html">is_alluvia_form()</a></code> and <code><a href="../reference/alluvial-data.html">to_lodes_form()</a></code> now accepts <code><a href="https://dplyr.tidyverse.org/reference/vars.html">dplyr::vars()</a></code> objects, as in <code><a href="https://dplyr.tidyverse.org/reference/select_all.html">dplyr::select_at()</a></code>. Alternatively, variables can be fed to these functions as in <code><a href="https://dplyr.tidyverse.org/reference/select.html">dplyr::select()</a></code>, to be collected by <code>rlang::quos(...)</code> and used as axis variables. If <code>axes</code> is not <code>NULL</code>, then such additional arguments are ignored.</li>
 <li>The functions <code>to_*_form()</code> now merge their internal reshapen data frames with the distilled or diffused variables in a consistent order, placing the distilled or diffused variables to the left.</li>
 </ul>
 </div>
