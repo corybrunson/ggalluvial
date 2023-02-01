@@ -1,8 +1,15 @@
 ## Test environments
 
-* local OS X install, R 4.0.0 (via `devtools::check()`)
-* Rhub (via `rhub::check_for_cran()`)
-* win-builder (devel, current, and previous; via `devtools::check_win_*()`)
+* local OS X install, R 4.2.1
+  * `devtools::check()`
+  * `devtools::check(env_vars = c('_R_CHECK_DEPENDS_ONLY_' = "true"))`
+* Win-Builder
+  * `devtools::check_win_oldrelease()`
+  * `devtools::check_win_release()`
+  * `devtools::check_win_devel()`
+* R-hub
+  * `rhub::check_for_cran()`
+  * `rhub::check_for_cran(platforms = "macos-highsierra-release-cran")`
 
 In response to a previous failed submission, **vdiffr** tests are now skipped on CRAN and when not installed, using `testthat::skip_*()`.
 

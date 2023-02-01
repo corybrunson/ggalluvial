@@ -260,6 +260,7 @@ ggplot(vaccinations,
   scale_alpha_discrete(range = c(.2, .6)) +
   guides(alpha = "none")
 
+\donttest{
 # aesthetics that vary betwween and within strata
 data(vaccinations)
 vaccinations$subgroup <- LETTERS[1:2][rbinom(
@@ -280,6 +281,7 @@ ggplot(vaccinations,
   scale_alpha_discrete(range = c(1/3, 2/3)) +
   geom_stratum(alpha = .5) +
   geom_text(stat = "stratum")
+}
 }
 \seealso{
 \code{\link[ggplot2:layer]{ggplot2::layer()}} for additional arguments and

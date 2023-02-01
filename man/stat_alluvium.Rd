@@ -286,7 +286,7 @@ ggplot(ggalluvial::majors,
   theme_bw() +
   scale_y_reverse()
 
-\dontrun{
+\donttest{
 # alluvium cementation examples
 gg <- ggplot(ggalluvial::majors,
              aes(x = semester, stratum = curriculum, alluvium = student,
@@ -308,7 +308,7 @@ gg +
             distill = function(x) paste(x, collapse = "; "))
 }
 
-\dontrun{
+\donttest{
 data(babynames, package = "babynames")
 # a discontiguous alluvium
 bn <- subset(babynames, prop >= .01 & sex == "F" & year > 1962 & year < 1968)

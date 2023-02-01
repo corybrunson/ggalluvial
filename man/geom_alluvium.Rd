@@ -216,6 +216,7 @@ gg + geom_alluvium(aes(fill = country, colour = country),
 gg + geom_alluvium(aes(fill = country, colour = country),
                    decreasing = NA, width = 0, knot.pos = 0)
 
+\donttest{
 # irregular spacing between axes of a continuous variable
 refugees_sub <- subset(alluvial::Refugees, year \%in\% c(2003, 2005, 2010, 2013))
 gg <- ggplot(data = refugees_sub,
@@ -245,6 +246,7 @@ gg +
                 alpha = .75, decreasing = FALSE, width = 1/2,
                 curve_type = "arctan", curve_range = 1) +
   geom_stratum(aes(stratum = country), decreasing = FALSE, width = 1/2)
+}
 }
 \seealso{
 \code{\link[ggplot2:layer]{ggplot2::layer()}} for additional arguments and

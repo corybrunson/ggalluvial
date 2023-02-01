@@ -34,6 +34,7 @@ ggplot(wph,
        aes(x = Year, alluvium = Region, y = Telephones)) +
   geom_flow(aes(fill = Region, colour = Region), width = 0, knot.prop = FALSE)
 
+\donttest{
 # rightward flow aesthetics for vaccine survey data, with cubic flows
 data(vaccinations)
 vaccinations$response <- factor(vaccinations$response,
@@ -54,3 +55,4 @@ ggplot(vaccinations,
   geom_text(stat = "flow",
             aes(label = after_stat(n),
                 hjust = (after_stat(flow) == "to")))
+}
