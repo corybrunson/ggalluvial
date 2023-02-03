@@ -3,7 +3,8 @@ title: "Tooltips for ggalluvial plots in Shiny apps"
 author: "Quentin D. Read"
 date: "`r Sys.Date()`"
 output:
-  rmarkdown::html_vignette
+  rmarkdown::html_vignette:
+    self_contained: no
 runtime: shiny
 vignette: >
   %\VignetteIndexEntry{ggalluvial in Shiny apps}
