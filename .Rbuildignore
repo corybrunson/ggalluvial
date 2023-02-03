@@ -28,4 +28,5 @@ paper.*
 ^_pkgdown\.yml$
 ^\.travis\.yml$
 cran-comments.md
+^CRAN-SUBMISSION$
 ^CRAN-RELEASE$
