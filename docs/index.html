@@ -29,6 +29,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -41,18 +43,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">ggalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.12.4</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="articles/ggalluvial.html">Get started</a>
 </li>
@@ -60,7 +56,7 @@
   <a href="reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -83,7 +79,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/corybrunson/ggalluvial/">
+  <a href="https://github.com/corybrunson/ggalluvial/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -100,129 +96,139 @@
 
       </header><div class="row">
   <div class="contents col-md-9">
-<div id="ggalluvial" class="section level1">
-<div class="page-header"><h1 class="hasAnchor">
-<a href="#ggalluvial" class="anchor"></a>ggalluvial</h1></div>
-
-<p>This is a <a href="https://exts.ggplot2.tidyverse.org/"><strong>ggplot2</strong> extension</a> for alluvial plots.</p>
-<div id="design" class="section level2">
-<h2 class="hasAnchor">
-<a href="#design" class="anchor"></a>Design</h2>
-<p>The alluvial plots implemented here can be used to visualize frequency distributions over time or frequency tables involving several categorical variables. The design is inspired by the <a href="https://github.com/mbojan/alluvial"><strong>alluvial</strong></a> package, but the <strong>ggplot2</strong> framework induced several conspicuous differences:</p>
+<div class="section level1">
+<div class="page-header"><h1 id="ggalluvial">ggalluvial<a class="anchor" aria-label="anchor" href="#ggalluvial"></a>
+</h1></div>
+<p><a href="https://travis-ci.org/corybrunson/ggalluvial" class="external-link"><img src="https://travis-ci.org/corybrunson/ggalluvial.svg?branch=main" alt="Travis"></a> <a href="https://cran.r-project.org/package=ggalluvial" class="external-link"><img src="http://www.r-pkg.org/badges/version/ggalluvial" alt="CRAN"></a> <a href="https://cran.r-project.org/package=ggalluvial" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/ggalluvial" alt="downloads"></a> <a href="https://doi.org/10.5281/zenodo.3836748" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.3836748.svg" alt="DOI"></a> <a href="https://doi.org/10.21105/joss.02017" class="external-link"><img src="https://joss.theoj.org/papers/10.21105/joss.02017/status.svg" alt="JOSS"></a></p>
+<p>This is a <a href="https://exts.ggplot2.tidyverse.org/" class="external-link"><strong>ggplot2</strong> extension</a> for alluvial plots.</p>
+<div class="section level2">
+<h2 id="design">Design<a class="anchor" aria-label="anchor" href="#design"></a>
+</h2>
+<p>The alluvial plots implemented here can be used to visualize frequency distributions over time or frequency tables involving several categorical variables. The design is inspired by the <a href="https://github.com/mbojan/alluvial" class="external-link"><strong>alluvial</strong></a> package, but the <strong>ggplot2</strong> framework induced several conspicuous differences:</p>
 <ul>
 <li>
 <strong>alluvial</strong> understands a variety of inputs (vectors, lists, data frames), whereas <strong>ggalluvial</strong> requires a single data frame;</li>
 <li>
-<strong>alluvial</strong> uses each variable of these inputs as a dimension of the data, whereas <strong>ggalluvial</strong> requires the user to specify the dimensions, either as separate aesthetics or as <a href="https://tidyr.tidyverse.org/">key-value pairs</a>;</li>
+<strong>alluvial</strong> uses each variable of these inputs as a dimension of the data, whereas <strong>ggalluvial</strong> requires the user to specify the dimensions, either as separate aesthetics or as <a href="https://tidyr.tidyverse.org/" class="external-link">key-value pairs</a>;</li>
 <li>
 <strong>alluvial</strong> produces both the <em>alluvia</em>, which link cohorts across multiple dimensions, and (what are here called) the <em>strata</em>, which partition the data along each dimension, in a single function; whereas <strong>ggalluvial</strong> relies on separate layers (stats and geoms) to produce strata, alluvia, and alluvial segments called <em>lodes</em> and <em>flows</em>.</li>
 </ul>
 <p>Additionally, <strong>ggalluvial</strong> arranges these layers vertically without gaps, so that the secondary plotting axis indicates the cumulative values of the strata at each dimension.</p>
 </div>
-<div id="installation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#installation" class="anchor"></a>Installation</h2>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
 <p>The latest stable release can be installed from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"ggalluvial"</span><span class="op">)</span></code></pre></div>
-<p>The <a href="https://github.com/corybrunson/ggalluvial/tree/cran"><code>cran</code> branch</a> will contain the version most recently submitted to <a href="https://cran.r-project.org/package=ggalluvial">CRAN</a>. It is duplicated in the <code>master</code> branch, from which source the <a href="https://corybrunson.github.io/ggalluvial/">website</a> is built.</p>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"ggalluvial"</span><span class="op">)</span></span></code></pre></div>
+<p>The <a href="https://github.com/corybrunson/ggalluvial/tree/cran" class="external-link"><code>cran</code> branch</a> will contain the version most recently submitted to <a href="https://cran.r-project.org/package=ggalluvial" class="external-link">CRAN</a>. It is duplicated in the <code>master</code> branch, from which source the <a href="https://corybrunson.github.io/ggalluvial/" class="external-link">website</a> is built.</p>
 <p>The development version can be installed from the (default) <code>main</code> branch on GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"corybrunson/ggalluvial@main"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"corybrunson/ggalluvial@main"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>Note that, in order to build the vignettes, the imported packages <strong>alluvial</strong>, <strong>ggfittext</strong>, and <strong>ggrepel</strong> must be installed. To skip this step, leave <code>build_vignettes</code> unspecified or set it to <code>FALSE</code>.</p>
-<p>The <a href="https://github.com/corybrunson/ggalluvial/tree/optimization"><code>optimization</code> branch</a> contains a development version with experimental functions to reduce the number or area of alluvial overlaps (see issue <a href="https://github.com/corybrunson/ggalluvial/issues/6">#6</a>). Install it as follows:</p>
+<p>The <a href="https://github.com/corybrunson/ggalluvial/tree/optimization" class="external-link"><code>optimization</code> branch</a> contains a development version with experimental functions to reduce the number or area of alluvial overlaps (see issue <a href="https://github.com/corybrunson/ggalluvial/issues/6" class="external-link">#6</a>). Install it as follows:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html">install_github</a></span><span class="op">(</span><span class="st">"corybrunson/ggalluvial"</span>, ref <span class="op">=</span> <span class="st">"optimization"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"corybrunson/ggalluvial"</span>, ref <span class="op">=</span> <span class="st">"optimization"</span><span class="op">)</span></span></code></pre></div>
 <p>Note, however, that this branch has not kept pace with the <code>main</code> branch or with recent upgrades on CRAN.</p>
 </div>
-<div id="usage" class="section level2">
-<h2 class="hasAnchor">
-<a href="#usage" class="anchor"></a>Usage</h2>
-<div id="example" class="section level3">
-<h3 class="hasAnchor">
-<a href="#example" class="anchor"></a>Example</h3>
+<div class="section level2">
+<h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
+</h2>
+<div class="section level3">
+<h3 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
+</h3>
 <p>Here is how to generate an alluvial plot representation of the multi-dimensional categorical dataset of passengers on the Titanic:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">titanic_wide</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">Titanic</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">titanic_wide</span><span class="op">)</span>
-<span class="co">#&gt;   Class    Sex   Age Survived Freq</span>
-<span class="co">#&gt; 1   1st   Male Child       No    0</span>
-<span class="co">#&gt; 2   2nd   Male Child       No    0</span>
-<span class="co">#&gt; 3   3rd   Male Child       No   35</span>
-<span class="co">#&gt; 4  Crew   Male Child       No    0</span>
-<span class="co">#&gt; 5   1st Female Child       No    0</span>
-<span class="co">#&gt; 6   2nd Female Child       No    0</span>
-<span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">titanic_wide</span>,
-       <span class="fu">aes</span><span class="op">(</span>axis1 <span class="op">=</span> <span class="va">Class</span>, axis2 <span class="op">=</span> <span class="va">Sex</span>, axis3 <span class="op">=</span> <span class="va">Age</span>,
-           y <span class="op">=</span> <span class="va">Freq</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">scale_x_discrete</span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Class"</span>, <span class="st">"Sex"</span>, <span class="st">"Age"</span><span class="op">)</span>, expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.2</span>, <span class="fl">.05</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">xlab</span><span class="op">(</span><span class="st">"Demographic"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="reference/geom_alluvium.html">geom_alluvium</a></span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">Survived</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="reference/geom_stratum.html">geom_stratum</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">geom_text</span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"stratum"</span>, <span class="fu">aes</span><span class="op">(</span>label <span class="op">=</span> <span class="fu">after_stat</span><span class="op">(</span><span class="va">stratum</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"passengers on the maiden voyage of the Titanic"</span>,
-          <span class="st">"stratified by demographics and survival"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">titanic_wide</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">Titanic</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">titanic_wide</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   Class    Sex   Age Survived Freq</span></span>
+<span><span class="co">#&gt; 1   1st   Male Child       No    0</span></span>
+<span><span class="co">#&gt; 2   2nd   Male Child       No    0</span></span>
+<span><span class="co">#&gt; 3   3rd   Male Child       No   35</span></span>
+<span><span class="co">#&gt; 4  Crew   Male Child       No    0</span></span>
+<span><span class="co">#&gt; 5   1st Female Child       No    0</span></span>
+<span><span class="co">#&gt; 6   2nd Female Child       No    0</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">titanic_wide</span>,</span>
+<span>       <span class="fu">aes</span><span class="op">(</span>axis1 <span class="op">=</span> <span class="va">Class</span>, axis2 <span class="op">=</span> <span class="va">Sex</span>, axis3 <span class="op">=</span> <span class="va">Age</span>,</span>
+<span>           y <span class="op">=</span> <span class="va">Freq</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">scale_x_discrete</span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Class"</span>, <span class="st">"Sex"</span>, <span class="st">"Age"</span><span class="op">)</span>, expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.2</span>, <span class="fl">.05</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">xlab</span><span class="op">(</span><span class="st">"Demographic"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/geom_alluvium.html">geom_alluvium</a></span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">Survived</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/geom_stratum.html">geom_stratum</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">geom_text</span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"stratum"</span>, <span class="fu">aes</span><span class="op">(</span>label <span class="op">=</span> <span class="fu">after_stat</span><span class="op">(</span><span class="va">stratum</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"passengers on the maiden voyage of the Titanic"</span>,</span>
+<span>          <span class="st">"stratified by demographics and survival"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-6-1.png"><!-- --></p>
 <p>The data is in “wide” format, but <strong>ggalluvial</strong> also recognizes data in “long” format and can convert between the two:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">titanic_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/alluvial-data.html">to_lodes_form</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span><span class="va">Titanic</span><span class="op">)</span>,
-                              key <span class="op">=</span> <span class="st">"Demographic"</span>,
-                              axes <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span>
-<span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">titanic_long</span><span class="op">)</span>
-<span class="co">#&gt;   Survived Freq alluvium Demographic stratum</span>
-<span class="co">#&gt; 1       No    0        1       Class     1st</span>
-<span class="co">#&gt; 2       No    0        2       Class     2nd</span>
-<span class="co">#&gt; 3       No   35        3       Class     3rd</span>
-<span class="co">#&gt; 4       No    0        4       Class    Crew</span>
-<span class="co">#&gt; 5       No    0        5       Class     1st</span>
-<span class="co">#&gt; 6       No    0        6       Class     2nd</span>
-<span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">titanic_long</span>,
-       <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Demographic</span>, stratum <span class="op">=</span> <span class="va">stratum</span>, alluvium <span class="op">=</span> <span class="va">alluvium</span>,
-           y <span class="op">=</span> <span class="va">Freq</span>, label <span class="op">=</span> <span class="va">stratum</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="reference/geom_alluvium.html">geom_alluvium</a></span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">Survived</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="reference/geom_stratum.html">geom_stratum</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_text</span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"stratum"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"passengers on the maiden voyage of the Titanic"</span>,
-          <span class="st">"stratified by demographics and survival"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">titanic_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/alluvial-data.html">to_lodes_form</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">Titanic</span><span class="op">)</span>,</span>
+<span>                              key <span class="op">=</span> <span class="st">"Demographic"</span>,</span>
+<span>                              axes <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">titanic_long</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   Survived Freq alluvium Demographic stratum</span></span>
+<span><span class="co">#&gt; 1       No    0        1       Class     1st</span></span>
+<span><span class="co">#&gt; 2       No    0        2       Class     2nd</span></span>
+<span><span class="co">#&gt; 3       No   35        3       Class     3rd</span></span>
+<span><span class="co">#&gt; 4       No    0        4       Class    Crew</span></span>
+<span><span class="co">#&gt; 5       No    0        5       Class     1st</span></span>
+<span><span class="co">#&gt; 6       No    0        6       Class     2nd</span></span>
+<span><span class="fu">ggplot</span><span class="op">(</span>data <span class="op">=</span> <span class="va">titanic_long</span>,</span>
+<span>       <span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">Demographic</span>, stratum <span class="op">=</span> <span class="va">stratum</span>, alluvium <span class="op">=</span> <span class="va">alluvium</span>,</span>
+<span>           y <span class="op">=</span> <span class="va">Freq</span>, label <span class="op">=</span> <span class="va">stratum</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/geom_alluvium.html">geom_alluvium</a></span><span class="op">(</span><span class="fu">aes</span><span class="op">(</span>fill <span class="op">=</span> <span class="va">Survived</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="reference/geom_stratum.html">geom_stratum</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> <span class="fu">geom_text</span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"stratum"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"passengers on the maiden voyage of the Titanic"</span>,</span>
+<span>          <span class="st">"stratified by demographics and survival"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-7-1.png"><!-- --></p>
 </div>
-<div id="documentation" class="section level3">
-<h3 class="hasAnchor">
-<a href="#documentation" class="anchor"></a>Documentation</h3>
+<div class="section level3">
+<h3 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
+</h3>
 <p>For detailed discussion of the data formats recognized by <strong>ggalluvial</strong> and several examples that illustrate its flexibility and limitations, read the technical vignette:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html">vignette</a></span><span class="op">(</span>topic <span class="op">=</span> <span class="st">"ggalluvial"</span>, package <span class="op">=</span> <span class="st">"ggalluvial"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span>topic <span class="op">=</span> <span class="st">"ggalluvial"</span>, package <span class="op">=</span> <span class="st">"ggalluvial"</span><span class="op">)</span></span></code></pre></div>
 <p>Several additional vignettes offer detailed solutions to specific needs:</p>
 <ul>
 <li>“Labeling small strata” (<code>"labels"</code>) for how to elegantly label strata of a wide range of heights in an alluvial plot;</li>
 <li>“The Order of the Rectangles” (<code>"order-rectangles"</code>) for how to control the positioning of strata and lodes in an alluvial plot; and</li>
 <li>“Tooltips for ggalluvial plots in Shiny apps” (<code>"shiny"</code>) for how to incorporate alluvial plots into interactive apps.</li>
 </ul>
-<p>The object documentation includes several more examples. Use <code>help()</code> to call forth more detail on</p>
+<p>The object documentation includes several more examples. Use <code><a href="https://rdrr.io/r/utils/help.html" class="external-link">help()</a></code> to call forth more detail on</p>
 <ul>
 <li>any layer (<code>stat_*</code> or <code>geom_*</code>),</li>
 <li>the conversion functions (<code>to_*_form</code>), and</li>
 <li>the data sets installed with the package (<code>vaccinations</code> and <code>majors</code>).</li>
 </ul>
 </div>
+<div class="section level3">
+<h3 id="short-form">Short form<a class="anchor" aria-label="anchor" href="#short-form"></a>
+</h3>
+<p>For some more digestible guidance on using <strong>ggalluvial</strong>, check out three cheat sheets and demos by students in Joyce Robbins’s <a href="https://jtr13.github.io/cc21fall2/index.html" class="external-link">Exploratory Data Analysis and Visualization Community Contribution Project</a>:</p>
+<ul>
+<li>an <a href="https://jtr13.github.io/cc21fall2/ggalluvial-cheatsheet.html" class="external-link">introduction</a> by Meggie Wen (Chapter 33)</li>
+<li>a <a href="https://cheatography.com/seleven/cheat-sheets/ggalluvial/" class="external-link">cheat sheet</a> by Qingyi Zhang (Chapter 14)</li>
+<li>a <a href="https://medium.com/@arnavsaxena96/all-about-alluvial-diagrams-21da1505520b" class="external-link">blog about how this package implements alluvial plots</a> by Arnav Saxena (Chapter 134)</li>
+</ul>
 </div>
-<div id="acknowledgments" class="section level2">
-<h2 class="hasAnchor">
-<a href="#acknowledgments" class="anchor"></a>Acknowledgments</h2>
-<div id="resources" class="section level3">
-<h3 class="hasAnchor">
-<a href="#resources" class="anchor"></a>Resources</h3>
-<p>Development of this package benefitted from the use of equipment and the support of colleagues at <a href="https://health.uconn.edu/">UConn Health</a> and at <a href="https://ufhealth.org/">UF Health</a>.</p>
 </div>
-<div id="contribute" class="section level3">
-<h3 class="hasAnchor">
-<a href="#contribute" class="anchor"></a>Contribute</h3>
-<p>Contributions in any form are more than welcome! Pretty much every fix and feature of this package derives from a problem or question posed by someone with datasets or design goals i hadn’t anticipated. See the <a href="https://github.com/corybrunson/ggalluvial/blob/main/CONTRIBUTING.md">CONTRIBUTING</a> file for guidance, and please respect the <a href="https://github.com/corybrunson/ggalluvial/blob/main/CODE_OF_CONDUCT.md">Code of Conduct</a>.</p>
+<div class="section level2">
+<h2 id="acknowledgments">Acknowledgments<a class="anchor" aria-label="anchor" href="#acknowledgments"></a>
+</h2>
+<div class="section level3">
+<h3 id="resources">Resources<a class="anchor" aria-label="anchor" href="#resources"></a>
+</h3>
+<p>Development of this package benefitted from the use of equipment and the support of colleagues at <a href="https://health.uconn.edu/" class="external-link">UConn Health</a> and at <a href="https://ufhealth.org/" class="external-link">UF Health</a>.</p>
 </div>
-<div id="cite" class="section level3">
-<h3 class="hasAnchor">
-<a href="#cite" class="anchor"></a>Cite</h3>
+<div class="section level3">
+<h3 id="contribute">Contribute<a class="anchor" aria-label="anchor" href="#contribute"></a>
+</h3>
+<p>Contributions in any form are more than welcome! Pretty much every fix and feature of this package derives from a problem or question posed by someone with datasets or design goals i hadn’t anticipated. See the <a href="https://github.com/corybrunson/ggalluvial/blob/main/CONTRIBUTING.md" class="external-link">CONTRIBUTING</a> file for guidance, and please respect the <a href="https://github.com/corybrunson/ggalluvial/blob/main/CODE_OF_CONDUCT.md" class="external-link">Code of Conduct</a>.</p>
+</div>
+<div class="section level3">
+<h3 id="cite">Cite<a class="anchor" aria-label="anchor" href="#cite"></a>
+</h3>
 <p>If you use <strong>ggalluvial</strong>-generated figures in publication, i’d be grateful to hear about it! You can also cite the package according to <code>citation("ggalluvial")</code>.</p>
 </div>
 </div>
@@ -231,63 +237,58 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2>Links</h2>
+<h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=ggalluvial">https://​cloud.r-project.org/​package=ggalluvial</a>
-</li>
-<li>Browse source code at <br><a href="https://github.com/corybrunson/ggalluvial/">https://​github.com/​corybrunson/​ggalluvial/​</a>
-</li>
-<li>Report a bug at <br><a href="https://github.com/corybrunson/ggalluvial/issues">https://​github.com/​corybrunson/​ggalluvial/​issues</a>
-</li>
+<li><a href="https://cloud.r-project.org/package=ggalluvial" class="external-link">View on CRAN</a></li>
+<li><a href="https://github.com/corybrunson/ggalluvial/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/corybrunson/ggalluvial/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
+
 <div class="license">
-<h2>License</h2>
+<h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-3">GPL-3</a></li>
+<li><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></li>
 </ul>
 </div>
+
 <div class="community">
-<h2>Community</h2>
+<h2 data-toc-skip>Community</h2>
 <ul class="list-unstyled">
 <li><a href="CONTRIBUTING.html">Contributing guide</a></li>
 <li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
 </ul>
 </div>
+
 <div class="citation">
-<h2>Citation</h2>
+<h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li><a href="authors.html">Citing ggalluvial</a></li>
+<li><a href="authors.html#citation">Citing ggalluvial</a></li>
 </ul>
 </div>
+
 <div class="developers">
-<h2>Developers</h2>
+<h2 data-toc-skip>Developers</h2>
 <ul class="list-unstyled">
 <li>Jason Cory Brunson <br><small class="roles"> Author, maintainer </small>  </li>
 <li>Quentin D. Read <br><small class="roles"> Author </small>  </li>
 </ul>
 </div>
 
-  <div class="dev-status">
-<h2>Dev status</h2>
-<ul class="list-unstyled">
-<li><a href="https://travis-ci.org/corybrunson/ggalluvial"><img src="https://travis-ci.org/corybrunson/ggalluvial.svg?branch=main" alt="Travis"></a></li>
-<li><a href="https://cran.r-project.org/package=ggalluvial"><img src="http://www.r-pkg.org/badges/version/ggalluvial" alt="CRAN"></a></li>
-<li><a href="https://cran.r-project.org/package=ggalluvial"><img src="https://cranlogs.r-pkg.org/badges/ggalluvial" alt="downloads"></a></li>
-<li><a href="https://doi.org/10.5281/zenodo.3836748"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.3836748.svg" alt="DOI"></a></li>
-<li><a href="https://doi.org/10.21105/joss.02017"><img src="https://joss.theoj.org/papers/10.21105/joss.02017/status.svg" alt="JOSS"></a></li>
-</ul>
-</div>
-</div>
+
+
+  </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p>Developed by Jason Cory Brunson, Quentin D. Read.</p>
+  <p></p>
+<p>Developed by Jason Cory Brunson, Quentin D. Read.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
@@ -295,6 +296,8 @@
 
   
 
+
+  
 
   </body>
 </html>

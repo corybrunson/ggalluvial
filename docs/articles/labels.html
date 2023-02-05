@@ -19,6 +19,8 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
+    
+
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -31,18 +33,12 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ggalluvial</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.12.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.12.4</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
-</li>
 <li>
   <a href="../articles/ggalluvial.html">Get started</a>
 </li>
@@ -50,7 +46,7 @@
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
     Articles
      
     <span class="caret"></span>
@@ -73,7 +69,7 @@
       </ul>
 <ul class="nav navbar-nav navbar-right">
 <li>
-  <a href="https://github.com/corybrunson/ggalluvial/">
+  <a href="https://github.com/corybrunson/ggalluvial/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
      
   </a>
@@ -88,364 +84,409 @@
 
       
 
-      </header><script src="labels_files/header-attrs-2.11/header-attrs.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Labeling small strata</h1>
-                        <h4 class="author">Jason Cory Brunson</h4>
+                        <h4 data-toc-skip class="author">Jason Cory
+Brunson</h4>
             
-            <h4 class="date">2022-01-09</h4>
+            <h4 data-toc-skip class="date">2023-02-05</h4>
       
-      <small class="dont-index">Source: <a href="https://github.com/corybrunson/ggalluvial/blob/master/vignettes/labels.rmd"><code>vignettes/labels.rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/corybrunson/ggalluvial/blob/HEAD/vignettes/labels.rmd" class="external-link"><code>vignettes/labels.rmd</code></a></small>
       <div class="hidden name"><code>labels.rmd</code></div>
 
     </div>
 
     
     
-<div id="setup" class="section level2">
-<h2 class="hasAnchor">
-<a href="#setup" class="anchor"></a>Setup</h2>
-<p>This brief vignette uses the <code>vaccinations</code> dataset included in <strong>ggalluvial</strong>. As in <a href="http://corybrunson.github.io/ggalluvial/articles/ggalluvial.html">the technical introduction</a>, the order of the levels is reversed to be more intuitive. Objects from other <strong>ggplot2</strong> extensions are accessed via <code>::</code> and <code>:::</code>.</p>
+<div class="section level2">
+<h2 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
+</h2>
+<p>This brief vignette uses the <code>vaccinations</code> dataset
+included in {ggalluvial}. As in <a href="http://corybrunson.github.io/ggalluvial/articles/ggalluvial.html" class="external-link">the
+technical introduction</a>, the order of the levels is reversed to be
+more intuitive. Objects from other {ggplot2} extensions are accessed via
+<code>::</code> and <code>:::</code>.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">knitr</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html">opts_chunk</a></span><span class="op">$</span><span class="fu">set</span><span class="op">(</span>fig.width <span class="op">=</span> <span class="fl">6</span>, fig.height <span class="op">=</span> <span class="fl">4</span>, fig.align <span class="op">=</span> <span class="st">"center"</span><span class="op">)</span>
-<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://corybrunson.github.io/ggalluvial/">ggalluvial</a></span><span class="op">)</span></code></pre></div>
-<pre><code>## Loading required package: ggplot2</code></pre>
+<code class="sourceCode R"><span><span class="fu">knitr</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/knitr/man/opts_chunk.html" class="external-link">opts_chunk</a></span><span class="op">$</span><span class="fu">set</span><span class="op">(</span>fig.width <span class="op">=</span> <span class="fl">6</span>, fig.height <span class="op">=</span> <span class="fl">4</span>, fig.align <span class="op">=</span> <span class="st">"center"</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="http://corybrunson.github.io/ggalluvial/" class="external-link">ggalluvial</a></span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Loading required package: ggplot2</span></span></code></pre>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">vaccinations</span><span class="op">)</span>
-<span class="va">vaccinations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html">transform</a></span><span class="op">(</span><span class="va">vaccinations</span>,
-                          response <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">response</span>, <span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">response</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">vaccinations</span><span class="op">)</span></span>
+<span><span class="va">vaccinations</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/transform.html" class="external-link">transform</a></span><span class="op">(</span><span class="va">vaccinations</span>,</span>
+<span>                          response <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">response</span>, <span class="fu"><a href="https://rdrr.io/r/base/rev.html" class="external-link">rev</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/levels.html" class="external-link">levels</a></span><span class="op">(</span><span class="va">response</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="problem" class="section level2">
-<h2 class="hasAnchor">
-<a href="#problem" class="anchor"></a>Problem</h2>
-<p>The issue on the table: Strata are most helpful when they’re overlaid with text labels. Yet the strata often vary in height, and the labels in length, to such a degree that fitting the text inside the strata at a uniform size renders them illegible. In principle, the user could treat <code>size</code> as a variable aesthetic and manually fit text to strata, but this is cumbersome, and doesn’t help anyway in cases where large text is needed.</p>
-<p>To illustrate the problem, check out the plot below. It’s by no means an egregious case, but it’ll do. (For a more practical example, see <a href="https://stackoverflow.com/questions/50720718/labelling-and-theme-of-ggalluvial-plot-in-r">this question on StackOverflow</a>, which prompted this vignette.)</p>
+<div class="section level2">
+<h2 id="problem">Problem<a class="anchor" aria-label="anchor" href="#problem"></a>
+</h2>
+<p>The issue on the table: Strata are most helpful when they’re overlaid
+with text labels. Yet the strata often vary in height, and the labels in
+length, to such a degree that fitting the text inside the strata at a
+uniform size renders them illegible. In principle, the user could treat
+<code>size</code> as a variable aesthetic and manually fit text to
+strata, but this is cumbersome, and doesn’t help anyway in cases where
+large text is needed.</p>
+<p>To illustrate the problem, check out the plot below. It’s by no means
+an egregious case, but it’ll do. (For a more practical example, see <a href="https://stackoverflow.com/questions/50720718/labelling-and-theme-of-ggalluvial-plot-in-r" class="external-link">this
+question on StackOverflow</a>, which prompted this vignette.)</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">vaccinations</span>,
-       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">survey</span>, stratum <span class="op">=</span> <span class="va">response</span>, alluvium <span class="op">=</span> <span class="va">subject</span>, y <span class="op">=</span> <span class="va">freq</span>,
-           fill <span class="op">=</span> <span class="va">response</span>, label <span class="op">=</span> <span class="va">response</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html">scale_x_discrete</a></span><span class="op">(</span>expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="../reference/geom_flow.html">geom_flow</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">.5</span>, width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">geom_text</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"stratum"</span>, size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"vaccination survey responses"</span>, <span class="st">"labeled using `geom_text()`"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">vaccinations</span>,</span>
+<span>       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">survey</span>, stratum <span class="op">=</span> <span class="va">response</span>, alluvium <span class="op">=</span> <span class="va">subject</span>, y <span class="op">=</span> <span class="va">freq</span>,</span>
+<span>           fill <span class="op">=</span> <span class="va">response</span>, label <span class="op">=</span> <span class="va">response</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html" class="external-link">scale_x_discrete</a></span><span class="op">(</span>expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_flow.html">geom_flow</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">.5</span>, width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"stratum"</span>, size <span class="op">=</span> <span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"vaccination survey responses"</span>, <span class="st">"labeled using `geom_text()`"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="labels_files/figure-html/raw-1.png" width="576" style="display: block; margin: auto;"></p>
-<div id="fix" class="section level3">
-<h3 class="hasAnchor">
-<a href="#fix" class="anchor"></a>Fix</h3>
-<p>One option is to simply omit those labels that don’t fit within their strata. In response to <a href="https://github.com/corybrunson/ggalluvial/issues/27">an issue</a>, <code>v0.9.2</code> includes parameters in <code><a href="../reference/stat_stratum.html">stat_stratum()</a></code> to exclude strata outside a specified height range; while few would use this to omit the rectangles themselves, it can be used in tandem with <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">geom_text()</a></code> to shirk this problem, at least when the labels are concise:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">vaccinations</span>,
-       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">survey</span>, stratum <span class="op">=</span> <span class="va">response</span>, alluvium <span class="op">=</span> <span class="va">subject</span>, y <span class="op">=</span> <span class="va">freq</span>,
-           fill <span class="op">=</span> <span class="va">response</span>, label <span class="op">=</span> <span class="va">response</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html">scale_x_discrete</a></span><span class="op">(</span>expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="../reference/geom_flow.html">geom_flow</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">.5</span>, width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">geom_text</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"stratum"</span>, size <span class="op">=</span> <span class="fl">4</span>, min.y <span class="op">=</span> <span class="fl">100</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span>
-    <span class="st">"vaccination survey responses"</span>,
-    <span class="st">"labeled using `geom_text()` with `min.y = 100`"</span>
-  <span class="op">)</span></code></pre></div>
-<p><img src="labels_files/figure-html/omit-1.png" width="576" style="display: block; margin: auto;"></p>
-<p>This is a useful fix for some cases. Still, if the goal is a publication-ready graphic, then it reaffirms the need for more adaptable and elegant solutions. Fortunately, two wonderful packages deliver with, shall we say, flowing colors.</p>
-</div>
-</div>
-<div id="solutions" class="section level2">
-<h2 class="hasAnchor">
-<a href="#solutions" class="anchor"></a>Solutions</h2>
-<p>Two <strong>ggplot2</strong> extensions are well-suited to this problem: <a href="https://github.com/slowkow/ggrepel"><strong>ggrepel</strong></a> and <a href="https://github.com/wilkox/ggfittext"><strong>ggfittext</strong></a>. They provide new geom layers that use the output of existing stat layers to situate text: <code><a href="https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html">ggrepel::geom_text_repel()</a></code> takes the same aesthetics as <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">ggplot2::geom_text()</a></code>, namely <code>x</code>, <code>y</code>, and <code>label</code>. In contrast, <code><a href="https://wilkox.org/ggfittext/reference/geom_fit_text.html">ggfittext::geom_fit_text()</a></code> only specifically requires <code>label</code> but also needs enough information to determine the rectangle that will contain the text. This can be encoded as <code>xmin</code> and <code>xmax</code> or as <code>x</code> and <code>width</code> for the horizontal direction, and as <code>ymin</code> and <code>ymax</code> or as <code>y</code> and <code>height</code> for the vertical direction. Conveniently, <code><a href="../reference/stat_stratum.html">ggalluvial::stat_stratum()</a></code> produces more than enough information for both geoms, including <code>x</code>, <code>xmin</code>, <code>xmax</code>, and their vertical counterparts.</p>
-<p>All this can be gleaned from the <code>ggproto</code> objects that construct the layers:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu">ggrepel</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/ggrepel/man/ggrepel-ggproto.html">GeomTextRepel</a></span><span class="op">$</span><span class="va">required_aes</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] "x"     "y"     "label"</code></pre>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu">ggfittext</span><span class="fu">:::</span><span class="va">GeomFitText</span><span class="op">$</span><span class="va">required_aes</span><span class="op">)</span></code></pre></div>
-<pre><code>## [1] "label"</code></pre>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu">ggfittext</span><span class="fu">:::</span><span class="va">GeomFitText</span><span class="op">$</span><span class="va">setup_data</span><span class="op">)</span></code></pre></div>
-<pre><code>## &lt;ggproto method&gt;
-##   &lt;Wrapper function&gt;
-##     function (...) 
-## f(...)
-## 
-##   &lt;Inner function (f)&gt;
-##     function (data, params) 
-## {
-##     if (!(("xmin" %in% names(data) &amp; "xmax" %in% names(data)) | 
-##         ("x" %in% names(data)))) {
-##         stop("geom_fit_text needs either 'xmin' and 'xmax', or 'x'", 
-##             .call = FALSE)
-##     }
-##     if (!("ymin" %in% names(data) &amp; "ymax" %in% names(data) | 
-##         "y" %in% names(data))) {
-##         stop("geom_fit_text needs either 'ymin' and 'ymax', or 'y'", 
-##             .call = FALSE)
-##     }
-##     if ((!is.null(params$width)) &amp; (!"unit" %in% class(params$width))) {
-##         data$xmin &lt;- data$x - params$width/2
-##         data$xmax &lt;- data$x + params$width/2
-##     }
-##     if ((!is.null(params$height)) &amp; (!"unit" %in% class(params$height))) {
-##         data$ymin &lt;- data$y - params$height/2
-##         data$ymax &lt;- data$y + params$height/2
-##     }
-##     if (is.null(params$width) &amp; !"xmin" %in% names(data)) {
-##         data$width &lt;- ggplot2::resolution(data$x, FALSE) * 0.9
-##         data$xmin &lt;- data$x - data$width/2
-##         data$xmax &lt;- data$x + data$width/2
-##         data$width &lt;- NULL
-##     }
-##     if (is.null(params$height) &amp; !"ymin" %in% names(data)) {
-##         data$height &lt;- ggplot2::resolution(data$y, FALSE) * 0.9
-##         data$ymin &lt;- data$y - data$height/2
-##         data$ymax &lt;- data$y + data$height/2
-##         data$height &lt;- NULL
-##     }
-##     if (!is.null(params$formatter)) {
-##         if (!is.function(params$formatter)) {
-##             stop("`formatter` must be a function")
-##         }
-##         formatted_labels &lt;- sapply(data$label, params$formatter, 
-##             USE.NAMES = FALSE)
-##         if ((!length(formatted_labels) == length(data$label)) | 
-##             (!is.character(formatted_labels))) {
-##             stop("`formatter` must produce a character vector of same length as input")
-##         }
-##         data$label &lt;- formatted_labels
-##     }
-##     data
-## }</code></pre>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">StatStratum</span><span class="op">$</span><span class="va">compute_panel</span><span class="op">)</span></code></pre></div>
-<pre><code>## &lt;ggproto method&gt;
-##   &lt;Wrapper function&gt;
-##     function (...) 
-## f(..., self = self)
-## 
-##   &lt;Inner function (f)&gt;
-##     function (self, data, scales, decreasing = NULL, reverse = NULL, 
-##     absolute = NULL, discern = FALSE, distill = first, negate.strata = NULL, 
-##     infer.label = FALSE, label.strata = NULL, min.y = NULL, max.y = NULL, 
-##     min.height = NULL, max.height = NULL) 
-## {
-##     if (is.null(decreasing)) 
-##         decreasing &lt;- ggalluvial_opt("decreasing")
-##     if (is.null(reverse)) 
-##         reverse &lt;- ggalluvial_opt("reverse")
-##     if (is.null(absolute)) 
-##         absolute &lt;- ggalluvial_opt("absolute")
-##     if (!is.null(label.strata)) {
-##         defunct_parameter("label.strata", msg = "use `aes(label = after_stat(stratum))`.")
-##         infer.label &lt;- label.strata
-##     }
-##     if (infer.label) {
-##         deprecate_parameter("infer.label", msg = "Use `aes(label = after_stat(stratum))`.")
-##         if (is.null(data$label)) {
-##             data$label &lt;- data$stratum
-##         }
-##         else {
-##             warning("Aesthetic `label` is specified, ", "so parameter `infer.label` will be ignored.")
-##         }
-##     }
-##     diff_aes &lt;- intersect(c(.color_diff_aesthetics, .text_aesthetics), 
-##         names(data))
-##     data$yneg &lt;- data$y &lt; 0
-##     data$lode &lt;- data$alluvium
-##     distill &lt;- distill_fun(distill)
-##     weight &lt;- data$weight
-##     data$weight &lt;- NULL
-##     if (is.null(weight)) 
-##         weight &lt;- 1
-##     data$n &lt;- weight
-##     data$count &lt;- data$y * weight
-##     by_vars &lt;- c("x", "yneg", "stratum")
-##     only_vars &lt;- c(diff_aes)
-##     sum_vars &lt;- c("y", "n", "count")
-##     if (!is.null(data$lode)) {
-##         agg_lode &lt;- stats::aggregate(data[, "lode", drop = FALSE], 
-##             data[, by_vars], distill)
-##     }
-##     if (length(only_vars) &gt; 0) {
-##         agg_only &lt;- stats::aggregate(data[, only_vars, drop = FALSE], 
-##             data[, by_vars], only)
-##     }
-##     data &lt;- stats::aggregate(data[, sum_vars], data[, by_vars], 
-##         sum)
-##     if (!is.null(data$lode)) {
-##         data &lt;- merge(data, agg_lode)
-##     }
-##     if (length(only_vars) &gt; 0) {
-##         data &lt;- merge(data, agg_only)
-##     }
-##     data &lt;- subset(data, y != 0)
-##     data &lt;- deposit_data(data, decreasing, reverse, absolute)
-##     x_sums &lt;- tapply(abs(data$count), data$x, sum, na.rm = TRUE)
-##     data$prop &lt;- data$count/x_sums[match(as.character(data$x), 
-##         names(x_sums))]
-##     data &lt;- data[with(data, order(deposit)), , drop = FALSE]
-##     data$ycum &lt;- NA
-##     for (xx in unique(data$x)) {
-##         for (yn in c(FALSE, TRUE)) {
-##             ww &lt;- which(data$x == xx &amp; data$yneg == yn)
-##             data$ycum[ww] &lt;- cumulate(data$y[ww])
-##         }
-##     }
-##     data$ymin &lt;- data$ycum - abs(data$y)/2
-##     data$ymax &lt;- data$ycum + abs(data$y)/2
-##     data$y &lt;- data$ycum
-##     data$yneg &lt;- NULL
-##     data$ycum &lt;- NULL
-##     if (!is.null(min.height)) {
-##         deprecate_parameter("min.height", "min.y")
-##         min.y &lt;- min.height
-##     }
-##     if (!is.null(max.height)) {
-##         deprecate_parameter("max.height", "max.y")
-##         max.y &lt;- max.height
-##     }
-##     if (!is.null(min.y)) 
-##         data &lt;- subset(data, ymax - ymin &gt;= min.y)
-##     if (!is.null(max.y)) 
-##         data &lt;- subset(data, ymax - ymin &lt;= max.y)
-##     data
-## }</code></pre>
-<p>I reached the specific solutions through trial and error. They may not be the best tricks for most cases, but they demonstrate what these packages can do. For many more examples, see the respective package vignettes: <a href="https://CRAN.R-project.org/package=ggrepel/vignettes/ggrepel.html">for <strong>ggrepel</strong></a>, and <a href="https://CRAN.R-project.org/package=ggfittext/vignettes/introduction-to-ggfittext.html">for <strong>ggfittext</strong></a>.</p>
-<div id="solution-1-ggrepel" class="section level3">
-<h3 class="hasAnchor">
-<a href="#solution-1-ggrepel" class="anchor"></a>Solution 1: <strong>ggrepel</strong>
+<div class="section level3">
+<h3 id="fix">Fix<a class="anchor" aria-label="anchor" href="#fix"></a>
 </h3>
-<p><strong>ggrepel</strong> is most often (in my experience) used to repel text away from symbols in a scatterplot, in whatever directions prevent them from overlapping the symbols and each other. In this case, however, it makes much more sense to align them vertically a fixed horizontal distance (<code>nudge_x</code>) away from the strata and repel them vertically from each other (<code>direction = "y"</code>) just enough to print them without overlap. It takes an extra bit of effort to render text <em>only</em> for the strata at the first (or at the last) axis, but the result is worth it.</p>
+<p>One option is to simply omit those labels that don’t fit within their
+strata. In response to <a href="https://github.com/corybrunson/ggalluvial/issues/27" class="external-link">an issue</a>,
+<code>v0.9.2</code> includes parameters in <code><a href="../reference/stat_stratum.html">stat_stratum()</a></code>
+to exclude strata outside a specified height range; while few would use
+this to omit the rectangles themselves, it can be used in tandem with
+<code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text()</a></code> to shirk this problem, at least when the labels
+are concise:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">vaccinations</span>,</span>
+<span>       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">survey</span>, stratum <span class="op">=</span> <span class="va">response</span>, alluvium <span class="op">=</span> <span class="va">subject</span>, y <span class="op">=</span> <span class="va">freq</span>,</span>
+<span>           fill <span class="op">=</span> <span class="va">response</span>, label <span class="op">=</span> <span class="va">response</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html" class="external-link">scale_x_discrete</a></span><span class="op">(</span>expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_flow.html">geom_flow</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">.5</span>, width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">geom_text</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"stratum"</span>, size <span class="op">=</span> <span class="fl">4</span>, min.y <span class="op">=</span> <span class="fl">100</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span></span>
+<span>    <span class="st">"vaccination survey responses"</span>,</span>
+<span>    <span class="st">"labeled using `geom_text()` with `min.y = 100`"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<p><img src="labels_files/figure-html/omit-1.png" width="576" style="display: block; margin: auto;"></p>
+<p>This is a useful fix for some cases. Still, if the goal is a
+publication-ready graphic, then it reaffirms the need for more adaptable
+and elegant solutions. Fortunately, two wonderful packages deliver with,
+shall we say, flowing colors.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="solutions">Solutions<a class="anchor" aria-label="anchor" href="#solutions"></a>
+</h2>
+<p>Two {ggplot2} extensions are well-suited to this problem: <a href="https://github.com/slowkow/ggrepel" class="external-link">{ggrepel}</a> and <a href="https://github.com/wilkox/ggfittext" class="external-link">{ggfittext}</a>. They provide
+new geom layers that use the output of existing stat layers to situate
+text: <code><a href="https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html" class="external-link">ggrepel::geom_text_repel()</a></code> takes the same aesthetics
+as <code><a href="https://ggplot2.tidyverse.org/reference/geom_text.html" class="external-link">ggplot2::geom_text()</a></code>, namely <code>x</code>,
+<code>y</code>, and <code>label</code>. In contrast,
+<code><a href="https://wilkox.org/ggfittext/reference/geom_fit_text.html" class="external-link">ggfittext::geom_fit_text()</a></code> only specifically requires
+<code>label</code> but also needs enough information to determine the
+rectangle that will contain the text. This can be encoded as
+<code>xmin</code> and <code>xmax</code> or as <code>x</code> and
+<code>width</code> for the horizontal direction, and as
+<code>ymin</code> and <code>ymax</code> or as <code>y</code> and
+<code>height</code> for the vertical direction. Conveniently,
+<code><a href="../reference/stat_stratum.html">ggalluvial::stat_stratum()</a></code> produces more than enough
+information for both geoms, including <code>x</code>, <code>xmin</code>,
+<code>xmax</code>, and their vertical counterparts.</p>
+<p>All this can be gleaned from the <code>ggproto</code> objects that
+construct the layers:</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">ggrepel</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/ggrepel/man/ggrepel.html" class="external-link">GeomTextRepel</a></span><span class="op">$</span><span class="va">required_aes</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "x"     "y"     "label"</span></span></code></pre>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">ggfittext</span><span class="fu">:::</span><span class="va">GeomFitText</span><span class="op">$</span><span class="va">required_aes</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## [1] "label"</span></span></code></pre>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu">ggfittext</span><span class="fu">:::</span><span class="va">GeomFitText</span><span class="op">$</span><span class="va">setup_data</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## &lt;ggproto method&gt;</span></span>
+<span><span class="co">##   &lt;Wrapper function&gt;</span></span>
+<span><span class="co">##     function (...) </span></span>
+<span><span class="co">## setup_data(...)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##   &lt;Inner function (f)&gt;</span></span>
+<span><span class="co">##     function (data, params) </span></span>
+<span><span class="co">## {</span></span>
+<span><span class="co">##     if (!(("xmin" %in% names(data) &amp; "xmax" %in% names(data)) | </span></span>
+<span><span class="co">##         ("x" %in% names(data)))) {</span></span>
+<span><span class="co">##         stop("geom_fit_text needs either 'xmin' and 'xmax', or 'x'", </span></span>
+<span><span class="co">##             .call = FALSE)</span></span>
+<span><span class="co">##     }</span></span>
+<span><span class="co">##     if (!("ymin" %in% names(data) &amp; "ymax" %in% names(data) | </span></span>
+<span><span class="co">##         "y" %in% names(data))) {</span></span>
+<span><span class="co">##         stop("geom_fit_text needs either 'ymin' and 'ymax', or 'y'", </span></span>
+<span><span class="co">##             .call = FALSE)</span></span>
+<span><span class="co">##     }</span></span>
+<span><span class="co">##     if ((!is.null(params$width)) &amp; (!"unit" %in% class(params$width))) {</span></span>
+<span><span class="co">##         data$xmin &lt;- data$x - params$width/2</span></span>
+<span><span class="co">##         data$xmax &lt;- data$x + params$width/2</span></span>
+<span><span class="co">##     }</span></span>
+<span><span class="co">##     if ((!is.null(params$height)) &amp; (!"unit" %in% class(params$height))) {</span></span>
+<span><span class="co">##         data$ymin &lt;- data$y - params$height/2</span></span>
+<span><span class="co">##         data$ymax &lt;- data$y + params$height/2</span></span>
+<span><span class="co">##     }</span></span>
+<span><span class="co">##     if (is.null(params$width) &amp; !"xmin" %in% names(data)) {</span></span>
+<span><span class="co">##         data$width &lt;- ggplot2::resolution(data$x, FALSE) * 0.9</span></span>
+<span><span class="co">##         data$xmin &lt;- data$x - data$width/2</span></span>
+<span><span class="co">##         data$xmax &lt;- data$x + data$width/2</span></span>
+<span><span class="co">##         data$width &lt;- NULL</span></span>
+<span><span class="co">##     }</span></span>
+<span><span class="co">##     if (is.null(params$height) &amp; !"ymin" %in% names(data)) {</span></span>
+<span><span class="co">##         data$height &lt;- ggplot2::resolution(data$y, FALSE) * 0.9</span></span>
+<span><span class="co">##         data$ymin &lt;- data$y - data$height/2</span></span>
+<span><span class="co">##         data$ymax &lt;- data$y + data$height/2</span></span>
+<span><span class="co">##         data$height &lt;- NULL</span></span>
+<span><span class="co">##     }</span></span>
+<span><span class="co">##     if (!is.null(params$formatter)) {</span></span>
+<span><span class="co">##         if (!is.function(params$formatter)) {</span></span>
+<span><span class="co">##             stop("`formatter` must be a function")</span></span>
+<span><span class="co">##         }</span></span>
+<span><span class="co">##         formatted_labels &lt;- sapply(data$label, params$formatter, </span></span>
+<span><span class="co">##             USE.NAMES = FALSE)</span></span>
+<span><span class="co">##         if ((!length(formatted_labels) == length(data$label)) | </span></span>
+<span><span class="co">##             (!is.character(formatted_labels))) {</span></span>
+<span><span class="co">##             stop("`formatter` must produce a character vector of same length as input")</span></span>
+<span><span class="co">##         }</span></span>
+<span><span class="co">##         data$label &lt;- formatted_labels</span></span>
+<span><span class="co">##     }</span></span>
+<span><span class="co">##     data</span></span>
+<span><span class="co">## }</span></span></code></pre>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">StatStratum</span><span class="op">$</span><span class="va">compute_panel</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## &lt;ggproto method&gt;</span></span>
+<span><span class="co">##   &lt;Wrapper function&gt;</span></span>
+<span><span class="co">##     function (...) </span></span>
+<span><span class="co">## compute_panel(..., self = self)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">##   &lt;Inner function (f)&gt;</span></span>
+<span><span class="co">##     function (self, data, scales, decreasing = NULL, reverse = NULL, </span></span>
+<span><span class="co">##     absolute = NULL, discern = FALSE, distill = first, negate.strata = NULL, </span></span>
+<span><span class="co">##     infer.label = FALSE, label.strata = NULL, min.y = NULL, max.y = NULL, </span></span>
+<span><span class="co">##     min.height = NULL, max.height = NULL) </span></span>
+<span><span class="co">## {</span></span>
+<span><span class="co">##     if (is.null(decreasing)) </span></span>
+<span><span class="co">##         decreasing &lt;- ggalluvial_opt("decreasing")</span></span>
+<span><span class="co">##     if (is.null(reverse)) </span></span>
+<span><span class="co">##         reverse &lt;- ggalluvial_opt("reverse")</span></span>
+<span><span class="co">##     if (is.null(absolute)) </span></span>
+<span><span class="co">##         absolute &lt;- ggalluvial_opt("absolute")</span></span>
+<span><span class="co">##     if (!is.null(label.strata)) {</span></span>
+<span><span class="co">##         defunct_parameter("label.strata", msg = "use `aes(label = after_stat(stratum))`.")</span></span>
+<span><span class="co">##         infer.label &lt;- label.strata</span></span>
+<span><span class="co">##     }</span></span>
+<span><span class="co">##     if (infer.label) {</span></span>
+<span><span class="co">##         deprecate_parameter("infer.label", msg = "Use `aes(label = after_stat(stratum))`.")</span></span>
+<span><span class="co">##         if (is.null(data$label)) {</span></span>
+<span><span class="co">##             data$label &lt;- data$stratum</span></span>
+<span><span class="co">##         }</span></span>
+<span><span class="co">##         else {</span></span>
+<span><span class="co">##             warning("Aesthetic `label` is specified, ", "so parameter `infer.label` will be ignored.")</span></span>
+<span><span class="co">##         }</span></span>
+<span><span class="co">##     }</span></span>
+<span><span class="co">##     diff_aes &lt;- intersect(c(.color_diff_aesthetics, .text_aesthetics), </span></span>
+<span><span class="co">##         names(data))</span></span>
+<span><span class="co">##     data$yneg &lt;- data$y &lt; 0</span></span>
+<span><span class="co">##     data$lode &lt;- data$alluvium</span></span>
+<span><span class="co">##     distill &lt;- distill_fun(distill)</span></span>
+<span><span class="co">##     weight &lt;- data$weight</span></span>
+<span><span class="co">##     data$weight &lt;- NULL</span></span>
+<span><span class="co">##     if (is.null(weight)) </span></span>
+<span><span class="co">##         weight &lt;- 1</span></span>
+<span><span class="co">##     data$n &lt;- weight</span></span>
+<span><span class="co">##     data$count &lt;- data$y * weight</span></span>
+<span><span class="co">##     by_vars &lt;- c("x", "yneg", "stratum")</span></span>
+<span><span class="co">##     only_vars &lt;- c(diff_aes)</span></span>
+<span><span class="co">##     sum_vars &lt;- c("y", "n", "count")</span></span>
+<span><span class="co">##     if (!is.null(data$lode)) {</span></span>
+<span><span class="co">##         agg_lode &lt;- stats::aggregate(data[, "lode", drop = FALSE], </span></span>
+<span><span class="co">##             data[, by_vars], distill)</span></span>
+<span><span class="co">##     }</span></span>
+<span><span class="co">##     if (length(only_vars) &gt; 0) {</span></span>
+<span><span class="co">##         agg_only &lt;- stats::aggregate(data[, only_vars, drop = FALSE], </span></span>
+<span><span class="co">##             data[, by_vars], only)</span></span>
+<span><span class="co">##     }</span></span>
+<span><span class="co">##     data &lt;- stats::aggregate(data[, sum_vars], data[, by_vars], </span></span>
+<span><span class="co">##         sum)</span></span>
+<span><span class="co">##     if (!is.null(data$lode)) {</span></span>
+<span><span class="co">##         data &lt;- merge(data, agg_lode)</span></span>
+<span><span class="co">##     }</span></span>
+<span><span class="co">##     if (length(only_vars) &gt; 0) {</span></span>
+<span><span class="co">##         data &lt;- merge(data, agg_only)</span></span>
+<span><span class="co">##     }</span></span>
+<span><span class="co">##     data &lt;- subset(data, y != 0)</span></span>
+<span><span class="co">##     data &lt;- deposit_data(data, decreasing, reverse, absolute)</span></span>
+<span><span class="co">##     x_sums &lt;- tapply(abs(data$count), data$x, sum, na.rm = TRUE)</span></span>
+<span><span class="co">##     data$prop &lt;- data$count/x_sums[match(as.character(data$x), </span></span>
+<span><span class="co">##         names(x_sums))]</span></span>
+<span><span class="co">##     data &lt;- data[with(data, order(deposit)), , drop = FALSE]</span></span>
+<span><span class="co">##     data$ycum &lt;- NA</span></span>
+<span><span class="co">##     for (xx in unique(data$x)) {</span></span>
+<span><span class="co">##         for (yn in c(FALSE, TRUE)) {</span></span>
+<span><span class="co">##             ww &lt;- which(data$x == xx &amp; data$yneg == yn)</span></span>
+<span><span class="co">##             data$ycum[ww] &lt;- cumulate(data$y[ww])</span></span>
+<span><span class="co">##         }</span></span>
+<span><span class="co">##     }</span></span>
+<span><span class="co">##     data$ymin &lt;- data$ycum - abs(data$y)/2</span></span>
+<span><span class="co">##     data$ymax &lt;- data$ycum + abs(data$y)/2</span></span>
+<span><span class="co">##     data$y &lt;- data$ycum</span></span>
+<span><span class="co">##     data$yneg &lt;- NULL</span></span>
+<span><span class="co">##     data$ycum &lt;- NULL</span></span>
+<span><span class="co">##     if (!is.null(min.height)) {</span></span>
+<span><span class="co">##         deprecate_parameter("min.height", "min.y")</span></span>
+<span><span class="co">##         min.y &lt;- min.height</span></span>
+<span><span class="co">##     }</span></span>
+<span><span class="co">##     if (!is.null(max.height)) {</span></span>
+<span><span class="co">##         deprecate_parameter("max.height", "max.y")</span></span>
+<span><span class="co">##         max.y &lt;- max.height</span></span>
+<span><span class="co">##     }</span></span>
+<span><span class="co">##     if (!is.null(min.y)) </span></span>
+<span><span class="co">##         data &lt;- subset(data, ymax - ymin &gt;= min.y)</span></span>
+<span><span class="co">##     if (!is.null(max.y)) </span></span>
+<span><span class="co">##         data &lt;- subset(data, ymax - ymin &lt;= max.y)</span></span>
+<span><span class="co">##     data</span></span>
+<span><span class="co">## }</span></span></code></pre>
+<p>I reached the specific solutions through trial and error. They may
+not be the best tricks for most cases, but they demonstrate what these
+packages can do. For many more examples, see the respective package
+vignettes: <a href="https://CRAN.R-project.org/package=ggrepel/vignettes/ggrepel.html" class="external-link">for
+{ggrepel}</a>, and <a href="https://CRAN.R-project.org/package=ggfittext/vignettes/introduction-to-ggfittext.html" class="external-link">for
+{ggfittext}</a>.</p>
+<div class="section level3">
+<h3 id="solution-1-ggrepel">Solution 1: {ggrepel}<a class="anchor" aria-label="anchor" href="#solution-1-ggrepel"></a>
+</h3>
+<p>{ggrepel} is most often (in my experience) used to repel text away
+from symbols in a scatterplot, in whatever directions prevent them from
+overlapping the symbols and each other. In this case, however, it makes
+much more sense to align them vertically a fixed horizontal distance
+(<code>nudge_x</code>) away from the strata and repel them vertically
+from each other (<code>direction = "y"</code>) just enough to print them
+without overlap. It takes an extra bit of effort to render text
+<em>only</em> for the strata at the first (or at the last) axis, but the
+result is worth it.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">vaccinations</span>,
-       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">survey</span>, stratum <span class="op">=</span> <span class="va">response</span>, alluvium <span class="op">=</span> <span class="va">subject</span>, y <span class="op">=</span> <span class="va">freq</span>,
-           fill <span class="op">=</span> <span class="va">response</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html">scale_x_discrete</a></span><span class="op">(</span>expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.4</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="../reference/geom_flow.html">geom_flow</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">.5</span>, width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_linetype_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"blank"</span>, <span class="st">"solid"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggrepel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html">geom_text_repel</a></span><span class="op">(</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">survey</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">response</span><span class="op">)</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span>,
-    stat <span class="op">=</span> <span class="st">"stratum"</span>, size <span class="op">=</span> <span class="fl">4</span>, direction <span class="op">=</span> <span class="st">"y"</span>, nudge_x <span class="op">=</span> <span class="op">-</span><span class="fl">.5</span>
-  <span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggrepel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html">geom_text_repel</a></span><span class="op">(</span>
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">survey</span><span class="op">)</span> <span class="op">==</span> <span class="fl">3</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="va">response</span><span class="op">)</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span>,
-    stat <span class="op">=</span> <span class="st">"stratum"</span>, size <span class="op">=</span> <span class="fl">4</span>, direction <span class="op">=</span> <span class="st">"y"</span>, nudge_x <span class="op">=</span> <span class="fl">.5</span>
-  <span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"vaccination survey responses"</span>, <span class="st">"labeled using `geom_text_repel()`"</span><span class="op">)</span></code></pre></div>
-<pre><code>## Warning: Removed 8 rows containing missing values (geom_text_repel).
-
-## Warning: Removed 8 rows containing missing values (geom_text_repel).</code></pre>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">vaccinations</span>,</span>
+<span>       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">survey</span>, stratum <span class="op">=</span> <span class="va">response</span>, alluvium <span class="op">=</span> <span class="va">subject</span>, y <span class="op">=</span> <span class="va">freq</span>,</span>
+<span>           fill <span class="op">=</span> <span class="va">response</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html" class="external-link">scale_x_discrete</a></span><span class="op">(</span>expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.4</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_flow.html">geom_flow</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">.5</span>, width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_linetype_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"blank"</span>, <span class="st">"solid"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggrepel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html" class="external-link">geom_text_repel</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">survey</span><span class="op">)</span> <span class="op">==</span> <span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">response</span><span class="op">)</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    stat <span class="op">=</span> <span class="st">"stratum"</span>, size <span class="op">=</span> <span class="fl">4</span>, direction <span class="op">=</span> <span class="st">"y"</span>, nudge_x <span class="op">=</span> <span class="op">-</span><span class="fl">.5</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggrepel</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ggrepel/man/geom_text_repel.html" class="external-link">geom_text_repel</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">survey</span><span class="op">)</span> <span class="op">==</span> <span class="fl">3</span>, <span class="fu"><a href="https://rdrr.io/r/base/character.html" class="external-link">as.character</a></span><span class="op">(</span><span class="va">response</span><span class="op">)</span>, <span class="cn">NA</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    stat <span class="op">=</span> <span class="st">"stratum"</span>, size <span class="op">=</span> <span class="fl">4</span>, direction <span class="op">=</span> <span class="st">"y"</span>, nudge_x <span class="op">=</span> <span class="fl">.5</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"vaccination survey responses"</span>, <span class="st">"labeled using `geom_text_repel()`"</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning: Removed 8 rows containing missing values (`geom_text_repel()`).</span></span>
+<span><span class="co">## Removed 8 rows containing missing values (`geom_text_repel()`).</span></span></code></pre>
 <p><img src="labels_files/figure-html/ggrepel-1.png" width="576" style="display: block; margin: auto;"></p>
 </div>
-<div id="solution-2-ggfittext" class="section level3">
-<h3 class="hasAnchor">
-<a href="#solution-2-ggfittext" class="anchor"></a>Solution 2: <strong>ggfittext</strong>
+<div class="section level3">
+<h3 id="solution-2-ggfittext">Solution 2: {ggfittext}<a class="anchor" aria-label="anchor" href="#solution-2-ggfittext"></a>
 </h3>
-<p><strong>ggfittext</strong> is simplicity itself: The strata are just rectangles, so no more parameter specifications are necessary to fit the text into them. One key parameter is <code>min.size</code>, which defaults to <code>4</code> and controls how small the text is allowed to get without being omitted.</p>
+<p>{ggfittext} is simplicity itself: The strata are just rectangles, so
+no more parameter specifications are necessary to fit the text into
+them. One key parameter is <code>min.size</code>, which defaults to
+<code>4</code> and controls how small the text is allowed to get without
+being omitted.</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">vaccinations</span>,
-       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">survey</span>, stratum <span class="op">=</span> <span class="va">response</span>, alluvium <span class="op">=</span> <span class="va">subject</span>, y <span class="op">=</span> <span class="va">freq</span>,
-           fill <span class="op">=</span> <span class="va">response</span>, label <span class="op">=</span> <span class="va">response</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html">scale_x_discrete</a></span><span class="op">(</span>expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="../reference/geom_flow.html">geom_flow</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">.5</span>, width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu">ggfittext</span><span class="fu">::</span><span class="fu"><a href="https://wilkox.org/ggfittext/reference/geom_fit_text.html">geom_fit_text</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"stratum"</span>, width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span>, min.size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span>
-  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">ggtitle</a></span><span class="op">(</span><span class="st">"vaccination survey responses"</span>, <span class="st">"labeled using `geom_fit_text()`"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">vaccinations</span>,</span>
+<span>       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">survey</span>, stratum <span class="op">=</span> <span class="va">response</span>, alluvium <span class="op">=</span> <span class="va">subject</span>, y <span class="op">=</span> <span class="va">freq</span>,</span>
+<span>           fill <span class="op">=</span> <span class="va">response</span>, label <span class="op">=</span> <span class="va">response</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_discrete.html" class="external-link">scale_x_discrete</a></span><span class="op">(</span>expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.1</span>, <span class="fl">0</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_flow.html">geom_flow</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">.5</span>, width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu">ggfittext</span><span class="fu">::</span><span class="fu"><a href="https://wilkox.org/ggfittext/reference/geom_fit_text.html" class="external-link">geom_fit_text</a></span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"stratum"</span>, width <span class="op">=</span> <span class="fl">1</span><span class="op">/</span><span class="fl">4</span>, min.size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">ggtitle</a></span><span class="op">(</span><span class="st">"vaccination survey responses"</span>, <span class="st">"labeled using `geom_fit_text()`"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="labels_files/figure-html/ggfittext-1.png" width="576" style="display: block; margin: auto;"></p>
-<p>Note that this solution requires <strong>ggfittext</strong> v0.6.0.</p>
+<p>Note that this solution requires {ggfittext} v0.6.0.</p>
 </div>
 </div>
-<div id="appendix" class="section level2">
-<h2 class="hasAnchor">
-<a href="#appendix" class="anchor"></a>Appendix</h2>
+<div class="section level2">
+<h2 id="appendix">Appendix<a class="anchor" aria-label="anchor" href="#appendix"></a>
+</h2>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">sessioninfo</span><span class="fu">::</span><span class="fu"><a href="https://r-lib.github.io/sessioninfo/reference/session_info.html">session_info</a></span><span class="op">(</span><span class="op">)</span></code></pre></div>
-<pre><code>## ─ Session info  🛀  🤲🏼  🏠   ─────────────────────────────────────────────────
-##  hash: person taking bath, palms up together: medium-light skin tone, house
-## 
-##  setting  value
-##  version  R version 4.1.1 (2021-08-10)
-##  os       macOS Big Sur 10.16
-##  system   x86_64, darwin17.0
-##  ui       X11
-##  language (EN)
-##  collate  en_US.UTF-8
-##  ctype    en_US.UTF-8
-##  tz       America/New_York
-##  date     2022-01-09
-##  pandoc   2.12 @ /opt/homebrew/anaconda3/bin/ (via rmarkdown)
-## 
-## ─ Packages ───────────────────────────────────────────────────────────────────
-##  package     * version date (UTC) lib source
-##  assertthat    0.2.1   2019-03-21 [2] CRAN (R 4.1.0)
-##  bslib         0.3.1   2021-10-06 [2] CRAN (R 4.1.0)
-##  cachem        1.0.6   2021-08-19 [2] CRAN (R 4.1.0)
-##  cli           3.1.0   2021-10-27 [2] CRAN (R 4.1.0)
-##  colorspace    2.0-2   2021-06-24 [2] CRAN (R 4.1.0)
-##  crayon        1.4.2   2021-10-29 [2] CRAN (R 4.1.0)
-##  DBI           1.1.1   2021-01-15 [2] CRAN (R 4.1.0)
-##  desc          1.4.0   2021-09-28 [2] CRAN (R 4.1.0)
-##  digest        0.6.28  2021-09-23 [2] CRAN (R 4.1.0)
-##  dplyr         1.0.7   2021-06-18 [2] CRAN (R 4.1.0)
-##  ellipsis      0.3.2   2021-04-29 [2] CRAN (R 4.1.0)
-##  evaluate      0.14    2019-05-28 [2] CRAN (R 4.1.0)
-##  fansi         0.5.0   2021-05-25 [2] CRAN (R 4.1.0)
-##  farver        2.1.0   2021-02-28 [2] CRAN (R 4.1.0)
-##  fastmap       1.1.0   2021-01-25 [2] CRAN (R 4.1.0)
-##  fs            1.5.0   2020-07-31 [2] CRAN (R 4.1.0)
-##  generics      0.1.1   2021-10-25 [2] CRAN (R 4.1.0)
-##  ggalluvial  * 0.12.3  2022-01-09 [1] local
-##  ggfittext     0.9.1   2021-01-30 [2] CRAN (R 4.1.0)
-##  ggplot2     * 3.3.5   2021-06-25 [2] CRAN (R 4.1.0)
-##  ggrepel       0.9.1   2021-01-15 [2] CRAN (R 4.1.0)
-##  glue          1.5.0   2021-11-07 [2] CRAN (R 4.1.0)
-##  gtable        0.3.0   2019-03-25 [2] CRAN (R 4.1.0)
-##  highr         0.9     2021-04-16 [2] CRAN (R 4.1.0)
-##  htmltools     0.5.2   2021-08-25 [2] CRAN (R 4.1.0)
-##  jquerylib     0.1.4   2021-04-26 [2] CRAN (R 4.1.0)
-##  jsonlite      1.7.2   2020-12-09 [2] CRAN (R 4.1.0)
-##  knitr         1.36    2021-09-29 [2] CRAN (R 4.1.0)
-##  labeling      0.4.2   2020-10-20 [2] CRAN (R 4.1.0)
-##  lifecycle     1.0.1   2021-09-24 [2] CRAN (R 4.1.0)
-##  magrittr      2.0.1   2020-11-17 [2] CRAN (R 4.1.0)
-##  memoise       2.0.0   2021-01-26 [2] CRAN (R 4.1.0)
-##  munsell       0.5.0   2018-06-12 [2] CRAN (R 4.1.0)
-##  pillar        1.6.4   2021-10-18 [2] CRAN (R 4.1.0)
-##  pkgconfig     2.0.3   2019-09-22 [2] CRAN (R 4.1.0)
-##  pkgdown       1.6.1   2020-09-12 [2] CRAN (R 4.1.0)
-##  purrr         0.3.4   2020-04-17 [2] CRAN (R 4.1.0)
-##  R6            2.5.1   2021-08-19 [2] CRAN (R 4.1.0)
-##  ragg          1.1.3   2021-06-09 [2] CRAN (R 4.1.0)
-##  Rcpp          1.0.7   2021-07-07 [2] CRAN (R 4.1.0)
-##  rlang         0.4.12  2021-10-18 [2] CRAN (R 4.1.0)
-##  rmarkdown     2.11    2021-09-14 [2] CRAN (R 4.1.0)
-##  rprojroot     2.0.2   2020-11-15 [2] CRAN (R 4.1.0)
-##  rstudioapi    0.13    2020-11-12 [2] CRAN (R 4.1.0)
-##  sass          0.4.0   2021-05-12 [2] CRAN (R 4.1.0)
-##  scales        1.1.1   2020-05-11 [2] CRAN (R 4.1.0)
-##  sessioninfo   1.2.1   2021-11-02 [2] CRAN (R 4.1.0)
-##  stringi       1.7.5   2021-10-04 [2] CRAN (R 4.1.0)
-##  stringr       1.4.0   2019-02-10 [2] CRAN (R 4.1.0)
-##  systemfonts   1.0.2   2021-05-11 [2] CRAN (R 4.1.0)
-##  textshaping   0.3.6   2021-10-13 [2] CRAN (R 4.1.0)
-##  tibble        3.1.6   2021-11-07 [2] CRAN (R 4.1.0)
-##  tidyr         1.1.4   2021-09-27 [2] CRAN (R 4.1.0)
-##  tidyselect    1.1.1   2021-04-30 [2] CRAN (R 4.1.0)
-##  utf8          1.2.2   2021-07-24 [2] CRAN (R 4.1.0)
-##  vctrs         0.3.8   2021-04-29 [2] CRAN (R 4.1.0)
-##  withr         2.4.2   2021-04-18 [2] CRAN (R 4.1.0)
-##  xfun          0.28    2021-11-04 [2] CRAN (R 4.1.0)
-##  yaml          2.2.1   2020-02-01 [2] CRAN (R 4.1.0)
-## 
-##  [1] /private/var/folders/4p/3cy0qmp15x9216qsqhh84kzm0000gn/T/Rtmpfjktsf/temp_libpath1c9b6d93f7a9
-##  [2] /Library/Frameworks/R.framework/Versions/4.1/Resources/library
-## 
-## ──────────────────────────────────────────────────────────────────────────────</code></pre>
+<code class="sourceCode R"><span><span class="fu">sessioninfo</span><span class="fu">::</span><span class="fu"><a href="https://r-lib.github.io/sessioninfo/reference/session_info.html" class="external-link">session_info</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #00BBBB; font-weight: bold;">─ Session info ───────────────────────────────────────────────────────────────</span></span></span>
+<span><span class="co">##  <span style="color: #555555; font-style: italic;">setting </span> <span style="color: #555555; font-style: italic;">value</span></span></span>
+<span><span class="co">##  version  R version 4.2.1 (2022-06-23)</span></span>
+<span><span class="co">##  os       macOS Catalina 10.15.7</span></span>
+<span><span class="co">##  system   x86_64, darwin17.0</span></span>
+<span><span class="co">##  ui       X11</span></span>
+<span><span class="co">##  language en</span></span>
+<span><span class="co">##  collate  en_US.UTF-8</span></span>
+<span><span class="co">##  ctype    en_US.UTF-8</span></span>
+<span><span class="co">##  tz       America/New_York</span></span>
+<span><span class="co">##  date     2023-02-05</span></span>
+<span><span class="co">##  pandoc   2.19.2 @ /Applications/RStudio.app/Contents/Resources/app/quarto/bin/tools/ (via rmarkdown)</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## <span style="color: #00BBBB; font-weight: bold;">─ Packages ───────────────────────────────────────────────────────────────────</span></span></span>
+<span><span class="co">##  <span style="color: #555555; font-style: italic;">package    </span> <span style="color: #555555; font-style: italic;">*</span> <span style="color: #555555; font-style: italic;">version</span> <span style="color: #555555; font-style: italic;">date (UTC)</span> <span style="color: #555555; font-style: italic;">lib</span> <span style="color: #555555; font-style: italic;">source</span></span></span>
+<span><span class="co">##  bslib         0.4.2   <span style="color: #555555;">2022-12-16</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  cachem        1.0.6   <span style="color: #555555;">2021-08-19</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  cli           3.6.0   <span style="color: #555555;">2023-01-09</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  colorspace    2.1-0   <span style="color: #555555;">2023-01-23</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  desc          1.4.2   <span style="color: #555555;">2022-09-08</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  digest        0.6.31  <span style="color: #555555;">2022-12-11</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  dplyr         1.1.0   <span style="color: #555555;">2023-01-29</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  evaluate      0.20    <span style="color: #555555;">2023-01-17</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  fansi         1.0.4   <span style="color: #555555;">2023-01-22</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  farver        2.1.1   <span style="color: #555555;">2022-07-06</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  fastmap       1.1.0   <span style="color: #555555;">2021-01-25</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  fs            1.6.0   <span style="color: #555555;">2023-01-23</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  generics      0.1.3   <span style="color: #555555;">2022-07-05</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  ggalluvial  * 0.12.4  <span style="color: #555555;">2023-02-05</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">local</span></span></span>
+<span><span class="co">##  ggfittext     0.9.1   <span style="color: #555555;">2021-01-30</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  ggplot2     * 3.4.0   <span style="color: #555555;">2022-11-04</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.1)</span></span></span>
+<span><span class="co">##  ggrepel       0.9.2   <span style="color: #555555;">2022-11-06</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  glue          1.6.2   <span style="color: #555555;">2022-02-24</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  gtable        0.3.1   <span style="color: #555555;">2022-09-01</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  highr         0.10    <span style="color: #555555;">2022-12-22</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  htmltools     0.5.4   <span style="color: #555555;">2022-12-07</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  jquerylib     0.1.4   <span style="color: #555555;">2021-04-26</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  jsonlite      1.8.4   <span style="color: #555555;">2022-12-06</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  knitr         1.42    <span style="color: #555555;">2023-01-25</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  labeling      0.4.2   <span style="color: #555555;">2020-10-20</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  lifecycle     1.0.3   <span style="color: #555555;">2022-10-07</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  magrittr      2.0.3   <span style="color: #555555;">2022-03-30</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  memoise       2.0.1   <span style="color: #555555;">2021-11-26</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  munsell       0.5.0   <span style="color: #555555;">2018-06-12</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  pillar        1.8.1   <span style="color: #555555;">2022-08-19</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  pkgconfig     2.0.3   <span style="color: #555555;">2019-09-22</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  pkgdown       2.0.7   <span style="color: #555555;">2022-12-14</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  purrr         1.0.1   <span style="color: #555555;">2023-01-10</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  R6            2.5.1   <span style="color: #555555;">2021-08-19</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  ragg          1.2.5   <span style="color: #555555;">2023-01-12</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  Rcpp          1.0.10  <span style="color: #555555;">2023-01-22</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.1)</span></span></span>
+<span><span class="co">##  rlang         1.0.6   <span style="color: #555555;">2022-09-24</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  rmarkdown     2.20    <span style="color: #555555;">2023-01-19</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  rprojroot     2.0.3   <span style="color: #555555;">2022-04-02</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  rstudioapi    0.14    <span style="color: #555555;">2022-08-22</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  sass          0.4.5   <span style="color: #555555;">2023-01-24</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  scales        1.2.1   <span style="color: #555555;">2022-08-20</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  sessioninfo   1.2.2   <span style="color: #555555;">2021-12-06</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  stringi       1.7.12  <span style="color: #555555;">2023-01-11</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  stringr       1.5.0   <span style="color: #555555;">2022-12-02</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  systemfonts   1.0.4   <span style="color: #555555;">2022-02-11</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  textshaping   0.3.6   <span style="color: #555555;">2021-10-13</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  tibble        3.1.8   <span style="color: #555555;">2022-07-22</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  tidyr         1.3.0   <span style="color: #555555;">2023-01-24</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  tidyselect    1.2.0   <span style="color: #555555;">2022-10-10</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  utf8          1.2.3   <span style="color: #555555;">2023-01-31</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.1)</span></span></span>
+<span><span class="co">##  vctrs         0.5.2   <span style="color: #555555;">2023-01-23</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  withr         2.5.0   <span style="color: #555555;">2022-03-03</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">##  xfun          0.37    <span style="color: #555555;">2023-01-31</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.1)</span></span></span>
+<span><span class="co">##  yaml          2.3.7   <span style="color: #555555;">2023-01-23</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.2.0)</span></span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## <span style="color: #555555;"> [1] /private/var/folders/k6/l4mq9ctj3219429xnvqpdbxm8tckkx/T/RtmpByirPq/temp_libpath286664e155c7</span></span></span>
+<span><span class="co">## <span style="color: #555555;"> [2] /Library/Frameworks/R.framework/Versions/4.2/Resources/library</span></span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## <span style="color: #00BBBB; font-weight: bold;">──────────────────────────────────────────────────────────────────────────────</span></span></span></code></pre>
 </div>
   </div>
 
@@ -460,11 +501,13 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Jason Cory Brunson, Quentin D. Read.</p>
+  <p></p>
+<p>Developed by Jason Cory Brunson, Quentin D. Read.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
+  <p></p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.7.</p>
 </div>
 
       </footer>
@@ -472,6 +515,8 @@
 
   
 
+
+  
 
   </body>
 </html>
