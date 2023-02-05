@@ -27,7 +27,7 @@ Depends:
     ggplot2 (>= 2.2)
 Imports:
     stats,
-    dplyr (>= 0.7),
+    dplyr (>= 1.1),
     tidyr (>= 0.7),
     lazyeval,
     rlang,
