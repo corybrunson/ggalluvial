@@ -1,7 +1,7 @@
 Package: ggalluvial
 Type: Package
 Title: Alluvial Plots in 'ggplot2'
-Version: 0.12.4
+Version: 0.12.5
 Authors@R: c(
     person(given = "Jason Cory",
            family = "Brunson",
