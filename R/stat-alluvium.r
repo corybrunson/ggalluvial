@@ -173,7 +173,7 @@ StatAlluvium <- ggproto(
                            decreasing = NULL,
                            reverse = NULL,
                            absolute = NULL,
-                           discern = FALSE, distill = first,
+                           discern = FALSE, distill = "first",
                            negate.strata = NULL,
                            aggregate.y = NULL,
                            cement.alluvia = NULL,

@@ -150,7 +150,7 @@ StatFlow <- ggproto(
                            decreasing = NULL,
                            reverse = NULL,
                            absolute = NULL,
-                           discern = FALSE, distill = first,
+                           discern = FALSE, distill = "first",
                            negate.strata = NULL,
                            aes.bind = NULL,
                            infer.label = FALSE,

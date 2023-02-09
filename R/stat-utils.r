@@ -100,11 +100,21 @@ cumulate <- function(x) {
 }
 
 # choose a function via the `cement` parameter
+distill_vals <- c("first", "last", "most")
 distill_fun <- function(distill) {
   if (is.function(distill)) {
     return(distill)
-  } else {
+  } else if (distill %in% distill_vals) {
+    return(switch(
+      distill,
+      first = dplyr::first,
+      last = dplyr::last,
+      most = most
+    ))
+  } else if (is.character(distill)) {
     return(get(distill))
+  } else {
+    stop("Please pass either a function or its name to `distill`.")
   }
 }
 

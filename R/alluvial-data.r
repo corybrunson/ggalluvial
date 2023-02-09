@@ -249,16 +249,18 @@ to_alluvia_form <- function(data,
       function(x) nrow(unique(uniq_data[c(id_var, x)]))
     ) > uniq_id))
     if (is.logical(distill)) {
-      if (distill) {
-        distill <- most
+      if (isTRUE(distill)) {
+        distill <- "first"
       } else {
         warning("The following variables vary within `id`s ",
                 "and will be dropped: ",
                 paste(distill_vars, collapse = ", "))
         distill <- NULL
       }
-    } else if (is.character(distill)) {
-      distill <- get(distill)
+    # } else if (is.character(distill)) {
+    #   distill <- get(distill)
+    } else {
+      distill <- distill_fun(distill)
     }
     if (! is.null(distill)) {
       stopifnot(is.function(distill))

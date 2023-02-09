@@ -11,33 +11,30 @@
 
 #' @import ggplot2
 #' @family alluvial stat layers
-#' @seealso [ggplot2::layer()] for additional arguments and
-#'   [geom_stratum()] for the corresponding geom.
+#' @seealso [ggplot2::layer()] for additional arguments and [geom_stratum()] for
+#'   the corresponding geom.
 #' @inheritParams ggplot2::layer
 #' @template layer-params
-#' @param geom The geometric object to use display the data;
-#'    override the default.
-#' @param decreasing Logical; whether to arrange the strata at each axis
-#'   in the order of the variable values (`NA`, the default),
-#'   in ascending order of totals (largest on top, `FALSE`), or
-#'   in descending order of totals (largest on bottom, `TRUE`).
-#' @param reverse Logical; if `decreasing` is `NA`,
-#'   whether to arrange the strata at each axis
-#'   in the reverse order of the variable values,
-#'   so that they match the order of the values in the legend.
-#'   Ignored if `decreasing` is not `NA`.
-#'   Defaults to `TRUE`.
-#' @param absolute Logical; if some cases or strata are negative,
-#'   whether to arrange them (respecting `decreasing` and `reverse`)
-#'   using negative or absolute values of `y`.
-#' @param discern Passed to [to_lodes_form()] if `data` is in
-#'   alluvia format.
+#' @param geom The geometric object to use display the data; override the
+#'   default.
+#' @param decreasing Logical; whether to arrange the strata at each axis in the
+#'   order of the variable values (`NA`, the default), in ascending order of
+#'   totals (largest on top, `FALSE`), or in descending order of totals (largest
+#'   on bottom, `TRUE`).
+#' @param reverse Logical; if `decreasing` is `NA`, whether to arrange the
+#'   strata at each axis in the reverse order of the variable values, so that
+#'   they match the order of the values in the legend. Ignored if `decreasing`
+#'   is not `NA`. Defaults to `TRUE`.
+#' @param absolute Logical; if some cases or strata are negative, whether to
+#'   arrange them (respecting `decreasing` and `reverse`) using negative or
+#'   absolute values of `y`.
+#' @param discern Passed to [to_lodes_form()] if `data` is in alluvia format.
 #' @param distill A function (or its name) to be used to distill alluvium values
 #'   to a single lode label, accessible via
 #'   [`ggplot2::after_stat()`][ggplot2::aes_eval] (similar to its behavior in
-#'   [to_alluvia_form()]). In addition to existing functions, accepts the
-#'   character values `"first"` (the default), `"last"`, and `"most"` (which
-#'   returns the first modal value).
+#'   [to_alluvia_form()]). It recognizes three character values: `"first"` (the
+#'   default) and `"last"` [as defined][dplyr::nth()] in **dplyr**; and `"most"`
+#'   (which returns the first modal value).
 #' @param negate.strata A vector of values of the `stratum` aesthetic to be
 #'   treated as negative (will ignore missing values with a warning).
 #' @param infer.label Logical; whether to assign the `stratum` or `alluvium`
@@ -60,7 +57,7 @@ stat_stratum <- function(mapping = NULL,
                          decreasing = NULL,
                          reverse = NULL,
                          absolute = NULL,
-                         discern = FALSE, distill = first,
+                         discern = FALSE, distill = "first",
                          negate.strata = NULL,
                          infer.label = FALSE, label.strata = NULL,
                          min.y = NULL, max.y = NULL,
@@ -172,7 +169,7 @@ StatStratum <- ggproto(
                            decreasing = NULL,
                            reverse = NULL,
                            absolute = NULL,
-                           discern = FALSE, distill = first,
+                           discern = FALSE, distill = "first",
                            negate.strata = NULL,
                            infer.label = FALSE, label.strata = NULL,
                            min.y = NULL, max.y = NULL,

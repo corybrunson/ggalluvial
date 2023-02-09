@@ -45,32 +45,29 @@ the plot data. The return value must be a \code{data.frame}, and
 will be used as the layer data. A \code{function} can be created
 from a \code{formula} (e.g. \code{~ head(.x, 10)}).}
 
-\item{geom}{The geometric object to use display the data;
-override the default.}
+\item{geom}{The geometric object to use display the data; override the
+default.}
 
 \item{position}{Position adjustment, either as a string naming the adjustment
 (e.g. \code{"jitter"} to use \code{position_jitter}), or the result of a call to a
 position adjustment function. Use the latter if you need to change the
 settings of the adjustment.}
 
-\item{decreasing}{Logical; whether to arrange the strata at each axis
-in the order of the variable values (\code{NA}, the default),
-in ascending order of totals (largest on top, \code{FALSE}), or
-in descending order of totals (largest on bottom, \code{TRUE}).}
+\item{decreasing}{Logical; whether to arrange the strata at each axis in the
+order of the variable values (\code{NA}, the default), in ascending order of
+totals (largest on top, \code{FALSE}), or in descending order of totals (largest
+on bottom, \code{TRUE}).}
 
-\item{reverse}{Logical; if \code{decreasing} is \code{NA},
-whether to arrange the strata at each axis
-in the reverse order of the variable values,
-so that they match the order of the values in the legend.
-Ignored if \code{decreasing} is not \code{NA}.
-Defaults to \code{TRUE}.}
+\item{reverse}{Logical; if \code{decreasing} is \code{NA}, whether to arrange the
+strata at each axis in the reverse order of the variable values, so that
+they match the order of the values in the legend. Ignored if \code{decreasing}
+is not \code{NA}. Defaults to \code{TRUE}.}
 
-\item{absolute}{Logical; if some cases or strata are negative,
-whether to arrange them (respecting \code{decreasing} and \code{reverse})
-using negative or absolute values of \code{y}.}
+\item{absolute}{Logical; if some cases or strata are negative, whether to
+arrange them (respecting \code{decreasing} and \code{reverse}) using negative or
+absolute values of \code{y}.}
 
-\item{discern}{Passed to \code{\link[=to_lodes_form]{to_lodes_form()}} if \code{data} is in
-alluvia format.}
+\item{discern}{Passed to \code{\link[=to_lodes_form]{to_lodes_form()}} if \code{data} is in alluvia format.}
 
 \item{negate.strata}{A vector of values of the \code{stratum} aesthetic to be
 treated as negative (will ignore missing values with a warning).}
