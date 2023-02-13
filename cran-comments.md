@@ -1,3 +1,7 @@
+## Timing
+
+Version 0.12.4 was just released in order to resolve a bug that arose with the upgrade to {dplyr} 1.1.0. Unfortunately, that fix simply shifted the bug to interoperation with {dplyr} <= 1.0.10. This quick patch resolves the bug for all versions. Discussion can be found under issues #107 <https://github.com/corybrunson/ggalluvial/issues/107> and #108 <https://github.com/corybrunson/ggalluvial/issues/108> on GitHub.
+
 ## Test environments
 
 * local OS X install, R 4.2.1
@@ -21,7 +25,18 @@ There were no ERRORs, WARNINGs, or NOTEs.
 
 There were no ERRORs or WARNINGs.
 
-On some runs, one NOTE flagged several last names in the DESCRIPTION as possibly misspelled words. (These have been checked.)
+On one platform (x86_64-w64-mingw32 (64-bit); the old release), one NOTE flagged several last names in the DESCRIPTION as possibly misspelled words (these have been checked), while another NOTE flagged examples that took > 10s to run:
+```
+** running examples for arch 'i386' ... [39s] NOTE
+Examples with CPU (user + system) or elapsed time > 10s
+              user system elapsed
+stat_alluvium 9.86   0.06   10.14
+** running examples for arch 'x64' ... [42s] NOTE
+Examples with CPU (user + system) or elapsed time > 10s
+               user system elapsed
+stat_alluvium 10.64   0.05   10.97
+```
+I still don't know why this is, as the number of examples outside `\donttest` sections in the documentation for each function is no larger than previous submissions.
 
 ### Rhub
 
@@ -35,21 +50,6 @@ Found the following files/directories:
 ```
 As documented, this note is probably due to a MiKTeX bug that can be ignored:
 <https://github.com/r-hub/rhub/issues/503>
-
-On another platform (Ubuntu Linux 20.04.1 LTS, R-release, GCC), one NOTE flagged that examples for five reference pages took > 5s to run:
-```
-* checking examples ... [30s/113s] NOTE
-Examples with CPU (user + system) or elapsed time > 5s
-               user system elapsed
-stat_alluvium 7.594  0.016  28.568
-stat_flow     4.520  0.019  17.349
-stat_stratum  4.045  0.004  15.033
-geom_flow     3.298  0.016  11.816
-alluvial-data 2.431  0.021   9.928
-geom_lode     2.355  0.007   9.036
-geom_alluvium 1.607  0.040   6.237
-```
-I don't know why this is, as the number of examples outside `\donttest` sections is smaller than previous submissions.
 
 ## Downstream dependencies
 
