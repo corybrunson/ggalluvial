@@ -1,3 +1,7 @@
+# ggalluvial 0.12.5
+
+This patch fixes a bug involivng the {dplyr} functions `first()` and `last()` that was shifted but not fixed in 0.12.4. Rather than being imported during build, they are accessed internally and thus imported during use. See issues #107 <https://github.com/corybrunson/ggalluvial/issues/107> and #108 <https://github.com/corybrunson/ggalluvial/issues/108> on GitHub for details.
+
 # ggalluvial 0.12.4
 
 ## `linewidth` aesthetic (breaking change)
