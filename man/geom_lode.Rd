@@ -90,6 +90,9 @@ following aesthetics (required aesthetics are in bold):
 }
 
 \code{group} is used internally; arguments are ignored.
+
+Alluvium, flow, and lode geoms default to \code{alpha = 0.5}. Learn more about
+setting these aesthetics in \code{vignette("ggplot2-specs", package = "ggplot2")}.
 }
 
 \section{Defunct parameters}{
