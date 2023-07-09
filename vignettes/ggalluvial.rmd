@@ -163,7 +163,7 @@ Refugees$region <- country_regions[Refugees$country]
 ggplot(data = Refugees,
        aes(x = year, y = refugees, alluvium = country)) +
   geom_alluvium(aes(fill = country, colour = country),
-                alpha = .75, decreasing = FALSE) +
+                alpha = .75, decreasing = FALSE, outline.type = "upper") +
   scale_x_continuous(breaks = seq(2003, 2013, 2)) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = -30, hjust = 0)) +
