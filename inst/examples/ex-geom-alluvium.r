@@ -8,7 +8,7 @@ ggplot(as.data.frame(Titanic),
 
 gg <- ggplot(alluvial::Refugees,
              aes(y = refugees, x = year, alluvium = country))
-# time series bump chart (quintic flows)
+# time series bump chart (sigmoid flows)
 gg + geom_alluvium(aes(fill = country, colour = country),
                    width = 1/4, alpha = 2/3, decreasing = FALSE,
                    curve_type = "sigmoid")

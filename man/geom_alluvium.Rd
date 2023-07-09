@@ -16,6 +16,7 @@ geom_alluvium(
   curve_type = NULL,
   curve_range = NULL,
   segments = NULL,
+  outline.type = "both",
   na.rm = FALSE,
   show.legend = NA,
   inherit.aes = TRUE,
@@ -85,6 +86,9 @@ to obtain the shape that will be scaled to fit between strata. See the
 \item{segments}{The number of segments to be used in drawing each alternative
 curve (each curved boundary of each flow). If less than 3, will be silently
 changed to 3.}
+
+\item{outline.type}{Type of outline of each alluvium; one of \code{"both"},
+\code{"lower"}, \code{"upper"}, and \code{"full"}.}
 
 \item{na.rm}{Logical:
 if \code{FALSE}, the default, \code{NA} lodes are not included;
@@ -211,7 +215,7 @@ ggplot(as.data.frame(Titanic),
 
 gg <- ggplot(alluvial::Refugees,
              aes(y = refugees, x = year, alluvium = country))
-# time series bump chart (quintic flows)
+# time series bump chart (sigmoid flows)
 gg + geom_alluvium(aes(fill = country, colour = country),
                    width = 1/4, alpha = 2/3, decreasing = FALSE,
                    curve_type = "sigmoid")

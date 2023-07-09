@@ -8,7 +8,7 @@
 #' position parameter `knot.pos`, and filled rectangles at either end, using a
 #' provided `width`.
 #'
-#' The helper function `positions_toflow()` takes the corner and knot positions
+#' The helper function `positions_to_flow()` takes the corner and knot positions
 #' and curve parameters for a single flow as input and returns a data frame of
 #' `x`, `y`, and `shape` used by [grid::xsplineGrob()] to render the flow.
 #' @template geom-aesthetics
@@ -35,13 +35,14 @@ geom_flow <- function(mapping = NULL,
                       width = 1/3,
                       knot.pos = 1/4, knot.prop = TRUE,
                       curve_type = NULL, curve_range = NULL,
-                      segments = NULL,
+                      segments = NULL, outline.type = "both",
                       aes.flow = "forward",
                       na.rm = FALSE,
                       show.legend = NA,
                       inherit.aes = TRUE,
                       ...) {
 
+  outline.type <- match.arg(outline.type, c("both", "upper", "lower", "full"))
   aes.flow <- match.arg(aes.flow, c("forward", "backward"))
 
   layer(
@@ -59,6 +60,7 @@ geom_flow <- function(mapping = NULL,
       curve_type = curve_type,
       curve_range = curve_range,
       segments = segments,
+      outline.type = outline.type,
       aes.flow = aes.flow,
       na.rm = na.rm,
       ...
@@ -98,7 +100,7 @@ GeomFlow <- ggproto(
                         width = 1/3, aes.flow = "forward",
                         knot.pos = 1/4, knot.prop = TRUE,
                         curve_type = NULL, curve_range = NULL,
-                        segments = NULL) {
+                        segments = NULL, outline.type = "both") {
     
     # parameter defaults
     if (is.null(curve_type)) curve_type <- ggalluvial_opt("curve_type")
@@ -151,17 +153,43 @@ GeomFlow <- ggproto(
       # transform (after calculating spline paths)
       f_coords <- coord$transform(f_data, panel_params)
 
-      # single spline grob
-      grid::xsplineGrob(
+      # graphics object for single row
+      is_full_outline <- identical(outline.type, "full")
+      
+      # polygon interior
+      grob_polygon <- grid::xsplineGrob(
         x = f_coords$x, y = f_coords$y, shape = f_coords$shape,
         open = FALSE,
         gp = grid::gpar(
-          col = f_coords$colour, fill = f_coords$fill,
-          alpha = f_coords$alpha,
+          fill = f_coords$fill, alpha = f_coords$alpha,
+          col = if (is_full_outline) f_coords$colour else NA,
+          lty = if (is_full_outline) f_coords$linetype else 1,
+          lwd = if (is_full_outline) (f_coords$linewidth %||% f_coords$size) * .pt else 0
+        )
+      )
+      
+      if (is_full_outline) {
+        return(grob_polygon)
+      }
+      
+      # lower and upper bounds
+      if (identical(outline.type, "lower"))
+        f_coords <- f_coords[f_coords$bound == 0L, ]
+      if (identical(outline.type, "upper"))
+        f_coords <- f_coords[f_coords$bound == 1L, ]
+      grob_lines <- grid::xsplineGrob(
+        x = f_coords$x, y = f_coords$y, shape = f_coords$shape,
+        open = TRUE,
+        id = f_coords$bound,
+        gp = grid::gpar(
+          col = f_coords$colour,
           lty = f_coords$linetype,
           lwd = (f_coords$linewidth %||% f_coords$size) * .pt
         )
       )
+      
+      grob <- grid::grobTree(grob_polygon, grob_lines)
+      grob
     })
 
     # combine spline grobs
@@ -190,7 +218,8 @@ positions_to_flow <- function(
     data.frame(
       x = c(x_fore, rev(x_fore)),
       y = c(ymin0, ymin0, ymin1, ymin1, ymax1, ymax1, ymax0, ymax0),
-      shape = rep(c(0, 1, 1, 0), times = 2)
+      shape = rep(c(0, 1, 1, 0), times = 2),
+      bound = rep(c(0L, 1L), each = length(x_fore))
     )
   } else {
     # default to 48 segments per curve, ensure the minimum number of segments
@@ -207,7 +236,8 @@ positions_to_flow <- function(
       x = c(x_fore, rev(x_fore)),
       y = c(ymin0 + (ymin1 - ymin0) * f_fore,
             ymax1 + (ymax0 - ymax1) * f_fore),
-      shape = 0
+      shape = 0,
+      bound = rep(c(0L, 1L), each = length(x_fore))
     )
   }
 }

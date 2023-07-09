@@ -16,6 +16,7 @@ geom_flow(
   curve_type = NULL,
   curve_range = NULL,
   segments = NULL,
+  outline.type = "both",
   aes.flow = "forward",
   na.rm = FALSE,
   show.legend = NA,
@@ -94,6 +95,9 @@ to obtain the shape that will be scaled to fit between strata. See the
 curve (each curved boundary of each flow). If less than 3, will be silently
 changed to 3.}
 
+\item{outline.type}{Type of outline of each alluvium; one of \code{"both"},
+\code{"lower"}, \code{"upper"}, and \code{"full"}.}
+
 \item{aes.flow}{Character; how inter-lode flows assume aesthetics from lodes.
 Options are "forward" and "backward".}
 
@@ -128,7 +132,7 @@ position parameter \code{knot.pos}, and filled rectangles at either end, using a
 provided \code{width}.
 }
 \details{
-The helper function \code{positions_toflow()} takes the corner and knot positions
+The helper function \code{positions_to_flow()} takes the corner and knot positions
 and curve parameters for a single flow as input and returns a data frame of
 \code{x}, \code{y}, and \code{shape} used by \code{\link[grid:grid.xspline]{grid::xsplineGrob()}} to render the flow.
 }
@@ -226,7 +230,7 @@ ggplot(as.data.frame(Titanic),
   geom_text(stat = "stratum", aes(label = after_stat(stratum))) +
   ggtitle("Alluvial plot of Titanic passenger demographic data")
 
-# use of facets, with sigmoid flows
+# use of facets, with quintic flows
 ggplot(as.data.frame(Titanic),
        aes(y = Freq,
            axis1 = Class, axis2 = Sex)) +
@@ -241,16 +245,19 @@ wph <- as.data.frame(as.table(WorldPhones))
 names(wph) <- c("Year", "Region", "Telephones")
 ggplot(wph,
        aes(x = Year, alluvium = Region, y = Telephones)) +
-  geom_flow(aes(fill = Region, colour = Region), width = 0)
+  geom_flow(aes(fill = Region, colour = Region),
+            width = 0, outline.type = "full")
 # treat 'Year' as a number rather than as a factor
 wph$Year <- as.integer(as.character(wph$Year))
 ggplot(wph,
        aes(x = Year, alluvium = Region, y = Telephones)) +
-  geom_flow(aes(fill = Region, colour = Region), width = 0)
+  geom_flow(aes(fill = Region, colour = Region),
+            width = 0, outline.type = "upper")
 # hold the knot positions fixed
 ggplot(wph,
        aes(x = Year, alluvium = Region, y = Telephones)) +
-  geom_flow(aes(fill = Region, colour = Region), width = 0, knot.prop = FALSE)
+  geom_flow(aes(fill = Region, colour = Region),
+            width = 0, outline.type = "lower", knot.prop = FALSE)
 
 \donttest{
 # rightward flow aesthetics for vaccine survey data, with cubic flows
