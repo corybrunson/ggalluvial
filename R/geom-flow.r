@@ -166,7 +166,7 @@ GeomFlow <- ggproto(
 
     # combine spline grobs
     grob <- do.call(grid::grobTree, grobs)
-    grob$name <- grid::grobName(grob, "xspline")
+    grob$name <- grid::grobName(grob, "geom_flow")
     grob
   },
 

@@ -40,6 +40,8 @@
 #' @param segments The number of segments to be used in drawing each alternative
 #'   curve (each curved boundary of each flow). If less than 3, will be silently
 #'   changed to 3.
+#' @param outline.type Type of outline of each alluvium; one of `"both"`,
+#'   `"lower"`, `"upper"`, and `"full"`.
 #' @example inst/examples/ex-geom-alluvium.r
 #' @export
 geom_alluvium <- function(mapping = NULL,
@@ -49,11 +51,13 @@ geom_alluvium <- function(mapping = NULL,
                           width = 1/3,
                           knot.pos = 1/4, knot.prop = TRUE,
                           curve_type = NULL, curve_range = NULL,
-                          segments = NULL,
+                          segments = NULL, outline.type = "both",
                           na.rm = FALSE,
                           show.legend = NA,
                           inherit.aes = TRUE,
                           ...) {
+  outline.type <- match.arg(outline.type, c("both", "upper", "lower", "full"))
+  
   layer(
     geom = GeomAlluvium,
     mapping = mapping,
@@ -69,6 +73,7 @@ geom_alluvium <- function(mapping = NULL,
       curve_type = curve_type,
       curve_range = curve_range,
       segments = segments,
+      outline.type = outline.type,
       na.rm = na.rm,
       ...
     )
@@ -116,7 +121,7 @@ GeomAlluvium <- ggproto(
                         width = 1/3,
                         knot.pos = 1/4, knot.prop = TRUE,
                         curve_type = NULL, curve_range = NULL,
-                        segments = NULL) {
+                        segments = NULL, outline.type = "both") {
     
     # parameter defaults
     if (is.null(curve_type)) curve_type <- ggalluvial_opt("curve_type")
@@ -153,16 +158,42 @@ GeomAlluvium <- ggproto(
     coords <- coord$transform(data, panel_scales)
     
     # graphics object
-    grid::xsplineGrob(
+    is_full_outline <- identical(outline.type, "full")
+    
+    # polygon interior
+    grob_polygon <- grid::xsplineGrob(
       x = coords$x, y = coords$y, shape = coords$shape,
       open = FALSE,
       gp = grid::gpar(
-        col = coords$colour, fill = coords$fill,
-        alpha = coords$alpha,
+        fill = coords$fill, alpha = coords$alpha,
+        col = if (is_full_outline) coords$colour else NA,
+        lty = if (is_full_outline) coords$linetype else 1,
+        lwd = if (is_full_outline) (coords$linewidth %||% coords$size) * .pt else 0
+      )
+    )
+    
+    if (is_full_outline) {
+      grob_polygon$name <- grid::grobName(grob_polygon, "geom_alluvium")
+      return(grob_polygon)
+    }
+    
+    # lower and upper bounds
+    if (identical(outline.type, "lower")) coords <- coords[coords$bound == 0L, ]
+    if (identical(outline.type, "upper")) coords <- coords[coords$bound == 1L, ]
+    grob_lines <- grid::xsplineGrob(
+      x = coords$x, y = coords$y, shape = coords$shape,
+      open = TRUE,
+      id = coords$bound,
+      gp = grid::gpar(
+        col = coords$colour,
         lty = coords$linetype,
         lwd = (coords$linewidth %||% coords$size) * .pt
       )
     )
+    
+    grob <- grid::grobTree(grob_polygon, grob_lines)
+    grob$name <- grid::grobName(grob, "geom_alluvium")
+    grob
   },
   
   draw_key = draw_key_polygon,
@@ -186,7 +217,8 @@ data_to_alluvium <- function(
     with(data, data.frame(
       x = x + width / 2 * c(-1, 1, 1, -1),
       y = ymin + (ymax - ymin) * c(0, 0, 1, 1),
-      shape = rep(0, 4L)
+      shape = rep(0, 4L),
+      bound = rep(c(0L, 1L), each = 2L)
     ))
   } else if (curve_type %in% c("spline", "xspline")) {
     # spline coordinates (more than one axis)
@@ -214,7 +246,8 @@ data_to_alluvium <- function(
     data.frame(
       x = c(x_fore, rev(x_fore)),
       y = c(ymin_fore, rev(ymax_fore)),
-      shape = rep(shape_fore, 2L)
+      shape = rep(shape_fore, 2L),
+      bound = rep(c(0L, 1L), each = length(x_fore))
     )
   } else {
     # unit curve coordinates (more than one axis)
@@ -244,7 +277,8 @@ data_to_alluvium <- function(
     data.frame(
       x = c(x_fore, rev(x_fore)),
       y = c(ymin_fore, rev(ymax_fore)),
-      shape = 0
+      shape = 0,
+      bound = rep(c(0L, 1L), each = length(x_fore))
     )
   }
 }

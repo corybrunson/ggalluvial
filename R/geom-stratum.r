@@ -80,7 +80,7 @@ GeomStratum <- ggproto(
     
     # combine polygon grobs
     grob <- do.call(grid::grobTree, polys)
-    grob$name <- grid::grobName(grob, "bar")
+    grob$name <- grid::grobName(grob, "geom_stratum")
     grob
   },
   
