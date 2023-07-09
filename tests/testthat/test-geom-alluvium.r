@@ -1,7 +1,3 @@
-context("geom-alluvium")
-
-
-
 # visual tests
 
 test_that("`geom_alluvium` draws correctly", {
@@ -31,7 +27,8 @@ test_that("`geom_alluvium` draws correctly", {
   vdiffr::expect_doppelganger(
     "`geom_alluvium`: line plot",
     ggplot(d2, a3) +
-      geom_alluvium(aes(fill = country),  width = 0, knot.pos = 0)
+      geom_alluvium(aes(fill = country),
+                    width = 0, knot.pos = 0, outline.type = "upper")
   )
 })
 

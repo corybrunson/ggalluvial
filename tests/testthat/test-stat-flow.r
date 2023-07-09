@@ -1,5 +1,3 @@
-context("stat-flow")
-
 # weights are used but not returned
 
 test_that("`stat_flow` weights computed variables but drops weight", {

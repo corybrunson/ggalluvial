@@ -1,5 +1,3 @@
-context("geom-flow")
-
 # curve tests
 
 test_that("`positions_to_flow` computes as expected", {

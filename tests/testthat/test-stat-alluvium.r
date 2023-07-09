@@ -1,5 +1,3 @@
-context("stat-alluvium")
-
 # weights are used but not returned
 
 test_that("`stat_alluvium` weights computed variables but drops weight", {

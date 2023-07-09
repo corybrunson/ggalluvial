@@ -1,5 +1,3 @@
-context("geom-lode")
-
 # visual tests
 
 test_that("`geom_lode` draws correctly", {

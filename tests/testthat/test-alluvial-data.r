@@ -1,5 +1,3 @@
-context("alluvial-data")
-
 titanic_alluvia <- as.data.frame(Titanic)
 null_wt <- NULL
 

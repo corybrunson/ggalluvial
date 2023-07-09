@@ -1,5 +1,3 @@
-context("geom-stratum")
-
 # visual tests
 
 test_that("`geom_stratum` draws correctly", {

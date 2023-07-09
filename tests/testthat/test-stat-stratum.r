@@ -1,5 +1,3 @@
-context("stat-stratum")
-
 # weights are used but not returned
 
 test_that("`stat_stratum` weights computed variables but drops weight", {
