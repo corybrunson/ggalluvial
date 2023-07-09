@@ -71,7 +71,9 @@ head(as.data.frame(UCBAdmissions), n = 12)
 is_alluvia_form(as.data.frame(UCBAdmissions), axes = 1:3, silent = TRUE)
 ```
 
-This format is inherited from the first release of {ggalluvial}, which modeled it after usage in {alluvial}: The user declares any number of axis variables, which `stat_alluvium()` and `stat_stratum()` recognize and process in a consistent way:
+This format is inherited from the first release of {ggalluvial}, which modeled it after usage in {alluvial}: The user declares any number of axis variables, which `stat_alluvium()` and `stat_stratum()` recognize and process in a consistent way:[^width]
+
+[^width]: Note that the spacing parameter `width` is set to the same value in each alluvial layer.
 
 ```{r alluvial plot of UC Berkeley admissions dataset}
 ggplot(as.data.frame(UCBAdmissions),
