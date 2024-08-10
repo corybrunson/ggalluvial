@@ -3,14 +3,10 @@
 test_that("`geom_alluvium` draws correctly", {
   skip_on_cran()
   skip_if_not_installed("vdiffr")
-  skip_if_not_installed("alluvial")
 
   d1 <- as.data.frame(Titanic)
   a1 <- aes(y = Freq, axis1 = Class, axis2 = Sex, axis3 = Age, fill = Survived)
   a2 <- aes(y = Freq, axis1 = Class, axis2 = Sex)
-  d2 <- alluvial::Refugees
-  a3 <- aes(y = refugees, x = year, alluvium = country)
-  
   vdiffr::expect_doppelganger(
     "`geom_alluvium`: basic",
     ggplot(d1, a1) + geom_alluvium()
@@ -21,6 +17,11 @@ test_that("`geom_alluvium` draws correctly", {
       geom_alluvium(aes(fill = Age), width = .4) +
       facet_wrap(~ Survived, scales = "fixed")
   )
+  
+  skip_if_not_installed("alluvial")
+  
+  d2 <- alluvial::Refugees
+  a3 <- aes(y = refugees, x = year, alluvium = country)
   vdiffr::expect_doppelganger(
     "`geom_alluvium`: bump plot",
     ggplot(d2, a3) +

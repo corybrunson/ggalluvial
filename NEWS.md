@@ -4,6 +4,10 @@
 
 The paramater `outline.type` from `ggplot2::geom_ribbon()` has been adapted to `geom_alluvium()` and `geom_flow()` with the same options and default.
 
+## remove test dependency on {alluvial}
+
+The tests that use the `Refugees` data set from **alluvial** are now only run if that package is installed; see #131 and thanks to @MichaelChirico.
+
 # ggalluvial 0.12.5
 
 This patch fixes a bug involving the {dplyr} functions `first()` and `last()` that was shifted but not fixed in 0.12.4. Rather than being imported during build, they are accessed internally and thus imported during use. See issues #107 <https://github.com/corybrunson/ggalluvial/issues/107> and #108 <https://github.com/corybrunson/ggalluvial/issues/108> on GitHub for details.
@@ -12,7 +16,7 @@ This patch fixes a bug involving the {dplyr} functions `first()` and `last()` th
 
 ## `linewidth` aesthetic (breaking change)
 
-An upcoming release of *ggplot2* controls stroke width using the new `linewidth` aesthetic rather than `size`. This release adapts to this change internally by updating row and column layers as recommended here: <https://www.tidyverse.org/blog/2022/08/ggplot2-3-4-0-size-to-linewidth/>
+An upcoming release of **ggplot2** controls stroke width using the new `linewidth` aesthetic rather than `size`. This release adapts to this change internally by updating row and column layers as recommended here: <https://www.tidyverse.org/blog/2022/08/ggplot2-3-4-0-size-to-linewidth/>
 
 ## Curve constructors
 
