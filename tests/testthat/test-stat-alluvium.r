@@ -81,6 +81,7 @@ test_that("`stat_alluvium` orders alluvia correctly according to `aes.bind`", {
 # exceptional data
 
 test_that("`stat_flow` handles exceptional data with out errors", {
+  skip_if_not_installed("alluvial")
   data(Refugees, package = "alluvial")
   refugees_sub <- subset(Refugees, year %in% c(2003, 2005, 2010, 2013))
   gg <- ggplot(refugees_sub, aes(x = year, y = refugees, alluvium = country)) +
