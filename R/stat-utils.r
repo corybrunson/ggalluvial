@@ -131,3 +131,14 @@ z_order_aes <- function(data, aesthetics) {
   data$group <- match(data$group, unique(aes_data$group))
   data[with(data, order(x, group)), , drop = FALSE]
 }
+
+discern.sep <- ".discern_"
+
+# undo name disambiguation now that positions have been computed
+undiscern_labels <- function(data, params) {
+  if (isTRUE(params$discern) && ! is.null(data[["label"]])) {
+    data$label <- as.character(data$label)
+    data$label <- gsub("\\.discern\\_[0-9]+$", "", data$label)
+  }
+  data
+}

@@ -8,6 +8,14 @@ The paramater `outline.type` from `ggplot2::geom_ribbon()` has been adapted to `
 
 The tests that use the `Refugees` data set from **alluvial** are now only run if that package is installed; see #131 and thanks to @MichaelChirico.
 
+## condition examples on dependent packages
+
+The examples that require **alluvial** or **babynames** to be installed are now only run conditional on this installation, via `require("<package>")`.
+
+## restoration of discerned stratum values
+
+Heretofore the `sep` parameter of `make.unique()` was passed to `to_lodes_form()` but not used. It is now passed to every call. Additionally, as discussed in #138, an elaborate suffix is used internally, then removed immediately before plotting by a new `finish_layer()` component of each `Stat*` ggproto.
+
 # ggalluvial 0.12.5
 
 This patch fixes a bug involving the {dplyr} functions `first()` and `last()` that was shifted but not fixed in 0.12.4. Rather than being imported during build, they are accessed internally and thus imported during use. See issues #107 <https://github.com/corybrunson/ggalluvial/issues/107> and #108 <https://github.com/corybrunson/ggalluvial/issues/108> on GitHub for details.

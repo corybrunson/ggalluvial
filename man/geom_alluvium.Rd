@@ -55,10 +55,18 @@ from a \code{formula} (e.g. \code{~ head(.x, 10)}).}
 \item{stat}{The statistical transformation to use on the data;
 override the default.}
 
-\item{position}{Position adjustment, either as a string naming the adjustment
-(e.g. \code{"jitter"} to use \code{position_jitter}), or the result of a call to a
-position adjustment function. Use the latter if you need to change the
-settings of the adjustment.}
+\item{position}{A position adjustment to use on the data for this layer. This
+can be used in various ways, including to prevent overplotting and
+improving the display. The \code{position} argument accepts the following:
+\itemize{
+\item The result of calling a position function, such as \code{position_jitter()}.
+This method allows for passing extra arguments to the position.
+\item A string naming the position adjustment. To give the position as a
+string, strip the function name of the \code{position_} prefix. For example,
+to use \code{position_jitter()}, give the position as \code{"jitter"}.
+\item For more information and other ways to specify the position, see the
+\link[ggplot2:layer_positions]{layer position} documentation.
+}}
 
 \item{width}{Numeric; the width of each stratum, as a proportion of the
 distance between axes. Defaults to 1/3.}
@@ -213,15 +221,17 @@ ggplot(as.data.frame(Titanic),
   geom_alluvium() +
   scale_x_discrete(limits = c("Class", "Sex", "Age"))
 
-gg <- ggplot(alluvial::Refugees,
-             aes(y = refugees, x = year, alluvium = country))
-# time series bump chart (sigmoid flows)
-gg + geom_alluvium(aes(fill = country, colour = country),
-                   width = 1/4, alpha = 2/3, decreasing = FALSE,
-                   curve_type = "sigmoid")
-# time series line plot of refugees data, sorted by country
-gg + geom_alluvium(aes(fill = country, colour = country),
-                   decreasing = NA, width = 0, knot.pos = 0)
+if (require("alluvial")) {
+  gg <- ggplot(alluvial::Refugees,
+               aes(y = refugees, x = year, alluvium = country))
+  # time series bump chart (sigmoid flows)
+  gg + geom_alluvium(aes(fill = country, colour = country),
+                     width = 1/4, alpha = 2/3, decreasing = FALSE,
+                     curve_type = "sigmoid")
+  # time series line plot of refugees data, sorted by country
+  gg + geom_alluvium(aes(fill = country, colour = country),
+                     decreasing = NA, width = 0, knot.pos = 0)
+}
 
 \donttest{
 # irregular spacing between axes of a continuous variable

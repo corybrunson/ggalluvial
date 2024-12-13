@@ -36,7 +36,8 @@ to_lodes_form(
   value = "stratum",
   id = "alluvium",
   diffuse = FALSE,
-  discern = FALSE
+  discern = FALSE,
+  sep = "."
 )
 
 to_alluvia_form(data, key, value, id, distill = FALSE)
@@ -84,6 +85,8 @@ logical value indicating whether to merge all (\code{TRUE}) or none
 variables used as axes that appear at more than one variable in order to
 distinguish their factor levels. This forces the levels of the combined
 factor variable \code{value} to be in the order of the axes.}
+
+\item{sep}{Character; passed to \code{\link[base:make.unique]{base::make.unique()}}.}
 
 \item{distill}{A logical value indicating whether to include variables, other
 than those passed to \code{key} and \code{value}, that vary within values

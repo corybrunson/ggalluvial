@@ -138,12 +138,12 @@ StatStratum <- ggproto(
     if (type == "alluvia") {
       axis_ind <- get_axes(names(data))
       data <- to_lodes_form(data = data, axes = axis_ind,
-                            discern = params$discern)
+                            discern = params$discern, sep = discern.sep)
       # positioning requires numeric `x`
       data <- data[with(data, order(x, stratum, alluvium)), , drop = FALSE]
       data$x <- contiguate(data$x)
     } else {
-      if (! is.null(params$discern) && ! (params$discern == FALSE)) {
+      if (isTRUE(params$discern)) {
         warning("Data is already in lodes format, ",
                 "so `discern` will be ignored.")
       }
@@ -280,6 +280,11 @@ StatStratum <- ggproto(
     if (! is.null(max.y)) data <- subset(data, ymax - ymin <= max.y)
     
     data
+  },
+
+  finish_layer = function(data, params) {
+
+    undiscern_labels(data, params)
   }
 )
 

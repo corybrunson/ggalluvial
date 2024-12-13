@@ -68,31 +68,31 @@ gg +
             distill = function(x) paste(x, collapse = "; "))
 }
 
-\donttest{
-data(babynames, package = "babynames")
-# a discontiguous alluvium
-bn <- subset(babynames, prop >= .01 & sex == "F" & year > 1962 & year < 1968)
-ggplot(data = bn,
-       aes(x = year, alluvium = name, y = prop)) +
-  geom_alluvium(aes(fill = name, color = name == "Tammy"),
-                decreasing = TRUE, show.legend = FALSE) +
-  scale_color_manual(values = c("#00000000", "#000000"))
-# expanded to include missing values
-bn2 <- merge(bn,
-             expand.grid(year = unique(bn$year), name = unique(bn$name)),
-             all = TRUE)
-ggplot(data = bn2,
-       aes(x = year, alluvium = name, y = prop)) +
-  geom_alluvium(aes(fill = name, color = name == "Tammy"),
-                decreasing = TRUE, show.legend = FALSE) +
-  scale_color_manual(values = c("#00000000", "#000000"))
-# with missing values filled in with zeros
-bn2$prop[is.na(bn2$prop)] <- 0
-ggplot(data = bn2,
-       aes(x = year, alluvium = name, y = prop)) +
-  geom_alluvium(aes(fill = name, color = name == "Tammy"),
-                decreasing = TRUE, show.legend = FALSE) +
-  scale_color_manual(values = c("#00000000", "#000000"))
+if (require("babynames")) {
+  data(babynames, package = "babynames")
+  # a discontiguous alluvium
+  bn <- subset(babynames, prop >= .01 & sex == "F" & year > 1962 & year < 1968)
+  ggplot(data = bn,
+         aes(x = year, alluvium = name, y = prop)) +
+    geom_alluvium(aes(fill = name, color = name == "Tammy"),
+                  decreasing = TRUE, show.legend = FALSE) +
+    scale_color_manual(values = c("#00000000", "#000000"))
+  # expanded to include missing values
+  bn2 <- merge(bn,
+               expand.grid(year = unique(bn$year), name = unique(bn$name)),
+               all = TRUE)
+  ggplot(data = bn2,
+         aes(x = year, alluvium = name, y = prop)) +
+    geom_alluvium(aes(fill = name, color = name == "Tammy"),
+                  decreasing = TRUE, show.legend = FALSE) +
+    scale_color_manual(values = c("#00000000", "#000000"))
+  # with missing values filled in with zeros
+  bn2$prop[is.na(bn2$prop)] <- 0
+  ggplot(data = bn2,
+         aes(x = year, alluvium = name, y = prop)) +
+    geom_alluvium(aes(fill = name, color = name == "Tammy"),
+                  decreasing = TRUE, show.legend = FALSE) +
+    scale_color_manual(values = c("#00000000", "#000000"))
 }
 
 # use negative y values to encode deaths versus survivals
@@ -113,8 +113,11 @@ ggplot(titanic, aes(y = Freq, axis1 = Class, axis2 = Sex, axis3 = Age)) +
   geom_alluvium() +
   geom_stratum() +
   geom_text(stat = "stratum", aes(label = after_stat(stratum)))
-ggplot(transform(alluvial::Refugees, id = 1),
-       aes(y = refugees, x = year, alluvium = id)) +
-  facet_wrap(~ country) +
-  geom_alluvium(alpha = .75, color = "darkgrey") +
-  scale_x_continuous(breaks = seq(2004, 2012, 4))
+
+if (require("alluvial")) {
+  ggplot(transform(alluvial::Refugees, id = 1),
+         aes(y = refugees, x = year, alluvium = id)) +
+    facet_wrap(~ country) +
+    geom_alluvium(alpha = .75, color = "darkgrey") +
+    scale_x_continuous(breaks = seq(2004, 2012, 4))
+}

@@ -76,6 +76,7 @@
 #'   variables used as axes that appear at more than one variable in order to
 #'   distinguish their factor levels. This forces the levels of the combined
 #'   factor variable `value` to be in the order of the axes.
+#' @param sep Character; passed to [base::make.unique()].
 #' @example inst/examples/ex-alluvial-data.r
 
 #' @rdname alluvial-data
@@ -164,7 +165,7 @@ is_alluvia_form <- function(data,
 to_lodes_form <- function(data,
                           ..., axes = NULL,
                           key = "x", value = "stratum", id = "alluvium",
-                          diffuse = FALSE, discern = FALSE) {
+                          diffuse = FALSE, discern = FALSE, sep = ".") {
   
   key_var <- quo_name(enexpr(key))
   value_var <- quo_name(enexpr(value))
@@ -200,9 +201,9 @@ to_lodes_form <- function(data,
     warning("Some strata appear at multiple axes.")
   }
   if (isTRUE(discern)) {
-    data <- discern_data(data, axes)
+    data <- discern_data(data, axes, sep = sep)
     # uniquify strata separately from `discern_data` as a validation step
-    strata <- make.unique(unname(cat_levels))
+    strata <- make.unique(unname(cat_levels), sep = sep)
   } else {
     strata <- unique(unname(cat_levels))
   }
@@ -295,7 +296,7 @@ discern_data <- function(data, axes, sep = ".") {
   # concatenated vector of strata at all axes
   cat_levels <- unlist(list_levels)
   # vector of uniquified strata across all axes
-  new_levels <- make.unique(unname(cat_levels))
+  new_levels <- make.unique(unname(cat_levels), sep = sep)
   # cumulative number of strata before each axis
   i_levels <- cumsum(c(0, sapply(list_levels, length)))
   # characterized, uniquified strata at each axis
