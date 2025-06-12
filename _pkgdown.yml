@@ -1,3 +1,6 @@
+template:
+  bootstrap: 5
+
 reference:
 - title: Alluvial data
   desc:  Illustrate, test for, and convert between alluvial formats
