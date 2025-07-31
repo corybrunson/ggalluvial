@@ -90,6 +90,7 @@ deposit_data <- function(data, decreasing, reverse, absolute) {
 # calculate cumulative 'y' values, accounting for sign
 cumulate <- function(x) {
   if (length(x) == 0) return(x)
+  if (all(x == 0)) return(rep(0, length(x)))
   s <- setdiff(unique(sign(x)), 0)
   stopifnot(length(s) == 1 && s %in% c(-1, 1))
   if (s == 1) {

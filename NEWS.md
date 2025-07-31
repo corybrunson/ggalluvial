@@ -8,6 +8,10 @@ The paramater `outline.type` from `ggplot2::geom_ribbon()` has been adapted to `
 
 The tests that use the `Refugees` data set from **alluvial** are now only run if that package is installed; see #131 and thanks to @MichaelChirico.
 
+## `cumulate()` fix
+
+The `cumulate()` function previously broke if an axis had zero total alluvial height (#146); it has been debugged.
+
 # ggalluvial 0.12.5
 
 This patch fixes a bug involving the {dplyr} functions `first()` and `last()` that was shifted but not fixed in 0.12.4. Rather than being imported during build, they are accessed internally and thus imported during use. See issues #107 <https://github.com/corybrunson/ggalluvial/issues/107> and #108 <https://github.com/corybrunson/ggalluvial/issues/108> on GitHub for details.

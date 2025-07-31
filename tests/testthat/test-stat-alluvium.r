@@ -88,3 +88,16 @@ test_that("`stat_flow` handles exceptional data with out errors", {
     geom_alluvium(aes(fill = country))
   expect_silent(ggplot_build(gg))
 })
+
+d <- data.frame(
+  subject = rep(c("A", "B"), each = 2),
+  time = rep(1:2, times = 2),
+  status = factor(c("a", "b", "b", "a")),
+  value = c(0, 1, 0, 2)
+)
+test_that("`stat_alluvium` handles axes with zero total height", {
+  gg <-
+    ggplot(d, aes(x = time, stratum = status, alluvium = subject, y = value)) +
+    stat_alluvium(aes(fill = subject))
+  expect_silent(ggplot_build(gg))
+})
