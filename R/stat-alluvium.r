@@ -4,7 +4,7 @@
 #' centroids (`x` and `y`) and heights (`ymin` and `ymax`) of the lodes, the
 #' intersections of the alluvia with the strata. It leverages the `group`
 #' aesthetic for plotting purposes (for now).
-#' @template stat-aesthetics
+#' @aesthetics StatAlluvium
 #' @template computed-variables
 #' @template order-options
 #' @template defunct-stat-params
