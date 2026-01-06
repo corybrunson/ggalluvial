@@ -34,7 +34,7 @@
 #' @name alluvial-data
 #' @importFrom rlang enquo enquos enexpr enexprs quos is_empty quo_name
 #'   is_character is_integerish is_quosures have_name
-#' @importFrom tidyselect vars_pull vars_select
+#' @importFrom tidyselect vars_pull vars_select eval_select
 #' @family alluvial data manipulation
 #' @param data A data frame.
 #' @param logical Defunct. Whether to return a logical value or a character
@@ -315,9 +315,9 @@ data_at_vars <- function(data, vars) {
   } else if (is_integerish(vars)) {
     data_vars[vars]
   } else if (is_quosures(vars)) {
-    # Create a named list to pass to eval_select
+    # create a named list to pass to `tidyselect::eval_select()`
     data_names <- rlang::set_names(seq_along(data_vars), data_vars)
-    out <- tidyselect::eval_select(rlang::expr(c(!!! vars)), data_names)
+    out <- eval_select(rlang::expr(c(!!! vars)), data_names)
     out <- names(out)
     if (! any(have_name(vars))) {
       names(out) <- NULL
