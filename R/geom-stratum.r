@@ -3,7 +3,7 @@
 #' `geom_stratum` receives a dataset of the horizontal (`x`) and vertical (`y`,
 #' `ymin`, `ymax`) positions of the strata of an alluvial plot. It plots
 #' rectangles for these strata of a provided `width`.
-#' @template geom-aesthetics
+#' @aesthetics GeomStratum
 #' @template defunct-geom-params
 #'
 

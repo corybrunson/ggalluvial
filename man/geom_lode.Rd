@@ -40,10 +40,18 @@ from a \code{formula} (e.g. \code{~ head(.x, 10)}).}
 \item{stat}{The statistical transformation to use on the data;
 override the default.}
 
-\item{position}{Position adjustment, either as a string naming the adjustment
-(e.g. \code{"jitter"} to use \code{position_jitter}), or the result of a call to a
-position adjustment function. Use the latter if you need to change the
-settings of the adjustment.}
+\item{position}{A position adjustment to use on the data for this layer. This
+can be used in various ways, including to prevent overplotting and
+improving the display. The \code{position} argument accepts the following:
+\itemize{
+\item The result of calling a position function, such as \code{position_jitter()}.
+This method allows for passing extra arguments to the position.
+\item A string naming the position adjustment. To give the position as a
+string, strip the function name of the \code{position_} prefix. For example,
+to use \code{position_jitter()}, give the position as \code{"jitter"}.
+\item For more information and other ways to specify the position, see the
+\link[ggplot2:layer_positions]{layer position} documentation.
+}}
 
 \item{width}{Numeric; the width of each stratum, as a proportion of the
 distance between axes. Defaults to 1/3.}
@@ -57,12 +65,14 @@ plotted in grey (regardless of the color scheme).}
 \code{NA}, the default, includes if any aesthetics are mapped.
 \code{FALSE} never includes, and \code{TRUE} always includes.
 It can also be a named logical vector to finely select the aesthetics to
-display.}
+display. To include legend keys for all levels, even
+when no data exists, use \code{TRUE}.  If \code{NA}, all levels are shown in legend,
+but unobserved levels are omitted.}
 
 \item{inherit.aes}{If \code{FALSE}, overrides the default aesthetics,
 rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
-the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
+the default plot specification, e.g. \code{\link[ggplot2:annotation_borders]{annotation_borders()}}.}
 
 \item{...}{Additional arguments passed to \code{\link[ggplot2:layer]{ggplot2::layer()}}.}
 }
@@ -72,29 +82,6 @@ the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
 intersections of the alluvia with the strata. It plots rectangles for these
 lodes of a provided \code{width}.
 }
-\section{Aesthetics}{
-
-\code{geom_alluvium}, \code{geom_flow}, \code{geom_lode}, and \code{geom_stratum} understand the
-following aesthetics (required aesthetics are in bold):
-\itemize{
-\item \strong{\code{x}}
-\item \strong{\code{y}}
-\item \strong{\code{ymin}}
-\item \strong{\code{ymax}}
-\item \code{alpha}
-\item \code{colour}
-\item \code{fill}
-\item \code{linetype}
-\item \code{size}
-\item \code{group}
-}
-
-\code{group} is used internally; arguments are ignored.
-
-Alluvium, flow, and lode geoms default to \code{alpha = 0.5}. Learn more about
-setting these aesthetics in \code{vignette("ggplot2-specs", package = "ggplot2")}.
-}
-
 \section{Defunct parameters}{
 
 The previously defunct parameters \code{axis_width} and \code{ribbon_bend} have been
@@ -131,3 +118,22 @@ Other alluvial geom layers:
 \code{\link{geom_stratum}()}
 }
 \concept{alluvial geom layers}
+\section{Aesthetics}{
+
+\code{geom_lode()} understands the following aesthetics. Required aesthetics are displayed in bold and defaults are displayed for optional aesthetics:
+\tabular{rll}{
+ • \tab \strong{\code{\link[ggplot2:aes_position]{x}}} \tab   \cr
+ • \tab \strong{\code{\link[ggplot2:aes_position]{y}}} \tab   \cr
+ • \tab \strong{\code{\link[ggplot2:aes_position]{ymin}}} \tab   \cr
+ • \tab \strong{\code{\link[ggplot2:aes_position]{ymax}}} \tab   \cr
+ • \tab \code{\link[ggplot2:aes_colour_fill_alpha]{alpha}} \tab → \code{0.5} \cr
+ • \tab \code{\link[ggplot2:aes_colour_fill_alpha]{colour}} \tab → \code{"transparent"} \cr
+ • \tab \code{\link[ggplot2:aes_colour_fill_alpha]{fill}} \tab → \code{"gray"} \cr
+ • \tab \code{\link[ggplot2:aes_group_order]{group}} \tab → inferred \cr
+ • \tab \code{\link[ggplot2:aes_linetype_size_shape]{linetype}} \tab → \code{1} \cr
+ • \tab \code{\link[ggplot2:aes_linetype_size_shape]{linewidth}} \tab → \code{0.5} \cr
+ • \tab \code{\link[ggplot2:aes_linetype_size_shape]{size}} \tab → \code{0.5} \cr
+}
+
+Learn more about setting these aesthetics in \code{vignette("ggplot2-specs")}.
+}
