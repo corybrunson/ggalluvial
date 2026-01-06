@@ -315,7 +315,10 @@ data_at_vars <- function(data, vars) {
   } else if (is_integerish(vars)) {
     data_vars[vars]
   } else if (is_quosures(vars)) {
-    out <- dplyr::select_vars(data_vars, !!! vars)
+    # Create a named list to pass to eval_select
+    data_names <- rlang::set_names(seq_along(data_vars), data_vars)
+    out <- tidyselect::eval_select(rlang::expr(c(!!! vars)), data_names)
+    out <- names(out)
     if (! any(have_name(vars))) {
       names(out) <- NULL
     }
