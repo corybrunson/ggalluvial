@@ -1,5 +1,9 @@
 # next version
 
+## use `eval_select()` rather than `select_vars()` in data transformations
+
+See issue #154. Thanks to @DavisVaughan.
+
 ## outline type
 
 The paramater `outline.type` from `ggplot2::geom_ribbon()` has been adapted to `geom_alluvium()` and `geom_flow()` with the same options and default.
