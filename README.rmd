@@ -14,10 +14,10 @@ knitr::opts_chunk$set(
 
 # ggalluvial
 
-[![Travis](https://travis-ci.org/corybrunson/ggalluvial.svg?branch=main)](https://travis-ci.org/corybrunson/ggalluvial)
+[![Travis](https://api.travis-ci.com/corybrunson/ggalluvial.svg?branch=main)](https://travis-ci.org/corybrunson/ggalluvial)
 [![CRAN](http://www.r-pkg.org/badges/version/ggalluvial)](https://cran.r-project.org/package=ggalluvial)
 [![downloads](https://cranlogs.r-pkg.org/badges/ggalluvial)](https://cran.r-project.org/package=ggalluvial)
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3836748.svg)](https://doi.org/10.5281/zenodo.3836748)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3836748.svg)](https://doi.org/10.5281/zenodo.3836747)
 [![JOSS](https://joss.theoj.org/papers/10.21105/joss.02017/status.svg)](https://doi.org/10.21105/joss.02017)
 
 This is a [{ggplot2} extension](https://exts.ggplot2.tidyverse.org/) for alluvial plots.
@@ -123,7 +123,6 @@ For some more digestible guidance on using {ggalluvial}, check out three cheat s
 
 * an [introduction](https://jtr13.github.io/cc21fall2/ggalluvial-cheatsheet.html) by Meggie Wen (Chapter 33)
 * a [cheat sheet](https://cheatography.com/seleven/cheat-sheets/ggalluvial/) by Qingyi Zhang (Chapter 14)
-* a [blog about how this package implements alluvial plots](https://medium.com/@arnavsaxena96/all-about-alluvial-diagrams-21da1505520b) by Arnav Saxena (Chapter 134)
 
 
 ## Acknowledgments

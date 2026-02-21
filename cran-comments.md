@@ -1,19 +1,13 @@
-## Timing
-
-Version 0.12.4 was just released in order to resolve a bug that arose with the upgrade to {dplyr} 1.1.0. Unfortunately, that fix simply shifted the bug to interoperation with {dplyr} <= 1.0.10. This quick patch resolves the bug for all versions. Discussion can be found under issues #107 <https://github.com/corybrunson/ggalluvial/issues/107> and #108 <https://github.com/corybrunson/ggalluvial/issues/108> on GitHub.
-
 ## Test environments
 
-* local OS X install, R 4.2.1
+* local OS X install, R 4.2.1 and R 4.5.1
   * `devtools::check()`
   * `devtools::check(env_vars = c('_R_CHECK_DEPENDS_ONLY_' = "true"))`
+  * `devtools::check(manual = TRUE, remote = TRUE)`
 * Win-Builder
   * `devtools::check_win_oldrelease()`
   * `devtools::check_win_release()`
   * `devtools::check_win_devel()`
-* R-hub
-  * `rhub::check_for_cran()`
-  * `rhub::check_for_cran(platforms = "macos-highsierra-release-cran")`
 
 In response to a previous failed submission, {vdiffr} tests are now skipped on CRAN and when not installed, using `testthat::skip_*()`.
 

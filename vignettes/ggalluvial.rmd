@@ -21,7 +21,7 @@ This vignette
 
 Unlike most alluvial and related diagrams, the plots produced by {ggalluvial} are uniquely determined by the data set and statistical transformation. The distinction is detailed in [this blog post](https://corybrunson.github.io/2019/09/13/flow-taxonomy/).
 
-Many other resources exist for visualizing categorical data in R, including several more basic plot types that are likely to more accurately convey proportions to viewers when the data are not so structured as to warrant an alluvial plot. In particular, check out Michael Friendly's [{vcd} and {vcdExtra} packages](https://friendly.github.io/vcdExtra/) for a variety of statistically-motivated categorical data visualization techniques, Hadley Wickham's [{productplots} package](https://github.com/hadley/productplots) and Haley Jeppson and Heike Hofmann's descendant [{ggmosaic} package](https://CRAN.R-project.org/package=ggmosaic/vignettes/ggmosaic.html) for product or mosaic plots, and Nicholas Hamilton's [{ggtern} package](http://www.ggtern.com/) for ternary coordinates. Other related packages are mentioned below.
+Many other resources exist for visualizing categorical data in R, including several more basic plot types that are likely to more accurately convey proportions to viewers when the data are not so structured as to warrant an alluvial plot. In particular, check out Michael Friendly's [{vcd} and {vcdExtra} packages](https://friendly.github.io/vcdExtra/) for a variety of statistically-motivated categorical data visualization techniques, Hadley Wickham's [{productplots} package](https://github.com/hadley/productplots) and Haley Jeppson and Heike Hofmann's descendant [{ggmosaic} package](https://haleyjeppson.github.io/ggmosaic/) for product or mosaic plots, and Nicholas Hamilton's [{ggtern} package](https://bitbucket.org/nicholasehamilton/ggtern/) for ternary coordinates. Other related packages are mentioned below.
 
 ```{r setup, echo=FALSE, message=FALSE, results='hide'}
 library(ggalluvial)
@@ -89,7 +89,7 @@ ggplot(as.data.frame(UCBAdmissions),
 An important feature of these plots is the meaningfulness of the vertical axis: No gaps are inserted between the strata, so the total height of the plot reflects the cumulative quantity of the observations. The plots produced by {ggalluvial} conform (somewhat; keep reading) to the "grammar of graphics" principles of {ggplot2}, and this prevents users from producing "free-floating" visualizations like the Sankey diagrams showcased [here](https://developers.google.com/chart/interactive/docs/gallery/sankey).[^ggforce]
 {ggalluvial} parameters and native {ggplot2} functionality can also produce [parallel sets](https://eagereyes.org/parallel-sets) plots, illustrated here using the `HairEyeColor` dataset:[^ggparallel][^crayola]
 
-[^ggforce]: [The {ggforce} package](https://github.com/thomasp85/ggforce) includes parallel set geom and stat layers to produce similar diagrams that can be allowed to free-float.
+[^ggforce]: [The {ggforce} package](https://ggforce.data-imaginist.com/) includes parallel set geom and stat layers to produce similar diagrams that can be allowed to free-float.
 [^ggparallel]: A greater variety of parallel sets plots are implemented in the [{ggparallel}](https://github.com/heike/ggparallel) and [{ggpcp}](https://github.com/yaweige/ggpcp) packages.
 [^crayola]: Eye color hex codes are taken from [Crayola's Colors of the World crayons](https://en.wikipedia.org/wiki/List_of_Crayola_crayon_colors).
 
