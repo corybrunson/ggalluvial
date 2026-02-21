@@ -1,4 +1,6 @@
-# next version
+# ggalluvial 0.12.6
+
+This patch includes some of several fixes in progress but was prompted by the deprecation by **dplyr** of `select_vars()`.
 
 ## use `eval_select()` rather than `select_vars()` in data transformations
 
@@ -6,7 +8,7 @@ See issue #154. Thanks to @DavisVaughan.
 
 ## outline type
 
-The paramater `outline.type` from `ggplot2::geom_ribbon()` has been adapted to `geom_alluvium()` and `geom_flow()` with the same options and default.
+The parameter `outline.type` from `ggplot2::geom_ribbon()` has been adapted to `geom_alluvium()` and `geom_flow()` with the same options and default.
 
 ## remove test dependency on {alluvial}
 
