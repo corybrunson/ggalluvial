@@ -1,6 +1,6 @@
 ## Test environments
 
-* local OS X install, R 4.2.1 and R 4.5.1
+* local OS X install, R 4.5.2
   * `devtools::check()`
   * `devtools::check(env_vars = c('_R_CHECK_DEPENDS_ONLY_' = "true"))`
   * `devtools::check(manual = TRUE, remote = TRUE)`
@@ -11,66 +11,18 @@
 
 In response to a previous failed submission, {vdiffr} tests are now skipped on CRAN and when not installed, using `testthat::skip_*()`.
 
-### R CMD check results
+### local OS X install
 
 There were no ERRORs, WARNINGs, or NOTEs.
 
 ### WinBuilder
 
 There were no ERRORs or WARNINGs.
-
-On one platform (x86_64-w64-mingw32 (64-bit); the old release), one NOTE flagged several last names in the DESCRIPTION as possibly misspelled words (these have been checked), while another NOTE flagged examples that took > 10s to run:
-```
-** running examples for arch 'i386' ... [39s] NOTE
-Examples with CPU (user + system) or elapsed time > 10s
-              user system elapsed
-stat_alluvium 9.86   0.06   10.14
-** running examples for arch 'x64' ... [42s] NOTE
-Examples with CPU (user + system) or elapsed time > 10s
-               user system elapsed
-stat_alluvium 10.64   0.05   10.97
-```
-I still don't know why this is, as the number of examples outside `\donttest` sections in the documentation for each function is no larger than previous submissions.
-
-### Rhub
-
-There were no WARNINGs.
-
-On one platform (Windows Server 2022, R-devel, 64 bit), one NOTE read as follows:
-```
-* checking for detritus in the temp directory ... NOTE
-Found the following files/directories:
-  'lastMiKTeXException'
-```
-As documented, this note is probably due to a MiKTeX bug that can be ignored:
-<https://github.com/r-hub/rhub/issues/503>
+The only NOTE concerned a (possibly) broken URL, which has been checked.
 
 ## Downstream dependencies
 
-CRAN reports the following reverse depends:
-
-- {iotarelr}
-
-CRAN reports the following reverse imports:
-
-- {bandle} (Bioconductor)
-- {easyalluvial}
-- {ethnobotanyR}
-- {immunarch}
-- {MutationalPatterns} (Bioconductor)
-- {projectR} (Bioconductor)
-- {scRepertoire} (Bioconductor)
-- {standR} (Bioconductor)
-
-CRAN reports the following reverse suggests:
-
-- {ISAnalytics} (Bioconductor)
-- {longmixr}
-- {MicrobiotaProcess} (Bioconductor)
-- {Platypus}
-- {plotly}
-- {SCpubr}
-- {sigminer}
-
-`revdepcheck::revdep_check()` on CRAN source code produced no ERRORs, WARNINGs, or NOTEs. Checks on GitHub/Bioconductor source code produced the ERROR with {projectR} reproduced here: <https://github.com/genesofeve/projectR/issues/27#issuecomment-1415490762>
-The maintainer indicated on that issue that this is a problem with the development version of {projectR}, not with the dependency.
+Most checks were problem-free.
+The check for {DOtools} raised problems, apparently due to my own system's Python limitations.
+The check for {bandle} failed, apparently due to my own system's C++ limitations.
+I've raised issues at the two repos just in case.
