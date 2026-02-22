@@ -3,7 +3,7 @@
 
 # ggalluvial
 
-[![Travis](https://api.travis-ci.com/corybrunson/ggalluvial.svg?branch=main)](https://travis-ci.org/corybrunson/ggalluvial)
+[![Travis](https://api.travis-ci.com/corybrunson/ggalluvial.svg?branch=main)](https://app.travis-ci.com/corybrunson/ggalluvial)
 [![CRAN](http://www.r-pkg.org/badges/version/ggalluvial)](https://cran.r-project.org/package=ggalluvial)
 [![downloads](https://cranlogs.r-pkg.org/badges/ggalluvial)](https://cran.r-project.org/package=ggalluvial)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3836748.svg)](https://doi.org/10.5281/zenodo.3836747)
