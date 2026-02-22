@@ -1,9 +1,9 @@
 pandoc: '2.19'
-pkgdown: 2.1.2
+pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   ggalluvial: ggalluvial.html
   labels: labels.html
   order-rectangles: order-rectangles.html
   shiny: shiny.html
-last_built: 2025-06-12T12:33Z
+last_built: 2026-02-22T13:11Z

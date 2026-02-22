@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggalluvial</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,7 +63,7 @@
                         <h4 data-toc-skip class="author">Jason Cory
 Brunson</h4>
             
-            <h4 data-toc-skip class="date">2025-06-12</h4>
+            <h4 data-toc-skip class="date">2026-02-22</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/corybrunson/ggalluvial/blob/HEAD/vignettes/ggalluvial.rmd" class="external-link"><code>vignettes/ggalluvial.rmd</code></a></small>
       <div class="d-none name"><code>ggalluvial.rmd</code></div>
@@ -96,14 +96,15 @@ structured as to warrant an alluvial plot. In particular, check out
 Michael Friendly’s <a href="https://friendly.github.io/vcdExtra/" class="external-link">{vcd}
 and {vcdExtra} packages</a> for a variety of statistically-motivated
 categorical data visualization techniques, Hadley Wickham’s <a href="https://github.com/hadley/productplots" class="external-link">{productplots} package</a>
-and Haley Jeppson and Heike Hofmann’s descendant <a href="https://CRAN.R-project.org/package=ggmosaic/vignettes/ggmosaic.html" class="external-link">{ggmosaic}
-package</a> for product or mosaic plots, and Nicholas Hamilton’s <a href="http://www.ggtern.com/" class="external-link">{ggtern} package</a> for ternary
-coordinates. Other related packages are mentioned below.</p>
+and Haley Jeppson and Heike Hofmann’s descendant <a href="https://haleyjeppson.github.io/ggmosaic/" class="external-link">{ggmosaic} package</a>
+for product or mosaic plots, and Nicholas Hamilton’s <a href="https://bitbucket.org/nicholasehamilton/ggtern/" class="external-link">{ggtern}
+package</a> for ternary coordinates. Other related packages are
+mentioned below.</p>
 <div class="section level2">
 <h2 id="alluvial-plots">Alluvial plots<a class="anchor" aria-label="anchor" href="#alluvial-plots"></a>
 </h2>
 <p>Here’s a quintessential alluvial plot:</p>
-<p><img src="ggalluvial_files/figure-html/example%20alluvial%20plot%20using%20Titanic%20dataset-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="ggalluvial_files/figure-html/example%20alluvial%20plot%20using%20Titanic%20dataset-1.png" class="r-plt" alt="" width="576" style="display: block; margin: auto;"></p>
 <p>The next section details how the elements of this image encode
 information about the underlying dataset. For now, we use the image as a
 point of reference to define the following elements of a typical
@@ -197,14 +198,14 @@ set to the same value in each alluvial layer.&lt;/p&gt;"><sup>3</sup></a></p>
 <span>  <span class="fu">scale_x_discrete</span><span class="op">(</span>limits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Gender"</span>, <span class="st">"Dept"</span><span class="op">)</span>, expand <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">.05</span>, <span class="fl">.05</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">scale_fill_brewer</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"qual"</span>, palette <span class="op">=</span> <span class="st">"Set1"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"UC Berkeley admissions and rejections, by sex and department"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggalluvial_files/figure-html/alluvial%20plot%20of%20UC%20Berkeley%20admissions%20dataset-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="ggalluvial_files/figure-html/alluvial%20plot%20of%20UC%20Berkeley%20admissions%20dataset-1.png" class="r-plt" alt="" width="576" style="display: block; margin: auto;"></p>
 <p>An important feature of these plots is the meaningfulness of the
 vertical axis: No gaps are inserted between the strata, so the total
 height of the plot reflects the cumulative quantity of the observations.
 The plots produced by {ggalluvial} conform (somewhat; keep reading) to
 the “grammar of graphics” principles of {ggplot2}, and this prevents
 users from producing “free-floating” visualizations like the Sankey
-diagrams showcased <a href="https://developers.google.com/chart/interactive/docs/gallery/sankey" class="external-link">here</a>.<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;&lt;a href="https://github.com/thomasp85/ggforce" class="external-link"&gt;The
+diagrams showcased <a href="https://developers.google.com/chart/interactive/docs/gallery/sankey" class="external-link">here</a>.<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;&lt;a href="https://ggforce.data-imaginist.com/" class="external-link"&gt;The
 {ggforce} package&lt;/a&gt; includes parallel set geom and stat layers to
 produce similar diagrams that can be allowed to free-float.&lt;/p&gt;'><sup>4</sup></a>
 {ggalluvial} parameters and native {ggplot2} functionality can also
@@ -234,7 +235,7 @@ Colors of the World crayons&lt;/a&gt;.&lt;/p&gt;'><sup>6</sup></a></p>
 <span><span class="co">## params$discern): Some strata appear at multiple axes.</span></span>
 <span><span class="co">## Warning in to_lodes_form(data = data, axes = axis_ind, discern =</span></span>
 <span><span class="co">## params$discern): Some strata appear at multiple axes.</span></span></code></pre>
-<p><img src="ggalluvial_files/figure-html/parallel%20sets%20plot%20of%20hair%20and%20eye%20color%20dataset-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="ggalluvial_files/figure-html/parallel%20sets%20plot%20of%20hair%20and%20eye%20color%20dataset-1.png" class="r-plt" alt="" width="576" style="display: block; margin: auto;"></p>
 <p>(The warning is due to the “Hair” and “Eye” axes having the value
 “Brown” in common.)</p>
 <p>This format and functionality are useful for many applications and
@@ -356,7 +357,7 @@ region, in order to compare refugee volumes at different scales:</p>
 <span>  <span class="fu">scale_color_brewer</span><span class="op">(</span>type <span class="op">=</span> <span class="st">"qual"</span>, palette <span class="op">=</span> <span class="st">"Set3"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">facet_wrap</span><span class="op">(</span><span class="op">~</span> <span class="va">region</span>, scales <span class="op">=</span> <span class="st">"fixed"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"refugee volume by country and region of origin"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggalluvial_files/figure-html/time%20series%20alluvia%20plot%20of%20refugees%20dataset-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="ggalluvial_files/figure-html/time%20series%20alluvia%20plot%20of%20refugees%20dataset-1.png" class="r-plt" alt="" width="576" style="display: block; margin: auto;"></p>
 <p>The format allows us to assign aesthetics that change from axis to
 axis along the same alluvium, which is useful for repeated measures
 datasets. This requires generating a separate graphical object for each
@@ -378,7 +379,7 @@ across all semesters:</p>
 <span>  <span class="fu"><a href="../reference/geom_stratum.html">geom_stratum</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"student curricula across several semesters"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggalluvial_files/figure-html/alluvial%20plot%20of%20majors%20dataset-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="ggalluvial_files/figure-html/alluvial%20plot%20of%20majors%20dataset-1.png" class="r-plt" alt="" width="576" style="display: block; margin: auto;"></p>
 <p>The stratum heights <code>y</code> are unspecified, so each row is
 given unit height. This example demonstrates one way {ggalluvial}
 handles missing data. The alternative is to set the parameter
@@ -410,7 +411,7 @@ cohort (mapped to <code>y</code>) is recorded in “freq”.</p>
 <span>  <span class="fu">geom_text</span><span class="op">(</span>stat <span class="op">=</span> <span class="st">"stratum"</span>, size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"vaccination survey responses at three points in time"</span><span class="op">)</span></span></code></pre></div>
-<p><img src="ggalluvial_files/figure-html/alluvial%20plot%20of%20vaccinations%20dataset-1.png" width="576" style="display: block; margin: auto;"></p>
+<p><img src="ggalluvial_files/figure-html/alluvial%20plot%20of%20vaccinations%20dataset-1.png" class="r-plt" alt="" width="576" style="display: block; margin: auto;"></p>
 <p>This plot ignores any continuity between the flows between axes. This
 “memoryless” statistical transformation yields a less cluttered plot, in
 which at most one flow proceeds from each stratum at one axis to each
@@ -425,67 +426,69 @@ across the entire plot.</p>
 <code class="sourceCode R"><span><span class="fu">sessioninfo</span><span class="fu">::</span><span class="fu"><a href="https://sessioninfo.r-lib.org/reference/session_info.html" class="external-link">session_info</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #00BBBB; font-weight: bold;">─ Session info ───────────────────────────────────────────────────────────────</span></span></span>
 <span><span class="co">##  <span style="color: #555555; font-style: italic;">setting </span> <span style="color: #555555; font-style: italic;">value</span></span></span>
-<span><span class="co">##  version  R version 4.4.2 (2024-10-31)</span></span>
-<span><span class="co">##  os       macOS Sonoma 14.4.1</span></span>
+<span><span class="co">##  version  R version 4.5.2 (2025-10-31)</span></span>
+<span><span class="co">##  os       macOS Tahoe 26.2</span></span>
 <span><span class="co">##  system   aarch64, darwin20</span></span>
 <span><span class="co">##  ui       X11</span></span>
 <span><span class="co">##  language en</span></span>
 <span><span class="co">##  collate  en_US.UTF-8</span></span>
 <span><span class="co">##  ctype    en_US.UTF-8</span></span>
 <span><span class="co">##  tz       America/New_York</span></span>
-<span><span class="co">##  date     2025-06-12</span></span>
+<span><span class="co">##  date     2026-02-22</span></span>
 <span><span class="co">##  pandoc   2.19 @ /opt/homebrew/bin/ (via rmarkdown)</span></span>
-<span><span class="co">##  quarto   NA</span></span>
+<span><span class="co">##  quarto   1.8.25 @ /usr/local/bin/quarto</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## <span style="color: #00BBBB; font-weight: bold;">─ Packages ───────────────────────────────────────────────────────────────────</span></span></span>
 <span><span class="co">##  <span style="color: #555555; font-style: italic;">package     </span> <span style="color: #555555; font-style: italic;">*</span> <span style="color: #555555; font-style: italic;">version</span> <span style="color: #555555; font-style: italic;">date (UTC)</span> <span style="color: #555555; font-style: italic;">lib</span> <span style="color: #555555; font-style: italic;">source</span></span></span>
-<span><span class="co">##  bslib          0.9.0   <span style="color: #555555;">2025-01-30</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  cachem         1.1.0   <span style="color: #555555;">2024-05-16</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  cli            3.6.5   <span style="color: #555555;">2025-04-23</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  desc           1.4.3   <span style="color: #555555;">2023-12-10</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  digest         0.6.37  <span style="color: #555555;">2024-08-19</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  dplyr          1.1.4   <span style="color: #555555;">2023-11-17</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.0)</span></span></span>
-<span><span class="co">##  evaluate       1.0.3   <span style="color: #555555;">2025-01-10</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  farver         2.1.2   <span style="color: #555555;">2024-05-13</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  fastmap        1.2.0   <span style="color: #555555;">2024-05-15</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  fs             1.6.6   <span style="color: #555555;">2025-04-12</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  generics       0.1.4   <span style="color: #555555;">2025-05-09</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  ggalluvial   * 0.12.5  <span style="color: #555555;">2025-06-12</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">local</span></span></span>
-<span><span class="co">##  ggplot2      * 3.5.2   <span style="color: #555555;">2025-04-09</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  glue           1.8.0   <span style="color: #555555;">2024-09-30</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  gtable         0.3.6   <span style="color: #555555;">2024-10-25</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  htmltools      0.5.8.1 <span style="color: #555555;">2024-04-04</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  htmlwidgets    1.6.4   <span style="color: #555555;">2023-12-06</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.0)</span></span></span>
-<span><span class="co">##  jquerylib      0.1.4   <span style="color: #555555;">2021-04-26</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.0)</span></span></span>
-<span><span class="co">##  jsonlite       2.0.0   <span style="color: #555555;">2025-03-27</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  knitr          1.50    <span style="color: #555555;">2025-03-16</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  labeling       0.4.3   <span style="color: #555555;">2023-08-29</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  lifecycle      1.0.4   <span style="color: #555555;">2023-11-07</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  magrittr       2.0.3   <span style="color: #555555;">2022-03-30</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  pillar         1.10.2  <span style="color: #555555;">2025-04-05</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  pkgconfig      2.0.3   <span style="color: #555555;">2019-09-22</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  pkgdown        2.1.2   <span style="color: #555555;">2025-04-28</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  purrr          1.0.4   <span style="color: #555555;">2025-02-05</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  R6             2.6.1   <span style="color: #555555;">2025-02-15</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  ragg           1.4.0   <span style="color: #555555;">2025-04-10</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  RColorBrewer   1.1-3   <span style="color: #555555;">2022-04-03</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  rlang          1.1.6   <span style="color: #555555;">2025-04-11</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  rmarkdown      2.29    <span style="color: #555555;">2024-11-04</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  sass           0.4.10  <span style="color: #555555;">2025-04-11</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  scales         1.4.0   <span style="color: #555555;">2025-04-24</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  sessioninfo    1.2.3   <span style="color: #555555;">2025-02-05</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  systemfonts    1.2.3   <span style="color: #555555;">2025-04-30</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  textshaping    1.0.1   <span style="color: #555555;">2025-05-01</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  tibble         3.2.1   <span style="color: #555555;">2023-03-20</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.0)</span></span></span>
-<span><span class="co">##  tidyr          1.3.1   <span style="color: #555555;">2024-01-24</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  tidyselect     1.2.1   <span style="color: #555555;">2024-03-11</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.0)</span></span></span>
-<span><span class="co">##  vctrs          0.6.5   <span style="color: #555555;">2023-12-01</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.0)</span></span></span>
-<span><span class="co">##  withr          3.0.2   <span style="color: #555555;">2024-10-28</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  xfun           0.52    <span style="color: #555555;">2025-04-02</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
-<span><span class="co">##  yaml           2.3.10  <span style="color: #555555;">2024-07-26</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.4.1)</span></span></span>
+<span><span class="co">##  bslib          0.9.0   <span style="color: #555555;">2025-01-30</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  cachem         1.1.0   <span style="color: #555555;">2024-05-16</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  cli            3.6.5   <span style="color: #555555;">2025-04-23</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  desc           1.4.3   <span style="color: #555555;">2023-12-10</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  digest         0.6.39  <span style="color: #555555;">2025-11-19</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
+<span><span class="co">##  dplyr          1.1.4   <span style="color: #555555;">2023-11-17</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  evaluate       1.0.5   <span style="color: #555555;">2025-08-27</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  farver         2.1.2   <span style="color: #555555;">2024-05-13</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  fastmap        1.2.0   <span style="color: #555555;">2024-05-15</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  fs             1.6.6   <span style="color: #555555;">2025-04-12</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  generics       0.1.4   <span style="color: #555555;">2025-05-09</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  ggalluvial   * 0.12.6  <span style="color: #555555;">2026-02-22</span> <span style="color: #555555;">[1]</span> <span style="color: #BB00BB; font-weight: bold;">local</span></span></span>
+<span><span class="co">##  ggplot2      * 4.0.2   <span style="color: #555555;">2026-02-03</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
+<span><span class="co">##  glue           1.8.0   <span style="color: #555555;">2024-09-30</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  gtable         0.3.6   <span style="color: #555555;">2024-10-25</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  htmltools      0.5.9   <span style="color: #555555;">2025-12-04</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
+<span><span class="co">##  htmlwidgets    1.6.4   <span style="color: #555555;">2023-12-06</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  jquerylib      0.1.4   <span style="color: #555555;">2021-04-26</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  jsonlite       2.0.0   <span style="color: #555555;">2025-03-27</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  knitr          1.51    <span style="color: #555555;">2025-12-20</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
+<span><span class="co">##  labeling       0.4.3   <span style="color: #555555;">2023-08-29</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  lifecycle      1.0.5   <span style="color: #555555;">2026-01-08</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
+<span><span class="co">##  magrittr       2.0.4   <span style="color: #555555;">2025-09-12</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  otel           0.2.0   <span style="color: #555555;">2025-08-29</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  pillar         1.11.1  <span style="color: #555555;">2025-09-17</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  pkgconfig      2.0.3   <span style="color: #555555;">2019-09-22</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  pkgdown        2.2.0   <span style="color: #555555;">2025-11-06</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  purrr          1.2.1   <span style="color: #555555;">2026-01-09</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
+<span><span class="co">##  R6             2.6.1   <span style="color: #555555;">2025-02-15</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  ragg           1.5.0   <span style="color: #555555;">2025-09-02</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  RColorBrewer   1.1-3   <span style="color: #555555;">2022-04-03</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  rlang          1.1.7   <span style="color: #555555;">2026-01-09</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
+<span><span class="co">##  rmarkdown      2.30    <span style="color: #555555;">2025-09-28</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  S7             0.2.1   <span style="color: #555555;">2025-11-14</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
+<span><span class="co">##  sass           0.4.10  <span style="color: #555555;">2025-04-11</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  scales         1.4.0   <span style="color: #555555;">2025-04-24</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  sessioninfo    1.2.3   <span style="color: #555555;">2025-02-05</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  systemfonts    1.3.1   <span style="color: #555555;">2025-10-01</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  textshaping    1.0.4   <span style="color: #555555;">2025-10-10</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  tibble         3.3.1   <span style="color: #555555;">2026-01-11</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
+<span><span class="co">##  tidyr          1.3.2   <span style="color: #555555;">2025-12-19</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
+<span><span class="co">##  tidyselect     1.2.1   <span style="color: #555555;">2024-03-11</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  vctrs          0.7.1   <span style="color: #555555;">2026-01-23</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
+<span><span class="co">##  withr          3.0.2   <span style="color: #555555;">2024-10-28</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.0)</span></span></span>
+<span><span class="co">##  xfun           0.56    <span style="color: #555555;">2026-01-18</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
+<span><span class="co">##  yaml           2.3.12  <span style="color: #555555;">2025-12-10</span> <span style="color: #555555;">[2]</span> <span style="color: #555555;">CRAN (R 4.5.2)</span></span></span>
 <span><span class="co">## </span></span>
-<span><span class="co">## <span style="color: #555555;"> [1] /private/var/folders/4p/3cy0qmp15x9216qsqhh84kzm0000gn/T/Rtmpys5FaI/temp_libpath178905dc69195</span></span></span>
-<span><span class="co">## <span style="color: #555555;"> [2] /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/library</span></span></span>
+<span><span class="co">## <span style="color: #555555;"> [1] /private/var/folders/4p/3cy0qmp15x9216qsqhh84kzm0000gn/T/RtmpXbhyna/temp_libpath5542f864f19</span></span></span>
+<span><span class="co">## <span style="color: #555555;"> [2] /Library/Frameworks/R.framework/Versions/4.5-arm64/Resources/library</span></span></span>
 <span><span class="co">##  <span style="color: #BBBBBB; background-color: #BB0000;">*</span> ── Packages attached to the search path.</span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## <span style="color: #00BBBB; font-weight: bold;">──────────────────────────────────────────────────────────────────────────────</span></span></span></code></pre>
@@ -502,7 +505,7 @@ across the entire plot.</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>

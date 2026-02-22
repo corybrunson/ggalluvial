@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">ggalluvial</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,6 +40,27 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.12.6" id="ggalluvial-0126">ggalluvial 0.12.6<a class="anchor" aria-label="anchor" href="#ggalluvial-0126"></a></h2>
+<p>This patch includes some of several fixes in progress but was prompted by the deprecation by <strong>dplyr</strong> of <code>select_vars()</code>.</p>
+<div class="section level3">
+<h3 id="use-eval_select-rather-than-select_vars-in-data-transformations-0-12-6">use <code>eval_select()</code> rather than <code>select_vars()</code> in data transformations<a class="anchor" aria-label="anchor" href="#use-eval_select-rather-than-select_vars-in-data-transformations-0-12-6"></a></h3>
+<p>See issue <a href="https://github.com/corybrunson/ggalluvial/issues/154" class="external-link">#154</a>. Thanks to <a href="https://github.com/DavisVaughan" class="external-link">@DavisVaughan</a>.</p>
+</div>
+<div class="section level3">
+<h3 id="outline-type-0-12-6">outline type<a class="anchor" aria-label="anchor" href="#outline-type-0-12-6"></a></h3>
+<p>The parameter <code>outline.type</code> from <code><a href="https://ggplot2.tidyverse.org/reference/geom_ribbon.html" class="external-link">ggplot2::geom_ribbon()</a></code> has been adapted to <code><a href="../reference/geom_alluvium.html">geom_alluvium()</a></code> and <code><a href="../reference/geom_flow.html">geom_flow()</a></code> with the same options and default.</p>
+</div>
+<div class="section level3">
+<h3 id="remove-test-dependency-on-alluvial-0-12-6">remove test dependency on {alluvial}<a class="anchor" aria-label="anchor" href="#remove-test-dependency-on-alluvial-0-12-6"></a></h3>
+<p>The tests that use the <code>Refugees</code> data set from <strong>alluvial</strong> are now only run if that package is installed; see <a href="https://github.com/corybrunson/ggalluvial/issues/131" class="external-link">#131</a> and thanks to <a href="https://github.com/MichaelChirico" class="external-link">@MichaelChirico</a>.</p>
+</div>
+<div class="section level3">
+<h3 id="cumulate-fix-0-12-6">
+<code>cumulate()</code> fix<a class="anchor" aria-label="anchor" href="#cumulate-fix-0-12-6"></a></h3>
+<p>The <code>cumulate()</code> function previously broke if an axis had zero total alluvial height (<a href="https://github.com/corybrunson/ggalluvial/issues/146" class="external-link">#146</a>); it has been debugged.</p>
+</div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.12.5" id="ggalluvial-0125">ggalluvial 0.12.5<a class="anchor" aria-label="anchor" href="#ggalluvial-0125"></a></h2><p class="text-muted">CRAN release: 2023-02-22</p>
 <p>This patch fixes a bug involving the {dplyr} functions <code>first()</code> and <code>last()</code> that was shifted but not fixed in 0.12.4. Rather than being imported during build, they are accessed internally and thus imported during use. See issues <a href="https://github.com/corybrunson/ggalluvial/issues/107" class="external-link">#107</a> <a href="https://github.com/corybrunson/ggalluvial/issues/107" class="external-link uri">https://github.com/corybrunson/ggalluvial/issues/107</a> and <a href="https://github.com/corybrunson/ggalluvial/issues/108" class="external-link">#108</a> <a href="https://github.com/corybrunson/ggalluvial/issues/108" class="external-link uri">https://github.com/corybrunson/ggalluvial/issues/108</a> on GitHub for details.</p>
 </div>
@@ -48,7 +69,7 @@
 <div class="section level3">
 <h3 id="linewidth-aesthetic-breaking-change-0-12-4">
 <code>linewidth</code> aesthetic (breaking change)<a class="anchor" aria-label="anchor" href="#linewidth-aesthetic-breaking-change-0-12-4"></a></h3>
-<p>An upcoming release of <strong>ggplot2</strong> controls stroke width using the new <code>linewidth</code> aesthetic rather than <code>size</code>. This release adapts to this change internally by updating row and column layers as recommended here: <a href="https://www.tidyverse.org/blog/2022/08/ggplot2-3-4-0-size-to-linewidth/" class="external-link uri">https://www.tidyverse.org/blog/2022/08/ggplot2-3-4-0-size-to-linewidth/</a></p>
+<p>An upcoming release of <strong>ggplot2</strong> controls stroke width using the new <code>linewidth</code> aesthetic rather than <code>size</code>. This release adapts to this change internally by updating row and column layers as recommended here: <a href="https://tidyverse.org/blog/2022/08/ggplot2-3-4-0-size-to-linewidth/" class="external-link uri">https://tidyverse.org/blog/2022/08/ggplot2-3-4-0-size-to-linewidth/</a></p>
 </div>
 <div class="section level3">
 <h3 id="curve-constructors-0-12-4">Curve constructors<a class="anchor" aria-label="anchor" href="#curve-constructors-0-12-4"></a></h3>
@@ -342,7 +363,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer></div>

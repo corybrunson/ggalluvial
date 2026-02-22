@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">ggalluvial</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.12.6</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,21 +58,18 @@
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header"><h1 id="ggalluvial">ggalluvial<a class="anchor" aria-label="anchor" href="#ggalluvial"></a>
 </h1></div>
-<p><a href="https://travis-ci.org/corybrunson/ggalluvial" class="external-link"><img src="https://travis-ci.org/corybrunson/ggalluvial.svg?branch=main" alt="Travis"></a> <a href="https://cran.r-project.org/package=ggalluvial" class="external-link"><img src="http://www.r-pkg.org/badges/version/ggalluvial" alt="CRAN"></a> <a href="https://cran.r-project.org/package=ggalluvial" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/ggalluvial" alt="downloads"></a> <a href="https://doi.org/10.5281/zenodo.3836748" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.3836748.svg" alt="DOI"></a> <a href="https://doi.org/10.21105/joss.02017" class="external-link"><img src="https://joss.theoj.org/papers/10.21105/joss.02017/status.svg" alt="JOSS"></a></p>
-<p>This is a <a href="https://exts.ggplot2.tidyverse.org/" class="external-link"><strong>ggplot2</strong> extension</a> for alluvial plots.</p>
+<p><a href="https://app.travis-ci.com/corybrunson/ggalluvial" class="external-link"><img src="https://api.travis-ci.com/corybrunson/ggalluvial.svg?branch=main" alt="Travis"></a> <a href="https://cran.r-project.org/package=ggalluvial" class="external-link"><img src="http://www.r-pkg.org/badges/version/ggalluvial" alt="CRAN"></a> <a href="https://cran.r-project.org/package=ggalluvial" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/ggalluvial" alt="downloads"></a> <a href="https://doi.org/10.5281/zenodo.3836747" class="external-link"><img src="https://zenodo.org/badge/DOI/10.5281/zenodo.3836748.svg" alt="DOI"></a> <a href="https://doi.org/10.21105/joss.02017" class="external-link"><img src="https://joss.theoj.org/papers/10.21105/joss.02017/status.svg" alt="JOSS"></a></p>
+<p>This is a <a href="https://exts.ggplot2.tidyverse.org/" class="external-link">{ggplot2} extension</a> for alluvial plots.</p>
 <div class="section level2">
 <h2 id="design">Design<a class="anchor" aria-label="anchor" href="#design"></a>
 </h2>
-<p>The alluvial plots implemented here can be used to visualize frequency distributions over time or frequency tables involving several categorical variables. The design is inspired by the <a href="https://github.com/mbojan/alluvial" class="external-link"><strong>alluvial</strong></a> package, but the <strong>ggplot2</strong> framework induced several conspicuous differences:</p>
+<p>The alluvial plots implemented here can be used to visualize frequency distributions over time or frequency tables involving several categorical variables. The design is inspired by the <a href="https://github.com/mbojan/alluvial" class="external-link">{alluvial}</a> package, but the {ggplot2} framework induced several conspicuous differences:</p>
 <ul>
-<li>
-<strong>alluvial</strong> understands a variety of inputs (vectors, lists, data frames), whereas <strong>ggalluvial</strong> requires a single data frame;</li>
-<li>
-<strong>alluvial</strong> uses each variable of these inputs as a dimension of the data, whereas <strong>ggalluvial</strong> requires the user to specify the dimensions, either as separate aesthetics or as <a href="https://tidyr.tidyverse.org/" class="external-link">key-value pairs</a>;</li>
-<li>
-<strong>alluvial</strong> produces both the <em>alluvia</em>, which link cohorts across multiple dimensions, and (what are here called) the <em>strata</em>, which partition the data along each dimension, in a single function; whereas <strong>ggalluvial</strong> relies on separate layers (stats and geoms) to produce strata, alluvia, and alluvial segments called <em>lodes</em> and <em>flows</em>.</li>
+<li>{alluvial} understands a variety of inputs (vectors, lists, data frames), whereas {ggalluvial} requires a single data frame;</li>
+<li>{alluvial} uses each variable of these inputs as a dimension of the data, whereas {ggalluvial} requires the user to specify the dimensions, either as separate aesthetics or as <a href="https://tidyr.tidyverse.org/" class="external-link">key-value pairs</a>;</li>
+<li>{alluvial} produces both the <em>alluvia</em>, which link cohorts across multiple dimensions, and (what are here called) the <em>strata</em>, which partition the data along each dimension, in a single function; whereas {ggalluvial} relies on separate layers (stats and geoms) to produce strata, alluvia, and alluvial segments called <em>lodes</em> and <em>flows</em>.</li>
 </ul>
-<p>Additionally, <strong>ggalluvial</strong> arranges these layers vertically without gaps, so that the secondary plotting axis indicates the cumulative values of the strata at each dimension.</p>
+<p>Additionally, {ggalluvial} arranges these layers vertically without gaps, so that the secondary plotting axis indicates the cumulative values of the strata at each dimension.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -84,7 +81,7 @@
 <p>The development version can be installed from the (default) <code>main</code> branch on GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"corybrunson/ggalluvial@main"</span>, build_vignettes <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-<p>Note that, in order to build the vignettes, the imported packages <strong>alluvial</strong>, <strong>ggfittext</strong>, and <strong>ggrepel</strong> must be installed. To skip this step, leave <code>build_vignettes</code> unspecified or set it to <code>FALSE</code>.</p>
+<p>Note that, in order to build the vignettes, the imported packages {alluvial}, {ggfittext}, and {ggrepel} must be installed. To skip this step, leave <code>build_vignettes</code> unspecified or set it to <code>FALSE</code>.</p>
 <p>The <a href="https://github.com/corybrunson/ggalluvial/tree/optimization" class="external-link"><code>optimization</code> branch</a> contains a development version with experimental functions to reduce the number or area of alluvial overlaps (see issue <a href="https://github.com/corybrunson/ggalluvial/issues/6" class="external-link">#6</a>). Install it as follows:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"corybrunson/ggalluvial"</span>, ref <span class="op">=</span> <span class="st">"optimization"</span><span class="op">)</span></span></code></pre></div>
@@ -119,7 +116,7 @@
 <span>  <span class="fu">ggtitle</span><span class="op">(</span><span class="st">"passengers on the maiden voyage of the Titanic"</span>,</span>
 <span>          <span class="st">"stratified by demographics and survival"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-unnamed-chunk-6-1.png"><!-- --></p>
-<p>The data is in “wide” format, but <strong>ggalluvial</strong> also recognizes data in “long” format and can convert between the two:</p>
+<p>The data is in “wide” format, but {ggalluvial} also recognizes data in “long” format and can convert between the two:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">titanic_long</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/alluvial-data.html">to_lodes_form</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">Titanic</span><span class="op">)</span>,</span>
 <span>                              key <span class="op">=</span> <span class="st">"Demographic"</span>,</span>
@@ -145,7 +142,7 @@
 <div class="section level3">
 <h3 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
 </h3>
-<p>For detailed discussion of the data formats recognized by <strong>ggalluvial</strong> and several examples that illustrate its flexibility and limitations, read the technical vignette:</p>
+<p>For detailed discussion of the data formats recognized by {ggalluvial} and several examples that illustrate its flexibility and limitations, read the technical vignette:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/vignette.html" class="external-link">vignette</a></span><span class="op">(</span>topic <span class="op">=</span> <span class="st">"ggalluvial"</span>, package <span class="op">=</span> <span class="st">"ggalluvial"</span><span class="op">)</span></span></code></pre></div>
 <p>Several additional vignettes offer detailed solutions to specific needs:</p>
@@ -164,11 +161,10 @@
 <div class="section level3">
 <h3 id="short-form">Short form<a class="anchor" aria-label="anchor" href="#short-form"></a>
 </h3>
-<p>For some more digestible guidance on using <strong>ggalluvial</strong>, check out three cheat sheets and demos by students in Joyce Robbins’s <a href="https://jtr13.github.io/cc21fall2/index.html" class="external-link">Exploratory Data Analysis and Visualization Community Contribution Project</a>:</p>
+<p>For some more digestible guidance on using {ggalluvial}, check out three cheat sheets and demos by students in Joyce Robbins’s <a href="https://jtr13.github.io/cc21fall2/index.html" class="external-link">Exploratory Data Analysis and Visualization Community Contribution Project</a>:</p>
 <ul>
 <li>an <a href="https://jtr13.github.io/cc21fall2/ggalluvial-cheatsheet.html" class="external-link">introduction</a> by Meggie Wen (Chapter 33)</li>
 <li>a <a href="https://cheatography.com/seleven/cheat-sheets/ggalluvial/" class="external-link">cheat sheet</a> by Qingyi Zhang (Chapter 14)</li>
-<li>a <a href="https://medium.com/@arnavsaxena96/all-about-alluvial-diagrams-21da1505520b" class="external-link">blog about how this package implements alluvial plots</a> by Arnav Saxena (Chapter 134)</li>
 </ul>
 </div>
 </div>
@@ -188,7 +184,7 @@
 <div class="section level3">
 <h3 id="cite">Cite<a class="anchor" aria-label="anchor" href="#cite"></a>
 </h3>
-<p>If you use <strong>ggalluvial</strong>-generated figures in publication, i’d be grateful to hear about it! You can also cite the package according to <code>citation("ggalluvial")</code>.</p>
+<p>If you use {ggalluvial}-generated figures in publication, i’d be grateful to hear about it! You can also cite the package according to <code>citation("ggalluvial")</code>.</p>
 </div>
 </div>
 </div>
@@ -242,7 +238,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.2.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
