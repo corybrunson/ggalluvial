@@ -4,7 +4,7 @@
 #' `ymin`, `ymax`) positions of the **lodes** of an alluvial plot, the
 #' intersections of the alluvia with the strata. It plots rectangles for these
 #' lodes of a provided `width`.
-#' @template geom-aesthetics
+#' @aesthetics GeomLode
 #' @template defunct-geom-params
 #'
 

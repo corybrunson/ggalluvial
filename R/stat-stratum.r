@@ -3,7 +3,7 @@
 #' Given a dataset with alluvial structure, `stat_stratum` calculates the
 #' centroids (`x` and `y`) and heights (`ymin` and `ymax`) of the strata at each
 #' axis.
-#' @template stat-aesthetics
+#' @aesthetics StatStratum
 #' @template computed-variables
 #' @template order-options
 #' @template defunct-stat-params

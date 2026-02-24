@@ -10,7 +10,7 @@
 #' (mapped aesthetics) and curve parameters for a single alluvium as input and
 #' returns a data frame of `x`, `y`, and `shape` used by [grid::xsplineGrob()]
 #' to render the alluvium.
-#' @template geom-aesthetics
+#' @aesthetics GeomAlluvium
 #' @template geom-curves
 #' @template defunct-geom-params
 #'   

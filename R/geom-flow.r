@@ -11,7 +11,7 @@
 #' The helper function `positions_to_flow()` takes the corner and knot positions
 #' and curve parameters for a single flow as input and returns a data frame of
 #' `x`, `y`, and `shape` used by [grid::xsplineGrob()] to render the flow.
-#' @template geom-aesthetics
+#' @aesthetics GeomFlow
 #' @template geom-curves
 #' @template defunct-geom-params
 #'   

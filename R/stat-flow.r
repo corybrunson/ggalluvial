@@ -3,7 +3,7 @@
 #' Given a dataset with alluvial structure, `stat_flow` calculates the centroids
 #' (`x` and `y`) and heights (`ymin` and `ymax`) of the flows between each pair
 #' of adjacent axes.
-#' @template stat-aesthetics
+#' @aesthetics StatFlow
 #' @template computed-variables
 #' @template order-options
 #' @template defunct-stat-params

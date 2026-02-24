@@ -51,10 +51,18 @@ from a \code{formula} (e.g. \code{~ head(.x, 10)}).}
 \item{geom}{The geometric object to use display the data; override the
 default.}
 
-\item{position}{Position adjustment, either as a string naming the adjustment
-(e.g. \code{"jitter"} to use \code{position_jitter}), or the result of a call to a
-position adjustment function. Use the latter if you need to change the
-settings of the adjustment.}
+\item{position}{A position adjustment to use on the data for this layer. This
+can be used in various ways, including to prevent overplotting and
+improving the display. The \code{position} argument accepts the following:
+\itemize{
+\item The result of calling a position function, such as \code{position_jitter()}.
+This method allows for passing extra arguments to the position.
+\item A string naming the position adjustment. To give the position as a
+string, strip the function name of the \code{position_} prefix. For example,
+to use \code{position_jitter()}, give the position as \code{"jitter"}.
+\item For more information and other ways to specify the position, see the
+\link[ggplot2:layer_positions]{layer position} documentation.
+}}
 
 \item{decreasing}{Logical; whether to arrange the strata at each axis in the
 order of the variable values (\code{NA}, the default), in ascending order of
@@ -106,12 +114,14 @@ plotted in grey (regardless of the color scheme).}
 \code{NA}, the default, includes if any aesthetics are mapped.
 \code{FALSE} never includes, and \code{TRUE} always includes.
 It can also be a named logical vector to finely select the aesthetics to
-display.}
+display. To include legend keys for all levels, even
+when no data exists, use \code{TRUE}.  If \code{NA}, all levels are shown in legend,
+but unobserved levels are omitted.}
 
 \item{inherit.aes}{If \code{FALSE}, overrides the default aesthetics,
 rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
-the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
+the default plot specification, e.g. \code{\link[ggplot2:annotation_borders]{annotation_borders()}}.}
 
 \item{...}{Additional arguments passed to \code{\link[ggplot2:layer]{ggplot2::layer()}}.}
 }
@@ -120,48 +130,6 @@ Given a dataset with alluvial structure, \code{stat_stratum} calculates the
 centroids (\code{x} and \code{y}) and heights (\code{ymin} and \code{ymax}) of the strata at each
 axis.
 }
-\section{Aesthetics}{
-
-\code{stat_alluvium}, \code{stat_flow}, and \code{stat_stratum} require one
-of two sets of aesthetics:
-\itemize{
-\item \strong{\code{x}} and at least one of \strong{\code{alluvium}} and \strong{\code{stratum}}
-\item any number of \strong{\verb{axis[0-9]*}} (\code{axis1}, \code{axis2}, etc.)
-}
-
-Use \code{x}, \code{alluvium}, and/or \code{stratum} for data in lodes format
-and \verb{axis[0-9]*} for data in alluvia format (see \code{\link{alluvial-data}}).
-Arguments to parameters inconsistent with the format will be ignored.
-Additionally, each \verb{stat_*()} accepts the following optional
-aesthetics:
-\itemize{
-\item \code{y}
-\item \code{weight}
-\item \code{order}
-\item \code{group}
-\item \code{label}
-}
-
-\code{y} controls the heights of the alluvia,
-and may be aggregated across equivalent observations.
-\code{weight} applies to the computed variables (see that section below)
-but does not affect the positional aesthetics.
-\code{order}, recognized by \code{stat_alluvium()} and \code{stat_flow()}, is used to
-arrange the lodes within each stratum. It tolerates duplicates and takes
-precedence over the differentiation aesthetics (when \code{aes.bind} is not
-\code{"none"}) and lode guidance with respect to the remaining axes. (It replaces
-the deprecated parameter \code{lode.ordering}.)
-\code{group} is used internally; arguments are ignored.
-\code{label} is used to label the strata or lodes and must take a unique value
-across the observations within each stratum or lode.
-
-These and any other aesthetics are aggregated as follows:
-Numeric aesthetics, including \code{y}, are summed.
-Character and factor aesthetics, including \code{label},
-are assigned to strata or lodes provided they take unique values across the
-observations within each (and are otherwise assigned \code{NA}).
-}
-
 \section{Computed variables}{
  These can be used with
 \code{\link[ggplot2:aes_eval]{ggplot2::after_stat()}} to \href{https://ggplot2.tidyverse.org/reference/aes_eval.html}{control aesthetic evaluation}.
@@ -289,3 +257,16 @@ Other alluvial stat layers:
 \code{\link{stat_flow}()}
 }
 \concept{alluvial stat layers}
+\section{Aesthetics}{
+
+\code{stat_stratum()} understands the following aesthetics. Required aesthetics are displayed in bold and defaults are displayed for optional aesthetics:
+\tabular{rll}{
+ • \tab \strong{\code{\link[ggplot2:aes_position]{x}}} \tab   \cr
+ • \tab \code{alluvium} \tab → \code{NULL} \cr
+ • \tab \code{\link[ggplot2:aes_group_order]{group}} \tab → inferred \cr
+ • \tab \code{stratum} \tab → \code{NULL} \cr
+ • \tab \code{weight} \tab → \code{1} \cr
+}
+
+Learn more about setting these aesthetics in \code{vignette("ggplot2-specs")}.
+}
