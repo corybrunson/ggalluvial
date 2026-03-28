@@ -56,7 +56,8 @@ is_alluvial <- function(data, ..., silent = FALSE) {
   ))
   
   # determine method based on arguments given
-  dots <- lazyeval::lazy_dots(...)
+  # dots <- lazyeval::lazy_dots(...)
+  dots <- rlang::quo(...)
   if (! is.null(dots$key) | ! is.null(dots$value) | ! is.null(dots$id)) {
     if (! is.null(dots$axes)) {
       stop("Arguments to `key`, `value`, and `id` are mutually exclusive ",
