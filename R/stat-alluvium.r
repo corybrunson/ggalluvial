@@ -99,7 +99,15 @@ StatAlluvium <- ggproto(
         # replace any null entries with uniform `NA` vectors
         wh_null <- which(sapply(params$lode.ordering, is.null))
         len <- unique(sapply(params$lode.ordering[wh_null], length))
-        if (length(len) > 1) stop("Lode orderings have different lengths.")
+        if (length(len) > 1) {
+          rlang::abort(
+            c(
+              "Lode orderings have different lengths.",
+              "i" = "All non-NULL entries of `lode.ordering` must have the same length."
+            ),
+            call = rlang::caller_env()
+          )
+        }
         for (w in wh_null) params$lode.ordering[[w]] <- rep(NA, len)
         # convert list to array (requires equal-length numeric entries)
         params$lode.ordering <- do.call(cbind, params$lode.ordering)
@@ -132,8 +140,13 @@ StatAlluvium <- ggproto(
     
     type <- get_alluvial_type(data)
     if (type == "none") {
-      stop("Data is not in a recognized alluvial form ",
-           "(see `help('alluvial-data')` for details).")
+      rlang::abort(
+        c(
+          "Data is not in a recognized alluvial form.",
+          "i" = "See `help('alluvial-data')` for details."
+        ),
+        call = rlang::caller_env()
+      )
     }
     
     if (params$na.rm) {
@@ -152,15 +165,26 @@ StatAlluvium <- ggproto(
       data$x <- contiguate(data$x)
     } else {
       if (! is.null(params$discern) && ! (params$discern == FALSE)) {
-        warning("Data is already in lodes format, ",
-                "so `discern` will be ignored.")
+        rlang::warn(
+          c(
+            "Data is already in lodes format, so `discern` will be ignored.",
+            "i" = "`discern` only applies to data in alluvia format."
+          ),
+          call = rlang::caller_env()
+        )
       }
     }
     
     # negate strata
     if (! is.null(params$negate.strata)) {
       if (! all(params$negate.strata %in% unique(data$stratum))) {
-        warning("Some values of `negate.strata` are not among strata.")
+        rlang::warn(
+          c(
+            "Some values of `negate.strata` are not among strata.",
+            "i" = "Unmatched values will be ignored."
+          ),
+          call = rlang::caller_env()
+        )
       }
       wneg <- which(data$stratum %in% params$negate.strata)
       if (length(wneg) > 0) data$y[wneg] <- -data$y[wneg]
@@ -198,8 +222,13 @@ StatAlluvium <- ggproto(
       if (is.null(data$label)) {
         data$label <- data$alluvium
       } else {
-        warning("Aesthetic `label` is specified, ",
-                "so parameter `infer.label` will be ignored.")
+        rlang::warn(
+          c(
+            "Aesthetic `label` is already specified, so `infer.label` will be ignored.",
+            "i" = "Remove `infer.label` or the `label` aesthetic."
+          ),
+          call = rlang::caller_env()
+        )
       }
     }
     
@@ -217,8 +246,13 @@ StatAlluvium <- ggproto(
         # flatten `lode.ordering` into an 'order' column
         data$order <- as.vector(lode.ordering)
       } else {
-        warning("Aesthetic `order` is specified, ",
-                "so parameter `lode.ordering` will be ignored.")
+        rlang::warn(
+          c(
+            "Aesthetic `order` is already specified, so `lode.ordering` will be ignored.",
+            "i" = "Remove `lode.ordering` or the `order` aesthetic."
+          ),
+          call = rlang::caller_env()
+        )
       }
     }
     
@@ -229,8 +263,13 @@ StatAlluvium <- ggproto(
     if (! is.null(aes.bind)) {
       if (is.logical(aes.bind)) {
         aes.bind.rep <- if (aes.bind) "flows" else "none"
-        warning("Logical values of `aes.bind` are deprecated; ",
-                "replacing ", aes.bind, " with '", aes.bind.rep, "'.")
+        rlang::warn(
+          c(
+            "Logical values of `aes.bind` are deprecated.",
+            "i" = paste0("Replacing `", aes.bind, "` with '", aes.bind.rep, "'.")
+          ),
+          call = rlang::caller_env()
+        )
         aes.bind <- aes.bind.rep
       }
       aes.bind <- match.arg(aes.bind, c("none", "flows", "alluvia"))

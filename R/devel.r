@@ -59,8 +59,13 @@ is_alluvial <- function(data, ..., silent = FALSE) {
   dots <- lazyeval::lazy_dots(...)
   if (! is.null(dots$key) | ! is.null(dots$value) | ! is.null(dots$id)) {
     if (! is.null(dots$axes)) {
-      stop("Arguments to `key`, `value`, and `id` are mutually exclusive ",
-           "with an argument to `axes`.")
+      rlang::abort(
+        c(
+          "Arguments to `key`, `value`, and `id` are mutually exclusive with `axes`.",
+          "i" = "Pass either `key`/`value`/`id` or `axes`, not both."
+        ),
+        call = rlang::caller_env()
+      )
     }
     is_lodes_form(data = data, ..., silent = silent)
   } else {

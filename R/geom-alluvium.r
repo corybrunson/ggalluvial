@@ -94,9 +94,13 @@ GeomAlluvium <- ggproto(
   setup_data = function(data, params) {
     
     if (! is.null(params$aes.flow)) {
-      warning("Parameter `aes.flow` cannot be used in `geom_alluvium`, ",
-              "and will be ignored; ",
-              "use `geom_lode` and `geom_flow` instead.")
+      rlang::warn(
+        c(
+          "Parameter `aes.flow` cannot be used in `geom_alluvium` and will be ignored.",
+          "i" = "Use `geom_lode()` and `geom_flow()` instead."
+        ),
+        call = rlang::caller_env()
+      )
       params$aes.flow <- NULL
     }
     
@@ -104,9 +108,14 @@ GeomAlluvium <- ggproto(
     aesthetics <- intersect(.color_diff_aesthetics, names(data))
     if (nrow(unique(data[, c("alluvium", aesthetics), drop = FALSE])) !=
         length(unique(data$alluvium))) {
-      warning("Some differentiation aesthetics vary within alluvia, ",
-              "and will be diffused by their first value.\n",
-              "Consider using `geom_flow()` instead.")
+      rlang::warn(
+        c(
+          "Some differentiation aesthetics vary within alluvia.",
+          "i" = "They will be diffused by their first value.",
+          "i" = "Consider using `geom_flow()` instead."
+        ),
+        call = rlang::caller_env()
+      )
     }
     
     knot.pos <- params$knot.pos
