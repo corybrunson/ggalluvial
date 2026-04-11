@@ -4,7 +4,14 @@
 get_axes <- function(x) {
   if (anyDuplicated(x)) {
     dupes <- unique(x[duplicated(x)])
-    stop("Duplicated variables: ", paste(dupes, collapse = ", "))
+    rlang::abort(
+      c(
+        "Column names must be unique.",
+        "x" = paste0("Duplicated variable(s): ",
+                      paste(dupes, collapse = ", "), ".")
+      ),
+      call = rlang::caller_env()
+    )
   }
   axis_ind <- grep("^axis[0-9]*$", x)
   axis_ind[order(as.numeric(gsub("^axis", "", x[axis_ind])), na.last = FALSE)]
@@ -14,8 +21,13 @@ get_alluvial_type <- function(data) {
   # ensure that data is alluvial
   if (!is.null(data$x) | !is.null(data$stratum) | !is.null(data$alluvium)) {
     if (is.null(data$x) | is.null(data$stratum) | is.null(data$alluvium)) {
-      stop("Parameters `x`, `stratum`, and `alluvium` are required ",
-           "for data in lodes form.")
+      rlang::abort(
+        c(
+          "Aesthetics `x`, `stratum`, and `alluvium` are all required for data in lodes form.",
+          "i" = "Map all three in `aes()`."
+        ),
+        call = rlang::caller_env()
+      )
     }
     if (is_lodes_form(data,
                       key = "x", value = "stratum", id = "alluvium",
@@ -115,7 +127,14 @@ distill_fun <- function(distill) {
   } else if (is.character(distill)) {
     return(get(distill))
   } else {
-    stop("Please pass either a function or its name to `distill`.")
+    rlang::abort(
+      c(
+        "`distill` must be a function or a character string naming one.",
+        "i" = paste0("Valid names: ",
+                      paste(distill_vals, collapse = ", "), ".")
+      ),
+      call = rlang::caller_env()
+    )
   }
 }
 

@@ -124,8 +124,13 @@ StatStratum <- ggproto(
     
     type <- get_alluvial_type(data)
     if (type == "none") {
-      stop("Data is not in a recognized alluvial form ",
-           "(see `help('alluvial-data')` for details).")
+      rlang::abort(
+        c(
+          "Data is not in a recognized alluvial form.",
+          "i" = "See `help('alluvial-data')` for details."
+        ),
+        call = rlang::caller_env()
+      )
     }
     
     if (params$na.rm) {
@@ -144,15 +149,26 @@ StatStratum <- ggproto(
       data$x <- contiguate(data$x)
     } else {
       if (! is.null(params$discern) && ! (params$discern == FALSE)) {
-        warning("Data is already in lodes format, ",
-                "so `discern` will be ignored.")
+        rlang::warn(
+          c(
+            "Data is already in lodes format, so `discern` will be ignored.",
+            "i" = "`discern` only applies to data in alluvia format."
+          ),
+          call = rlang::caller_env()
+        )
       }
     }
     
     # negate strata
     if (! is.null(params$negate.strata)) {
       if (! all(params$negate.strata %in% unique(data$stratum))) {
-        warning("Some values of `negate.strata` are not among strata.")
+        rlang::warn(
+          c(
+            "Some values of `negate.strata` are not among strata.",
+            "i" = "Unmatched values will be ignored."
+          ),
+          call = rlang::caller_env()
+        )
       }
       wneg <- which(data$stratum %in% params$negate.strata)
       if (length(wneg) > 0) data$y[wneg] <- -data$y[wneg]
@@ -192,8 +208,13 @@ StatStratum <- ggproto(
       if (is.null(data$label)) {
         data$label <- data$stratum
       } else {
-        warning("Aesthetic `label` is specified, ",
-                "so parameter `infer.label` will be ignored.")
+        rlang::warn(
+          c(
+            "Aesthetic `label` is already specified, so `infer.label` will be ignored.",
+            "i" = "Remove `infer.label` or the `label` aesthetic."
+          ),
+          call = rlang::caller_env()
+        )
       }
     }
     

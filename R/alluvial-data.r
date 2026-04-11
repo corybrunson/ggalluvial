@@ -33,7 +33,8 @@
 
 #' @name alluvial-data
 #' @importFrom rlang enquo enquos enexpr enexprs quos is_empty quo_name
-#'   is_character is_integerish is_quosures have_name
+#'   is_character is_integerish is_quosures have_name abort warn inform
+#'   caller_env
 #' @importFrom tidyselect vars_pull vars_select eval_select
 #' @family alluvial data manipulation
 #' @param data A data frame.
@@ -97,23 +98,38 @@ is_lodes_form <- function(data,
   }
   
   if (any(duplicated(cbind(data[c(key_var, id_var)])))) {
-    if (! silent) message("Duplicated id-axis pairings",
-                          if (! is.null(enexprs(site))) "." else
-                            "; should `site` have been specified?")
+    if (! silent) {
+      if (is.null(enexprs(site))) {
+        rlang::inform(
+          c(
+            "Duplicated id-axis pairings.",
+            "i" = "Should `site` have been specified?"
+          )
+        )
+      } else {
+        rlang::inform("Duplicated id-axis pairings.")
+      }
+    }
     return(if (logical) FALSE else "none")
   }
   
   n_pairs <-
     dplyr::n_distinct(data[key_var]) * dplyr::n_distinct(data[id_var])
   if (nrow(data) < n_pairs) {
-    if (! silent) warning("Missing id-axis pairings (at some sites).")
+    if (! silent) rlang::warn(
+      c(
+        "Missing id-axis pairings at some sites.",
+        "i" = "Some combinations of `id` and `key` are absent from the data."
+      ),
+      call = rlang::caller_env()
+    )
   }
   
   # if `weight` is not `NULL`, use NSE to identify `weight_var`
   if (! is.null(enexpr(weight))) {
     weight_var <- vars_select(names(data), !! enquo(weight))
     if (! is.numeric(data[[weight_var]])) {
-      if (! silent) message("Lode weights are non-numeric.")
+      if (! silent) rlang::inform(c("i" = "Lode weights are non-numeric."))
       return(if (logical) FALSE else "none")
     }
   }
@@ -134,7 +150,7 @@ is_alluvia_form <- function(data,
   } else {
     weight_var <- vars_select(names(data), !! enquo(weight))
     if (! is.numeric(data[[weight_var]])) {
-      if (! silent) message("Alluvium weights are non-numeric.")
+      if (! silent) rlang::inform(c("i" = "Alluvium weights are non-numeric."))
       return(if (logical) FALSE else "none")
     }
   }
@@ -153,7 +169,7 @@ is_alluvia_form <- function(data,
   n_alluvia <- nrow(dplyr::distinct(data[axes]))
   n_combns <- do.call(prod, lapply(data[axes], dplyr::n_distinct))
   if (n_alluvia < n_combns) {
-    if (! silent) message("Missing alluvia for some stratum combinations.")
+    if (! silent) rlang::inform(c("i" = "Missing alluvia for some stratum combinations."))
   }
   
   if (logical) TRUE else "alluvia"
@@ -190,14 +206,27 @@ to_lodes_form <- function(data,
   } else {
     diffuse <- unname(vars_select(names(data), !! enquo(diffuse)))
     if (! all(diffuse %in% axes)) {
-      stop("All `diffuse` variables must be `axes` variables.")
+      rlang::abort(
+        c(
+          "All `diffuse` variables must be `axes` variables.",
+          "x" = paste0("Non-axis variable(s): ",
+                        paste(setdiff(diffuse, axes), collapse = ", "), ".")
+        ),
+        call = rlang::caller_env()
+      )
     }
   }
   
   # combine factor levels
   cat_levels <- unname(unlist(lapply(lapply(data[axes], as.factor), levels)))
   if (any(duplicated(cat_levels)) & is.null(discern)) {
-    warning("Some strata appear at multiple axes.")
+    rlang::warn(
+      c(
+        "Some strata appear at multiple axes.",
+        "i" = "Set `discern = TRUE` to suffix duplicated stratum labels."
+      ),
+      call = rlang::caller_env()
+    )
   }
   if (isTRUE(discern)) {
     data <- discern_data(data, axes)
@@ -252,9 +281,14 @@ to_alluvia_form <- function(data,
       if (isTRUE(distill)) {
         distill <- "first"
       } else {
-        warning("The following variables vary within `id`s ",
-                "and will be dropped: ",
-                paste(distill_vars, collapse = ", "))
+        rlang::warn(
+          c(
+            "Some variables vary within `id`s and will be dropped.",
+            "x" = paste0("Dropped variable(s): ",
+                          paste(distill_vars, collapse = ", "), ".")
+          ),
+          call = rlang::caller_env()
+        )
         distill <- NULL
       }
     # } else if (is.character(distill)) {
@@ -264,8 +298,10 @@ to_alluvia_form <- function(data,
     }
     if (! is.null(distill)) {
       stopifnot(is.function(distill))
-      message("Distilled variables: ",
-              paste(distill_vars, collapse = ", "))
+      rlang::inform(
+        c("i" = paste0("Distilled variable(s): ",
+                        paste(distill_vars, collapse = ", "), "."))
+      )
       distill_data <- stats::aggregate(
         data[distill_vars],
         data[id_var],
@@ -324,8 +360,12 @@ data_at_vars <- function(data, vars) {
     }
     out
   } else {
-    stop("Either a character or numeric vector ",
-         "or a `vars()` object ",
-         "is required.")
+    rlang::abort(
+      c(
+        "`axes` must be a character vector, numeric vector, or a `vars()` object.",
+        "i" = paste0("Got class: ", paste(class(vars), collapse = "/"), ".")
+      ),
+      call = rlang::caller_env()
+    )
   }
 }
