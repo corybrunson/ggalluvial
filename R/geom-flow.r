@@ -126,7 +126,7 @@ GeomFlow <- ggproto(
     )
 
     # aesthetics (in prescribed order)
-    aesthetics <- intersect(.color_diff_aesthetics, names(data))
+    aesthetics <- detect_diff_aes(data)
     # arrange data by aesthetics for consistent (reverse) z-ordering
     data <- data[do.call(order, lapply(
       data[, c("step", aesthetics)],

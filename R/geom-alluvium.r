@@ -101,7 +101,7 @@ GeomAlluvium <- ggproto(
     }
     
     # check whether color or differentiation aesthetics vary within alluvia
-    aesthetics <- intersect(.color_diff_aesthetics, names(data))
+    aesthetics <- detect_diff_aes(data)
     if (nrow(unique(data[, c("alluvium", aesthetics), drop = FALSE])) !=
         length(unique(data$alluvium))) {
       warning("Some differentiation aesthetics vary within alluvia, ",

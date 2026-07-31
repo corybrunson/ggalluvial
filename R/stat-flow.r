@@ -175,8 +175,8 @@ StatFlow <- ggproto(
     }
     
     # differentiation and text aesthetics (in prescribed order)
-    diff_aes <- intersect(c(.color_diff_aesthetics, .text_aesthetics),
-                          names(data))
+    diff_aes <- intersect(.diff_aesthetics, names(data))
+    diff_aes <- detect_diff_aes(data)
     # match arguments for `aes.bind`
     if (! is.null(aes.bind)) {
       if (is.logical(aes.bind)) {

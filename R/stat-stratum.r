@@ -198,8 +198,8 @@ StatStratum <- ggproto(
     }
     
     # differentiation aesthetics (in prescribed order)
-    diff_aes <- intersect(c(.color_diff_aesthetics, .text_aesthetics),
-                          names(data))
+    diff_aes <- intersect(.diff_aesthetics, names(data))
+    diff_aes <- detect_diff_aes(data)
     
     # sign variable (sorts positives before negatives)
     data$yneg <- data$y < 0
