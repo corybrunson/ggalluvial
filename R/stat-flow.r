@@ -37,6 +37,8 @@ stat_flow <- function(mapping = NULL,
                       decreasing = NULL,
                       reverse = NULL,
                       absolute = NULL,
+                      sort_strata = NULL,
+                      color_strata = NULL,
                       discern = FALSE,
                       negate.strata = NULL,
                       aes.bind = NULL,
@@ -46,6 +48,11 @@ stat_flow <- function(mapping = NULL,
                       show.legend = NA,
                       inherit.aes = TRUE,
                       ...) {
+  # `layer()` rewrites 'color' to 'colour' in parameter names, so the parameter
+  # seen by the stat is `colour_strata`; accept either spelling here
+  dots <- list(...)
+  if (is.null(color_strata)) color_strata <- dots$colour_strata
+  dots$colour_strata <- NULL
   layer(
     stat = StatFlow,
     data = data,
@@ -54,18 +61,19 @@ stat_flow <- function(mapping = NULL,
     position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
-    params = list(
+    params = c(list(
       decreasing = decreasing,
       reverse = reverse,
       absolute = absolute,
+      sort_strata = sort_strata,
+      colour_strata = color_strata,
       discern = discern,
       negate.strata = negate.strata,
       aes.bind = aes.bind,
       infer.label = infer.label,
       min.y = min.y, max.y = max.y,
-      na.rm = na.rm,
-      ...
-    )
+      na.rm = na.rm
+    ), dots)
   )
 }
 
@@ -150,6 +158,8 @@ StatFlow <- ggproto(
                            decreasing = NULL,
                            reverse = NULL,
                            absolute = NULL,
+                           sort_strata = NULL,
+                           colour_strata = NULL,
                            discern = FALSE, distill = "first",
                            negate.strata = NULL,
                            aes.bind = NULL,
@@ -161,6 +171,13 @@ StatFlow <- ggproto(
     if (is.null(reverse)) reverse <- ggalluvial_opt("reverse")
     if (is.null(absolute)) absolute <- ggalluvial_opt("absolute")
     if (is.null(aes.bind)) aes.bind <- ggalluvial_opt("aes.bind")
+    if (is.null(sort_strata)) sort_strata <- ggalluvial_opt("sort_strata")
+    if (is.null(colour_strata)) colour_strata <- ggalluvial_opt("color_strata")
+    
+    # delegate stratum order and stratum clusters to an uncrossing engine
+    # (before the lodes are split into flows)
+    strata_ranks <- uncross_ranks(data, sort_strata)
+    strata_clusters <- uncross_clusters(data, colour_strata)
     
     # introduce label
     if (infer.label) {
@@ -204,7 +221,9 @@ StatFlow <- ggproto(
       (-1) ^ (data$yneg * absolute + reverse)
     
     # define 'deposit' variable to rank strata vertically
-    data <- deposit_data(data, decreasing, reverse, absolute)
+    data <- deposit_data(data, decreasing, reverse, absolute, strata_ranks)
+    # introduce the computed variable 'cluster'
+    data <- uncross_attach_clusters(data, strata_clusters)
     
     # identify fissures at aesthetics that vary within strata
     n_lodes <- nrow(unique(data[, c("x", "stratum")]))
@@ -262,7 +281,7 @@ StatFlow <- ggproto(
     
     # aggregate variables over 'alluvium', 'x', 'yneg', and 'stratum':
     # sum of computed variables and unique-or-bust values of aesthetics
-    by_vars <- intersect(c("alluvium", "x", "yneg", "stratum",
+    by_vars <- intersect(c("alluvium", "x", "yneg", "stratum", "cluster",
                            "deposit", "order", "fissure", "link", "flow",
                            "adj_deposit", "adj_order", "adj_fissure"),
                          names(data))

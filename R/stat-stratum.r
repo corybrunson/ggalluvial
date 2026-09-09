@@ -28,6 +28,17 @@
 #' @param absolute Logical; if some cases or strata are negative, whether to
 #'   arrange them (respecting `decreasing` and `reverse`) using negative or
 #'   absolute values of `y`.
+#' @param sort_strata A method specification passed to an uncrossing engine
+#'   (by default **wompwomp**) to order the strata at each axis; see
+#'   [`uncross`]. Defaults to `NULL`, for no reordering. Must be given the same
+#'   value in every layer of a plot.
+#' @param color_strata A method specification passed to an uncrossing engine
+#'   (by default **wompwomp**) to assign the strata to clusters shared across
+#'   axes, available as the computed variable `cluster`; see [`uncross`].
+#'   Defaults to `NULL`, for no clustering; pass `NA` to ignore the package
+#'   option in one layer. Since [ggplot2::layer()] rewrites
+#'   'color' to 'colour' in parameter names, `colour_strata` is accepted as
+#'   well and is the name the parameter goes by internally.
 #' @param discern Passed to [to_lodes_form()] if `data` is in alluvia format.
 #' @param distill A function (or its name) to be used to distill alluvium values
 #'   to a single lode label, accessible via
@@ -57,6 +68,8 @@ stat_stratum <- function(mapping = NULL,
                          decreasing = NULL,
                          reverse = NULL,
                          absolute = NULL,
+                         sort_strata = NULL,
+                         color_strata = NULL,
                          discern = FALSE, distill = "first",
                          negate.strata = NULL,
                          infer.label = FALSE, label.strata = NULL,
@@ -66,6 +79,11 @@ stat_stratum <- function(mapping = NULL,
                          show.legend = NA,
                          inherit.aes = TRUE,
                          ...) {
+  # `layer()` rewrites 'color' to 'colour' in parameter names, so the parameter
+  # seen by the stat is `colour_strata`; accept either spelling here
+  dots <- list(...)
+  if (is.null(color_strata)) color_strata <- dots$colour_strata
+  dots$colour_strata <- NULL
   layer(
     stat = StatStratum,
     mapping = mapping,
@@ -74,18 +92,19 @@ stat_stratum <- function(mapping = NULL,
     position = position,
     show.legend = show.legend,
     inherit.aes = inherit.aes,
-    params = list(
+    params = c(list(
       decreasing = decreasing,
       reverse = reverse,
       absolute = absolute,
+      sort_strata = sort_strata,
+      colour_strata = color_strata,
       discern = discern, distill = distill,
       negate.strata = negate.strata,
       infer.label = infer.label, label.strata = label.strata,
       min.y = min.y, max.y = max.y,
       min.height = min.height, max.height = max.height,
-      na.rm = na.rm,
-      ...
-    )
+      na.rm = na.rm
+    ), dots)
   )
 }
 
@@ -99,6 +118,32 @@ StatStratum <- ggproto(
   
   # `<new-aes> = NULL` prevents "unknown aesthetics" warnings
   default_aes = aes(weight = 1, stratum = NULL, alluvium = NULL),
+  
+  setup_params = function(data, params) {
+    
+    # resolve the uncrossing options here rather than in `compute_panel()`, so
+    # that the check below can override them
+    if (is.null(params$sort_strata)) {
+      params$sort_strata <- ggalluvial_opt("sort_strata")
+    }
+    if (is.null(params$colour_strata)) {
+      params$colour_strata <- ggalluvial_opt("color_strata")
+    }
+    
+    # `setup_data()` invents an 'alluvium' for lodes-form data that provides
+    # none, linking the strata at adjacent axes by row order alone. Uncrossing
+    # or clustering those links would make the plot depend on the order of the
+    # data, so refuse to do it.
+    if (is.null(data$alluvium) && ! is.null(data$x) &&
+        (! is.null(params$sort_strata) || ! is.null(params$colour_strata))) {
+      warning("`sort_strata` and `color_strata` require the `alluvium` ",
+              "aesthetic, which is not provided; ignoring them.")
+      params$sort_strata <- NA
+      params$colour_strata <- NA
+    }
+    
+    params
+  },
   
   setup_data = function(data, params) {
     
@@ -169,6 +214,8 @@ StatStratum <- ggproto(
                            decreasing = NULL,
                            reverse = NULL,
                            absolute = NULL,
+                           sort_strata = NULL,
+                           colour_strata = NULL,
                            discern = FALSE, distill = "first",
                            negate.strata = NULL,
                            infer.label = FALSE, label.strata = NULL,
@@ -179,6 +226,13 @@ StatStratum <- ggproto(
     if (is.null(decreasing)) decreasing <- ggalluvial_opt("decreasing")
     if (is.null(reverse)) reverse <- ggalluvial_opt("reverse")
     if (is.null(absolute)) absolute <- ggalluvial_opt("absolute")
+    if (is.null(sort_strata)) sort_strata <- ggalluvial_opt("sort_strata")
+    if (is.null(colour_strata)) colour_strata <- ggalluvial_opt("color_strata")
+    
+    # delegate stratum order and stratum clusters to an uncrossing engine
+    # (before the lodes are aggregated away)
+    strata_ranks <- uncross_ranks(data, sort_strata)
+    strata_clusters <- uncross_clusters(data, colour_strata)
     
     # introduce label
     if (! is.null(label.strata)) {
@@ -244,7 +298,9 @@ StatStratum <- ggproto(
     data <- subset(data, y != 0)
     
     # define 'deposit' variable to rank strata vertically
-    data <- deposit_data(data, decreasing, reverse, absolute)
+    data <- deposit_data(data, decreasing, reverse, absolute, strata_ranks)
+    # introduce the computed variable 'cluster'
+    data <- uncross_attach_clusters(data, strata_clusters)
     
     # calculate variables for `after_stat()`
     x_sums <- tapply(abs(data$count), data$x, sum, na.rm = TRUE)

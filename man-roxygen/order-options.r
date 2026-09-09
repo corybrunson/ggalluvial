@@ -12,6 +12,9 @@
 #' - `ggalluvial.lode.guidance` (`stat_alluvium`): defaults to `"zigzag"`.
 #' - `ggalluvial.aes.bind` (`stat_alluvium` and `stat_flow`): defaults to
 #'   `"none"`.
+#' - `ggalluvial.sort_strata` (each `stat_*`): defaults to `NULL`.
+#' - `ggalluvial.color_strata` (each `stat_*`): defaults to `NULL`.
+#' - `ggalluvial.sort_axes` (`sort_axes()`): defaults to `NULL`.
 #' 
 #' See [base::options()] for how to use options.
 #' 

@@ -7,6 +7,8 @@
 #'   \item{`prop`}{weighted proportion of lode}
 #'   \item{`stratum`}{value of variable used to define strata}
 #'   \item{`deposit`}{order in which (signed) strata are deposited}
+#'   \item{`cluster`}{cluster shared by strata at different axes
+#'                   (only if `color_strata` is set; see [`uncross`])}
 #'   \item{`lode`}{lode label distilled from alluvia
 #'                 (`stat_alluvium()` and `stat_flow()` only)}
 #'   \item{`flow`}{direction of flow `"to"` or `"from"` from its axis

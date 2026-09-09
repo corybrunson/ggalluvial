@@ -12,6 +12,8 @@ stat_alluvium(
   decreasing = NULL,
   reverse = NULL,
   absolute = NULL,
+  sort_strata = NULL,
+  color_strata = NULL,
   discern = FALSE,
   negate.strata = NULL,
   aggregate.y = NULL,
@@ -52,10 +54,18 @@ from a \code{formula} (e.g. \code{~ head(.x, 10)}).}
 \item{geom}{The geometric object to use display the data; override the
 default.}
 
-\item{position}{Position adjustment, either as a string naming the adjustment
-(e.g. \code{"jitter"} to use \code{position_jitter}), or the result of a call to a
-position adjustment function. Use the latter if you need to change the
-settings of the adjustment.}
+\item{position}{A position adjustment to use on the data for this layer. This
+can be used in various ways, including to prevent overplotting and
+improving the display. The \code{position} argument accepts the following:
+\itemize{
+\item The result of calling a position function, such as \code{position_jitter()}.
+This method allows for passing extra arguments to the position.
+\item A string naming the position adjustment. To give the position as a
+string, strip the function name of the \code{position_} prefix. For example,
+to use \code{position_jitter()}, give the position as \code{"jitter"}.
+\item For more information and other ways to specify the position, see the
+\link[ggplot2:layer_positions]{layer position} documentation.
+}}
 
 \item{decreasing}{Logical; whether to arrange the strata at each axis in the
 order of the variable values (\code{NA}, the default), in ascending order of
@@ -70,6 +80,19 @@ is not \code{NA}. Defaults to \code{TRUE}.}
 \item{absolute}{Logical; if some cases or strata are negative, whether to
 arrange them (respecting \code{decreasing} and \code{reverse}) using negative or
 absolute values of \code{y}.}
+
+\item{sort_strata}{A method specification passed to an uncrossing engine
+(by default \strong{wompwomp}) to order the strata at each axis; see
+\code{\link{uncross}}. Defaults to \code{NULL}, for no reordering. Must be given the same
+value in every layer of a plot.}
+
+\item{color_strata}{A method specification passed to an uncrossing engine
+(by default \strong{wompwomp}) to assign the strata to clusters shared across
+axes, available as the computed variable \code{cluster}; see \code{\link{uncross}}.
+Defaults to \code{NULL}, for no clustering; pass \code{NA} to ignore the package
+option in one layer. Since \code{\link[ggplot2:layer]{ggplot2::layer()}} rewrites
+'color' to 'colour' in parameter names, \code{colour_strata} is accepted as
+well and is the name the parameter goes by internally.}
 
 \item{discern}{Passed to \code{\link[=to_lodes_form]{to_lodes_form()}} if \code{data} is in alluvia format.}
 
@@ -130,12 +153,14 @@ plotted in grey (regardless of the color scheme).}
 \code{NA}, the default, includes if any aesthetics are mapped.
 \code{FALSE} never includes, and \code{TRUE} always includes.
 It can also be a named logical vector to finely select the aesthetics to
-display.}
+display. To include legend keys for all levels, even
+when no data exists, use \code{TRUE}.  If \code{NA}, all levels are shown in legend,
+but unobserved levels are omitted.}
 
 \item{inherit.aes}{If \code{FALSE}, overrides the default aesthetics,
 rather than combining with them. This is most useful for helper functions
 that define both data and aesthetics and shouldn't inherit behaviour from
-the default plot specification, e.g. \code{\link[ggplot2:borders]{borders()}}.}
+the default plot specification, e.g. \code{\link[ggplot2:annotation_borders]{annotation_borders()}}.}
 
 \item{...}{Additional arguments passed to \code{\link[ggplot2:layer]{ggplot2::layer()}}.}
 }
@@ -196,6 +221,8 @@ observations within each (and are otherwise assigned \code{NA}).
 \item{\code{prop}}{weighted proportion of lode}
 \item{\code{stratum}}{value of variable used to define strata}
 \item{\code{deposit}}{order in which (signed) strata are deposited}
+\item{\code{cluster}}{cluster shared by strata at different axes
+(only if \code{color_strata} is set; see \code{\link{uncross}})}
 \item{\code{lode}}{lode label distilled from alluvia
 (\code{stat_alluvium()} and \code{stat_flow()} only)}
 \item{\code{flow}}{direction of flow \code{"to"} or \code{"from"} from its axis
@@ -223,6 +250,9 @@ manually set:
 \item \code{ggalluvial.lode.guidance} (\code{stat_alluvium}): defaults to \code{"zigzag"}.
 \item \code{ggalluvial.aes.bind} (\code{stat_alluvium} and \code{stat_flow}): defaults to
 \code{"none"}.
+\item \code{ggalluvial.sort_strata} (each \verb{stat_*}): defaults to \code{NULL}.
+\item \code{ggalluvial.color_strata} (each \verb{stat_*}): defaults to \code{NULL}.
+\item \code{ggalluvial.sort_axes} (\code{sort_axes()}): defaults to \code{NULL}.
 }
 
 See \code{\link[base:options]{base::options()}} for how to use options.
@@ -362,6 +392,7 @@ ggplot(transform(alluvial::Refugees, id = 1),
 
 Other alluvial stat layers: 
 \code{\link{stat_flow}()},
-\code{\link{stat_stratum}()}
+\code{\link{stat_stratum}()},
+\code{\link{uncross}}
 }
 \concept{alluvial stat layers}

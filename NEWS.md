@@ -1,3 +1,53 @@
+# ggalluvial (development version)
+
+## uncrossing and recoloring strata
+
+The `stat_*()` layers take two new parameters, `sort_strata` and
+`color_strata`, which delegate the order of the strata at each axis and a
+coloring of the strata shared across axes to an *uncrossing engine*:
+
+``` r
+ggplot(vaccinations,
+       aes(x = survey, stratum = response, alluvium = subject, y = freq)) +
+  geom_flow(sort_strata = "wompwomp") +
+  geom_stratum(aes(fill = after_stat(cluster)),
+               sort_strata = "wompwomp", color_strata = "wompwomp")
+```
+
+Each parameter names an engine. The
+[**wompwomp**](https://github.com/pachterlab/wompwomp) engine (a suggested,
+not a required, dependency) sorts the k-partite graph underlying an alluvial
+diagram so as to nearly minimize the number of crossing flows, and clusters
+the strata across axes. Four engines that need no other package --
+`"alphabetical"`, `"reverse_alphabetical"`, `"increasing"`, `"decreasing"` --
+order the strata at each axis independently.
+
+An engine's algorithm and tuning arguments are given in a list:
+
+``` r
+sort_strata = list("wompwomp", method = "tsp", alpha = 3)
+```
+
+`color_strata` introduces the computed variable `cluster`, used through
+`after_stat()`. Both require the `alluvium` aesthetic: `stat_stratum()` invents
+one when lodes-form data provides none, and rather than uncross links that are
+an artifact of row order it warns and leaves the strata alone. Both default to
+the session options `ggalluvial.sort_strata` and `ggalluvial.color_strata`, and
+`NA` opts a single layer out of such a default. Results are memoized within a
+session, so an engine runs once per panel rather than once per layer, and
+stochastic algorithms cannot disagree between layers.
+
+Engines are resolved through a registry, so another package or algorithm can be
+plugged in with a single call to the new `register_uncross_engine()` and no
+change to the layers.
+
+The order of the axes themselves cannot be set from a statistical
+transformation, since position scales are trained before stats are computed.
+The new `sort_axes()` returns the recommended axis order instead, for use in
+`scale_x_discrete(limits = )` or `to_lodes_form(axes = )`.
+
+See `help("uncross")`.
+
 # ggalluvial 0.12.6
 
 This patch includes some of several fixes in progress but was prompted by the deprecation by **dplyr** of `select_vars()`.

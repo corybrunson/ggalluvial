@@ -63,12 +63,15 @@ contiguate <- function(x) {
 }
 
 # define 'deposit' variable to rank strata vertically
-deposit_data <- function(data, decreasing, reverse, absolute) {
+# `ranks`, if provided, is an integer vector named by 'x' and 'stratum' (see
+# `uncross_ranks()`); it replaces the intrinsic order of the stratum values
+deposit_data <- function(data, decreasing, reverse, absolute, ranks = NULL) {
   if (is.na(decreasing)) {
     deposits <- unique(data[, c("x", "yneg", "stratum"), drop = FALSE])
     deposits$deposit <- order(order(
       deposits$x, -deposits$yneg,
-      xtfrm(deposits$stratum) * (-1) ^ (deposits$yneg * absolute + reverse)
+      stratum_xtfrm(deposits, ranks) * (-1) ^ (deposits$yneg * absolute +
+                                                 reverse)
     ))
   } else {
     deposits <- stats::aggregate(
@@ -80,11 +83,25 @@ deposit_data <- function(data, decreasing, reverse, absolute) {
     deposits$deposit <- order(order(
       deposits$x, -deposits$yneg,
       xtfrm(deposits$y) * (-1) ^ (deposits$yneg * absolute + decreasing),
-      xtfrm(deposits$stratum) * (-1) ^ (deposits$yneg * absolute + reverse)
+      stratum_xtfrm(deposits, ranks) * (-1) ^ (deposits$yneg * absolute +
+                                                 reverse)
     ))
     deposits$y <- NULL
   }
   merge(data, deposits, all.x = TRUE, all.y = FALSE)
+}
+
+# numeric sorting key for the strata: their intrinsic order, or the externally
+# supplied ranks when these are available. Strata missing from `ranks` are
+# deposited after the ranked ones, in their intrinsic order.
+stratum_xtfrm <- function(deposits, ranks = NULL) {
+  if (is.null(ranks)) return(xtfrm(deposits$stratum))
+  res <- unname(ranks[paste0(deposits$x, "\r", as.character(deposits$stratum))])
+  if (! anyNA(res)) return(res)
+  wh <- which(is.na(res))
+  top <- if (all(is.na(res))) 0L else max(res, na.rm = TRUE)
+  res[wh] <- top + rank(xtfrm(deposits$stratum)[wh], ties.method = "min")
+  res
 }
 
 # calculate cumulative 'y' values, accounting for sign

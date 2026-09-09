@@ -26,7 +26,7 @@ An object of class \code{StatAlluvium} (inherits from \code{Stat}, \code{ggproto
 
 An object of class \code{StatFlow} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 7.
 
-An object of class \code{StatStratum} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 5.
+An object of class \code{StatStratum} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 6.
 }
 \description{
 Base ggproto classes for ggalluvial

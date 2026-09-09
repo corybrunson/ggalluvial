@@ -25,6 +25,10 @@ op.ggalluvial <- list(
   ggalluvial.cement.alluvia = FALSE,
   ggalluvial.lode.guidance = "zigzag",
   ggalluvial.aes.bind = "none",
+  # uncrossing and recoloring (see `help("uncross")`)
+  ggalluvial.sort_strata = NULL,
+  ggalluvial.color_strata = NULL,
+  ggalluvial.sort_axes = NULL,
   # curves
   ggalluvial.curve_type = "xspline",
   ggalluvial.curve_range = NA_real_,
