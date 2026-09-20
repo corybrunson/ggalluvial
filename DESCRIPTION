@@ -45,12 +45,14 @@ Suggests:
     htmltools,
     sp (>= 1.4-0),
     ggfittext (>= 0.6),
-    vdiffr (>= 0.2)
+    vdiffr (>= 0.2),
+    wompwomp
 License: GPL-3
 LazyData: true
 URL: http://corybrunson.github.io/ggalluvial/
 BugReports: https://github.com/corybrunson/ggalluvial/issues
 VignetteBuilder: knitr
-RoxygenNote: 7.2.3
 Roxygen: list(markdown = TRUE)
 Encoding: UTF-8
+Config/roxygen2/version: 8.0.0
+RoxygenNote: 7.3.3
