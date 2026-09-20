@@ -135,9 +135,9 @@ gg + geom_alluvium() +
 \code{\link[=stat_alluvium]{stat_alluvium()}} and
 \code{\link[=stat_stratum]{stat_stratum()}} for the corresponding stats.
 
-Other alluvial geom layers: 
-\code{\link{geom_alluvium}()},
-\code{\link{geom_flow}()},
-\code{\link{geom_stratum}()}
+Other alluvial geom layers:
+\code{\link[=geom_alluvium]{geom_alluvium()}},
+\code{\link[=geom_flow]{geom_flow()}},
+\code{\link[=geom_stratum]{geom_stratum()}}
 }
 \concept{alluvial geom layers}

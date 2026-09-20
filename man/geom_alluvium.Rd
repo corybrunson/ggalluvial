@@ -128,7 +128,7 @@ themselves, using \code{\link[=geom_lode]{geom_lode()}}, and the flows between t
 \details{
 The helper function \code{data_to_alluvium()} takes internal \strong{ggplot2} data
 (mapped aesthetics) and curve parameters for a single alluvium as input and
-returns a data frame of \code{x}, \code{y}, and \code{shape} used by \code{\link[grid:grid.xspline]{grid::xsplineGrob()}}
+returns a data frame of \code{x}, \code{y}, and \code{shape} used by \code{\link[grid:xsplineGrob]{grid::xsplineGrob()}}
 to render the alluvium.
 }
 \section{Aesthetics}{
@@ -270,9 +270,9 @@ gg +
 \code{\link[=stat_alluvium]{stat_alluvium()}} and
 \code{\link[=stat_flow]{stat_flow()}} for the corresponding stats.
 
-Other alluvial geom layers: 
-\code{\link{geom_flow}()},
-\code{\link{geom_lode}()},
-\code{\link{geom_stratum}()}
+Other alluvial geom layers:
+\code{\link[=geom_flow]{geom_flow()}},
+\code{\link[=geom_lode]{geom_lode()}},
+\code{\link[=geom_stratum]{geom_stratum()}}
 }
 \concept{alluvial geom layers}

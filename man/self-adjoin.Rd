@@ -68,7 +68,8 @@ vaccination_steps <- self_adjoin(vaccinations, key = survey, by = "subject",
 head(vaccination_steps)
 }
 \seealso{
-Other alluvial data manipulation: 
-\code{\link{alluvial-data}}
+Other alluvial data manipulation:
+\code{\link{alluvial-data}},
+\code{\link{uncross-strata}}
 }
 \concept{alluvial data manipulation}

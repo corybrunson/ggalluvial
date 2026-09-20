@@ -36,20 +36,26 @@ export(to_alluvia)
 export(to_alluvia_form)
 export(to_lodes)
 export(to_lodes_form)
+export(uncross_strata_alluvia)
+export(uncross_strata_lodes)
 import(ggplot2)
-importFrom(rlang,"%||%")
-importFrom(rlang,.data)
-importFrom(rlang,enexpr)
-importFrom(rlang,enexprs)
-importFrom(rlang,enquo)
-importFrom(rlang,enquos)
-importFrom(rlang,have_name)
-importFrom(rlang,is_character)
-importFrom(rlang,is_empty)
-importFrom(rlang,is_integerish)
-importFrom(rlang,is_quosures)
-importFrom(rlang,quo_name)
-importFrom(rlang,quos)
-importFrom(tidyselect,eval_select)
-importFrom(tidyselect,vars_pull)
-importFrom(tidyselect,vars_select)
+importFrom(rlang,
+  "%||%",
+  .data,
+  enexpr,
+  enexprs,
+  enquo,
+  enquos,
+  have_name,
+  is_character,
+  is_empty,
+  is_integerish,
+  is_quosures,
+  quo_name,
+  quos
+)
+importFrom(tidyselect,
+  eval_select,
+  vars_pull,
+  vars_select
+)

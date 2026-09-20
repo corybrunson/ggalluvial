@@ -295,8 +295,8 @@ ggplot(vaccinations,
 \code{\link[=geom_alluvium]{geom_alluvium()}} and
 \code{\link[=geom_flow]{geom_flow()}} for the corresponding geoms.
 
-Other alluvial stat layers: 
-\code{\link{stat_alluvium}()},
-\code{\link{stat_stratum}()}
+Other alluvial stat layers:
+\code{\link[=stat_alluvium]{stat_alluvium()}},
+\code{\link[=stat_stratum]{stat_stratum()}}
 }
 \concept{alluvial stat layers}

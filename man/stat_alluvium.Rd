@@ -315,7 +315,7 @@ gg +
             distill = function(x) paste(x, collapse = "; "))
 }
 
-\donttest{
+\dontrun{
 data(babynames, package = "babynames")
 # a discontiguous alluvium
 bn <- subset(babynames, prop >= .01 & sex == "F" & year > 1962 & year < 1968)
@@ -370,8 +370,8 @@ ggplot(transform(alluvial::Refugees, id = 1),
 \code{\link[ggplot2:layer]{ggplot2::layer()}} for additional arguments and \code{\link[=geom_alluvium]{geom_alluvium()}},
 \code{\link[=geom_lode]{geom_lode()}}, and \code{\link[=geom_flow]{geom_flow()}} for the corresponding geoms.
 
-Other alluvial stat layers: 
-\code{\link{stat_flow}()},
-\code{\link{stat_stratum}()}
+Other alluvial stat layers:
+\code{\link[=stat_flow]{stat_flow()}},
+\code{\link[=stat_stratum]{stat_stratum()}}
 }
 \concept{alluvial stat layers}

@@ -294,8 +294,8 @@ ggplot(admissions,
 \code{\link[ggplot2:layer]{ggplot2::layer()}} for additional arguments and \code{\link[=geom_stratum]{geom_stratum()}} for
 the corresponding geom.
 
-Other alluvial stat layers: 
-\code{\link{stat_alluvium}()},
-\code{\link{stat_flow}()}
+Other alluvial stat layers:
+\code{\link[=stat_alluvium]{stat_alluvium()}},
+\code{\link[=stat_flow]{stat_flow()}}
 }
 \concept{alluvial stat layers}

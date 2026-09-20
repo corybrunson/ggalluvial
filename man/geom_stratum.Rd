@@ -133,9 +133,9 @@ ggplot(as.data.frame(Titanic),
 \code{\link[ggplot2:layer]{ggplot2::layer()}} for additional arguments and
 \code{\link[=stat_stratum]{stat_stratum()}} for the corresponding stat.
 
-Other alluvial geom layers: 
-\code{\link{geom_alluvium}()},
-\code{\link{geom_flow}()},
-\code{\link{geom_lode}()}
+Other alluvial geom layers:
+\code{\link[=geom_alluvium]{geom_alluvium()}},
+\code{\link[=geom_flow]{geom_flow()}},
+\code{\link[=geom_lode]{geom_lode()}}
 }
 \concept{alluvial geom layers}
