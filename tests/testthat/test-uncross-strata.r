@@ -10,7 +10,27 @@ majors_wide <- to_alluvia_form(
   key = "semester", value = "curriculum", id = "student"
 )
 
+test_that("`uncross_strata_*()` functions fail gracefully without wompwomp", {
+  # alluvia format
+  expect_error(
+    uncross_strata_alluvia(
+      majors_wide, axes = c("CURR1", "CURR7", "CURR13")
+    ),
+    regexp = "wompwomp"
+  )
+  # lodes format
+  expect_error(
+    uncross_strata_lodes(
+      majors,
+      key = semester, value = curriculum, id = student
+    ),
+    regexp = "wompwomp"
+  )
+})
+
 test_that("`uncross_strata_alluvia()` reorders axis variables", {
+  skip_if_not_installed("wompwomp")
+  
   set.seed(1)
   # FIXME: Keep non-axis columns by default.
   maj_sort <- uncross_strata_alluvia(
@@ -42,6 +62,8 @@ test_that("`uncross_strata_alluvia()` reorders axis variables", {
 })
 
 test_that("`uncross_strata_alluvia()` handles weights", {
+  skip_if_not_installed("wompwomp")
+  
   vac_axes <- levels(factor(vaccinations$survey))
   vac_wide <- to_alluvia_form(
     vaccinations[c("subject", "survey", "response", "freq")],
@@ -61,6 +83,8 @@ test_that("`uncross_strata_alluvia()` handles weights", {
 # `uncross_strata_lodes()` tests
 
 test_that("`uncross_strata_lodes()` reorders stratum variable", {
+  skip_if_not_installed("wompwomp")
+  
   set.seed(1)
   maj_bf <- uncross_strata_lodes(majors,
                               key = semester, value = curriculum,
@@ -87,6 +111,8 @@ test_that("`uncross_strata_lodes()` reorders stratum variable", {
 })
 
 test_that("`uncross_strata_lodes()` handles weights", {
+  skip_if_not_installed("wompwomp")
+  
   set.seed(1)
   vac_zig <- uncross_strata_lodes(vaccinations, method = "tsp",
                                   key = survey, value = response,

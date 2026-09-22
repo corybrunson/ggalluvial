@@ -58,6 +58,11 @@ uncross_strata_alluvia <- function(data, ..., axes = NULL,
   }
   stopifnot(is_alluvia_form(data, axes = axes, silent = TRUE))
 
+  rlang::check_installed(
+    "wompwomp",
+    reason = "to optimize ribbon crossings.",
+    version = "1.0.0"
+  )
   # wompwomp ordering of each axis
   data_sort <- if (is.null(enexpr(weight))) {
     suppressWarnings(wompwomp::sort_to_uncross(

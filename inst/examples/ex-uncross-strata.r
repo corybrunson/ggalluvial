@@ -1,3 +1,5 @@
+if (requireNamespace("wompwomp", quietly = TRUE)) { # begin conditional exaples
+
 # reorder axes of alluvia-form data
 data(majors)
 majors_alluvia <- to_alluvia_form(majors,
@@ -49,3 +51,5 @@ ggplot(vaccinations_zagzig,
   stat_alluvium(alpha = .8) +
   stat_stratum(aes(fill = response)) +
   stat_stratum(geom = "text", aes(label = after_stat(stratum)), size = 3)
+
+} # end conditional exaples
