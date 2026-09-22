@@ -38,14 +38,14 @@
 #' @name uncross-strata
 #' @inheritParams alluvial-data
 #' @param method A valid `method` argument to [wompwomp::sort_to_uncross()];
-#'   defaults to `"tsp"`.
+#'   defaults to `"neighbornet"`.
 #' @return The input data with either all axis variables or the one stratum
 #'   variable factored or re-leveled.
 #' @example inst/examples/ex-uncross-strata.r
 #' @family alluvial data manipulation
 #' @export
 uncross_strata_alluvia <- function(data, ..., axes = NULL,
-                                   weight = NULL, method = "tsp") {
+                                   weight = NULL, method = "neighbornet") {
   if (! is.null(enexpr(axes))) {
     axes <- unname(vars_select(names(data), !! enquo(axes)))
   } else {
@@ -78,7 +78,7 @@ uncross_strata_alluvia <- function(data, ..., axes = NULL,
 
 #' @rdname uncross-strata
 #' @export
-uncross_strata_lodes <- function(data, method = "tsp",
+uncross_strata_lodes <- function(data, method = "neighbornet",
                                  stratum.guidance = c("forward", "zigzag",
                                                       "zagzig",
                                                       "backward", "frontback",

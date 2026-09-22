@@ -14,7 +14,7 @@ test_that("`uncross_strata_alluvia()` reorders axis variables", {
   set.seed(1)
   # FIXME: Keep non-axis columns by default.
   maj_sort <- uncross_strata_alluvia(
-    majors_wide, axes = c("CURR1", "CURR7", "CURR13"), method = "tsp"
+    majors_wide, axes = c("CURR1", "CURR7", "CURR13")
   )
   # returns data in alluvia form
   expect_true(is_alluvia_form(maj_sort,
@@ -49,7 +49,7 @@ test_that("`uncross_strata_alluvia()` handles weights", {
   )
   set.seed(1)
   vac_sort <- uncross_strata_alluvia(vac_wide, axes = vac_axes,
-                                   weight = freq, method = "tsp")
+                                   weight = freq)
   expect_true(is_alluvia_form(vac_sort, axes = vac_axes, silent = TRUE))
   expect_contains(colnames(vac_sort), c(vac_axes, "freq"))
   for (ax in vac_axes) {
@@ -88,15 +88,15 @@ test_that("`uncross_strata_lodes()` reorders stratum variable", {
 
 test_that("`uncross_strata_lodes()` handles weights", {
   set.seed(1)
-  vac_zig <- uncross_strata_lodes(vaccinations,
-                                key = survey, value = response,
-                                id = subject, weight = freq,
-                                stratum.guidance = "zigzag")
+  vac_zig <- uncross_strata_lodes(vaccinations, method = "tsp",
+                                  key = survey, value = response,
+                                  id = subject, weight = freq,
+                                  stratum.guidance = "zigzag")
   set.seed(1)
-  vac_rank <- uncross_strata_lodes(vaccinations,
-                                 key = survey, value = response,
-                                 id = subject, weight = freq,
-                                 stratum.guidance = "mean_rank")
+  vac_rank <- uncross_strata_lodes(vaccinations, method = "tsp",
+                                   key = survey, value = response,
+                                   id = subject, weight = freq,
+                                   stratum.guidance = "mean_rank")
   expect_true(is_lodes_form(vac_zig,
                             key = "survey", value = "response", id = "subject",
                             weight = "freq", silent = TRUE))

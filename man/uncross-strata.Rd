@@ -6,11 +6,17 @@
 \alias{uncross_strata_lodes}
 \title{Reorder strata to minimize alluvial crossings}
 \usage{
-uncross_strata_alluvia(data, ..., axes = NULL, weight = NULL, method = "tsp")
+uncross_strata_alluvia(
+  data,
+  ...,
+  axes = NULL,
+  weight = NULL,
+  method = "neighbornet"
+)
 
 uncross_strata_lodes(
   data,
-  method = "tsp",
+  method = "neighbornet",
   stratum.guidance = c("forward", "zigzag", "zagzig", "backward", "frontback",
     "backfront", "rightward", "leftward", "rightleft", "leftright", "mean_rank"),
   start = NULL,
@@ -36,7 +42,7 @@ to \code{axes}. Ignored when \code{axes} is provided.}
 the alluvia or lodes.}
 
 \item{method}{A valid \code{method} argument to \code{\link[wompwomp:sort_to_uncross]{wompwomp::sort_to_uncross()}};
-defaults to \code{"tsp"}.}
+defaults to \code{"neighbornet"}.}
 
 \item{stratum.guidance}{In \code{to_lodes_form}, how to combine the factor levels
 of the \code{axes} variables into those of the \code{value} variable: \code{NULL}
