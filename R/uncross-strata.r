@@ -39,14 +39,19 @@
 #' @inheritParams alluvial-data
 #' @param method A valid `method` argument to [wompwomp::sort_to_uncross()];
 #'   defaults to `"neighbornet"`.
+#' @param missing_value Character, passed to
+#'   [wompwomp::sort_to_uncross_options()]; the value to replace missing entries
+#'   in the sorted data. `NA` is not yet allowed.
 #' @return The input data with either all axis variables or the one stratum
 #'   variable factored or re-leveled.
 #' @example inst/examples/ex-uncross-strata.r
 #' @family alluvial data manipulation
 #' @export
 uncross_strata_alluvia <- function(data, ..., axes = NULL,
-                                   weight = NULL, method = "neighbornet") {
+                                   weight = NULL, method = "neighbornet",
+                                   missing_value = "Missing") {
   if (! is.null(enexpr(axes))) {
+    # FIXME: Using an external vector in selections was deprecated.
     axes <- unname(vars_select(names(data), !! enquo(axes)))
   } else {
     quos <- quos(...)
@@ -63,21 +68,33 @@ uncross_strata_alluvia <- function(data, ..., axes = NULL,
     reason = "to optimize ribbon crossings.",
     version = "1.0.0"
   )
+  if (missing_value %in% names(data)) {
+    stop(
+      "String '", missing_value, "' is already a `data` column name;",
+      " pass a different value to the `missing_value` argument."
+    )
+  }
+  stu_opts <- wompwomp::sort_to_uncross_options(
+    missing_value = missing_value
+  )
   # wompwomp ordering of each axis
   data_sort <- if (is.null(enexpr(weight))) {
     suppressWarnings(wompwomp::sort_to_uncross(
-      data, cols = axes, method = method
+      data, cols = axes, method = method, options = stu_opts
     ))
   } else {
     weight_var <- vars_pull(names(data), !! enquo(weight))
     suppressWarnings(do.call(
       wompwomp::sort_to_uncross,
-      list(data, cols = axes, wt = weight_var, method = method)
+      list(data, cols = axes, wt = weight_var,
+           method = method, options = stu_opts)
     ))
   }
   
   # merge non-axis/weight variables back in
   merge_by <- c(axes, if (! is.null(enexpr(weight))) weight_var)
+  # FIXME: If original has missing entries then sorted has filler values;
+  # also sorted has been collapsed.
   merge(data_sort, data, by = merge_by)
 }
 
@@ -92,7 +109,8 @@ uncross_strata_lodes <- function(data, method = "neighbornet",
                                                       "leftright", "mean_rank"),
                                  start = NULL,
                                  key = "x", value = "stratum",
-                                 id = "alluvium", weight = NULL) {
+                                 id = "alluvium", weight = NULL,
+                                 missing_value = "Missing") {
   
   key_var <- vars_pull(names(data), !! enquo(key))
   value_var <- vars_pull(names(data), !! enquo(value))
@@ -121,10 +139,11 @@ uncross_strata_lodes <- function(data, method = "neighbornet",
 
   # uncross the axis orders (alluvia form in, alluvia form out)
   data_sort <- if (is.null(womp_wt)) {
-    uncross_strata_alluvia(data_alluvia, axes = axes_vars, method = method)
+    uncross_strata_alluvia(data_alluvia, axes = axes_vars,
+                           method = method, missing_value = missing_value)
   } else {
     uncross_strata_alluvia(data_alluvia, axes = axes_vars, weight = "wt",
-                           method = method)
+                           method = method, missing_value = missing_value)
   }
 
   # re-level axis variables of `data_alluvia` (which retains `id`) by the
