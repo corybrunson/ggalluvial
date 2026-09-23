@@ -68,7 +68,7 @@ gg +
             distill = function(x) paste(x, collapse = "; "))
 }
 
-\donttest{
+\dontrun{
 data(babynames, package = "babynames")
 # a discontiguous alluvium
 bn <- subset(babynames, prop >= .01 & sex == "F" & year > 1962 & year < 1968)

@@ -36,7 +36,9 @@ to_lodes_form(
   value = "stratum",
   id = "alluvium",
   diffuse = FALSE,
-  discern = FALSE
+  discern = FALSE,
+  stratum.guidance = NULL,
+  start = NULL
 )
 
 to_alluvia_form(data, key, value, id, distill = FALSE)
@@ -52,11 +54,11 @@ of \code{data} to be used as the axis (key), stratum (value), and alluvium
 (identifying) variables.}
 
 \item{weight}{Optional field of \code{data}, handled using
-\code{\link[rlang:topic-defuse]{rlang::enquo()}}, to be used as heights or depths of
+\code{\link[rlang:nse-defuse]{rlang::enquo()}}, to be used as heights or depths of
 the alluvia or lodes.}
 
 \item{site}{Optional vector of fields of \code{data}, handled using
-\code{\link[rlang:topic-defuse]{rlang::enquos()}}, to be used to group rows before
+\code{\link[rlang:nse-defuse]{rlang::enquos()}}, to be used to group rows before
 testing for duplicate and missing id-axis pairings. Variables intended for
 faceting should be passed to \code{site}.}
 
@@ -85,6 +87,23 @@ variables used as axes that appear at more than one variable in order to
 distinguish their factor levels. This forces the levels of the combined
 factor variable \code{value} to be in the order of the axes.}
 
+\item{stratum.guidance}{In \code{to_lodes_form}, how to combine the factor levels
+of the \code{axes} variables into those of the \code{value} variable: \code{NULL}
+(default) concatenates the per-axis levels in the order of the axes; a
+lode guidance pattern (\link{lode-guidance-functions}) concatenates the
+per-axis levels in the corresponding order, starting from \code{start}; and
+\code{"mean_rank"} orders the strata by their mean position (rank) across the
+axes at which they appear.}
+
+\item{start}{In \code{to_lodes_form}, position (1-based) of the axis at which
+lode guidance orders begin, used only when \code{stratum.guidance} is a lode
+guidance pattern. If \code{NULL} (default), a value appropriate to the role of
+the anchoring axis in the chosen lode guidance pattern: the first axis for
+\code{"forward"}, the last axis for \code{"backward"}, the floored middle axis
+(e.g. 2 when there are 4 axes) for \code{"zagzig"} and \code{"frontback"}, and the
+ceilinged middle axis (e.g. 3 when there are 4 axes) for \code{"zigzag"} and
+\code{"backfront"}.}
+
 \item{distill}{A logical value indicating whether to include variables, other
 than those passed to \code{key} and \code{value}, that vary within values
 of \code{id}. Alternatively, a function (or its name) to be used to distill
@@ -94,15 +113,18 @@ each such variable to a single value. In addition to existing functions,
 returns the first modal value).}
 }
 \description{
+These functions check a data frame for either of two alluvial formats
+(\verb{is_*_form()}) and convert a data frame from one format to the other
+(\verb{to_*_form()}).
+}
+\details{
 Alluvial plots consist of multiple horizontally-distributed columns (axes)
 representing factor variables, vertical divisions (strata) of these axes
 representing these variables' values; and splines (alluvial flows) connecting
 vertical subdivisions (lodes) within strata of adjacent axes representing
 subsets or amounts of observations that take the corresponding values of the
-corresponding variables. This function checks a data frame for either of two
-types of alluvial structure:
-}
-\details{
+corresponding variables. Two functions check a data frame for alluvial
+structure:
 \itemize{
 \item One row per \strong{lode}, wherein each row encodes a subset or amount of
 observations having a specific profile of axis values, a \code{key} field
@@ -199,7 +221,8 @@ ggplot(majors[majors$semester \%in\% paste0("CURR", c(1, 7, 13)), ],
   geom_text(stat = "stratum", discern = TRUE)
 }
 \seealso{
-Other alluvial data manipulation: 
-\code{\link{self-adjoin}}
+Other alluvial data manipulation:
+\code{\link{self-adjoin}},
+\code{\link{uncross-strata}}
 }
 \concept{alluvial data manipulation}

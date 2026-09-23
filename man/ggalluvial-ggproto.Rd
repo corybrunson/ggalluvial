@@ -2,7 +2,6 @@
 % Please edit documentation in R/geom-alluvium.r, R/geom-flow.r, R/geom-lode.r,
 %   R/geom-stratum.r, R/ggproto.r, R/stat-alluvium.r, R/stat-flow.r,
 %   R/stat-stratum.r
-\docType{data}
 \name{GeomAlluvium}
 \alias{GeomAlluvium}
 \alias{GeomFlow}
@@ -13,26 +12,10 @@
 \alias{StatFlow}
 \alias{StatStratum}
 \title{Base ggproto classes for ggalluvial}
-\format{
-An object of class \code{GeomAlluvium} (inherits from \code{Geom}, \code{ggproto}, \code{gg}) of length 8.
-
-An object of class \code{GeomFlow} (inherits from \code{Geom}, \code{ggproto}, \code{gg}) of length 8.
-
-An object of class \code{GeomLode} (inherits from \code{Geom}, \code{ggproto}, \code{gg}) of length 6.
-
-An object of class \code{GeomStratum} (inherits from \code{GeomRect}, \code{Geom}, \code{ggproto}, \code{gg}) of length 6.
-
-An object of class \code{StatAlluvium} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 6.
-
-An object of class \code{StatFlow} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 7.
-
-An object of class \code{StatStratum} (inherits from \code{Stat}, \code{ggproto}, \code{gg}) of length 5.
-}
 \description{
 Base ggproto classes for ggalluvial
 }
 \seealso{
 \code{\link[ggplot2:ggplot2-ggproto]{ggplot2::ggplot2-ggproto}}
 }
-\keyword{datasets}
 \keyword{internal}

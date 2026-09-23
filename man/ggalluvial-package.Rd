@@ -31,6 +31,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Jason Cory Brunson \email{cornelioid@gmail.com}
   \item Quentin D. Read
 }
 

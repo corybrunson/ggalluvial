@@ -1,13 +1,17 @@
 #' Check for alluvial structure and convert between alluvial formats
 #'
+#' These functions check a data frame for either of two alluvial formats
+#' (`is_*_form()`) and convert a data frame from one format to the other
+#' (`to_*_form()`).
+#'
 #' Alluvial plots consist of multiple horizontally-distributed columns (axes)
 #' representing factor variables, vertical divisions (strata) of these axes
 #' representing these variables' values; and splines (alluvial flows) connecting
 #' vertical subdivisions (lodes) within strata of adjacent axes representing
 #' subsets or amounts of observations that take the corresponding values of the
-#' corresponding variables. This function checks a data frame for either of two
-#' types of alluvial structure:
-#'
+#' corresponding variables. Two functions check a data frame for alluvial
+#' structure:
+#' 
 #' - One row per **lode**, wherein each row encodes a subset or amount of
 #'   observations having a specific profile of axis values, a `key` field
 #'   encodes the axis, a `value` field encodes the value within each axis, and a
@@ -76,6 +80,21 @@
 #'   variables used as axes that appear at more than one variable in order to
 #'   distinguish their factor levels. This forces the levels of the combined
 #'   factor variable `value` to be in the order of the axes.
+#' @param stratum.guidance In `to_lodes_form`, how to combine the factor levels
+#'   of the `axes` variables into those of the `value` variable: `NULL`
+#'   (default) concatenates the per-axis levels in the order of the axes; a
+#'   lode guidance pattern ([lode-guidance-functions]) concatenates the
+#'   per-axis levels in the corresponding order, starting from `start`; and
+#'   `"mean_rank"` orders the strata by their mean position (rank) across the
+#'   axes at which they appear.
+#' @param start In `to_lodes_form`, position (1-based) of the axis at which
+#'   lode guidance orders begin, used only when `stratum.guidance` is a lode
+#'   guidance pattern. If `NULL` (default), a value appropriate to the role of
+#'   the anchoring axis in the chosen lode guidance pattern: the first axis for
+#'   `"forward"`, the last axis for `"backward"`, the floored middle axis
+#'   (e.g. 2 when there are 4 axes) for `"zagzig"` and `"frontback"`, and the
+#'   ceilinged middle axis (e.g. 3 when there are 4 axes) for `"zigzag"` and
+#'   `"backfront"`.
 #' @example inst/examples/ex-alluvial-data.r
 
 #' @rdname alluvial-data
@@ -164,7 +183,8 @@ is_alluvia_form <- function(data,
 to_lodes_form <- function(data,
                           ..., axes = NULL,
                           key = "x", value = "stratum", id = "alluvium",
-                          diffuse = FALSE, discern = FALSE) {
+                          diffuse = FALSE, discern = FALSE,
+                          stratum.guidance = NULL, start = NULL) {
   
   key_var <- quo_name(enexpr(key))
   value_var <- quo_name(enexpr(value))
@@ -195,16 +215,65 @@ to_lodes_form <- function(data,
   }
   
   # combine factor levels
-  cat_levels <- unname(unlist(lapply(lapply(data[axes], as.factor), levels)))
+  list_levels <- lapply(lapply(data[axes], as.factor), levels)
+  cat_levels <- unname(unlist(list_levels))
   if (any(duplicated(cat_levels)) & is.null(discern)) {
     warning("Some strata appear at multiple axes.")
   }
   if (isTRUE(discern)) {
+    # suffix (or "discern") values that appear at several axes
     data <- discern_data(data, axes)
-    # uniquify strata separately from `discern_data` as a validation step
-    strata <- make.unique(unname(cat_levels))
+    # reconstitute the per-axis levels from the discerned data
+    list_levels <- lapply(lapply(data[axes], as.factor), levels)
+  }
+  if (is.null(stratum.guidance)) {
+    # concatenate the per-axis levels in the order of the axes (default)
+    strata <-
+      if (isTRUE(discern)) make.unique(cat_levels) else unique(cat_levels)
   } else {
-    strata <- unique(unname(cat_levels))
+    stratum.guidance <- match.arg(stratum.guidance, c("forward", "zigzag",
+                                "zagzig", "backward",
+                                "frontback", "backfront", "rightward",
+                                "leftward", "rightleft", "leftright",
+                                "mean_rank"))
+    if (stratum.guidance == "mean_rank") {
+      # score each stratum by its mean position (rank) across the axes at
+      # which it appears; order by that score, breaking ties by appearance
+      all_strata <- unique(unlist(list_levels))
+      mean_ranks <- vapply(
+        all_strata,
+        function(s) mean(vapply(list_levels, function(lv) match(s, lv),
+                                integer(1))),
+        numeric(1)
+      )
+      strata <- all_strata[order(mean_ranks)]
+    } else {
+      # concatenate the per-axis levels following the lode guidance function
+      guidance_fun <- switch(
+        stratum.guidance,
+        zigzag = lode_zigzag, zagzig = lode_zagzig,
+        forward = lode_forward, backward = lode_backward,
+        frontback = lode_frontback, backfront = lode_backfront,
+        rightward = lode_rightward, leftward = lode_leftward,
+        rightleft = lode_rightleft, leftright = lode_leftright
+      )
+      n_axes <- length(axes)
+      if (is.null(start)) {
+        # choose a default `start` befitting the chosen lode guidance function
+        mid_fl <- floor((n_axes + 1) / 2)
+        mid_ceil <- ceiling((n_axes + 1) / 2)
+        start <- switch(
+          stratum.guidance,
+          forward = 1, rightward = 1,
+          backward = n_axes, leftward = n_axes,
+          frontback = mid_fl, rightleft = mid_fl, zagzig = mid_fl,
+          backfront = mid_ceil, leftright = mid_ceil, zigzag = mid_ceil
+        )
+      }
+      stopifnot(start >= 1, start <= n_axes)
+      axis_order <- guidance_fun(n_axes, start)
+      strata <- unique(unlist(list_levels[axis_order]))
+    }
   }
   
   # format data in preparation for `gather()`
